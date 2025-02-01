@@ -7,28 +7,24 @@ const {
 } = require('../config/config');
 
 const getHashedPassword = async (password) => {
-  const hashedPassword = await bcrypt.hash(password, parseInt(SALT_ROUNDS));
-  return hashedPassword;
+  return bcrypt.hash(password, parseInt(SALT_ROUNDS));
 }
 
 const comparePassword = async (password, hashedPassword) => {
-  const isPasswordValid = await bcrypt.compare(password, hashedPassword);
-  return isPasswordValid;
+  return bcrypt.compare(password, hashedPassword);
 }
 
 const getAccessToken = (userData) => {
-  const accessToken = jwt.sign(
+  return jwt.sign(
     { userData },
     JWT_SECRET,
-    { expiresIn: '72h' },
+    // { expiresIn: '72h' },
   );
-  return accessToken;
 }
 
 const verifyAccessToken = async (accessToken) => {
   try {
-    const data = jwt.verify(accessToken, JWT_SECRET);
-    return data;
+    return jwt.verify(accessToken, JWT_SECRET);
   } catch (error) {
     return {
       error: error,

@@ -21,13 +21,15 @@ async function mailFunction(sub, content, email, name) {
           name: BREVO_USER_NAME,
           email: BREVO_EMAIL,
         },
-        to: [{ email: email, name: name }],
-        htmlContent: `
-          <html>
+        to: [{
+          email: email,
+          name: name,
+        }],
+        htmlContent:
+          `<html>
             <head></head>
             ${content}
-          </html>
-        `,
+          </html>`,
         subject: sub,
       },
     };
