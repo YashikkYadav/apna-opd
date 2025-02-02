@@ -19,12 +19,12 @@ patient.post(
 );
 
 patient.get(
-  '/:user-id',
+  '/:patientId',
   patientController.getPatient,
 );
 
 patient.delete(
-  '/:user-id',
+  '/:patientId',
   patientController.deletePatient,
 );
 

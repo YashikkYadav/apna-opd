@@ -63,7 +63,7 @@ const loginPatient = async (req, res) => {
 
 const getPatient = async (req, res) => {
   try {
-    const patientId = req.params;
+    const { patientId } = req.params;
     const patient = await patientService.getPatient(patientId);
     if (patient?.error) {
       return res
@@ -83,7 +83,7 @@ const getPatient = async (req, res) => {
 
 const deletePatient = async (req, res) => {
   try {
-    const patientId = req.params;
+    const { patientId } = req.params;
     const patient = await patientService.deletePatient(patientId);
     if (patient?.error) {
       return res

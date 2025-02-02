@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const Patient = require('../models/patient');
 const { getAccessToken } = require('../utils/helpers');
 const validatePatient = require('../validations/patient.validation');
@@ -14,10 +16,10 @@ const createPatient = async (patientData) => {
     } = patientData;
 
     const patientValidation = validatePatient(patientData);
-    if (patientValidation?.error) {
+    if (!patientValidation.success) {
       return {
         statusCode: 403,
-        error: patientValidation.error,
+        error: patientValidation.errors,
       };
     }
 
@@ -110,17 +112,18 @@ const loginPatient = async (patientData) => {
   try {
     const {
       email,
-      password,
+      phoneNumber,
       otp,
     } = patientData;
 
     if (
-      !email
-      || !password
+      (!email
+      || !phoneNumber)
+      && !otp
     ) {
       return {
         statusCode: 400,
-        error: 'Please fill all the required fields',
+        error: `Please enter patient's email or phone number and OTP`,
       };
     }
 
@@ -130,6 +133,7 @@ const loginPatient = async (patientData) => {
         { phoneNumber },
       ],
     });
+
     if (!patient) {
       return {
         statusCode: 404,
@@ -139,6 +143,7 @@ const loginPatient = async (patientData) => {
 
     if (otp !== patient.otp) {
       return {
+        statusCode: '401',
         error: 'Wrong OTP, Please enter correct OTP',
       };
     }
@@ -178,6 +183,7 @@ const getPatient = async (patientId) => {
     };
   } catch (error) {
     return {
+      statusCode: 500,
       error: error,
     };
   }

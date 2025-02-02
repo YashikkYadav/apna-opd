@@ -21,7 +21,20 @@ const patientValidationSchema = z.object({
 });
 
 const validatePatient = (data) => {
-  return patientValidationSchema.safeParse(data);
+  const validationResult = patientValidationSchema.safeParse(data);
+  if (!validationResult.success) {
+    const errors = validationResult.error.errors.map((err) => ({
+        field: err.path[1] ? `${err.path[1]} is missing in ${err.path[0]}` : err.path[0],
+        message: err.message,
+      }));
+
+    return {
+      success: false,
+      errors,
+    };
+  }
+
+  return { success: true };
 };
 
 module.exports = validatePatient;
