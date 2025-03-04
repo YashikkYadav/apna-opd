@@ -2,7 +2,13 @@ const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema(
   {
-    name: {
+    uid: {
+      index: true,
+      required: true,
+      type: String,
+      unique: true,
+    },
+    fullName: {
       required: true,
       type: String,
     },
@@ -10,49 +16,48 @@ const patientSchema = new mongoose.Schema(
       index: true,
       required: true,
       type: Number,
-      unique: true,
+      // unique: true,
+    },
+    alternatePhoneNumber: {
+      type: Number,
+      default: null,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    age: {
+      type: Number,
+    },
+    gender: {
+      type: String,
+      default: null,
     },
     email: {
-      index: true,
-      required: true,
       type: String,
-      unique: true,
-    },
-    fatherName: {
-      required: true,
-      type: String,
+      default: null,
     },
     address: {
-      streetAddress1: {
-        required: true,
-        type: String,
-      },
-      streetAddress2: {
-        type: String,
-      },
-      city: {
-        required: true,
-        type: String,
-      },
-      state: {
-        required: true,
-        type: String,
-      },
-      country: {
-        required: true,
-        type: String,
-      },
-      zipCode: {
-        required: true,
-        type: Number,
-      },
-    },
-    medicalProblem: {
-      required: true,
       type: String,
+    },
+    bloodGroup: {
+      type: String,
+      default: null,
+    },
+    allergies: {
+      type: String,
+      default: null,
+    },
+    tags: {
+      type: String,
+      default: null,
+    },
+    referredBy: {
+      type: String,
+      default: null,
     },
     otp: {
       type: Number,
+      default: null,
     },
   },
   {

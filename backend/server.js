@@ -1,23 +1,28 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 require('dotenv').config();
-
-const databaseConnection = require('./config/db');
-const indexRoutes = require('./routes/indexRoutes');
-
-const {
-  PORT
-} = require('./config/config');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
-databaseConnection();
-
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+const {
+  PORT,
+} = require('./config/config');
+
+const dbConnection = require('./config/db.js');
+dbConnection();
+
+const publicPath = path.join(__dirname, 'public');
+app.use('/public', express.static(publicPath)); 
+
+const indexRoutes = require('./routes/index.routes');
 app.use('/api', indexRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Successfully connected to PORT ${PORT}`);
+  console.log(`Server running on PORT ${PORT}`);
 });

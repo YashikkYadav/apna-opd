@@ -1,10 +1,11 @@
 const patientService = require('../services/patient.service');
 
-const createPatient = async (req, res) => {
+const registerPatient = async (req, res) => {
   try {
     const patientData = req.body;
+    const { doctorId } = req.params;
 
-    const patient = await patientService.createPatient(patientData);
+    const patient = await patientService.registerPatient(patientData, doctorId);
     if (patient?.error) {
       return res
         .status(patient.statusCode)
@@ -13,18 +14,20 @@ const createPatient = async (req, res) => {
 
     res
       .status(patient.statusCode)
-      .json({ patient: patient.patient });
+      .json({
+        patient: patient.patient,
+      });
   } catch(error) {
     res
       .status(500)
-      .json({ error: error });
+      .send(`Error: ${error}`);
   }
 }
 
 const generateOTP = async (req, res) => {
   try {
-    const patientData = req.body;
-    const patient = await patientService.generateOTP(patientData);
+    const { phoneNumber } = req.body;
+    const patient = await patientService.generateOTP(phoneNumber);
     if (patient?.error) {
       return res
         .status(patient.statusCode)
@@ -33,18 +36,20 @@ const generateOTP = async (req, res) => {
 
     res
       .status(patient.statusCode)
-      .json({ patient: patient.patient });
+      .json({
+        patient: patient.patient,
+      });
   } catch(error) {
     res
       .status(500)
-      .json({ error: error });
+      .send(`Error: ${error}`);
   }
 }
 
-const loginPatient = async (req, res) => {
+const validateOTP = async (req, res) => {
   try {
-    const patientData = req.body;
-    const patient = await patientService.loginPatient(patientData);
+    const { phoneNumber, otp } = req.body;
+    const patient = await patientService.validateOTP(phoneNumber, otp);
     if (patient?.error) {
       return res
         .status(patient.statusCode)
@@ -53,18 +58,21 @@ const loginPatient = async (req, res) => {
 
     res
       .status(patient.statusCode)
-      .json({ patient: patient.patient });
+      .json({
+        patient: patient.patient,
+      });
   } catch(error) {
     res
       .status(500)
-      .json({ error: error });
+      .send(`Error: ${error}`);
   }
 }
 
-const getPatient = async (req, res) => {
+const getPatientById = async (req, res) => {
   try {
     const { patientId } = req.params;
-    const patient = await patientService.getPatient(patientId);
+
+    const patient = await patientService.getPatientById(patientId);
     if (patient?.error) {
       return res
         .status(patient.statusCode)
@@ -73,38 +81,62 @@ const getPatient = async (req, res) => {
 
     res
       .status(patient.statusCode)
-      .json({ patient: patient.patient });
+      .json({
+        patient: patient.patient,
+      });
   } catch(error) {
     res
       .status(500)
-      .json({ error: error });
+      .send(`Error: ${error}`);
+  }
+}
+
+const getAllPatients = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const { page, limit } = req.query;
+
+    const patients = await patientService.getAllPatients(doctorId, page, limit);
+
+    res
+      .status(patients.statusCode)
+      .json({
+        patient: patients.patients,
+        pagination: patients.pagination,
+      });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
   }
 }
 
 const deletePatient = async (req, res) => {
   try {
-    const { patientId } = req.params;
-    const patient = await patientService.deletePatient(patientId);
+    const { doctorId, patientId } = req.params;
+
+    const patient = await patientService.deletePatient(doctorId, patientId);
     if (patient?.error) {
       return res
         .status(patient.statusCode)
         .send(patient.error);
     }
 
-    res
-      .status(patient.statusCode)
-      .json({ patient: patient.patient });
+    res.status(204).json({
+      message: `Patient deleted successfully`,
+    });
   } catch(error) {
     res
       .status(500)
-      .json({ error: error });
+      .send(`Error: ${error}`);
   }
 }
 
 module.exports = {
-  createPatient,
+  registerPatient,
   generateOTP,
-  loginPatient,
-  getPatient,
+  validateOTP,
+  getPatientById,
+  getAllPatients,
   deletePatient,
 };

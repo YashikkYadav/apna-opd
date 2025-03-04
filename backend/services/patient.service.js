@@ -1,50 +1,81 @@
-const mongoose = require('mongoose');
-
 const Patient = require('../models/patient');
-const { getAccessToken } = require('../utils/helpers');
-const validatePatient = require('../validations/patient.validation');
+const DoctorPatient = require('../models/doctorPatient');
+const { generatePatientUid, getAccessToken } = require('../utils/helpers');
+const { validatePatient } = require('../validations/patient.validation');
+const { sendTemplateMessage } = require('../utils/whatsapp');
 
-const createPatient = async (patientData) => {
+const registerPatient = async ( patientData, doctorId ) => {
   try {
     const {
-      name,
+      fullName,
       phoneNumber,
+      alternatePhoneNumber,
+      dateOfBirth,
+      age,
+      gender,
       email,
-      fatherName,
       address,
-      medicalProblem,
+      bloodGroup,
+      allergies,
+      tags,
+      referredBy,
     } = patientData;
 
     const patientValidation = validatePatient(patientData);
     if (!patientValidation.success) {
       return {
-        statusCode: 403,
+        statusCode: 400,
         error: patientValidation.errors,
       };
     }
 
-    const patient = await Patient.findOne({
-      $or: [
-        { email },
-        { phoneNumber },
-      ]
-    });
-    if (patient) {
-      return {
-        statusCode: 409,
-        error: 'Patient already exist, Please try login',
-      };
-    }
+    // const patient = await Patient.findOne({ phoneNumber });
+    // if (patient) {
+    //   const doctorPatient = await DoctorPatient.findOne({ patientId: patient._id, doctorId });
 
+    //   if (!doctorPatient) {
+    //     const doctorPatient = new DoctorPatient({
+    //       doctorId,
+    //       patientId: patient._id,
+    //     });
+    //     await doctorPatient.save();
+    //     return {
+    //       statusCode: 201,
+    //       patient: patient,
+    //     };
+    //   }
+
+    //   return {
+    //     statusCode: 409,
+    //     error: `Patient with ${phoneNumber} already exist`,
+    //   };
+    // }
+
+    const uid = await generatePatientUid();
     const newPatient = new Patient({
-      name,
-      email,
+      uid,
+      fullName,
       phoneNumber,
-      fatherName,
+      alternatePhoneNumber,
+      dateOfBirth,
+      age,
+      gender,
+      email,
       address,
-      medicalProblem,
+      bloodGroup,
+      allergies,
+      tags,
+      referredBy,
     });
     await newPatient.save();
+
+    if (doctorId !== 'register') {
+      const doctorPatient = new DoctorPatient({
+        doctorId,
+        patientId: newPatient._id,
+      });
+      await doctorPatient.save();
+    }
 
     return {
       statusCode: 201,
@@ -58,29 +89,10 @@ const createPatient = async (patientData) => {
   }
 }
 
-const generateOTP = async (patientData) => {
+const generateOTP = async (phoneNumber) => {
   try {
-    const {
-      email,
-      phoneNumber,
-    } = patientData;
+    const patient = await Patient.findOne({ phoneNumber });
 
-    if (
-      !email
-      && !phoneNumber
-    ) {
-      return {
-        statusCode: 400,
-        error: `Please enter patient's email or phone number`,
-      }
-    }
-
-    let patient = await Patient.findOne({
-      $or: [
-        { email },
-        { phoneNumber },
-      ],
-    });
     if (!patient) {
       return {
         statusCode: 404,
@@ -88,17 +100,24 @@ const generateOTP = async (patientData) => {
       };
     }
 
-    // const otp = Math.floor(Math.random() * 9000 + 1000);
-    const otp = 1234;
-    patient = await Patient.findByIdAndUpdate(
-      patient._id,
-      { otp },
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+
+    // await sendTemplateMessage(
+    //   phoneNumber,
+    //   'google_review',
+    //   'en',
+    //   [],
+    // );
+
+    await Patient.findOneAndUpdate(
+      { phoneNumber },
+      { otp: 1234 },
       { new: true },
     );
 
     return {
       statusCode: 200,
-      patient: 'OTP sent successfully',
+      patient,
     };
   } catch (error) {
     return {
@@ -108,31 +127,19 @@ const generateOTP = async (patientData) => {
   }
 }
 
-const loginPatient = async (patientData) => {
+const validateOTP = async (phoneNumber, otp) => {
   try {
-    const {
-      email,
-      phoneNumber,
-      otp,
-    } = patientData;
-
     if (
-      (!email
-      || !phoneNumber)
-      && !otp
+      !otp
+      || otp === null
+      || otp === undefined
     ) {
       return {
-        statusCode: 400,
-        error: `Please enter patient's email or phone number and OTP`,
-      };
+        statusCode: 422,
+        error: 'Missing field: OTP',
+      }
     }
-
-    const patient = await Patient.findOne({
-      $or: [
-        { email },
-        { phoneNumber },
-      ],
-    });
+    const patient = await Patient.findOne({ phoneNumber });
 
     if (!patient) {
       return {
@@ -141,44 +148,20 @@ const loginPatient = async (patientData) => {
       };
     }
 
-    if (otp !== patient.otp) {
+    if ( patient.otp !== otp) {
       return {
-        statusCode: '401',
-        error: 'Wrong OTP, Please enter correct OTP',
+        statusCode: 401,
+        error: 'Wrong OTP',
       };
     }
 
-    const accessToken = getAccessToken(patient);
-    return {
-      statusCode: 200,
-      patient: {
-        id: patient._id,
-        name: patient.name,
-        email: patient.email,
-        phoneNumber: patient.phoneNumber,
-        accessToken: accessToken,
-      },
-    };
-  } catch (error) {
-    return {
-      error: error,
-    };
-  }
-}
+    const accessToken = getAccessToken(patient.phoneNumber, patient.fullName);
 
-const getPatient = async (patientId) => {
-  try {
-    const patient = await Patient.findById(patientId);
     return {
       statusCode: 200,
       patient: {
-        id: patientId,
-        name: patient.name,
-        email: patient.email,
-        phoneNumber: patient.phoneNumber,
-        fatherName: patient.fatherName,
-        address: patient.address,
-        medicalProblem: patient.medicalProblem,
+        accessToken,
+        phoneNumber,
       },
     };
   } catch (error) {
@@ -189,24 +172,96 @@ const getPatient = async (patientId) => {
   }
 }
 
-const deletePatient = async (patientId) => {
+const getPatientById = async ( patientId ) => {
   try {
-    const patient = await Patient.findByIdAndDelete(patientId);
+    const patient = await Patient.findById(patientId);
+
+    if (!patient) {
+      return {
+        statusCode: 404,
+        error: 'Patient not found',
+      };
+    }
+
     return {
-      statusCode: 204,
-      patient: patient,
+      statusCode: 200,
+      patient,
     };
   } catch (error) {
     return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+}
+
+const getAllPatients = async ( doctorId, page = 1, limit = 25 ) => {
+  try {
+    const pageNumber = parseInt(page, 10) || 1;
+    const limitNumber = parseInt(limit, 10) || 25;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const totalPatients = await DoctorPatient.countDocuments({ doctorId });
+
+    const patients = await DoctorPatient
+      .find({ doctorId })
+      .populate('patientId')
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limitNumber);
+
+    return {
+      statusCode: 200,
+      patients,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages: Math.ceil(totalPatients / limitNumber),
+        totalPatients,
+        pageSize: limitNumber,
+        hasNextPage: pageNumber * limitNumber < totalPatients,
+        hasPrevPage: pageNumber > 1,
+      },
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+}
+
+const deletePatient = async ( doctorId, patientId ) => {
+  try {
+    if (!doctorId || !patientId) {
+      return {
+        statusCode: 403,
+        error: 'DoctorId & PatientId is required',
+      };
+    }
+
+    const patient = await DoctorPatient.findOneAndDelete({ doctorId, patientId });
+
+    if (!patient) {
+      return {
+        statusCode: 404,
+        error: 'Patient not found',
+      };
+    }
+
+    return {};
+  } catch (error) {
+    return {
+      statusCode: 500, 
       error: error,
     };
   }
 }
 
 module.exports = {
-  createPatient,
+  registerPatient,
   generateOTP,
-  loginPatient,
-  getPatient,
+  validateOTP,
+  getPatientById,
+  getAllPatients,
   deletePatient,
 };

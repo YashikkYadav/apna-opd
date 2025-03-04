@@ -1,12 +1,6 @@
 const express = require('express');
 const patientController = require('../controllers/patient.controller');
-
 const patient = express.Router({ mergeParams: true });
-
-patient.post(
-  '/',
-  patientController.createPatient,
-);
 
 patient.post(
   '/generate-otp',
@@ -14,17 +8,27 @@ patient.post(
 );
 
 patient.post(
-  '/access-token',
-  patientController.loginPatient,
+  '/validate-otp',
+  patientController.validateOTP,
+);
+
+patient.post(
+  '/:doctorId',
+  patientController.registerPatient,
+);
+
+patient.get(
+  '/get-all/:doctorId',
+  patientController.getAllPatients,
 );
 
 patient.get(
   '/:patientId',
-  patientController.getPatient,
+  patientController.getPatientById,
 );
 
 patient.delete(
-  '/:patientId',
+  '/:doctorId/:patientId',
   patientController.deletePatient,
 );
 

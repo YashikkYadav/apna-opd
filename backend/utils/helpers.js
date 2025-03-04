@@ -6,25 +6,32 @@ const {
   JWT_SECRET,
 } = require('../config/config');
 
+const Patient = require('../models/patient');
+const Invoice = require('../models/invoice');
+
 const getHashedPassword = async (password) => {
-  return bcrypt.hash(password, parseInt(SALT_ROUNDS));
+  const hashedPassword = await bcrypt.hash(password, parseInt(SALT_ROUNDS));
+  return hashedPassword;
 }
 
 const comparePassword = async (password, hashedPassword) => {
-  return bcrypt.compare(password, hashedPassword);
+  const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+  return isPasswordValid;
 }
 
-const getAccessToken = (userData) => {
-  return jwt.sign(
-    { userData },
+const getAccessToken = (data) => {
+  const accessToken = jwt.sign(
+    { data },
     JWT_SECRET,
-    // { expiresIn: '72h' },
+    // { expiresIn: '48h' },
   );
+  return accessToken;
 }
 
 const verifyAccessToken = async (accessToken) => {
   try {
-    return jwt.verify(accessToken, JWT_SECRET);
+    const data = jwt.verify(accessToken, JWT_SECRET);
+    return data;
   } catch (error) {
     return {
       error: error,
@@ -32,9 +39,66 @@ const verifyAccessToken = async (accessToken) => {
   }
 }
 
+const generatePatientUid = async () => {
+  try {
+    let uid;
+
+    const existingPatients = await Patient.find();
+    const existingUids = existingPatients.map((patient) => patient.uid);
+
+    for (let i=1; i<100001; i++) {
+      uid = `UID${i}`;
+      if (!existingUids.includes(uid)) {
+        break;
+      }
+    }
+
+    return uid;
+  } catch (error) {
+    return {
+      error: "Error generating UID",
+    };
+  }
+};
+
+const generateInvoiceId = async () => {
+  try {
+    let invoiceId;
+
+    const existingInvoices = await Invoice.find();
+    const existingInvoiceIds = existingInvoices.map((invoice) => invoice.invoiceId);
+
+    for (let i=1; i<100001; i++) {
+      if (i < 10) {
+        invoiceId = `UID00000${i}`;
+      } else if (i < 100) {
+        invoiceId = `UID0000${i}`;
+      } else if (i < 1000) {
+        invoiceId = `UID000${i}`;
+      } else if (i < 10000) {
+        invoiceId = `UID00${i}`;
+      } else {
+        invoiceId = `UID0${i}`;
+      }
+
+      if (!existingInvoiceIds.includes(invoiceId)) {
+        break;
+      }
+    }
+
+    return invoiceId;
+  } catch (error) {
+    return {
+      error: "Error generating UID",
+    };
+  }
+};
+
 module.exports = {
   getHashedPassword,
   comparePassword,
   getAccessToken,
   verifyAccessToken,
+  generatePatientUid,
+  generateInvoiceId,
 };

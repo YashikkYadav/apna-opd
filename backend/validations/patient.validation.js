@@ -1,32 +1,47 @@
-const { z } = require('zod');
+const zod = require('zod');
 
-const patientValidationSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  phoneNumber: z
+const PatientSchema = zod.object({
+  fullName: zod
     .string()
-    .regex(/^\d{10}$/, 'Phone number must be a valid 10-digit number'),
-  email: z.string().email('Invalid email address'),
-  fatherName: z.string().min(1, 'Father name is required'),
-  address: z.object({
-    streetAddress1: z.string().min(1, 'Street Address 1 is required'),
-    streetAddress2: z.string().optional(),
-    city: z.string().min(1, 'City is required'),
-    state: z.string().min(1, 'State is required'),
-    country: z.string().min(1, 'Country is required'),
-    zipCode: z
-      .string()
-      .regex(/^\d{5,6}$/, 'Zip Code must be 5 or 6 digits'),
-  }),
-  medicalProblem: z.string().min(1, 'Medical problem is required'),
+    .min(3, { message: 'Full name must contain at least 3 characters.' })
+    .trim(),
+  phoneNumber: zod
+    .string()
+    .regex(/^\d{10}$/, { message: 'Phone number must be a 10-digit number.' }),
+  alternatePhoneNumber: zod
+    .string()
+    .regex(/^\d{10}$/, { message: 'Alternate phone number must be a 10-digit number.' })
+    .optional(),
+  // dateOfBirth: zod.coerce
+  //   .date({ message: 'Date of birth is invalid. Please provide a valid date.' })
+  //   .optional(),
+  // age: zod
+  //   .number()
+  //   .min(0, { message: 'Age must be a positive number.' })
+  //   .max(150, { message: 'Age must be realistic (below 150).' })
+  //   .optional(),
+  gender: zod
+    .enum(['Male', 'Female', 'Other'], { message: 'Gender must be Male, Female, or Other.' }),
+  // email: zod
+  //   .string()
+  //   .email({ message: 'Email address is invalid. Please provide a valid email.' })
+  //   .trim()
+  //   .optional(),
+  // address: zod
+  //   .string()
+  //   .min(1, { message: 'Address cannot be empty.' })
+  //   .trim()
+  //   .optional(),
 });
 
-const validatePatient = (data) => {
-  const validationResult = patientValidationSchema.safeParse(data);
-  if (!validationResult.success) {
-    const errors = validationResult.error.errors.map((err) => ({
-        field: err.path[1] ? `${err.path[1]} is missing in ${err.path[0]}` : err.path[0],
-        message: err.message,
-      }));
+const validatePatient = (patientData) => {
+  const result = PatientSchema.safeParse(patientData);
+
+  if (!result.success) {
+    const errors = result.error.errors.map((err) => ({
+      field: err.path[0],
+      message: err.message,
+    }));
 
     return {
       success: false,
@@ -34,7 +49,12 @@ const validatePatient = (data) => {
     };
   }
 
-  return { success: true };
+  return {
+    success: true,
+    data: result.data,
+  };
 };
 
-module.exports = validatePatient;
+module.exports = {
+  validatePatient,
+};

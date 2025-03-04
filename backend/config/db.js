@@ -5,14 +5,10 @@ const {
   DB_NAME,
 } = require('../config/config');
 
-const databaseConnection = () => {
+const dbConnection = () => {
   mongoose.connect(MONGO_URL, { dbName: DB_NAME })
-    .then(() => {
-      console.log('Successfully connected with MongoDB');
-    })
-    .catch((err) => {
-      console.error(`Error occurred while connected with database: ${err}`);
-    });
+    .then(() => console.log('Connected with MongoDB'))
+    .catch((error) => console.error('An error occurred: ', error));
 }
 
-module.exports = databaseConnection;
+module.exports = dbConnection;
