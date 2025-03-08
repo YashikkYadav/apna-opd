@@ -4,7 +4,7 @@
       <v-list>
         <v-list-item class="logo">
           <v-list-item-content>
-            <v-img src="../assets/nn_logo.svg" alt="Logo" style="height: auto;" class="ml-0 logo-image my-5"></v-img>
+            <v-img src="../assets/apna_opd_logo.svg" alt="Logo" style="height: auto;" class="ml-0 logo-image my-5"></v-img>
           </v-list-item-content>
         </v-list-item>
 
@@ -18,13 +18,13 @@
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-account-group" title="Patient Queue" value="patientQueue"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
         <router-link to="/create-rx" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-prescription" title="Create Rx" value="createRx"
+          <v-list-item prepend-icon="mdi-prescription" title="Prescription" value="createRx"
             class="custom-list-item"></v-list-item>
         </router-link>
 
@@ -33,36 +33,36 @@
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <router-link to="/appointments" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/appointments" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-calendar" title="Appointments" value="appointments"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
-        <v-list-item prepend-icon="mdi-hospital-building" title="IPD" value="ipd"
-          class="custom-list-item"></v-list-item>
+        <!-- <v-list-item prepend-icon="mdi-hospital-building" title="IPD" value="ipd"
+          class="custom-list-item"></v-list-item> -->
 
         <router-link to="/messages" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-message" title="Messages" value="messages"
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <router-link to="/social" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/social" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-google-circles-extended" title="Social" value="social"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
-        <router-link to="/automation" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/automation" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-source-branch" title="Automation" value="automation"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
-        <v-list-item disabled class="more-btn-sidebar">
+        <!-- <v-list-item disabled class="more-btn-sidebar">
           <v-list-item-content>
             <v-list-item-title>More</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-list-group value="library" class="sidebar-drawer">
+        <!-- <v-list-group value="library" class="sidebar-drawer">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" prepend-icon="mdi-library" title="Library"></v-list-item>
           </template>
@@ -75,10 +75,10 @@
           <router-link to="/dropdown-library" style="text-decoration: none; color: inherit;">
             <v-list-item title="Dropdown" value="dropdown" class="custom-list-item"></v-list-item>
           </router-link>
-        </v-list-group>
-        <v-list-item prepend-icon="mdi-account-multiple" title="User" value="User"
+        </v-list-group> -->
+        <!-- <v-list-item prepend-icon="mdi-account-multiple" title="User" value="User"
           class="custom-list-item"></v-list-item>
-        <v-list-item prepend-icon="mdi-cogs" title="Settings" value="settings" class="custom-list-item"></v-list-item>
+        <v-list-item prepend-icon="mdi-cogs" title="Settings" value="settings" class="custom-list-item"></v-list-item> -->
       </v-list>
     </v-navigation-drawer>
   </div>

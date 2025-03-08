@@ -19,841 +19,33 @@
         <p v-if="patientData.address">Address: {{ patientData.address }}</p>
       </v-card-text>
     </v-card>
-    <div class="d-flex mb-4">
-      <v-btn class="saaro-btn" style="width: 100%; margin-left: auto;" text @click="showSettingsForSection = true">Add
-        Section</v-btn>
-    </div>
-    <!-- Vitals Section -->
-    <v-card class="section-card vitals">
-      <v-toolbar flat style="column-gap: 20px; padding: 0px 20px;">
-        <div class="prescription-page-icon">
-          <v-icon>mdi-clipboard-pulse-outline</v-icon>
-        </div>
-        <v-toolbar-title class="ml-3">Vitals</v-toolbar-title>
 
-        <!-- Settings Button -->
-        <v-spacer></v-spacer>
-        <v-btn icon @click="showSettings = true">
-          <v-icon>mdi-cog</v-icon>
-        </v-btn>
-      </v-toolbar>
-
-      <!-- Dynamic Form Grid -->
-      <v-container class="max-w-auto">
-        <v-row v-for="(row, rowIndex) in chunkArray(dynamicFields, 6)" :key="rowIndex">
-          <v-col v-for="(item, index) in row" :key="index" cols="12" md="2">
-            <div class="lable-dev">
-              <span>{{ item.label }}</span>
-            </div>
-            <!-- Dynamically Render Text or Date Input -->
-            <v-textarea v-if="item.type === 'text'" variant="outlined" v-model="vitals[item.model]"
-              :placeholder="item.placeholder" rows="1" auto-grow></v-textarea>
-            <v-text-field v-else-if="item.type === 'date'" variant="outlined" v-model="vitals[item.model]"
-              type="date"></v-text-field>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-
-    <!-- Complaints Section -->
-    <v-card class="section-card">
-      <v-data-table :items="complaintsList" class="elevation-1" disable-sort>
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-            class="investigation-template">
-            <!-- Left side -->
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-clipboard-text-clock</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Complaints</v-toolbar-title>
-            </div>
-
-            <!-- Right side -->
-            <div class="d-flex">
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Complaints', 1, complaintsList, complaintSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-              <v-menu offset-y class="template" v-if="complaintsTemplate.length > 0">
-                <template v-slot:activator="{ props }">
-                  <v-btn flat icon v-bind="props" class="icon-spacing">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-progress-upload</v-icon>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in complaintsTemplate" :key="index"
-                    @click="addTemplate(template, 'complaintsList', { name: '' })">
-                    {{ template.name }}
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.name="{ item }" class="print-table">
-          <v-combobox variant="outlined" v-model="item.name" :items="complaintSuggestions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'complaintsList', ['name'])" @keydown.enter="focusNextInput"
-            style="margin-bottom: 10px;"></v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-    <div class="d-flex align-start">
-      <div class="v-col-6 pr-6">
-        <!-- History Section -->
-        <v-card class="section-card">
-          <v-data-table :items="historyList" class="elevation-1" disable-sort>
-            <template v-slot:top>
-              <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-                class="investigation-template">
-                <!-- Left side -->
-                <div style="align-items: center;  display: flex;  justify-content: space-between;">
-                  <div class="prescription-page-icon">
-                    <v-icon>mdi-human-edit</v-icon>
-                  </div>
-                  <v-toolbar-title class="ml-3">History</v-toolbar-title>
-                </div>
-
-                <!-- Right side -->
-                <div class="d-flex">
-                  <v-btn flat icon class="icon-spacing"
-                    @click="AddDropdown('History', 2, historyList, historySuggestions)">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-content-save-check</v-icon>
-                    </div>
-                  </v-btn>
-                  <v-menu offset-y class="template" v-if="historyTemplate.length > 0">
-                    <template v-slot:activator="{ props }">
-                      <v-btn flat icon v-bind="props" class="icon-spacing">
-                        <div class="prescription-page-icon">
-                          <v-icon>mdi-progress-upload</v-icon>
-                        </div>
-                      </v-btn>
-                    </template>
-                    <v-list style="width: 100%;">
-                      <v-list-item v-for="(template, index) in historyTemplate" :key="index"
-                        @click="addTemplate(template, 'historyList', { name: '' })">
-                        {{ template.name }}
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" :items="historySuggestions" hide-details
-                @update:modelValue="dynamicHandleInput(item, 'historyList', ['name'])" @keydown.enter="focusNextInput"
-                style=" margin-bottom: 10px;"></v-combobox>
-            </template>
-          </v-data-table>
-        </v-card>
-
-        <!-- Previous Surgery Section -->
-        <v-card class="section-card">
-          <v-toolbar class="mb-4" flat style="column-gap: 20px; padding: 0px 20px;">
-            <div class="prescription-page-icon">
-              <v-icon>mdi-hospital</v-icon>
-            </div>
-            <v-toolbar-title class="ml-3">Previous Surgery</v-toolbar-title>
-          </v-toolbar>
-          <v-combobox class="px-5" variant="outlined" v-model="previousSurgery" @keydown.enter="focusNextInput"
-            outlined>
-          </v-combobox>
-        </v-card>
-      </div>
-
-      <div class="v-col-6 pl-6">
-        <!-- Drug History Section -->
-        <v-card class="section-card fix-box">
-          <v-data-table :items="drugHistory" class="elevation-1" disable-sort>
-            <template v-slot:top>
-              <v-toolbar flat style="padding: 0px 20px; display: flex;">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-allergy</v-icon>
-                </div>
-                <v-toolbar-title class="ml-3">Drug History</v-toolbar-title>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details
-                @input="dynamicHandleInput(item, 'drugHistory', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-            <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details
-                @input="dynamicHandleInput(item, 'drugHistory', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-          </v-data-table>
-        </v-card>
-
-        <!-- Drug Allergy Section -->
-        <v-card class="section-card fix-box">
-          <v-data-table :items="drugAllergy" class="elevation-1" disable-sort>
-            <template v-slot:top>
-              <v-toolbar flat style="padding: 0px 20px; display: flex;">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-allergy</v-icon>
-                </div>
-                <v-toolbar-title class="ml-3">Drug Allergy</v-toolbar-title>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details
-                @input="dynamicHandleInput(item, 'drugAllergy', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-            <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details
-                @input="dynamicHandleInput(item, 'drugAllergy', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-          </v-data-table>
-        </v-card>
-
-        <!-- Antiplatlet/Anticogulant Section -->
-        <v-card class="section-card fix-box">
-          <v-data-table :items="antiplatlet" class="elevation-1" disable-sort>
-            <template v-slot:top>
-              <v-toolbar flat style="padding: 0px 20px; display: flex;">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-allergy</v-icon>
-                </div>
-                <v-toolbar-title class="ml-3">Antiplatelet/Anticogulant</v-toolbar-title>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details
-                @input="dynamicHandleInput(item, 'antiplatlet', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-            <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details
-                @input="dynamicHandleInput(item, 'antiplatlet', ['name', 'details'])" @keydown.enter="focusNextInput"
-                style="margin-bottom: 10px;">
-              </v-combobox>
-            </template>
-          </v-data-table>
-        </v-card>
-      </div>
-    </div>
-
-    <!-- Physical Examination Section -->
-    <v-card class="section-card">
-      <v-data-table :items="physicalExamList" class="elevation-1" disable-sort>
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-            class="investigation-template">
-            <!-- Left side -->
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-clipboard-edit-outline</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Physical Examination</v-toolbar-title>
-            </div>
-
-            <!-- Right side -->
-            <div class="d-flex">
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Physical Examination', 3, physicalExamList, physicalSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-              <v-menu offset-y class="template" v-if="physicalExaminationTemplate.length > 0">
-                <template v-slot:activator="{ props }">
-                  <v-btn flat icon v-bind="props" class="icon-spacing">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-progress-upload</v-icon>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in physicalExaminationTemplate" :key="index"
-                    @click="addTemplate(template, 'physicalExamList', { name: '' })">
-                    {{ template.name }}
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-
-          </v-toolbar>
-        </template>
-        <template v-slot:item.name="{ item }" class="print-table">
-          <v-combobox variant="outlined" v-model="item.name" :items="physicalSuggestions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'physicalExamList', ['name'])" @keydown.enter="focusNextInput"
-            style=" margin-bottom: 10px;"></v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-    <div class="d-flex align-start">
-      <!-- Provisional Diagnosis Section -->
-      <div class="v-col-6 pr-6">
-        <v-card class="section-card provisional-box" style="height: 258px;">
-          <v-toolbar class="investigation-template mb-4" flat
-            style="padding: 0px 20px; display: flex; justify-content: space-between;">
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-clipboard-list-outline</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">
-                <span>Provisional Diagnosis </span>
-                <span style="font-size: 14px;">(will not be printed)</span>
-              </v-toolbar-title>
-            </div>
-            <div>
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Provisional Diagnosis', 4, provisional, provisionalDiagnosisSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-            </div>
-          </v-toolbar>
-          <v-combobox variant="outlined" v-model="provisional" outlined class="px-5"
-            :items="provisionalDiagnosisSuggestions" @keydown.enter="focusNextInput"></v-combobox>
-        </v-card>
-      </div>
-
-      <!-- Diagnosis Section -->
-      <div class="v-col-6 pl-6">
-        <v-card class="section-card fix-box">
-          <v-data-table :items="diagnosisList" class="elevation-1" disable-sort>
-            <template v-slot:top>
-              <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-                class="investigation-template">
-                <!-- Left side -->
-                <div style="align-items: center;  display: flex;  justify-content: space-between;">
-
-                  <div class="prescription-page-icon">
-                    <v-icon>mdi-human-male-board</v-icon>
-                  </div>
-                  <v-toolbar-title class="ml-3">Diagnosis</v-toolbar-title>
-                </div>
-
-                <!-- Right side -->
-                <div class="d-flex">
-                  <v-btn flat icon class="icon-spacing"
-                    @click="AddDropdown('Diagnosis', 5, diagnosisList, diagnosisSuggestions)">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-content-save-check</v-icon>
-                    </div>
-                  </v-btn>
-                  <v-menu offset-y class="template" v-if="diagnosisTemplate.length > 0">
-                    <template v-slot:activator="{ props }">
-                      <v-btn flat icon v-bind="props" class="icon-spacing">
-                        <div class="prescription-page-icon">
-                          <v-icon>mdi-progress-upload</v-icon>
-                        </div>
-                      </v-btn>
-                    </template>
-                    <v-list style="width: 100%;">
-                      <v-list-item v-for="(template, index) in diagnosisTemplate" :key="index"
-                        @click="addTemplate(template, 'diagnosisList', { type: '', details: '' })">
-                        {{ template.name }}
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-              </v-toolbar>
-            </template>
-            <template v-slot:item.type="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.type" :items="diagnosisSuggestions" hide-details
-                @update:modelValue="dynamicHandleInput(item, 'diagnosisList', ['type', 'details'])"
-                @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
-            </template>
-            <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details
-                @input="dynamicHandleInput(item, 'diagnosisList', ['type', 'details'])" @keydown.enter="focusNextInput"
-                style=" margin-bottom: 10px;"></v-combobox>
-            </template>
-          </v-data-table>
-        </v-card>
-      </div>
-    </div>
-
-    <v-card class="section-card v-col-12 fix-box">
-      <v-data-table :items="investigationAdviceList" class="elevation-1" disable-sort>
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-            class="investigation-template">
-            <!-- Left side -->
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-clipboard-list-outline</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Investigation Advice</v-toolbar-title>
-            </div>
-
-            <!-- Right side -->
-            <div class="d-flex">
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Investigation Advice', 6, investigationAdviceList, investigationAdviceSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-              <v-menu offset-y class="template" v-if="investigationAdviceTemplate.length > 0">
-                <template v-slot:activator="{ props }">
-                  <v-btn flat icon v-bind="props" class="icon-spacing">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-progress-upload</v-icon>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in investigationAdviceTemplate" :key="index"
-                    @click="addTemplate(template, 'investigationAdviceList', { name: '', details: '' })">
-                    {{ template.name }}
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.name="{ item }" class="print-table">
-          <v-combobox variant="outlined" v-model="item.name" :items="investigationAdviceSuggestions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'investigationAdviceList', ['name', 'details'])"
-            @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
-        </template>
-        <template v-slot:item.details="{ item }" class="print-table">
-          <v-combobox variant="outlined" v-model="item.details" hide-details
-            @input="dynamicHandleInput(item, 'investigationAdviceList', ['name', 'details'])"
-            @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-    <!-- Medications Section -->
-    <v-card class="section-card fix-box-1">
-      <v-data-table :items="medications" :headers="medicationHeaders" class="elevation-1 medication-table" disable-sort>
-
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-            class="investigation-template">
-            <!-- Left side -->
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-pill-multiple</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Medications</v-toolbar-title>
-            </div>
-
-            <!-- Right side -->
-            <div class="d-flex">
-              <v-btn flat icon class="icon-spacing" @click="AddMedicineDropdown(medications, medicineSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-              <v-menu offset-y class="template" v-if="medicationsTemplate.length > 0">
-                <template v-slot:activator="{ props }">
-                  <v-btn flat icon v-bind="props" class="icon-spacing">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-progress-upload</v-icon>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in medicationsTemplate" :key="index" @click="addTemplate(template, 'medications', {
-                    name: '', dosage: '', frequency: '', duration: '', notes: ''
-                  })">
-                    {{ template.name }}
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </v-toolbar>
-        </template>
-        <template v-slot:headers="{ props }">
-          <tr>
-            <th v-for="header in medicationHeaders" :key="header.text" class="head">
-              {{ header.text }}
-            </th>
-          </tr>
-        </template>
-        <template v-slot:item.name="{ item }">
-          <v-combobox variant="outlined" v-model="item.name" item-value="name" item-title="name" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'], true)"
-            @keydown.enter="focusNextInput" :items="medicineSuggestions" class="print-table mb-2 test-data">
-            <template v-slot:item="{ props, item }">
-              <v-list-item v-bind="props">
-                <template v-slot:title>
-                  {{ item.raw.name }}
-                </template>
-                <template v-slot:subtitle>
-                  {{ item.raw.composition || 'No Composition' }}
-                </template>
-              </v-list-item>
-            </template>
-          </v-combobox>
-          <div style="font-size: 12px; display: flex; align-items: center; margin-bottom: 10px;">
-            <!-- Edit Composition -->
-            <template v-if="!item.isEditingComposition">
-              <v-icon size="15" @click="toggleEditComposition(item)" style="margin-right: 5px; cursor: pointer;"
-                v-if="item.composition">
-                mdi-pencil
-              </v-icon>
-              <span>{{ item.composition }}</span>
-            </template>
-
-            <!-- Input field for editing Composition -->
-            <template v-else>
-              <input v-model="item.composition" @blur="toggleEditComposition(item)" type="text"
-                style="font-size: 12px; flex: 1; padding: 2px;" />
-            </template>
-          </div>
-        </template>
-
-
-        <template v-slot:item.dosage="{ item }">
-          <v-combobox variant="outlined" v-model="item.dosage" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
-            @keydown.enter="focusNextInput" :items="dosageSuggestions" class="print-table mb-2" style=""></v-combobox>
-        </template>
-        <template v-slot:item.frequency="{ item }">
-          <v-combobox variant="outlined" v-model="item.frequency" :items="frequencyOptions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
-            @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
-        </template>
-        <template v-slot:item.duration="{ item }">
-          <v-combobox variant="outlined" v-model="item.duration" :items="durationSuggestions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
-            @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
-        </template>
-        <template v-slot:item.notes="{ item }">
-          <v-combobox variant="outlined" v-model="item.notes" hide-details
-            @input="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
-            @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-    <!-- Advice Section -->
-    <v-card class="section-card">
-      <v-data-table :items="adviceList" class="elevation-1" disable-sort>
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex; justify-content: space-between;"
-            class="investigation-template">
-            <!-- Left side -->
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-clipboard-list-outline</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Advice</v-toolbar-title>
-            </div>
-
-            <!-- Right side -->
-            <div class="d-flex">
-              <v-btn flat icon class="icon-spacing" @click="AddDropdown('Advice', 7, adviceList, adviceSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-              <v-menu offset-y class="template" v-if="adviceTemplate.length > 0">
-                <template v-slot:activator="{ props }">
-                  <v-btn flat icon v-bind="props" class="icon-spacing">
-                    <div class="prescription-page-icon">
-                      <v-icon>mdi-progress-upload</v-icon>
-                    </div>
-                  </v-btn>
-                </template>
-                <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in adviceTemplate" :key="index"
-                    @click="addTemplate(template, 'adviceList', { name: '' })">
-                    {{ template.name }}
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.name="{ item }" class="print-table">
-          <v-combobox variant="outlined" v-model="item.name" :items="adviceSuggestions" hide-details
-            @update:modelValue="dynamicHandleInput(item, 'adviceList', ['name'])" @keydown.enter="focusNextInput"
-            style=" margin-bottom: 10px;"></v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-    <!-- Follow Up Section -->
-    <v-card class="section-card">
-      <v-toolbar class="mb-4" flat style="column-gap: 20px; padding: 0px 20px;">
-        <div class="prescription-page-icon">
-          <v-icon>mdi-history</v-icon>
-        </div>
-        <v-toolbar-title class="ml-3">Follow Up</v-toolbar-title>
-      </v-toolbar>
-      <v-row class="px-5">
-        <v-col>
-          <div class="lable-dev">
-            <span>Days</span>
-          </div>
-          <v-combobox variant="outlined" v-model="followUpDays" type="number" min="0" @input="calculateFollowUpDate()"
-            @keydown.enter="focusNextInput"></v-combobox>
-        </v-col>
-
-        <v-col>
-          <div class="lable-dev">
-            <span>Follow Up Date</span>
-          </div>
-          <v-combobox variant="outlined" v-model="followUpDate" disabled @keydown.enter="focusNextInput"></v-combobox>
-        </v-col>
-      </v-row>
-    </v-card>
-
-    <v-card class="section-card v-col-12 fix-box">
-      <v-data-table :items="implant" class="elevation-1 removable" disable-sort>
-        <template v-slot:top>
-          <v-toolbar flat style="padding: 0px 20px; display: flex;">
-            <div class="prescription-page-icon">
-              <v-icon>mdi-history</v-icon>
-            </div>
-            <v-toolbar-title class="ml-3">Any Implant</v-toolbar-title>
-          </v-toolbar>
-        </template>
-        <template v-slot:item.name="{ item, index }">
-          <div v-if="index === 0" class="lable-dev">
-            <span>Name</span>
-          </div>
-          <v-combobox variant="outlined" v-model="item.name" hide-details
-            @input="dynamicHandleInput(item, 'implant', ['name', 'removalDate'])" @keydown.enter="focusNextInput"
-            style="margin-bottom: 10px;">
-          </v-combobox>
-        </template>
-        <template v-slot:item.removalDate="{ item, index }">
-          <div v-if="index === 0" class="lable-dev">
-            <span>Removable Date</span>
-          </div>
-          <v-combobox variant="outlined" v-model="item.removalDate" hide-details type="date"
-            @input="dynamicHandleInput(item, 'implant', ['name', 'removalDate'])" @keydown.enter="focusNextInput"
-            style="margin-bottom: 10px;">
-          </v-combobox>
-        </template>
-      </v-data-table>
-    </v-card>
-
-
-    <div class="d-flex align-start">
-      <div class="v-col-6 pr-6">
-        <!-- Referred To Section -->
-        <v-card class="section-card">
-          <v-toolbar class="investigation-template mb-4" flat
-            style="padding: 0px 20px; display: flex; justify-content: space-between;">
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-doctor</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Referred To</v-toolbar-title>
-            </div>
-            <div>
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Doctor', 8, referredTo.name, doctorNameSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-            </div>
-          </v-toolbar>
-          <v-row class="px-5">
-            <v-col>
-              <div class="lable-dev">
-                <span>Doctor Name</span>
-              </div>
-              <v-combobox variant="outlined" v-model="referredTo.name" hide-details :items="doctorNameSuggestions"
-                @keydown.enter="focusNextInput"></v-combobox>
-            </v-col>
-            <v-col>
-              <div class="lable-dev">
-                <span>Specialty</span>
-              </div>
-              <v-combobox variant="outlined" v-model="referredTo.specialty"
-                @keydown.enter="focusNextInput"></v-combobox>
-            </v-col>
-          </v-row>
-        </v-card>
-      </div>
-      <div class="v-col-6 pl-6">
-        <!-- Referred By Section -->
-        <v-card class="section-card">
-          <v-toolbar class="investigation-template mb-4" flat
-            style="padding: 0px 20px; display: flex; justify-content: space-between;">
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-
-              <div class="prescription-page-icon">
-                <v-icon>mdi-human-male</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Referred By</v-toolbar-title>
-            </div>
-            <div>
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Doctor', 8, referredBy.name, doctorNameSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-            </div>
-          </v-toolbar>
-          <v-row class="px-5">
-            <v-col>
-              <div class="lable-dev">
-                <span>Doctor Name</span>
-              </div>
-              <v-combobox variant="outlined" v-model="referredBy.name" :items="doctorNameSuggestions"
-                @keydown.enter="focusNextInput"></v-combobox>
-            </v-col>
-            <v-col>
-              <div class="lable-dev">
-                <span>Specialty</span>
-              </div>
-              <v-combobox variant="outlined" v-model="referredBy.specialty"
-                @keydown.enter="focusNextInput"></v-combobox>
-            </v-col>
-          </v-row>
-        </v-card>
-      </div>
-    </div>
-
-    <div class="d-flex align-start">
-      <!-- Surgery Advised Section -->
-      <div class="v-col-6 pr-6">
-        <v-card class="section-card">
-          <v-toolbar class="investigation-template mb-4" flat
-            style="padding: 0px 20px; display: flex; justify-content: space-between;">
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-hospital-box-outline</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Surgery Advised</v-toolbar-title>
-            </div>
-            <div>
-              <v-btn flat icon class="icon-spacing"
-                @click="AddDropdown('Surgery Adviced', 9, surgeryAdvised, surgeryAdviceSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-            </div>
-          </v-toolbar>
-          <v-combobox class="px-5" variant="outlined" v-model="surgeryAdvised" outlined
-            :items="surgeryAdviceSuggestions" @keydown.enter="focusNextInput"></v-combobox>
-        </v-card>
-      </div>
-      <!-- Tags Section -->
-      <div class="v-col-6 pl-6">
-        <v-card class="section-card">
-          <v-toolbar class="investigation-template mb-4" flat
-            style="padding: 0px 20px; display: flex; justify-content: space-between;">
-            <div style="align-items: center;  display: flex;  justify-content: space-between;">
-              <div class="prescription-page-icon">
-                <v-icon>mdi-tag-multiple</v-icon>
-              </div>
-              <v-toolbar-title class="ml-3">Category</v-toolbar-title>
-            </div>
-            <div>
-              <v-btn flat icon class="icon-spacing" @click="AddDropdown('Tags', 10, tags, tagsSuggestions)">
-                <div class="prescription-page-icon">
-                  <v-icon>mdi-content-save-check</v-icon>
-                </div>
-              </v-btn>
-            </div>
-          </v-toolbar>
-          <v-combobox class="px-5" variant="outlined" v-model="tags" outlined :items="tagsSuggestions"
-            @keydown.enter="focusNextInput"></v-combobox>
-        </v-card>
-      </div>
-    </div>
-    <div class="v-col-12 pa-0">
-      <v-card class="section-card" v-for="(data, rowIndex) in dynamicSection" :key="rowIndex">
-        <v-toolbar class="mb-4" flat style="column-gap: 20px; padding: 0px 20px;">
-          <div class="prescription-page-icon">
-            <v-icon>mdi-tag-multiple</v-icon>
-          </div>
-          <v-toolbar-title class="ml-3">{{ data.label }}</v-toolbar-title>
-        </v-toolbar>
-        <div class="px-5">
-          <v-textarea v-if="data.type === 'text'" variant="outlined" v-model="additionalSectionsData[data.model]"
-            :placeholder="data.placeholder" rows="1" auto-grow></v-textarea>
-          <v-text-field v-else-if="data.type === 'date'" variant="outlined" v-model="additionalSectionsData[data.model]"
-            type="date"></v-text-field>
-        </div>
-      </v-card>
-    </div>
-
-    <!-- Save Prescription Button -->
-    <v-btn class="saaro-btn mb-10" @click="savePrescription">Save</v-btn>
-    <v-btn class="saaro-btn mb-10" @click="endConsultation('draft')">Print Prescription</v-btn>
-    <v-btn class="saaro-btn mb-10" @click="endConsultation('complete')">End Consultation</v-btn>
-
-    <template>
-      <div class="text-center pa-4">
-        <v-dialog v-model="dialog" class="height: auto">
-          <v-card class="print-popup w-75 max-1400">
-            <v-card-title class="headline">Save Prescription</v-card-title>
-            <v-card-text class="d-flex pr-0 pb-0 pt-0 pl-16">
-              <v-row class="w-75 max-1100">
-                <v-col class="v-col-12 m-0" style="height: 60vh;">
-                  <div style="border: 1px solid #ccc; height: 100%; overflow: hidden;">
-                    <iframe :src="prescriptionUrl" width="100%" height="100%" style="border: none;"></iframe>
-                  </div>
-                </v-col>
-              </v-row>
-              <v-row class="justify-center">
-                <v-col class="v-col-10">
-                  <div class="text-center pb-10">
-                    <v-text-field variant="outlined" v-model="emailInput" label="Email" outlined></v-text-field>
-                    <v-btn class="saaro-btn margin-none" @click="sharePrescription('Email')">Email</v-btn>
-                  </div>
-                  <div class="text-center">
-                    <v-text-field variant="outlined" v-model="phoneInput" label="Phone Number" outlined></v-text-field>
-                    <v-btn class="saaro-btn margin-none" @click="sharePrescription('WhatsApp/SMS')">WhatsApp/SMS</v-btn>
-                  </div>
-
-                </v-col>
-              </v-row>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text @click="closePopup" class="mr-12 px-15 saaro-btn">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-      </div>
-    </template>
-
-    <!-- Past Prescriptions Section -->
-    <h4 class="section-title mb-5 prescription-card-heading">Past Prescriptions</h4>
+    <!-- Upload Prescription Record -->
     <v-row>
-      <v-col v-for="prescription in pastPrescriptions" :key="prescription.id" cols="12" md="6">
-        <v-card class="prescription-card mb-4" @click="pdfDialogHandle(prescription)" large>
+      <v-col class="v-col-9">
+        <h4 class="section-title prescription-card-heading">Prescriptions</h4>
+      </v-col>
+      <v-col class="text-center v-col-3">
+        <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('prescription')">Upload Prescription</v-btn>
+        <input ref="prescriptionFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
+          @change="handleFileUpload('prescription')" />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col v-for="record in prescriptionRecords" :key="record.id" cols="12" md="6">
+        <v-card class="health-record-card mb-4">
           <v-card-title>
-            <span class="font-weight-bold">Prescription ID: {{ prescription.count }}</span>
+            <span class="font-weight-bold">Document:</span>
           </v-card-title>
           <v-card-text>
-            <p><strong>Date:</strong> {{ formatedDate(prescription.date) }}</p>
-            <p><strong>Diagnosis:</strong> {{ prescription.diagnosis.join(', ') || 'No Diagnosis Added' }}</p>
-            <p><strong>Medicines:</strong> {{ prescription.medicines.join(', ') || 'No Medicines Added' }}</p>
-            <p>
-              <strong>investigation Advice:</strong>
-              {{ prescription.investigationsAdviced.join(', ') || 'No Investigation Advice Added' }}
-            </p>
+            <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
+    <!-- Upload Health Record -->
     <v-row>
       <v-col class="v-col-9">
         <h4 class="section-title prescription-card-heading">Health Records</h4>
@@ -1079,6 +271,7 @@ export default {
       isDraft: false,
       healthRecords: [],
       ipdRecords: [],
+      prescriptionRecords: [],
       templates: [],
     };
   },
@@ -1093,6 +286,7 @@ export default {
       this.fetchPriscriptionSections();
       this.fetchHealthFiles();
       this.fetchIpdFiles();
+      this.fetchPrescriptionFiles();
     }
   },
   methods: {
@@ -1360,99 +554,99 @@ export default {
       }
     },
     async fetchPrescriptions() {
-      const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
+      // const patientId = this.$route.params.patientId;
+      // const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
 
-      if (res) {
-        let counter = res.files.length;
-        this.pastPrescriptions = res.files.map((item) => ({
-          count: counter--,
-          id: item._id,
-          history: item.history,
-          drugAllergy: item.drugAllergy,
-          drugHistory: item.drugHistory,
-          antiplatlet: item.antiplatlet,
-          previousSurgery: item.previousSurgery,
-          implants: item.implant,
-          tags: item.tags,
-          provisional: item.provisional,
-          medicines: item.medications.map((med) => med.name),
-          diagnosis: item.diagnosis.map((diag) => diag.type),
-          date: new Date(item.createdAt).toLocaleDateString(),
-          investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
-          pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
-        }));
+      // if (res) {
+      //   let counter = res.files.length;
+      //   this.pastPrescriptions = res.files.map((item) => ({
+      //     count: counter--,
+      //     id: item._id,
+      //     history: item.history,
+      //     drugAllergy: item.drugAllergy,
+      //     drugHistory: item.drugHistory,
+      //     antiplatlet: item.antiplatlet,
+      //     previousSurgery: item.previousSurgery,
+      //     implants: item.implant,
+      //     tags: item.tags,
+      //     provisional: item.provisional,
+      //     medicines: item.medications.map((med) => med.name),
+      //     diagnosis: item.diagnosis.map((diag) => diag.type),
+      //     date: new Date(item.createdAt).toLocaleDateString(),
+      //     investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
+      //     pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
+      //   }));
 
-        if (!this.isDraft === true && this.pastPrescriptions.length > 0) {
-          const item = this.pastPrescriptions[0];
-          const drugList = [];
-          for (let i = 0; i < item.drugAllergy.length; i++) {
-            drugList.push({
-              name: item.drugAllergy[i].name,
-              details: item.drugAllergy[i].details,
-            });
-          }
-          drugList.push({
-            name: '',
-            details: '',
-          })
-          this.drugAllergy = drugList;
+      //   if (!this.isDraft === true && this.pastPrescriptions.length > 0) {
+      //     const item = this.pastPrescriptions[0];
+      //     const drugList = [];
+      //     for (let i = 0; i < item.drugAllergy.length; i++) {
+      //       drugList.push({
+      //         name: item.drugAllergy[i].name,
+      //         details: item.drugAllergy[i].details,
+      //       });
+      //     }
+      //     drugList.push({
+      //       name: '',
+      //       details: '',
+      //     })
+      //     this.drugAllergy = drugList;
 
-          const drugHList = [];
-          for (let i = 0; i < item.drugHistory.length; i++) {
-            drugHList.push({
-              name: item.drugHistory[i].name,
-              details: item.drugHistory[i].details,
-            });
-          }
-          drugHList.push({
-            name: '',
-            details: '',
-          })
-          this.drugHistory = drugHList;
+      //     const drugHList = [];
+      //     for (let i = 0; i < item.drugHistory.length; i++) {
+      //       drugHList.push({
+      //         name: item.drugHistory[i].name,
+      //         details: item.drugHistory[i].details,
+      //       });
+      //     }
+      //     drugHList.push({
+      //       name: '',
+      //       details: '',
+      //     })
+      //     this.drugHistory = drugHList;
 
-          const antiplatlet = [];
-          for (let i = 0; i < item.antiplatlet.length; i++) {
-            antiplatlet.push({
-              name: item.antiplatlet[i].name,
-              details: item.antiplatlet[i].details,
-            });
-          }
-          antiplatlet.push({
-            name: '',
-            details: '',
-          })
-          this.antiplatlet = antiplatlet;
+      //     const antiplatlet = [];
+      //     for (let i = 0; i < item.antiplatlet.length; i++) {
+      //       antiplatlet.push({
+      //         name: item.antiplatlet[i].name,
+      //         details: item.antiplatlet[i].details,
+      //       });
+      //     }
+      //     antiplatlet.push({
+      //       name: '',
+      //       details: '',
+      //     })
+      //     this.antiplatlet = antiplatlet;
 
-          const today = new Date();
-          const implantList = [];
-          for (let i = 0; i < item.implants.length; i++) {
-            const removalDate = new Date(item.implants[i].removalDate);
-            if (removalDate >= today) {
-              implantList.push({
-                name: item.implants[i].name,
-                removalDate: item.implants[i].removalDate,
-              });
-            }
-          }
-          implantList.push({
-            name: '',
-            removalDate: '',
-          })
-          this.implant = implantList;
+      //     const today = new Date();
+      //     const implantList = [];
+      //     for (let i = 0; i < item.implants.length; i++) {
+      //       const removalDate = new Date(item.implants[i].removalDate);
+      //       if (removalDate >= today) {
+      //         implantList.push({
+      //           name: item.implants[i].name,
+      //           removalDate: item.implants[i].removalDate,
+      //         });
+      //       }
+      //     }
+      //     implantList.push({
+      //       name: '',
+      //       removalDate: '',
+      //     })
+      //     this.implant = implantList;
 
-          this.tags = item.tags;
-          this.provisional = item.provisional;
+      //     this.tags = item.tags;
+      //     this.provisional = item.provisional;
 
-          const historyList = [];
-          for (let i = 0; i < item.history.length; i++) {
-            historyList.push({
-              name: item.history[i],
-            });
-          }
-          this.historyList = historyList;
-        }
-      }
+      //     const historyList = [];
+      //     for (let i = 0; i < item.history.length; i++) {
+      //       historyList.push({
+      //         name: item.history[i],
+      //       });
+      //     }
+      //     this.historyList = historyList;
+      //   }
+      // }
     },
     async fetchHealthFiles() {
       const patientId = this.$route.params.patientId;
@@ -1471,6 +665,16 @@ export default {
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
           this.ipdRecords.push(res.files[i]);
+        }
+      }
+    },
+    async fetchPrescriptionFiles() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
+
+      if (res) {
+        for (let i = 0; i < res.files.length; i++) {
+          this.prescriptionRecords.push(res.files[i]);
         }
       }
     },
@@ -1787,7 +991,7 @@ export default {
     },
     async handleFileUpload(type) {
       const fileInput =
-        type === "health" ? this.$refs.healthFileInput : this.$refs.ipdFileInput;
+        type === "health" ? this.$refs.healthFileInput :  type === "ipd" ? this.$refs.ipdFileInput : this.$refs.prescriptionFileInput;
       const file = fileInput.files[0];
 
       if (!file) {
@@ -1810,6 +1014,8 @@ export default {
         this.healthRecords.push(newRecord);
       } else if (type === "ipd") {
         this.ipdRecords.push(newRecord);
+      } else if (type === 'prescription') {
+        this.prescriptionRecords.push(newRecord);
       }
 
       // Upload file to the server
@@ -1979,6 +1185,8 @@ export default {
         this.$refs.healthFileInput.click();
       } else if (type === "ipd") {
         this.$refs.ipdFileInput.click();
+      } else if (type === 'prescription') {
+        this.$refs.prescriptionFileInput.click();
       }
     },
     formatedDate(date) {

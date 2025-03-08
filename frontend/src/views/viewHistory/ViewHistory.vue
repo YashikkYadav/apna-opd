@@ -28,54 +28,28 @@
     </v-card>
 
     <v-row>
-      <v-col class="v-col-12">
-        <h4 class="section-title prescription-card-heading">Past Prescriptions</h4>
+      <v-col class="v-col-9">
+        <h4 class="section-title prescription-card-heading">Prescriptions</h4>
       </v-col>
-      <v-col v-for="prescription in pastPrescriptions" :key="prescription.id" cols="12" md="6">
-        <v-card class="prescription-card mb-4" @click="pdfDialogHandle(prescription)">
+      <v-col class="text-center v-col-3">
+        <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('prescription')">Upload Prescription</v-btn>
+        <input ref="prescriptionFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
+          @change="handleFileUpload('prescription')" />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col v-for="record in prescriptionRecords" :key="record.id" cols="12" md="6">
+        <v-card class="health-record-card mb-4">
           <v-card-title>
-            <span class="font-weight-bold">Prescription ID: {{ prescription.count }}</span>
+            <span class="font-weight-bold">Document:</span>
           </v-card-title>
           <v-card-text>
-            <p><strong>Date:</strong> {{ formatedDate(prescription.date) }}</p>
-            <p><strong>Diagnosis:</strong> {{ prescription.diagnosis.join(', ') || 'No Diagnosis Added' }}</p>
-            <p><strong>Medicines:</strong> {{ prescription.medicines.join(', ') || 'No Medicines Added' }}</p>
-            <p><strong>investigation Advice:</strong> {{ prescription.investigationsAdviced.join(', ') || 'No Investigation Advice Added' }}</p>
+            <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-
-    <v-dialog v-model="pdfDialog" class="height: auto">
-      <v-card class="print-popup w-66 d-flex" style="margin: 0 auto;">
-        <v-card-title class="headline">Past Prescription</v-card-title>
-        <v-card-text class="d-flex pr-0">
-          <v-row class="w-75">
-            <v-col class="v-col-12 m-0" style="height: 80vh;">
-              <div style="border: 1px solid #ccc; height: 100%; overflow: hidden;">
-                <iframe :src="pdfUrl" width="100%" height="100%" style="border: none;"></iframe>
-              </div>
-            </v-col>
-          </v-row>
-          <v-row class="justify-center">
-            <v-col class="v-col-10">
-              <div class="text-center pb-10">
-                <v-text-field variant="outlined" v-model="emailInput" label="Email" outlined></v-text-field>
-                <v-btn class="saaro-btn" @click="sharePrescription('Email')">Email</v-btn>
-              </div>
-              <div class="text-center">
-                <v-text-field variant="outlined" v-model="phoneInput" label="Phone Number" outlined></v-text-field>
-                <v-btn class="saaro-btn" @click="sharePrescription('WhatsApp/SMS')">WhatsApp/SMS</v-btn>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions class="close-btn">
-          <v-spacer></v-spacer>
-          <v-btn class="saaro-btn" text @click="closePdfDialog">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
     <v-row>
       <v-col class="v-col-9">
@@ -140,6 +114,7 @@ export default {
       pastPrescriptions: [],
       ipdRecords: [],
       healthRecords: [],
+      prescriptionRecords: [],
       emailInput: '',
       phoneInput: '',
       pdfDialog: false,
@@ -189,16 +164,9 @@ export default {
       const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
 
       if (res) {
-        let counter = 1;
-          this.pastPrescriptions = res.files.map((item) => ({
-            count: counter++,
-            id: item._id,
-            medicines: item.medications.map((med) => med.name),
-            diagnosis: item.diagnosis.map((diag) => diag.type),
-            date: new Date(item.createdAt).toLocaleDateString(),
-            investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
-            pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
-          }));
+        for (let i = 0; i < res.files.length; i++) {
+            this.prescriptionRecords.push(res.files[i]);
+          }
       }
     },
     triggerFileUpload(type) {
@@ -206,6 +174,8 @@ export default {
         this.$refs.healthFileInput.click();
       } else if (type === "ipd") {
         this.$refs.ipdFileInput.click();
+      } else if (type === 'prescription') {
+        this.$refs.prescriptionFileInput.click();
       }
     },
     pdfDialogHandle(item) {
@@ -230,7 +200,7 @@ export default {
     },
     async handleFileUpload(type) {
       const fileInput =
-        type === "health" ? this.$refs.healthFileInput : this.$refs.ipdFileInput;
+        type === "health" ? this.$refs.healthFileInput : type === "ipd" ? this.$refs.ipdFileInput : this.$refs.prescriptionFileInput;
       const file = fileInput.files[0];
 
       if (!file) {
@@ -253,6 +223,8 @@ export default {
         this.healthRecords.push(newRecord);
       } else if (type === "ipd") {
         this.ipdRecords.push(newRecord);
+      } else if (type === 'prescription') {
+        this.prescriptionRecords.push(newRecord);
       }
 
       // Upload file to the server

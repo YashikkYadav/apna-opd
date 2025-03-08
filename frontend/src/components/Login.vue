@@ -4,7 +4,7 @@
       <div class="inner">
         <div class="signIn" v-if="signIn">
           <div class="top">
-            <img class="logo" src="../assets/logo.png" />
+            <img class="logo" src="../assets/apna_opd_logo.jpg" />
             <div class="title">Sign in</div>
 
           </div>
@@ -32,7 +32,7 @@
 
         <div class="register" v-else>
           <div class="top">
-            <img class="logo" src="../assets/logo.png" />
+            <img class="logo" src="../assets/apna_opd_logo.jpg" />
             <div class="title">Create an Account</div>
           </div>
 

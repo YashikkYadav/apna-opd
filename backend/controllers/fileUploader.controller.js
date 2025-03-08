@@ -12,20 +12,25 @@ const getFilesByPatientId = async (req, res) => {
   try {
     const { patientId, type } = req.params;
 
-    let data = {};
-    if (
-      type === 'health'
-      || type === 'ipd'
-    ) {
-      data = await FileUploader.find({
+    // let data = {};
+    // if (
+    //   type === 'health'
+    //   || type === 'ipd'
+    // ) {
+    //   data = await FileUploader.find({
+    //     patientId,
+    //     type,
+    //   }).sort({ updatedAt: -1 });
+    // } else if (type === 'prescription') {
+    //   data = await Prescription.find({
+    //     patientId,
+    //   }).sort({ updatedAt: -1 });
+    // }
+
+    const data = await FileUploader.find({
         patientId,
         type,
       }).sort({ updatedAt: -1 });
-    } else if (type === 'prescription') {
-      data = await Prescription.find({
-        patientId,
-      }).sort({ updatedAt: -1 });
-    }
 
     res
       .status(200)
