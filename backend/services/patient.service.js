@@ -195,16 +195,37 @@ const getPatientById = async ( patientId ) => {
   }
 }
 
-const getAllPatients = async ( doctorId, page = 1, limit = 25 ) => {
+const getAllPatients = async ( doctorId, page = 1, limit = 25, searchQuery = "" ) => {
   try {
     const pageNumber = parseInt(page, 10) || 1;
     const limitNumber = parseInt(limit, 10) || 25;
     const skip = (pageNumber - 1) * limitNumber;
 
-    const totalPatients = await DoctorPatient.countDocuments({ doctorId });
+    let searchFilter = {};
+    if (searchQuery) {
+      const numericSearch = !isNaN(searchQuery) ? Number(searchQuery) : null;
 
-    const patients = await DoctorPatient
-      .find({ doctorId })
+      searchFilter = {
+        $or: [
+          { fullName: { $regex: searchQuery, $options: "i" } },
+          { uid: { $regex: searchQuery, $options: "i" } },
+          ...(numericSearch !== null ? [{ phoneNumber: numericSearch }] : []),
+        ],
+      };
+    }
+
+    const matchingPatients = await Patient.find(searchFilter).select("_id");
+    const matchingPatientIds = matchingPatients.map((patient) => patient._id);
+
+    const totalPatients = await DoctorPatient.countDocuments({
+      doctorId,
+      patientId: { $in: matchingPatientIds },
+    });
+
+    const patients = await DoctorPatient.find({
+      doctorId,
+      patientId: { $in: matchingPatientIds },
+    })
       .populate('patientId')
       .sort({ updatedAt: -1 })
       .skip(skip)
@@ -221,6 +242,70 @@ const getAllPatients = async ( doctorId, page = 1, limit = 25 ) => {
         hasNextPage: pageNumber * limitNumber < totalPatients,
         hasPrevPage: pageNumber > 1,
       },
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+}
+
+const updatePatient = async ( patientId, patientData ) => {
+  try {
+    const {
+      fullName,
+      phoneNumber,
+      alternatePhoneNumber,
+      dateOfBirth,
+      age,
+      gender,
+      email,
+      address,
+      bloodGroup,
+      allergies,
+      tags,
+      referredBy,
+    } = patientData;
+
+    const patientValidation = validatePatient(patientData);
+    if (!patientValidation.success) {
+      return {
+        statusCode: 400,
+        error: patientValidation.errors,
+      };
+    }
+
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return {
+        statusCode: 404,
+        error: 'Patient not found',
+      };
+    }
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      patientId,
+      {
+        fullName,
+        phoneNumber,
+        alternatePhoneNumber,
+        dateOfBirth,
+        age,
+        gender,
+        email,
+        address,
+        bloodGroup,
+        allergies,
+        tags,
+        referredBy,
+      },
+      { new: true },
+    );
+
+    return {
+      statusCode: 200,
+      patient: updatedPatient,
     };
   } catch (error) {
     return {
@@ -263,5 +348,6 @@ module.exports = {
   validateOTP,
   getPatientById,
   getAllPatients,
+  updatePatient,
   deletePatient,
 };

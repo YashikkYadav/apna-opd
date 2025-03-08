@@ -14,7 +14,7 @@
         <p v-if="patientData.age">Age: {{ patientData.age }}</p>
         <p v-if="patientData.bloodGroup">Blood Group: {{ patientData.bloodGroup }}</p>
         <p v-if="patientData.allergies">Allergies: {{ patientData.allergies }}</p>
-        <p v-if="patientData.dateOfBirth">Date of Birth: {{ patientData.dateOfBirth }}</p>
+        <p v-if="patientData.dateOfBirth">Date of Birth: {{ formatedDate(patientData.dateOfBirth) }}</p>
         <p v-if="patientData.tags">Category: {{ patientData.tags }}</p>
         <p v-if="patientData.address">Address: {{ patientData.address }}</p>
       </v-card-text>
@@ -87,7 +87,7 @@
                 </template>
                 <v-list style="width: 100%;">
                   <v-list-item v-for="(template, index) in complaintsTemplate" :key="index"
-                    @click="AddComplaintsTemplate(template)">
+                    @click="addTemplate(template, 'complaintsList', { name: '' })">
                     {{ template.name }}
                   </v-list-item>
                 </v-list>
@@ -97,7 +97,7 @@
         </template>
         <template v-slot:item.name="{ item }" class="print-table">
           <v-combobox variant="outlined" v-model="item.name" :items="complaintSuggestions" hide-details
-            @update:modelValue="handleInputComplaints(item)" @keydown.enter="focusNextInput"
+            @update:modelValue="dynamicHandleInput(item, 'complaintsList', ['name'])" @keydown.enter="focusNextInput"
             style="margin-bottom: 10px;"></v-combobox>
         </template>
       </v-data-table>
@@ -137,7 +137,7 @@
                     </template>
                     <v-list style="width: 100%;">
                       <v-list-item v-for="(template, index) in historyTemplate" :key="index"
-                        @click="AddHistoryTemplate(template)">
+                        @click="addTemplate(template, 'historyList', { name: '' })">
                         {{ template.name }}
                       </v-list-item>
                     </v-list>
@@ -147,7 +147,7 @@
             </template>
             <template v-slot:item.name="{ item }" class="print-table">
               <v-combobox variant="outlined" v-model="item.name" :items="historySuggestions" hide-details
-                @update:modelValue="handleInputHistory(item)" @keydown.enter="focusNextInput"
+                @update:modelValue="dynamicHandleInput(item, 'historyList', ['name'])" @keydown.enter="focusNextInput"
                 style=" margin-bottom: 10px;"></v-combobox>
             </template>
           </v-data-table>
@@ -180,13 +180,15 @@
               </v-toolbar>
             </template>
             <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details @input="handleInputDrugHistory(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.name" hide-details
+                @input="dynamicHandleInput(item, 'drugHistory', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
             <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details @input="handleInputDrugHistory(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.details" hide-details
+                @input="dynamicHandleInput(item, 'drugHistory', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
           </v-data-table>
@@ -204,13 +206,15 @@
               </v-toolbar>
             </template>
             <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details @input="handleInputDrugAllergy(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.name" hide-details
+                @input="dynamicHandleInput(item, 'drugAllergy', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
             <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details @input="handleInputDrugAllergy(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.details" hide-details
+                @input="dynamicHandleInput(item, 'drugAllergy', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
           </v-data-table>
@@ -228,13 +232,15 @@
               </v-toolbar>
             </template>
             <template v-slot:item.name="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.name" hide-details @input="handleInputAntiplatlet(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.name" hide-details
+                @input="dynamicHandleInput(item, 'antiplatlet', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
             <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details @input="handleInputAntiplatlet(item)"
-                @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+              <v-combobox variant="outlined" v-model="item.details" hide-details
+                @input="dynamicHandleInput(item, 'antiplatlet', ['name', 'details'])" @keydown.enter="focusNextInput"
+                style="margin-bottom: 10px;">
               </v-combobox>
             </template>
           </v-data-table>
@@ -274,7 +280,7 @@
                 </template>
                 <v-list style="width: 100%;">
                   <v-list-item v-for="(template, index) in physicalExaminationTemplate" :key="index"
-                    @click="AddPhysicalExaminationTemplate(template)">
+                    @click="addTemplate(template, 'physicalExamList', { name: '' })">
                     {{ template.name }}
                   </v-list-item>
                 </v-list>
@@ -285,7 +291,7 @@
         </template>
         <template v-slot:item.name="{ item }" class="print-table">
           <v-combobox variant="outlined" v-model="item.name" :items="physicalSuggestions" hide-details
-            @update:modelValue="handleInputPhysicalExam(item)" @keydown.enter="focusNextInput"
+            @update:modelValue="dynamicHandleInput(item, 'physicalExamList', ['name'])" @keydown.enter="focusNextInput"
             style=" margin-bottom: 10px;"></v-combobox>
         </template>
       </v-data-table>
@@ -354,24 +360,23 @@
                     </template>
                     <v-list style="width: 100%;">
                       <v-list-item v-for="(template, index) in diagnosisTemplate" :key="index"
-                        @click="AddDiagnosisTemplate(template)">
+                        @click="addTemplate(template, 'diagnosisList', { type: '', details: '' })">
                         {{ template.name }}
                       </v-list-item>
                     </v-list>
                   </v-menu>
                 </div>
-
-
               </v-toolbar>
             </template>
             <template v-slot:item.type="{ item }" class="print-table">
               <v-combobox variant="outlined" v-model="item.type" :items="diagnosisSuggestions" hide-details
-                @update:modelValue="handleInputDiagnosis(item)" @keydown.enter="focusNextInput"
-                style=" margin-bottom: 10px;"></v-combobox>
+                @update:modelValue="dynamicHandleInput(item, 'diagnosisList', ['type', 'details'])"
+                @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
             </template>
             <template v-slot:item.details="{ item }" class="print-table">
-              <v-combobox variant="outlined" v-model="item.details" hide-details @input="handleInputDiagnosis(item)"
-                @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
+              <v-combobox variant="outlined" v-model="item.details" hide-details
+                @input="dynamicHandleInput(item, 'diagnosisList', ['type', 'details'])" @keydown.enter="focusNextInput"
+                style=" margin-bottom: 10px;"></v-combobox>
             </template>
           </v-data-table>
         </v-card>
@@ -409,7 +414,7 @@
                 </template>
                 <v-list style="width: 100%;">
                   <v-list-item v-for="(template, index) in investigationAdviceTemplate" :key="index"
-                    @click="AddInvestigationTemplate(template)">
+                    @click="addTemplate(template, 'investigationAdviceList', { name: '', details: '' })">
                     {{ template.name }}
                   </v-list-item>
                 </v-list>
@@ -419,17 +424,16 @@
         </template>
         <template v-slot:item.name="{ item }" class="print-table">
           <v-combobox variant="outlined" v-model="item.name" :items="investigationAdviceSuggestions" hide-details
-            @update:modelValue="handleInputInvestigationAdvice(item)" @keydown.enter="focusNextInput"
-            style=" margin-bottom: 10px;"></v-combobox>
+            @update:modelValue="dynamicHandleInput(item, 'investigationAdviceList', ['name', 'details'])"
+            @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
         </template>
         <template v-slot:item.details="{ item }" class="print-table">
           <v-combobox variant="outlined" v-model="item.details" hide-details
-            @input="handleInputInvestigationAdvice(item)" @keydown.enter="focusNextInput"
-            style=" margin-bottom: 10px;"></v-combobox>
+            @input="dynamicHandleInput(item, 'investigationAdviceList', ['name', 'details'])"
+            @keydown.enter="focusNextInput" style=" margin-bottom: 10px;"></v-combobox>
         </template>
       </v-data-table>
     </v-card>
-
 
     <!-- Medications Section -->
     <v-card class="section-card fix-box-1">
@@ -462,8 +466,9 @@
                   </v-btn>
                 </template>
                 <v-list style="width: 100%;">
-                  <v-list-item v-for="(template, index) in medicationsTemplate" :key="index"
-                    @click="AddMedicationsTemplate(template)">
+                  <v-list-item v-for="(template, index) in medicationsTemplate" :key="index" @click="addTemplate(template, 'medications', {
+                    name: '', dosage: '', frequency: '', duration: '', notes: ''
+                  })">
                     {{ template.name }}
                   </v-list-item>
                 </v-list>
@@ -480,8 +485,8 @@
         </template>
         <template v-slot:item.name="{ item }">
           <v-combobox variant="outlined" v-model="item.name" item-value="name" item-title="name" hide-details
-            @update:modelValue="handleInput(item, true)" @keydown.enter="focusNextInput" :items="medicineSuggestions"
-            class="print-table mb-2 test-data">
+            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'], true)"
+            @keydown.enter="focusNextInput" :items="medicineSuggestions" class="print-table mb-2 test-data">
             <template v-slot:item="{ props, item }">
               <v-list-item v-bind="props">
                 <template v-slot:title>
@@ -514,21 +519,22 @@
 
         <template v-slot:item.dosage="{ item }">
           <v-combobox variant="outlined" v-model="item.dosage" hide-details
-            @update:modelValue="handleInput(item, false)" @keydown.enter="focusNextInput" :items="dosageSuggestions"
-            class="print-table mb-2" style=""></v-combobox>
+            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
+            @keydown.enter="focusNextInput" :items="dosageSuggestions" class="print-table mb-2" style=""></v-combobox>
         </template>
         <template v-slot:item.frequency="{ item }">
           <v-combobox variant="outlined" v-model="item.frequency" :items="frequencyOptions" hide-details
-            @update:modelValue="handleInput(item, false)" @keydown.enter="focusNextInput" class="print-table mb-2"
-            style=""></v-combobox>
+            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
+            @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
         </template>
         <template v-slot:item.duration="{ item }">
           <v-combobox variant="outlined" v-model="item.duration" :items="durationSuggestions" hide-details
-            @update:modelValue="handleInput(item, false)" @keydown.enter="focusNextInput" class="print-table mb-2"
-            style=""></v-combobox>
+            @update:modelValue="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
+            @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
         </template>
         <template v-slot:item.notes="{ item }">
-          <v-combobox variant="outlined" v-model="item.notes" hide-details @input="handleInput(item, false)"
+          <v-combobox variant="outlined" v-model="item.notes" hide-details
+            @input="dynamicHandleInput(item, 'medications', ['name', 'dosage', 'frequency', 'duration', 'notes', 'composition'])"
             @keydown.enter="focusNextInput" class="print-table mb-2" style=""></v-combobox>
         </template>
       </v-data-table>
@@ -565,7 +571,7 @@
                 </template>
                 <v-list style="width: 100%;">
                   <v-list-item v-for="(template, index) in adviceTemplate" :key="index"
-                    @click="AddAdviceTemplate(template)">
+                    @click="addTemplate(template, 'adviceList', { name: '' })">
                     {{ template.name }}
                   </v-list-item>
                 </v-list>
@@ -575,7 +581,7 @@
         </template>
         <template v-slot:item.name="{ item }" class="print-table">
           <v-combobox variant="outlined" v-model="item.name" :items="adviceSuggestions" hide-details
-            @update:modelValue="handleInputAdvice(item)" @keydown.enter="focusNextInput"
+            @update:modelValue="dynamicHandleInput(item, 'adviceList', ['name'])" @keydown.enter="focusNextInput"
             style=" margin-bottom: 10px;"></v-combobox>
         </template>
       </v-data-table>
@@ -621,8 +627,9 @@
           <div v-if="index === 0" class="lable-dev">
             <span>Name</span>
           </div>
-          <v-combobox variant="outlined" v-model="item.name" hide-details @input="handleInputImplant(item)"
-            @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+          <v-combobox variant="outlined" v-model="item.name" hide-details
+            @input="dynamicHandleInput(item, 'implant', ['name', 'removalDate'])" @keydown.enter="focusNextInput"
+            style="margin-bottom: 10px;">
           </v-combobox>
         </template>
         <template v-slot:item.removalDate="{ item, index }">
@@ -630,7 +637,8 @@
             <span>Removable Date</span>
           </div>
           <v-combobox variant="outlined" v-model="item.removalDate" hide-details type="date"
-            @input="handleInputImplant(item)" @keydown.enter="focusNextInput" style="margin-bottom: 10px;">
+            @input="dynamicHandleInput(item, 'implant', ['name', 'removalDate'])" @keydown.enter="focusNextInput"
+            style="margin-bottom: 10px;">
           </v-combobox>
         </template>
       </v-data-table>
@@ -967,8 +975,14 @@
 </template>
 
 <script>
-import { getDateFormate } from '@/lib/utils/utils';
-import { useSnackbarStore } from '../store/snackbar';
+import { checkAuth, getDateFormate } from '@/lib/utils/utils';
+import { usePatientStore } from '@/store/PatientStore';
+import { useDropdownStore } from '@/store/DropdownStore';
+import { useTemplateStore } from '@/store/TemplateStore';
+import { useMedicineStore } from '@/store/MedicineStore';
+import { usePrescriptionStore } from '@/store/PrescriptionStore';
+import { useUiStore } from '@/store/UiStore';
+import { dosageSuggestionsData, durationSuggestionsData, frequencyOptions } from '@/faker/data';
 export default {
   data() {
     return {
@@ -982,8 +996,7 @@ export default {
         temperature: "",
         painScore: "",
       },
-      additionalSectionsData: {
-      },
+      additionalSectionsData: {},
       dynamicFields: [
         { label: "BP", model: "bp", type: "text", placeholder: "mm/Hg" },
         { label: "Pulse", model: "pulse", type: "text", placeholder: "bpm" },
@@ -999,7 +1012,7 @@ export default {
         { details: "", reaction: "" }
       ],
       patientData: [],
-      dosageSuggestions: ['1-0-0', '1-1-0', '0-1-0', '0-1-1', '0-0-1', '1-0-1', '1-1-1'],
+      dosageSuggestions: dosageSuggestionsData,
       complaintSuggestions: [],
       historySuggestions: [],
       physicalSuggestions: [],
@@ -1011,28 +1024,7 @@ export default {
       doctorNameSuggestions: [],
       surgeryAdviceSuggestions: [],
       tagsSuggestions: [],
-      durationSuggestions: [
-        "1 day",
-        "2 days",
-        "3 days",
-        "4 days",
-        "5 days",
-        "6 days",
-        "7 days",
-        "10 days",
-        "14 days",
-        "15 days",
-        "21 days",
-        "30 days",
-        "6 weeks",
-        "8 weeks",
-        "12 weeks",
-        "16 weeks",
-        "1 month",
-        "3 months",
-        "6 months",
-        "1 year"
-      ],
+      durationSuggestions: durationSuggestionsData,
       investigationAdviceTemplate: [],
       complaintsTemplate: [],
       historyTemplate: [],
@@ -1054,7 +1046,6 @@ export default {
       implantList: [
         { type: "", details: "" }
       ],
-      implantTypeOptions: ["Dental", "Orthopedic", "Other"],
       diagnosisList: [{ type: '', details: '' }],
       investigationAdviceList: [{ name: "", details: "" }],
       suggestions: ["Blood Test", "MRI Scan", "CT Scan", "X-Ray"],
@@ -1084,10 +1075,7 @@ export default {
         { text: 'Duration', align: 'start', value: 'duration' },
         { text: 'Notes', align: 'start', value: 'notes' },
       ],
-      diagnosisOptions: ['Primary', 'Secondary', 'Tertiary'],
-      frequencyOptions: ['Once a day', 'Twice a day', 'Thrice a day', 'SOS'],
-      doctorId: '',
-      accessToken: '',
+      frequencyOptions: frequencyOptions,
       isDraft: false,
       healthRecords: [],
       ipdRecords: [],
@@ -1095,26 +1083,398 @@ export default {
     };
   },
   mounted() {
-    this.doctorId = localStorage.getItem('doctor_id');
-    this.accessToken = localStorage.getItem('access_token');
-
-    if (!this.doctorId || !this.accessToken) {
-      this.$router.push('/login');
+    const auth = checkAuth(this.$router);
+    if (auth) {
+      this.fetchDraftPrescription();
+      this.fetchPatientDetails();
+      this.fetchTemplates();
+      this.fetchDropdowns();
+      this.fetchMedicines();
+      this.fetchPriscriptionSections();
+      this.fetchHealthFiles();
+      this.fetchIpdFiles();
     }
-
-    this.fetchFiles();
-    this.fetchDraftPrescription();
-    this.fetchPatientDetails();
-    this.fetchTemplates();
-    this.fetchDropdowns();
-    this.fetchMedicines();
-    this.fetchPriscriptionSections();
   },
   methods: {
-    closeModal() {
-      this.showSettings = false;
+    async fetchPatientDetails() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePatientStore().getPatientDetailsApiCall(patientId)
+
+      if (res) {
+        this.emailInput = res.patient.email;
+        this.phoneInput = res.patient.phoneNumber;
+        this.tags = res.patient.tags;
+        this.patientData = res.patient
+      }
     },
-    addField() {
+    async fetchPriscriptionSections() {
+      const res = await usePrescriptionStore().getPrescriptionSectionsApiCall()
+
+      if (res) {
+        res.prescriptionSections.forEach((item) => {
+          const exists = this.dynamicFields.some(field => field.label === item.label);
+          const existsSection = this.dynamicSection.some(field => field.label === item.label);
+
+          if (!exists && item.sectionType === "vitals") {
+            this.dynamicFields.push({
+              label: item.label,
+              model: item.label,
+              type: item.fieldType,
+              placeholder: item.fieldType === "text" ? "Enter text" : "",
+            })
+          } else if (!existsSection && item.sectionType === "consult") {
+            this.dynamicSection.push({
+              label: item.label,
+              model: item.label,
+              type: item.fieldType,
+              placeholder: item.fieldType === "text" ? "Enter text" : "",
+            })
+          }
+        })
+      }
+    },
+    async fetchDropdowns() {
+      const res = await useDropdownStore().getAllDropdownsApiCall()
+
+      if (res) {
+        const templates = {};
+
+        res.dropdowns.forEach((item) => {
+          const sectionName = item.sectionName
+            .toLowerCase()
+            .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+              index === 0 ? word.toLowerCase() : word.toUpperCase()
+            )
+
+          if (!templates[sectionName]) {
+            templates[sectionName] = [];
+          }
+
+          templates[sectionName].push({
+            name: item.name || "Template First",
+          });
+        });
+
+        this.complaintSuggestions = this.convertToDirectArray(templates.complaints) || [];
+        this.historySuggestions = this.convertToDirectArray(templates.history) || [];
+        this.physicalSuggestions = this.convertToDirectArray(templates["physical Examination"]) || [];
+        this.diagnosisSuggestions = this.convertToDirectArray(templates.diagnosis) || [];
+        this.provisionalDiagnosisSuggestions = this.convertToDirectArray(templates["provisional Diagnosis"]) || [];
+        this.investigationAdviceSuggestions = this.convertToDirectArray(templates["investigation Advice"]) || [];
+        this.adviceSuggestions = this.convertToDirectArray(templates.advice) || [];
+        this.doctorNameSuggestions = this.convertToDirectArray(templates.doctor) || [];
+        this.surgeryAdviceSuggestions = this.convertToDirectArray(templates["surgery Adviced"]) || [];
+        this.tagsSuggestions = this.convertToDirectArray(templates.tags) || [];
+      }
+    },
+    async fetchTemplates() {
+      const res = await useTemplateStore().getAllTemplatesApiCall()
+
+      if (res) {
+        const templates = {};
+
+        res.templates.forEach((item) => {
+          const sectionName = item.sectionName
+            .toLowerCase()
+            .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+              index === 0 ? word.toLowerCase() : word.toUpperCase()
+            )
+            .replace(/\s+/g, "") + "Template";
+
+          if (!templates[sectionName]) {
+            templates[sectionName] = [];
+          }
+
+          const formattedData = item.data
+            .filter((dataItem) => {
+              return Object.values(dataItem).some((value) => value && value.trim());
+            })
+            .map((dataItem) => {
+              if (sectionName === "complaintsTemplate") {
+                return { name: dataItem.name || "" };
+              } else if (sectionName === "diagnosisTemplate") {
+                return { type: dataItem.name || "", details: dataItem.details || "" };
+              } else {
+                return dataItem;
+              }
+            });
+
+          templates[sectionName].push({
+            name: item.name || "Template First",
+            data: formattedData,
+          });
+        });
+
+        this.complaintsTemplate = templates.complaintsTemplate || [];
+        this.historyTemplate = templates.historyTemplate || [];
+        this.physicalExaminationTemplate = templates.physicalExaminationTemplate || [];
+        this.diagnosisTemplate = templates.diagnosisTemplate || [];
+        this.medicationsTemplate = templates.medicationsTemplate || [];
+        this.adviceTemplate = templates.adviceTemplate || [];
+        this.investigationAdviceTemplate = templates.investigationAdviceTemplate || [];
+      }
+    },
+    async fetchMedicines() {
+      const res = await useMedicineStore().getAllMedicinesApiCall()
+
+      if (res) {
+        this.medicineSuggestions = res.medicines.map((medicine) => ({
+          name: medicine.medicineName,
+          composition: medicine.composition,
+        }));
+      }
+    },
+    async fetchDraftPrescription() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().getDraftPrescriptionApiCall(patientId)
+
+      if (res) {
+        const prescriptionData = res.prescription;
+
+        if (prescriptionData !== 'Prescription is not drafted yet.') {
+          this.isDraft = true;
+        }
+
+        this.vitals.bp = prescriptionData.bloodPressure;
+        this.vitals.height = prescriptionData.height;
+        this.vitals.weight = prescriptionData.weight;
+        this.vitals.pulse = prescriptionData.pulse;
+        this.vitals.temperature = prescriptionData.temperature;
+        this.vitals.painScore = prescriptionData.painScore
+
+        this.complaintsList = prescriptionData.complaints?.length ? prescriptionData.complaints.map(complaint => ({ name: complaint })) : [{ name: "" }];
+        this.historyList = prescriptionData.history?.length ? prescriptionData.history.map(history => ({ name: history })) : [{ name: "" }];
+        this.previousSurgery = prescriptionData.previousSurgery;
+        this.physicalExamList = prescriptionData.physicalExamination?.length ? prescriptionData.physicalExamination.map(complaint => ({ name: complaint })) : [{ name: "" }];
+        this.provisional = prescriptionData.provisional;
+        this.investigationAdvice = prescriptionData.investigationsAdviced;
+        this.adviceList = prescriptionData.advice?.length ? prescriptionData.advice.map(advice => ({ name: advice })) : [{ name: "" }];
+        this.followUpDate = getDateFormate(prescriptionData.followUp?.date);
+        this.followUpDays = prescriptionData.followUp?.days;
+        this.surgeryAdvised = prescriptionData.surgeryAdvice;
+        this.tags = prescriptionData.tags;
+        this.referredBy.name = prescriptionData.referredBy?.name;
+        this.referredBy.specialty = prescriptionData.referredBy?.speciality;
+        this.referredTo.name = prescriptionData.referredTo?.name;
+        this.referredTo.specialty = prescriptionData.referredTo?.speciality;
+
+        const diagnosisListRes = [];
+        for (let i = 0; i < prescriptionData.diagnosis?.length; i++) {
+          diagnosisListRes.push({
+            type: prescriptionData.diagnosis[i].type,
+            details: prescriptionData.diagnosis[i].details,
+          });
+        }
+        diagnosisListRes.push({
+          type: '',
+          details: '',
+        })
+        this.diagnosisList = diagnosisListRes;
+
+        const investigationAdviceList = [];
+        for (let i = 0; i < prescriptionData.investigationsAdviced?.length; i++) {
+          investigationAdviceList.push({
+            name: prescriptionData.investigationsAdviced[i].name,
+            details: prescriptionData.investigationsAdviced[i].details,
+          });
+        }
+        investigationAdviceList.push({
+          name: '',
+          details: '',
+        })
+        this.investigationAdviceList = investigationAdviceList;
+
+        const implantList = [];
+        for (let i = 0; i < prescriptionData.implant?.length; i++) {
+          implantList.push({
+            name: prescriptionData.implant[i].name,
+            removalDate: prescriptionData.implant[i].removalDate,
+          });
+        }
+        implantList.push({
+          name: '',
+          removalDate: '',
+        })
+        this.implant = implantList;
+
+        const drugAllergyList = [];
+        for (let i = 0; i < prescriptionData.drugAllergy?.length; i++) {
+          drugAllergyList.push({
+            name: prescriptionData.drugAllergy[i].name,
+            details: prescriptionData.drugAllergy[i].details,
+          });
+        }
+        drugAllergyList.push({
+          name: '',
+          details: '',
+        })
+        this.drugAllergy = drugAllergyList;
+
+        const drugHistoryList = [];
+        for (let i = 0; i < prescriptionData.drugHistory?.length; i++) {
+          drugHistoryList.push({
+            name: prescriptionData.drugHistory[i].name,
+            details: prescriptionData.drugHistory[i].details,
+          });
+        }
+        drugHistoryList.push({
+          name: '',
+          details: '',
+        })
+        this.drugHistory = drugHistoryList;
+
+        const antiplatletList = [];
+        for (let i = 0; i < prescriptionData.antiplatlet?.length; i++) {
+          antiplatletList.push({
+            name: prescriptionData.antiplatlet[i].name,
+            details: prescriptionData.antiplatlet[i].details,
+          });
+        }
+        antiplatletList.push({
+          name: '',
+          details: '',
+        })
+        this.antiplatlet = antiplatletList;
+
+        const medicationListRes = [];
+        for (let i = 0; i < prescriptionData.medications?.length; i++) {
+          medicationListRes.push({
+            name: prescriptionData.medications[i].name,
+            dosage: prescriptionData.medications[i].dosage,
+            frequency: prescriptionData.medications[i].frequency,
+            duration: prescriptionData.medications[i].duration,
+            notes: prescriptionData.medications[i].notes,
+            composition: prescriptionData.medications[i].composition,
+          });
+        }
+        medicationListRes.push({
+          name: '',
+          dosage: '',
+          frequency: '',
+          duration: '',
+          notes: '',
+          composition: ''
+        })
+        this.medications = medicationListRes;
+        this.fetchPrescriptions();
+      }
+    },
+    async fetchPrescriptions() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
+
+      if (res) {
+        let counter = res.files.length;
+        this.pastPrescriptions = res.files.map((item) => ({
+          count: counter--,
+          id: item._id,
+          history: item.history,
+          drugAllergy: item.drugAllergy,
+          drugHistory: item.drugHistory,
+          antiplatlet: item.antiplatlet,
+          previousSurgery: item.previousSurgery,
+          implants: item.implant,
+          tags: item.tags,
+          provisional: item.provisional,
+          medicines: item.medications.map((med) => med.name),
+          diagnosis: item.diagnosis.map((diag) => diag.type),
+          date: new Date(item.createdAt).toLocaleDateString(),
+          investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
+          pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
+        }));
+
+        if (!this.isDraft === true && this.pastPrescriptions.length > 0) {
+          const item = this.pastPrescriptions[0];
+          const drugList = [];
+          for (let i = 0; i < item.drugAllergy.length; i++) {
+            drugList.push({
+              name: item.drugAllergy[i].name,
+              details: item.drugAllergy[i].details,
+            });
+          }
+          drugList.push({
+            name: '',
+            details: '',
+          })
+          this.drugAllergy = drugList;
+
+          const drugHList = [];
+          for (let i = 0; i < item.drugHistory.length; i++) {
+            drugHList.push({
+              name: item.drugHistory[i].name,
+              details: item.drugHistory[i].details,
+            });
+          }
+          drugHList.push({
+            name: '',
+            details: '',
+          })
+          this.drugHistory = drugHList;
+
+          const antiplatlet = [];
+          for (let i = 0; i < item.antiplatlet.length; i++) {
+            antiplatlet.push({
+              name: item.antiplatlet[i].name,
+              details: item.antiplatlet[i].details,
+            });
+          }
+          antiplatlet.push({
+            name: '',
+            details: '',
+          })
+          this.antiplatlet = antiplatlet;
+
+          const today = new Date();
+          const implantList = [];
+          for (let i = 0; i < item.implants.length; i++) {
+            const removalDate = new Date(item.implants[i].removalDate);
+            if (removalDate >= today) {
+              implantList.push({
+                name: item.implants[i].name,
+                removalDate: item.implants[i].removalDate,
+              });
+            }
+          }
+          implantList.push({
+            name: '',
+            removalDate: '',
+          })
+          this.implant = implantList;
+
+          this.tags = item.tags;
+          this.provisional = item.provisional;
+
+          const historyList = [];
+          for (let i = 0; i < item.history.length; i++) {
+            historyList.push({
+              name: item.history[i],
+            });
+          }
+          this.historyList = historyList;
+        }
+      }
+    },
+    async fetchHealthFiles() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().getHealthFileApiCall(patientId)
+
+      if (res) {
+        for (let i = 0; i < res.files.length; i++) {
+          this.healthRecords.push(res.files[i]);
+        }
+      }
+    },
+    async fetchIpdFiles() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().getIpdFileApiCall(patientId)
+
+      if (res) {
+        for (let i = 0; i < res.files.length; i++) {
+          this.ipdRecords.push(res.files[i]);
+        }
+      }
+    },
+    async addField() {
       if (!this.newField.label) return;
 
       const requestData = {
@@ -1125,41 +1485,16 @@ export default {
         printable: true
       }
 
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription-section`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.accessToken,
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => {
-          const contentType = response.headers.get('content-type');
-          if (!response.ok) {
-            if (contentType && !contentType.includes('application/json')) {
-              return response.text().then(text => {
-                this.showSnackbar(text, true);
-                this.showSettings = false;
-                throw new Error(`Error ${response.status}: ${text}`);
-              });
-            }
-          }
-          return response.json();
-        })
-        .then((res) => {
-          if (res) {
-            // this.vitals[newModel] = ""; // Add to vitals object
-            this.newField = { label: "", type: "text" }; // Reset field
-            this.showSettings = false; // Close popup
-            this.fetchPriscriptionSections();
-          }
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        });
-    },
+      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(requestData)
 
-    addSection() {
+      if (res) {
+        this.newField = { label: "", type: "text" };
+        this.showSettings = false;
+        this.fetchPriscriptionSections();
+        useUiStore().openNotificationMessage("Vitals Added Successfully!");
+      }
+    },
+    async addSection() {
       if (!this.newSection.label) return;
 
       const requestData = {
@@ -1170,706 +1505,70 @@ export default {
         printable: this.newSection.isPrint
       }
 
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription-section`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.accessToken,
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => {
-          const contentType = response.headers.get('content-type');
-          if (!response.ok) {
-            if (contentType && !contentType.includes('application/json')) {
-              return response.text().then(text => {
-                this.showSnackbar(text, true);
-                this.showSettingsForSection = false;
-                throw new Error(`Error ${response.status}: ${text}`);
-              });
-            }
-          }
-          return response.json();
-        })
-        .then((res) => {
-          if (res) {
-            this.fetchPriscriptionSections();
-            this.newSection = { label: "", isPrint: false, type: "text" }; // Reset field
-            this.showSettingsForSection = false; // Close popup
-          }
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        });
-    },
+      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(requestData)
 
-    // Helper function to split array into chunks of 6
-    chunkArray(array, chunkSize) {
-      const result = [];
-      for (let i = 0; i < array.length; i += chunkSize) {
-        result.push(array.slice(i, i + chunkSize));
-      }
-      return result;
-    },
-    convertToDirectArray(objArray) {
-      return objArray?.map(item => item.name);
-    },
-    focusNextInput(index, field) {
-      const currentInput = document.activeElement;
-      const allInputs = Array.from(document.querySelectorAll("input"));
-      const validInputs = allInputs.filter(input => {
-        const ariaLabel = input.getAttribute("aria-label") || "";
-        const inputMode = input.getAttribute("inputmode") || "";
-        return inputMode !== "none" && !ariaLabel.toLowerCase().includes("open");
-      });
-
-      const currentIndex = validInputs.indexOf(currentInput);
-
-      if (currentIndex !== -1 && currentIndex < validInputs.length - 1) {
-        validInputs[currentIndex + 1].focus();
+      if (res) {
+        this.fetchPriscriptionSections();
+        this.newSection = { label: "", isPrint: false, type: "text" };
+        this.showSettingsForSection = false;
+        useUiStore().openNotificationMessage("Consult Section Added Successfully!");
       }
     },
-    fetchPriscriptionSections() {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription-section`, {
-        method: "GET",
-        headers: {
-          Authorization: this.accessToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          res.prescriptionSections.forEach((item) => {
-            const exists = this.dynamicFields.some(field => field.label === item.label);
-            const existsSection = this.dynamicSection.some(field => field.label === item.label);
+    async AddDropdown(sectionName, sectionId, data, dropdownData) {
+      let notAvailableData
 
-            if (!exists && item.sectionType === "vitals") {
-              this.dynamicFields.push({
-                label: item.label,
-                model: item.label,
-                type: item.fieldType,
-                placeholder: item.fieldType === "text" ? "Enter text" : "",
-              })
-            } else if (!existsSection && item.sectionType === "consult") {
-              this.dynamicSection.push({
-                label: item.label,
-                model: item.label,
-                type: item.fieldType,
-                placeholder: item.fieldType === "text" ? "Enter text" : "",
-              })
-            }
-          })
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        });
-    },
-    fetchDropdowns() {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/dropdown`, {
-        method: "GET",
-        headers: {
-          Authorization: this.accessToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          const templates = {};
-
-          res.dropdowns.forEach((item) => {
-            const sectionName = item.sectionName
-              .toLowerCase()
-              .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-                index === 0 ? word.toLowerCase() : word.toUpperCase()
-              )
-
-            if (!templates[sectionName]) {
-              templates[sectionName] = [];
-            }
-
-            templates[sectionName].push({
-              name: item.name || "Template First",
-            });
-          });
-
-          this.complaintSuggestions = this.convertToDirectArray(templates.complaints) || [];
-          this.historySuggestions = this.convertToDirectArray(templates.history) || [];
-          this.physicalSuggestions = this.convertToDirectArray(templates["physical Examination"]) || [];
-          this.diagnosisSuggestions = this.convertToDirectArray(templates.diagnosis) || [];
-          this.provisionalDiagnosisSuggestions = this.convertToDirectArray(templates["provisional Diagnosis"]) || [];
-          this.investigationAdviceSuggestions = this.convertToDirectArray(templates["investigation Advice"]) || [];
-          this.adviceSuggestions = this.convertToDirectArray(templates.advice) || [];
-          this.doctorNameSuggestions = this.convertToDirectArray(templates.doctor) || [];
-          this.surgeryAdviceSuggestions = this.convertToDirectArray(templates["surgery Adviced"]) || [];
-          this.tagsSuggestions = this.convertToDirectArray(templates.tags) || [];
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        });
-    },
-    fetchTemplates() {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/template`, {
-        method: "GET",
-        headers: {
-          Authorization: this.accessToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          const templates = {};
-
-          res.templates.forEach((item) => {
-            const sectionName = item.sectionName
-              .toLowerCase()
-              .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-                index === 0 ? word.toLowerCase() : word.toUpperCase()
-              )
-              .replace(/\s+/g, "") + "Template";
-
-            if (!templates[sectionName]) {
-              templates[sectionName] = [];
-            }
-
-            const formattedData = item.data
-              .filter((dataItem) => {
-                return Object.values(dataItem).some((value) => value && value.trim());
-              })
-              .map((dataItem) => {
-                if (sectionName === "complaintsTemplate") {
-                  return { name: dataItem.name || "" };
-                } else if (sectionName === "diagnosisTemplate") {
-                  return { type: dataItem.name || "", details: dataItem.details || "" };
-                } else {
-                  return dataItem;
-                }
-              });
-
-            templates[sectionName].push({
-              name: item.name || "Template First",
-              data: formattedData,
-            });
-          });
-
-          this.complaintsTemplate = templates.complaintsTemplate || [];
-          this.historyTemplate = templates.historyTemplate || [];
-          this.physicalExaminationTemplate = templates.physicalExaminationTemplate || [];
-          this.diagnosisTemplate = templates.diagnosisTemplate || [];
-          this.medicationsTemplate = templates.medicationsTemplate || [];
-          this.adviceTemplate = templates.adviceTemplate || [];
-          this.investigationAdviceTemplate = templates.investigationAdviceTemplate || [];
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        });
-    },
-    fetchMedicines() {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/medicine`, {
-        method: "GET",
-        headers: {
-          Authorization: this.accessToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          this.medicineSuggestions = res.medicines.map((medicine) => ({
-            name: medicine.medicineName,
-            composition: medicine.composition,
-          }));
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-        })
-    },
-    toggleEditComposition(item) {
-
-      if (item.isEditingComposition) {
-        item.isEditingComposition = false;
+      if (typeof data === "string") {
+        notAvailableData = dropdownData.includes(data.trim()) ? [] : [data.trim()];
       } else {
-        item.isEditingComposition = true;
-      }
-    },
 
-
-    // complaints
-    handleInputComplaints(item) {
-      if (this.isRowFilledComplaints(item) && !this.hasEmptyRowComplaints()) {
-        this.complaintsList.push({ name: "" });
-      }
-      this.removeEmptyRowsComplaints();
-    },
-    isRowFilledComplaints(item) {
-      return item.name;
-    },
-    hasEmptyRowComplaints() {
-      return this.complaintsList.some(
-        (med) => !med.name
-      );
-    },
-    removeEmptyRowsComplaints() {
-      this.complaintsList = this.complaintsList.filter((med, index) => {
-        return this.isRowFilledComplaints(med) || index === this.complaintsList.length - 1;
-      });
-    },
-
-    // physicalExam
-    handleInputPhysicalExam(item) {
-      if (this.isRowFilledPhysicalExam(item) && !this.hasEmptyRowPhysicalExam()) {
-        this.physicalExamList.push({ name: "" });
-      }
-      this.removeEmptyRowsPhysicalExam();
-    },
-    isRowFilledPhysicalExam(item) {
-      return item.name;
-    },
-    hasEmptyRowPhysicalExam() {
-      return this.physicalExamList.some(
-        (med) => !med.name
-      );
-    },
-    removeEmptyRowsPhysicalExam() {
-      this.physicalExamList = this.physicalExamList.filter((med, index) => {
-        return this.isRowFilledPhysicalExam(med) || index === this.physicalExamList.length - 1;
-      });
-    },
-
-    // advice
-    handleInputAdvice(item) {
-      if (this.isRowFilledAdvice(item) && !this.hasEmptyRowAdvice()) {
-        this.adviceList.push({ name: "" });
-      }
-      this.removeEmptyRowsAdvice();
-    },
-    isRowFilledAdvice(item) {
-      return item.name;
-    },
-    hasEmptyRowAdvice() {
-      return this.adviceList.some(
-        (med) => !med.name
-      );
-    },
-    removeEmptyRowsAdvice() {
-      this.adviceList = this.adviceList.filter((med, index) => {
-        return this.isRowFilledAdvice(med) || index === this.adviceList.length - 1;
-      });
-    },
-
-    // history
-    handleInputHistory(item) {
-      if (this.isRowFilledHistory(item) && !this.hasEmptyRowHistory()) {
-        this.historyList.push({ name: "" });
-      }
-      this.removeEmptyRowsHistory();
-    },
-    isRowFilledHistory(item) {
-      return item.name;
-    },
-    hasEmptyRowHistory() {
-      return this.historyList.some(
-        (med) => !med.name
-      );
-    },
-    removeEmptyRowsHistory() {
-      this.historyList = this.historyList.filter((med, index) => {
-        return this.isRowFilledHistory(med) || index === this.historyList.length - 1;
-      });
-    },
-
-    handleInput(item, isComposition) {
-      if (isComposition) {
-
-        const selectedMedicine = this.medicineSuggestions.find(
-          (suggestion) => suggestion.name === item.name.name
-        );
-
-        if (selectedMedicine) {
-          item.composition = selectedMedicine.composition;
+        if (sectionName === "Diagnosis") {
+          notAvailableData = data
+            .map(item => item.type.trim())
+            .filter(name => name && !dropdownData.includes(name));
         } else {
-          item.composition = "";
+          notAvailableData = data
+            .map(item => item.name.trim())
+            .filter(name => name && !dropdownData.includes(name));
         }
       }
 
-      if (this.isRowFilled(item) && !this.hasEmptyRow()) {
-        this.medications.push({ name: "", dosage: "", frequency: "", duration: "", notes: "" });
-      }
-      this.removeEmptyRows();
-    },
-    isRowFilled(item) {
-      return item.name || item.dosage || item.frequency || item.duration || item.notes || item.composition;
-    },
-    hasEmptyRow() {
-      return this.medications.some(
-        (med) => !med.name && !med.dosage && !med.frequency && !med.duration && !med.notes && !med.composition
-      );
-    },
-    removeEmptyRows() {
-      this.medications = this.medications.filter((med, index) => {
-        return this.isRowFilled(med) || index === this.medications.length - 1;
-      });
-    },
+      if (notAvailableData.length > 0) {
+        notAvailableData.map(async (name) => {
+          const requestData = {
+            sectionId: sectionId,
+            sectionName: sectionName,
+            name: name
+          }
 
-    handleInputImplant(item) {
-      if (this.isImplantRowFilled(item) && !this.hasEmptyImplantRow()) {
-        this.implant.push({ name: "", removalDate: "" });
-      }
-      this.removeEmptyImplantRows();
-    },
-    isImplantRowFilled(item) {
-      return item.name || item.removalDate;
-    },
-    hasEmptyImplantRow() {
-      return this.implant.some(
-        (impl) => !impl.name && !impl.removalDate
-      );
-    },
-    removeEmptyImplantRows() {
-      this.implant = this.implant.filter((impl, index) => {
-        return this.isImplantRowFilled(impl) || index === this.implant.length - 1;
-      });
-    },
+          const res = await useDropdownStore().AddDropdownApiCall(requestData)
 
-    handleInputDrugAllergy(item) {
-      if (this.isDrugRowFilled(item) && !this.hasEmptyDrugRow()) {
-        this.drugAllergy.push({ name: "", details: "" });
-      }
-      this.removeEmptyDrugRows();
-    },
-    isDrugRowFilled(item) {
-      return item.name || item.details;
-    },
-    hasEmptyDrugRow() {
-      return this.drugAllergy.some(
-        (drug) => !drug.name && !drug.details
-      );
-    },
-    removeEmptyDrugRows() {
-      this.drugAllergy = this.drugAllergy.filter((drug, index) => {
-        return this.isDrugRowFilled(drug) || index === this.drugAllergy.length - 1;
-      });
-    },
-
-    handleInputDrugHistory(item) {
-      if (this.isDrugHRowFilled(item) && !this.hasEmptyDrugHRow()) {
-        this.drugHistory.push({ name: "", details: "" });
-      }
-      this.removeEmptyDrugHRows();
-    },
-    isDrugHRowFilled(item) {
-      return item.name || item.details;
-    },
-    hasEmptyDrugHRow() {
-      return this.drugHistory.some(
-        (drug) => !drug.name && !drug.details
-      );
-    },
-    removeEmptyDrugHRows() {
-      this.drugHistory = this.drugHistory.filter((drug, index) => {
-        return this.isDrugRowFilled(drug) || index === this.drugHistory.length - 1;
-      });
-    },
-
-    handleInputAntiplatlet(item) {
-      if (this.isAntiplatletFilled(item) && !this.hasEmptyAntiplatletRow()) {
-        this.antiplatlet.push({ name: "", details: "" });
-      }
-      this.removeEmptyAntiplatletRows();
-    },
-    isAntiplatletFilled(item) {
-      return item.name || item.details;
-    },
-    hasEmptyAntiplatletRow() {
-      return this.antiplatlet.some(
-        (anti) => !anti.name && !anti.details
-      );
-    },
-    removeEmptyAntiplatletRows() {
-      this.antiplatlet = this.antiplatlet.filter((anti, index) => {
-        return this.isAntiplatletFilled(anti) || index === this.antiplatlet.length - 1;
-      });
-    },
-
-    handleInputDiagnosis(item) {
-      if (this.isRowFilledDiagnosis(item) && !this.hasEmptyRowDiagnosis()) {
-        this.diagnosisList.push({ type: "", details: "" });
-      }
-      this.removeEmptyRowsDiagnosis();
-    },
-    isRowFilledDiagnosis(item) {
-      return item.type || item.details;
-    },
-    hasEmptyRowDiagnosis() {
-      return this.diagnosisList.some(
-        (diag) => !diag.type && !diag.details
-      );
-    },
-    removeEmptyRowsDiagnosis() {
-      this.diagnosisList = this.diagnosisList.filter((diag, index) => {
-        return this.isRowFilledDiagnosis(diag) || index === this.diagnosisList.length - 1;
-      });
-    },
-
-    handleInputInvestigationAdvice(item) {
-      if (this.isRowFilledInvestigation(item) && !this.hasEmptyRowInvestigation()) {
-        this.investigationAdviceList.push({ name: "", details: "" });
-      }
-      this.removeEmptyRowsInvestigation();
-    },
-    isRowFilledInvestigation(item) {
-      return item.name || item.details;
-    },
-    hasEmptyRowInvestigation() {
-      return this.investigationAdviceList.some(
-        (invest) => !invest.name && !invest.details
-      );
-    },
-    removeEmptyRowsInvestigation() {
-      this.investigationAdviceList = this.investigationAdviceList.filter((invest, index) => {
-        return this.isRowFilledInvestigation(invest) || index === this.investigationAdviceList.length - 1;
-      });
-    },
-
-    pdfDialogHandle(item) {
-      this.pdfUrl = `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item.id}.pdf`;
-      this.pdfDialog = true;
-    },
-    closePdfDialog() {
-      this.pdfUrl = '';
-      this.pdfDialog = false;
-      window.location.reload();
-    },
-
-    AddInvestigationTemplate(templateData) {
-      this.investigationAdviceList = this.investigationAdviceList.filter(
-        (item) => item.name !== "" || item.details !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.investigationAdviceList.push(item);
-      });
-
-      this.investigationAdviceList.push({
-        name: "",
-        details: "",
-      });
-    },
-    AddComplaintsTemplate(templateData) {
-      this.complaintsList = this.complaintsList.filter(
-        (item) => item.name !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.complaintsList.push(item);
-      });
-
-      this.complaintsList.push({
-        name: "",
-      });
-    },
-    AddHistoryTemplate(templateData) {
-      this.historyList = this.historyList.filter(
-        (item) => item.name !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.historyList.push(item);
-      });
-
-      this.historyList.push({
-        name: "",
-      });
-    },
-    AddPhysicalExaminationTemplate(templateData) {
-      this.physicalExamList = this.physicalExamList.filter(
-        (item) => item.name !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.physicalExamList.push(item);
-      });
-
-      this.physicalExamList.push({
-        name: "",
-      });
-    },
-    AddDiagnosisTemplate(templateData) {
-      this.diagnosisList = this.diagnosisList.filter(
-        (item) => item.type !== "" || item.details !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.diagnosisList.push(item);
-      });
-
-      this.diagnosisList.push({
-        type: "",
-        details: "",
-      });
-    },
-    AddMedicationsTemplate(templateData) {
-      this.medications = this.medications.filter(
-        (item) => item.name !== "" || item.dosage !== "" || item.frequency !== "" || item.duration !== "" || item.notes !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.medications.push(item);
-      });
-
-      this.medications.push({
-        name: "",
-        dosage: "",
-        frequency: "",
-        duration: "",
-        notes: ""
-      });
-    },
-    AddAdviceTemplate(templateData) {
-      this.adviceList = this.adviceList.filter(
-        (item) => item.name !== ""
-      );
-
-      // Add new data
-      templateData.data.forEach(item => {
-        this.adviceList.push(item);
-      });
-
-      this.adviceList.push({
-        name: "",
-      });
-    },
-    fetchPatientDetails() {
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/patient/${this.$route.params.patientId}`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Data: ', data.patient.tags);
-          this.emailInput = data.patient.email;
-          this.phoneInput = data.patient.phoneNumber;
-          this.tags = data.patient.tags;
-          this.patientData = data.patient
-
-          console.log('Tags: ', this.tags);
-        })
-        .catch((error) => {
-          console.error("Error fetching prescriptions:", error);
-        })
-    },
-    printPrescription() {
-      const iframe = document.createElement('iframe');
-      iframe.src = this.pdfUrl;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-
-      iframe.onload = () => {
-        iframe.contentWindow.print();
-        document.body.removeChild(iframe);
-      };
-    },
-    fetchPrescriptions() {
-      const patientId = this.$route.params.patientId;
-
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${patientId}/file/prescription`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          let counter = data.files.length;
-          this.pastPrescriptions = data.files.map((item) => ({
-            count: counter--,
-            id: item._id,
-            history: item.history,
-            drugAllergy: item.drugAllergy,
-            drugHistory: item.drugHistory,
-            antiplatlet: item.antiplatlet,
-            previousSurgery: item.previousSurgery,
-            implants: item.implant,
-            tags: item.tags,
-            provisional: item.provisional,
-            medicines: item.medications.map((med) => med.name),
-            diagnosis: item.diagnosis.map((diag) => diag.type),
-            date: new Date(item.createdAt).toLocaleDateString(),
-            investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
-            pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
-          }));
-
-          if (!this.isDraft === true && this.pastPrescriptions.length > 0) {
-            const item = this.pastPrescriptions[0];
-            const drugList = [];
-            for (let i = 0; i < item.drugAllergy.length; i++) {
-              drugList.push({
-                name: item.drugAllergy[i].name,
-                details: item.drugAllergy[i].details,
-              });
-            }
-            drugList.push({
-              name: '',
-              details: '',
-            })
-            this.drugAllergy = drugList;
-
-            const drugHList = [];
-            for (let i = 0; i < item.drugHistory.length; i++) {
-              drugHList.push({
-                name: item.drugHistory[i].name,
-                details: item.drugHistory[i].details,
-              });
-            }
-            drugHList.push({
-              name: '',
-              details: '',
-            })
-            this.drugHistory = drugHList;
-
-            const antiplatlet = [];
-            for (let i = 0; i < item.antiplatlet.length; i++) {
-              antiplatlet.push({
-                name: item.antiplatlet[i].name,
-                details: item.antiplatlet[i].details,
-              });
-            }
-            antiplatlet.push({
-              name: '',
-              details: '',
-            })
-            this.antiplatlet = antiplatlet;
-
-            const today = new Date();
-            const implantList = [];
-            for (let i = 0; i < item.implants.length; i++) {
-              const removalDate = new Date(item.implants[i].removalDate);
-              if (removalDate >= today) {
-                implantList.push({
-                  name: item.implants[i].name,
-                  removalDate: item.implants[i].removalDate,
-                });
-              }
-            }
-            implantList.push({
-              name: '',
-              removalDate: '',
-            })
-            this.implant = implantList;
-
-            this.tags = item.tags;
-            this.provisional = item.provisional;
-
-            const historyList = [];
-            for (let i = 0; i < item.history.length; i++) {
-              historyList.push({
-                name: item.history[i],
-              });
-            }
-            this.historyList = historyList;
+          if (res) {
+            this.fetchDropdowns();
+            useUiStore().openNotificationMessage("Dropdown Saved Successfully!");
           }
         })
-        .catch((error) => {
-          console.error("Error fetching prescriptions:", error);
-        });
+      }
     },
-    savePrescription() {
+    async AddMedicineDropdown(data, dropdownData) {
+      let notAvailableData = data.map(item => (typeof item.name === "string" && item.name.trim())).filter(name => name && !dropdownData.includes(name));
+
+      if (notAvailableData.length > 0) {
+        notAvailableData.map(async (name) => {
+          const requestData = {
+            composition: "-",
+            medicineName: name
+          }
+
+          const res = await useMedicineStore().AddMedicineApiCall(requestData)
+
+          if (res) {
+            this.fetchMedicines();
+            useUiStore().openNotificationMessage("Medicine Saved Successfully!");
+          }
+        })
+      }
+    },
+    async savePrescription() {
       const formattedDiagnosis = this.diagnosisList
         .filter((item) => item.type || item.details)
         .map((item) => ({
@@ -1970,36 +1669,14 @@ export default {
 
       const patientId = this.$route.params.patientId;
 
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription/${patientId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.accessToken,
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => {
-          const contentType = response.headers.get('content-type');
-          if (!response.ok) {
-            if (contentType && !contentType.includes('application/json')) {
-              return response.text().then(text => {
-                this.showSnackbar(text, true);
-                this.isTemplateDetailModalOpen = false;
-                throw new Error(`Error ${response.status}: ${text}`);
-              });
-            }
-          }
-          return response.json();
-        })
-        .then((res) => {
-          console.log('Res: ', res);
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-          alert("Error saving prescription.");
-        });
+      const res = await usePrescriptionStore().savePrescriptionApiCall(patientId, requestData)
+
+      if (res) {
+        useUiStore().openNotificationMessage("Prescription Saved Successfully!");
+        this.fetchDraftPrescription()
+      }
     },
-    endConsultation(status) {
+    async endConsultation(status) {
       const formattedDiagnosis = this.diagnosisList
         .filter((item) => item.type || item.details)
         .map((item) => ({
@@ -2100,181 +1777,150 @@ export default {
       }
 
       const patientId = this.$route.params.patientId;
+      const res = await usePrescriptionStore().endConsultationApiCall(patientId, requestData)
 
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription/${patientId}/end-consultation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.accessToken,
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => {
-          const contentType = response.headers.get('content-type');
-          if (!response.ok) {
-            if (contentType && !contentType.includes('application/json')) {
-              return response.text().then(text => {
-                this.showSnackbar(text, true);
-                this.isTemplateDetailModalOpen = false;
-                throw new Error(`Error ${response.status}: ${text}`);
-              });
-            }
-          }
-          return response.json();
-        })
-        .then((res) => {
-          this.prescriptionUrl = res.pdfPath;
-          // this.prescriptionUrl = `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${res.prescription._id}.pdf`;
-          this.dialog = true;
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-          alert("Error saving prescription.");
-        });
+      if (res) {
+        this.prescriptionUrl = res.pdfPath;
+        this.dialog = true;
+        useUiStore().openNotificationMessage("End Consultation Successfully!");
+      }
     },
-    fetchDraftPrescription() {
+    async handleFileUpload(type) {
+      const fileInput =
+        type === "health" ? this.$refs.healthFileInput : this.$refs.ipdFileInput;
+      const file = fileInput.files[0];
+
+      if (!file) {
+        console.log("No file selected");
+        return;
+      }
+
+      const fileType = file.type.startsWith("image") ? "image" : "pdf";
+      const filePreviewUrl = URL.createObjectURL(file);
+
+      const newRecord = {
+        id: Date.now(),
+        fileName: file.name,
+        type: fileType,
+        fileUrl: filePreviewUrl,
+        date: new Date().toLocaleDateString()
+      };
+
+      if (type === "health") {
+        this.healthRecords.push(newRecord);
+      } else if (type === "ipd") {
+        this.ipdRecords.push(newRecord);
+      }
+
+      // Upload file to the server
       const patientId = this.$route.params.patientId;
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/prescription/${patientId}/draft`, {
-        method: "GET",
-        headers: {
-          Authorization: this.accessToken,
-        },
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          const prescriptionData = res.prescription;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileType", type);
 
-          if (prescriptionData !== 'Prescription is not drafted yet.') {
-            this.isDraft = true;
-          }
+      const res = await usePrescriptionStore().uploadFileApiCall(patientId, formData)
 
-          this.vitals.bp = prescriptionData.bloodPressure;
-          this.vitals.height = prescriptionData.height;
-          this.vitals.weight = prescriptionData.weight;
-          this.vitals.pulse = prescriptionData.pulse;
-          this.vitals.temperature = prescriptionData.temperature;
-          this.vitals.painScore = prescriptionData.painScore
+      if (res) {
+        useUiStore().openNotificationMessage(`${type} record uploaded successfully!`);
+      }
+    },
+    closeModal() {
+      this.showSettings = false;
+    },
+    chunkArray(array, chunkSize) {
+      const result = [];
+      for (let i = 0; i < array.length; i += chunkSize) {
+        result.push(array.slice(i, i + chunkSize));
+      }
+      return result;
+    },
+    convertToDirectArray(objArray) {
+      return objArray?.map(item => item.name);
+    },
+    focusNextInput(index, field) {
+      const currentInput = document.activeElement;
+      const allInputs = Array.from(document.querySelectorAll("input"));
+      const validInputs = allInputs.filter(input => {
+        const ariaLabel = input.getAttribute("aria-label") || "";
+        const inputMode = input.getAttribute("inputmode") || "";
+        return inputMode !== "none" && !ariaLabel.toLowerCase().includes("open");
+      });
 
-          this.complaintsList = prescriptionData.complaints?.length ? prescriptionData.complaints.map(complaint => ({ name: complaint })) : [{ name: "" }];
-          this.historyList = prescriptionData.history?.length ? prescriptionData.history.map(history => ({ name: history })) : [{ name: "" }];
-          this.previousSurgery = prescriptionData.previousSurgery;
-          this.physicalExamList = prescriptionData.physicalExamination?.length ? prescriptionData.physicalExamination.map(complaint => ({ name: complaint })) : [{ name: "" }];
-          this.provisional = prescriptionData.provisional;
-          this.investigationAdvice = prescriptionData.investigationsAdviced;
-          this.adviceList = prescriptionData.advice?.length ? prescriptionData.advice.map(advice => ({ name: advice })) : [{ name: "" }];
-          this.followUpDate = getDateFormate(prescriptionData.followUp?.date);
-          this.followUpDays = prescriptionData.followUp?.days;
-          this.surgeryAdvised = prescriptionData.surgeryAdvice;
-          this.tags = prescriptionData.tags;
-          this.referredBy.name = prescriptionData.referredBy?.name;
-          this.referredBy.specialty = prescriptionData.referredBy?.speciality;
-          this.referredTo.name = prescriptionData.referredTo?.name;
-          this.referredTo.specialty = prescriptionData.referredTo?.speciality;
+      const currentIndex = validInputs.indexOf(currentInput);
 
-          const diagnosisListRes = [];
-          for (let i = 0; i < prescriptionData.diagnosis?.length; i++) {
-            diagnosisListRes.push({
-              type: prescriptionData.diagnosis[i].type,
-              details: prescriptionData.diagnosis[i].details,
-            });
-          }
-          diagnosisListRes.push({
-            type: '',
-            details: '',
-          })
-          this.diagnosisList = diagnosisListRes;
+      if (currentIndex !== -1 && currentIndex < validInputs.length - 1) {
+        validInputs[currentIndex + 1].focus();
+      }
+    },
+    toggleEditComposition(item) {
 
-          const investigationAdviceList = [];
-          for (let i = 0; i < prescriptionData.investigationsAdviced?.length; i++) {
-            investigationAdviceList.push({
-              name: prescriptionData.investigationsAdviced[i].name,
-              details: prescriptionData.investigationsAdviced[i].details,
-            });
-          }
-          investigationAdviceList.push({
-            name: '',
-            details: '',
-          })
-          this.investigationAdviceList = investigationAdviceList;
+      if (item.isEditingComposition) {
+        item.isEditingComposition = false;
+      } else {
+        item.isEditingComposition = true;
+      }
+    },
+    // Add New Feilds
+    dynamicHandleInput(item, listKey, keyFields = ["name"], isComposition = false) {
+      if (isComposition) {
+        const selectedMedicine = this.medicineSuggestions.find(
+          (suggestion) => suggestion.name === item.name?.name
+        );
 
-          const implantList = [];
-          for (let i = 0; i < prescriptionData.implant?.length; i++) {
-            implantList.push({
-              name: prescriptionData.implant[i].name,
-              removalDate: prescriptionData.implant[i].removalDate,
-            });
-          }
-          implantList.push({
-            name: '',
-            removalDate: '',
-          })
-          this.implant = implantList;
+        item.composition = selectedMedicine ? selectedMedicine.composition : "";
+      }
+      if (this.isRowFilledDynamic(item, keyFields) && !this.hasEmptyRowDynamic(this[listKey], keyFields)) {
+        this[listKey].push(this.createEmptyRowDynamic(keyFields));
+      }
+      this.removeEmptyRowsDynamic(listKey, keyFields);
+    },
 
-          const drugAllergyList = [];
-          for (let i = 0; i < prescriptionData.drugAllergy?.length; i++) {
-            drugAllergyList.push({
-              name: prescriptionData.drugAllergy[i].name,
-              details: prescriptionData.drugAllergy[i].details,
-            });
-          }
-          drugAllergyList.push({
-            name: '',
-            details: '',
-          })
-          this.drugAllergy = drugAllergyList;
+    isRowFilledDynamic(item, keyFields) {
+      return keyFields.some(field => item[field]?.trim());
+    },
 
-          const drugHistoryList = [];
-          for (let i = 0; i < prescriptionData.drugHistory?.length; i++) {
-            drugHistoryList.push({
-              name: prescriptionData.drugHistory[i].name,
-              details: prescriptionData.drugHistory[i].details,
-            });
-          }
-          drugHistoryList.push({
-            name: '',
-            details: '',
-          })
-          this.drugHistory = drugHistoryList;
+    hasEmptyRowDynamic(list, keyFields) {
+      return list.some(row => keyFields.every(field => !row[field]?.trim()));
+    },
 
-          const antiplatletList = [];
-          for (let i = 0; i < prescriptionData.antiplatlet?.length; i++) {
-            antiplatletList.push({
-              name: prescriptionData.antiplatlet[i].name,
-              details: prescriptionData.antiplatlet[i].details,
-            });
-          }
-          antiplatletList.push({
-            name: '',
-            details: '',
-          })
-          this.antiplatlet = antiplatletList;
+    removeEmptyRowsDynamic(listKey, keyFields) {
+      this[listKey] = this[listKey].filter((row, index) =>
+        this.isRowFilledDynamic(row, keyFields) || index === this[listKey].length - 1
+      );
+    },
 
-          const medicationListRes = [];
-          for (let i = 0; i < prescriptionData.medications?.length; i++) {
-            medicationListRes.push({
-              name: prescriptionData.medications[i].name,
-              dosage: prescriptionData.medications[i].dosage,
-              frequency: prescriptionData.medications[i].frequency,
-              duration: prescriptionData.medications[i].duration,
-              notes: prescriptionData.medications[i].notes,
-              composition: prescriptionData.medications[i].composition,
-            });
-          }
-          medicationListRes.push({
-            name: '',
-            dosage: '',
-            frequency: '',
-            duration: '',
-            notes: '',
-            composition: ''
-          })
-          this.medications = medicationListRes;
-          this.fetchPrescriptions();
-        })
-        .catch((error) => {
-          console.error("Network Error:", error);
-          this.fetchPrescriptions();
-        })
+    createEmptyRowDynamic(keyFields) {
+      return keyFields.reduce((obj, field) => ({ ...obj, [field]: "" }), {});
+    },
+
+    // Add Template
+    addTemplate(templateData, listKey, emptyItem) {
+      this[listKey] = this[listKey].filter(item =>
+        Object.values(item).some(value => value !== "")
+      );
+
+      this[listKey].push(...templateData.data);
+      this[listKey].push(emptyItem);
+    },
+    pdfDialogHandle(item) {
+      this.pdfUrl = `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item.id}.pdf`;
+      this.pdfDialog = true;
+    },
+    closePdfDialog() {
+      this.pdfUrl = '';
+      this.pdfDialog = false;
+      // window.location.reload();
+    },
+    printPrescription() {
+      const iframe = document.createElement('iframe');
+      iframe.src = this.pdfUrl;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      iframe.onload = () => {
+        iframe.contentWindow.print();
+        document.body.removeChild(iframe);
+      };
     },
     clearAll() {
       this.visitNumber = '';
@@ -2316,7 +1962,7 @@ export default {
     },
     closePopup() {
       this.dialog = false;
-      window.location.reload();
+      // window.location.reload();
     },
     sharePrescription(method) {
       if (method === 'WhatsApp/SMS') {
@@ -2335,302 +1981,9 @@ export default {
         this.$refs.ipdFileInput.click();
       }
     },
-    handleFileUpload(type) {
-      const fileInput =
-        type === "health" ? this.$refs.healthFileInput : this.$refs.ipdFileInput;
-      const file = fileInput.files[0];
-
-      if (!file) {
-        console.log("No file selected");
-        return;
-      }
-
-      const fileType = file.type.startsWith("image") ? "image" : "pdf";
-      const filePreviewUrl = URL.createObjectURL(file);
-
-      const newRecord = {
-        id: Date.now(),
-        fileName: file.name,
-        type: fileType,
-        fileUrl: filePreviewUrl,
-        date: new Date().toLocaleDateString()
-      };
-
-      if (type === "health") {
-        this.healthRecords.push(newRecord);
-      } else if (type === "ipd") {
-        this.ipdRecords.push(newRecord);
-      }
-
-      // Upload file to the server
-      const patientId = this.$route.params.patientId;
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("fileType", type);
-
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${patientId}/file/upload`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(`${type} record uploaded successfully:`, data);
-        })
-        .catch((error) => {
-          console.error(`Error uploading ${type} record:`, error);
-        });
-    },
-    fetchFiles() {
-      const patientId = this.$route.params.patientId;
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${patientId}/file/health`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          for (let i = 0; i < data.files.length; i++) {
-            this.healthRecords.push(data.files[i]);
-          }
-        })
-        .catch((error) => {
-          console.error(`Error fetching health records:`, error);
-        });
-
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${patientId}/file/ipd`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          for (let i = 0; i < data.files.length; i++) {
-            this.ipdRecords.push(data.files[i]);
-          }
-        })
-        .catch((error) => {
-          console.error(`Error fetching IPD records:`, error);
-        });
-
-      fetch(`${import.meta.env.VITE_SERVER_URL}/api/${patientId}/file/prescription`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          let counter = 1;
-          this.pastPrescriptions = data.files.map((item) => ({
-            count: counter++,
-            id: item._id,
-            medicines: item.medications.map((med) => med.name),
-            diagnosis: item.diagnosis.map((diag) => diag.type),
-            date: new Date(item.createdAt).toLocaleDateString(),
-            investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
-            pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescriptions_${item._id}.pdf`,
-          }));
-        })
-        .catch((error) => {
-          console.error(`Error fetching prescription records:`, error);
-        });
-    },
-    showSnackbar(message, isError = false) {
-      const snackbarStore = useSnackbarStore();
-      snackbarStore.showMessage(message, isError);
-    },
     formatedDate(date) {
       return getDateFormate(date);
     },
-    AddDropdown(sectionName, sectionId, data, dropdownData) {
-      console.log("fgdfgdfg", sectionName, data);
-      let notAvailableData
-
-      if (typeof data === "string") {
-        notAvailableData = dropdownData.includes(data.trim()) ? [] : [data.trim()];
-      }else{
-
-        if (sectionName === "Diagnosis") {
-          notAvailableData = data
-            .map(item => item.type.trim())
-            .filter(name => name && !dropdownData.includes(name));
-        } else {
-          notAvailableData = data
-            .map(item => item.name.trim())
-            .filter(name => name && !dropdownData.includes(name));
-        }
-      }
-
-
-      if (notAvailableData.length > 0) {
-
-        notAvailableData.map((name) => {
-          const requestData = {
-            sectionId: sectionId,
-            sectionName: sectionName,
-            name: name
-          }
-          fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/dropdown`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: this.accessToken,
-            },
-            body: JSON.stringify(requestData),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((res) => {
-              if (res) {
-                this.fetchDropdowns();
-              }
-            })
-            .catch((error) => {
-              console.error("Network Error:", error);
-            });
-
-        })
-      }
-
-    },
-    AddMedicineDropdown(data, dropdownData) {
-      let notAvailableData = data.map(item => (typeof item.name === "string" && item.name.trim())).filter(name => name && !dropdownData.includes(name));
-
-      if (notAvailableData.length > 0) {
-        notAvailableData.map((name) => {
-          const requestData = {
-            composition: "-",
-            medicineName: name
-          }
-          fetch(`${import.meta.env.VITE_SERVER_URL}/api/${this.doctorId}/medicine`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: this.accessToken,
-            },
-            body: JSON.stringify(requestData),
-          })
-            .then((response) => {
-              return response.json();
-            })
-            .then((res) => {
-              if (res) {
-                this.fetchMedicines();
-              }
-            })
-            .catch((error) => {
-              console.error("Network Error:", error);
-            });
-
-        })
-      }
-    }
   },
 };
 </script>
-
-
-<style scoped>
-.prescription-page {
-  padding: 20px;
-}
-
-.section-card {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.font-weight-bold {
-  font-weight: bold;
-}
-
-.prescription-card {
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.prescription-card:hover {
-  transform: scale(1.05);
-}
-
-.v-btn {
-  margin-left: 10px;
-  color: #385D7E !important;
-  background-color: #d4ebff !important;
-  border: none;
-}
-
-.margin-none {
-  margin-left: 0 !important;
-}
-
-.pb-0 {
-  padding-bottom: 0 !important;
-}
-
-.pt-0 {
-  padding-top: 0 !important;
-}
-
-.pl-16 {
-  padding-left: 16px !important;
-}
-
-.pr-6 {
-  padding: 0 6px 0 0 !important;
-}
-
-.pl-6 {
-  padding: 0 0 0 6px !important;
-}
-
-.mr-12 {
-  margin-right: 12px !important;
-}
-
-.px-15 {
-  padding: 0 15px !important;
-}
-
-.max-1100 {
-  max-width: 1100px !important;
-}
-
-.max-1400 {
-  max-width: 1200px !important;
-}
-
-.v-toolbar {
-  background-color: #d4ebff !important;
-}
-
-.print-popup {
-  display: flex;
-  margin: 0 auto;
-  height: 60% !important;
-}
-
-.prescription-card {
-  background-color: #d4ebff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.lable-dev {
-  padding-bottom: 10px;
-}
-
-.lable-dev span {
-  color: #747474;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.test-data {
-  margin-bottom: 2px !important;
-}
-
-.max-w-auto {
-  max-width: 100%;
-}
-</style>

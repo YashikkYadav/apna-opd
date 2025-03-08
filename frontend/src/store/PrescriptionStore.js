@@ -27,9 +27,24 @@ export const usePrescriptionStore = defineStore('prescriptionStore', {
       const data = await PrescriptionService.PrescriptionSections(this.doctorId)
       return data
     },
+    async addPrescriptionSectionsApiCall(payload) {
+      const PrescriptionService = new AxiosPrescription()
+      const data = await PrescriptionService.AddPrescriptionSections(this.doctorId, payload)
+      return data
+    },
     async getDraftPrescriptionApiCall(patientId) {
       const PrescriptionService = new AxiosPrescription()
       const data = await PrescriptionService.DraftPrescription(this.doctorId, patientId)
+      return data
+    },
+    async savePrescriptionApiCall(patientId, payload) {
+      const PrescriptionService = new AxiosPrescription()
+      const data = await PrescriptionService.SavePrescription(this.doctorId, patientId, payload)
+      return data
+    },
+    async endConsultationApiCall(patientId, payload) {
+      const PrescriptionService = new AxiosPrescription()
+      const data = await PrescriptionService.EndConsultation(this.doctorId, patientId, payload)
       return data
     },
     async uploadFileApiCall(patientId, payload) {

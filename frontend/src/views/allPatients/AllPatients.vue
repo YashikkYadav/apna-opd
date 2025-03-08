@@ -4,7 +4,7 @@
         <v-row class="align-center mb-4">
             <v-col cols="8" class="mt-4">
                 <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Name,Phone,UID" variant="solo"
-                    max-width="350" rounded="pill" class="rounded-xl"></v-text-field>
+                    max-width="350" rounded="pill" class="rounded-xl" @change="filterData"></v-text-field>
             </v-col>
 
             <v-col cols="4" class="text-end mb-2">
@@ -18,7 +18,7 @@
         <v-card title="Patients" flat>
             <v-data-table-server :headers="headers" :items="patients" :search="search" class="table grey-head"
                 :page.sync="currentPageNumber" :items-length="totalPatients" :items-per-page="limit"
-                @update:page="pageUpdateFunction"  :options.sync="options" @update:items-per-page="perPageUpdateFunction">
+                @update:page="pageUpdateFunction" :options.sync="options" @update:items-per-page="perPageUpdateFunction">
                 <template v-if="isLoading" v-slot:body>
                     <tr v-for="n in 6" :key="n">
                         <td v-for="header in headers" :key="header.key">
@@ -37,6 +37,9 @@
                             View History
                         </v-btn>
                     </router-link>
+                    <v-btn icon class="delete-btn ml-2" @click="editDialog(item.id)">
+                        <v-icon color="7A7A7A">mdi-pencil-outline</v-icon>
+                    </v-btn>
                     <v-btn icon class="delete-btn ml-2" @click="openDeleteDialog(item.id)">
                         <v-icon color="7A7A7A">mdi-trash-can</v-icon>
                     </v-btn>
@@ -44,7 +47,7 @@
             </v-data-table-server>
         </v-card>
     </v-container>
-    <patient-add-edit-model :dialog="dialog" :isEditModel="false" @close-dialog="dialog = false"
+    <patient-add-edit-model :dialog="dialog" :isEditModel="isEdit" :patientId="this.patientId" @close-dialog="dialog = false;"
         @fetch-patients="fetchPatients" />
 
     <common-model :commonModel="isDeleteModalOpen" @close-dialog="isDeleteModalOpen = false" @actions="onDeletePatient"
@@ -52,6 +55,7 @@
 </template>
 
 <script>
+import { debounce } from "lodash";
 import { usePatientStore } from '@/store/PatientStore';
 import { useUiStore } from '@/store/UiStore';
 import { checkAuth } from '@/lib/utils/utils';
@@ -70,6 +74,7 @@ export default {
             dialog: false,
             isDeleteModalOpen: false,
             isLoading: true,
+            isEdit: false,
             patients: [],
             patientId: "",
             currentPageNumber: 1,
@@ -86,7 +91,8 @@ export default {
                 { key: "Date", title: "Last Visit" },
                 { key: "Tags", title: "Category" },
                 { key: "action", title: "Action", sortable: false },
-            ]
+            ],
+            debouncedSearch: null
         };
     },
     mounted() {
@@ -94,10 +100,11 @@ export default {
         if (auth) {
             this.fetchPatients();
         }
+        this.debouncedSearch = debounce(this.filterData, 500);
     },
     methods: {
         async fetchPatients() {
-            const res = await usePatientStore().getAllPatientApiCall(this.currentPageNumber, this.limit)
+            const res = await usePatientStore().getAllPatientApiCall(this.currentPageNumber, this.limit, this.search)
             if (res) {
                 this.isLoading = false;
                 this.patients = res.patient.map((patient) => ({
@@ -127,6 +134,14 @@ export default {
 
         openDialog() {
             this.dialog = true;
+            this.patientId = null
+            this.isEdit = false;
+        },
+
+        editDialog(id) {
+            this.patientId = id
+            this.dialog = true;
+            this.isEdit = true;
         },
 
         openDeleteDialog(id) {
@@ -141,8 +156,18 @@ export default {
             this.limit = newPageNumber;
             this.fetchPatients();
         },
+        filterData() {
+            this.currentPageNumber = 1;
+            this.fetchPatients();
+        }
     },
     watch: {
+        search: {
+            handler(newVal) {
+                this.debouncedSearch();
+            },
+            immediate: false
+        },
         options: {
             handler() {
                 this.limit = this.options.itemsPerPage;
@@ -151,6 +176,6 @@ export default {
             },
             deep: true
         }
-    }
+    },
 };
 </script>

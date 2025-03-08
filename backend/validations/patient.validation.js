@@ -11,7 +11,8 @@ const PatientSchema = zod.object({
   alternatePhoneNumber: zod
     .string()
     .regex(/^\d{10}$/, { message: 'Alternate phone number must be a 10-digit number.' })
-    .optional(),
+    .optional()
+    .nullable(),
   // dateOfBirth: zod.coerce
   //   .date({ message: 'Date of birth is invalid. Please provide a valid date.' })
   //   .optional(),

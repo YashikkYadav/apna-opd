@@ -22,8 +22,20 @@ export class AxiosPrescription {
         return this.apiClient.get(`/${doctorId}/prescription-section`)
     }
 
+    AddPrescriptionSections(doctorId, payload) {
+        return this.apiClient.post(`/${doctorId}/prescription-section`, payload)
+    }
+
     DraftPrescription(doctorId, patientId) {
         return this.apiClient.get(`/${doctorId}/prescription/${patientId}/draft`)
+    }
+
+    SavePrescription(doctorId, patientId, payload) {
+        return this.apiClient.post(`/${doctorId}/prescription/${patientId}`, payload)
+    }
+
+    EndConsultation(doctorId, patientId, payload) {
+        return this.apiClient.post(`/${doctorId}/prescription/${patientId}/end-consultation`, payload)
     }
 
     UploadFile(patientId, payload) {

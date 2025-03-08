@@ -12,6 +12,7 @@
     "@mdi/font": "7.4.47",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
+    "lodash": "^4.17.21",
     "pinia": "^2.3.1",
     "roboto-fontface": "*",
     "v-calendar": "^3.1.2",

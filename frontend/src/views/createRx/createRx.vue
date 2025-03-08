@@ -4,7 +4,7 @@
         <v-row class="align-center mb-4">
             <v-col cols="8" class="mt-4">
                 <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Name,Phone,UID" variant="solo"
-                    max-width="350" rounded="pill" class="rounded-xl"></v-text-field>
+                    max-width="350" rounded="pill" class="rounded-xl" @change="filterData"></v-text-field>
             </v-col>
 
             <v-col cols="4" class="text-end mb-2">
@@ -43,11 +43,12 @@
             </v-data-table-server>
         </v-card>
     </v-container>
-    <patient-add-edit-model :dialog="dialog" :isEditModel="false" @close-dialog="dialog = false"
+    <patient-add-edit-model :dialog="dialog" :isEditModel="false" :patientId="null" @close-dialog="dialog = false"
         @fetch-patients="fetchPatients" />
 </template>
 
 <script>
+import { debounce } from "lodash";
 import { checkAuth } from '@/lib/utils/utils';
 import { usePatientStore } from '@/store/PatientStore';
 import PatientAddEditModel from '@/components/PatientAddEditModel.vue';
@@ -79,6 +80,7 @@ export default {
                 { key: "Tags", title: "Category" },
                 { key: "action", title: "Action", sortable: false },
             ],
+            debouncedSearch: null
         };
     },
     mounted() {
@@ -86,11 +88,13 @@ export default {
         if (auth) {
             this.fetchPatients();
         }
+        this.debouncedSearch = debounce(this.filterData, 500);
     },
     methods: {
         async fetchPatients() {
-            const res = await usePatientStore().getAllPatientApiCall(this.currentPageNumber, this.limit)
+            const res = await usePatientStore().getAllPatientApiCall(this.currentPageNumber, this.limit, this.search)
             if (res) {
+                this.isLoading = false;
                 this.patients = res.patient.map((patient) => ({
                     id: patient.patientId?._id,
                     UID: patient.patientId?.uid,
@@ -100,7 +104,6 @@ export default {
                     Tags: patient.patientId?.tags,
                     Action: "",
                 }));
-                this.isLoading = false;
 
                 if (res.pagination) {
                     this.totalPatients = res.pagination.totalPatients || 0;
@@ -118,8 +121,18 @@ export default {
             this.limit = newPageNumber;
             this.fetchPatients();
         },
+        filterData() {
+            this.currentPageNumber = 1;
+            this.fetchPatients();
+        }
     },
     watch: {
+        search: {
+            handler(newVal) {
+                this.debouncedSearch();
+            },
+            immediate: false
+        },
         options: {
             handler() {
                 this.limit = this.options.itemsPerPage;

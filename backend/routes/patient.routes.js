@@ -27,6 +27,11 @@ patient.get(
   patientController.getPatientById,
 );
 
+patient.put(
+  '/:patientId',
+  patientController.updatePatient,
+);
+
 patient.delete(
   '/:doctorId/:patientId',
   patientController.deletePatient,

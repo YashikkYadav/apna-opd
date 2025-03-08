@@ -37,7 +37,7 @@
                     <v-row>
                         <v-col cols="3">
                             <v-select v-model="form.title" label="Title" :items="['Mr.', 'Mrs.', 'Dr.']"
-                                variant="outlined" placeholder="Title" :rules="[rules.required]" dense>
+                                variant="outlined" placeholder="Title" dense>
                             </v-select>
                         </v-col>
                         <v-col cols="9">
@@ -140,29 +140,6 @@ import { useUiStore } from '@/store/UiStore';
 
 export default {
     name: "PatientAddEditModel",
-    props: {
-        dialog: Boolean,
-        isEditModel: Boolean,
-        invoicesData: Object,
-    },
-    computed: {
-        isDialogOpen() {
-            return this.dialog;
-        },
-        isEdit() {
-            return this.isEditModel;
-        },
-        invoiceData() {
-            return this.invoicesData;
-        }
-    },
-    watch: {
-        dialog(newValue) {
-            if (newValue === true) {
-                this.resetForm();
-            }
-        }
-    },
     data() {
         return {
             moreOptions: false,
@@ -193,7 +170,57 @@ export default {
             },
         };
     },
+    props: {
+        dialog: Boolean,
+        patientId: String,
+        invoicesData: Object,
+        isEditModel: Boolean
+    },
+    computed: {
+        isDialogOpen() {
+            return this.dialog;
+        },
+        isPatientId() {
+            return this.patientId;
+        },
+        invoiceData() {
+            return this.invoicesData;
+        },
+        isEdit() {
+            return this.isEditModel;
+        }
+    },
+    watch: {
+        dialog(newValue) {
+            if (newValue === true && this.isEdit) {
+                this.fetchPatientDetails();
+            }else{
+                this.resetForm();
+            }
+        },
+    },
     methods: {
+        async fetchPatientDetails() {
+            const res = await usePatientStore().getPatientDetailsApiCall(this.patientId)
+
+            if (res) {
+                this.form = {
+                    countryCode: "+91",
+                    mobileNumber: String(res.patient.phoneNumber),
+                    alternateNumber: res.patient.alternatePhoneNumber != null ? String(res.patient.alternatePhoneNumber) : "",
+                    name: res.patient.fullName,
+                    dateOfBirth: res.patient.dateOfBirth?.split("T")[0],
+                    age: res.patient.age,
+                    gender: res.patient.gender,
+                    email: res.patient.email,
+                    address: res.patient.address,
+                    bloodGroup: res.patient.bloodGroup,
+                    allergies: res.patient.allergies,
+                    tags: res.patient.tags,
+                    referredBy: res.patient.referredBy,
+                };
+            }
+        },
         async submitForm() {
             const isValid = await this.$refs.form.validate();
 
@@ -204,7 +231,7 @@ export default {
             const requestData = {
                 fullName: this.form.name,
                 phoneNumber: this.form.mobileNumber,
-                alternatePhone: this.form.alternateNumber,
+                alternatePhoneNumber: this.form.alternateNumber === "" ? null : this.form.alternateNumber,
                 dateOfBirth: this.form.dateOfBirth,
                 age: this.form.age,
                 gender: this.form.gender,
@@ -216,11 +243,20 @@ export default {
                 referredBy: this.form.referredBy,
             };
 
-            const res = await usePatientStore().addPatientApiCall(requestData)
-            if (res) {
-                this.$emit('close-dialog');
-                this.$emit('fetch-patients');
-                useUiStore().openNotificationMessage("Patient Added Succesfully!")
+            if (this.isPatientId) {
+                const res = await usePatientStore().updatePatientApiCall(this.patientId, requestData)
+                if (res) {
+                    this.$emit('close-dialog');
+                    this.$emit('fetch-patients');
+                    useUiStore().openNotificationMessage("Patient Updated Succesfully!")
+                }
+            }else{
+                const res = await usePatientStore().addPatientApiCall(requestData)
+                if (res) {
+                    this.$emit('close-dialog');
+                    this.$emit('fetch-patients');
+                    useUiStore().openNotificationMessage("Patient Added Succesfully!")
+                }
             }
         },
         updateAge() {

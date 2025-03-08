@@ -94,15 +94,39 @@ const getPatientById = async (req, res) => {
 const getAllPatients = async (req, res) => {
   try {
     const { doctorId } = req.params;
-    const { page, limit } = req.query;
+    const { page, limit, searchQuery } = req.query;
 
-    const patients = await patientService.getAllPatients(doctorId, page, limit);
+    const patients = await patientService.getAllPatients(doctorId, page, limit, searchQuery);
 
     res
       .status(patients.statusCode)
       .json({
         patient: patients.patients,
         pagination: patients.pagination,
+      });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
+  }
+}
+
+const updatePatient = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const patientData = req.body;
+
+    const patient = await patientService.updatePatient(patientId, patientData);
+    if (patient?.error) {
+      return res
+        .status(patient.statusCode)
+        .send(patient.error);
+    }
+
+    res
+      .status(patient.statusCode)
+      .json({
+        patient: patient.patient,
       });
   } catch(error) {
     res
@@ -138,5 +162,6 @@ module.exports = {
   validateOTP,
   getPatientById,
   getAllPatients,
+  updatePatient,
   deletePatient,
 };

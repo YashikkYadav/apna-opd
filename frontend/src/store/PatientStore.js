@@ -7,9 +7,9 @@ export const usePatientStore = defineStore('patientStore', {
   }),
 
   actions: {
-    async getAllPatientApiCall(currentPage, limit) {
+    async getAllPatientApiCall(currentPage, limit, search) {
       const PatientService = new AxiosPatient()
-      const data = await PatientService.PatientsList(this.doctorId, currentPage, limit)
+      const data = await PatientService.PatientsList(this.doctorId, currentPage, limit, search)
       return data
     },
     async getPatientDetailsApiCall(patientId) {
@@ -20,6 +20,11 @@ export const usePatientStore = defineStore('patientStore', {
     async addPatientApiCall(payload) {
       const PatientService = new AxiosPatient()
       const data = await PatientService.PatientAdd(this.doctorId, payload)
+      return data
+    },
+    async updatePatientApiCall(patientId, payload) {
+      const PatientService = new AxiosPatient()
+      const data = await PatientService.PatientUpdate(patientId, payload)
       return data
     },
     async deletePatientApiCall(patientId) {

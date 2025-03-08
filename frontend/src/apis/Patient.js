@@ -6,8 +6,8 @@ export class AxiosPatient {
         this.apiClient = new axiosAuthenticator()
     }
 
-    PatientsList(doctorId, currentPage, limit) {
-        return this.apiClient.get(`/patient/get-all/${doctorId}?page=${currentPage}&limit=${limit}`)
+    PatientsList(doctorId, currentPage, limit, search) {
+        return this.apiClient.get(`/patient/get-all/${doctorId}?page=${currentPage}&limit=${limit}&searchQuery=${search}`)
     }
 
     PatientDetails(patientId) {
@@ -16,6 +16,10 @@ export class AxiosPatient {
 
     PatientAdd(doctorId, payload) {
         return this.apiClient.post(`/patient/${doctorId}`, payload)
+    }
+
+    PatientUpdate(doctorId, payload) {
+        return this.apiClient.put(`/patient/${doctorId}`, payload)
     }
 
     PatientDelete(doctorId, patientId) {

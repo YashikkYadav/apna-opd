@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Import the components you want to route to
-import ConsultCard from './components/ConsultCard.vue';
 import DashBoard from './views/dashboard/DashBoard.vue';
 import Invoice from './views/invoice/Invoice.vue';
 import AllPatients from './views/allPatients/AllPatients.vue';
@@ -17,6 +16,7 @@ import DropdownLibrary from './views/dropdownLibrary/DropdownLibrary.vue';
 import Profile from './views/profile/Profile.vue';
 import Login from './views/login/Login.vue';
 import ViewHistory from './views/viewHistory/ViewHistory.vue';
+import Consult from './views/consult/consult.vue';
 
 const routes = [
   {
@@ -42,7 +42,7 @@ const routes = [
   {
     path:'/:patientId/consult',
     name:'ConsultCard',
-    component: ConsultCard
+    component: Consult
   },
   {
     path: '/all-patients',
