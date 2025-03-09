@@ -1,22 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Import the components you want to route to
-import DashBoard from './views/doctor/dashboard/DashBoard.vue';
-import Invoice from './views/doctor/invoice/Invoice.vue';
-import AllPatients from './views/doctor/allPatients/AllPatients.vue';
-import CreateRx from './views/doctor/createRx/createRx.vue';
-import PatientQueue from './views/doctor/patientQueue/patientQueue.vue';
-import Appointments from './views/doctor/appointments/Appointments.vue';
-import Messages from './views/doctor/messages/Messages.vue';
-import Social from './views/doctor/social/Social.vue';
-import Automation from './views/doctor/automation/Automation.vue';
-import TemplateLibrary from './views/doctor/templateLibrary/TemplateLibrary.vue';
-import MedicineLibrary from './views/doctor/medicineLibrary/MedicineLibrary.vue';
-import DropdownLibrary from './views/doctor/dropdownLibrary/DropdownLibrary.vue';
-import Profile from './views/doctor/profile/Profile.vue';
-import Login from './views/doctor/login/Login.vue';
-import ViewHistory from './views/doctor/viewHistory/ViewHistory.vue';
-import Consult from './views/doctor/consult/consult.vue';
+import DashBoard from './views/dashboard/DashBoard.vue';
+import Invoice from './views/invoice/Invoice.vue';
+import AllPatients from './views/allPatients/AllPatients.vue';
+import CreateRx from './views/createRx/createRx.vue';
+import PatientQueue from './views/patientQueue/patientQueue.vue';
+import Appointments from './views/appointments/Appointments.vue';
+import Messages from './views/messages/Messages.vue';
+import Social from './views/social/Social.vue';
+import Automation from './views/automation/Automation.vue';
+import TemplateLibrary from './views/templateLibrary/TemplateLibrary.vue';
+import MedicineLibrary from './views/medicineLibrary/MedicineLibrary.vue';
+import DropdownLibrary from './views/dropdownLibrary/DropdownLibrary.vue';
+import Profile from './views/profile/Profile.vue';
+import Login from './views/login/Login.vue';
+import ViewHistory from './views/viewHistory/ViewHistory.vue';
+import Consult from './views/consult/consult.vue';
 
 const routes = [
   {
