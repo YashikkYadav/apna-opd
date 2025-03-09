@@ -13,27 +13,22 @@
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <router-link to="/doctors" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-view-dashboard" title="My Doctors" value="doctors"
-            class="custom-list-item"></v-list-item>
-        </router-link>
-
         <!-- <router-link to="/invoices" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-file-document" title="Invoice" value="invoice"
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <!-- <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-account-group" title="Patient Queue" value="patientQueue"
+        <router-link to="/doctors" style="text-decoration: none; color: inherit;">
+          <v-list-item prepend-icon="mdi-account-group" title="My Doctors" value="doctors"
             class="custom-list-item"></v-list-item>
-        </router-link> -->
+        </router-link>
 
         <!-- <router-link to="/create-rx" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-prescription" title="Prescription" value="createRx"
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <router-link to="/:patientId/prescriptions" style="text-decoration: none; color: inherit;">
+        <router-link :to="`/${patientId}/prescriptions`" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-prescription" title="Prescriptions" value="prescriptions"
             class="custom-list-item"></v-list-item>
         </router-link>
@@ -95,11 +90,13 @@
 </template>
 
 <script>
+import { onMounted } from 'vue';
 export default {
   data() {
     return {
       drawer: true,
       rail: false,
+      patientId: "",
     }
   },
   computed: {
@@ -125,6 +122,9 @@ export default {
         moreItem.style.display = "block";
       }
     }
+  },
+  mounted() {
+    this.patientId = localStorage.getItem('doctor_id') || "";
   }
 }
 </script>

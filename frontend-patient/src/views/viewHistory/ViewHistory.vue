@@ -2,9 +2,9 @@
   <v-container style="max-width: 100%;" class="history-page">
     <h2 class="text-center mb-4">Patient Prescription Page</h2>
     <v-row class="justify-end mb-3">
-      <v-col cols="auto">
+      <!-- <v-col cols="auto">
         <v-btn class="saaro-btn" @click="createNewVisit">Create New Visit</v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-card class="patient-card mb-4">
@@ -31,11 +31,11 @@
       <v-col class="v-col-9">
         <h4 class="section-title prescription-card-heading">Prescriptions</h4>
       </v-col>
-      <v-col class="text-center v-col-3">
+      <!-- <v-col class="text-center v-col-3">
         <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('prescription')">Upload Prescription</v-btn>
         <input ref="prescriptionFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
           @change="handleFileUpload('prescription')" />
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-row>
@@ -55,11 +55,11 @@
       <v-col class="v-col-9">
         <h4 class="section-title prescription-card-heading">Health Records</h4>
       </v-col>
-      <v-col class="text-center v-col-3">
+      <!-- <v-col class="text-center v-col-3">
         <v-btn class="saaro-btn" @click="triggerFileUpload('health')">Upload Health Record</v-btn>
         <input ref="healthFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
           @change="handleFileUpload('health')" />
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-row>

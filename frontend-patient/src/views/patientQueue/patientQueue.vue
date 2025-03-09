@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row class="align-center mb-4">
             <v-col cols="8" class="mt-4">
-                <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Search Patient" variant="solo"
+                <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Search Doctor" variant="solo"
                     max-width="350" rounded="pill" class="rounded-xl"></v-text-field>
             </v-col>
         </v-row>
@@ -22,14 +22,14 @@
             </template>
             <template #top>
                 <v-toolbar flat>
-                    <v-toolbar-title>Patient Queue</v-toolbar-title>
+                    <v-toolbar-title>My Doctors</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="markCompleted" class="mx-2">
+                    <!-- <v-btn color="primary" @click="markCompleted" class="mx-2">
                         Mark Completed
                     </v-btn>
                     <v-btn color="error" @click="markNoShow" class="mx-2">
                         Mark No Show
-                    </v-btn>
+                    </v-btn> -->
                 </v-toolbar>
             </template>
 

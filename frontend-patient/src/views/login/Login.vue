@@ -150,7 +150,7 @@ export default {
         localStorage.setItem('doctor_id', res.patient.id);
         localStorage.setItem('access_token', res.patient.accessToken);
 
-        this.$router.push('/create-rx');
+        this.$router.push('/doctors');
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");
       }
     },

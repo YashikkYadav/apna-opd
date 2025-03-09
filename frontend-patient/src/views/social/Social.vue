@@ -2,7 +2,7 @@
   <v-container class="social-platforms-container">
     <v-row class="social-platforms-row" justify="space-evenly">
       <!-- Facebook -->
-      <v-col cols="12" sm="6" md="4" lg="3" class="card-col">
+      <!-- <v-col cols="12" sm="6" md="4" lg="3" class="card-col">
         <v-card class="platform-card">
           <div class="logo-circle">
             <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook Logo" />
@@ -15,18 +15,18 @@
             <v-btn block class="platform-btn">Manage</v-btn>
           </div>
         </v-card>
-      </v-col>
+      </v-col> -->
 
       <!-- Instagram -->
       <v-col cols="12" sm="6" md="4" lg="3" class="card-col">
         <v-card class="platform-card">
           <div class="logo-circle">
-            <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram Logo" />
+            <img src="https://cdn.iconscout.com/icon/free/png-256/free-razorpay-logo-icon-download-in-svg-png-gif-file-formats--payment-gateway-brand-logos-icons-1399875.png?f=webp" alt="Razorpay Logo" />
           </div>
           <div class="platform-content">
-            <h3 class="platform-title">Instagram</h3>
+            <h3 class="platform-title">Razorpay</h3>
             <p class="platform-description">
-              Integrate Instagram to engage with your followers seamlessly.
+              Integrate Razorpay to engage with your services seamlessly.
             </p>
             <v-btn block class="platform-btn">Manage</v-btn>
           </div>
@@ -34,7 +34,7 @@
       </v-col>
 
       <!-- WhatsApp -->
-      <v-col cols="12" sm="6" md="4" lg="3" class="card-col">
+      <!-- <v-col cols="12" sm="6" md="4" lg="3" class="card-col">
         <v-card class="platform-card">
           <div class="logo-circle">
             <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png" alt="WhatsApp Logo" />
@@ -47,10 +47,10 @@
             <v-btn block class="platform-btn">Manage</v-btn>
           </div>
         </v-card>
-      </v-col>
+      </v-col> -->
 
       <!-- Google Business Profile -->
-      <v-col cols="12" sm="6" md="4" lg="3" class="card-col align-left">
+      <!-- <v-col cols="12" sm="6" md="4" lg="3" class="card-col align-left">
         <v-card class="platform-card">
           <div class="logo-circle">
             <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google Business Logo" />
@@ -63,7 +63,7 @@
             <v-btn block class="platform-btn">Manage</v-btn>
           </div>
         </v-card>
-      </v-col>
+      </v-col> -->
     </v-row>
   </v-container>
 </template>

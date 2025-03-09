@@ -25,6 +25,11 @@ const routes = [
     component: DashBoard
   },
   {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashBoard
+  },
+  {
     path: '/invoice',
     name: 'Invoice',
     component: Invoice
@@ -32,6 +37,11 @@ const routes = [
   {
     path: '/patient-queue',
     name: 'PatientQueue',
+    component: PatientQueue
+  },
+  {
+    path: '/doctors',
+    name: 'My Doctors',
     component: PatientQueue
   },
   {
@@ -54,6 +64,11 @@ const routes = [
     name:'View History',
     component: ViewHistory
   },
+  { 
+    path:'/:patientId/prescriptions',
+    name:'View History',
+    component: ViewHistory
+  },
 
   {
     path: '/appointments',
@@ -67,6 +82,11 @@ const routes = [
   },
   {
     path: '/social',
+    name:'Social',
+    component: Social
+  },
+  {
+    path: '/payments',
     name:'Social',
     component: Social
   },
