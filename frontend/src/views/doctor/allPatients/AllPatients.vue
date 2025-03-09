@@ -59,7 +59,7 @@ import { debounce } from "lodash";
 import { usePatientStore } from '@/store/PatientStore';
 import { useUiStore } from '@/store/UiStore';
 import { checkAuth } from '@/lib/utils/utils';
-import PatientAddEditModel from '../../components/PatientAddEditModel.vue'
+import PatientAddEditModel from '../../../components/PatientAddEditModel.vue'
 import CommonModel from '@/components/CommonModel.vue';
 
 export default {

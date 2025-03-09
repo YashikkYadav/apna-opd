@@ -70,32 +70,6 @@
       </v-col>
     </v-row>
 
-    <!-- Upload IPD Record -->
-    <v-row>
-      <v-col class="v-col-9">
-        <h4 class="section-title prescription-card-heading">IPD Records</h4>
-      </v-col>
-      <v-col class="text-center v-col-3">
-        <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('ipd')">Upload IPD Record</v-btn>
-        <input ref="ipdFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
-          @change="handleFileUpload('ipd')" />
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col v-for="record in ipdRecords" :key="record.id" cols="12" md="6">
-        <v-card class="record-card mb-4">
-          <v-card-title>
-            <span class="font-weight-bold">Document:</span>
-            <!-- <v-btn color="#ff8c00" @click="downloadDocument(record.fileUrl)" class="ml-auto">Download</v-btn> -->
-          </v-card-title>
-          <v-card-text>
-            <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-
     <!-- Prescription Dialog -->
     <v-dialog v-model="pdfDialog" class="height: auto">
       <v-card class="print-popup w-66">
