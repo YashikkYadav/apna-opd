@@ -8,30 +8,40 @@
           </v-list-item-content>
         </v-list-item>
 
-        <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-view-dashboard" title="Dashboard" value="dashboard"
+            class="custom-list-item"></v-list-item>
+        </router-link> -->
+
+        <router-link to="/doctors" style="text-decoration: none; color: inherit;">
+          <v-list-item prepend-icon="mdi-view-dashboard" title="My Doctors" value="doctors"
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <router-link to="/invoice" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/invoices" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-file-document" title="Invoice" value="invoice"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
         <!-- <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-account-group" title="Patient Queue" value="patientQueue"
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <router-link to="/create-rx" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/create-rx" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-prescription" title="Prescription" value="createRx"
+            class="custom-list-item"></v-list-item>
+        </router-link> -->
+
+        <router-link to="/:patientId/prescriptions" style="text-decoration: none; color: inherit;">
+          <v-list-item prepend-icon="mdi-prescription" title="Prescriptions" value="prescriptions"
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <router-link to="/all-patients" style="text-decoration: none; color: inherit;">
+        <!-- <router-link to="/all-patients" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-account-multiple" title="All Patients" value="allPatients"
             class="custom-list-item"></v-list-item>
-        </router-link>
+        </router-link> -->
 
         <!-- <router-link to="/appointments" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-calendar" title="Appointments" value="appointments"
@@ -46,10 +56,10 @@
             class="custom-list-item"></v-list-item>
         </router-link>
 
-        <!-- <router-link to="/social" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-google-circles-extended" title="Social" value="social"
+        <router-link to="/payments" style="text-decoration: none; color: inherit;">
+          <v-list-item prepend-icon="mdi-google-circles-extended" title="Payments" value="payments"
             class="custom-list-item"></v-list-item>
-        </router-link> -->
+        </router-link>
 
         <!-- <router-link to="/automation" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-source-branch" title="Automation" value="automation"
