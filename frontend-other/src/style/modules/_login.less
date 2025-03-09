@@ -1,0 +1,122 @@
+.loginBox {
+    max-width: 1440px;
+    margin: auto auto;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginBox .inner {
+    width: 100%;
+}
+
+.loginBox .invalid {
+    border: 2px solid red !important;
+
+    &::placeholder {
+        color: red;
+    }
+}
+
+.loginBox .errorMessage {
+    color: red;
+    margin: 10px;
+    top: 5px;
+}
+
+.loginBox .action {
+    height: 56px;
+    border-radius: 40px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background: #d4ebff;
+    margin-top: 20px;
+    color: #385D7E;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    border: 1px solid #385D7E;
+    font-weight: bold;
+}
+
+.loginBox .action-disabled {
+    color: #eee;
+    background: #aaa;
+    border: 1px solid #aaa;
+    cursor: auto;
+}
+
+.loginBox .top {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.loginBox .title {
+    width: 100%;
+    font-size: 1.8rem;
+    margin: 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+.loginBox .subtitle {
+    text-align: center;
+    margin-top: 20px;
+
+    .subtitle-action {
+        color: #385D7E;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+.loginBox .loginBox {
+    background: #fff;
+    border-radius: 15px;
+    max-width: 400px;
+    padding: 25px 55px;
+    animation: slideInTop 1s;
+}
+
+.signIn,
+.register {
+    border: 1px solid #e9ecef;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 3rem;
+}
+
+.register {
+    max-width: 800px;
+}
+
+.ragister-form .v-col-sm-4,
+.ragister-form .v-col-sm-6,
+.ragister-form .v-col-sm-12 {
+    padding-bottom: 0;
+}
+
+.register .title {
+    margin-bottom: 10px;
+}
+
+.loginBox .logo {
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+.email-input {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.loginBox .v-field {
+    border-radius: 12px;
+}
