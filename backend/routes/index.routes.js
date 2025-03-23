@@ -6,12 +6,13 @@ const invoiceRoutes = require('./invoice.routes');
 const libraryRoutes = require('./library.routes');
 const dashboardRoutes = require('./dashboard.routes');
 const fileUploader = require('./fileUploader.routes');
+const healthServeRoutes = require('./healthServe.routes');
 const appointmentRoutes = require('./appointment.routes');
 const prescriptionRoutes = require('./prescription.routes');
 const medicineLibraryRoutes = require('./medicineLibrary.routes');
 const templateLibraryRoutes = require('./templateLibrary.routes');
 const dropdownLibraryRoutes = require('./dropdownLibrary.routes');
-const doctorProfileRoutes = require('../routes/doctorProfile.routes');
+const doctorProfileRoutes = require('./doctorProfile.routes');
 const patientAppointmentRoutes = require('../routes/patientAppointment.routes');
 const prescriptionSectionRoutes = require('../routes/prescriptionSection.routes');
 const doctorMiddleware = require('../middlewares/doctor.middleware');
@@ -95,6 +96,11 @@ router.use(
   '/:doctorId/prescription-section',
   doctorMiddleware,
   prescriptionSectionRoutes,
+);
+
+router.use(
+  '/health-serve',
+  healthServeRoutes,
 );
 
 module.exports = router;
