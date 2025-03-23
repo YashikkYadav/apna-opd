@@ -83,15 +83,11 @@ const getAllEnquiries = async (healthServeId, page = 1, limit = 10, searchQuery 
       ];
     }
 
-    console.log('Search query: ', searchFilter, searchQuery);
-
     const totalCount = await Enquiry.countDocuments(searchFilter);
     const enquiries = await Enquiry.find(searchFilter)
       .select("_id name phone enquiry")
       .skip(skip)
       .limit(limitNumber);
-
-    console.log('Enquiries: ', enquiries);
 
     return {
       statusCode: 200,

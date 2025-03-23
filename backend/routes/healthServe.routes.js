@@ -12,4 +12,24 @@ healthServe.post(
   healthServeController.loginHealthServe,
 );
 
+healthServe.get(
+  '/',
+  healthServeController.getAllHealthServes,
+);
+
+healthServe.get(
+  '/:healthServeId',
+  healthServeController.getHealthServeById,
+);
+
+healthServe.put(
+  '/:healthServeId',
+  healthServeController.updateHealthServe,
+);
+
+healthServe.delete(
+  '/:healthServeId',
+  healthServeController.deleteHealthServe,
+);
+
 module.exports = healthServe;

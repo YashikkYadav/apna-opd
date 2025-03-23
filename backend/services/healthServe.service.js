@@ -82,7 +82,6 @@ const login = async (data) => {
     }
 
     const passwordCheck = await comparePassword(password, healthServe.password);
-    console.log('Password check :', passwordCheck);
     if (!passwordCheck) {
       return {
         statusCode: 401,
@@ -130,13 +129,13 @@ const getHealthServeById = async ( healthServeId ) => {
   }
 }
 
-const getAllHealthServes = async (page = 1, limit = 10, searchQuery = "") => {
+const getAllHealthServes = async (type, page = 1, limit = 10, searchQuery = "") => {
   try {
     const pageNumber = Math.max(parseInt(page, 10), 1);
     const limitNumber = Math.max(parseInt(limit, 10), 1);
     const skip = (pageNumber - 1) * limitNumber;
 
-    let searchFilter = {};
+    let searchFilter = { type };
 
     if (searchQuery) {
       searchFilter = {
@@ -146,7 +145,7 @@ const getAllHealthServes = async (page = 1, limit = 10, searchQuery = "") => {
 
     const totalCount = await HealthServe.countDocuments(searchFilter);
     const healthServes = await HealthServe.find(searchFilter)
-      .select("_id location")
+      .select("_id name phone email location")
       .skip(skip)
       .limit(limitNumber);
 
@@ -178,17 +177,8 @@ const updateHealthServe = async ( healthServeId, data ) => {
       name,
       phone,
       email,
-      password,
       location,
     } = data;
-
-    const healthServeValidation = validateHealthServe(data);
-    if (!healthServeValidation.success) {
-      return {
-        statusCode: 400,
-        error: healthServeValidation.errors,
-      };
-    }
 
     const isHealthServeExist = await HealthServe.findByid(healthServeId);
     if (!isHealthServeExist) {
@@ -205,7 +195,6 @@ const updateHealthServe = async ( healthServeId, data ) => {
         name,
         phone,
         email,
-        password,
         location,
       },
       { new: true },
@@ -232,8 +221,7 @@ const deleteHealthServe = async ( healthServeId ) => {
       };
     }
 
-    const healthServe = await HealthServe.findOneAndDelete({ healthServeId });
-
+    const healthServe = await HealthServe.findByIdAndDelete(healthServeId);
     if (!healthServe) {
       return {
         statusCode: 404,

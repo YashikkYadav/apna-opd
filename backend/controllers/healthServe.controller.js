@@ -46,21 +46,21 @@ const loginHealthServe = async (req, res) => {
   }
 }
 
-const getPatientById = async (req, res) => {
+const getHealthServeById = async (req, res) => {
   try {
-    const { patientId } = req.params;
+    const { healthServeId } = req.params;
 
-    const patient = await patientService.getPatientById(patientId);
-    if (patient?.error) {
+    const healthServe = await healthServeService.getHealthServeById(healthServeId);
+    if (healthServe?.error) {
       return res
-        .status(patient.statusCode)
-        .send(patient.error);
+        .status(healthServe.statusCode)
+        .send(healthServe.error);
     }
 
     res
-      .status(patient.statusCode)
+      .status(healthServe.statusCode)
       .json({
-        patient: patient.patient,
+        healthServe: healthServe.healthServe,
       });
   } catch(error) {
     res
@@ -69,18 +69,16 @@ const getPatientById = async (req, res) => {
   }
 }
 
-const getAllPatients = async (req, res) => {
+const getAllHealthServes = async (req, res) => {
   try {
-    const { doctorId } = req.params;
-    const { page, limit, searchQuery } = req.query;
+    const { type, page, limit, location } = req.query;
 
-    const patients = await patientService.getAllPatients(doctorId, page, limit, searchQuery);
-
+    const healthServes = await healthServeService.getAllHealthServes(type, page, limit, location);
     res
-      .status(patients.statusCode)
+      .status(healthServes.statusCode)
       .json({
-        patient: patients.patients,
-        pagination: patients.pagination,
+        healthServes: healthServes.healthServes,
+        pagination: healthServes.pagination,
       });
   } catch(error) {
     res
@@ -89,22 +87,22 @@ const getAllPatients = async (req, res) => {
   }
 }
 
-const updatePatient = async (req, res) => {
+const updateHealthServe = async (req, res) => {
   try {
-    const { patientId } = req.params;
-    const patientData = req.body;
+    const { healthServeId } = req.params;
+    const data = req.body;
 
-    const patient = await patientService.updatePatient(patientId, patientData);
-    if (patient?.error) {
+    const healthServe = await healthServeService.updateHealthServe(healthServeId, data);
+    if (healthServe?.error) {
       return res
-        .status(patient.statusCode)
-        .send(patient.error);
+        .status(healthServe.statusCode)
+        .send(healthServe.error);
     }
 
     res
-      .status(patient.statusCode)
+      .status(healthServe.statusCode)
       .json({
-        patient: patient.patient,
+        healthServe: healthServe.healthServe,
       });
   } catch(error) {
     res
@@ -113,19 +111,19 @@ const updatePatient = async (req, res) => {
   }
 }
 
-const deletePatient = async (req, res) => {
+const deleteHealthServe = async (req, res) => {
   try {
-    const { doctorId, patientId } = req.params;
+    const { healthServeId } = req.params;
 
-    const patient = await patientService.deletePatient(doctorId, patientId);
-    if (patient?.error) {
+    const healthServe = await healthServeService.deleteHealthServe(healthServeId);
+    if (healthServe?.error) {
       return res
-        .status(patient.statusCode)
-        .send(patient.error);
+        .status(healthServe.statusCode)
+        .send(healthServe.error);
     }
 
     res.status(204).json({
-      message: `Patient deleted successfully`,
+      message: `Health Serve deleted successfully`,
     });
   } catch(error) {
     res
@@ -137,8 +135,8 @@ const deletePatient = async (req, res) => {
 module.exports = {
   registerHealthServe,
   loginHealthServe,
-  getPatientById,
-  getAllPatients,
-  updatePatient,
-  deletePatient,
+  getHealthServeById,
+  getAllHealthServes,
+  updateHealthServe,
+  deleteHealthServe,
 };

@@ -8,13 +8,13 @@ enquiry.post(
 );
 
 enquiry.get(
-  '/:enquiryId',
-  enquiryController.getEnquiryById,
+  '/',
+  enquiryController.getAllEnquiries,
 );
 
 enquiry.get(
-  '/',
-  enquiryController.getAllEnquiries,
+  '/:enquiryId',
+  enquiryController.getEnquiryById,
 );
 
 enquiry.delete(
