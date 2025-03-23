@@ -4,6 +4,7 @@ const doctorRoutes = require('./doctor.routes');
 const patientRoutes = require('./patient.routes');
 const invoiceRoutes = require('./invoice.routes');
 const libraryRoutes = require('./library.routes');
+const enquiryRoutes = require('./enquiry.routes');
 const dashboardRoutes = require('./dashboard.routes');
 const fileUploader = require('./fileUploader.routes');
 const healthServeRoutes = require('./healthServe.routes');
@@ -101,6 +102,11 @@ router.use(
 router.use(
   '/health-serve',
   healthServeRoutes,
+);
+
+router.use(
+  '/:healthServeId/enquiry',
+  enquiryRoutes,
 );
 
 module.exports = router;

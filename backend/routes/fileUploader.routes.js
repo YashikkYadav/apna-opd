@@ -12,6 +12,6 @@ fileUploader.post(
 fileUploader.get(
   '/:type',
   fileUploaderController.getFilesByPatientId
-)
+);
 
 module.exports = fileUploader;
