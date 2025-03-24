@@ -11,7 +11,7 @@
 
           <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
-              <v-text-field v-model="email" label="Email" :rules="[rules.required, rules.email]"
+              <v-text-field v-model="phone" label="Phone" :rules="[rules.required]"
                 variant="outlined" dense class="email-input">
               </v-text-field>
 
@@ -22,13 +22,13 @@
 
             <input type="submit" value="Login" class="action" />
           </v-form>
-          <div class="subtitle">
+          <!-- <div class="subtitle">
             Don't have an account?
-            <!-- <span class="subtitle-action" @click="signIn = !signIn"> -->
+            <span class="subtitle-action" @click="signIn = !signIn">
             <span class="subtitle-action">
               Create Account
             </span>
-          </div>
+          </div> -->
         </div>
 
         <div class="register" v-else>
@@ -136,17 +136,17 @@ export default {
       }
 
       const requestData = {
-        email: this.email.trim(),
+        phone: this.phone,
         password: this.password,
       };
 
       const res = await useAuthStore().LoginApiCall(requestData)
 
       if (res) {
-        localStorage.setItem('doctor_id', res.doctor.id);
-        localStorage.setItem('access_token', res.doctor.accessToken);
+        localStorage.setItem('doctor_id', res?.healthServe?.id);
+        localStorage.setItem('access_token', res?.healthServe?.accessToken);
 
-        this.$router.push('/create-rx');
+        this.$router.push('/dashboard');
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");
       }
     },

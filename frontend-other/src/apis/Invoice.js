@@ -7,7 +7,7 @@ export class AxiosInvoice {
     }
 
     InvoicesList(doctorId) {
-        return this.apiClient.get(`/${doctorId}/invoice`)
+        return this.apiClient.get(`/${doctorId}/enquiry`)
     }
 
     InvoicesAdd(doctorId, payload) {
@@ -19,6 +19,6 @@ export class AxiosInvoice {
     }
 
     InvoicesDelete(doctorId, invoiceId) {
-        return this.apiClient.delete(`/${doctorId}/invoice/${invoiceId}`)
+        return this.apiClient.delete(`/${doctorId}/enquiry/${invoiceId}`)
     }
 }

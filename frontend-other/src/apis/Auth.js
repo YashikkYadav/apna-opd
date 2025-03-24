@@ -7,7 +7,7 @@ export class AxiosAuth {
     }
 
     Login(payload) {
-        return this.apiClient.post(`/doctor/access-token`, payload)
+        return this.apiClient.post(`/health-serve/access-token`, payload)
     }
 
     Register(payload) {
