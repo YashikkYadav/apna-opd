@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'DMSans';
+  src: url('/fonts/DMSans.ttf') format('truetype');
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "DMSans";
+}
+
+.title-24{
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: bold;
+}
+
+.title-32{
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: bold;
+}
+
+.title-48{
+  font-size: 48px;
+  line-height: 64px;
+  font-weight: bold;
+  color: #2E2E2E;
+}
+
+.title-64{
+  font-size: 64px;
+  line-height: 88px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+
+.ant-select-selector{
+  border: 1px solid #094B89 !important;
+}
+
+button:hover{
+  background-color: transparent;
+  border: 1px solid #05a7f7;
+  color: #05a7f7;
+}
+button{
+  border: 1px solid transparent;
+}
+
+.banner-with-search .ant-select-selector{
+  border: 1px solid transparent !important;
+
+}
+
+@media only screen and (max-width: 767px) {
+  .title-32{
+    font-size: 28px;
+    line-height: 42px;
+    font-weight: bold;
+  }
+
+  .title-48{
+    font-size: 32px;
+    line-height: 48px;
+  }
+
+  .title-64{
+    font-size: 44px;
+    line-height: 68px;
+  }
+}
