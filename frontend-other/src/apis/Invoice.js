@@ -18,6 +18,10 @@ export class AxiosInvoice {
         return this.apiClient.post(`/${doctorId}/invoice/${invoiceId}`, payload)
     }
 
+    InvoicesUpdate(doctorId, invoiceId) {
+        return this.apiClient.patch(`/${doctorId}/enquiry/${invoiceId}`)
+    }
+
     InvoicesDelete(doctorId, invoiceId) {
         return this.apiClient.delete(`/${doctorId}/enquiry/${invoiceId}`)
     }

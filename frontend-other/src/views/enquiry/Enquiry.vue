@@ -21,7 +21,10 @@
           </tr>
         </template>
         <template v-slot:[`item.InvoiceID`]="{ item }">
-          <span class="status-tag" :style="{ color: '#56b1f3', cursor: 'pointer' }"
+          <span v-if="!item.isContacted" class="status-tag" :style="{ color: 'red', cursor: 'pointer' }"
+            @click="onClickingRow(item.InvoiceID)">#{{ item.InvoiceID
+            }}</span>
+          <span v-else class="status-tag" :style="{ color: '#56b1f3', cursor: 'pointer' }"
             @click="showInvoice(item.InvoiceID)">#{{ item.InvoiceID
             }}</span>
         </template>
@@ -101,7 +104,8 @@ export default {
           "User Phone": invoice.phone,
           Date: new Date(invoice.createdAt).toLocaleDateString('en-GB'),
           // Type: invoice.paymentMode,
-          id: invoice._id
+          id: invoice._id,
+          isContacted: invoice.isContacted,
         }));
         this.isLoading = false
       }
@@ -114,12 +118,16 @@ export default {
       this.fetchInvoices();
       useUiStore().openNotificationMessage("Invoice Deleted Successfully!");
     },
+    async onClickingRow(id) {
+      const res = await useInvoiceStore().updateInvoiceApiCall(id)
+      this.fetchInvoices();
+    },
     deleteDialogHandle(item) {
       this.isDeleteModalOpen = true;
       this.invoiceId = item.id
     },
     showInvoice(id) {
-      const data = this.allInvoices.filter(invoice => invoice.invoiceId === id)
+      const data = this.allInvoices.filter(invoice => invoice._id === id)
 
       this.invoiceData = {
         name: data[0].name,

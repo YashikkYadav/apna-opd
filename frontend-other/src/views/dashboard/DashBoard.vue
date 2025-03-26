@@ -7,10 +7,10 @@
     </v-row>
 
     <v-row>
-      <v-col cols="4">
+      <v-col cols="6">
         <last-24-hours-patient />
       </v-col>
-      <v-col cols="4">
+      <v-col cols="6">
         <last-30-days-patient />
       </v-col>
       <!-- <v-col cols="4">

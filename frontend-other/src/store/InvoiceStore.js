@@ -23,6 +23,12 @@ export const useInvoiceStore = defineStore('invoiceStore', {
       return data
     },
 
+    async updateInvoiceApiCall(invoiceId) {
+      const InvoiceService = new AxiosInvoice()
+      const data = await InvoiceService.InvoicesUpdate(this.doctorId, invoiceId)
+      return data
+    },
+
     async deleteInvoiceApiCall(invoiceId) {
       const InvoiceService = new AxiosInvoice()
       const data = await InvoiceService.InvoicesDelete(this.doctorId, invoiceId)

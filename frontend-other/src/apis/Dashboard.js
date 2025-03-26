@@ -7,11 +7,11 @@ export class AxiosDashboard {
     }
 
     last24hoursPatientList(doctorId) {
-        return this.apiClient.get(`/${doctorId}/report/patient/24hours`)
+        return this.apiClient.get(`/${doctorId}/enquiry/24hours`)
     }
 
     last30DaysPatientList(doctorId) {
-        return this.apiClient.get(`/${doctorId}/report/patient/30days`)
+        return this.apiClient.get(`/${doctorId}/enquiry/30days`)
     }
 
     last30DaysInvoiceList(doctorId) {
