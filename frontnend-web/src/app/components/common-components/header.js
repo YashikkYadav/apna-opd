@@ -2,10 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { CaretDownOutlined } from "@ant-design/icons";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const router = useRouter();
+
+  const handleClickOnFind = (e) => {
+    e.preventDefault();
+    setMenuOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -14,12 +21,33 @@ const Header = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("click", handleOutsideClick);
+
+    const handleRouteChange = () => {
+      setMenuOpen(false);
+    };
+
+    window.addEventListener("beforeunload", handleRouteChange);
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
+      window.removeEventListener("beforeunload", handleRouteChange);
     };
   }, []);
+
+  const menuItems = [
+    { label: "Doctors", route: "/find-doctor" },
+    { label: "Ambulance", route: "/more/ambulance" },
+    { label: "GYM", route: "/more/gym" },
+    { label: "Yoga", route: "/more/yoga" },
+    { label: "Commercial Meditation", route: "/more/commercial-meditation" },
+    { label: "Nasha Mukti Kendra", route: "/more/nasha-mukti-kendra" },
+    { label: "Medical Store", route: "/more/medical-store" },
+    { label: "Nursing & Medical College", route: "/more/nursing-college" },
+    { label: "Blood Bank", route: "/more/blood-bank" },
+    { label: "Physiotherapist", route: "/more/physiotherapist" },
+    { label: "Blood Donor", route: "/more/blood-donor" },
+  ];
 
   return (
     <div>
@@ -49,165 +77,65 @@ const Header = () => {
             } lg:block absolute lg:relative top-[80px] lg:top-auto right-9 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[200px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
             <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px]">
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/">Home</Link>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/" onClick={() => setMenuOpen(false)}>
+                  Home
+                </Link>
               </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/find-doctor">Find Doctor</Link>
-              </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/blog">Blog</Link>
-              </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/faq">FAQ</Link>
-              </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/about">About</Link>
-              </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Link href="/contact">Contact</Link>
-              </li>
-              <li
-                className="text-[#094B89] text-base font-bold"
-                onClick={() => setMenuOpen(false)}
-                onMouseEnter={() => setMenuOpen(!menuOpen)}
-              >
-                <a className="hover:border-none">
-                  More <span className="text-[#3DB8F5]">+</span>
-                </a>
+              <li className="text-[#094B89] text-base font-bold relative">
+                <Link
+                  href="#"
+                  className="hover:border-none hover:m-0 text-[#094B89] text-base font-bold bg-transparent"
+                  onClick={handleClickOnFind}
+                >
+                  Find <CaretDownOutlined />
+                </Link>
                 {menuOpen && (
-                  <div
-                    onMouseEnter={() => setMenuOpen(true)}
-                    className="absolute top-[22px] left-[400px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-md bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent"
-                  >
+                  <div className="absolute top-[28px] left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-md bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent">
                     <ul className="flex flex-col gap-1">
-                      <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                        <Link
-                          className="w-full block"
-                          href="/more/ambulance"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Ambulance
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                        <Link
-                          className="w-full block"
-                          href="/more/gym"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          GYM
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                        <Link
-                          className="w-full block"
-                          href="/more/yoga"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Yoga
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                        <Link
-                          className="w-full block"
-                          href="/more/commercial-meditation"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Commercial Meditation
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                        <Link
-                          className="w-full block"
-                          href="/more/nasha-mukti-kendra"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Nasha Mukti Kendra
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white p-1 rounded-md">
-                        <Link
-                          className="w-full block"
-                          href="/more/medical-store"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Medical Store
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white p-1 rounded-md">
-                        <Link
-                          className="w-full block"
-                          href="/more/nursing-college"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Nursing & Medical College
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white p-1 rounded-md">
-                        <Link
-                          className="w-full block"
-                          href="/more/blood-bank"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Blood Bank
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white p-1 rounded-md">
-                        <Link
-                          className="w-full block"
-                          href="/more/physiotherapist"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Physiotherapist
-                        </Link>
-                      </li>
-                      <hr />
-                      <li className="hover:bg-[#3DB8F5] hover:text-white p-1 rounded-md">
-                        <Link
-                          className="w-full block"
-                          href="/more/blood-donor"
-                          onClick={() => setMenuOpen(false)}
-                        >
-                          Blood Donor
-                        </Link>
-                      </li>
+                      {menuItems.map((item, index) => (
+                        <div key={item.route}>
+                          <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
+                            <Link
+                              href={item.route}
+                              className="w-full block text-left hover:text-white hover:border-none"
+                              onClick={() => setMenuOpen(false)}
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                          {index < menuItems.length - 1 && <hr />}
+                        </div>
+                      ))}
                     </ul>
                   </div>
                 )}
               </li>
-              <li
-                className="block lg:hidden"
-                onClick={() => setMenuOpen(false)}
-              >
-                {" "}
-                <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold w-full">
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/blog" onClick={() => setMenuOpen(false)}>
+                  Blog
+                </Link>
+              </li>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/faq" onClick={() => setMenuOpen(false)}>
+                  FAQ
+                </Link>
+              </li>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/about" onClick={() => setMenuOpen(false)}>
+                  About
+                </Link>
+              </li>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/contact" onClick={() => setMenuOpen(false)}>
+                  Contact
+                </Link>
+              </li>
+              <li className="block lg:hidden">
+                <button
+                  className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold w-full"
+                  onClick={() => setMenuOpen(false)}
+                >
                   Find now
                 </button>
               </li>

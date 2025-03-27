@@ -1,21 +1,26 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const handlePageChange = (page) => {
+    onPageChange(page);
+  };
   return (
     <div className="mt-[56px]">
       <div className="text-center flex gap-[16px] items-center justify-center">
-        <div className="">
-          <Image
-            src="/images/gray_left_arrow.svg"
-            width={16}
-            height={16}
-            alt="Previous Page"
-            className="cursor-pointer"
-            onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
-            style={{ opacity: currentPage === 1 ? 0.5 : 1 }}
-          />
+        <div
+          className="cursor-pointer"
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          {currentPage === 1 ? (
+            <LeftOutlined
+              className="text-[#b5b2b2] cursor-not-allowed"
+              disabled={currentPage === 1}
+            />
+          ) : (
+            <LeftOutlined className="text-[#5151E1]" />
+          )}
         </div>
         <div className="">
           <div className="text-center flex gap-[16px] items-center justify-center">
@@ -54,16 +59,18 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             )}
           </div>
         </div>
-        <div className="">
-          <Image
-            src="/images/purple_right_arrow.svg"
-            width={16}
-            height={16}
-            alt="Next Page"
-            className="cursor-pointer"
-            onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
-            style={{ opacity: currentPage === totalPages ? 0.5 : 1 }}
-          />
+        <div
+          className="cursor-pointer"
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          {currentPage === totalPages ? (
+            <RightOutlined
+              className="text-[#b5b2b2] cursor-not-allowed"
+              disabled={currentPage === totalPages}
+            />
+          ) : (
+            <RightOutlined className="text-[#5151E1]" />
+          )}
         </div>
       </div>
     </div>

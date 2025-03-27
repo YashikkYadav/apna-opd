@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
-import SearchBar from "../common/SearchBar";
+import SearchBar from "../../common-components/SearchBar";
 import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";

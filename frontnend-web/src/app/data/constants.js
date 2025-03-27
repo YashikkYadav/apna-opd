@@ -1,5 +1,4 @@
-// Sample data - will be replaced with API calls in the future
-const locations = [];
+import { searchCities } from "../services/locationService";
 
 export const specialties = [
   "Cardiologist",

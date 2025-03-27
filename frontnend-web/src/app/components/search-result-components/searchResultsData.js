@@ -1,16 +1,15 @@
 "use client";
-import { Form, Input, Select } from "antd";
+import { Select } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getLocations, getSpecialties } from "../../data/constants";
-import SearchBar from "../more/common/SearchBar";
+import SearchBar from "../common-components/SearchBar";
+import Pagination from "./../more/common/Pagination";
 
 const SearchResultsData = () => {
   const router = useRouter();
-  const locations = getLocations();
-  const specialties = getSpecialties();
 
   const data = [
     {
@@ -165,10 +164,10 @@ const SearchResultsData = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = data.slice(startIndex, endIndex);
-  const [location, setLocation] = useState("");
-  const [speciality, setSpeciality] = useState("");
 
   const searchParams = useSearchParams();
+  const [location, setLocation] = useState("");
+  const [speciality, setSpeciality] = useState("");
   useEffect(() => {
     const locationQuery = searchParams.get("location");
     const specialityQuery = searchParams.get("speciality");
@@ -177,11 +176,16 @@ const SearchResultsData = () => {
   }, [searchParams]);
 
   const handlePageChange = (page) => {
+    if (page > totalPages || page < 1) {
+      return;
+    }
     setCurrentPage(page);
   };
 
-  const SearchResults = () => {
-    router.push(`/more/${speciality}`);
+  const handleSearch = (location, speciality) => {
+    router.push(
+      `/search-results?location=${location}&speciality=${speciality}`
+    );
   };
 
   const handleDoctorDetails = (doctorId) => {
@@ -207,7 +211,7 @@ const SearchResultsData = () => {
             </div>
 
             <div>
-              <SearchBar locations={locations} />
+              <SearchBar onSearch={handleSearch} />
             </div>
           </div>
         </div>
@@ -232,11 +236,13 @@ const SearchResultsData = () => {
                 }
                 value={location}
               >
-                {locations.map((eachLocation) => (
-                  <Select.Option key={eachLocation} value={eachLocation}>
-                    {eachLocation}
-                  </Select.Option>
-                ))}
+                <Select.Option
+                  key={location}
+                  value={location}
+                  placeholder={location}
+                >
+                  {location || "location"}
+                </Select.Option>
               </Select>
             </div>
             <div className="w-full">
@@ -256,11 +262,9 @@ const SearchResultsData = () => {
                 }
                 value={speciality}
               >
-                {specialties.map((eachSpecialty) => (
-                  <Select.Option key={eachSpecialty} value={eachSpecialty}>
-                    {eachSpecialty}
-                  </Select.Option>
-                ))}
+                <Select.Option key={speciality} value={speciality}>
+                  {speciality || "Specialist"}
+                </Select.Option>
               </Select>
             </div>
           </div>
@@ -312,89 +316,11 @@ const SearchResultsData = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-[56px]">
-              <div className="text-center flex gap-[16px] items-center justify-center">
-                <div className="">
-                  <Image
-                    src="/images/gray_left_arrow.svg"
-                    width={16}
-                    height={16}
-                    alt="Working Men"
-                    className="cursor-pointer"
-                    onClick={() =>
-                      handlePageChange(Math.max(currentPage - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                  />
-                </div>
-                <div className="">
-                  <div className="text-center flex gap-[16px] items-center justify-center">
-                    {currentPage > 1 && (
-                      <button
-                        key={currentPage - 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        className={`w-[32px] h-[32px] rounded-[4px] ${
-                          currentPage === currentPage - 1
-                            ? "bg-[#5151E1] text-white"
-                            : "text-808080"
-                        }`}
-                      >
-                        {currentPage - 1}
-                      </button>
-                    )}
-                    <button
-                      key={currentPage}
-                      className={`w-[32px] h-[32px] rounded-[4px] ${
-                        currentPage === currentPage
-                          ? "bg-[#5151E1] text-white"
-                          : "text-808080"
-                      }`}
-                    >
-                      {currentPage}
-                    </button>
-                    {currentPage + 1 <= totalPages && (
-                      <button
-                        key={currentPage + 1}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        className={`w-[32px] h-[32px] rounded-[4px] ${
-                          currentPage === currentPage + 1
-                            ? "bg-[#5151E1] text-white"
-                            : "text-808080"
-                        }`}
-                      >
-                        {currentPage + 1}
-                      </button>
-                    )}
-                    {currentPage + 2 <= totalPages && (
-                      <button
-                        key={currentPage + 2}
-                        onClick={() => handlePageChange(currentPage + 2)}
-                        className={`w-[32px] h-[32px] rounded-[4px] ${
-                          currentPage === currentPage + 2
-                            ? "bg-[#5151E1] text-white"
-                            : "text-808080"
-                        }`}
-                      >
-                        {currentPage + 2}
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <div className="mr-[32px]">
-                  <Image
-                    src="/images/purple_right_arrow.svg"
-                    width={16}
-                    height={16}
-                    alt="Working Men"
-                    className="cursor-pointer"
-                    onClick={() =>
-                      handlePageChange(Math.min(currentPage + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                  />
-                </div>
-              </div>
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

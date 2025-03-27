@@ -17,7 +17,7 @@ const Loader = () => {
         zIndex: 9999,
       }}
     >
-      <Spin size="large" tip="Loading..." />
+      <Spin size="large" />
     </div>
   );
 };

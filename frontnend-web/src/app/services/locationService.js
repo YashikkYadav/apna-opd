@@ -10,7 +10,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 export const searchCities = async (searchText) => {
   try {
     // Check cache first
-    const cacheKey = searchText.toLowerCase();
+    const cacheKey = searchText?.toLowerCase();
     const cachedData = cache.get(cacheKey);
     if (cachedData && cachedData.timestamp > Date.now() - CACHE_DURATION) {
       return cachedData.data;
