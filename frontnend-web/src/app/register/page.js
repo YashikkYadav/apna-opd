@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select, message } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
 import { searchCities } from "../services/locationService";
 import debounce from "lodash/debounce";
+import Loader from "../components/common-components/Loader";
 
 const Register = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const Register = () => {
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -55,7 +57,8 @@ const Register = () => {
     }
   };
 
-  const handleLocationSearch = async (value) => {
+  // Create a debounced search function
+  const debouncedLocationSearch = debounce(async (value) => {
     if (value.length < 2) {
       setLocationOptions([]);
       return;
@@ -64,17 +67,28 @@ const Register = () => {
     setLocationLoading(true);
     try {
       const locations = await searchCities(value);
-      setLocationOptions(
-        locations.map((location) => ({
-          value: location.name,
-          label: location.name,
-        }))
-      );
+      if (Array.isArray(locations)) {
+        setLocationOptions(
+          locations.map((location) => ({
+            value: location.label,
+            label: location.label,
+          }))
+        );
+      } else {
+        setLocationOptions([]);
+      }
     } catch (error) {
+      console.error("Failed to fetch locations:", error);
       message.error("Failed to fetch locations");
+      setLocationOptions([]);
     } finally {
       setLocationLoading(false);
     }
+  }, 300);
+
+  // Use the debounced function in the handler
+  const handleLocationSearch = (value) => {
+    debouncedLocationSearch(value);
   };
 
   const handleLocationChange = (value) => {
@@ -118,6 +132,7 @@ const Register = () => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const payload = {
         type: formData.registrationFor,
@@ -127,21 +142,47 @@ const Register = () => {
         password: formData.password,
         location: formData.location,
       };
-
+      console.log("payload", payload);
       const response = await axiosInstance.post("/health-serve/", payload);
-      if (response.status === 200) {
-        message.success("Registration successful!");
-        router.push("/login");
-      } else {
-        message.error("Registration failed");
-      }
+      console.log("response", response);
+      
+      // Show success message
+      message.success({
+        content: "Registration successful! Redirecting ...",
+        duration: 3,
+        style: {
+          marginTop: '20vh',
+        },
+      });
+      
+      // Redirect after a delay
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     } catch (error) {
-      message.error(error?.response?.data?.message || "Registration failed");
+      console.error("Registration error:", error);
+      message.error({
+        content: typeof error === 'string' ? error : "Registration failed. Please try again.",
+        duration: 5,
+        style: {
+          marginTop: '20vh',
+        },
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  // Clean up debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedLocationSearch.cancel();
+    };
+  }, []);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      {isSubmitting && <Loader />}
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
         <form
@@ -228,6 +269,7 @@ const Register = () => {
               className="w-full text-black"
               style={{ color: "black" }}
               required
+              notFoundContent={locationLoading ? "Loading..." : "No locations found"}
             />
           </div>
 
@@ -299,8 +341,9 @@ const Register = () => {
           <button
             type="submit"
             className="md:col-span-2 w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 mt-4"
+            disabled={isSubmitting}
           >
-            Register
+            {isSubmitting ? "Registering..." : "Register"}
           </button>
         </form>
 
