@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const message = error.response?.data?.message || "Something went wrong";
+    const message = error || "Something went wrong";
     return Promise.reject(message);
   }
 );

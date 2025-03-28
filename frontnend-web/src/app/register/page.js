@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Select, message } from "antd";
+import { Button, Select } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
 import { searchCities } from "../services/locationService";
 import debounce from "lodash/debounce";
-import Loader from "../components/common-components/Loader";
+import { Bounce, Flip, toast, ToastContainer } from "react-toastify";
 
 const Register = () => {
   const router = useRouter();
@@ -142,31 +142,30 @@ const Register = () => {
         password: formData.password,
         location: formData.location,
       };
-      console.log("payload", payload);
-      const response = await axiosInstance.post("/health-serve/", payload);
-      console.log("response", response);
-      
-      // Show success message
-      message.success({
-        content: "Registration successful! Redirecting ...",
-        duration: 3,
-        style: {
-          marginTop: '20vh',
-        },
-      });
-      
-      // Redirect after a delay
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
+      const response = await axiosInstance.post("/health-serve/", payload); 
+      if(response){
+        toast.success("Registration successful!", {
+          position: "top-center",
+          autoClose: 1500,
+          closeOnClick: false,
+          transition: Flip,
+        });
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      }
     } catch (error) {
-      console.error("Registration error:", error);
-      message.error({
-        content: typeof error === 'string' ? error : "Registration failed. Please try again.",
-        duration: 5,
-        style: {
-          marginTop: '20vh',
-        },
+      console.log("error", error);
+      const errorMessage =
+        typeof error?.response?.data === "string"
+          ? error.response.data
+          : error?.response?.data?.error ||
+            error?.response?.data[0]?.message ||
+            "Something went wrong. Please try again.";
+
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 2000,
       });
     } finally {
       setIsSubmitting(false);
@@ -182,7 +181,6 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      {isSubmitting && <Loader />}
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
         <form
@@ -246,7 +244,7 @@ const Register = () => {
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
               minLength={10}
-              maxLength={12}
+              maxLength={10}
               pattern="\d{10,12}"
               required
             />
@@ -269,10 +267,11 @@ const Register = () => {
               className="w-full text-black"
               style={{ color: "black" }}
               required
-              notFoundContent={locationLoading ? "Loading..." : "No locations found"}
+              notFoundContent={
+                locationLoading ? "Loading..." : "No locations found"
+              }
             />
           </div>
-
           {/* Password */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -354,6 +353,19 @@ const Register = () => {
           </a>
         </p>
       </div>
+      <ToastContainer
+        position="top-center"
+        hideProgressBar
+        newestOnTop
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="light"
+        transition={Flip}
+        limit={3}
+      />
     </div>
   );
 };

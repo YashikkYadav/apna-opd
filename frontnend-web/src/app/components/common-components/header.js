@@ -51,7 +51,7 @@ const Header = () => {
 
   return (
     <div>
-      <div className="bg-white rounded-b-[8px] shadow-md fixed w-full z-[9999999]">
+      <div className="bg-white rounded-b-[8px] shadow-md fixed w-full">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center py-[13px] px-[15px] sm:px-[30px]">
           <Link href="/">
             <Image
