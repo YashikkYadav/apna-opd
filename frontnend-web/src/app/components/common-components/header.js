@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CaretDownOutlined } from "@ant-design/icons";
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -11,7 +12,14 @@ const Header = () => {
 
   const handleClickOnFind = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setMenuOpen((prev) => !prev);
+  };
+
+  const handleNavigation = (route) => (e) => {
+    e.stopPropagation();
+    setMenuOpen(false);
+    router.push(route);
   };
 
   useEffect(() => {
@@ -51,7 +59,7 @@ const Header = () => {
 
   return (
     <div>
-      <div className="bg-white rounded-b-[8px] shadow-md fixed w-full">
+      <div className="bg-white rounded-b-[8px] shadow-md fixed w-full z-[999]">
         <div className="max-w-[1400px] mx-auto flex justify-between items-center py-[13px] px-[15px] sm:px-[30px]">
           <Link href="/">
             <Image
@@ -83,26 +91,27 @@ const Header = () => {
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold relative">
-                <Link
-                  href="#"
-                  className="hover:border-none hover:m-0 text-[#094B89] text-base font-bold bg-transparent"
+                <a
+                  className="cursor-pointer hover:border-none hover:m-0 text-[#094B89] text-base font-bold bg-transparent flex items-center"
                   onClick={handleClickOnFind}
                 >
-                  Find <CaretDownOutlined />
-                </Link>
+                  Find <CaretDownOutlined className="pl-1"/>
+                </a>
                 {menuOpen && (
-                  <div className="absolute top-[28px] left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-md bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent">
+                  <div 
+                    className="cursor-pointer absolute top-[28px] left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-md bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <ul className="flex flex-col gap-1">
                       {menuItems.map((item, index) => (
                         <div key={item.route}>
                           <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
-                            <Link
-                              href={item.route}
+                            <span
                               className="w-full block text-left hover:text-white hover:border-none"
-                              onClick={() => setMenuOpen(false)}
+                              onClick={handleNavigation(item.route)}
                             >
                               {item.label}
-                            </Link>
+                            </span>
                           </li>
                           {index < menuItems.length - 1 && <hr />}
                         </div>
