@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const NashaMukti = () => {
   const [nashaMuktiList, setNashaMuktiList] = useState([]);
@@ -14,11 +14,7 @@ const NashaMukti = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     const data = getServiceData("nasha_mukti");
@@ -43,21 +39,6 @@ const NashaMukti = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (center) => {
-    setInquiryModal({
-      isOpen: true,
-      title: center.name,
-      itemId: center.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
   };
 
   // Get current items
@@ -164,10 +145,10 @@ const NashaMukti = () => {
                       $50
                     </h2>
                     <button
-                      onClick={() => handleInquiry(center)}
+                      onClick={() => navigate.push(`/more/nashaMukti/${center.id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -199,13 +180,6 @@ const NashaMukti = () => {
               </div>
             </div>
           </div>
-
-          <InquiryModal
-            isOpen={inquiryModal.isOpen}
-            onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-            onSubmit={handleInquirySubmit}
-            title={inquiryModal.title}
-          />
         </div>
       </div>
     </>

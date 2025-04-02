@@ -55,12 +55,31 @@ export const servicesData = {
       id: 1,
       title: "City Emergency Ambulance",
       rating: 4.8,
-      price: 25,
-      images: ["/images/ambulance1.jpg"],
+      price: 1500,
+      description: "City Emergency Ambulance provides 24/7 emergency medical transportation services with fully equipped ambulances and trained paramedics. We ensure quick response times and professional care during transit.",
+      images: [
+        "/images/ambulance1.jpg",
+        "/images/ambulance2.jpg",
+        "/images/ambulance3.jpg"
+      ],
       contactDetails: {
         phone: "+91 98765 43210",
         address: "123 Healthcare Street, Mumbai",
+        organization: "City Emergency Services"
       },
+      experience: "15 Years",
+      establishment: "2008",
+      certifications: "ISO 9001:2015 Certified, National Accreditation Board for Hospitals & Healthcare Providers",
+      facilities: [
+        "Advanced Life Support",
+        "Basic Life Support",
+        "Patient Transport",
+        "Neonatal Transport",
+        "Cardiac Care"
+      ],
+      schedule: {
+        "24/7": "Available"
+      }
     },
     {
       id: 2,

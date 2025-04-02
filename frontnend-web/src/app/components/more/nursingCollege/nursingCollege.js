@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const NursingCollege = () => {
   const [nursingCollegeList, setNursingCollegeList] = useState([]);
@@ -14,11 +14,7 @@ const NursingCollege = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     // Fetch nursing college data
@@ -44,21 +40,6 @@ const NursingCollege = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (college) => {
-    setInquiryModal({
-      isOpen: true,
-      title: college.name,
-      itemId: college.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
   };
 
   // Pagination Logic
@@ -162,10 +143,10 @@ const NursingCollege = () => {
                       Fees: ${college.price || "N/A"}
                     </h2>
                     <button
-                      onClick={() => handleInquiry(college)}
+                      onClick={() => navigate.push(`/more/nursingCollege/${college.id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -196,12 +177,6 @@ const NursingCollege = () => {
               </div>
             </div>
           </div>
-          <InquiryModal
-            isOpen={inquiryModal.isOpen}
-            onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-            onSubmit={handleInquirySubmit}
-            title={inquiryModal.title}
-          />
         </div>
       </div>
     </>

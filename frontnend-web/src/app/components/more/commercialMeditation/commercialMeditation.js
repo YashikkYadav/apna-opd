@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const CommercialMeditation = () => {
   const [meditationList, setMeditationList] = useState([]);
@@ -14,11 +14,7 @@ const CommercialMeditation = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     // Get all meditation data
@@ -44,21 +40,6 @@ const CommercialMeditation = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (meditation) => {
-    setInquiryModal({
-      isOpen: true,
-      title: meditation.name,
-      itemId: meditation.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -164,10 +145,10 @@ const CommercialMeditation = () => {
                       ${meditation.price}
                     </h2>
                     <button
-                      onClick={() => handleInquiry(meditation)}
+                      onClick={() => navigate.push(`/more/commercialMeditation/${meditation.id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -201,13 +182,6 @@ const CommercialMeditation = () => {
           </div>
         </div>
       </div>
-
-      <InquiryModal
-        isOpen={inquiryModal.isOpen}
-        onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-        onSubmit={handleInquirySubmit}
-        title={inquiryModal.title}
-      />
     </>
   );
 };

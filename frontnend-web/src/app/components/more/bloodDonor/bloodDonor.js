@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const BloodDonar = () => {
   const [bloodBankList, setBloodBankList] = useState([]);
@@ -14,11 +14,7 @@ const BloodDonar = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     // Fetch blood bank data
@@ -159,10 +155,10 @@ const BloodDonar = () => {
                       Availability: {bank.price ? `${bank.price} Units` : "N/A"}
                     </h4>
                     <button
-                      onClick={() => handleInquiry(bank)}
+                      onClick={() => navigate.push(`/more/bloodDonor/${bank.id}/details`)}
                       className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -193,12 +189,6 @@ const BloodDonar = () => {
               </div>
             </div>
           </div>
-          <InquiryModal
-            isOpen={inquiryModal.isOpen}
-            onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-            onSubmit={handleInquirySubmit}
-            title={inquiryModal.title}
-          />
         </div>
       </div>
     </>

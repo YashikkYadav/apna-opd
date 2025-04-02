@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const MedicalStore = () => {
   const [medicalStoreList, setMedicalStoreList] = useState([]);
@@ -14,11 +14,7 @@ const MedicalStore = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     // Get all medical store data
@@ -44,22 +40,6 @@ const MedicalStore = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (store) => {
-    setInquiryModal({
-      isOpen: true,
-      title: store.name,
-      itemId: store.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
-    // Here you would typically send this data to your backend
   };
 
   // Get current items
@@ -160,10 +140,10 @@ const MedicalStore = () => {
                       ${store.price || "N/A"}
                     </h2> */}
                     <button
-                      onClick={() => handleInquiry(store)}
+                      onClick={() => navigate.push(`/more/medicalstore/${store.id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -194,12 +174,6 @@ const MedicalStore = () => {
               </div>
             </div>
           </div>
-          <InquiryModal
-            isOpen={inquiryModal.isOpen}
-            onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-            onSubmit={handleInquirySubmit}
-            title={inquiryModal.title}
-          />
         </div>
       </div>
     </>

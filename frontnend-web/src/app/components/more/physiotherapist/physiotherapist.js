@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
-import InquiryModal from "../common/InquiryModal";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
 
 const Physiotherapist = () => {
   const [physiotherapistList, setPhysiotherapistList] = useState([]);
@@ -14,11 +14,7 @@ const Physiotherapist = () => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
-  const [inquiryModal, setInquiryModal] = useState({
-    isOpen: false,
-    title: "",
-    itemId: null,
-  });
+  const navigate = useRouter();
 
   useEffect(() => {
     // Fetch physiotherapist data
@@ -164,10 +160,10 @@ const Physiotherapist = () => {
                       Fees: ${physio.price || "N/A"}
                     </h4>
                     <button
-                      onClick={() => handleInquiry(physio)}
+                      onClick={() => navigate.push(`/more/physiotherapist/${physio.id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
-                      Inquiry
+                      Details
                     </button>
                   </div>
                 </div>
@@ -198,12 +194,6 @@ const Physiotherapist = () => {
               </div>
             </div>
           </div>
-          <InquiryModal
-            isOpen={inquiryModal.isOpen}
-            onClose={() => setInquiryModal({ ...inquiryModal, isOpen: false })}
-            onSubmit={handleInquirySubmit}
-            title={inquiryModal.title}
-          />
         </div>
       </div>
     </>
