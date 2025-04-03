@@ -101,6 +101,7 @@ const Gym = () => {
                     alt="Location Icon"
                   />
                 }
+                value={location}
               >
                 {locations.map((location) => (
                   <Select.Option key={location} value={location}>
