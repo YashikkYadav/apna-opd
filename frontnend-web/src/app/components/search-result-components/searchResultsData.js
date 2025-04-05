@@ -4,161 +4,179 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { getLocations, getSpecialties } from "../../data/constants";
 import SearchBar from "../common-components/SearchBar";
 import Pagination from "./../more/common/Pagination";
+import axiosInstance from "@/app/config/axios";
 
 const SearchResultsData = () => {
   const router = useRouter();
+  const [data, setData] = useState([]);
 
-  const data = [
-    {
-      id: 1,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 2,
-      title: "Mark David, MD",
-    },
-    {
-      id: 3,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 4,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 5,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 6,
-      title: "Mark David, MD",
-    },
-    {
-      id: 7,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 8,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 9,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 10,
-      title: "Mark David, MD",
-    },
-    {
-      id: 11,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 12,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 13,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 14,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 15,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 16,
-      title: "Mark David, MD",
-    },
-    {
-      id: 17,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 18,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 19,
-      title: "Mark David, MD",
-    },
-    {
-      id: 20,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 21,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 22,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 23,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 24,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 25,
-      title: "Mark David, MD",
-    },
-    {
-      id: 26,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 27,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 28,
-      title: "Mark David, MD",
-    },
-    {
-      id: 29,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 30,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 31,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 32,
-      title: "Rudolf Andrew, MD",
-    },
-    {
-      id: 33,
-      title: "Maria Antonie, MD",
-    },
-    {
-      id: 34,
-      title: "Mark David, MD",
-    },
-    {
-      id: 35,
-      title: "Angela Nielson, MD",
-    },
-    {
-      id: 36,
-      title: "Rudolf Andrew, MD",
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 7,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 8,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 9,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 10,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 11,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 12,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 13,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 14,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 15,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 16,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 17,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 18,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 19,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 20,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 21,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 22,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 23,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 24,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 25,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 26,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 27,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 28,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 29,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 30,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 31,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 32,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  //   {
+  //     id: 33,
+  //     title: "Maria Antonie, MD",
+  //   },
+  //   {
+  //     id: 34,
+  //     title: "Mark David, MD",
+  //   },
+  //   {
+  //     id: 35,
+  //     title: "Angela Nielson, MD",
+  //   },
+  //   {
+  //     id: 36,
+  //     title: "Rudolf Andrew, MD",
+  //   },
+  // ];
 
-  const itemsPerPage = 4;
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/doctor/list?page=${currentPage}`
+      );
+      if(response.list.doctorList){
+        setData(response.list.doctorList);
+      }
+    } catch (error) {
+      console.log("error",error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -276,7 +294,7 @@ const SearchResultsData = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
@@ -298,8 +316,11 @@ const SearchResultsData = () => {
                         10 Years of Experience
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        California Medical Center
+                        {item.clinicName || "California Medical Center"}
                       </h4>
+                      <h6 className="text-base text-[#2E2E2E] !font-medium">
+                        DR. {item.name}
+                      </h6>
                     </div>
                   </div>
                   <div className="flex flex-row sm:flex-col justify-between">
@@ -307,7 +328,7 @@ const SearchResultsData = () => {
                       $25
                     </h2>
                     <button
-                      onClick={() => handleDoctorDetails(item.id)}
+                      onClick={() => handleDoctorDetails(item._id)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details
