@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema(
     },
     rmcNumber: {
       index: true,
-      required: true,
+      required: false,
       type: String,
       unique: true,
     },

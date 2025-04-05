@@ -5,10 +5,6 @@ const DoctorValidationSchema = zod.object({
     .string()
     .min(3, { message: 'Name must have at least 3 characters.' })
     .trim(),
-  rmcNumber: zod
-    .string()
-    .min(1, { message: 'RMC Number is required.' })
-    .trim(),
   phoneNumber: zod
     .string()
     .regex(/^\d{10}$/, { message: 'Phone number must be a valid 10-digit number.' }),
