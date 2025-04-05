@@ -5,6 +5,7 @@ const {
   comparePassword,
   getAccessToken,
 } = require("../utils/helpers");
+const DoctorProfile = require("../models/doctorProfile");
 
 const registerDoctor = async (doctorData) => {
   try {
@@ -157,14 +158,19 @@ const getDoctorList = async (page) => {
   try {
     const limit = 5;
     const skip = (page - 1) * limit;
-    
-    const data = await Doctor.find().skip(skip).limit(limit);
-    
-    const total = await Doctor.countDocuments();
-    
+
+    const doctorList = await Doctor.find().skip(skip).limit(limit);
+    const doctorIds = doctorList.map(doctor => doctor._id);
+    const doctorProfileList = await DoctorProfile.find({
+      doctorId: { $in: doctorIds }
+    });
+
+    const total = await DoctorProfile.countDocuments();
+
     return {
-      statusCode:200,
-      data,
+      statusCode: 200,
+      doctorList,
+      doctorProfileList,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,

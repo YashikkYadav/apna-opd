@@ -1,4 +1,5 @@
 const HealthServe = require("../models/healthServe");
+const HealthServeProfile = require("../models/healthServeProfile");
 const {
   getAccessToken,
   getHashedPassword,
@@ -38,6 +39,16 @@ const register = async (data) => {
       location,
     });
     await newHealthServe.save();
+
+    const newHealthServeProfile = new HealthServeProfile({
+      healthServeId: newHealthServe._id,
+      type,
+      name,
+      phone,
+      email,
+      location,
+    });
+    await newHealthServeProfile.save();
 
     return {
       statusCode: 201,
@@ -238,13 +249,20 @@ const getHealthServeList = async (page) => {
     const limit = 5;
     const skip = (page - 1) * limit;
 
-    const data = await HealthServe.find().skip(skip).limit(limit);
+    const healthServeList = await HealthServe.find().skip(skip).limit(limit);
+    const healthServeIds = healthServeList.map(
+      (healthServe) => healthServe._id
+    );
+    const healthServeProfileList = await HealthServeProfile.find({
+      healthServeId: { $in: healthServeIds },
+    });
 
     const total = await HealthServe.countDocuments();
 
     return {
       statusCode: 200,
-      data,
+      healthServeList,
+      healthServeProfileList,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
