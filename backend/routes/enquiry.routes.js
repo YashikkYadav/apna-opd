@@ -13,8 +13,23 @@ enquiry.get(
 );
 
 enquiry.get(
+  '/24hours',
+  enquiryController.getLast24HoursDataCount,
+);
+
+enquiry.get(
+  '/30days',
+  enquiryController.getLast30DaysDataCount,
+);
+
+enquiry.get(
   '/:enquiryId',
   enquiryController.getEnquiryById,
+);
+
+enquiry.patch(
+  '/:enquiryId',
+  enquiryController.updateIsContacted,
 );
 
 enquiry.delete(

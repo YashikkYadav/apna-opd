@@ -67,6 +67,27 @@ const getAllEnquiries = async (req, res) => {
   }
 }
 
+const updateIsContacted = async (req, res) => {
+  try {
+    const { enquiryId } = req.params;
+
+    const enquiry = await enquiryService.updateIsContacted(enquiryId);
+    if (enquiry?.error) {
+      return res
+        .status(enquiry.statusCode)
+        .send(enquiry.error);
+    }
+
+    res.status(enquiry.statusCode).json({
+      enquiry: enquiry.enquiry,
+    });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
+  }
+}
+
 const deleteEnquiry = async (req, res) => {
   try {
     const { enquiryId } = req.params;
@@ -88,9 +109,58 @@ const deleteEnquiry = async (req, res) => {
   }
 }
 
+const getLast24HoursDataCount = async (req, res) => {
+  try {
+    const { healthServeId } = req.params;
+
+    const enquiry = await enquiryService.getLast24HoursDataCount(healthServeId);
+    if (enquiry?.error) {
+      return res
+        .status(enquiry.statusCode)
+        .send(enquiry.error);
+    }
+
+    res
+      .status(enquiry.statusCode)
+      .json({
+        enquiry: enquiry.enquiry,
+      });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
+  }
+}
+
+const getLast30DaysDataCount = async (req, res) => {
+  try {
+    const { healthServeId } = req.params;
+
+    const enquiry = await enquiryService.getLast30DaysDataCount(healthServeId);
+    if (enquiry?.error) {
+      return res
+        .status(enquiry.statusCode)
+        .send(enquiry.error);
+    }
+
+    res
+      .status(enquiry.statusCode)
+      .json({
+        enquiry: enquiry.enquiry,
+      });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
+  }
+}
+
 module.exports = {
   createEnquiry,
   getEnquiryById,
   getAllEnquiries,
+  updateIsContacted,
   deleteEnquiry,
+  getLast24HoursDataCount,
+  getLast30DaysDataCount,
 };

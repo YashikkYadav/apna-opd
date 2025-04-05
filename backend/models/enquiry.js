@@ -20,7 +20,11 @@ const enquirySchema = new mongoose.Schema(
       required: true,
       type: mongoose.Schema.Types.ObjectId,
       ref: 'HealthServe',
-    }
+    },
+    isContacted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
