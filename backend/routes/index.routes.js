@@ -17,6 +17,7 @@ const doctorProfileRoutes = require('./doctorProfile.routes');
 const patientAppointmentRoutes = require('../routes/patientAppointment.routes');
 const prescriptionSectionRoutes = require('../routes/prescriptionSection.routes');
 const doctorMiddleware = require('../middlewares/doctor.middleware');
+const profileRoute = require('./profile.routes');
 
 const router = express.Router();
 
@@ -31,6 +32,11 @@ router.use(
   doctorMiddleware,
   doctorProfileRoutes,
 );
+
+router.use(
+  '/:profileId/user-profile',
+  profileRoute,
+)
 
 router.use(
   '/:doctorId/patient',

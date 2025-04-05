@@ -1,12 +1,12 @@
-const Doctor = require('../models/doctor');
-const validateDoctor = require('../validations/doctor.validation');
+const Doctor = require("../models/doctor");
+const validateDoctor = require("../validations/doctor.validation");
 const {
   getHashedPassword,
   comparePassword,
   getAccessToken,
-} = require('../utils/helpers');
+} = require("../utils/helpers");
 
-const registerDoctor = async ( doctorData ) => {
+const registerDoctor = async (doctorData) => {
   try {
     const {
       name,
@@ -27,13 +27,14 @@ const registerDoctor = async ( doctorData ) => {
     }
 
     let doctor =
-      await Doctor.findOne({ phoneNumber })
-      || await Doctor.findOne({ email });
+      (await Doctor.findOne({ phoneNumber })) ||
+      (await Doctor.findOne({ email }));
 
     if (doctor) {
       return {
         statusCode: 409,
-        error: 'Doctor already exist, Please use different email/phone number or login',
+        error:
+          "Doctor already exist, Please use different email/phone number or login",
       };
     }
 
@@ -67,45 +68,38 @@ const registerDoctor = async ( doctorData ) => {
       error: error,
     };
   }
-}
+};
 
-const loginDoctor = async ( doctorData ) => {
+const loginDoctor = async (doctorData) => {
   try {
-    const {
-      email,
-      phoneNumber,
-      password,
-    } = doctorData;
+    const { email, phoneNumber, password } = doctorData;
 
-    if (
-      !(email || phoneNumber)
-      && password
-    ) {
+    if (!(email || phoneNumber) && password) {
       return {
         statusCode: 400,
-        error: 'Please fill all the fields',
+        error: "Please fill all the fields",
       };
     }
-  
+
     const doctor =
-      await Doctor.findOne({ email })
-      || await Doctor.findOne({ phoneNumber });
+      (await Doctor.findOne({ email })) ||
+      (await Doctor.findOne({ phoneNumber }));
 
     if (!doctor) {
       return {
         statusCode: 404,
-        error: 'Doctor not found',
+        error: "Doctor not found",
       };
     }
-  
+
     const isPasswordValid = await comparePassword(password, doctor.password);
     if (!isPasswordValid) {
       return {
         statusCode: 401,
-        error: 'Wrong Password',
+        error: "Wrong Password",
       };
     }
-  
+
     const accessToken = getAccessToken(doctor);
     return {
       statusCode: 200,
@@ -120,9 +114,9 @@ const loginDoctor = async ( doctorData ) => {
       error: error,
     };
   }
-}
+};
 
-const getDoctor = async ( doctorId ) => {
+const getDoctor = async (doctorId) => {
   try {
     const doctor = await Doctor.findById(doctorId);
     return {
@@ -143,7 +137,7 @@ const getDoctor = async ( doctorId ) => {
       error: error,
     };
   }
-}
+};
 
 const deleteDoctor = async (doctorId) => {
   try {
@@ -157,11 +151,36 @@ const deleteDoctor = async (doctorId) => {
       error: error,
     };
   }
-}
+};
+
+const getDoctorList = async (page) => {
+  try {
+    const limit = 5;
+    const skip = (page - 1) * limit;
+    
+    const data = await Doctor.find().skip(skip).limit(limit);
+    
+    const total = await Doctor.countDocuments();
+    
+    return {
+      statusCode:200,
+      data,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
 
 module.exports = {
   registerDoctor,
   loginDoctor,
   getDoctor,
-  deleteDoctor, 
+  deleteDoctor,
+  getDoctorList,
 };

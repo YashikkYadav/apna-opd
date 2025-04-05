@@ -15,6 +15,11 @@ doctor.post(
 );
 
 doctor.get(
+  '/list',
+  doctorController.getDoctorList,
+)
+
+doctor.get(
   '/:doctorId',
   doctorMiddleware,
   doctorController.getDoctor,
@@ -25,5 +30,6 @@ doctor.delete(
   doctorMiddleware,
   doctorController.deleteDoctor,
 );
+
 
 module.exports = doctor;

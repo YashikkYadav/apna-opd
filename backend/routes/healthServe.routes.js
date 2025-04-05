@@ -1,35 +1,20 @@
-const express = require('express');
-const healthServeController = require('../controllers/healthServe.controller');
+const express = require("express");
+const healthServeController = require("../controllers/healthServe.controller");
 const healthServe = express.Router({ mergeParams: true });
 
-healthServe.post(
-  '/',
-  healthServeController.registerHealthServe,
-);
+healthServe.post("/", healthServeController.registerHealthServe);
 
-healthServe.post(
-  '/access-token',
-  healthServeController.loginHealthServe,
-);
+healthServe.post("/access-token", healthServeController.loginHealthServe);
 
-healthServe.get(
-  '/',
-  healthServeController.getAllHealthServes,
-);
+healthServe.get("/", healthServeController.getAllHealthServes);
 
-healthServe.get(
-  '/:healthServeId',
-  healthServeController.getHealthServeById,
-);
+healthServe.get("/list", healthServeController.getHealthServeList);
 
-healthServe.put(
-  '/:healthServeId',
-  healthServeController.updateHealthServe,
-);
+healthServe.get("/:healthServeId", healthServeController.getHealthServeById);
 
-healthServe.delete(
-  '/:healthServeId',
-  healthServeController.deleteHealthServe,
-);
+healthServe.put("/:healthServeId", healthServeController.updateHealthServe);
+
+healthServe.delete("/:healthServeId", healthServeController.deleteHealthServe);
+
 
 module.exports = healthServe;
