@@ -65,8 +65,10 @@ const deleteDoctor = async (req, res) => {
 const getDoctorList = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
+    const location = req.query.location || null;
+    const speciality = req.query.speciality || null;
 
-    const doctorList = await doctorService.getDoctorList(page);
+    const doctorList = await doctorService.getDoctorList(page,location,speciality);
 
     if (doctorList?.error) {
       return res.status(doctorList.statusCode).send(doctorList.error);

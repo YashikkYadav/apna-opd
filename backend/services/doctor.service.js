@@ -16,6 +16,7 @@ const registerDoctor = async (doctorData) => {
       email,
       address,
       clinicName,
+      speciality,
       password,
     } = doctorData;
 
@@ -47,6 +48,7 @@ const registerDoctor = async (doctorData) => {
       email,
       address,
       clinicName,
+      speciality,
       password: hashedPassword,
     });
     await newDoctor.save();
@@ -61,6 +63,7 @@ const registerDoctor = async (doctorData) => {
         email: newDoctor.email,
         address: newDoctor.address,
         clinicName: newDoctor.clinicName,
+        speciality: newDoctor.speciality,
       },
     };
   } catch (error) {
@@ -154,18 +157,22 @@ const deleteDoctor = async (doctorId) => {
   }
 };
 
-const getDoctorList = async (page) => {
+const getDoctorList = async (page, location, speciality) => {
   try {
     const limit = 5;
     const skip = (page - 1) * limit;
 
-    const doctorList = await Doctor.find().skip(skip).limit(limit);
+    const filter = {};
+    if (location) filter.address = { $regex: location, $options: "i" };
+    if (speciality) filter.speciality = speciality;
+
+    const doctorList = await Doctor.find(filter).skip(skip).limit(limit);
     const doctorIds = doctorList.map((doctor) => doctor._id);
     const doctorProfileList = await DoctorProfile.find({
       doctorId: { $in: doctorIds },
     });
 
-    const total = await Doctor.countDocuments();
+    const total = await Doctor.countDocuments(filter);
 
     return {
       statusCode: 200,
