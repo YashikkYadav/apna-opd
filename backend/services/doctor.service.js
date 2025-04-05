@@ -160,12 +160,12 @@ const getDoctorList = async (page) => {
     const skip = (page - 1) * limit;
 
     const doctorList = await Doctor.find().skip(skip).limit(limit);
-    const doctorIds = doctorList.map(doctor => doctor._id);
+    const doctorIds = doctorList.map((doctor) => doctor._id);
     const doctorProfileList = await DoctorProfile.find({
-      doctorId: { $in: doctorIds }
+      doctorId: { $in: doctorIds },
     });
 
-    const total = await DoctorProfile.countDocuments();
+    const total = await Doctor.countDocuments();
 
     return {
       statusCode: 200,
