@@ -163,21 +163,26 @@ const getDoctorList = async (page, location, speciality) => {
     const skip = (page - 1) * limit;
 
     const filter = {};
-    if (location) filter.address = { $regex: location, $options: "i" };
+    if (location)
+      filter.location = {
+        $elemMatch: {
+          address: { $regex: location, $options: "i" },
+        },
+      };
+
     if (speciality) filter.speciality = speciality;
 
-    const doctorList = await Doctor.find(filter).skip(skip).limit(limit);
-    const doctorIds = doctorList.map((doctor) => doctor._id);
-    const doctorProfileList = await DoctorProfile.find({
-      doctorId: { $in: doctorIds },
-    });
+    const doctorList = await DoctorProfile.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .populate("doctorId");
+    console.log(doctorList);
 
-    const total = await Doctor.countDocuments(filter);
+    const total = await DoctorProfile.countDocuments(filter);
 
     return {
       statusCode: 200,
       doctorList,
-      doctorProfileList,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
