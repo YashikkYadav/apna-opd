@@ -163,26 +163,40 @@ const getDoctorList = async (page, location, speciality) => {
     const skip = (page - 1) * limit;
 
     const filter = {};
-    if (location)
-      filter.location = {
-        $elemMatch: {
-          address: { $regex: location, $options: "i" },
+
+    if (speciality) {
+      filter["doctor.speciality"] = speciality;
+    }
+
+    if (location) {
+      filter["doctor.address"] = { $regex: location, $options: "i" };
+    }
+
+    const doctorList = await DoctorProfile.aggregate([
+      {
+        $lookup: {
+          from: "doctors",
+          localField: "doctorId",
+          foreignField: "_id",
+          as: "doctor",
         },
-      };
+      },
+      { $unwind: "$doctor" },
+      { $match: filter },
+      {
+        $facet: {
+          data: [{ $skip: skip }, { $limit: limit }],
+          totalCount: [{ $count: "count" }],
+        },
+      },
+    ]);
 
-    if (speciality) filter.speciality = speciality;
-
-    const doctorList = await DoctorProfile.find(filter)
-      .skip(skip)
-      .limit(limit)
-      .populate("doctorId");
-    console.log(doctorList);
-
-    const total = await DoctorProfile.countDocuments(filter);
+    const total = doctorList[0].totalCount[0]?.count || 0;
+    const doctorListData = doctorList[0]?.data;
 
     return {
       statusCode: 200,
-      doctorList,
+      doctorListData,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
