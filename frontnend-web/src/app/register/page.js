@@ -117,7 +117,6 @@ const Register = () => {
     };
     try {
       const response = await axiosInstance.post("/doctor", payload);
-      console.log("response", response);
       if (response.doctor) {
         toast.success("Registration successful!", {
           position: "top-center",

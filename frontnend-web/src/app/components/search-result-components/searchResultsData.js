@@ -11,181 +11,39 @@ import axiosInstance from "@/app/config/axios";
 const SearchResultsData = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0
+  });
 
-  // const data = [
-  //   {
-  //     id: 1,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 7,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 8,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 9,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 10,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 11,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 12,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 13,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 14,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 15,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 16,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 17,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 18,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 19,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 20,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 21,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 22,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 23,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 24,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 25,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 26,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 27,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 28,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 29,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 30,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 31,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 32,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  //   {
-  //     id: 33,
-  //     title: "Maria Antonie, MD",
-  //   },
-  //   {
-  //     id: 34,
-  //     title: "Mark David, MD",
-  //   },
-  //   {
-  //     id: 35,
-  //     title: "Angela Nielson, MD",
-  //   },
-  //   {
-  //     id: 36,
-  //     title: "Rudolf Andrew, MD",
-  //   },
-  // ];
-
-  const fetchData = async () => {
+  const fetchData = async (page = 1) => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get(
-        `/doctor/list?page=${currentPage}`
+        `/doctor/list?page=${page}`
       );
-      if(response.list.doctorList){
+      
+      if(response.list?.doctorList){
         setData(response.list.doctorList);
+        setPagination({
+          currentPage: response.list.currentPage,
+          totalPages: response.list.totalPages,
+          totalItems: response.list.totalItems
+        });
       }
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = data.slice(startIndex, endIndex);
 
   const searchParams = useSearchParams();
   const [location, setLocation] = useState("");
   const [speciality, setSpeciality] = useState("");
+
   useEffect(() => {
     const locationQuery = searchParams.get("location");
     const specialityQuery = searchParams.get("speciality");
@@ -194,10 +52,8 @@ const SearchResultsData = () => {
   }, [searchParams]);
 
   const handlePageChange = (page) => {
-    if (page > totalPages || page < 1) {
-      return;
-    }
-    setCurrentPage(page);
+    if (page > pagination.totalPages || page < 1) return;
+    fetchData(page);
   };
 
   const handleSearch = (location, speciality) => {
@@ -209,6 +65,12 @@ const SearchResultsData = () => {
   const handleDoctorDetails = (doctorId) => {
     router.push(`${doctorId}/profile`);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) return <div className="text-center py-10">Loading...</div>;
 
   return (
     <>
@@ -287,12 +149,12 @@ const SearchResultsData = () => {
             </div>
           </div>
           <div className="lg:w-[66%]">
-            <h2 className="title-48 mb-[24px]">Result for Pediatrics</h2>
+            <h2 className="title-48 mb-[24px]">Result for {speciality || "Paediatrics"}</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {data.length} results
+              Showing {data.length} of {pagination.totalItems} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((item, index) => (
+              {data.map((item) => (
                 <div
                   key={item._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -309,18 +171,15 @@ const SearchResultsData = () => {
                     </div>
                     <div className="py-[18px] sm:py-0 md:py-[18px]">
                       <p className="text-base text-[#5151E1] mb-[8px]">
-                        Pedriatics Specialist
+                        {item.speciality || "Pedriatics Specialist"}
                       </p>
-                      <h3 className="title-32 mb-[8px]">{item.title}</h3>
+                      <h3 className="title-32 mb-[8px]">{item.name}</h3>
                       <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
                         10 Years of Experience
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
                         {item.clinicName || "California Medical Center"}
                       </h4>
-                      <h6 className="text-base text-[#2E2E2E] !font-medium">
-                        DR. {item.name}
-                      </h6>
                     </div>
                   </div>
                   <div className="flex flex-row sm:flex-col justify-between">
@@ -338,8 +197,8 @@ const SearchResultsData = () => {
               ))}
             </div>
             <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
+              currentPage={pagination.currentPage}
+              totalPages={pagination.totalPages}
               onPageChange={handlePageChange}
             />
           </div>
