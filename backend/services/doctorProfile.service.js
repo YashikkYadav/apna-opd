@@ -1,9 +1,9 @@
-const moment = require('moment');
-const DoctorProfile = require('../models/doctorProfile');
-const validateDoctorProfile = require('../validations/doctorProfile.validation');
-const { validateLocationSchedule } = require('../utils/doctorTiming');
+const moment = require("moment");
+const DoctorProfile = require("../models/doctorProfile");
+const validateDoctorProfile = require("../validations/doctorProfile.validation");
+const { validateLocationSchedule } = require("../utils/doctorTiming");
 
-const createDoctorProfile = async (doctorId, profileData) =>  {
+const createDoctorProfile = async (doctorId, profileData) => {
   try {
     const {
       introduction,
@@ -23,12 +23,14 @@ const createDoctorProfile = async (doctorId, profileData) =>  {
       };
     }
 
-    const validationOfLocation = validateLocationSchedule(locations);
-    if (!validationOfLocation.success) {
-      return {
-        statusCode: 400,
-        error: validationOfLocation.message,
-      };
+    if (locations) {
+      const validationOfLocation = validateLocationSchedule(locations);
+      if (!validationOfLocation.success) {
+        return {
+          statusCode: 400,
+          error: validationOfLocation.message,
+        };
+      }
     }
 
     const doctorProfile = await DoctorProfile.findOne({ doctorId });
@@ -43,7 +45,7 @@ const createDoctorProfile = async (doctorId, profileData) =>  {
           locations,
           unavailabilityDate,
           availabilityAfter,
-        },
+        }
       );
 
       return {
@@ -74,12 +76,13 @@ const createDoctorProfile = async (doctorId, profileData) =>  {
       error: error,
     };
   }
-}
+};
 
 const getDoctorProfile = async (doctorId) => {
   try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
+      "doctorId"
+    );
 
     return {
       statusCode: 200,
@@ -91,38 +94,42 @@ const getDoctorProfile = async (doctorId) => {
       error: error,
     };
   }
-}
+};
 
 const getAppointmentDetails = async (doctorId) => {
   try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
+      "doctorId"
+    );
 
     if (!doctorProfile) {
       return {
         statusCode: 404,
-        message: 'Doctor profile not found',
+        message: "Doctor profile not found",
       };
     }
 
     const now = moment();
-    const appointmentStartTime = now.add((doctorProfile.delayTimeInHours || 0), 'hours');
+    const appointmentStartTime = now.add(
+      doctorProfile.delayTimeInHours || 0,
+      "hours"
+    );
 
     const getNextWeekday = (targetDay, startDate) => {
       let daysToAdd = (targetDay - startDate.day() + 7) % 7;
       if (daysToAdd === 0) daysToAdd = 7;
-      return startDate.add(daysToAdd, 'days');
+      return startDate.add(daysToAdd, "days");
     };
 
     const generateTimeSlots = (from, to, timeslotDuration) => {
       const slots = [];
-      const startTime = moment(from, 'hh:mm A');
-      const endTime = moment(to, 'hh:mm A');
+      const startTime = moment(from, "hh:mm A");
+      const endTime = moment(to, "hh:mm A");
       const slotDuration = timeslotDuration;
 
       while (startTime < endTime) {
-        slots.push(startTime.format('h:mm A'));
-        startTime.add(slotDuration, 'minutes');
+        slots.push(startTime.format("h:mm A"));
+        startTime.add(slotDuration, "minutes");
       }
       return slots;
     };
@@ -137,16 +144,23 @@ const getAppointmentDetails = async (doctorId) => {
       while (appointmentsCount < 7) {
         let targetDay = availableDays[appointmentsCount % availableDays.length];
         const targetDayIndex = moment.weekdays().indexOf(targetDay);
-        let nextAvailableDate = getNextWeekday(targetDayIndex, nextAppointmentDate.clone());
-        const timeSlots = generateTimeSlots(location.from, location.to, location.timeslot);
+        let nextAvailableDate = getNextWeekday(
+          targetDayIndex,
+          nextAppointmentDate.clone()
+        );
+        const timeSlots = generateTimeSlots(
+          location.from,
+          location.to,
+          location.timeslot
+        );
 
         slotsPerLocation.push({
           day: targetDay,
-          date: nextAvailableDate.format('YYYY-MM-DD'),
+          date: nextAvailableDate.format("YYYY-MM-DD"),
           timeSlots: timeSlots,
         });
 
-        nextAppointmentDate = nextAvailableDate.clone().add(1, 'days');
+        nextAppointmentDate = nextAvailableDate.clone().add(1, "days");
         appointmentsCount++;
       }
 

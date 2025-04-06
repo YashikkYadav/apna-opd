@@ -43,9 +43,6 @@ const DoctorProfileValidationSchema = zod.object({
     .string()
     .min(1, { message: 'About must have at least 1 characters.' })
     .trim(),
-  locations: zod
-    .array(LocationSchema)
-    .min(1, { message: 'At least one location is required.' }),
 });
 
 const validateDoctorProfile = (profileData) => {
