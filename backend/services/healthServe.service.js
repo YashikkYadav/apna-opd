@@ -244,12 +244,14 @@ const deleteHealthServe = async (healthServeId) => {
   }
 };
 
-const getHealthServeList = async (page) => {
+const getHealthServeList = async (page,location) => {
   try {
     const limit = 5;
     const skip = (page - 1) * limit;
 
-    const healthServeList = await HealthServe.find().skip(skip).limit(limit);
+    const filter = {};
+    if (location) filter.location = { $regex: location, $options: "i" };
+    const healthServeList = await HealthServe.find(filter).skip(skip).limit(limit);
     const healthServeIds = healthServeList.map(
       (healthServe) => healthServe._id
     );
@@ -257,7 +259,7 @@ const getHealthServeList = async (page) => {
       healthServeId: { $in: healthServeIds },
     });
 
-    const total = await HealthServe.countDocuments();
+    const total = await HealthServe.countDocuments(filter);
 
     return {
       statusCode: 200,
