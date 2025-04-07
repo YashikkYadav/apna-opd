@@ -17,7 +17,6 @@ export const specialties = [
   "Rheumatologist",
   "Allergist",
   "Nurse",
-  "Ambulance",
 ];
 
 // Update getLocations to be async and use the locationService

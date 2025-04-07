@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button, Select, message } from "antd";
+import { Select, message } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
 import { searchCities } from "../services/locationService";
 import debounce from "lodash/debounce";
 import { Flip, toast, ToastContainer } from "react-toastify";
+import { specialties } from './../data/constants';
 
 const Register = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const Register = () => {
     location: null,
     rmcNumber: "",
     clinicName: "",
+    speciality: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -114,6 +116,7 @@ const Register = () => {
       rmcNumber: formData.rmcNumber,
       clinicName: formData.clinicName,
       address: formData.location,
+      speciality: formData.speciality,
     };
     try {
       const response = await axiosInstance.post("/doctor", payload);
@@ -322,32 +325,54 @@ const Register = () => {
               }
             />
           </div>
-          {formData.registrationFor === "doctor" && <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              RMC Number
-            </label>
-            <input
-              type="text"
-              name="rmcNumber"
-              value={formData.rmcNumber}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-              required
-            />
-          </div>}
-          {formData.registrationFor === "doctor" && <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Clinic Name
-            </label>
-            <input
-              type="text"
-              name="clinicName"
-              value={formData.clinicName}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-              required
-            />
-          </div>}
+
+          {/* Doctor Specific Fields */}
+          {formData.registrationFor === "doctor" && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  RMC Number
+                </label>
+                <input
+                  type="text"
+                  name="rmcNumber"
+                  value={formData.rmcNumber}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Clinic Name
+                </label>
+                <input
+                  type="text"
+                  name="clinicName"
+                  value={formData.clinicName}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Speciality
+                </label>
+                <Select
+                  value={formData.speciality}
+                  onChange={(value) => setFormData(prev => ({ ...prev, speciality: value }))}
+                  placeholder="Select Speciality"
+                  options={specialties.map(specialty => ({ value: specialty, label: specialty }))}
+                  className="w-full"
+                  required
+                />
+              </div>
+            </>
+          )}
+
           {/* Password */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">

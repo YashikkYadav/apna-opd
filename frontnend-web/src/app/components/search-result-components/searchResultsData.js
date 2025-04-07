@@ -150,9 +150,11 @@ const SearchResultsData = () => {
           </div>
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Result for {speciality || "Paediatrics"}</h2>
-            <p className="title-24 text-[#808080] !font-normal mb-[56px]">
+            {data.length > 0 ? (<p className="title-24 text-[#808080] !font-normal mb-[56px]">
               Showing {data.length} of {pagination.totalItems} results
-            </p>
+            </p>):(<p className="title-24 text-[#808080] !font-normal mb-[56px]">
+              No doctors Registered as of now.
+            </p>)}
             <div className="flex flex-col gap-[32px]">
               {data.map((item) => (
                 <div
@@ -196,11 +198,11 @@ const SearchResultsData = () => {
                 </div>
               ))}
             </div>
-            <Pagination
+            {pagination.totalPages > 1 && <Pagination
               currentPage={pagination.currentPage}
               totalPages={pagination.totalPages}
               onPageChange={handlePageChange}
-            />
+            />}
           </div>
         </div>
       </div>
