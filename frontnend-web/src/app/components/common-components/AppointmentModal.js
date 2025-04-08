@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import dayjs from "dayjs";
 import axiosInstance from "@/app/config/axios";
 
@@ -24,7 +24,6 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       fetchLocations();
     } else {
       document.body.style.overflow = 'unset';
-      // Reset form data when modal closes
       setFormData({
         phoneNumber: "",
         location: "",
@@ -135,7 +134,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       toast.success("Appointment booked successfully!");
       onClose();
     } catch (error) {
-      toast.error(error?.response || "Failed to book appointment");
+      toast.error(error?.response?.data || error?.response || "Failed to book appointment");
       console.error("Error booking appointment:", error);
     } finally {
       setIsLoading(false);
@@ -281,6 +280,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           </div>
         )}
       </div>
+      <ToastContainer position="bottom-center" autoClose={1800} hideProgressBar={true}/>
     </div>
   );
 };
