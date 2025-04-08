@@ -2,57 +2,145 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import axiosInstance from "@/app/config/axios";
 
 const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [locations, setLocations] = useState([]);
+  const [availableDates, setAvailableDates] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    otp: "",
+    phoneNumber: "",
     location: "",
-    date: null,
-    timeSlot: null
+    locationId: "",
+    date: "",
+    time: "",
+    type: "Regular"
   });
 
   useEffect(() => {
     if (visible) {
       document.body.style.overflow = 'hidden';
+      fetchLocations();
     } else {
       document.body.style.overflow = 'unset';
+      // Reset form data when modal closes
+      setFormData({
+        phoneNumber: "",
+        location: "",
+        locationId: "",
+        date: "",
+        time: "",
+        type: "Regular"
+      });
+      setAvailableDates([]);
+      setTimeSlots([]);
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [visible]);
+  }, [visible, doctorDetails.doctorId]);
 
-  const generateTimeSlots = (selectedDate) => {
-    if (!selectedDate) return [];
-    
-    const dayName = dayjs(selectedDate).format('dddd');
-    const scheduleInfo = doctorDetails.schedule[dayName];
-    
-    if (!scheduleInfo) return [];
-
-    const [startTime, endTime] = scheduleInfo.time.split(' - ');
-    const slots = [];
-    const currentTime = dayjs(selectedDate).format('YYYY-MM-DD ') + startTime;
-    const endTimeStr = dayjs(selectedDate).format('YYYY-MM-DD ') + endTime;
-    
-    let current = dayjs(currentTime);
-    const end = dayjs(endTimeStr);
-
-    while (current.isBefore(end)) {
-      slots.push({
-        label: current.format('h:mm A'),
-        value: current.format('HH:mm')
-      });
-      current = current.add(doctorDetails.timeslot, 'minute');
+  const fetchLocations = async () => {
+    try {
+      setIsLoading(true);
+      const { locations } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/locations`);
+      if (locations) {
+        setLocations(locations);
+      }
+    } catch (error) {
+      toast.error(error?.response || "Failed to fetch locations");
+      console.error("Error fetching locations:", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    return slots;
   };
 
-  const availableDates = Object.values(doctorDetails.schedule).map(info => info.date);
+  const fetchDates = async (locationId) => {
+    try {
+      setIsLoading(true);
+      const { dates } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/${locationId}/dates`);
+      if (dates) {
+        setAvailableDates(dates);
+      }
+    } catch (error) {
+      toast.error(error?.response || "Failed to fetch available dates");
+      console.error("Error fetching dates:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchTimeSlots = async (locationId, date) => {
+    try {
+      setIsLoading(true);
+      const { timeSlots } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/${locationId}/date/${date}`);
+      if (timeSlots) {
+        setTimeSlots(timeSlots);
+      }
+    } catch (error) {
+      toast.error(error?.response || "Failed to fetch time slots");
+      console.error("Error fetching time slots:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLocationChange = async (e) => {
+    const selectedLocation = locations.find(loc => loc._id === e.target.value);
+    setFormData(prev => ({
+      ...prev,
+      locationId: e.target.value,
+      location: selectedLocation?.address || "",
+      date: "",
+      time: ""
+    }));
+    setTimeSlots([]);
+    if (e.target.value) {
+      await fetchDates(e.target.value);
+    } else {
+      setAvailableDates([]);
+    }
+  };
+
+  const handleDateChange = async (e) => {
+    setFormData(prev => ({
+      ...prev,
+      date: e.target.value,
+      time: ""
+    }));
+    if (e.target.value && formData.locationId) {
+      await fetchTimeSlots(formData.locationId, e.target.value);
+    } else {
+      setTimeSlots([]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.phoneNumber || !formData.date || !formData.location || !formData.time) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await axiosInstance.post(`/appointment/${doctorDetails.doctorId}/book-appointment`, {
+        phoneNumber: formData.phoneNumber,
+        date: formData.date,
+        location: formData.location,
+        time: formData.time,
+        type: formData.type
+      });
+      
+      toast.success("Appointment booked successfully!");
+      onClose();
+    } catch (error) {
+      toast.error(error?.response || "Failed to book appointment");
+      console.error("Error booking appointment:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!visible) return null;
 
@@ -69,18 +157,8 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           aria-label="Close modal"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
@@ -90,117 +168,118 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
             Book Appointment with {doctorDetails.name}
           </h2>
           <p className="text-gray-600 mt-2">
-            {doctorDetails.specialty} • {doctorDetails.locations[0]?.name}
+            {doctorDetails.specialty}
           </p>
         </div>
 
         {/* Content */}
-        <div className="mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left Column - Doctor Info */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Doctor Details</h3>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-600 mb-2">
-                  <span className="font-medium">Location:</span>{" "}
-                  {doctorDetails.locations[0]?.address}
-                </p>
-                <p className="text-gray-600 mb-2">
-                  <span className="font-medium">Consultation Duration:</span>{" "}
-                  {doctorDetails.timeslot} minutes
-                </p>
-                <p className="text-gray-600">
-                  <span className="font-medium">Consultation Fee:</span> $25
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column - Appointment Selection */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
-              <div className="space-y-4">
-                {/* Date Selection */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Available Dates
-                  </label>
-                  <select
-                    className="w-full p-2 border rounded-md"
-                    value={formData.date || ""}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        date: e.target.value,
-                        timeSlot: null,
-                      }))
-                    }
-                  >
-                    <option value="">Select a date</option>
-                    {availableDates.map((date) => (
-                      <option key={date} value={date}>
-                        {dayjs(date).format("dddd, MMMM D, YYYY")}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Time Slots */}
-                {formData.date && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Available Time Slots
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
-                      {generateTimeSlots(formData.date).map((slot) => (
-                        <button
-                          key={slot.value}
-                          onClick={() =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              timeSlot: slot.value,
-                            }))
-                          }
-                          className={`p-2 text-sm rounded-md transition-colors ${
-                            formData.timeSlot === slot.value
-                              ? "bg-[#3DB8F5] text-white"
-                              : "bg-gray-100 hover:bg-gray-200 text-gray-800"
-                          }`}
-                        >
-                          {slot.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+        <div className="space-y-6">
+          {/* Phone Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Phone Number*
+            </label>
+            <input
+              type="tel"
+              className="w-full p-2 border rounded-md"
+              placeholder="Enter your phone number"
+              value={formData.phoneNumber}
+              onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+            />
           </div>
+
+          {/* Location Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Location*
+            </label>
+            <select
+              className="w-full p-2 border rounded-md"
+              value={formData.locationId}
+              onChange={handleLocationChange}
+              disabled={isLoading}
+            >
+              <option value="">Select a location</option>
+              {locations.map((location) => (
+                <option key={location._id} value={location._id}>
+                  {location.name} - {location.address}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Date Selection */}
+          {availableDates.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Date*
+              </label>
+              <select
+                className="w-full p-2 border rounded-md"
+                value={formData.date}
+                onChange={handleDateChange}
+                disabled={isLoading}
+              >
+                <option value="">Select a date</option>
+                {availableDates.map((date) => (
+                  <option key={date} value={date}>
+                    {dayjs(date).format("dddd, MMMM D, YYYY")}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Time Slots */}
+          {timeSlots.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Time*
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {timeSlots.map((slot) => (
+                  <button
+                    key={slot}
+                    onClick={() => setFormData(prev => ({ ...prev, time: slot }))}
+                    disabled={isLoading}
+                    className={`p-2 text-sm rounded-md transition-colors ${
+                      formData.time === slot
+                        ? "bg-[#3DB8F5] text-white"
+                        : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-4 border-t pt-4">
+        <div className="flex justify-end gap-4 border-t mt-6 pt-4">
           <button
             onClick={onClose}
             className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            disabled={isLoading}
           >
             Cancel
           </button>
           <button
-            onClick={() => {
-              if (!formData.date || !formData.timeSlot) {
-                toast.error("Please select both date and time");
-                return;
-              }
-              // Handle booking logic here
-              toast.success("Appointment booked successfully!");
-              onClose();
-            }}
-            disabled={!formData.date || !formData.timeSlot || isLoading}
+            onClick={handleSubmit}
+            disabled={isLoading || !formData.phoneNumber || !formData.date || !formData.location || !formData.time}
             className="px-6 py-2 bg-[#3DB8F5] text-white rounded-md hover:bg-[#69b6ff] disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             {isLoading ? "Booking..." : "Book Appointment"}
           </button>
         </div>
+
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3DB8F5]"></div>
+          </div>
+        )}
       </div>
     </div>
   );

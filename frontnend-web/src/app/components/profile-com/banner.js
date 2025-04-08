@@ -54,6 +54,7 @@ const Banner = ({ doctorDetail }) => {
     const doctorDetails = {
         name: doctorDetail?.doctor?.name,
         specialty: doctorDetail?.doctor?.speciality,
+        doctorId: doctorDetail?.doctor?._id,
         locations: doctorDetail?.locations || [],
         schedule: formatSchedule(),
         timeslot: doctorDetail?.locations?.[0]?.timeslot || 15,
