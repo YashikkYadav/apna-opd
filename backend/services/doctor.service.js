@@ -162,41 +162,55 @@ const getDoctorList = async (page, location, speciality) => {
     const limit = 5;
     const skip = (page - 1) * limit;
 
-    const filter = {};
-
-    if (speciality) {
-      filter["doctor.speciality"] = speciality;
-    }
+    const pipeline = [];
 
     if (location) {
-      filter["doctor.address"] = { $regex: location, $options: "i" };
+      pipeline.push({
+        $match: {
+          locations: {
+            $elemMatch: {
+              address: { $regex: location, $options: "i" },
+            },
+          },
+        },
+      });
     }
 
-    const doctorList = await DoctorProfile.aggregate([
-      {
-        $lookup: {
-          from: "doctors",
-          localField: "doctorId",
-          foreignField: "_id",
-          as: "doctor",
-        },
+    pipeline.push({
+      $lookup: {
+        from: "doctors", // collection name (plural, lowercase model name)
+        localField: "doctorId",
+        foreignField: "_id",
+        as: "doctor",
       },
-      { $unwind: "$doctor" },
-      { $match: filter },
-      {
-        $facet: {
-          data: [{ $skip: skip }, { $limit: limit }],
-          totalCount: [{ $count: "count" }],
-        },
-      },
-    ]);
+    });
 
-    const total = doctorList[0].totalCount[0]?.count || 0;
-    const doctorListData = doctorList[0]?.data;
+    pipeline.push({
+      $unwind: "$doctor",
+    });
+
+    if (speciality) {
+      pipeline.push({
+        $match: {
+          "doctor.speciality": speciality,
+        },
+      });
+    }
+
+    pipeline.push({
+      $facet: {
+        data: [{ $skip: skip }, { $limit: limit }],
+        totalCount: [{ $count: "count" }],
+      },
+    });
+
+    const result = await DoctorProfile.aggregate(pipeline);
+    const doctorList = result[0]?.data || [];
+    const total = result[0]?.totalCount?.[0]?.count || 0;
 
     return {
       statusCode: 200,
-      doctorListData,
+      doctorList,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
