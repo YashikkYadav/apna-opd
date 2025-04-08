@@ -3,20 +3,66 @@ import Image from "next/image";
 import { useState } from "react";
 import AppointmentModal from "../common-components/AppointmentModal";
 
-const Banner = () => {
+const Banner = ({ doctorDetail }) => {
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+    
+    // Check if a date falls within unavailability period
+    const isDateUnavailable = (date) => {
+        if (!doctorDetail?.unavailabilityDate) return false;
+        const checkDate = new Date(date);
+        const fromDate = new Date(doctorDetail.unavailabilityDate.from);
+        const toDate = new Date(doctorDetail.unavailabilityDate.to);
+        return checkDate >= fromDate && checkDate <= toDate;
+    };
+
+    // Get the next available date considering availabilityAfter
+    const getNextAvailableDate = () => {
+        const today = new Date();
+        const availableAfterDays = doctorDetail?.availabilityAfter || 0;
+        const nextDate = new Date(today);
+        nextDate.setDate(today.getDate() + availableAfterDays);
+        return nextDate;
+    };
+
+    // Format the schedule based on the location data and availability
+    const formatSchedule = () => {
+        const location = doctorDetail?.locations?.[0];
+        if (!location) return {};
+
+        const schedule = {};
+        const nextAvailableDate = getNextAvailableDate();
+        let currentDate = new Date(nextAvailableDate);
+        let daysFound = 0;
+        let maxDays = 14; // Look up to 14 days ahead
+
+        while (daysFound < 7 && maxDays > 0) {
+            const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
+            if (location.days.includes(dayName) && !isDateUnavailable(currentDate)) {
+                schedule[dayName] = {
+                    time: `${location.from} - ${location.to}`,
+                    date: new Date(currentDate)
+                };
+                daysFound++;
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+            maxDays--;
+        }
+
+        return schedule;
+    };
 
     const doctorDetails = {
-        name: "Maria Antonie, MD",
-        specialty: "Pediatrics Specialist",
-        locations: ["California Medical Center", "Downtown Clinic"],
-        schedule: {
-            Monday: "1 PM - 4 PM",
-            Tuesday: "1 PM - 4 PM",
-            Wednesday: "1 PM - 4 PM",
-            Friday: "1 PM - 4 PM"
-        }
+        name: doctorDetail?.doctor?.name,
+        specialty: doctorDetail?.doctor?.speciality,
+        locations: doctorDetail?.locations || [],
+        schedule: formatSchedule(),
+        timeslot: doctorDetail?.locations?.[0]?.timeslot || 15,
+        unavailabilityDate: doctorDetail?.unavailabilityDate,
+        availabilityAfter: doctorDetail?.availabilityAfter
     };
+
+    const nextAvailableDate = getNextAvailableDate();
+    const hasImmediateAvailability = Object.keys(doctorDetails.schedule).length > 0;
 
     return (
         <>
@@ -30,13 +76,13 @@ const Banner = () => {
                                 width={17}
                                 height={10}
                                 alt="Down Arrow"
-                            /><span>Pediatrics Specialist</span> <Image
+                            /><span>{doctorDetail?.doctor?.speciality}</span> <Image
                                 className="-rotate-90 mx-[8px]"
                                 src="/images/down_arrow_white.svg"
                                 width={17}
                                 height={10}
                                 alt="Down Arrow"
-                            /><span>Maria Antonie, MD</span>
+                            /><span>{doctorDetail?.doctor?.name}</span>
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
                             <div className="flex lg:mr-[20px]">
@@ -44,12 +90,12 @@ const Banner = () => {
                             </div>
                             <div className="flex flex-col justify-center">
                                 <div className="mb-[32px]">
-                                    <h2 className="title-48 !text-white mb-[8px]">Maria Antonie, MD</h2>
-                                    <h5 className="title-24 text-white !font-medium">Pediatrics Specialist</h5>
+                                    <h2 className="title-48 !text-white mb-[8px]">{doctorDetail?.doctor?.name}</h2>
+                                    <h5 className="title-24 text-white !font-medium">{doctorDetail?.doctor?.speciality}</h5>
                                 </div>
                                 <div className="mb-[32px]">
-                                    <h5 className="title-24 text-white mb-[8px]">California Medical Center</h5>
-                                    <p className="text-base text-white !font-normal">8819 Ohio St. South Gate, California 90280</p>
+                                    <h5 className="title-24 text-white mb-[8px]">{doctorDetail?.doctor?.clinicName}</h5>
+                                    <p className="text-base text-white !font-normal">{doctorDetail?.doctor?.address}</p>
                                 </div>
                                 <div className="mb-[32px]">
                                     <h5 className="title-24 text-white mb-[8px]">Make an Appointment</h5>
@@ -57,24 +103,32 @@ const Banner = () => {
                                         {Object.entries(doctorDetails.schedule).map(([day, time]) => (
                                             <div key={day}>
                                                 <p className="text-base text-white !font-normal">{day}</p>
-                                                <p className="text-base text-white font-bold">{time}</p>
+                                                <p className="text-base text-white font-bold">{time.time}</p>
                                             </div>
                                         ))}
                                     </div>
+                                    {doctorDetail?.unavailabilityDate && (
+                                        <div className="mt-4">
+                                            <p className="text-sm text-[#FFD700] !font-medium">
+                                                Not available from {new Date(doctorDetail.unavailabilityDate.from).toLocaleDateString()} 
+                                                to {new Date(doctorDetail.unavailabilityDate.to).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="mb-[32px]">
+                                <div className="mb-[10px]">
                                     <h3 className="title-32 text-white">Consultation Cost : $25</h3>
                                 </div>
-                                <div className="flex flex-col sm:flex-row gap-[15px]">
+                                <div className="flex flex-col sm:flex-row gap-[15px] mb-5">
                                     <button 
                                         onClick={() => setShowAppointmentModal(true)}
-                                        className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hover:bg-[#69b6ff]"
+                                        className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hover:bg-[#69b6ff] hover:text-white"
                                     >
                                         Make an Appointment
                                     </button>
-                                    <button className="px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold border-white border hover:border-white hover:text-white">
+                                    {/* <button className="px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold border-white border hover:border-white hover:text-white">
                                         Consultation
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         </div>

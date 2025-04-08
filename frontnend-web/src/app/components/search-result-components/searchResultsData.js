@@ -22,15 +22,14 @@ const SearchResultsData = () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/doctor/list?page=${page}`
+        `/doctor/list?page=${page}&location=${location}&speciality=${speciality}`
       );
-      
-      if(response.list?.doctorList){
-        setData(response.list.doctorList);
+      if (response.list?.doctorListData) {
+        setData(response.list.doctorListData);
         setPagination({
           currentPage: response.list.currentPage,
           totalPages: response.list.totalPages,
-          totalItems: response.list.totalItems
+          totalItems: response.list.totalItems,
         });
       }
     } catch (error) {
@@ -158,7 +157,7 @@ const SearchResultsData = () => {
             <div className="flex flex-col gap-[32px]">
               {data.map((item) => (
                 <div
-                  key={item._id}
+                  key={item.doctor._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
@@ -173,14 +172,14 @@ const SearchResultsData = () => {
                     </div>
                     <div className="py-[18px] sm:py-0 md:py-[18px]">
                       <p className="text-base text-[#5151E1] mb-[8px]">
-                        {item.speciality || "Pedriatics Specialist"}
+                        {item.doctor.speciality || "Pedriatics Specialist"}
                       </p>
-                      <h3 className="title-32 mb-[8px]">{item.name}</h3>
+                      <h3 className="title-32 mb-[8px]">{item.doctor.name}</h3>
                       <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                        10 Years of Experience
+                        {`${item.experience} Years of Experience` || "10 Years of Experience"}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {item.clinicName || "California Medical Center"}
+                        {item.doctor.clinicName || "California Medical Center"}
                       </h4>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const ImageGallery = () => {
+const ImageGallery = ({ doctorDetail }) => {
     const data = ["", "", "", "", "", ""]
     return (
         <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pb-[60px] sm:pb-[70px]">
