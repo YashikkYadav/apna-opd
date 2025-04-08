@@ -116,10 +116,12 @@ const getHealthServeList = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const location = req.query.location || null;
+    const type = req.query.type || null;
 
     const healthServeList = await healthServeService.getHealthServeList(
       page,
-      location
+      location,
+      type
     );
 
     if (healthServeList?.error) {
