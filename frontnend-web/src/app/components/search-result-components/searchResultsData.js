@@ -24,8 +24,8 @@ const SearchResultsData = () => {
       const response = await axiosInstance.get(
         `/doctor/list?page=${page}&location=${location}&speciality=${speciality}`
       );
-      if (response.list?.doctorListData) {
-        setData(response.list.doctorListData);
+      if (response.list?.doctorList) {
+        setData(response.list.doctorList);
         setPagination({
           currentPage: response.list.currentPage,
           totalPages: response.list.totalPages,
