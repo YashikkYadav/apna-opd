@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const Physiotherapist = () => {
+const Physiotherapist = ({serviceData}) => {
   const [physiotherapistList, setPhysiotherapistList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,17 +18,8 @@ const Physiotherapist = () => {
 
   useEffect(() => {
     // Fetch physiotherapist data
-    const data = getServiceData("physiotherapist");
-    setPhysiotherapistList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
+    setPhysiotherapistList(serviceData);
+    setFilteredList(serviceData);
 
     setLoading(false);
   }, []);
@@ -40,21 +31,6 @@ const Physiotherapist = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (physio) => {
-    setInquiryModal({
-      isOpen: true,
-      title: physio.name,
-      itemId: physio.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
   };
 
   // Pagination Logic
@@ -127,14 +103,16 @@ const Physiotherapist = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((physio, index) => (
                 <div
-                  key={physio.id}
+                  key={physio._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          physio.images[0] || "/images/image_placeholder.svg"
+                          physio?.images && Array.isArray(physio.images) && physio.images.length > 0
+                            ? physio.images[0]
+                            : "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
@@ -151,7 +129,7 @@ const Physiotherapist = () => {
                         Rating: {physio.rating || "N/A"}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {physio.contactDetails.address}
+                        {physio.location}
                       </h4>
                     </div>
                   </div>

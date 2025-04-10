@@ -7,34 +7,19 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const Gym = () => {
+const Gym = ({serviceData}) => {
   const [gymList, setGymList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState([]);
-  const [specialties, setSpecialties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useRouter();
 
   useEffect(() => {
     // Get all gym data
-    const data = getServiceData(serviceTypes.GYM);
-    setGymList(data);
-    setFilteredList(data);
+    setGymList(serviceData);
+    setFilteredList(serviceData);
 
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
-
-    // Extract unique specialties
-    const uniqueSpecialties = [
-      ...new Set(data.flatMap((item) => item.specialty)),
-    ];
-    setSpecialties(uniqueSpecialties);
 
     setLoading(false);
   }, []);
@@ -119,13 +104,16 @@ const Gym = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((gym, index) => (
                 <div
-                  key={gym.id}
+                  key={gym._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={gym.images[0] || "/images/image_placeholder.svg"}
+                        src={gym?.images && Array.isArray(gym.images) && gym.images.length > 0
+                            ? gym.images[0]
+                            : "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
                         alt="Working Men"
@@ -141,8 +129,11 @@ const Gym = () => {
                         Rating: {gym.rating}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {gym.address}
+                        {gym.name}
                       </h4>
+                      <h2 className="title-16 text-[#808080] !font-medium">
+                        {gym.location}
+                      </h2>
                     </div>
                   </div>
                   <div className="flex flex-row sm:flex-col justify-between">

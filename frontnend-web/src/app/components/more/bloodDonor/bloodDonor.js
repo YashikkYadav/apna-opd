@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const BloodDonar = () => {
+const BloodDonar = ({serviceData}) => {
   const [bloodBankList, setBloodBankList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,18 +17,8 @@ const BloodDonar = () => {
   const navigate = useRouter();
 
   useEffect(() => {
-    // Fetch blood bank data
-    const data = getServiceData("blood_donor");
-    setBloodBankList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
+    setBloodBankList(serviceData);
+    setFilteredList(serviceData);
 
     setLoading(false);
   }, []);
@@ -40,21 +30,6 @@ const BloodDonar = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleInquiry = (bank) => {
-    setInquiryModal({
-      isOpen: true,
-      title: bank.name,
-      itemId: bank.id,
-    });
-  };
-
-  const handleInquirySubmit = (values) => {
-    console.log("Inquiry submitted:", {
-      ...values,
-      itemId: inquiryModal.itemId,
-    });
   };
 
   // Pagination Logic
@@ -124,13 +99,17 @@ const BloodDonar = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((bank, index) => (
                 <div
-                  key={bank.id}
+                  key={bank._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={bank.images[0] || "/images/image_placeholder.svg"}
+                        src={
+                          bank?.images && Array.isArray(bank.images) && bank.images.length > 0
+                            ? bank.images[0]
+                            : "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
                         alt="Blood Bank"
@@ -146,7 +125,7 @@ const BloodDonar = () => {
                         Rating: {bank.rating || "N/A"}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {bank.contactDetails.address}
+                        {bank.location}
                       </h4>
                     </div>
                   </div>
@@ -155,7 +134,7 @@ const BloodDonar = () => {
                       Availability: {bank.price ? `${bank.price} Units` : "N/A"}
                     </h4>
                     <button
-                      onClick={() => navigate.push(`/more/bloodDonor/${bank.id}/details`)}
+                      onClick={() => navigate.push(`/more/bloodDonor/${bank._id}/details`)}
                       className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

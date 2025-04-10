@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const BloodBank = () => {
+const BloodBank = ({serviceData}) => {
   const [bloodBankList, setBloodBankList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,18 +17,8 @@ const BloodBank = () => {
   const navigate = useRouter();
 
   useEffect(() => {
-    // Fetch blood bank data
-    const data = getServiceData(serviceTypes.BLOOD_BANK);
-    setBloodBankList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
+    setBloodBankList(serviceData);
+    setFilteredList(serviceData);
 
     setLoading(false);
   }, []);
@@ -109,13 +99,17 @@ const BloodBank = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((bank, index) => (
                 <div
-                  key={bank.id}
+                  key={bank._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={bank.images[0] || "/images/image_placeholder.svg"}
+                        src={
+                          bank?.images && Array.isArray(bank.images) && bank.images.length > 0
+                            ? bank.images[0]
+                            : "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
                         alt="Blood Bank"
@@ -131,7 +125,7 @@ const BloodBank = () => {
                         Rating: {bank.rating || "N/A"}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {bank.contactDetails.address}
+                        {bank.location}
                       </h4>
                     </div>
                   </div>

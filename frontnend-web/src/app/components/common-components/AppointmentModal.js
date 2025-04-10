@@ -162,7 +162,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
         </button>
 
         {/* Header */}
-        <div className="border-b pb-4 mb-6">
+        <div className="border-b mb-4">
           <h2 className="text-2xl font-bold text-gray-900">
             Book Appointment with {doctorDetails.name}
           </h2>

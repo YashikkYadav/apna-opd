@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const NashaMukti = () => {
+const NashaMukti = ({serviceData}) => {
   const [nashaMuktiList, setNashaMuktiList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,17 +17,8 @@ const NashaMukti = () => {
   const navigate = useRouter();
 
   useEffect(() => {
-    const data = getServiceData("nasha_mukti");
-    setNashaMuktiList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
+    setNashaMuktiList(serviceData);
+    setFilteredList(serviceData);
 
     setLoading(false);
   }, []);
@@ -112,14 +103,16 @@ const NashaMukti = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((center, index) => (
                 <div
-                  key={center.id}
+                  key={center._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          center.images[0] || "/images/image_placeholder.svg"
+                          center?.images && Array.isArray(center.images) && center.images.length > 0
+                            ? center.images[0]
+                            : "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
@@ -136,7 +129,7 @@ const NashaMukti = () => {
                         Rating: {center.rating}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {center.contactDetails.address}
+                        {center.location}
                       </h4>
                     </div>
                   </div>
@@ -145,7 +138,7 @@ const NashaMukti = () => {
                       $50
                     </h2>
                     <button
-                      onClick={() => navigate.push(`/more/nashaMukti/${center.id}/details`)}
+                      onClick={() => navigate.push(`/more/nashaMukti/${center._id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

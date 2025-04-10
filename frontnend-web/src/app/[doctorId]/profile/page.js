@@ -16,9 +16,8 @@ const ProfilePage = () => {
       const response = await axiosInstance.get(
         `/doctor/list?page=1&location=&speciality=`
       );
-      if (response.list?.doctorListData) {
-        const doctorDetail = response.list.doctorListData;
-        console.log("doctorDetailcsdfdsf", doctorDetail);
+      if (response.list?.doctorList) {
+        const doctorDetail = response.list.doctorList;
         doctorDetail.forEach((item) => {
           if (item._id === doctorId) {
             setDoctorDetail(item);

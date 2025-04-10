@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const CommercialMeditation = () => {
+const CommercialMeditation = ({serviceData}) => {
   const [meditationList, setMeditationList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,19 +17,8 @@ const CommercialMeditation = () => {
   const navigate = useRouter();
 
   useEffect(() => {
-    // Get all meditation data
-    const data = getServiceData("meditation");
-    setMeditationList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
-
+    setMeditationList(serviceData);
+    setFilteredList(serviceData);
     setLoading(false);
   }, []);
 
@@ -111,15 +100,16 @@ const CommercialMeditation = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((meditation, index) => (
                 <div
-                  key={meditation.id}
+                  key={meditation._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          meditation.images[0] ||
-                          "/images/image_placeholder.svg"
+                          meditation?.images && Array.isArray(meditation.images) && meditation.images.length > 0
+                            ? meditation.images[0]
+                            : "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
@@ -136,7 +126,7 @@ const CommercialMeditation = () => {
                         Rating: {meditation.rating}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {meditation.contactDetails.address}
+                        {meditation.location}
                       </h4>
                     </div>
                   </div>
@@ -145,7 +135,7 @@ const CommercialMeditation = () => {
                       ${meditation.price}
                     </h2>
                     <button
-                      onClick={() => navigate.push(`/more/commercialMeditation/${meditation.id}/details`)}
+                      onClick={() => navigate.push(`/more/commercialMeditation/${meditation._id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

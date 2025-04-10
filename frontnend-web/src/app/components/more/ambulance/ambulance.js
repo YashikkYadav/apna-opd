@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const Ambulance = () => {
+const Ambulance = ({ serviceData }) => {
   const [ambulanceList, setAmbulanceList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,17 +18,9 @@ const Ambulance = () => {
 
   useEffect(() => {
     // Get all ambulance data
-    const data = getServiceData(serviceTypes.AMBULANCE);
-    setAmbulanceList(data);
-    setFilteredList(data);
+    setAmbulanceList(serviceData);
+    setFilteredList(serviceData);
 
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
 
     setLoading(false);
   }, []);
@@ -94,7 +86,7 @@ const Ambulance = () => {
                     alt="Location Icon"
                   />
                 }
-                value={location}
+                value={location || "Select Location"}
               >
                 {locations.map((eachLocation) => (
                   <Select.Option key={eachLocation} value={eachLocation}>
@@ -114,14 +106,16 @@ const Ambulance = () => {
             <div className="flex flex-col gap-[32px]">
               {currentItems.map((ambulance, index) => (
                 <div
-                  key={ambulance.id}
+                  key={ambulance._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          ambulance.images[0] || "/images/image_placeholder.svg"
+                          ambulance?.images && Array.isArray(ambulance.images) && ambulance.images.length > 0
+                            ? ambulance.images[0]
+                            : "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
@@ -138,7 +132,7 @@ const Ambulance = () => {
                         Rating: {ambulance.rating}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {ambulance.contactDetails.address}
+                        {ambulance.location}
                       </h4>
                     </div>
                   </div>
