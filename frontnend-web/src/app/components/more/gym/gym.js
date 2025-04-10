@@ -39,8 +39,8 @@ const Gym = ({serviceData}) => {
   const [itemsPerPage] = useState(5);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -88,7 +88,7 @@ const Gym = ({serviceData}) => {
                 }
                 value={location}
               >
-                {locations.map((location) => (
+                {locations?.map((location) => (
                   <Select.Option key={location} value={location}>
                     {location}
                   </Select.Option>
@@ -99,10 +99,10 @@ const Gym = ({serviceData}) => {
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Result for Fitness Centers</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {gymList.length} results
+              Showing {currentItems?.length} of {gymList?.length} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((gym, index) => (
+              {currentItems?.map((gym, index) => (
                 <div
                   key={gym._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -110,7 +110,7 @@ const Gym = ({serviceData}) => {
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={gym?.images && Array.isArray(gym.images) && gym.images.length > 0
+                        src={gym?.images && Array.isArray(gym.images) && gym.images?.length > 0
                             ? gym.images[0]
                             : "/images/image_placeholder.svg"
                         }

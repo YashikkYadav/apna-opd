@@ -199,7 +199,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
               disabled={isLoading}
             >
               <option value="">Select a location</option>
-              {locations.map((location) => (
+              {locations?.map((location) => (
                 <option key={location._id} value={location._id}>
                   {location.name} - {location.address}
                 </option>
@@ -208,7 +208,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           </div>
 
           {/* Date Selection */}
-          {availableDates.length > 0 && (
+          {availableDates?.length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Date*
@@ -220,7 +220,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
                 disabled={isLoading}
               >
                 <option value="">Select a date</option>
-                {availableDates.map((date) => (
+                {availableDates?.map((date) => (
                   <option key={date} value={date}>
                     {dayjs(date).format("dddd, MMMM D, YYYY")}
                   </option>
@@ -230,13 +230,13 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           )}
 
           {/* Time Slots */}
-          {timeSlots.length > 0 && (
+          {timeSlots?.length > 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Time*
               </label>
               <div className="grid grid-cols-3 gap-2">
-                {timeSlots.map((slot) => (
+                {timeSlots?.map((slot) => (
                   <button
                     key={slot}
                     onClick={() => setFormData(prev => ({ ...prev, time: slot }))}

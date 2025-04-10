@@ -36,8 +36,8 @@ const Physiotherapist = ({serviceData}) => {
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -84,7 +84,7 @@ const Physiotherapist = ({serviceData}) => {
                 }
                 value={locations[0]} // Default location
               >
-                {locations.map((eachLocation) => (
+                {locations?.map((eachLocation) => (
                   <Select.Option key={eachLocation} value={eachLocation}>
                     {eachLocation}
                   </Select.Option>
@@ -97,11 +97,11 @@ const Physiotherapist = ({serviceData}) => {
               Top Physiotherapists Near You
             </h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {physiotherapistList.length}{" "}
+              Showing {currentItems?.length} of {physiotherapistList?.length}{" "}
               results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((physio, index) => (
+              {currentItems?.map((physio, index) => (
                 <div
                   key={physio._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -110,7 +110,7 @@ const Physiotherapist = ({serviceData}) => {
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          physio?.images && Array.isArray(physio.images) && physio.images.length > 0
+                          physio?.images && Array.isArray(physio.images) && physio.images?.length > 0
                             ? physio.images[0]
                             : "/images/image_placeholder.svg"
                         }

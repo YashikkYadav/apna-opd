@@ -34,8 +34,8 @@ const NursingCollege = ({serviceData}) => {
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -82,7 +82,7 @@ const NursingCollege = ({serviceData}) => {
                 }
                 value={locations[0]} // Default location
               >
-                {locations.map((eachLocation) => (
+                {locations?.map((eachLocation) => (
                   <Select.Option key={eachLocation} value={eachLocation}>
                     {eachLocation}
                   </Select.Option>
@@ -93,11 +93,11 @@ const NursingCollege = ({serviceData}) => {
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Nursing Colleges Near You</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {nursingCollegeList.length}{" "}
+              Showing {currentItems?.length} of {nursingCollegeList?.length}{" "}
               results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((college, index) => (
+              {currentItems?.map((college, index) => (
                 <div
                   key={college._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -106,7 +106,7 @@ const NursingCollege = ({serviceData}) => {
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          college?.images && Array.isArray(college.images) && college.images.length > 0
+                          college?.images && Array.isArray(college.images) && college.images?.length > 0
                             ? college.images[0]
                             : "/images/image_placeholder.svg"
                         }

@@ -103,7 +103,7 @@ const Header = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <ul className="flex flex-col gap-1">
-                      {menuItems.map((item, index) => (
+                      {menuItems?.map((item, index) => (
                         <div key={item.route}>
                           <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
                             <span
@@ -113,7 +113,7 @@ const Header = () => {
                               {item.label}
                             </span>
                           </li>
-                          {index < menuItems.length - 1 && <hr />}
+                          {index < menuItems?.length - 1 && <hr />}
                         </div>
                       ))}
                     </ul>

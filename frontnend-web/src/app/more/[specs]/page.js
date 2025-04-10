@@ -25,9 +25,8 @@ const ServicePage = () => {
       const response = await axiosInstance.get(
         `/health-serve/list?&location=&type=${params.specs}`
       );
-      if (response.list?.healthServeList) {
-        console.log("response.list.healthServeList", response.list.healthServeList);
-        setServiceData(response.list.healthServeList);
+      if (response?.list?.healthServeProfileList) {
+        setServiceData(response.list.healthServeProfileList);
       }
     } catch (error) {
       console.log("error", error);

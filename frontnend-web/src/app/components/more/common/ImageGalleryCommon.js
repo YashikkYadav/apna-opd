@@ -5,7 +5,7 @@ const ImageGalleryCommon = ({ images = [] }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   
   // If no images provided, use placeholders
-  const galleryImages = images.length > 0 
+  const galleryImages = images?.length > 0 
     ? images 
     : Array(6).fill("/images/image_placeholder.svg");
 
@@ -26,7 +26,7 @@ const ImageGalleryCommon = ({ images = [] }) => {
       
       {/* Thumbnail grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
-        {galleryImages.map((image, index) => (
+        {galleryImages?.map((image, index) => (
           <div 
             key={index}
             className={`cursor-pointer ${selectedImage === index ? 'ring-4 ring-[#3DB8F5]' : ''} rounded-md overflow-hidden`}

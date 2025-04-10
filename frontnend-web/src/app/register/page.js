@@ -63,7 +63,7 @@ const Register = () => {
   };
 
   const debouncedLocationSearch = debounce(async (value) => {
-    if (value.length < 2) {
+    if (value?.length < 2) {
       setLocationOptions([]);
       return;
     }
@@ -73,7 +73,7 @@ const Register = () => {
       const locations = await searchCities(value);
       if (Array.isArray(locations)) {
         setLocationOptions(
-          locations.map((location) => ({
+          locations?.map((location) => ({
             value: location.label,
             label: location.label,
           }))
@@ -155,7 +155,7 @@ const Register = () => {
       return;
     }
 
-    if (formData.mobile.length < 10) {
+    if (formData.mobile?.length < 10) {
       toast.error("Mobile number must be at least 10 digits!");
       return;
     }
@@ -365,7 +365,7 @@ const Register = () => {
                   value={formData.speciality}
                   onChange={(value) => setFormData(prev => ({ ...prev, speciality: value }))}
                   placeholder="Select Speciality"
-                  options={specialties.map(specialty => ({ value: specialty, label: specialty }))}
+                  options={specialties?.map(specialty => ({ value: specialty, label: specialty }))}
                   className="w-full"
                   required
                 />

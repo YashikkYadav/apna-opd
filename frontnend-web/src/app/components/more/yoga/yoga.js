@@ -37,8 +37,8 @@ const Yoga = ({serviceData}) => {
   // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -84,7 +84,7 @@ const Yoga = ({serviceData}) => {
                   />
                 }
               >
-                {locations.map((location) => (
+                {locations?.map((location) => (
                   <Select.Option key={location} value={location}>
                     {location}
                   </Select.Option>
@@ -95,10 +95,10 @@ const Yoga = ({serviceData}) => {
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Result for Yoga Centers</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {serviceData.length} of {serviceData.length} results
+              Showing {serviceData?.length} of {serviceData?.length} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {serviceData.map((yoga) => (
+              {serviceData?.map((yoga) => (
                 <div
                   key={yoga._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"

@@ -33,8 +33,8 @@ const CommercialMeditation = ({serviceData}) => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -81,7 +81,7 @@ const CommercialMeditation = ({serviceData}) => {
                   />
                 }
               >
-                {locations.map((location) => (
+                {locations?.map((location) => (
                   <Select.Option key={location} value={location}>
                     {location}
                   </Select.Option>
@@ -95,10 +95,10 @@ const CommercialMeditation = ({serviceData}) => {
               Result for Meditation Centers
             </h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {meditationList.length} results
+              Showing {currentItems?.length} of {meditationList?.length} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((meditation, index) => (
+              {currentItems?.map((meditation, index) => (
                 <div
                   key={meditation._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -107,7 +107,7 @@ const CommercialMeditation = ({serviceData}) => {
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          meditation?.images && Array.isArray(meditation.images) && meditation.images.length > 0
+                          meditation?.images && Array.isArray(meditation.images) && meditation.images?.length > 0
                             ? meditation.images[0]
                             : "/images/image_placeholder.svg"
                         }

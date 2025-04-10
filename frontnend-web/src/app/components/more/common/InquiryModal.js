@@ -61,8 +61,8 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
   };
 
   const formatServiceType = (type) => {
-    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ').map(
-      word => word.charAt(0).toUpperCase() + word.slice(1)
+    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
+      word => word.charAt(0).toUpperCase() + word?.slice(1)
     ).join(' ');
   };
 

@@ -63,7 +63,7 @@ const Banner = ({ doctorDetail }) => {
     };
 
     const nextAvailableDate = getNextAvailableDate();
-    const hasImmediateAvailability = Object.keys(doctorDetails.schedule).length > 0;
+    const hasImmediateAvailability = Object.keys(doctorDetails.schedule)?.length > 0;
 
     return (
         <>
@@ -101,7 +101,7 @@ const Banner = ({ doctorDetail }) => {
                                 <div className="mb-[32px]">
                                     <h5 className="title-24 text-white mb-[8px]">Make an Appointment</h5>
                                     <div className="flex flex-col md:flex-row gap-[16px] md:gap-[56px]">
-                                        {Object.entries(doctorDetails.schedule).map(([day, time]) => (
+                                        {Object.entries(doctorDetails.schedule)?.map(([day, time]) => (
                                             <div key={day}>
                                                 <p className="text-base text-white !font-normal">{day}</p>
                                                 <p className="text-base text-white font-bold">{time.time}</p>
