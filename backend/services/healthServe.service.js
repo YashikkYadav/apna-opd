@@ -250,23 +250,21 @@ const getHealthServeList = async (page, location, type) => {
     const skip = (page - 1) * limit;
 
     const filter = {};
-    if (type) filter.type = type;
-    if (location) filter.location = { $regex: location, $options: "i" };
-    const healthServeList = await HealthServe.find(filter)
-      .skip(skip)
-      .limit(limit);
-    const healthServeIds = healthServeList.map(
-      (healthServe) => healthServe._id
-    );
-    const healthServeProfileList = await HealthServeProfile.find({
-      healthServeId: { $in: healthServeIds },
-    });
+
+    if (location) {
+      filter.location = { $regex: location, $options: "i" };
+    }
+
+    if (type) {
+      filter.type = type;
+    }
+
+    const healthServeProfileList = await HealthServeProfile.find(filter);
 
     const total = await HealthServe.countDocuments(filter);
 
     return {
       statusCode: 200,
-      healthServeList,
       healthServeProfileList,
       currentPage: page,
       totalPages: Math.ceil(total / limit),
