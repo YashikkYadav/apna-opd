@@ -76,6 +76,25 @@
               ></v-file-upload>
             </v-col>
           </v-row>
+          <v-row>
+            <div class="image-gallery">
+              <div
+                v-for="(img, index) in images"
+                :key="index"
+                class="image-card"
+              >
+                <div class="image-container">
+                  <img :src="img.url" :alt="img.filename" class="image" />
+                </div>
+                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                  {{ "Profile" }}
+                </div>
+                <div v-if="img.type === 'galleryImages'" class="image-type">
+                  {{ "Gallery" }}
+                </div>
+              </div>
+            </div>
+          </v-row>
         </v-card>
       </div>
     </v-container>
@@ -117,6 +136,7 @@ export default {
       isShowMessage: false,
       galleryImages: [],
       profileImage: null,
+      images: [],
     };
   },
   mounted() {
@@ -140,6 +160,7 @@ export default {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getHealthServeApiCall();
+      this.images = res.healthServeProfile.images;
       if (res.healthServeProfile !== null) {
         this.form.introduction = res.healthServeProfile.introduction;
         this.form.about = res.healthServeProfile.about;
@@ -169,6 +190,8 @@ export default {
 
         if (res) {
           this.fetchProfileData();
+          this.profileImage = null;
+          this.galleryImages = [];
           useUiStore().openNotificationMessage(
             "Profile data updated sucessfully!"
           );
@@ -237,3 +260,46 @@ export default {
   },
 };
 </script>
+<style scoped>
+.image-gallery {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-inline: 1em;
+  margin-top: 2em;
+  width: 100%;
+}
+
+.image-card {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 5px 5px 10px #bbb;
+  border-radius: 10px 10px;
+  padding-bottom: 10px;
+}
+
+.image-container {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+</style>

@@ -2,27 +2,69 @@ const moment = require("moment");
 const healthServeProfile = require("../models/healthServeProfile");
 const HealthServeProfile = require("../models/healthServeProfile");
 const { default: mongoose } = require("mongoose");
+const fs = require("fs");
+const path = require("path");
+const config = require("../config/config");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
-    const healthServeProfile = await HealthServeProfile.create({
-      healthServeId,
+    const healthServeProfileImages = await getImagesById(healthServeId);
+
+    const updateData = {
       about: profileData.about,
       experience: profileData.experience,
       introduction: profileData.introduction,
-    });
+      images: healthServeProfileImages,
+    };
+
+    const healthServeProfile = await HealthServeProfile.findOneAndUpdate(
+      { healthServeId },
+      updateData,
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
 
     return {
       statusCode: 200,
       healthServeProfile,
     };
   } catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       error: error,
     };
   }
 };
+
+async function getImagesById(targetId) {
+  const IMAGE_DIR = path.join(__dirname, "../public/health-serve-profile");
+  const baseUrl = config.BASE_URL;
+  try {
+    const files = await fs.promises.readdir(IMAGE_DIR);
+
+    const imageData = files
+      .filter((file) => {
+        const pattern = new RegExp(`^${targetId}_`);
+        return pattern.test(file);
+      })
+      .map((file) => {
+        const [id, timestamp, type] = file.split("_");
+        const extension = path.extname(file);
+
+        return {
+          url: `${baseUrl}/public/health-serve-profile/${file}`,
+          type: type.replace(extension, ""),
+          timestamp: parseInt(timestamp),
+          filename: file,
+        };
+      });
+
+    return imageData;
+  } catch (error) {
+    console.error("Error reading directory:", error);
+    return [];
+  }
+}
 
 const getHealthServeProfile = async (healthServeId) => {
   try {

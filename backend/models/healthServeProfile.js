@@ -17,6 +17,27 @@ const healthServeProfileSchema = new mongoose.Schema(
     introduction: {
       type: String,
     },
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          enum: ["galleryImages", "profilePhoto"],
+          required: true,
+        },
+        timestamp: {
+          type: Number,
+          required: true,
+        },
+        filename: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

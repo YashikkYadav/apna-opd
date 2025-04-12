@@ -39,7 +39,7 @@ const createProfile = async (req, res) => {
       if (err) {
         return res.status(400).json({ message: err.message });
       }
-
+      console.log("Check");
       const healthServeProfile = await healthServerProfileService.createProfile(
         req.params.healthServeId,
         req.body
@@ -54,6 +54,7 @@ const createProfile = async (req, res) => {
       res.status(200).json({ message: "Profile created!" });
     });
   } catch (error) {
+    console.log("Error while creating profile : ", error);
     res.status(500).send(`Error: ${error}`);
   }
 };
