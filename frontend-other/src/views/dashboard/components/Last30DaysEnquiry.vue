@@ -1,34 +1,33 @@
 <template>
     <v-card class="kpi-card remove-lines">
         <div class="all-details">
-            <h2 class="card-title">Enquiries today</h2>
+            <h2 class="card-title">Enquires this Month</h2>
             <div class="d-flex">
-                <h1 class="dashboard-title">{{ patient24hoursSum }}</h1>
-                <p class="tag">+49%</p>
+                <h1 class="dashboard-title">{{ patientMonthSum }}</h1>
+                <p class="tag">+42%</p>
             </div>
         </div>
-        <div>
-            <apexchart type="area" :options="patientTodayOptions" :series="patientTodaySeries"></apexchart>
+        <div v-if="patientMonth.length > 0">
+            <apexchart type="area" :options="patientThisMonthOptions" :series="patientThisMonthSeries"></apexchart>
         </div>
     </v-card>
 </template>
 
 <script>
-import { checkAuth, getLast24Hours } from '@/lib/utils/utils';
+import { checkAuth, getLast30DaysDates } from '@/lib/utils/utils';
 import { useDashboardStore } from '@/store/DashboardStore';
 
 export default {
-    name: "Last24HoursPatient",
+    name: "Last30DaysPatient",
     data() {
         return {
-            patient24hours: [],
-            patient24hoursSum: "",
-            patientTodaySeries: [{
+            patientMonth: [0],
+            patientMonthSum: "",
+            patientThisMonthSeries: [{
                 name: 'patient',
-                data: this.patient24hours
-
+                data: this.patientMonth
             }],
-            patientTodayOptions: {
+            patientThisMonthOptions: {
                 chart: {
                     height: 350,
                     type: 'area',
@@ -47,8 +46,7 @@ export default {
                 colors: ['#385D7E'],
                 xaxis: {
                     type: 'datetime',
-                    "categories": [
-                    ],
+                    "categories": [],
                     labels: {
                         show: false
                     },
@@ -71,11 +69,17 @@ export default {
                     },
                     axisTicks: {
                         show: false
-                    },
+                    }
+                },
+                labels: {
+                    formatter: function (value) {
+                        const date = new Date(value);
+                        return `${date.getDate()}/${date.getMonth() + 1}`;
+                    }
                 },
                 tooltip: {
                     x: {
-                        format: 'dd/MM/yyyy HH:mm'
+                        format: 'dd/MM/yyyy'
                     },
                 },
             },
@@ -84,25 +88,25 @@ export default {
     mounted() {
         const auth = checkAuth(this.$router);
         if (auth) {
-            this.fetch24Hours();
-            this.patientTodayOptions.xaxis.categories = getLast24Hours();
+            this.fetchMonth();
+            this.patientThisMonthOptions.xaxis.categories = getLast30DaysDates();
         }
     },
     methods: {
-        async fetch24Hours() {
-            const res = await useDashboardStore().getLast24HoursPatientApiCall()
+        async fetchMonth() {
+            const res = await useDashboardStore().getLast30DaysPatientApiCall()
 
             if (res) {
-                this.patient24hours = res.patients;
-                const sum = res?.patients?.reduce((acc, val) => acc + val, 0);
-                this.patient24hoursSum = sum;
+                this.patientMonth = [...res.patients];
+                const sum = res.patients.reduce((acc, val) => acc + val, 0);
+                this.patientMonthSum = sum;
             }
         },
     },
     watch: {
-        patient24hours: {
+        patientMonth: {
             handler(newVal) {
-                this.patientTodaySeries = [{ name: "patient", data: newVal }];
+                this.patientThisMonthSeries = [{ name: "patient", data: newVal }];
             },
             deep: true,
             immediate: true,
