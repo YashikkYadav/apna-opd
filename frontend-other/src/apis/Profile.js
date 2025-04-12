@@ -11,7 +11,6 @@ export class AxiosProfile {
   }
 
   ProfileAdd(healthServeId, payload) {
-    console.log(payload.entries());
     return this.apiClient.post(
       `/${healthServeId}/health-serve-profile`,
       payload

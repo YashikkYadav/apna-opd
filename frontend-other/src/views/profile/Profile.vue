@@ -165,7 +165,6 @@ export default {
       if (valid) {
         const formData = new FormData();
 
-        // Append text fields
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -175,12 +174,9 @@ export default {
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file); // backend should handle this as array
+          formData.append("galleryImages", file);
         });
-        for (let pair of formData.entries()) {
-          console.log(pair[0] + ":", pair[1]);
-        }
-        // Make the API call
+
         const res = await useProfileStore().addHealthServeProfileApiCall(
           formData
         );
