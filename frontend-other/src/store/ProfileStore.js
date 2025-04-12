@@ -7,9 +7,11 @@ export const useProfileStore = defineStore("profileStore", {
   }),
 
   actions: {
-    async getDoctoreProfileApiCall() {
+    async getHealthServeApiCall() {
       const ProfileService = new AxiosProfile();
-      const data = await ProfileService.DoctorProfileData(this.healthServeId);
+      const data = await ProfileService.HealthServeProfileData(
+        this.healthServeId
+      );
       return data;
     },
     async addHealthServeProfileApiCall(payload) {

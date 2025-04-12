@@ -6,8 +6,8 @@ export class AxiosProfile {
     this.apiClient = new axiosAuthenticator();
   }
 
-  DoctorProfileData(healthServeId) {
-    return this.apiClient.get(`/${healthServeId}/patient/doctor-profile`);
+  HealthServeProfileData(healthServeId) {
+    return this.apiClient.get(`/${healthServeId}/health-serve-profile`);
   }
 
   ProfileAdd(healthServeId, payload) {

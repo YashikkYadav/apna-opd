@@ -6,7 +6,7 @@ const healthServeProfileRoute = express.Router({ mergeParams: true });
 
 healthServeProfileRoute.post("/", profileController.createProfile);
 
-healthServeProfileRoute.get("/", doctorProfileController.getDoctorProfile);
+healthServeProfileRoute.get("/", profileController.getHealthServeProfile);
 
 healthServeProfileRoute.get(
   "/appointment",

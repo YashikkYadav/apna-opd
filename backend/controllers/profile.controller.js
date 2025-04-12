@@ -58,18 +58,22 @@ const createProfile = async (req, res) => {
   }
 };
 
-const getDoctorProfile = async (req, res) => {
+const getHealthServeProfile = async (req, res) => {
   try {
-    const { doctorId } = req.params;
+    const { healthServeId } = req.params;
 
-    const doctorProfile = await profileServe.getDoctorProfile(doctorId);
-    if (doctorProfile?.error) {
-      return res.status(doctorProfile.statusCode).send(doctorProfile.error);
+    const healthServeProfile =
+      await healthServerProfileService.getHealthServeProfile(healthServeId);
+
+    if (healthServeProfile?.error) {
+      return res
+        .status(healthServeProfile.statusCode)
+        .send(healthServeProfile.error);
     }
 
     res
-      .status(doctorProfile.statusCode)
-      .json({ doctorProfile: doctorProfile.doctorProfile });
+      .status(healthServeProfile.statusCode)
+      .json({ healthServeProfile: healthServeProfile.healthServeProfile });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }
@@ -79,15 +83,17 @@ const getAppointmentDetails = async (req, res) => {
   try {
     const { doctorId } = req.params;
 
-    const doctorProfile =
+    const healthServeProfile =
       await doctorhealthServerProfileService.getAppointmentDetails(doctorId);
-    if (doctorProfile?.error) {
-      return res.status(doctorProfile.statusCode).send(doctorProfile.error);
+    if (healthServeProfile?.error) {
+      return res
+        .status(healthServeProfile.statusCode)
+        .send(healthServeProfile.error);
     }
 
     res
-      .status(doctorProfile.statusCode)
-      .json({ doctorProfile: doctorProfile.doctorProfile });
+      .status(healthServeProfile.statusCode)
+      .json({ healthServeProfile: healthServeProfile.healthServeProfile });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }
@@ -95,6 +101,6 @@ const getAppointmentDetails = async (req, res) => {
 
 module.exports = {
   createProfile,
-  getDoctorProfile,
+  getHealthServeProfile,
   getAppointmentDetails,
 };

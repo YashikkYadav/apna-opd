@@ -1,6 +1,7 @@
 const moment = require("moment");
-const DoctorProfile = require("../models/doctorProfile");
+const healthServeProfile = require("../models/healthServeProfile");
 const HealthServeProfile = require("../models/healthServeProfile");
+const { default: mongoose } = require("mongoose");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -10,25 +11,10 @@ const createProfile = async (healthServeId, profileData) => {
       experience: profileData.experience,
       introduction: profileData.introduction,
     });
-    return healthServeProfile;
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 500,
-      error: error,
-    };
-  }
-};
-
-const getDoctorProfile = async (doctorId) => {
-  try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
-      "doctorId"
-    );
 
     return {
       statusCode: 200,
-      doctorProfile,
+      healthServeProfile,
     };
   } catch (error) {
     return {
@@ -38,13 +24,34 @@ const getDoctorProfile = async (doctorId) => {
   }
 };
 
-const getAppointmentDetails = async (doctorId) => {
+const getHealthServeProfile = async (healthServeId) => {
   try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
-      "doctorId"
-    );
+    const healthServeProfile = await HealthServeProfile.findOne({
+      healthServeId: healthServeId,
+    }).populate("healthServeId");
 
-    if (!doctorProfile) {
+    return {
+      statusCode: 200,
+      healthServeProfile,
+    };
+  } catch (error) {
+    console.log("Error occured in fetching health serve profile :: ", error);
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
+
+const getAppointmentDetails = async (healthServeId) => {
+  try {
+    const healthServeProfile = await healthServeProfile
+      .find({
+        healthServeId,
+      })
+      .populate("healthServeId");
+
+    if (!healthServeProfile) {
       return {
         statusCode: 404,
         message: "Doctor profile not found",
@@ -53,7 +60,7 @@ const getAppointmentDetails = async (doctorId) => {
 
     const now = moment();
     const appointmentStartTime = now.add(
-      doctorProfile.delayTimeInHours || 0,
+      healthServeProfile.delayTimeInHours || 0,
       "hours"
     );
 
@@ -76,7 +83,7 @@ const getAppointmentDetails = async (doctorId) => {
       return slots;
     };
 
-    const appointmentDetails = doctorProfile.locations.map((location) => {
+    const appointmentDetails = healthServeProfile.locations.map((location) => {
       const availableDays = location.days;
       const slotsPerLocation = [];
 
@@ -114,8 +121,8 @@ const getAppointmentDetails = async (doctorId) => {
 
     return {
       statusCode: 200,
-      doctorProfile: {
-        ...doctorProfile.toObject(),
+      healthServeProfile: {
+        ...healthServeProfile.toObject(),
         appointmentDetails,
       },
     };
@@ -129,6 +136,6 @@ const getAppointmentDetails = async (doctorId) => {
 
 module.exports = {
   createProfile,
-  getDoctorProfile,
+  getHealthServeProfile,
   getAppointmentDetails,
 };

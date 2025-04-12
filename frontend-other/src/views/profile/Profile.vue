@@ -139,25 +139,11 @@ export default {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getDoctoreProfileApiCall();
-
-      if (res.doctorProfile !== null) {
-        this.form = res.doctorProfile;
-        this.form.locations = [
-          ...this.form.locations,
-          {
-            name: "",
-            address: "",
-            days: [],
-            from: null,
-            to: null,
-            timeslot: null,
-          },
-        ];
-        this.form.delay = res.doctorProfile.availabilityAfter;
-        this.form.from =
-          res.doctorProfile.unavailabilityDate.from.split("T")[0];
-        this.form.to = res.doctorProfile.unavailabilityDate.to.split("T")[0];
+      const res = await useProfileStore().getHealthServeApiCall();
+      if (res.healthServeProfile !== null) {
+        this.form.introduction = res.healthServeProfile.introduction;
+        this.form.about = res.healthServeProfile.about;
+        this.form.experience = res.healthServeProfile.experience;
       }
     },
     async onSubmit() {
