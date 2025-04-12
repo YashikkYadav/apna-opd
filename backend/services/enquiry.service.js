@@ -219,19 +219,7 @@ const getLast24HoursDataCount = async (healthServeId) => {
       },
     ]);
 
-    const past24HoursTimestamps = [];
-
-    for (let i = 0; i < 24; i++) {
-      const hourAgo = new Date(now.getTime() - i * 60 * 60 * 1000); // Subtract i hours from the current time
-
-      const year = hourAgo.getFullYear();
-      const month = (hourAgo.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-based, so add 1
-      const day = hourAgo.getDate().toString().padStart(2, "0");
-      const hour = hourAgo.getHours().toString().padStart(2, "0");
-
-      const formattedTimestamp = `${year}-${month}-${day} ${hour}`;
-      past24HoursTimestamps.unshift(formattedTimestamp);
-    }
+    const past24HoursTimestamps = getPast24HourTimestamps();
 
     const past24HoursEnquiry = past24HoursTimestamps.map((timestamp) => {
       const match = hourlyEnquiryCounts.find((item) => item._id === timestamp);
@@ -251,6 +239,22 @@ const getLast24HoursDataCount = async (healthServeId) => {
   }
 };
 
+const getPast24HourTimestamps = () => {
+  const past24HoursTimestamps = [];
+  for (let i = 0; i < 24; i++) {
+    const hourAgo = new Date(Date.now() - i * 60 * 60 * 1000);
+
+    const year = hourAgo.getFullYear();
+    const month = (hourAgo.getMonth() + 1).toString().padStart(2, "0");
+    const day = hourAgo.getDate().toString().padStart(2, "0");
+    const hour = hourAgo.getHours().toString().padStart(2, "0");
+
+    const formattedTimestamp = `${year}-${month}-${day} ${hour}`;
+    past24HoursTimestamps.unshift(formattedTimestamp);
+  }
+  return past24HoursTimestamps;
+};
+
 const getLast30DaysDataCount = async (healthServeId) => {
   try {
     if (!healthServeId) {
@@ -263,10 +267,15 @@ const getLast30DaysDataCount = async (healthServeId) => {
     const now = new Date();
     const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-    const dailyData = await Enquiry.aggregate([
+    let healthServeIdFilter = healthServeId;
+    if (typeof healthServeId === "string") {
+      healthServeIdFilter = new mongoose.Types.ObjectId(healthServeId);
+    }
+
+    const dailyEnquiryCount = await Enquiry.aggregate([
       {
         $match: {
-          healthServeId,
+          healthServeId: healthServeIdFilter,
           createdAt: { $gte: last30Days },
         },
       },
@@ -281,9 +290,16 @@ const getLast30DaysDataCount = async (healthServeId) => {
       },
     ]);
 
+    const last30DayDates = getLastMonthTimestamps();
+
+    const last30DayEnquiries = last30DayDates.map((date) => {
+      const match = dailyEnquiryCount.find((item) => item._id === date);
+      return match ? match.count : 0;
+    });
+
     return {
       statusCode: 200,
-      data: dailyData,
+      data: last30DayEnquiries,
     };
   } catch (error) {
     console.error("Error fetching last 30 days data count:", error);
@@ -292,6 +308,28 @@ const getLast30DaysDataCount = async (healthServeId) => {
       error: error.message,
     };
   }
+};
+
+const getLastMonthTimestamps = () => {
+  const last30DaysTimestamps = [];
+  const now = new Date();
+
+  for (let i = 0; i < 30; i++) {
+    const dayAgo = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - i
+    );
+
+    const year = dayAgo.getFullYear();
+    const month = (dayAgo.getMonth() + 1).toString().padStart(2, "0");
+    const day = dayAgo.getDate().toString().padStart(2, "0");
+
+    const formattedTimestamp = `${year}-${month}-${day}`;
+    last30DaysTimestamps.unshift(formattedTimestamp);
+  }
+
+  return last30DaysTimestamps;
 };
 
 module.exports = {

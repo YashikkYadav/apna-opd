@@ -10,8 +10,8 @@ export class AxiosDashboard {
     return this.apiClient.get(`/${healthServeId}/enquiry/24hours`);
   }
 
-  last30DaysPatientList(doctorId) {
-    return this.apiClient.get(`/${doctorId}/enquiry/30days`);
+  last30DaysEnquiryList(healthServeId) {
+    return this.apiClient.get(`/${healthServeId}/enquiry/30days`);
   }
 
   last30DaysInvoiceList(doctorId) {
