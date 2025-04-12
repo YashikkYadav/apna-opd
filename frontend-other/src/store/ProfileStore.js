@@ -3,18 +3,18 @@ import { AxiosProfile } from '../apis/Profile'
 
 export const useProfileStore = defineStore('profileStore', {
   state: () => ({
-    doctorId: localStorage.getItem('doctor_id') || null,
+    healthServeId: localStorage.getItem('doctor_id') || null,
   }),
 
   actions: {
     async getDoctoreProfileApiCall() {
       const ProfileService = new AxiosProfile()
-      const data = await ProfileService.DoctorProfileData(this.doctorId)
+      const data = await ProfileService.DoctorProfileData(this.healthServeId)
       return data
     },
-    async addDoctoreProfileApiCall(payload) {
+    async addHealthServeProfileApiCall(payload) {
       const ProfileService = new AxiosProfile()
-      const data = await ProfileService.ProfileAdd(this.doctorId, payload)
+      const data = await ProfileService.ProfileAdd(this.healthServeId, payload)
       return data
     },
   },

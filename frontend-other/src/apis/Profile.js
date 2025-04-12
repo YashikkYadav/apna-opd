@@ -1,16 +1,20 @@
 import axiosAuthenticator from "@/plugins/axios";
 
 export class AxiosProfile {
-    apiClient;
-    constructor() {
-        this.apiClient = new axiosAuthenticator()
-    }
+  apiClient;
+  constructor() {
+    this.apiClient = new axiosAuthenticator();
+  }
 
-    DoctorProfileData(doctorId) {
-        return this.apiClient.get(`/${doctorId}/patient/doctor-profile`)
-    }
+  DoctorProfileData(healthServeId) {
+    return this.apiClient.get(`/${healthServeId}/patient/doctor-profile`);
+  }
 
-    ProfileAdd(doctorId, payload) {
-        return this.apiClient.post(`/${doctorId}/doctor-profile`, payload)
-    }
+  ProfileAdd(healthServeId, payload) {
+    console.log(payload.entries());
+    return this.apiClient.post(
+      `/${healthServeId}/health-serve-profile`,
+      payload
+    );
+  }
 }
