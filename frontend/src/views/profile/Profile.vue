@@ -502,11 +502,7 @@ export default {
           "unavailabilityDate",
           JSON.stringify(data.unavailabilityDate)
         );
-        console.log("availabilityAfter", data.availabilityAfter);
         formData.append("availabilityAfter", data.availabilityAfter);
-        // for(const pair of formData.entries()) {
-        //   console.log(pair[0] + ", " + pair[1]);
-        // }
 
         const res = await useProfileStore().addDoctoreProfileApiCall(formData);
 

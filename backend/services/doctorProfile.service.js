@@ -42,7 +42,6 @@ const createDoctorProfile = async (doctorId, profileData) => {
     }
 
     const doctorProfile = await DoctorProfile.findOne({ doctorId });
-    console.log("Doctor Profile images", doctorProfileImages);
     if (doctorProfile) {
       const updatedDoctorProfile = await DoctorProfile.findOneAndUpdate(
         { doctorId },
@@ -95,7 +94,6 @@ async function getImagesById(targetId) {
   const baseUrl = config.BASE_URL;
   try {
     const files = await fs.promises.readdir(IMAGE_DIR);
-    console.log(files);
     const imageData = files
       .filter((file) => {
         const pattern = new RegExp(`^${targetId}_`);
