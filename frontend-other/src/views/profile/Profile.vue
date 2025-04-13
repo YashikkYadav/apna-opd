@@ -279,7 +279,7 @@ export default {
   justify-content: space-between;
   box-sizing: border-box;
   text-align: center;
-  box-shadow: 5px 5px 10px #bbb;
+  box-shadow: 5px 5px 10px #ddd;
   border-radius: 10px 10px;
   padding-bottom: 10px;
 }
@@ -288,6 +288,7 @@ export default {
   width: 120px;
   height: 120px;
   overflow: hidden;
+  background-color: #999;
   display: flex;
   align-items: center;
   justify-content: center;
