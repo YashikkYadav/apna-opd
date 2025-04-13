@@ -2,10 +2,13 @@ const moment = require("moment");
 const DoctorProfile = require("../models/doctorProfile");
 const validateDoctorProfile = require("../validations/doctorProfile.validation");
 const { validateLocationSchedule } = require("../utils/doctorTiming");
+const path = require("path");
+const fs = require("fs");
+const config = require("../config/config");
 
 const createDoctorProfile = async (doctorId, profileData) => {
   try {
-    const {
+    let {
       introduction,
       happyClients,
       experience,
@@ -14,6 +17,11 @@ const createDoctorProfile = async (doctorId, profileData) => {
       unavailabilityDate,
       availabilityAfter,
     } = profileData;
+
+    locations = JSON.parse(locations);
+    unavailabilityDate = JSON.parse(unavailabilityDate);
+
+    const doctorProfileImages = await getImagesById(doctorId);
 
     const profileDataValidation = validateDoctorProfile(profileData);
     if (!profileDataValidation.success) {
@@ -34,6 +42,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
     }
 
     const doctorProfile = await DoctorProfile.findOne({ doctorId });
+    console.log("Doctor Profile images", doctorProfileImages);
     if (doctorProfile) {
       const updatedDoctorProfile = await DoctorProfile.findOneAndUpdate(
         { doctorId },
@@ -45,6 +54,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
           locations,
           unavailabilityDate,
           availabilityAfter,
+          images: doctorProfileImages,
         }
       );
 
@@ -63,6 +73,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
       locations,
       unavailabilityDate,
       availabilityAfter,
+      images: doctorProfileImages,
     });
     await newDoctorProfile.save();
 
@@ -71,12 +82,43 @@ const createDoctorProfile = async (doctorId, profileData) => {
       doctorProfile: newDoctorProfile,
     };
   } catch (error) {
+    console.log("Error while inserting in databaes", error);
     return {
       statusCode: 500,
       error: error,
     };
   }
 };
+
+async function getImagesById(targetId) {
+  const IMAGE_DIR = path.join(__dirname, "../public/doctor-profile");
+  const baseUrl = config.BASE_URL;
+  try {
+    const files = await fs.promises.readdir(IMAGE_DIR);
+    console.log(files);
+    const imageData = files
+      .filter((file) => {
+        const pattern = new RegExp(`^${targetId}_`);
+        return pattern.test(file);
+      })
+      .map((file) => {
+        const [id, timestamp, type] = file.split("_");
+        const extension = path.extname(file);
+
+        return {
+          url: `${baseUrl}/public/doctor-profile/${file}`,
+          type: type.replace(extension, ""),
+          timestamp: parseInt(timestamp),
+          filename: file,
+        };
+      });
+
+    return imageData;
+  } catch (error) {
+    console.error("Error reading directory:", error);
+    return [];
+  }
+}
 
 const getDoctorProfile = async (doctorId) => {
   try {

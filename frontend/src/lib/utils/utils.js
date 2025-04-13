@@ -66,14 +66,12 @@ export const getLast24Hours = () => {
     const pastDate = new Date(today);
     pastDate.setHours(today.getHours() - i); // Subtract hours
     pastDate.setMinutes(0, 0, 0); // Set minutes, seconds, and milliseconds to 0
-    const istOffsetMs = 5.5 * 60 * 60 * 1000; // IST offset in milliseconds
-    const istDate = new Date(pastDate.getTime() + istOffsetMs);
-    isDate.setMinutes(0, 0, 0);
-    hours.push(istDate.toISOString());
+
+    hours.push(pastDate.toISOString()); // ISO format
   }
 
   return hours;
-};
+}
 
 export const getDateFormate = (date) => {
   if (!date) return "";

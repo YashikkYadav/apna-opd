@@ -63,15 +63,49 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" sm="12">
+            <v-col cols="12" sm="6">
               <v-file-upload
                 clearable
                 density="compact"
                 variant="compact"
                 title="Drag and drop profile image"
                 show-size
+                :model-value="profileImage"
+                @update:modelValue="handleProfileChange"
               ></v-file-upload>
             </v-col>
+            <v-col cols="12" sm="6">
+              <v-file-upload
+                clearable
+                multiple
+                :max="6"
+                density="compact"
+                variant="compact"
+                title="Drag and drop gallery image (max: 6)"
+                show-size
+                :model-value="galleryImages"
+                @update:modelValue="handleGalleryChange"
+              ></v-file-upload>
+            </v-col>
+          </v-row>
+          <v-row>
+            <div class="image-gallery">
+              <div
+                v-for="(img, index) in images"
+                :key="index"
+                class="image-card"
+              >
+                <div class="image-container">
+                  <img :src="img.url" :alt="img.filename" class="image" />
+                </div>
+                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                  {{ "Profile" }}
+                </div>
+                <div v-if="img.type === 'galleryImages'" class="image-type">
+                  {{ "Gallery" }}
+                </div>
+              </div>
+            </div>
           </v-row>
         </v-card>
         <v-card class="section-card">
@@ -339,10 +373,13 @@ import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
     return {
+      images: [],
+      profileImage: null,
+      galleryImages: [],
       form: {
         introduction: "",
-        happyClients: null,
-        experience: null,
+        happyClients: 0,
+        experience: 0,
         about: "",
         from: "",
         to: "",
@@ -398,10 +435,23 @@ export default {
     }
   },
   methods: {
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
+
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
+
+      this.galleryImages = uniqueFiles || [];
+    },
+    handleProfileChange(newFile) {
+      this.profileImage = newFile;
+    },
     async fetchProfileData() {
       const res = await useProfileStore().getDoctoreProfileApiCall();
 
       if (res.doctorProfile !== null) {
+        this.images = res.doctorProfile.images;
         this.form = res.doctorProfile;
         this.form.locations = [
           ...this.form.locations,
@@ -416,37 +466,64 @@ export default {
         ];
         this.form.delay = res.doctorProfile.availabilityAfter;
         this.form.from =
-          res.doctorProfile.unavailabilityDate.from.split("T")[0]
-        this.form.to = res.doctorProfile.unavailabilityDate.to.split("T")[0]
+          res.doctorProfile.unavailabilityDate.from.split("T")[0];
+        this.form.to = res.doctorProfile.unavailabilityDate.to.split("T")[0];
       }
     },
     async onSubmit() {
-      const { valid } = await this.$refs.form.validate()
+      const { valid } = await this.$refs.form.validate();
       if (valid) {
+        const formData = new FormData();
         const { delay, from, to, ...restForm } = this.form;
         const data = {
-          ...restForm, unavailabilityDate: {
+          ...restForm,
+          unavailabilityDate: {
             from: this.form.from,
-            to: this.form.to
+            to: this.form.to,
           },
-          availabilityAfter: this.form.delay
+          availabilityAfter: this.form.delay === null ? 0 : this.form.delay,
         };
-        data.happyClients = parseInt(data.happyClients)
-        data.experience = parseInt(data.experience)
-        data.locations = data.locations.filter(location => {
-          return (
-            location.name
-          );
+        data.locations = data.locations.filter((location) => {
+          return location.name;
         });
+        if (this.profileImage) {
+          formData.append("profilePhoto", this.profileImage);
+        }
 
-        const res = await useProfileStore().addDoctoreProfileApiCall(data)
+        this.galleryImages.forEach((file, index) => {
+          formData.append("galleryImages", file);
+        });
+        formData.append("introduction", this.form.introduction);
+        formData.append("happyClients", parseInt(this.form.happyClients));
+        formData.append("experience", parseInt(this.form.experience));
+        formData.append("about", this.form.about);
+        formData.append("locations", JSON.stringify(data.locations));
+        formData.append(
+          "unavailabilityDate",
+          JSON.stringify(data.unavailabilityDate)
+        );
+        console.log("availabilityAfter", data.availabilityAfter);
+        formData.append("availabilityAfter", data.availabilityAfter);
+        // for(const pair of formData.entries()) {
+        //   console.log(pair[0] + ", " + pair[1]);
+        // }
+
+        const res = await useProfileStore().addDoctoreProfileApiCall(formData);
 
         if (res) {
+          this.profileImage = null;
+          this.galleryImages = [];
           this.fetchProfileData();
-          useUiStore().openNotificationMessage("Profile data updated sucessfully!");
+          useUiStore().openNotificationMessage(
+            "Profile data updated sucessfully!"
+          );
         }
       } else {
-        useUiStore().openNotificationMessage("Please fill all required fields.", "", "error");
+        useUiStore().openNotificationMessage(
+          "Please fill all required fields.",
+          "",
+          "error"
+        );
       }
     },
     handleInputDrugHistory() {
@@ -454,7 +531,6 @@ export default {
         this.form.about.push("");
       }
       this.removeEmptyRows();
-
     },
     isAllRowsFilled() {
       return this.form.about.every((item) => item.trim() !== "");
@@ -464,13 +540,17 @@ export default {
     },
     removeEmptyRows() {
       this.form.about = this.form.about.filter(
-        (item, index) => item.trim() !== "" || index === this.form.about.length - 1
+        (item, index) =>
+          item.trim() !== "" || index === this.form.about.length - 1
       );
     },
     handleLocationHistory(item, index) {
       if (this.isLocationRowFilled(item) && !this.hasEmptyLocationRow()) {
         this.form.locations.push({
-          name: "", address: "", days: [], from: null,
+          name: "",
+          address: "",
+          days: [],
+          from: null,
           to: null,
           timeslot: null,
         });
@@ -488,16 +568,67 @@ export default {
     removeEmptyLocationRows() {
       this.form.locations = this.form.locations.filter(
         (drug, index) =>
-          this.isLocationRowFilled(drug) || index === this.form.locations.length - 1
+          this.isLocationRowFilled(drug) ||
+          index === this.form.locations.length - 1
       );
     },
 
     validateDays(value) {
       if (!value || value.length === 0) {
-        return '';
+        return "";
       }
       return true;
     },
   },
 };
 </script>
+<style scoped>
+.image-gallery {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-inline: 1em;
+  margin-top: 2em;
+  width: 100%;
+  margin-bottom: 2em;
+}
+
+.image-card {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 5px 5px 10px #eee;
+  border-radius: 10px 10px;
+  padding-bottom: 10px;
+  transition-duration: 200ms;
+}
+
+:hover.image-card {
+  box-shadow: 5px 5px 10px #ddd;
+}
+
+.image-container {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  background-color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+</style>

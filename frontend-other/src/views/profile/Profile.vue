@@ -268,6 +268,7 @@ export default {
   margin-inline: 1em;
   margin-top: 2em;
   width: 100%;
+  margin-bottom: 2em;
 }
 
 .image-card {
@@ -279,9 +280,14 @@ export default {
   justify-content: space-between;
   box-sizing: border-box;
   text-align: center;
-  box-shadow: 5px 5px 10px #ddd;
+  box-shadow: 5px 5px 10px #eee;
   border-radius: 10px 10px;
   padding-bottom: 10px;
+  transition-duration: 200ms;
+}
+
+:hover.image-card {
+  box-shadow: 5px 5px 10px #ddd;
 }
 
 .image-container {
