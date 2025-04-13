@@ -79,7 +79,15 @@ export default {
         },
         tooltip: {
           x: {
-            format: "dd/MM/yyyy HH:mm",
+            formatter: function (val) {
+              return new Date(val).toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+                hour: "2-digit",
+                minute: "2-digit",
+                day: "numeric",
+                month: "short",
+              });
+            },
           },
         },
       },
