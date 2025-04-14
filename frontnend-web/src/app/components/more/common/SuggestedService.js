@@ -17,7 +17,7 @@ const SuggestedService = ({ serviceType, currentId }) => {
       // Filter out the current service and limit to 2
       const filteredServices = allServices
         .filter(service => service.id.toString() !== currentId)
-        .slice(0, 2);
+        ?.slice(0, 2);
       
       setServices(filteredServices);
     }
@@ -30,8 +30,8 @@ const SuggestedService = ({ serviceType, currentId }) => {
   };
 
   const formatServiceType = (type) => {
-    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ').map(
-      word => word.charAt(0).toUpperCase() + word.slice(1)
+    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
+      word => word.charAt(0).toUpperCase() + word?.slice(1)
     ).join(' ');
   };
 
@@ -41,7 +41,7 @@ const SuggestedService = ({ serviceType, currentId }) => {
     <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pb-[50px]">
       <h1 className="title-48 mb-[42px]">Other {formatServiceType(serviceType)} Services</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-        {services.map((service) => (
+        {services?.map((service) => (
           <div key={service.id} className="flex justify-between">
             <div className="flex flex-col lg:flex-row w-full">
               <div className="lg:mr-[10px] xl:mr-[32px]">

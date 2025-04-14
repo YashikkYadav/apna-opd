@@ -2,43 +2,56 @@
 import { Form, Input, Select } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SearchBar from "./../common-components/SearchBar"
 
 const BannerWithSearch = ({ title, description }) => {
         const router = useRouter()
     
-        const SearchResults = () => {
-            router.push("/search-results")
-        }
+    const handleSearch = (locationQuery, searchQuery) => {
+    router.push(
+      `/search-results?location=${locationQuery}&speciality=${searchQuery}`
+        );
+    };
     return (
-        <div className="bg-[#0D7EB7] banner-with-search">
-            <div className="bg-[url('/images/gradient.svg')] bg-no-repeat bg-right">
-
-                <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto relative md:h-[700px] pb-[60px]">
-                    <div className="flex justify-between items-end pt-[60px] md:pt-[129px]">
-                        <div className="max-w-[700px] mx-auto">
-                            <h1 className="title-64 mb-[32px] text-center max-w-[530px] mx-auto">{title}</h1>
-                            <p className="text-base text-white mb-[88px] text-center">{description}</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <Form name="searchForm" className="flex flex-col md:flex-row gap-[17px] w-full">
-                            <Form.Item name="location" className="mb-0 w-full md:max-w-[317px]">
-                                <Select className="!h-[50px]" placeholder="Location" size="large" prefix={<Image className="mr-3" src="/images/blue_location.svg" width={24} height={24} alt="Location Icon" />}>
-                                    <Select.Option value="jaipur">Jaipur</Select.Option>
-                                    <Select.Option value="ahmedabad">Ahmedabad</Select.Option>
-                                    <Select.Option value="surat">Surat</Select.Option>
-                                </Select>
-                            </Form.Item>
-                            <Form.Item name="search" className="mb-0 w-full">
-                                <Input placeholder="Search Doctor, Nurse, Ambulance etc." className="h-[50px] border-transparent text-base hover:border-transparent" prefix={<Image className="mr-3" src="/images/search.svg" width={24} height={24} alt="Location Icon" />} />
-                            </Form.Item>
-                            <button className="bg-[#3DB8F5] px-[51px] py-[10px] rounded-[8px] text-lg text-white font-bold hover:text-white hover:border-white" onClick={()=> SearchResults()}>Search</button>
-                        </Form>
-                    </div>
-                </div>
+        <div className="bg-[#0D7EB7]">
+      <div className="bg-[url('/images/gradient.svg')] bg-no-repeat bg-right bg-cover">
+        <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto relative xl:h-[740px]">
+          <div className="flex flex-col xl:flex-row justify-between xl:items-end pt-[60px] md:pt-[110px]">
+            <div className="max-w-[550px]">
+              <h1 className="title-64 mb-[32px]">
+                Fully Medicine Solution for You
+              </h1>
+              <p className="text-base text-white mb-[29px]">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam.
+              </p>
+              <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold mb-[30px] md:mb-[67px] hover:text-white hover:border-white">
+                Get Started
+              </button>
             </div>
+            <div>
+              <Image
+                src="/images/smiling_indian_doctors.svg"
+                width={815}
+                height={543}
+                alt="Doctor Image"
+                className="mx-auto"
+                priority={true}
+              />
+            </div>
+          </div>
+          <div className="pb-[40px]">
+            <div className="rounded-[16px] bg-white w-full pb-[40px] px-[20px] md:px-[40px] pt-[16px] shadow-lg max-w-[1210px]">
+              <h3 className="text-4xl font-bold mb-[35px]">Find Doctor</h3>
+              <div>
+                <SearchBar onSearch={handleSearch} />
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
     );
 }
 

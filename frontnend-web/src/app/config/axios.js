@@ -10,9 +10,12 @@ const axiosInstance = axios.create({
 
 // Add a response interceptor for error handling
 axiosInstance.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    return response.data;
+  },
   (error) => {
-    const message = error || "Something went wrong";
+    console.error("API Error:", error.response?.data || error.message || error);
+    const message = error.response?.data || error.message || "Something went wrong";
     return Promise.reject(message);
   }
 );

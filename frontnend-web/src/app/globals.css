@@ -87,3 +87,6 @@ button{
     line-height: 68px;
   }
 }
+.ant-message {
+  z-index: 99999 !important;
+}

@@ -7,7 +7,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const MedicalStore = () => {
+const MedicalStore = ({serviceData}) => {
   const [medicalStoreList, setMedicalStoreList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,17 +18,9 @@ const MedicalStore = () => {
 
   useEffect(() => {
     // Get all medical store data
-    const data = getServiceData("medical_store");
-    setMedicalStoreList(data);
-    setFilteredList(data);
+    setMedicalStoreList(serviceData);
+    setFilteredList(serviceData);
 
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
 
     setLoading(false);
   }, []);
@@ -45,8 +37,8 @@ const MedicalStore = () => {
   // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -93,7 +85,7 @@ const MedicalStore = () => {
                 }
                 value={location}
               >
-                {locations.map((eachLocation) => (
+                {locations?.map((eachLocation) => (
                   <Select.Option key={eachLocation} value={eachLocation}>
                     {eachLocation}
                   </Select.Option>
@@ -104,18 +96,21 @@ const MedicalStore = () => {
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Medical Stores Near You</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {medicalStoreList.length} results
+              Showing {currentItems?.length} of {medicalStoreList?.length} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((store, index) => (
+              {currentItems?.map((store, index) => (
                 <div
-                  key={store.id}
+                  key={store._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={store.images[0] || "/images/image_placeholder.svg"}
+                        src={store?.images && Array.isArray(store.images) && store.images?.length > 0
+                            ? store.images[0]
+                            : "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
                         alt="Medical Store"
@@ -131,7 +126,7 @@ const MedicalStore = () => {
                         Rating: {store.rating}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
-                        {store.contactDetails.address}
+                        {store.location}
                       </h4>
                     </div>
                   </div>

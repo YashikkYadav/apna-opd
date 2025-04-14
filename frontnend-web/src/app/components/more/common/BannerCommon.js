@@ -14,8 +14,8 @@ const BannerCommon = ({ serviceData, serviceType }) => {
   }, []);
   
   const formatServiceType = (type) => {
-    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ').map(
-      word => word.charAt(0).toUpperCase() + word.slice(1)
+    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
+      word => word.charAt(0).toUpperCase() + word?.slice(1)
     ).join(' ');
   };
 
@@ -92,7 +92,7 @@ const BannerCommon = ({ serviceData, serviceType }) => {
                     Available Hours
                   </h5>
                   <div className="flex flex-col md:flex-row gap-[16px] md:gap-[56px]">
-                    {Object.entries(serviceData.schedule || {}).map(([day, hours]) => (
+                    {Object.entries(serviceData.schedule || {})?.map(([day, hours]) => (
                       <div key={day}>
                         <p className="text-base text-white !font-normal">{day}</p>
                         <p className="text-base text-white font-bold">
