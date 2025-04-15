@@ -74,13 +74,13 @@ const AboutCommon = ({ serviceData, serviceType }) => {
           </div>
         </div>
         <div className="flex lg:justify-end lg:ml-[20px]">
-          <Image
+          {/* <Image
             src={serviceData.images?.[1] || serviceData.images?.[0] || "/images/image_placeholder.svg"}
             width={504}
             height={584}
             alt={serviceData.title}
             className="w-full max-w-[504px] object-cover rounded-lg"
-          />
+          /> */}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ export const useProfileStore = defineStore("profileStore", {
   actions: {
     async getHealthServeApiCall() {
       const ProfileService = new AxiosProfile();
+      this.healthServeId = localStorage.getItem("doctor_id") || null;
       const data = await ProfileService.HealthServeProfileData(
         this.healthServeId
       );
@@ -18,6 +19,9 @@ export const useProfileStore = defineStore("profileStore", {
       const ProfileService = new AxiosProfile();
       const data = await ProfileService.ProfileAdd(this.healthServeId, payload);
       return data;
+    },
+    reset() {
+      this.$reset(); // Built-in Pinia function to reset to initial state
     },
   },
 });
