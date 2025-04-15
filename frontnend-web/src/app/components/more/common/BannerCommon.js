@@ -39,34 +39,34 @@ const BannerCommon = ({ serviceData, serviceType }) => {
         <div className="flex flex-col pt-[60px] md:pt-[96px] pb-[60px] lg:pb-0">
           <div className="title-24 text-white flex mb-[56px] flex-col sm:flex-row gap-[10px] sm:gap-0">
             <span className="cursor-pointer" onClick={handleHomeClick}>Home </span>{" "}
-            <Image
+            {/* <Image
               className="-rotate-90 mx-[8px]"
               src="/images/down_arrow_white.svg"
               width={17}
               height={10}
               alt="Down Arrow"
-            />
+            /> */}
             <span className="cursor-pointer" onClick={handleBackToListing}>
               {formatServiceType(serviceType)}
             </span>{" "}
-            <Image
+            {/* <Image
               className="-rotate-90 mx-[8px]"
               src="/images/down_arrow_white.svg"
               width={17}
               height={10}
               alt="Down Arrow"
-            />
+            /> */}
             <span>{serviceData.title}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
             <div className="flex lg:mr-[20px]">
-              <Image
+              {/* <Image
                 src={serviceData.images?.[0] || "/images/image_placeholder.svg"}
                 width={504}
                 height={608}
                 alt={serviceData.title}
                 className="h-[400px] md:h-[604px] object-cover rounded-t-[8px] rounded-b-[8px] lg:rounded-b-none"
-              />
+              /> */}
             </div>
             <div className="flex flex-col justify-center">
               <div className="mb-[32px]">

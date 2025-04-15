@@ -6,7 +6,7 @@ import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const Yoga = ({serviceData}) => {
+const Yoga = ({ serviceData }) => {
   const [yogaList, setYogaList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -131,7 +131,9 @@ const Yoga = ({serviceData}) => {
                   <div className="flex flex-row sm:flex-col justify-between">
                     <button
                       onClick={() =>
-                        navigate.push(`/more/yoga/${yoga._id}/details`)
+                        navigate.push(
+                          `/more/yoga/${yoga.healthServeId}/details`
+                        )
                       }
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >

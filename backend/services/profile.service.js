@@ -69,7 +69,7 @@ async function getImagesById(targetId) {
 const getHealthServeProfile = async (healthServeId) => {
   try {
     const healthServeProfile = await HealthServeProfile.findOne({
-      healthServeId: healthServeId,
+      healthServeId,
     }).populate("healthServeId");
 
     return {

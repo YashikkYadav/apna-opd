@@ -67,7 +67,7 @@ const doctorProfileSchema = new mongoose.Schema(
         },
         type: {
           type: String,
-          enum: ["gallery", "profile"],
+          enum: ["galleryImages", "profilePhoto"],
           required: true,
         },
         timestamp: {
