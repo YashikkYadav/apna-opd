@@ -1,22 +1,16 @@
-const express = require('express');
-const profileController = require('../controllers/profile.controller');
-const doctorProfileController = require('../controllers/doctorProfile.controller');
+const express = require("express");
+const profileController = require("../controllers/profile.controller");
+const doctorProfileController = require("../controllers/doctorProfile.controller");
 
-const profileRoute = express.Router({ mergeParams: true });
+const healthServeProfileRoute = express.Router({ mergeParams: true });
 
-profileRoute.post(
-  '/',
-  profileController.createProfile,
-);
+healthServeProfileRoute.post("/", profileController.createProfile);
 
-profileRoute.get(
-  '/',
-  doctorProfileController.getDoctorProfile,
-);
+healthServeProfileRoute.get("/", profileController.getHealthServeProfile);
 
-profileRoute.get(
-  '/appointment',
+healthServeProfileRoute.get(
+  "/appointment",
   doctorProfileController.getAppointmentDetails
 );
 
-module.exports = profileRoute;
+module.exports = healthServeProfileRoute;

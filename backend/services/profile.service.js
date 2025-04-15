@@ -1,133 +1,131 @@
-const moment = require('moment');
-const DoctorProfile = require('../models/doctorProfile');
-const validateDoctorProfile = require('../validations/doctorProfile.validation');
-const { validateLocationSchedule } = require('../utils/doctorTiming');
+const moment = require("moment");
+const healthServeProfile = require("../models/healthServeProfile");
+const HealthServeProfile = require("../models/healthServeProfile");
+const { default: mongoose } = require("mongoose");
+const fs = require("fs");
+const path = require("path");
+const config = require("../config/config");
 
-const createProfile = async (profileId , profileData) =>  {
+const createProfile = async (healthServeId, profileData) => {
   try {
-    const {
-      introduction,
-      happyClients,
-      experience,
-      about,
-      locations,
-      unavailabilityDate,
-      availabilityAfter,
-    } = profileData;
+    const healthServeProfileImages = await getImagesById(healthServeId);
 
-    const profileDataValidation = validateDoctorProfile(profileData);
-    if (!profileDataValidation.success) {
-      return {
-        statusCode: 400,
-        error: profileDataValidation.errors,
-      };
-    }
-
-    const validationOfLocation = validateLocationSchedule(locations);
-    if (!validationOfLocation.success) {
-      return {
-        statusCode: 400,
-        error: validationOfLocation.message,
-      };
-    }
-
-    const profile = await DoctorProfile.findOne({ profileId });
-    if (profile) {
-      const updatedDoctorProfile = await DoctorProfile.findOneAndUpdate(
-        { doctorId },
-        {
-          introduction,
-          happyClients,
-          experience,
-          about,
-          locations,
-          unavailabilityDate,
-          availabilityAfter,
-        },
-      );
-
-      return {
-        statusCode: 200,
-        doctorProfile: updatedDoctorProfile,
-      };
-    }
-
-    const newDoctorProfile = new DoctorProfile({
-      doctorId,
-      introduction,
-      happyClients,
-      experience,
-      about,
-      locations,
-      unavailabilityDate,
-      availabilityAfter,
-    });
-    await newDoctorProfile.save();
-
-    return {
-      statusCode: 201,
-      doctorProfile: newDoctorProfile,
+    const updateData = {
+      about: profileData.about,
+      experience: profileData.experience,
+      introduction: profileData.introduction,
+      images: healthServeProfileImages,
     };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      error: error,
-    };
-  }
-}
 
-const getDoctorProfile = async (doctorId) => {
-  try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const healthServeProfile = await HealthServeProfile.findOneAndUpdate(
+      { healthServeId },
+      updateData,
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
 
     return {
       statusCode: 200,
-      doctorProfile,
+      healthServeProfile,
     };
   } catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       error: error,
     };
   }
+};
+
+async function getImagesById(targetId) {
+  const IMAGE_DIR = path.join(__dirname, "../public/health-serve-profile");
+  const baseUrl = config.BASE_URL;
+  try {
+    const files = await fs.promises.readdir(IMAGE_DIR);
+
+    const imageData = files
+      .filter((file) => {
+        const pattern = new RegExp(`^${targetId}_`);
+        return pattern.test(file);
+      })
+      .map((file) => {
+        const [id, timestamp, type] = file.split("_");
+        const extension = path.extname(file);
+
+        return {
+          url: `${baseUrl}/public/health-serve-profile/${file}`,
+          type: type.replace(extension, ""),
+          timestamp: parseInt(timestamp),
+          filename: file,
+        };
+      });
+
+    return imageData;
+  } catch (error) {
+    console.error("Error reading directory:", error);
+    return [];
+  }
 }
 
-const getAppointmentDetails = async (doctorId) => {
+const getHealthServeProfile = async (healthServeId) => {
   try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const healthServeProfile = await HealthServeProfile.findOne({
+      healthServeId: healthServeId,
+    }).populate("healthServeId");
 
-    if (!doctorProfile) {
+    return {
+      statusCode: 200,
+      healthServeProfile,
+    };
+  } catch (error) {
+    console.log("Error occured in fetching health serve profile :: ", error);
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
+
+const getAppointmentDetails = async (healthServeId) => {
+  try {
+    const healthServeProfile = await healthServeProfile
+      .find({
+        healthServeId,
+      })
+      .populate("healthServeId");
+
+    if (!healthServeProfile) {
       return {
         statusCode: 404,
-        message: 'Doctor profile not found',
+        message: "Doctor profile not found",
       };
     }
 
     const now = moment();
-    const appointmentStartTime = now.add((doctorProfile.delayTimeInHours || 0), 'hours');
+    const appointmentStartTime = now.add(
+      healthServeProfile.delayTimeInHours || 0,
+      "hours"
+    );
 
     const getNextWeekday = (targetDay, startDate) => {
       let daysToAdd = (targetDay - startDate.day() + 7) % 7;
       if (daysToAdd === 0) daysToAdd = 7;
-      return startDate.add(daysToAdd, 'days');
+      return startDate.add(daysToAdd, "days");
     };
 
     const generateTimeSlots = (from, to, timeslotDuration) => {
       const slots = [];
-      const startTime = moment(from, 'hh:mm A');
-      const endTime = moment(to, 'hh:mm A');
+      const startTime = moment(from, "hh:mm A");
+      const endTime = moment(to, "hh:mm A");
       const slotDuration = timeslotDuration;
 
       while (startTime < endTime) {
-        slots.push(startTime.format('h:mm A'));
-        startTime.add(slotDuration, 'minutes');
+        slots.push(startTime.format("h:mm A"));
+        startTime.add(slotDuration, "minutes");
       }
       return slots;
     };
 
-    const appointmentDetails = doctorProfile.locations.map((location) => {
+    const appointmentDetails = healthServeProfile.locations.map((location) => {
       const availableDays = location.days;
       const slotsPerLocation = [];
 
@@ -137,16 +135,23 @@ const getAppointmentDetails = async (doctorId) => {
       while (appointmentsCount < 7) {
         let targetDay = availableDays[appointmentsCount % availableDays.length];
         const targetDayIndex = moment.weekdays().indexOf(targetDay);
-        let nextAvailableDate = getNextWeekday(targetDayIndex, nextAppointmentDate.clone());
-        const timeSlots = generateTimeSlots(location.from, location.to, location.timeslot);
+        let nextAvailableDate = getNextWeekday(
+          targetDayIndex,
+          nextAppointmentDate.clone()
+        );
+        const timeSlots = generateTimeSlots(
+          location.from,
+          location.to,
+          location.timeslot
+        );
 
         slotsPerLocation.push({
           day: targetDay,
-          date: nextAvailableDate.format('YYYY-MM-DD'),
+          date: nextAvailableDate.format("YYYY-MM-DD"),
           timeSlots: timeSlots,
         });
 
-        nextAppointmentDate = nextAvailableDate.clone().add(1, 'days');
+        nextAppointmentDate = nextAvailableDate.clone().add(1, "days");
         appointmentsCount++;
       }
 
@@ -158,8 +163,8 @@ const getAppointmentDetails = async (doctorId) => {
 
     return {
       statusCode: 200,
-      doctorProfile: {
-        ...doctorProfile.toObject(),
+      healthServeProfile: {
+        ...healthServeProfile.toObject(),
         appointmentDetails,
       },
     };
@@ -173,7 +178,6 @@ const getAppointmentDetails = async (doctorId) => {
 
 module.exports = {
   createProfile,
-  getDoctorProfile,
+  getHealthServeProfile,
   getAppointmentDetails,
 };
-

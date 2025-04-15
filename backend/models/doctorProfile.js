@@ -59,6 +59,27 @@ const doctorProfileSchema = new mongoose.Schema(
     availabilityAfter: {
       type: Number,
     },
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          enum: ["gallery", "profile"],
+          required: true,
+        },
+        timestamp: {
+          type: Number,
+          required: true,
+        },
+        filename: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
