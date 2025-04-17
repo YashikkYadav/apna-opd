@@ -135,7 +135,7 @@ const Register = () => {
       const errorMessage =
         typeof error?.response?.data === "string"
           ? error.response.data
-          : error?.response?.data?.error ||
+          : error[0].message || error?.response?.data?.error ||
             error?.response?.data[0]?.message ||
             "Something went wrong. Please try again.";
 

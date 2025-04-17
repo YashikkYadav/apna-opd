@@ -1,8 +1,9 @@
 "use client";
+import axiosInstance from "@/app/config/axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
-const InquiryModal = ({ serviceData, serviceType, onClose }) => {
+const InquiryModal = ({ profileData, serviceType, onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,16 +26,21 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
       phone: formData.phone,
       enquiry: formData.message,
     };
-    console.log("serviceData", serviceData);
-    console.log("payload", payload);
     try {
       const response = await axiosInstance.post(
-        `/67dfe27f39b2fed61409c6a3/enquiry`,
+        `/${profileData._id}/enquiry`,
         payload
       );
       console.log("response", response);
       if(response.enquiry){
         setSubmitSuccess(true);
+        toast.success("Enquiry submitted successfully", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       }
     } catch (error) {
       const errorMessage =
@@ -48,16 +54,7 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
         autoClose: 2000,
       });
     }
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      
-      // Close modal after success
-      setTimeout(() => {
-        onClose();
-      }, 2000);
-    }, 1500);
+
   };
 
   const formatServiceType = (type) => {
@@ -72,7 +69,7 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-800">
-              Inquiry for {serviceData?.title}
+              Enquiry for {profileData?.name}
             </h2>
             <button 
               onClick={onClose}

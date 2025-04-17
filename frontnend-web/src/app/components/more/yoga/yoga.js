@@ -132,7 +132,7 @@ const Yoga = ({ serviceData }) => {
                     <button
                       onClick={() =>
                         navigate.push(
-                          `/more/yoga/${yoga.healthServeId}/details`
+                          `/more/yoga/${yoga._id}/details`
                         )
                       }
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

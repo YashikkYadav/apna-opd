@@ -1,45 +1,53 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getServiceData } from "../../../../data/constants";
 import AboutCommon from "../../../../components/more/common/AboutCommon";
 import BannerCommon from "../../../../components/more/common/BannerCommon";
 import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryCommon";
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
-
+import axiosInstance from "@/app/config/axios";
 const DetailsPage = () => {
   const params = useParams();
   const [loading, setLoading] = useState(true);
-  const [serviceData, setServiceData] = useState(null);
+  const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
+  const  specs = params.specs;
+  const  specsId = params.specsId;
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `/health-serve/list?&location=&type=${specs}`
+      );
+
+      if (response?.list?.healthServeProfileList) {
+        response.list.healthServeProfileList?.forEach((item) => {
+          if (item._id === specsId) {
+            setProfileData(item);
+            console.log("item", item);
+          }
+        });
+      }
+      if (!response?.list?.healthServeProfileList) {
+        setError(`No data found for ${params.specs} with ID ${params.specsId}`);
+        return;
+      }
+
+    } catch (error) {
+      console.error("Error fetching service details:", error);
+      setError("Failed to load details. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // Convert specs parameter to the format used in constants.js
-        const serviceType = params.specs.replace(/-/g, '_');
-        const data = await getServiceData(serviceType, params.specsId);
-        console.log(data);
-        if (!data) {
-          setError(`No data found for ${params.specs} with ID ${params.specsId}`);
-          return;
-        }
-        
-        setServiceData(data);
-      } catch (error) {
-        console.error("Error fetching service details:", error);
-        setError("Failed to load details. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (params.specs && params.specsId) {
       fetchData();
     }
-  }, [params.specs, params.specsId]);
+  }, []);
 
   if (loading) return <Loader />;
   
@@ -54,19 +62,19 @@ const DetailsPage = () => {
   return (
     <div className="pt-[80px]">
       <BannerCommon 
-        serviceData={serviceData} 
-        serviceType={params.specs} 
+        profileData={profileData} 
+        serviceType={specs} 
       />
       <AboutCommon 
-        serviceData={serviceData} 
-        serviceType={params.specs} 
+        profileData={profileData} 
+        serviceType={specs} 
       />
       {/* <ImageGalleryCommon 
         images={.images || []}
       /> */}
       <SuggestedService 
-        serviceType={params.specs}
-        currentId={params.specsId}
+        serviceType={specs}
+        currentId={specsId}
       />
     </div>
   );
