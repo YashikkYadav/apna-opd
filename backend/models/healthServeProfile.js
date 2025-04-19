@@ -11,6 +11,14 @@ const healthServeProfileSchema = new mongoose.Schema(
     about: {
       type: String,
     },
+    phone: {
+      type: String,
+      unique: true,
+    },
+    email: {
+      type: String,
+      unique: true,
+    },
     experience: {
       type: Number,
     },
