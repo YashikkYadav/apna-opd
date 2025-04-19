@@ -26,7 +26,7 @@ const Register = () => {
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -90,7 +90,6 @@ const Register = () => {
     }
   }, 300);
 
-  // Use the debounced function in the handler
   const handleLocationSearch = (value) => {
     debouncedLocationSearch(value);
   };
@@ -127,9 +126,7 @@ const Register = () => {
           closeOnClick: false,
           transition: Flip,
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        setRegisterSuccess(true);
       }
     } catch (error) {
       const errorMessage =
@@ -204,9 +201,7 @@ const Register = () => {
           closeOnClick: false,
           transition: Flip,
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        setRegisterSuccess(true);
       }
     } catch (error) {
       const errorMessage =
@@ -232,7 +227,24 @@ const Register = () => {
     };
   }, []);
 
-  return (
+  return registerSuccess ? (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Register Success
+        </h2>
+        <p className="text-center text-sm mt-4">
+          Your registration has been successful! Please login to continue.
+        </p>
+        <div className="flex justify-center">
+          <p>Now you need to complete your profile to continue</p>
+          <a href="/#" className="text-blue-600 hover:underline">
+            Click here to complete your profile
+          </a>
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
@@ -363,9 +375,14 @@ const Register = () => {
                 </label>
                 <Select
                   value={formData.speciality}
-                  onChange={(value) => setFormData(prev => ({ ...prev, speciality: value }))}
+                  onChange={(value) =>
+                    setFormData((prev) => ({ ...prev, speciality: value }))
+                  }
                   placeholder="Select Speciality"
-                  options={specialties?.map(specialty => ({ value: specialty, label: specialty }))}
+                  options={specialties?.map((specialty) => ({
+                    value: specialty,
+                    label: specialty,
+                  }))}
                   className="w-full"
                   required
                 />

@@ -68,6 +68,12 @@ async function getImagesById(targetId) {
 
 const getHealthServeProfile = async (healthServeId) => {
   try {
+    if (!healthServeId || healthServeId === "" || healthServeId === null) {
+      return {
+        statusCode: 400,
+        message: "Health serve ID is required",
+      };
+    }
     const healthServeProfile = await HealthServeProfile.findOne({
       healthServeId,
     }).populate("healthServeId");
