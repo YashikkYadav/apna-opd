@@ -94,8 +94,27 @@ const getAppointmentDetails = async (req, res) => {
   }
 };
 
+const getPatients = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const patientData = await doctorProfileService.getPatients(doctorId);
+
+    if (patientData?.error) {
+      return res.status(patientData.statusCode).send(patientData.error);
+    }
+
+    res
+      .status(patientData.statusCode)
+      .json({ patientData: patientData.patientData });
+  } catch (error) {
+    console.log("Error while fetching patient data from the db :: ", error);
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
+  getPatients,
 };

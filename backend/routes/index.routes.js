@@ -18,6 +18,7 @@ const patientAppointmentRoutes = require("../routes/patientAppointment.routes");
 const prescriptionSectionRoutes = require("../routes/prescriptionSection.routes");
 const doctorMiddleware = require("../middlewares/doctor.middleware");
 const healthServeProfileRoutes = require("./profile.routes");
+const messageRoutes = require("./messages.routes");
 
 const router = express.Router();
 
@@ -37,6 +38,8 @@ router.use("/patient", patientRoutes);
 router.use("/:doctorId/report", doctorMiddleware, dashboardRoutes);
 
 router.use("/:doctorId/invoice", doctorMiddleware, invoiceRoutes);
+
+router.use("/:doctorPatientId", messageRoutes);
 
 router.use(
   "/:doctorId/prescription/:patientId",

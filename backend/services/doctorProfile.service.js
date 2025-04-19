@@ -5,6 +5,7 @@ const { validateLocationSchedule } = require("../utils/doctorTiming");
 const path = require("path");
 const fs = require("fs");
 const config = require("../config/config");
+const DoctorPatient = require("../models/doctorPatient");
 
 const createDoctorProfile = async (doctorId, profileData) => {
   try {
@@ -225,8 +226,28 @@ const getAppointmentDetails = async (doctorId) => {
   }
 };
 
+const getPatients = async (doctorId) => {
+  try {
+    const patients = await DoctorPatient.find({ doctorId }).populate(
+      "patientId"
+    );
+    console.log(patients);
+    return {
+      statusCode: 200,
+      patientData: patients,
+    };
+  } catch (error) {
+    console.log("Error while fetching patients from the Db : ", error);
+    return {
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+};
+
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
+  getPatients,
 };

@@ -18,11 +18,11 @@
           <v-list>
             <template
               v-for="(patient, index) in filteredPatients"
-              :key="patient.id"
+              :key="patient._id"
             >
               <v-list-item
-                @click="selectChat(patient.id)"
-                :class="{ 'selected-message': selectedChatId === patient.id }"
+                @click="selectChat(patient._id)"
+                :class="{ 'selected-message': selectedChatId === patient._id }"
               >
                 <div class="chat">
                   <v-list-item-avatar size="32" class="thumbnail-avatar">
@@ -31,7 +31,7 @@
                     </div>
                     <v-list-item-content class="chat-name">
                       <v-list-item-title class="font-weight-medium">{{
-                        patient.name
+                        patient.patientId?.fullName
                       }}</v-list-item-title>
                       <v-list-item-subtitle class="text-truncate">
                         {{ patient.lastMessage }}
@@ -101,6 +101,8 @@
 </template>
 
 <script>
+import { useProfileStore } from "@/store/ProfileStore";
+import { io } from "socket.io-client";
 export default {
   name: "Messages",
   data() {
@@ -109,178 +111,214 @@ export default {
       typingStatus: "",
       selectedChatId: null,
       newMessage: "",
-      patients: [
-        {
-          id: 1,
-          name: "John Doe",
-          avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-          lastMessage: "Thank you, Doctor!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Hello Doctor!",
-              time: "Today, 10:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Hi John, how can I help you?",
-              time: "Today, 10:05 AM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "I'm feeling much better now.",
-              time: "Today, 10:10 AM",
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Jane Smith",
-          avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-          lastMessage: "Can we reschedule?",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Good morning!",
-              time: "Today, 9:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Good morning, Jane!",
-              time: "Today, 9:05 AM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "Can we reschedule our appointment?",
-              time: "Today, 9:10 AM",
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: "Michael Brown",
-          avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-          lastMessage: "Thanks for the advice!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Doctor, I have a question.",
-              time: "Yesterday, 3:00 PM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Sure, Michael. Please go ahead.",
-              time: "Yesterday, 3:05 PM",
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: "Emily Davis",
-          avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-          lastMessage: "See you tomorrow!",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Good afternoon, Doctor.",
-              time: "Yesterday, 2:00 PM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Good afternoon, Emily.",
-              time: "Yesterday, 2:10 PM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "Looking forward to our appointment.",
-              time: "Yesterday, 2:20 PM",
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: "Sophia Wilson",
-          avatar: "https://randomuser.me/api/portraits/women/5.jpg",
-          lastMessage: "I'll call later.",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Hi Doctor, can we talk later?",
-              time: "Today, 11:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Sure, Sophia.",
-              time: "Today, 11:05 AM",
-            },
-          ],
-        },
-        {
-          id: 6,
-          name: "Chris Evans",
-          avatar: "https://randomuser.me/api/portraits/men/6.jpg",
-          lastMessage: "Need urgent help!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Doctor, please help!",
-              time: "Today, 8:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "I'm here. What happened?",
-              time: "Today, 8:05 AM",
-            },
-          ],
-        },
-      ],
+      socket: null,
+      doctorPatientId: "",
+      currentChatMessages: [],
+      patients: [],
+      senderType: "doctor",
+      // patients: [
+      //   {
+      //     id: 1,
+      //     name: "John Doe",
+      //     avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+      //     lastMessage: "Thank you, Doctor!",
+      //     unread: true,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Hello Doctor!",
+      //         time: "Today, 10:00 AM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "Hi John, how can I help you?",
+      //         time: "Today, 10:05 AM",
+      //       },
+      //       {
+      //         id: 3,
+      //         sender: "patient",
+      //         text: "I'm feeling much better now.",
+      //         time: "Today, 10:10 AM",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 2,
+      //     name: "Jane Smith",
+      //     avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+      //     lastMessage: "Can we reschedule?",
+      //     unread: false,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Good morning!",
+      //         time: "Today, 9:00 AM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "Good morning, Jane!",
+      //         time: "Today, 9:05 AM",
+      //       },
+      //       {
+      //         id: 3,
+      //         sender: "patient",
+      //         text: "Can we reschedule our appointment?",
+      //         time: "Today, 9:10 AM",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 3,
+      //     name: "Michael Brown",
+      //     avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+      //     lastMessage: "Thanks for the advice!",
+      //     unread: true,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Doctor, I have a question.",
+      //         time: "Yesterday, 3:00 PM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "Sure, Michael. Please go ahead.",
+      //         time: "Yesterday, 3:05 PM",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 4,
+      //     name: "Emily Davis",
+      //     avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+      //     lastMessage: "See you tomorrow!",
+      //     unread: false,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Good afternoon, Doctor.",
+      //         time: "Yesterday, 2:00 PM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "Good afternoon, Emily.",
+      //         time: "Yesterday, 2:10 PM",
+      //       },
+      //       {
+      //         id: 3,
+      //         sender: "patient",
+      //         text: "Looking forward to our appointment.",
+      //         time: "Yesterday, 2:20 PM",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 5,
+      //     name: "Sophia Wilson",
+      //     avatar: "https://randomuser.me/api/portraits/women/5.jpg",
+      //     lastMessage: "I'll call later.",
+      //     unread: false,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Hi Doctor, can we talk later?",
+      //         time: "Today, 11:00 AM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "Sure, Sophia.",
+      //         time: "Today, 11:05 AM",
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     id: 6,
+      //     name: "Chris Evans",
+      //     avatar: "https://randomuser.me/api/portraits/men/6.jpg",
+      //     lastMessage: "Need urgent help!",
+      //     unread: true,
+      //     messages: [
+      //       {
+      //         id: 1,
+      //         sender: "patient",
+      //         text: "Doctor, please help!",
+      //         time: "Today, 8:00 AM",
+      //       },
+      //       {
+      //         id: 2,
+      //         sender: "doctor",
+      //         text: "I'm here. What happened?",
+      //         time: "Today, 8:05 AM",
+      //       },
+      //     ],
+      //   },
+      // ],
       typingTimeout: null,
     };
   },
   computed: {
     filteredPatients() {
+      console.log(this.patients);
       return this.patients.filter((p) =>
-        p.name.toLowerCase().includes(this.search.toLowerCase())
+        p.patientId?.fullName.toLowerCase().includes(this.search.toLowerCase())
       );
     },
     currentChat() {
-      return this.patients.find((p) => p.id === this.selectedChatId);
+      return this.patients.find((p) => p._id === this.selectedChatId);
     },
   },
+  created() {
+    this.socket = io("http://localhost:8000");
+    useProfileStore()
+      .getPatients()
+      .then((res) => {
+        this.patients = res.patientData;
+      })
+      .catch((error) => {
+        console.log("error getting patinet data : ", error);
+      });
+  },
+  unmounted() {
+    if (this.socket) {
+      this.socket.disconnect();
+      console.log("Socket disconnected");
+    }
+  },
   methods: {
-    selectChat(id) {
+    async selectChat(id) {
+      console.log(id);
       this.selectedChatId = id;
+      this.socket.emit("joinRoom", { doctorPatientId: this.doctorPatientId });
+      const messageData = await useProfileStore().getChatMessages(id);
+      console.log(messageData);
+      this.currentChatMessages.push(messageData);
       const patient = this.patients.find((p) => p.id === id);
-      if (patient) patient.unread = false; // Mark as read
+      this.socket.on("receiveMessage", (data) => {
+        this.currentChatMessages.push(data);
+      });
+      if (patient) patient.unread = false;
     },
     sendMessage() {
       if (this.newMessage.trim() && this.currentChat) {
-        this.currentChat.messages.push({
+        this.currentChatMessages.push({
           id: Date.now(),
           sender: "doctor",
           text: this.newMessage,
           time: new Date().toLocaleTimeString(),
+        });
+        this.socket.emit("sendMessage", {
+          doctorPatientId: this.selectedChatId,
+          senderType: this.senderType,
+          message: this.newMessage.trim(),
         });
         this.newMessage = "";
       }
