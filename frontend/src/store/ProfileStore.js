@@ -26,6 +26,7 @@ export const useProfileStore = defineStore("profileStore", {
     async getChatMessages(id) {
       const ProfileService = new AxiosProfile();
       const chatMessageData = await ProfileService.ChatMessages(id);
+      return chatMessageData;
     },
     reset() {
       this.$reset();

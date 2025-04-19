@@ -1,14 +1,14 @@
 <template>
   <v-container fluid>
     <v-row>
-      <!-- Patient List -->
+      <!-- doctor List -->
       <v-col cols="12" md="4" class="pa-3">
         <v-card>
-          <v-card-title class="text-h6">Patients</v-card-title>
+          <v-card-title class="text-h6">Doctors</v-card-title>
           <v-divider></v-divider>
           <v-text-field
             v-model="search"
-            placeholder="Search patients..."
+            placeholder="Search doctors..."
             dense
             clearable
             class="pa-2"
@@ -17,35 +17,35 @@
           <v-divider></v-divider>
           <v-list>
             <template
-              v-for="(patient, index) in filteredPatients"
-              :key="patient.id"
+              v-for="(doctor, index) in filteredDoctors"
+              :key="doctor._id"
             >
               <v-list-item
-                @click="selectChat(patient.id)"
-                :class="{ 'selected-message': selectedChatId === patient.id }"
+                @click="selectChat(doctor._id)"
+                :class="{ 'selected-message': selectedChatId === doctor._id }"
               >
                 <div class="chat">
                   <v-list-item-avatar size="32" class="thumbnail-avatar">
                     <div class="image-container">
-                      <v-img :src="patient.avatar" alt="Patient Avatar"></v-img>
+                      <v-img :src="doctor.avatar" alt="doctor Avatar"></v-img>
                     </div>
                     <v-list-item-content class="chat-name">
                       <v-list-item-title class="font-weight-medium">{{
-                        patient.name
+                        doctor.doctorId?.name
                       }}</v-list-item-title>
                       <v-list-item-subtitle class="text-truncate">
-                        {{ patient.lastMessage }}
+                        {{ doctor.lastMessage }}
                       </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item-avatar>
                   <v-list-item-action>
-                    <v-chip v-if="patient.unread" color="primary" small label
+                    <v-chip v-if="doctor.unread" color="primary" small label
                       >Unread</v-chip
                     >
                   </v-list-item-action>
                 </div>
               </v-list-item>
-              <v-divider v-if="index < filteredPatients.length - 1"></v-divider>
+              <v-divider v-if="index < filteredDoctors.length - 1"></v-divider>
             </template>
           </v-list>
         </v-card>
@@ -59,22 +59,23 @@
               <v-img :src="currentChat?.avatar" alt="Chat Avatar"></v-img>
             </v-avatar>
             <span class="text-h6">{{
-              currentChat?.name || "Select a Patient"
+              currentChatName || "Select a doctor"
             }}</span>
             <span class="ml-auto text-subtitle-2">{{ typingStatus }}</span>
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text class="chat-window">
             <div
-              v-for="message in currentChat?.messages || []"
-              :key="message.id"
+              v-for="message in currentChatMessages || []"
+              :id="message._id"
+              :key="message._id"
               :class="[
                 'chat-bubble',
-                { 'doctor-bubble': message.sender === 'doctor' },
+                { 'doctor-bubble': message.senderType === 'doctor' },
               ]"
             >
-              <span>{{ message.text }}</span>
-              <small class="timestamp">{{ message.time }}</small>
+              <span>{{ message.message }}</span>
+              <small class="timestamp">{{ getDate(message.timestamp) }}</small>
             </div>
           </v-card-text>
           <v-divider></v-divider>
@@ -101,6 +102,8 @@
 </template>
 
 <script>
+import { useProfileStore } from "@/store/ProfileStore";
+import { io } from "socket.io-client";
 export default {
   name: "Messages",
   data() {
@@ -109,185 +112,119 @@ export default {
       typingStatus: "",
       selectedChatId: null,
       newMessage: "",
-      patients: [
-        {
-          id: 1,
-          name: "John Doe",
-          avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-          lastMessage: "Thank you, Doctor!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Hello Doctor!",
-              time: "Today, 10:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Hi John, how can I help you?",
-              time: "Today, 10:05 AM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "I'm feeling much better now.",
-              time: "Today, 10:10 AM",
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Jane Smith",
-          avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-          lastMessage: "Can we reschedule?",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Good morning!",
-              time: "Today, 9:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Good morning, Jane!",
-              time: "Today, 9:05 AM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "Can we reschedule our appointment?",
-              time: "Today, 9:10 AM",
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: "Michael Brown",
-          avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-          lastMessage: "Thanks for the advice!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Doctor, I have a question.",
-              time: "Yesterday, 3:00 PM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Sure, Michael. Please go ahead.",
-              time: "Yesterday, 3:05 PM",
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: "Emily Davis",
-          avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-          lastMessage: "See you tomorrow!",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Good afternoon, Doctor.",
-              time: "Yesterday, 2:00 PM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Good afternoon, Emily.",
-              time: "Yesterday, 2:10 PM",
-            },
-            {
-              id: 3,
-              sender: "patient",
-              text: "Looking forward to our appointment.",
-              time: "Yesterday, 2:20 PM",
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: "Sophia Wilson",
-          avatar: "https://randomuser.me/api/portraits/women/5.jpg",
-          lastMessage: "I'll call later.",
-          unread: false,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Hi Doctor, can we talk later?",
-              time: "Today, 11:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "Sure, Sophia.",
-              time: "Today, 11:05 AM",
-            },
-          ],
-        },
-        {
-          id: 6,
-          name: "Chris Evans",
-          avatar: "https://randomuser.me/api/portraits/men/6.jpg",
-          lastMessage: "Need urgent help!",
-          unread: true,
-          messages: [
-            {
-              id: 1,
-              sender: "patient",
-              text: "Doctor, please help!",
-              time: "Today, 8:00 AM",
-            },
-            {
-              id: 2,
-              sender: "doctor",
-              text: "I'm here. What happened?",
-              time: "Today, 8:05 AM",
-            },
-          ],
-        },
-      ],
+      socket: null,
+      doctordoctorId: "",
+      currentChatMessages: [],
+      currentChatName: null,
+      currentChat: {},
+      doctors: [],
+      senderType: "patient",
       typingTimeout: null,
+      newMessageCount: 0,
     };
   },
   computed: {
-    filteredPatients() {
-      return this.patients.filter((p) =>
-        p.name.toLowerCase().includes(this.search.toLowerCase())
+    filteredDoctors() {
+      return this.doctors.filter((p) =>
+        p.doctorId?.name.toLowerCase().includes(this.search.toLowerCase())
       );
     },
     currentChat() {
-      return this.patients.find((p) => p.id === this.selectedChatId);
+      return this.doctors.find((p) => p._id === this.selectedChatId);
+    },
+    scrollToDiv() {
+      const divId =
+        this.currentChatMessages[this.currentChatMessages.length - 1]._id;
+      const element = document.getElementById(divId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        console.warn(`Element with id "${divId}" not found.`);
+      }
     },
   },
+  created() {
+    this.socket = io("http://localhost:8000");
+    useProfileStore()
+      .getDoctors()
+      .then((res) => {
+        this.doctors = res.doctorData;
+      })
+      .catch((error) => {
+        console.log("error getting doctor data : ", error);
+      });
+  },
+  unmounted() {
+    if (this.socket) {
+      this.socket.disconnect();
+      console.log("Socket disconnected");
+    }
+  },
   methods: {
-    selectChat(id) {
+    setChatName(targetId) {
+      this.$nextTick(() => {
+        const doctor = this.doctors.find((p) => p._id === targetId);
+        this.currentChatName = doctor?.doctorId?.name || null;
+      });
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const lastMessage =
+          this.currentChatMessages[this.currentChatMessages.length - 1];
+        if (lastMessage) {
+          const element = document.getElementById(lastMessage._id);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+        }
+      });
+    },
+    getDate(isoString) {
+      const date = new Date(isoString);
+      const formatted = date.toLocaleString();
+      return formatted;
+    },
+    async selectChat(id) {
+      this.setChatName(id);
       this.selectedChatId = id;
-      const patient = this.patients.find((p) => p.id === id);
-      if (patient) patient.unread = false; // Mark as read
+      this.socket.emit("joinRoom", { doctorPatientId: this.selectedChatId });
+      const messageData = await useProfileStore().getChatMessages(id);
+      this.currentChatMessages = messageData;
+      this.scrollToBottom();
+      const doctor = this.doctors.find((d) => d._id === id);
+      this.socket.off("receiveMessage");
+      this.socket.on("receiveMessage", (data) => {
+        const newId = `temp-${Date.now()}-${this.newMessageCount}`;
+        data._id = newId;
+        this.newMessageCount++;
+        this.currentChatMessages.push(data);
+        this.scrollToBottom();
+      });
+      if (doctor) doctor.unread = false;
     },
     sendMessage() {
       if (this.newMessage.trim() && this.currentChat) {
-        this.currentChat.messages.push({
-          id: Date.now(),
-          sender: "patient",
-          text: this.newMessage,
-          time: new Date().toLocaleTimeString(),
+        const newId = `temp-${Date.now()}-${this.newMessageCount}`;
+        this.currentChatMessages.push({
+          _id: newId,
+          doctorPatientId: this.selectedChatId,
+          senderType: this.senderType,
+          message: this.newMessage,
+          timestamp: new Date(),
+        });
+        this.scrollToBottom();
+        this.newMessageCount++;
+        this.socket.emit("sendMessage", {
+          doctorPatientId: this.selectedChatId,
+          senderType: this.senderType,
+          message: this.newMessage.trim(),
         });
         this.newMessage = "";
       }
     },
     handleTyping() {
       if (this.typingTimeout) clearTimeout(this.typingTimeout);
-      this.typingStatus = "Patient is typing...";
+      this.typingStatus = "doctor is typing...";
       this.typingTimeout = setTimeout(() => {
         this.typingStatus = "";
       }, 2000);

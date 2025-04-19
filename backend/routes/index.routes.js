@@ -49,6 +49,8 @@ router.use(
 
 router.use("/:patientId/file", fileUploader);
 
+router.use("/:patientId", patientRoutes);
+
 router.use("/:doctorId/medicine", doctorMiddleware, medicineLibraryRoutes);
 
 router.use("/:doctorId/template", doctorMiddleware, templateLibraryRoutes);

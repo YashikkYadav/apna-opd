@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
   socket.on("joinRoom", ({ doctorPatientId }) => {
+    console.log("Join Room :: ", doctorPatientId);
     socket.join(doctorPatientId);
     console.log(`Socket ${socket.id} joined room ${doctorPatientId}`);
   });
@@ -49,9 +50,9 @@ io.on("connection", (socket) => {
     });
 
     await chat.save();
-    console.log({ doctorPatientId, message });
 
     socket.to(doctorPatientId).emit("receiveMessage", {
+      doctorPatientId,
       message,
       senderType,
       timestamp: new Date(),
