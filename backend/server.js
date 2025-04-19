@@ -36,9 +36,11 @@ io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
   socket.on("joinRoom", ({ doctorPatientId }) => {
-    console.log("Join Room :: ", doctorPatientId);
     socket.join(doctorPatientId);
-    console.log(`Socket ${socket.id} joined room ${doctorPatientId}`);
+    const time = new Date().toLocaleString();
+    console.log(
+      `\x1b[32m[${time}]\x1b[0m Socket ${socket.id} joined room ${doctorPatientId}`
+    );
   });
 
   socket.on("sendMessage", async ({ doctorPatientId, senderType, message }) => {

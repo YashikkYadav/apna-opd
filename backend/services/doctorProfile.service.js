@@ -231,7 +231,6 @@ const getPatients = async (doctorId) => {
     const patients = await DoctorPatient.find({ doctorId }).populate(
       "patientId"
     );
-    console.log(patients);
     return {
       statusCode: 200,
       patientData: patients,

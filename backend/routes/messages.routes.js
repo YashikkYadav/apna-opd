@@ -7,7 +7,6 @@ message.get("/get-messages", async (req, res) => {
   try {
     const { doctorPatientId } = req.params;
     const chat = await Chat.find({ doctorPatientId });
-    console.log("Chat = ", chat);
     res.status(200).send(chat);
   } catch (error) {
     console.log("Error while fetching messages from DB : ", error);
