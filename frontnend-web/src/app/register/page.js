@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button, Select } from "antd";
+import { Select, message } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
 import { searchCities } from "../services/locationService";
 import debounce from "lodash/debounce";
-import { Bounce, Flip, toast, ToastContainer } from "react-toastify";
+import { Flip, toast, ToastContainer } from "react-toastify";
+import { specialties } from './../data/constants';
 
 const Register = () => {
   const router = useRouter();
@@ -18,6 +19,9 @@ const Register = () => {
     confirmPassword: "",
     registrationFor: null,
     location: null,
+    rmcNumber: "",
+    clinicName: "",
+    speciality: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -28,6 +32,7 @@ const Register = () => {
 
   // Registration type options
   const registrationTypes = [
+    { value: "doctor", label: "Doctor" },
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
     { value: "yoga", label: "Yoga" },
@@ -57,9 +62,8 @@ const Register = () => {
     }
   };
 
-  // Create a debounced search function
   const debouncedLocationSearch = debounce(async (value) => {
-    if (value.length < 2) {
+    if (value?.length < 2) {
       setLocationOptions([]);
       return;
     }
@@ -69,7 +73,7 @@ const Register = () => {
       const locations = await searchCities(value);
       if (Array.isArray(locations)) {
         setLocationOptions(
-          locations.map((location) => ({
+          locations?.map((location) => ({
             value: location.label,
             label: location.label,
           }))
@@ -103,32 +107,82 @@ const Register = () => {
     return re.test(String(email).toLowerCase());
   };
 
+  const handleDoctorRegistration = async () => {
+    const payload = {
+      name: formData.name,
+      phoneNumber: formData.mobile,
+      email: formData.email,
+      password: formData.password,
+      rmcNumber: formData.rmcNumber,
+      clinicName: formData.clinicName,
+      address: formData.location,
+      speciality: formData.speciality,
+    };
+    try {
+      const response = await axiosInstance.post("/doctor", payload);
+      if (response.doctor) {
+        toast.success("Registration successful!", {
+          position: "top-center",
+          autoClose: 1500,
+          closeOnClick: false,
+          transition: Flip,
+        });
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      }
+    } catch (error) {
+      const errorMessage =
+        typeof error?.response?.data === "string"
+          ? error.response.data
+          : error?.response?.data?.error ||
+            error?.response?.data[0]?.message ||
+            "Something went wrong. Please try again.";
+
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation checks
     if (!validateEmail(formData.email)) {
-      message.error("Please enter a valid email address!");
+      toast.error("Please enter a valid email address!");
       return;
     }
 
-    if (formData.mobile.length < 10) {
-      message.error("Mobile number must be at least 10 digits!");
+    if (formData.mobile?.length < 10) {
+      toast.error("Mobile number must be at least 10 digits!");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      message.error("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
     if (!formData.registrationFor) {
-      message.error("Please select a registration type!");
+      toast.error("Please select a registration type!");
       return;
     }
-
+    if(formData.registrationFor === "doctor" && !formData.rmcNumber){
+      toast.error("Please enter RMC Number!");
+      return;
+    }
+    if(formData.registrationFor === "doctor" && !formData.clinicName){
+      toast.error("Please enter Clinic Name!");
+      return;
+    }
     if (!formData.location) {
-      message.error("Please select a location!");
+      toast.error("Please select a location!");
+      return;
+    }
+    if(formData.registrationFor === "doctor"){
+      handleDoctorRegistration();
       return;
     }
 
@@ -155,7 +209,6 @@ const Register = () => {
         }, 1000);
       }
     } catch (error) {
-      console.log("error", error);
       const errorMessage =
         typeof error?.response?.data === "string"
           ? error.response.data
@@ -272,6 +325,54 @@ const Register = () => {
               }
             />
           </div>
+
+          {/* Doctor Specific Fields */}
+          {formData.registrationFor === "doctor" && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  RMC Number
+                </label>
+                <input
+                  type="text"
+                  name="rmcNumber"
+                  value={formData.rmcNumber}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Clinic Name
+                </label>
+                <input
+                  type="text"
+                  name="clinicName"
+                  value={formData.clinicName}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Speciality
+                </label>
+                <Select
+                  value={formData.speciality}
+                  onChange={(value) => setFormData(prev => ({ ...prev, speciality: value }))}
+                  placeholder="Select Speciality"
+                  options={specialties?.map(specialty => ({ value: specialty, label: specialty }))}
+                  className="w-full"
+                  required
+                />
+              </div>
+            </>
+          )}
+
           {/* Password */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">

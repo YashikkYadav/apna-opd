@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const doctorProfileSchema = new mongoose.Schema(
   {
@@ -6,7 +6,7 @@ const doctorProfileSchema = new mongoose.Schema(
       index: true,
       required: true,
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Doctor',
+      ref: "Doctor",
     },
     introduction: {
       required: true,
@@ -27,29 +27,23 @@ const doctorProfileSchema = new mongoose.Schema(
     locations: [
       {
         name: {
-          required: true,
           type: String,
         },
         address: {
-          required: true,
           type: String,
         },
         days: [
           {
-            required: true,
             type: String,
           },
         ],
         from: {
-          required: true,
           type: String,
         },
         to: {
-          required: true,
           type: String,
         },
         timeslot: {
-          required: true,
           type: Number,
         },
       },
@@ -65,11 +59,32 @@ const doctorProfileSchema = new mongoose.Schema(
     availabilityAfter: {
       type: Number,
     },
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          enum: ["galleryImages", "profilePhoto"],
+          required: true,
+        },
+        timestamp: {
+          type: Number,
+          required: true,
+        },
+        filename: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const DoctorProfile = mongoose.model('DoctorProfile', doctorProfileSchema);
+const DoctorProfile = mongoose.model("DoctorProfile", doctorProfileSchema);
 module.exports = DoctorProfile;

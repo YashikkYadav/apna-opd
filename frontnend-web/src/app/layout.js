@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "./components/common-components/header";
 import Footer from "./components/common-components/footer";
 import { LoaderProvider } from "./components/common-components/loaderProvider";
+import "antd/dist/reset.css"; // required Antd v5+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

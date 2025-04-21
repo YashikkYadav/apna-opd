@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 
 const InquiryModal = ({ serviceData, serviceType, onClose }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,6 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +20,34 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+    const payload = {
+      name: formData.name,
+      phone: formData.phone,
+      enquiry: formData.message,
+    };
+    console.log("serviceData", serviceData);
+    console.log("payload", payload);
+    try {
+      const response = await axiosInstance.post(
+        `/67dfe27f39b2fed61409c6a3/enquiry`,
+        payload
+      );
+      console.log("response", response);
+      if(response.enquiry){
+        setSubmitSuccess(true);
+      }
+    } catch (error) {
+      const errorMessage =
+        typeof error?.response?.data === "string"
+          ? error.response.data
+          : error?.response?.data?.error ||
+            error?.response?.data?.message ||
+            "Something went wrong. Please try again.";
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
@@ -35,8 +61,8 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
   };
 
   const formatServiceType = (type) => {
-    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ').map(
-      word => word.charAt(0).toUpperCase() + word.slice(1)
+    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
+      word => word.charAt(0).toUpperCase() + word?.slice(1)
     ).join(' ');
   };
 
@@ -132,6 +158,7 @@ const InquiryModal = ({ serviceData, serviceType, onClose }) => {
           )}
         </div>
       </div>
+      <ToastContainer hideProgressBar autoClose={1200}/>
     </div>
   );
 };

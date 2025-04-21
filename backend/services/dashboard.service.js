@@ -1,21 +1,24 @@
-const Invoice = require('../models/invoice');
-const Appointment = require('../models/appointment');
-const Prescription = require('../models/prescription');
-const DoctorPatient = require('../models/doctorPatient');
+const Invoice = require("../models/invoice");
+const Appointment = require("../models/appointment");
+const Prescription = require("../models/prescription");
+const DoctorPatient = require("../models/doctorPatient");
 
 const getPatient24HourReport = async (doctorId) => {
   try {
     const now = new Date();
-    const past24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const past24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
     const patients = await DoctorPatient.find({
       doctorId,
-      createdAt: { $gte: past24Hours }
+      createdAt: { $gte: past24Hours },
     }).sort({ createdAt: 1 });
 
     const hourlyReport = new Array(24).fill(0);
-    patients.forEach(patient => {
-      const patientHour = Math.floor((patient.createdAt - past24Hours) / (60 * 60 * 1000));
+
+    patients.forEach((patient) => {
+      const patientHour = Math.floor(
+        (patient.createdAt - past24Hours) / (60 * 60 * 1000)
+      );
       if (patientHour >= 0 && patientHour < 24) {
         hourlyReport[patientHour]++;
       }
@@ -41,14 +44,16 @@ const getPatient30DaysReport = async (doctorId) => {
 
     const patients = await DoctorPatient.find({
       doctorId,
-      createdAt: { $gte: past30Days }
+      createdAt: { $gte: past30Days },
     }).sort({ createdAt: 1 });
 
     const dailyReport = new Array(30).fill(0);
 
-    patients.forEach(patient => {
+    patients.forEach((patient) => {
       const patientDate = new Date(patient.createdAt);
-      const dayIndex = Math.floor((patientDate - past30Days) / (24 * 60 * 60 * 1000));
+      const dayIndex = Math.floor(
+        (patientDate - past30Days) / (24 * 60 * 60 * 1000)
+      );
 
       if (dayIndex >= 0 && dayIndex < 30) {
         dailyReport[dayIndex]++;
@@ -79,9 +84,10 @@ const getInvoice12MonthsReport = async (doctorId) => {
 
     const monthlyReport = new Array(12).fill(0);
 
-    invoices.forEach(invoice => {
+    invoices.forEach((invoice) => {
       const invoiceDate = new Date(invoice.createdAt);
-      const yearDifference = invoiceDate.getFullYear() - past12Months.getFullYear();
+      const yearDifference =
+        invoiceDate.getFullYear() - past12Months.getFullYear();
       const monthDifference = invoiceDate.getMonth() - past12Months.getMonth();
       const monthIndex = yearDifference * 12 + monthDifference;
 
@@ -114,14 +120,17 @@ const getPayment12MonthsReport = async (doctorId) => {
 
     const monthlyReport = new Array(12).fill(0);
 
-    invoices.forEach(invoice => {
+    invoices.forEach((invoice) => {
       const invoiceDate = new Date(invoice.createdAt);
-      const yearDifference = invoiceDate.getFullYear() - past12Months.getFullYear();
+      const yearDifference =
+        invoiceDate.getFullYear() - past12Months.getFullYear();
       const monthDifference = invoiceDate.getMonth() - past12Months.getMonth();
       const monthIndex = yearDifference * 12 + monthDifference;
 
       if (monthIndex >= 0 && monthIndex < 12) {
-        monthlyReport[monthIndex] += invoice.totalAmount ? invoice.totalAmount : 0;
+        monthlyReport[monthIndex] += invoice.totalAmount
+          ? invoice.totalAmount
+          : 0;
       }
     });
 
@@ -143,32 +152,65 @@ const getComparisonData = async (doctorId) => {
     const { start: lastMonthStart, end: lastMonthEnd } = getDateRange(-1);
 
     const [thisMonthInvoices, lastMonthInvoices] = await Promise.all([
-      Invoice.countDocuments({ createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd } }),
-      Invoice.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd } }),
+      Invoice.countDocuments({
+        createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd },
+      }),
+      Invoice.countDocuments({
+        createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd },
+      }),
     ]);
 
     const [thisMonthPrescriptions, lastMonthPrescriptions] = await Promise.all([
-      Prescription.countDocuments({ createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd } }),
-      Prescription.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd } }),
+      Prescription.countDocuments({
+        createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd },
+      }),
+      Prescription.countDocuments({
+        createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd },
+      }),
     ]);
 
-    const [thisMonthDoctorPatients, lastMonthDoctorPatients] = await Promise.all([
-      DoctorPatient.countDocuments({ createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd }, doctorId }),
-      DoctorPatient.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd }, doctorId }),
-    ]);
+    const [thisMonthDoctorPatients, lastMonthDoctorPatients] =
+      await Promise.all([
+        DoctorPatient.countDocuments({
+          createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd },
+          doctorId,
+        }),
+        DoctorPatient.countDocuments({
+          createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd },
+          doctorId,
+        }),
+      ]);
 
     const [thisMonthAppointments, lastMonthAppointments] = await Promise.all([
-      Appointment.countDocuments({ createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd }, doctorId }),
-      Appointment.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd }, doctorId }),
+      Appointment.countDocuments({
+        createdAt: { $gte: thisMonthStart, $lt: thisMonthEnd },
+        doctorId,
+      }),
+      Appointment.countDocuments({
+        createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd },
+        doctorId,
+      }),
     ]);
 
     return {
       statusCode: 200,
       data: {
-        invoices: { thisMonth: thisMonthInvoices, lastMonth: lastMonthInvoices },
-        prescriptions: { thisMonth: thisMonthPrescriptions, lastMonth: lastMonthPrescriptions },
-        doctorPatients: { thisMonth: thisMonthDoctorPatients, lastMonth: lastMonthDoctorPatients },
-        appointments: { thisMonth: thisMonthAppointments, lastMonth: lastMonthAppointments },
+        invoices: {
+          thisMonth: thisMonthInvoices,
+          lastMonth: lastMonthInvoices,
+        },
+        prescriptions: {
+          thisMonth: thisMonthPrescriptions,
+          lastMonth: lastMonthPrescriptions,
+        },
+        doctorPatients: {
+          thisMonth: thisMonthDoctorPatients,
+          lastMonth: lastMonthDoctorPatients,
+        },
+        appointments: {
+          thisMonth: thisMonthAppointments,
+          lastMonth: lastMonthAppointments,
+        },
       },
     };
   } catch (error) {
@@ -177,7 +219,7 @@ const getComparisonData = async (doctorId) => {
       error: error.message,
     };
   }
-}
+};
 
 const getDateRange = (monthOffset = 0) => {
   const now = new Date();

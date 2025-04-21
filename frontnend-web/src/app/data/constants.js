@@ -1,3 +1,4 @@
+import axios from "axios";
 import { searchCities } from "../services/locationService";
 
 export const specialties = [
@@ -17,7 +18,6 @@ export const specialties = [
   "Rheumatologist",
   "Allergist",
   "Nurse",
-  "Ambulance",
 ];
 
 // Update getLocations to be async and use the locationService
@@ -56,30 +56,32 @@ export const servicesData = {
       title: "City Emergency Ambulance",
       rating: 4.8,
       price: 1500,
-      description: "City Emergency Ambulance provides 24/7 emergency medical transportation services with fully equipped ambulances and trained paramedics. We ensure quick response times and professional care during transit.",
+      description:
+        "City Emergency Ambulance provides 24/7 emergency medical transportation services with fully equipped ambulances and trained paramedics. We ensure quick response times and professional care during transit.",
       images: [
         "/images/ambulance1.jpg",
         "/images/ambulance2.jpg",
-        "/images/ambulance3.jpg"
+        "/images/ambulance3.jpg",
       ],
       contactDetails: {
         phone: "+91 98765 43210",
         address: "123 Healthcare Street, Mumbai",
-        organization: "City Emergency Services"
+        organization: "City Emergency Services",
       },
       experience: "15 Years",
       establishment: "2008",
-      certifications: "ISO 9001:2015 Certified, National Accreditation Board for Hospitals & Healthcare Providers",
+      certifications:
+        "ISO 9001:2015 Certified, National Accreditation Board for Hospitals & Healthcare Providers",
       facilities: [
         "Advanced Life Support",
         "Basic Life Support",
         "Patient Transport",
         "Neonatal Transport",
-        "Cardiac Care"
+        "Cardiac Care",
       ],
       schedule: {
-        "24/7": "Available"
-      }
+        "24/7": "Available",
+      },
     },
     {
       id: 2,
@@ -411,10 +413,14 @@ export const servicesData = {
 };
 
 // Getter functions for services
-export const getServiceData = (serviceType, id = null) => {
-  const data = servicesData[serviceType];
-  if (id) {
-    return data?.find((item) => item.id === parseInt(id)) || null;
-  }
+export const getServiceData = async (serviceType, id = null) => {
+  // const data = servicesData[serviceType];
+  // if (id) {
+  //   return data?.find((item) => item.id === parseInt(id)) || null;
+  // }
+  // return data || [];
+  const data = await axios.get(
+    `http://localhost:8000/api/${id}/health-serve-profile`
+  );
   return data || [];
 };

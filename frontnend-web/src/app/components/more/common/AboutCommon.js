@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const AboutCommon = ({ serviceData, serviceType }) => {
   const formatServiceType = (type) => {
-    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ').map(
-      word => word.charAt(0).toUpperCase() + word.slice(1)
+    return type.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
+      word => word.charAt(0).toUpperCase() + word?.slice(1)
     ).join(' ');
   };
 
@@ -49,7 +49,7 @@ const AboutCommon = ({ serviceData, serviceType }) => {
                 <h5 className="title-24 text-[#2E2E2E]">Facilities</h5>
                 <ul className="list-disc pl-5 mt-2">
                   {Array.isArray(serviceData.facilities) ? 
-                    serviceData.facilities.map((facility, index) => (
+                    serviceData.facilities?.map((facility, index) => (
                       <li key={index} className="text-base text-[#808080]">{facility}</li>
                     )) : 
                     <li className="text-base text-[#808080]">{serviceData.facilities}</li>
@@ -63,7 +63,7 @@ const AboutCommon = ({ serviceData, serviceType }) => {
                 <h5 className="title-24 text-[#2E2E2E]">Specialties</h5>
                 <ul className="list-disc pl-5 mt-2">
                   {Array.isArray(serviceData.specialty) ? 
-                    serviceData.specialty.map((spec, index) => (
+                    serviceData.specialty?.map((spec, index) => (
                       <li key={index} className="text-base text-[#808080]">{spec}</li>
                     )) : 
                     <li className="text-base text-[#808080]">{serviceData.specialty}</li>
@@ -74,13 +74,13 @@ const AboutCommon = ({ serviceData, serviceType }) => {
           </div>
         </div>
         <div className="flex lg:justify-end lg:ml-[20px]">
-          <Image
+          {/* <Image
             src={serviceData.images?.[1] || serviceData.images?.[0] || "/images/image_placeholder.svg"}
             width={504}
             height={584}
             alt={serviceData.title}
             className="w-full max-w-[504px] object-cover rounded-lg"
-          />
+          /> */}
         </div>
       </div>
     </div>

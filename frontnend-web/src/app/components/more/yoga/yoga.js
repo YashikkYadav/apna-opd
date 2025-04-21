@@ -1,41 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
 import { useRouter } from "next/navigation";
 
-const Yoga = () => {
+const Yoga = ({ serviceData }) => {
   const [yogaList, setYogaList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState([]);
-  const [specialties, setSpecialties] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const navigate = useRouter();
 
   useEffect(() => {
     // Get all yoga data
-    const data = getServiceData(serviceTypes.YOGA);
-    setYogaList(data);
-    setFilteredList(data);
-
-    // Extract unique locations
-    const uniqueLocations = [
-      ...new Set(
-        data.map((item) => item.contactDetails.address.split(",").pop().trim())
-      ),
-    ];
-    setLocations(uniqueLocations);
-
-    // Extract unique specialties
-    const uniqueSpecialties = [
-      ...new Set(data.flatMap((item) => item.specialty)),
-    ];
-    setSpecialties(uniqueSpecialties);
+    setYogaList(serviceData);
+    setFilteredList(serviceData);
 
     setLoading(false);
   }, []);
@@ -54,8 +37,8 @@ const Yoga = () => {
   // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredList?.length / itemsPerPage);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 
@@ -101,7 +84,7 @@ const Yoga = () => {
                   />
                 }
               >
-                {locations.map((location) => (
+                {locations?.map((location) => (
                   <Select.Option key={location} value={location}>
                     {location}
                   </Select.Option>
@@ -112,21 +95,23 @@ const Yoga = () => {
           <div className="lg:w-[66%]">
             <h2 className="title-48 mb-[24px]">Result for Yoga Centers</h2>
             <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {currentItems.length} of {yogaList.length} results
+              Showing {serviceData?.length} of {serviceData?.length} results
             </p>
             <div className="flex flex-col gap-[32px]">
-              {currentItems.map((yoga, index) => (
+              {serviceData?.map((yoga) => (
                 <div
-                  key={yoga.id}
+                  key={yoga._id}
                   className="flex flex-col sm:flex-row justify-between mb-[32px]"
                 >
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={yoga.images[0] || "/images/image_placeholder.svg"}
+                        src={
+                          yoga.images?.[0] || "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
-                        alt="Working Men"
+                        alt="Yoga Center"
                         className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
                       />
                     </div>
@@ -134,21 +119,22 @@ const Yoga = () => {
                       <p className="text-base text-[#5151E1] mb-[8px]">
                         Yoga Center
                       </p>
-                      <h3 className="title-32 mb-[8px]">{yoga.title}</h3>
+                      <h3 className="title-32 mb-[8px]">{yoga.name}</h3>
                       <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                        Rating: {yoga.rating}
+                        Location: {yoga.location}
                       </p>
-                      <h4 className="title-24 text-[#808080] !font-medium">
-                        {yoga.address}
-                      </h4>
+                      <div className="title-24 text-[#808080] !font-medium">
+                        Contact: {yoga.phone}
+                      </div>
                     </div>
                   </div>
                   <div className="flex flex-row sm:flex-col justify-between">
-                    <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
-                      ${yoga.price}
-                    </h2>
                     <button
-                      onClick={() => navigate.push(`/more/yoga/${yoga.id}/details`)}
+                      onClick={() =>
+                        navigate.push(
+                          `/more/yoga/${yoga.healthServeId}/details`
+                        )
+                      }
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

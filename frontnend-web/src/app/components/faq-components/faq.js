@@ -85,10 +85,10 @@ const FAQ = () => {
                 </Form>
             </div>
             <div className="flex flex-col gap-[60px] md:gap-[80px]">
-                {data.map((item, sectionIndex) => {
-                    const midIndex = Math.ceil(item.list.length / 2); // Calculate the midpoint for dividing
-                    const leftItems = item.list.slice(0, midIndex); // Items for the left column
-                    const rightItems = item.list.slice(midIndex); // Items for the right column
+                {data?.map((item, sectionIndex) => {
+                    const midIndex = Math.ceil(item.list?.length / 2); // Calculate the midpoint for dividing
+                    const leftItems = item.list?.slice(0, midIndex); // Items for the left column
+                    const rightItems = item.list?.slice(midIndex); // Items for the right column
 
                     return (
                         <div key={sectionIndex}>
@@ -96,7 +96,7 @@ const FAQ = () => {
                             <div className="flex flex-col sm:flex-row gap-[16px]">
                                 {/* Left Column */}
                                 <div className="flex flex-col gap-[16px]  w-full sm:w-1/2">
-                                    {leftItems.map((faq, index) => {
+                                    {leftItems?.map((faq, index) => {
                                         const isActive = activeIndexes.includes(
                                             `${sectionIndex}-left-${index}`
                                         );
@@ -137,7 +137,7 @@ const FAQ = () => {
 
                                 {/* Right Column */}
                                 <div className="flex flex-col gap-[16px] w-full sm:w-1/2">
-                                    {rightItems.map((faq, index) => {
+                                    {rightItems?.map((faq, index) => {
                                         const isActive = activeIndexes.includes(
                                             `${sectionIndex}-right-${index}`
                                         );

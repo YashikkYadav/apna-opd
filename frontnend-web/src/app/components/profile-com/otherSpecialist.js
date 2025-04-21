@@ -15,7 +15,7 @@ const OtherSpecialist = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
 
                 {
-                    data.map((item, index) => (
+                    data?.map((item, index) => (
                         <div key={index} className="flex justify-between">
                             <div className="flex flex-col lg:flex-row w-full">
                                 <div className="lg:mr-[10px] xl:mr-[32px]">

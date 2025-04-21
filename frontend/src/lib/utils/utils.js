@@ -1,9 +1,11 @@
+import { isDate } from "lodash";
+
 export const checkAuth = (router) => {
-  const doctorId = localStorage.getItem('doctor_id');
-  const accessToken = localStorage.getItem('access_token');
+  const doctorId = localStorage.getItem("doctor_id");
+  const accessToken = localStorage.getItem("access_token");
 
   if (!doctorId || !accessToken) {
-    router.push('/login');
+    router.push("/login");
     return null;
   }
   return { doctorId, accessToken };
@@ -20,7 +22,7 @@ export const getLast30DaysDates = () => {
   }
 
   return dates;
-}
+};
 
 export const getLast12Months = () => {
   const months = [];
@@ -37,7 +39,7 @@ export const getLast12Months = () => {
   }
 
   return months;
-}
+};
 
 export const getLast6Months = () => {
   const months = [];
@@ -54,7 +56,7 @@ export const getLast6Months = () => {
   }
 
   return months;
-}
+};
 
 export const getLast24Hours = () => {
   const hours = [];
@@ -73,7 +75,7 @@ export const getLast24Hours = () => {
 
 export const getDateFormate = (date) => {
   if (!date) return "";
-  
+
   const d = new Date(date);
   if (isNaN(d.getTime())) return "";
 
@@ -84,26 +86,24 @@ export const getDateFormate = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-
-
-export const getStatusStyle = (status) =>{
+export const getStatusStyle = (status) => {
   const statusColors = {
-    "Billed": { color: "#239f52", backgroundColor: "#3ec97233" },
-    "Unbilled": { color: "#e63939", backgroundColor: "#ff565633" },
+    Billed: { color: "#239f52", backgroundColor: "#3ec97233" },
+    Unbilled: { color: "#e63939", backgroundColor: "#ff565633" },
     "Partially Paid": { color: "#bc9021", backgroundColor: "#f0bb3333" },
-    "default": { color: "#000", backgroundColor: "#ddd" },
+    default: { color: "#000", backgroundColor: "#ddd" },
   };
 
   return statusColors[status] || statusColors.default;
-}
+};
 
-export const  getAmountStyle = (status) => {
+export const getAmountStyle = (status) => {
   const statusColors = {
-    "Billed": { color: "#34bd68", },
-    "Unbilled": { color: "#ff5656" },
+    Billed: { color: "#34bd68" },
+    Unbilled: { color: "#ff5656" },
     "Partially Paid": { color: "#dfad2b" },
-    "default": { color: "#000" },
+    default: { color: "#000" },
   };
 
   return statusColors[status] || statusColors.default;
-}
+};
