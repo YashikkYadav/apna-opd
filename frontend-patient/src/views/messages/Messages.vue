@@ -144,7 +144,8 @@ export default {
     },
   },
   created() {
-    this.socket = io("http://localhost:8000");
+    const serverUrl = import.meta.env.VITE_SERVER_URL;
+    this.socket = io(serverUrl);
     useProfileStore()
       .getDoctors()
       .then((res) => {
