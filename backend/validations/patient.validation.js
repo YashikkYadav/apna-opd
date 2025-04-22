@@ -1,16 +1,18 @@
-const zod = require('zod');
+const zod = require("zod");
 
 const PatientSchema = zod.object({
   fullName: zod
     .string()
-    .min(3, { message: 'Full name must contain at least 3 characters.' })
+    .min(3, { message: "Full name must contain at least 3 characters." })
     .trim(),
   phoneNumber: zod
     .string()
-    .regex(/^\d{10}$/, { message: 'Phone number must be a 10-digit number.' }),
+    .regex(/^\d{10}$/, { message: "Phone number must be a 10-digit number." }),
   alternatePhoneNumber: zod
     .string()
-    .regex(/^\d{10}$/, { message: 'Alternate phone number must be a 10-digit number.' })
+    .regex(/^\d{10}$/, {
+      message: "Alternate phone number must be a 10-digit number.",
+    })
     .optional()
     .nullable(),
   // dateOfBirth: zod.coerce
@@ -21,8 +23,9 @@ const PatientSchema = zod.object({
   //   .min(0, { message: 'Age must be a positive number.' })
   //   .max(150, { message: 'Age must be realistic (below 150).' })
   //   .optional(),
-  gender: zod
-    .enum(['Male', 'Female', 'Other'], { message: 'Gender must be Male, Female, or Other.' }),
+  gender: zod.enum(["Male", "Female", "Other"], {
+    message: "Gender must be Male, Female, or Other.",
+  }),
   // email: zod
   //   .string()
   //   .email({ message: 'Email address is invalid. Please provide a valid email.' })

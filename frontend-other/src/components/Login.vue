@@ -6,21 +6,46 @@
           <div class="top">
             <img class="logo" src="../assets/apna_opd_logo.jpg" />
             <div class="title">Sign in</div>
-
           </div>
 
           <form @submit.prevent="handleSubmit">
             <div class="form">
-              <v-text-field v-model="email.value" label="Email" :rules="[rules.required, rules.email]"
-                variant="outlined" dense class="email-input">
+              <v-select
+                v-model="selectedOption"
+                :items="dropdownItems"
+                label="Select Option"
+                variant="outlined"
+                dense
+                :rules="[rules.required]"
+              ></v-select>
+
+              <v-text-field
+                v-model="email.value"
+                label="Email"
+                :rules="[rules.required, rules.email]"
+                variant="outlined"
+                dense
+                class="email-input"
+              >
               </v-text-field>
 
-              <v-text-field v-model="password.value" label="Password" :rules="[rules.required]" variant="outlined" dense
-                type="password">
+              <v-text-field
+                v-model="password.value"
+                label="Password"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+                type="password"
+              >
               </v-text-field>
             </div>
 
-            <input type="submit" value="Login" class="action" :class="{ 'action-disabled': !loginValid }" />
+            <input
+              type="submit"
+              value="Login"
+              class="action"
+              :class="{ 'action-disabled': !loginValid }"
+            />
           </form>
           <div class="subtitle">
             Don't have an account?
@@ -40,52 +65,90 @@
             <div class="form ragister-form">
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.name" label="Name" :rules="[rules.required]" variant="outlined" dense>
+                  <v-text-field
+                    v-model="form.name"
+                    label="Name"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.email" label="Email" :rules="[rules.required]" variant="outlined" dense>
+                  <v-text-field
+                    v-model="form.email"
+                    label="Email"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
-
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.phoneNumber" label="Phone Number" :rules="[rules.required]"
-                    variant="outlined" dense>
+                  <v-text-field
+                    v-model="form.phoneNumber"
+                    label="Phone Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.password" label="Password" :rules="[rules.required]" variant="outlined"
-                    dense>
+                  <v-text-field
+                    v-model="form.password"
+                    label="Password"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
-
               </v-row>
               <v-row>
                 <v-col cols="12" sm="12">
-                  <v-text-field v-model="form.address" label="address" :rules="[rules.required]" variant="outlined"
-                    dense>
+                  <v-text-field
+                    v-model="form.address"
+                    label="address"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.clinicName" label="Clinic Name" variant="outlined" dense>
+                  <v-text-field
+                    v-model="form.clinicName"
+                    label="Clinic Name"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.rmcNumber" label="RMC Number" :rules="[rules.required]" variant="outlined"
-                    dense>
+                  <v-text-field
+                    v-model="form.rmcNumber"
+                    label="RMC Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
                   </v-text-field>
                 </v-col>
-
               </v-row>
             </div>
           </form>
 
-          <button class="action" @click="onRegister" :class="{ 'action-disabled': !registerValid }">
+          <button
+            class="action"
+            @click="onRegister"
+            :class="{ 'action-disabled': !registerValid }"
+          >
             Create Account
           </button>
           <div class="subtitle">
@@ -109,12 +172,12 @@ export default {
 
       password: {
         value: "",
-        error: false
+        error: false,
       },
 
       email: {
         value: "",
-        error: false
+        error: false,
       },
       form: {
         name: "",
@@ -129,10 +192,13 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
         email: (value) =>
-          !value.trim() || /^[\w\.-]+@[\w\.-]+\.\w+$/.test(value.trim()) || "Enter a valid email.",
+          !value.trim() ||
+          /^[\w\.-]+@[\w\.-]+\.\w+$/.test(value.trim()) ||
+          "Enter a valid email.",
       },
-
-      signIn: true
+      selectedOption: null,
+      dropdownItems: ["Option 1", "Option 2", "Option 3"],
+      signIn: true,
     };
   },
 
@@ -154,17 +220,17 @@ export default {
       };
 
       fetch(`${import.meta.env.VITE_SERVER_URL}/api/doctor/access-token`, {
-        method: 'POST',
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       })
         .then((response) => {
-          const contentType = response.headers.get('content-type');
+          const contentType = response.headers.get("content-type");
           if (!response.ok) {
-            if (contentType && !contentType.includes('application/json')) {
-              return response.text().then(text => {
+            if (contentType && !contentType.includes("application/json")) {
+              return response.text().then((text) => {
                 this.showSnackbar(text, true);
                 this.isTemplateDetailModalOpen = false;
                 throw new Error(`Error ${response.status}: ${text}`);
@@ -174,30 +240,30 @@ export default {
           return response.json();
         })
         .then((data) => {
-          localStorage.setItem('doctor_id', data.doctor.id);
-          localStorage.setItem('access_token', data.doctor.accessToken);
+          localStorage.setItem("doctor_id", data.doctor.id);
+          localStorage.setItem("access_token", data.doctor.accessToken);
 
-          this.$router.push('/create-rx');
+          this.$router.push("/create-rx");
         })
         .catch((error) => {
           console.error("Network Error:", error.message);
-        })
+        });
     },
 
     onRegister() {
       if (this.registerValid) {
         fetch(`${import.meta.env.VITE_SERVER_URL}/api/doctor`, {
-          method: 'POST',
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(this.form),
         })
           .then((response) => {
-            const contentType = response.headers.get('content-type');
+            const contentType = response.headers.get("content-type");
             if (!response.ok) {
-              if (contentType && !contentType.includes('application/json')) {
-                return response.text().then(text => {
+              if (contentType && !contentType.includes("application/json")) {
+                return response.text().then((text) => {
                   this.showSnackbar(text, true);
                   this.isTemplateDetailModalOpen = false;
                   throw new Error(`Error ${response.status}: ${text}`);
@@ -211,20 +277,19 @@ export default {
           })
           .catch((error) => {
             console.error("Network Error:", error.message);
-          })
+          });
       } else {
-        console.error('Please fill all required fields.');
+        console.error("Please fill all required fields.");
       }
-
-    }
+    },
   },
 
   mounted() {
-    const doctorId = localStorage.getItem('doctor_id');
-    const accessToken = localStorage.getItem('access_token');
+    const doctorId = localStorage.getItem("doctor_id");
+    const accessToken = localStorage.getItem("access_token");
 
     if (doctorId && accessToken) {
-      this.$router.push('/invoice');
+      this.$router.push("/invoice");
     }
   },
 
@@ -250,8 +315,8 @@ export default {
         this.form.address &&
         this.form.rmcNumber
       );
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -283,7 +348,6 @@ export default {
 .loginBox .inner {
   width: 100%;
 }
-
 
 .loginBox .invalid {
   border: 2px solid red !important;
@@ -321,10 +385,10 @@ export default {
   cursor: pointer;
   background: #d4ebff;
   margin-top: 20px;
-  color: #385D7E;
+  color: #385d7e;
   font-size: 1.2rem;
   line-height: 1.2rem;
-  border: 1px solid #385D7E;
+  border: 1px solid #385d7e;
   font-weight: bold;
   @include box;
 }
@@ -356,7 +420,7 @@ export default {
   margin-top: 20px;
 
   .subtitle-action {
-    color: #385D7E;
+    color: #385d7e;
     font-weight: bold;
     cursor: pointer;
   }
