@@ -111,16 +111,14 @@ export default {
     if (auth) {
       this.fetchMonth();
       this.patientThisMonthOptions.xaxis.categories = getLast24Hours();
-      console.log("24hrs :: ", this.patientThisMonthOptions.xaxis.categories);
     }
   },
   methods: {
     async fetchMonth() {
       const res = await useDashboardStore().getLast24HoursEnquiryApiCall();
-      console.log(res);
       if (res) {
         this.patientMonth = [...res.enquiry];
-        const sum = res.patients.reduce((acc, val) => acc + val, 0);
+        const sum = res.enquiry?.reduce((acc, val) => acc + val, 0);
         this.patientMonthSum = sum;
       }
     },

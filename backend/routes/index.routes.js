@@ -47,6 +47,8 @@ router.use(
   prescriptionRoutes
 );
 
+router.use("/health-serve", healthServeRoutes);
+
 router.use("/:patientId/file", fileUploader);
 
 router.use("/:patientId", patientRoutes);
@@ -64,8 +66,6 @@ router.use(
   doctorMiddleware,
   prescriptionSectionRoutes
 );
-
-router.use("/health-serve", healthServeRoutes);
 
 router.use("/:healthServeId/enquiry", enquiryRoutes);
 

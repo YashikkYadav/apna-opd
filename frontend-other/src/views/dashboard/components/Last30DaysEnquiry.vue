@@ -103,7 +103,7 @@ export default {
       const res = await useDashboardStore().getLast30DaysEnquiryApiCall();
       if (res) {
         this.patientMonth = res.enquiry;
-        const sum = res.patients.reduce((acc, val) => acc + val, 0);
+        const sum = res.enquiry?.reduce((acc, val) => acc + val, 0);
         this.patientMonthSum = sum;
       }
     },
