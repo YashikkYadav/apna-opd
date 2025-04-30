@@ -39,6 +39,7 @@ const createDoctorProfile = async (req, res) => {
       if (err) {
         return res.status(400).json({ message: err.message });
       }
+
       const doctorProfile = await doctorProfileService.createDoctorProfile(
         req.params.doctorId,
         req.body
