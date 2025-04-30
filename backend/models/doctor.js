@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const doctorSchema = new mongoose.Schema(
   {
@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema(
     },
     rmcNumber: {
       index: true,
-      required: true,
+      required: false,
       type: String,
       unique: true,
     },
@@ -31,6 +31,29 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    speciality: {
+      type: String,
+      enum: [
+        "Cardiologist",
+        "Dermatologist",
+        "Neurologist",
+        "Pediatrician",
+        "Orthopedic Surgeon",
+        "Gynecologist",
+        "Ophthalmologist",
+        "Psychiatrist",
+        "Endocrinologist",
+        "Oncologist",
+        "Urologist",
+        "Gastroenterologist",
+        "Pulmonologist",
+        "Rheumatologist",
+        "Allergist",
+        "Nurse",
+        "Ambulance",
+      ],
+      required: true,
+    },
     password: {
       required: true,
       type: String,
@@ -38,8 +61,8 @@ const doctorSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
+const Doctor = mongoose.model("Doctor", doctorSchema);
 module.exports = Doctor;

@@ -8,10 +8,10 @@
 
     <v-row>
       <v-col cols="6">
-        <last-24-hours-patient />
+        <last-24-hours-enquiry />
       </v-col>
       <v-col cols="6">
-        <last-30-days-patient />
+        <last-30-days-enquiry/>
       </v-col>
       <!-- <v-col cols="4">
         <last-30-days-invoice />
@@ -30,20 +30,20 @@
 </template>
 
 <script>
-import Last24HoursPatient from './components/Last24HoursPatient.vue'
-import Last30DaysPatient from './components/Last30DaysPatient.vue'
-import Last30DaysInvoice from './components/Last30DaysInvoice.vue';
-import Last30DaysPayment from './components/Last30DaysPayment.vue';
-import ComparisionData from './components/ComparisionData.vue';
+import Last24HoursEnquiry from "./components/Last24HoursEnquiry.vue";
+import Last30DaysEnquiry from "./components/Last30DaysEnquiry.vue";
+import Last30DaysInvoice from "./components/Last30DaysInvoice.vue";
+import Last30DaysPayment from "./components/Last30DaysPayment.vue";
+import ComparisionData from "./components/ComparisionData.vue";
 
 export default {
   name: "Dashboard",
   components: {
-    Last24HoursPatient,
-    Last30DaysPatient,
+    Last24HoursEnquiry,
+    Last30DaysEnquiry,
     Last30DaysInvoice,
     Last30DaysPayment,
-    ComparisionData
+    ComparisionData,
   },
 };
 </script>

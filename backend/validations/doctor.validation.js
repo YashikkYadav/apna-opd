@@ -1,31 +1,33 @@
-const zod = require('zod');
+const zod = require("zod");
+const specialties = require("../utils/constants");
+
+const SpecialitySchema = zod.enum(specialties, {
+  errorMap: () => ({
+    message: "Invalid speciality. Please select a valid medical speciality.",
+  }),
+});
 
 const DoctorValidationSchema = zod.object({
   name: zod
     .string()
-    .min(3, { message: 'Name must have at least 3 characters.' })
+    .min(3, { message: "Name must have at least 3 characters." })
     .trim(),
-  rmcNumber: zod
-    .string()
-    .min(1, { message: 'RMC Number is required.' })
-    .trim(),
-  phoneNumber: zod
-    .string()
-    .regex(/^\d{10}$/, { message: 'Phone number must be a valid 10-digit number.' }),
+  phoneNumber: zod.string().regex(/^\d{10}$/, {
+    message: "Phone number must be a valid 10-digit number.",
+  }),
   email: zod
     .string()
-    .email({ message: 'Email must be a valid email address.' })
+    .email({ message: "Email must be a valid email address." })
     .trim(),
   address: zod
     .string()
-    .min(5, { message: 'Address must have at least 5 characters.' })
+    .min(5, { message: "Address must have at least 5 characters." })
     .trim(),
-  clinicName: zod
-    .string()
-    .optional(),
+  clinicName: zod.string().optional(),
+  speciality: SpecialitySchema,
   password: zod
     .string()
-    .min(8, { message: 'Password must have at least 8 characters.' }),
+    .min(8, { message: "Password must have at least 8 characters." }),
 });
 
 const validateDoctor = (doctorData) => {

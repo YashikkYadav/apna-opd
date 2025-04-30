@@ -27,7 +27,7 @@ const FourPoints = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 xl:grid-cols-2 sm:gap-x-[30px] md:gap-[16px]">
                     {
-                        data.map((item, index) => (
+                        data?.map((item, index) => (
                             <div key={index} className="md:px-[32px] py-[30px] md:pb-0 hover:shadow-lg rounded-[8px]">
                                 <div className="h-[80px] w-[80px] bg-[#094B89] rounded-full mb-[24px]"></div>
                                 <h2 className="text-2xl font-bold mb-[16px]">{item.title}</h2>

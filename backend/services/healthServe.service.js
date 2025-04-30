@@ -1,17 +1,17 @@
-const HealthServe = require('../models/healthServe');
-const { getAccessToken, getHashedPassword, comparePassword } = require('../utils/helpers');
-const { validateHealthServe } = require('../validations/healthServe.validation');
+const HealthServe = require("../models/healthServe");
+const HealthServeProfile = require("../models/healthServeProfile");
+const {
+  getAccessToken,
+  getHashedPassword,
+  comparePassword,
+} = require("../utils/helpers");
+const {
+  validateHealthServe,
+} = require("../validations/healthServe.validation");
 
-const register = async ( data ) => {
+const register = async (data) => {
   try {
-    const {
-      type,
-      name,
-      phone,
-      email,
-      password,
-      location,
-    } = data;
+    const { type, name, phone, email, password, location } = data;
 
     const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
@@ -25,7 +25,7 @@ const register = async ( data ) => {
     if (isHealthServeExist) {
       return {
         statusCode: 409,
-        error: 'Health Serve with same number already exist',
+        error: "Health Serve with same number already exist",
       };
     }
 
@@ -40,6 +40,16 @@ const register = async ( data ) => {
     });
     await newHealthServe.save();
 
+    const newHealthServeProfile = new HealthServeProfile({
+      healthServeId: newHealthServe._id,
+      type,
+      name,
+      phone,
+      email,
+      location,
+    });
+    await newHealthServeProfile.save();
+
     return {
       statusCode: 201,
       healthServe: newHealthServe,
@@ -50,34 +60,34 @@ const register = async ( data ) => {
       error: error,
     };
   }
-}
+};
 
 const login = async (data) => {
   try {
-    const {
-      phone,
-      password
-    } = data;
+    const { phone, password, type } = data;
 
     if (
-      !phone
-      || phone === null
-      || phone === undefined
-      || !password
-      || password === null
-      || password === undefined
+      !phone ||
+      phone === null ||
+      phone === undefined ||
+      !password ||
+      password === null ||
+      password === undefined ||
+      !type ||
+      type === null ||
+      type === undefined
     ) {
       return {
         statusCode: 422,
-        error: 'Missing field: Phone Number and Password',
-      }
+        error: "Missing field: Phone Number and Password or Type",
+      };
     }
 
-    const healthServe = await HealthServe.findOne({ phone });
+    const healthServe = await HealthServe.findOne({ phone, type });
     if (!healthServe) {
       return {
         statusCode: 404,
-        error: 'Health Serve not found',
+        error: "Health Serve not found",
       };
     }
 
@@ -85,7 +95,7 @@ const login = async (data) => {
     if (!passwordCheck) {
       return {
         statusCode: 401,
-        error: 'Wrong Password',
+        error: "Wrong Password",
       };
     }
 
@@ -104,16 +114,16 @@ const login = async (data) => {
       error: error,
     };
   }
-}
+};
 
-const getHealthServeById = async ( healthServeId ) => {
+const getHealthServeById = async (healthServeId) => {
   try {
     const healthServe = await HealthServe.findById(healthServeId);
 
     if (!healthServe) {
       return {
         statusCode: 404,
-        error: 'Health Serve not found',
+        error: "Health Serve not found",
       };
     }
 
@@ -127,9 +137,14 @@ const getHealthServeById = async ( healthServeId ) => {
       error: error,
     };
   }
-}
+};
 
-const getAllHealthServes = async (type, page = 1, limit = 10, searchQuery = "") => {
+const getAllHealthServes = async (
+  type,
+  page = 1,
+  limit = 10,
+  searchQuery = ""
+) => {
   try {
     const pageNumber = Math.max(parseInt(page, 10), 1);
     const limitNumber = Math.max(parseInt(limit, 10), 1);
@@ -170,21 +185,15 @@ const getAllHealthServes = async (type, page = 1, limit = 10, searchQuery = "") 
   }
 };
 
-const updateHealthServe = async ( healthServeId, data ) => {
+const updateHealthServe = async (healthServeId, data) => {
   try {
-    const {
-      type,
-      name,
-      phone,
-      email,
-      location,
-    } = data;
+    const { type, name, phone, email, location } = data;
 
     const isHealthServeExist = await HealthServe.findByid(healthServeId);
     if (!isHealthServeExist) {
       return {
         statusCode: 404,
-        error: 'Health Serve not found',
+        error: "Health Serve not found",
       };
     }
 
@@ -197,7 +206,7 @@ const updateHealthServe = async ( healthServeId, data ) => {
         email,
         location,
       },
-      { new: true },
+      { new: true }
     );
 
     return {
@@ -210,14 +219,14 @@ const updateHealthServe = async ( healthServeId, data ) => {
       error: error,
     };
   }
-}
+};
 
-const deleteHealthServe = async ( healthServeId ) => {
+const deleteHealthServe = async (healthServeId) => {
   try {
     if (!healthServeId) {
       return {
         statusCode: 403,
-        error: 'HealthServe Id is required',
+        error: "HealthServe Id is required",
       };
     }
 
@@ -225,18 +234,52 @@ const deleteHealthServe = async ( healthServeId ) => {
     if (!healthServe) {
       return {
         statusCode: 404,
-        error: 'Health Serve not found',
+        error: "Health Serve not found",
       };
     }
 
     return {};
   } catch (error) {
     return {
-      statusCode: 500, 
+      statusCode: 500,
       error: error,
     };
   }
-}
+};
+
+const getHealthServeList = async (page, location, type) => {
+  try {
+    const limit = 5;
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+    if (location) {
+      filter.location = { $regex: location, $options: "i" };
+    }
+
+    if (type) {
+      filter.type = type;
+    }
+
+    const healthServeProfileList = await HealthServeProfile.find(filter);
+
+    const total = await HealthServe.countDocuments(filter);
+
+    return {
+      statusCode: 200,
+      healthServeProfileList,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
 
 module.exports = {
   register,
@@ -245,4 +288,5 @@ module.exports = {
   getAllHealthServes,
   updateHealthServe,
   deleteHealthServe,
+  getHealthServeList,
 };

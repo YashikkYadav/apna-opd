@@ -49,7 +49,7 @@ const Treatment = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px]">
-                {data.map((item, index) => (
+                {data?.map((item, index) => (
                     <div key={index} className="border border-[#E6E6E6] rounded-[8px]">
                         <div className="relative">
                             <Image
@@ -65,7 +65,7 @@ const Treatment = () => {
                         </div>
                         <div className="p-[32px]">
                             <ul>
-                                {item.list.map((subItem, subIndex) => (
+                                {item.list?.map((subItem, subIndex) => (
                                     <li key={subIndex} className="mb-[8px] text-[16px] text-[#2E2E2E] cursor-pointer">
                                         {subItem.title}
                                     </li>

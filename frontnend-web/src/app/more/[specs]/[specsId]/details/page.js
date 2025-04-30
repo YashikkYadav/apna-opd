@@ -15,13 +15,13 @@ const DetailsPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         // Convert specs parameter to the format used in constants.js
         const serviceType = params.specs.replace(/-/g, '_');
-        const data = getServiceData(serviceType, params.specsId);
-        
+        const data = await getServiceData(serviceType, params.specsId);
+        console.log(data);
         if (!data) {
           setError(`No data found for ${params.specs} with ID ${params.specsId}`);
           return;
@@ -61,9 +61,9 @@ const DetailsPage = () => {
         serviceData={serviceData} 
         serviceType={params.specs} 
       />
-      <ImageGalleryCommon 
-        images={serviceData.images || []} 
-      />
+      {/* <ImageGalleryCommon 
+        images={.images || []}
+      /> */}
       <SuggestedService 
         serviceType={params.specs}
         currentId={params.specsId}

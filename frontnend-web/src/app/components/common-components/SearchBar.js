@@ -19,12 +19,12 @@ const SearchBar = ({ onSearch }) => {
 
   const debouncedLocationSearch = useCallback(
     debounce(async (searchText) => {
-      if (searchText.length < 2) return;
+      if (searchText?.length < 2) return;
       setIsLoadingLocations(true);
       try {
         const results = await searchCities(searchText);
         setLocationOptions(results || []);
-        if (results && results.length > 0) {
+        if (results && results?.length > 0) {
           setShowLocationDropdown(true);
         }
       } catch (error) {
@@ -69,15 +69,15 @@ const SearchBar = ({ onSearch }) => {
     setSearchQuery(value);
 
     // Filter specialties based on search query
-    if (value.length > 0) {
+    if (value?.length > 0) {
       const filtered = specialties
         .filter((specialty) =>
           specialty.toLowerCase().includes(value.toLowerCase())
         )
-        .slice(0, 5);
+        ?.slice(0, 5);
 
       setFilteredSpecialties(filtered);
-      setShowSpecialtyDropdown(filtered.length > 0);
+      setShowSpecialtyDropdown(filtered?.length > 0);
     } else {
       setFilteredSpecialties([]);
       setShowSpecialtyDropdown(false);
@@ -115,7 +115,7 @@ const SearchBar = ({ onSearch }) => {
                 debouncedLocationSearch(e.target.value);
               }}
               onFocus={() => {
-                if (locationOptions.length > 0) {
+                if (locationOptions?.length > 0) {
                   setShowLocationDropdown(true);
                 }
               }}
@@ -124,8 +124,8 @@ const SearchBar = ({ onSearch }) => {
               <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                 {isLoadingLocations ? (
                   <div className="px-4 py-2 text-gray-500">Loading...</div>
-                ) : locationOptions.length > 0 ? (
-                  locationOptions.map((location) => (
+                ) : locationOptions?.length > 0 ? (
+                  locationOptions?.map((location) => (
                     <div
                       key={location.value}
                       className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
@@ -160,15 +160,15 @@ const SearchBar = ({ onSearch }) => {
               value={searchQuery}
               onChange={(e) => handleSearchQuery(e.target.value)}
               onFocus={() => {
-                if (filteredSpecialties.length > 0) {
+                if (filteredSpecialties?.length > 0) {
                   setShowSpecialtyDropdown(true);
                 }
               }}
             />
             {showSpecialtyDropdown && (
               <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
-                {filteredSpecialties.length > 0 ? (
-                  filteredSpecialties.map((specialty) => (
+                {filteredSpecialties?.length > 0 ? (
+                  filteredSpecialties?.map((specialty) => (
                     <div
                       key={specialty}
                       className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"

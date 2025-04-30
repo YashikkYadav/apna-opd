@@ -7,6 +7,7 @@ const config = {
     SALT_ROUNDS: process.env.SALT_ROUNDS,
     DOUBLE_TICK_API: process.env.DOUBLE_TICK_API,
     API_KEY: process.env.API_KEY,
+    BASE_URL: process.env.BASE_URL,
   },
   production: {
     DB_NAME: process.env.DB_NAME,

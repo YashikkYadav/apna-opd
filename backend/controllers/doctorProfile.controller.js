@@ -1,26 +1,63 @@
-const doctorProfileService = require('../services/doctorProfile.service');
+const doctorProfileService = require("../services/doctorProfile.service");
+const multer = require("multer");
+const path = require("path");
 
 const createDoctorProfile = async (req, res) => {
   try {
-    const { doctorId } = req.params;
-    const profileData = req.body;
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        const folder = "public/doctor-profile/";
+        cb(null, folder);
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now();
+        const ext = path.extname(file.originalname);
+        cb(
+          null,
+          `${req.params.doctorId}_${uniqueSuffix}_${file.fieldname}${ext}`
+        );
+      },
+    });
 
-    const doctorProfile = await doctorProfileService.createDoctorProfile(doctorId, profileData);
-    if (doctorProfile?.error) {
-      return res
+    const fileFilter = (req, file, cb) => {
+      const allowedTypes = [".jpg", ".jpeg", ".png"];
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (allowedTypes.includes(ext)) cb(null, true);
+      else cb(new Error("Invalid file type"), false);
+    };
+
+    const upload = multer({
+      storage,
+      fileFilter,
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }).fields([
+      { name: "profilePhoto", maxCount: 1 },
+      { name: "galleryImages", maxCount: 6 },
+    ]);
+
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: err.message });
+      }
+
+      const doctorProfile = await doctorProfileService.createDoctorProfile(
+        req.params.doctorId,
+        req.body
+      );
+
+      if (doctorProfile?.error) {
+        return res.status(doctorProfile.statusCode).send(doctorProfile.error);
+      }
+
+      res
         .status(doctorProfile.statusCode)
-        .send(doctorProfile.error);
-    }
-
-    res
-      .status(doctorProfile.statusCode)
-      .json({ doctorProfile: doctorProfile.doctorProfile });
-  } catch(error) {
-    res
-      .status(500)
-      .send(`Error: ${error}`);
+        .json({ doctorProfile: doctorProfile.doctorProfile });
+    });
+  } catch (error) {
+    console.log("Error while creating doctor profile : ", error);
+    res.status(500).send(`Error: ${error}`);
   }
-}
+};
 
 const getDoctorProfile = async (req, res) => {
   try {
@@ -28,44 +65,57 @@ const getDoctorProfile = async (req, res) => {
 
     const doctorProfile = await doctorProfileService.getDoctorProfile(doctorId);
     if (doctorProfile?.error) {
-      return res
-        .status(doctorProfile.statusCode)
-        .send(doctorProfile.error);
+      return res.status(doctorProfile.statusCode).send(doctorProfile.error);
     }
 
     res
       .status(doctorProfile.statusCode)
       .json({ doctorProfile: doctorProfile.doctorProfile });
-  } catch(error) {
-    res
-      .status(500)
-      .send(`Error: ${error}`);
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
   }
-}
+};
 
 const getAppointmentDetails = async (req, res) => {
   try {
     const { doctorId } = req.params;
 
-    const doctorProfile = await doctorProfileService.getAppointmentDetails(doctorId);
+    const doctorProfile = await doctorProfileService.getAppointmentDetails(
+      doctorId
+    );
     if (doctorProfile?.error) {
-      return res
-        .status(doctorProfile.statusCode)
-        .send(doctorProfile.error);
+      return res.status(doctorProfile.statusCode).send(doctorProfile.error);
     }
 
     res
       .status(doctorProfile.statusCode)
       .json({ doctorProfile: doctorProfile.doctorProfile });
-  } catch(error) {
-    res
-      .status(500)
-      .send(`Error: ${error}`);
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
   }
-}
+};
+
+const getPatients = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const patientData = await doctorProfileService.getPatients(doctorId);
+
+    if (patientData?.error) {
+      return res.status(patientData.statusCode).send(patientData.error);
+    }
+
+    res
+      .status(patientData.statusCode)
+      .json({ patientData: patientData.patientData });
+  } catch (error) {
+    console.log("Error while fetching patient data from the db :: ", error);
+    res.status(500).send(`Error: ${error}`);
+  }
+};
 
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
+  getPatients,
 };

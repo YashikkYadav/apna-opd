@@ -84,7 +84,7 @@ const Header = () => {
               menuOpen ? "block" : "hidden"
             } lg:block absolute lg:relative top-[80px] lg:top-auto right-9 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[200px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
-            <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px]">
+            <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px] mb-0">
               <li className="text-[#094B89] text-base font-bold">
                 <Link href="/" onClick={() => setMenuOpen(false)}>
                   Home
@@ -103,7 +103,7 @@ const Header = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <ul className="flex flex-col gap-1">
-                      {menuItems.map((item, index) => (
+                      {menuItems?.map((item, index) => (
                         <div key={item.route}>
                           <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
                             <span
@@ -113,7 +113,7 @@ const Header = () => {
                               {item.label}
                             </span>
                           </li>
-                          {index < menuItems.length - 1 && <hr />}
+                          {index < menuItems?.length - 1 && <hr />}
                         </div>
                       ))}
                     </ul>
