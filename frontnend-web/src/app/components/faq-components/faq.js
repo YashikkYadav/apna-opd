@@ -10,42 +10,41 @@ const FAQ = () => {
         {
             title: "General FAQ",
             list: [
-                { question: "Does this service treat all patients?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "What’s advantages that I will get by using this service?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "How can I make an appointment with doctor?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "How can I make an appointment with doctor?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Does this service treat all patients?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "What’s advantages that I will get by using this service?", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
+                { question: "What is Apna OPD and how does it work?", answer: "Apna OPD is an online doctor consultation platform that helps users across India find doctors online and book appointments instantly from their mobile devices." },
+                { question: "Can I consult a doctor online anytime?", answer: "Yes, Apna OPD offers flexible scheduling. Many doctors are available for consultation during extended hours, including evenings and weekends." },
+                { question: "Are the doctors on Apna OPD verified?", answer: "Absolutely. All doctors listed on our platform are verified professionals with valid certifications, making them trusted doctors in India." },
+                { question: "What types of specialists can I find on Apna OPD?", answer: "You can connect with general physicians, dermatologists, gynecologists, pediatricians, dentists, and other top doctors in India." },
+                { question: "Is my medical data secure on Apna OPD?", answer: "Yes. We follow strict data privacy protocols to ensure your personal and health information is fully protected." },
+                { question: "How do I book a doctor appointment through Apna OPD?", answer: "Search by name, specialty, or city, choose your preferred doctor and time slot, and confirm your appointment online. It's quick and hassle-free." },
             ],
         },
         {
             title: "Appoinment",
             list: [
-                { question: "Emergency medical services", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Internal medicine / Critical care", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Medical toxicology", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Pain medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
+                { question: "Can I book an appointment for emergency medical services?", answer: "Yes, Apna OPD offers access to emergency and urgent care doctors who are available for fast response consultations." },
+                { question: "Do you offer appointments with internal medicine or critical care specialists?", answer: "Yes. You can find and consult internal medicine and critical care specialists online for in-depth assessments and treatment plans." },
+                { question: "How do I reschedule or cancel an appointment?", answer: "You can easily reschedule or cancel any booked appointment through your Apna OPD account dashboard with just a few clicks." },
+                { question: "Can I book appointments for pain management or chronic conditions?", answer: "Yes. We have doctors who specialize in pain medicine and chronic condition care. Book an OPD consultation online with the right expert for you." },
+                { question: "Can I consult a doctor for general health or preventive checkups?", answer: "Absolutely. Apna OPD allows you to schedule preventive care, annual health checkups, and consultations for general wellness." },
             ],
         },
         {
             title: "Payment",
             list: [
-                { question: "Adolescent medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Geriatric medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Hospice and palliative medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Pain medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Sports medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
+                { question: "Is my payment information safe on Apna OPD?", answer: "Yes, we use encrypted and PCI-compliant payment gateways to ensure complete safety of your financial data." },
+                { question: "Can I get a refund if I cancel my appointment?", answer: "Absolutely. If canceled within the eligible time frame, your payment will be refunded based on our refund policy." },
+                { question: "Do I need to pay before consulting the doctor?", answer: "Yes, pre-payment is required to confirm your slot and secure your consultation with a verified doctor." },
+                { question: "Are there any hidden charges in the consultation fee?", answer: "No. All charges are transparently displayed before payment. You only pay what you see." },
             ],
         },
         {
             title: "Consultation",
             list: [
-                { question: "Adolescent medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Geriatric medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Hospice and palliative medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Pain medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
-                { question: "Sports medicine", answer: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto." },
+                { question: "How do I consult a doctor online with Apna OPD?", answer: "Simply search for a doctor, choose your time slot, and start your consultation directly from your mobile." },
+                { question: "Can I consult a specialist through the platform?", answer: "Yes, we offer access to top specialists in India across cardiology, dermatology, gynecology, pediatrics, and more." },
+                { question: "Is online consultation as effective as in-person visits?", answer: "For most non-emergency issues, yes. Our doctors provide accurate diagnoses and guidance through secure video consultations." },
+                { question: "Can I upload my reports or prescriptions for the doctor to review?", answer: "Yes, you can upload medical reports, lab results, or previous prescriptions before your consultation begins." },
+                { question: "How long does a typical consultation last?", answer: "A standard consultation lasts around 15–20 minutes, ensuring enough time for a complete discussion of your concern." },
             ],
         },
     ];
@@ -59,7 +58,7 @@ const FAQ = () => {
 
     return (
         <div className="max-w-[1084px] px-[15px] sm:px-[30px] mx-auto pb-[60px] md:pb-[120px] pt-[60px] md:pt-[80px]">
-            <div className="mb-[60px] md:mb-[80px]">
+            {/* <div className="mb-[60px] md:mb-[80px]">
                 <Form name="searchForm" className="flex flex-col sm:flex-row gap-[17px] w-full">
                     <Form.Item name="search" className="mb-0 w-full">
                         <Input
@@ -83,7 +82,7 @@ const FAQ = () => {
                         Search
                     </button>
                 </Form>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-[60px] md:gap-[80px]">
                 {data?.map((item, sectionIndex) => {
                     const midIndex = Math.ceil(item.list?.length / 2); // Calculate the midpoint for dividing

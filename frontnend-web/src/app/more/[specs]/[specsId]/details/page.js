@@ -29,7 +29,7 @@ const DetailsPage = () => {
         
         setServiceData(data);
       } catch (error) {
-        console.error("Error fetching service details:", error);
+        console.log("Error fetching service details:", error);
         setError("Failed to load details. Please try again later.");
       } finally {
         setLoading(false);

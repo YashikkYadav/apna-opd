@@ -28,7 +28,7 @@ const SearchBar = ({ onSearch }) => {
           setShowLocationDropdown(true);
         }
       } catch (error) {
-        console.error("Error fetching locations:", error);
+        console.log("Error fetching locations:", error);
       } finally {
         setIsLoadingLocations(false);
       }

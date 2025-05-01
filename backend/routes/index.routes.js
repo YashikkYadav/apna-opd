@@ -8,6 +8,7 @@ const enquiryRoutes = require("./enquiry.routes");
 const paymentRoutes = require("./payment.routes");
 const dashboardRoutes = require("./dashboard.routes");
 const fileUploader = require("./fileUploader.routes");
+const contactLeadRoutes = require("./contactLead.routes");
 const healthServeRoutes = require("./healthServe.routes");
 const appointmentRoutes = require("./appointment.routes");
 const prescriptionRoutes = require("./prescription.routes");
@@ -72,5 +73,6 @@ router.use(
   prescriptionSectionRoutes
 );
 
+router.use("/contact-lead", contactLeadRoutes);
 
 module.exports = router;

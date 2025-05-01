@@ -82,7 +82,7 @@ const Register = () => {
         setLocationOptions([]);
       }
     } catch (error) {
-      console.error("Failed to fetch locations:", error);
+      console.log("Failed to fetch locations:", error);
       message.error("Failed to fetch locations");
       setLocationOptions([]);
     } finally {

@@ -6,7 +6,7 @@ import BannerWithTitle from "../components/common-components/banner-with-title";
 const AboutPage = () => {
     return (
         <div className="pt-[80px]">
-            <BannerWithTitle title="Your Trusted Doctor Platform" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."/>
+            <BannerWithTitle title="Your Trusted Doctor Platform in India" description="Apna OPD is India’s reliable healthcare platform helping you find verified doctors and book online consultations anytime, anywhere. Whether you need a general physician or a specialist, we connect you with top-rated medical professionals in just a few clicks.Start your health journey with confidence — fast, secure, and trusted by thousands across the country."/>
             <About/>
             <OurVision/>
             <WhyChooseUs/>
