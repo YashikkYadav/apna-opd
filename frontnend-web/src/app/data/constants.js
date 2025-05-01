@@ -26,7 +26,7 @@ export const getLocations = async (searchText) => {
     const locations = await searchCities(searchText);
     return locations || [];
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.log("Error fetching locations:", error);
     return [];
   }
 };

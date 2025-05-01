@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "https://api.apnaopd.com/api",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
@@ -14,7 +14,7 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   (error) => {
-    console.error("API Error:", error.response?.data || error.message || error);
+    console.log("API Error:", error.response?.data || error.message || error);
     const message = error.response?.data || error.message || "Something went wrong";
     return Promise.reject(message);
   }

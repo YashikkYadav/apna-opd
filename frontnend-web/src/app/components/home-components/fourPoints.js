@@ -3,20 +3,20 @@ import Image from "next/image";
 const FourPoints = () => {
     const data = [
         {
-            title: "Find Doctor",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, the sed do eiusmod tempor elit et incididunt ut labore et dolore"
+            title: "Find Doctor in India",
+            description: "Quickly find specialist doctors across India by name, location, or expertise. Apna OPD helps you connect with trusted medical professionals for in-person or online care."
         },
         {
-            title: "Book Appointment",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, the sed do eiusmod tempor elit et incididunt ut labore et dolore"
+            title: "Book OPD Appointment Online",
+            description: "Skip the queue—book your OPD appointment online with top doctors near you. Apna OPD ensures a smooth and timely booking experience for all medical needs."
         },
         {
-            title: "Consult",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, the sed do eiusmod tempor elit et incididunt ut labore et dolore"
+            title: "Online Doctor Consultation",
+            description: "Consult experienced doctors from the comfort of your home via secure video or phone calls. Ideal for follow-ups, general advice, and non-emergency care."
         },
         {
-            title: "Buy Medicine ",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, the sed do eiusmod tempor elit et incididunt ut labore et dolore"
+            title: "Buy Medicine Online",
+            description: "Order prescribed medicines online and get fast doorstep delivery anywhere in India. Apna OPD partners with trusted pharmacies to ensure safe and timely access."
         },
     ]
     return (

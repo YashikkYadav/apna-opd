@@ -5,7 +5,7 @@ import FAQ from "../components/faq-components/faq";
 const FAQPage = () => {
     return (
         <div className="pt-[80px]">
-            <BannerWithTitle title="Frequently Asked Questions" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."/>
+            <BannerWithTitle title="Got Questions? We've Got Clear Answers" description="Not sure how Apna OPD works? Wondering if online consultations are safe, secure, or even effective? You're not alone. Dive into the answers to our most commonly asked questions and see how Apna OPD is transforming healthcare across India — one appointment at a time."/>
             <FAQ/>
             <GetInTouch/>
         </div>

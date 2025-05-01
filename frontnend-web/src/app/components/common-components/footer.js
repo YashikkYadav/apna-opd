@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="max-w-[1270px] mx-auto py-[63px] px-[15px] sm:px-[30px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-7">
           <div className="max-w-[240px] auto-cols-[minmax(0,2fr)]]">
-            <div className="mb-[20px] sm:mb-[35px]">
+            <div className="mb-[20px]">
               <Image
                 src="/images/apna_opd_logo.svg"
                 width={192}
@@ -18,8 +18,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-base text-[#808080]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore.
+              Your trusted partner for online doctor consultation in India. From finding top doctors near you to scheduling OPD appointments online, we make quality healthcare accessible for everyone.
             </p>
           </div>
           <div className="mt-[9px] col-span-1">
@@ -30,14 +29,14 @@ const Footer = () => {
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/find-doctor"> Find Doctors </Link>
               </li>
-              <li className="text-base text-[#2E2E2E]">
+              {/* <li className="text-base text-[#2E2E2E]">
                 <Link href="/consultation"> Consultation </Link>
-              </li>
+              </li> */}
+              {/* <li className="text-base text-[#2E2E2E]">
+                <Link href="/find-doctor"> Book an Appointement </Link>
+              </li> */}
               <li className="text-base text-[#2E2E2E]">
-                <Link href="/book-an-appointement"> Book an Appointement </Link>
-              </li>
-              <li className="text-base text-[#2E2E2E]">
-                <Link href="/medicine-store"> Medicine Store </Link>
+                <Link href="/more/medical-store"> Medicine Store </Link>
               </li>
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/register"> Register </Link>
@@ -50,11 +49,11 @@ const Footer = () => {
             </h6>
             <ul className="flex flex-col gap-[16px]">
               <li className="text-base text-[#2E2E2E]">
-                <Link href="/our-doctors"> Our Doctors </Link>
+                <Link href="/find-doctor"> Our Doctors </Link>
               </li>
-              <li className="text-base text-[#2E2E2E]">
+              {/* <li className="text-base text-[#2E2E2E]">
                 <Link href="/profile"> Profile </Link>
-              </li>
+              </li> */}
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/blog"> Blog </Link>
               </li>

@@ -44,7 +44,7 @@ export const searchCities = async (searchText) => {
 
     return formattedData;
   } catch (error) {
-    console.error("Error fetching cities:", error);
+    console.log("Error fetching cities:", error);
     throw error;
   }
 };
