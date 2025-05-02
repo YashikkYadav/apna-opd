@@ -105,7 +105,7 @@ const getAppointmentDetails = async (req, res) => {
     const { doctorId } = req.params;
 
     const healthServeProfile =
-      await doctorhealthServerProfileService.getAppointmentDetails(doctorId);
+      await healthServerProfileService.getAppointmentDetails(doctorId);
     if (healthServeProfile?.error) {
       return res
         .status(healthServeProfile.statusCode)
@@ -120,7 +120,27 @@ const getAppointmentDetails = async (req, res) => {
   }
 };
 
+const deleteImage = async (req, res) => {
+  try {
+    const { healthServeId } = req.params;
+    const image = req.body;
+    const deleteResponse = await healthServerProfileService.deleteImage(
+      healthServeId,
+      image
+    );
+    if (deleteResponse?.error) {
+      return res.status(deleteResponse.statusCode).send(deleteResponse.error);
+    }
+    return res
+      .status(deleteResponse.statusCode)
+      .json({ images: deleteResponse.images });
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
+  deleteImage,
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,

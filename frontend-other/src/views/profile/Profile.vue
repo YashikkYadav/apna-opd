@@ -85,6 +85,9 @@
               >
                 <div class="image-container">
                   <img :src="img.url" :alt="img.filename" class="image" />
+                  <button class="delete-button" @click="confirmDelete(img)">
+                    ✖
+                  </button>
                 </div>
                 <div v-if="img.type === 'profilePhoto'" class="image-type">
                   {{ "Profile" }}
@@ -114,6 +117,17 @@
       </v-row>
     </v-container>
   </v-form>
+
+  <!-- Delete Confirmation Modal -->
+  <div v-if="showModal" class="modal-overlay">
+    <div class="modal">
+      <p>Are you sure you want to delete this image?</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" @click="deleteImage">Yes, Delete</button>
+        <button class="btn btn-cancel" @click="cancelDelete">Cancel</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -124,6 +138,8 @@ import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
     return {
+      showModal: false,
+      imageToDelete: null,
       form: {
         introduction: "",
         experience: null,
@@ -155,6 +171,21 @@ export default {
     },
   },
   methods: {
+    confirmDelete(img) {
+      this.imageToDelete = img;
+      this.showModal = true;
+    },
+    cancelDelete() {
+      this.showModal = false;
+      this.imageToDelete = null;
+    },
+    async deleteImage() {
+      if (this.imageToDelete) {
+        const res = await useProfileStore().deleteImage(this.imageToDelete);
+        this.images = res.images;
+        this.cancelDelete();
+      }
+    },
     handleGalleryChange(newFiles) {
       const combined = [...this.galleryImages, ...newFiles];
 
@@ -281,6 +312,7 @@ export default {
 }
 
 .image-card {
+  position: relative;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
@@ -300,6 +332,7 @@ export default {
 }
 
 .image-container {
+  position: relative;
   width: 120px;
   height: 120px;
   overflow: hidden;
@@ -317,5 +350,92 @@ export default {
   object-fit: contain;
   object-position: center;
   display: block;
+}
+
+.delete-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.image-container:hover .delete-button {
+  opacity: 1;
+}
+.image-type {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 300px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.modal-actions button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.btn {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-danger {
+  background-color: #e53935;
+  color: white;
+}
+.btn-danger:hover {
+  background-color: #d32f2f;
+  transform: scale(1.03);
+}
+.btn-danger:active {
+  transform: scale(0.98);
+  background-color: #b71c1c;
+}
+.btn-cancel {
+  background-color: #f1f1f1;
+  color: #333;
+}
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.03);
+}
+.btn-cancel:active {
+  transform: scale(0.98);
+  background-color: #ccc;
 }
 </style>

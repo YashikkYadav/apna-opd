@@ -21,4 +21,10 @@ export class AxiosProfile {
   ChatMessages(doctorPatientId) {
     return this.apiClient.get(`/${doctorPatientId}/get-messages`);
   }
+
+  DeleteImage(doctorId, imageObject) {
+    return this.apiClient.delete(`/${doctorId}/doctor-profile/delete-image`, {
+      data: imageObject,
+    });
+  }
 }

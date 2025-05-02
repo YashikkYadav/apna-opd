@@ -131,9 +131,33 @@ const getPatients = async (req, res) => {
   }
 };
 
+const delelteDoctorImage = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const image = req.body;
+    const deleteResponse = await doctorProfileService.deleteDoctorImage(
+      doctorId,
+      image
+    );
+    if (deleteResponse?.error) {
+      return res
+        .status(deleteResponse.statusCode)
+        .json({ error: deleteResponse.images });
+    }
+    console.log("WOrking til heree fmoasiejalsij");
+    return res.status(200).json({
+      images: deleteResponse.images,
+    });
+  } catch (error) {
+    console.log("Error while deleting image:: ", error);
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
   getPatients,
+  delelteDoctorImage,
 };

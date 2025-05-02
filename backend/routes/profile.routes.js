@@ -4,6 +4,8 @@ const doctorProfileController = require("../controllers/doctorProfile.controller
 
 const healthServeProfileRoute = express.Router({ mergeParams: true });
 
+healthServeProfileRoute.delete("/delete-image", profileController.deleteImage);
+
 healthServeProfileRoute.post("/", profileController.createProfile);
 
 healthServeProfileRoute.get("/", profileController.getHealthServeProfile);

@@ -28,6 +28,14 @@ export const useProfileStore = defineStore("profileStore", {
       const chatMessageData = await ProfileService.ChatMessages(id);
       return chatMessageData;
     },
+    async deleteImage(imageObject) {
+      const ProfileService = new AxiosProfile();
+      const deletedRes = await ProfileService.DeleteImage(
+        this.doctorId,
+        imageObject
+      );
+      return deletedRes;
+    },
     reset() {
       this.$reset();
     },
