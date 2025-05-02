@@ -79,7 +79,7 @@
           <v-row>
             <div class="image-gallery">
               <div
-                v-for="(img, index) in images"
+                v-for="(img, index) in sortedImages"
                 :key="index"
                 class="image-card"
               >
@@ -144,6 +144,15 @@ export default {
     if (auth) {
       this.fetchProfileData();
     }
+  },
+  computed: {
+    sortedImages() {
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     handleGalleryChange(newFiles) {
