@@ -20,6 +20,7 @@ const registerPatient = async (patientData, doctorId) => {
       tags,
       referredBy,
     } = patientData;
+    const otp = 1234;
 
     const patientValidation = validatePatient(patientData);
     if (!patientValidation.success) {
@@ -66,6 +67,7 @@ const registerPatient = async (patientData, doctorId) => {
       allergies,
       tags,
       referredBy,
+      otp,
     });
     await newPatient.save();
 

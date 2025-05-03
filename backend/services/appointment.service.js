@@ -1,27 +1,21 @@
-const moment = require('moment');
-const Patient = require('../models/patient');
-const Appointment = require('../models/appointment');
-const DoctorProfile = require('../models/doctorProfile');
-const DoctorPatient = require('../models/doctorPatient');
+const moment = require("moment");
+const Patient = require("../models/patient");
+const Appointment = require("../models/appointment");
+const DoctorProfile = require("../models/doctorProfile");
+const DoctorPatient = require("../models/doctorPatient");
 
-const { generatePatientUid } = require('../utils/helpers');
-const validateAppointment = require('../validations/appointment.validation');
+const { generatePatientUid } = require("../utils/helpers");
+const validateAppointment = require("../validations/appointment.validation");
 
-const checkPatientAndGenerateOTP = async ( patientData, doctorId ) => {
+const checkPatientAndGenerateOTP = async (patientData, doctorId) => {
   try {
-    const {
-      fullName,
-      phoneNumber,
-    } = patientData;
+    const { fullName, phoneNumber } = patientData;
 
-    if (
-      !fullName
-      || !phoneNumber
-    ) {
+    if (!fullName || !phoneNumber) {
       return {
         statusCode: 400,
-        error: `Patient name and phone number is required`
-      }
+        error: `Patient name and phone number is required`,
+      };
     }
 
     let patient = await Patient.findOne({ phoneNumber });
@@ -45,7 +39,7 @@ const checkPatientAndGenerateOTP = async ( patientData, doctorId ) => {
       });
       await newDoctorPatient.save();
 
-      patient = newPatient
+      patient = newPatient;
     } else {
       const doctorPatient = await DoctorPatient.findOne({
         doctorId,
@@ -64,7 +58,7 @@ const checkPatientAndGenerateOTP = async ( patientData, doctorId ) => {
       patient = await Patient.findOneAndUpdate(
         { phoneNumber },
         { otp },
-        { new: true },
+        { new: true }
       );
     }
 
@@ -78,48 +72,45 @@ const checkPatientAndGenerateOTP = async ( patientData, doctorId ) => {
       error: error,
     };
   }
-}
+};
 
 const validateOTP = async (patientData) => {
   try {
     const { phoneNumber, otp } = patientData;
 
-    if (
-      !phoneNumber
-      || !otp
-    ) {
+    if (!phoneNumber || !otp) {
       return {
         statusCode: 400,
-        error: 'Phone number and otp is required'
-      }
+        error: "Phone number and otp is required",
+      };
     }
 
     const patient = await Patient.findOne({ phoneNumber });
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
-      }
+        error: "Patient not found",
+      };
     }
 
     if (patient.otp !== otp) {
       return {
         statusCode: 404,
-        error: 'Incorrect OTP, please enter correct OTP',
-      }
+        error: "Incorrect OTP, please enter correct OTP",
+      };
     }
 
     return {
       statusCode: 200,
-      message: 'Patient validated successfully',
-    }
+      message: "Patient validated successfully",
+    };
   } catch (error) {
     return {
       statusCode: 500,
       error: error,
     };
   }
-}
+};
 
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
@@ -129,16 +120,16 @@ const bookAppointment = async (appointmentData, doctorId) => {
     if (!phoneNumber) {
       return {
         statusCode: 400,
-        error: 'Phone number is required'
-      }
+        error: "Phone number is required",
+      };
     }
 
     const patient = await Patient.findOne({ phoneNumber });
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
-      }
+        error: "Patient not found",
+      };
     }
 
     const appointment = await createAppointment(appointmentData, doctorId);
@@ -147,30 +138,24 @@ const bookAppointment = async (appointmentData, doctorId) => {
       return {
         statusCode: appointment.statusCode,
         error: appointment.error,
-      }
+      };
     }
 
     return {
       statusCode: appointment.statusCode,
       appointment: appointment.appointment,
-    }
+    };
   } catch (error) {
     return {
       statusCode: 500,
       error: error,
     };
   }
-}
+};
 
-const createAppointment = async ( appointmentData, doctorId ) => {
+const createAppointment = async (appointmentData, doctorId) => {
   try {
-    const {
-      date,
-      location,
-      time,
-      type,
-      phoneNumber,
-    } = appointmentData;
+    const { date, location, time, type, phoneNumber } = appointmentData;
 
     const appointmentDataValidation = validateAppointment(appointmentData);
     if (!appointmentDataValidation.success) {
@@ -184,7 +169,7 @@ const createAppointment = async ( appointmentData, doctorId ) => {
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
@@ -194,7 +179,7 @@ const createAppointment = async ( appointmentData, doctorId ) => {
     if (new Date(date) < today) {
       return {
         statusCode: 400,
-        error: 'Please select a future date',
+        error: "Please select a future date",
       };
     }
 
@@ -208,7 +193,8 @@ const createAppointment = async ( appointmentData, doctorId ) => {
     if (appointment) {
       return {
         statusCode: 409,
-        error: 'Appointment already exist, Please select different date and time',
+        error:
+          "Appointment already exist, Please select different date and time",
       };
     }
 
@@ -232,14 +218,14 @@ const createAppointment = async ( appointmentData, doctorId ) => {
       error: error,
     };
   }
-}
+};
 
-const getUpcomingAppointment = async ( patientId ) => {
+const getUpcomingAppointment = async (patientId) => {
   try {
     if (!patientId) {
       return {
         statusCode: 400,
-        error: 'PatientId is required',
+        error: "PatientId is required",
       };
     }
 
@@ -248,12 +234,12 @@ const getUpcomingAppointment = async ( patientId ) => {
     let latestAppointment = null;
 
     for (const appointment of appointments) {
-      const [timePart, meridian] = appointment.time.split(' ');
-      let [hours, minutes] = timePart.split(':').map(Number);
+      const [timePart, meridian] = appointment.time.split(" ");
+      let [hours, minutes] = timePart.split(":").map(Number);
 
-      if (meridian === 'PM' && hours !== 12) {
+      if (meridian === "PM" && hours !== 12) {
         hours += 12;
-      } else if (meridian === 'AM' && hours === 12) {
+      } else if (meridian === "AM" && hours === 12) {
         hours = 0;
       }
 
@@ -290,14 +276,14 @@ const getUpcomingAppointment = async ( patientId ) => {
       error: error,
     };
   }
-}
+};
 
 const getAllAppointments = async (patientId) => {
   try {
     if (!patientId) {
       return {
         statusCode: 400,
-        error: 'PatientId is required',
+        error: "PatientId is required",
       };
     }
 
@@ -312,19 +298,23 @@ const getAllAppointments = async (patientId) => {
       error: error,
     };
   }
-}
+};
 
 const getAllUpcomingAppointments = async (doctorId) => {
   try {
     if (!doctorId) {
       return {
         statusCode: 400,
-        error: 'DoctorId is required',
+        error: "DoctorId is required",
       };
     }
 
     const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const todayStart = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
     const currentTime = now.toTimeString().slice(0, 5);
 
     let appointments = await Appointment.find({
@@ -333,8 +323,23 @@ const getAllUpcomingAppointments = async (doctorId) => {
       $or: [{ markComplete: false }, { markComplete: null }],
     })
       .sort({ date: 1, time: 1 })
-      .populate('patientId')
+      .populate("patientId")
       .exec();
+
+    if (!appointments.length) {
+      console.log(appointments);
+      console.log(doctorId);
+      appointments = await Appointment.find({
+        patientId: doctorId,
+        date: { $gte: todayStart },
+        $or: [{ markComplete: false }, { markComplete: null }],
+      })
+        .sort({ date: 1, time: 1 })
+        .populate("doctorId")
+        .exec();
+    }
+
+    console.log(appointments);
 
     appointments = appointments.filter((appt) => {
       const apptDate = new Date(appt.date);
@@ -352,24 +357,19 @@ const getAllUpcomingAppointments = async (doctorId) => {
       error: error.message || error,
     };
   }
-}
+};
 
-const updateAppointment = async ( appointmentId, appointmentData ) => {
+const updateAppointment = async (appointmentId, appointmentData) => {
   try {
-    const {
-      date,
-      location,
-      time,
-      type,
-    } = appointmentData;
+    const { date, location, time, type } = appointmentData;
 
     const now = new Date();
-    let [timePart, meridian] = time.split(' ');
-    let [hours, minutes] = timePart.split(':').map(Number);
+    let [timePart, meridian] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
 
-    if (meridian === 'PM' && hours !== 12) {
+    if (meridian === "PM" && hours !== 12) {
       hours += 12;
-    } else if (meridian === 'AM' && hours === 12) {
+    } else if (meridian === "AM" && hours === 12) {
       hours = 0;
     }
 
@@ -379,14 +379,14 @@ const updateAppointment = async ( appointmentId, appointmentData ) => {
     if (newAppointmentDate <= now) {
       return {
         statusCode: 400,
-        error: 'The new appointment date and time must be in the future',
+        error: "The new appointment date and time must be in the future",
       };
     }
 
     if (!appointmentId) {
       return {
         statusCode: 400,
-        error: 'Appointment Id is required',
+        error: "Appointment Id is required",
       };
     }
 
@@ -399,22 +399,20 @@ const updateAppointment = async ( appointmentId, appointmentData ) => {
     }
 
     let appointment = await Appointment.findById(appointmentId);
-    if (
-      !appointment
-    ) {
+    if (!appointment) {
       return {
         statusCode: 404,
-        error: 'No appointment present',
+        error: "No appointment present",
       };
     }
 
     const appointmentDate = new Date(appointment.date);
-    [timePart, meridian] = appointment.time.split(' ');
-    [hours, minutes] = timePart.split(':').map(Number);
+    [timePart, meridian] = appointment.time.split(" ");
+    [hours, minutes] = timePart.split(":").map(Number);
 
-    if (meridian === 'PM' && hours !== 12) {
+    if (meridian === "PM" && hours !== 12) {
       hours += 12;
-    } else if (meridian === 'AM' && hours === 12) {
+    } else if (meridian === "AM" && hours === 12) {
       hours = 0;
     }
 
@@ -422,14 +420,15 @@ const updateAppointment = async ( appointmentId, appointmentData ) => {
     if (appointmentDate < now) {
       return {
         statusCode: 400,
-        error: 'This is a past prescription, Please update a future appointment',
+        error:
+          "This is a past prescription, Please update a future appointment",
       };
     }
 
     appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
       { date, location, time, type },
-      { new: true },
+      { new: true }
     );
 
     return {
@@ -442,17 +441,14 @@ const updateAppointment = async ( appointmentId, appointmentData ) => {
       error: error,
     };
   }
-}
+};
 
 const updateAppointmentMarkComplete = async (appointmentData) => {
   try {
-    if (
-      !appointmentData.status
-      || !appointmentData.ids.length
-    ) {
+    if (!appointmentData.status || !appointmentData.ids.length) {
       return {
         statusCode: 400,
-        error: 'Appointment Ids and status are required',
+        error: "Appointment Ids and status are required",
       };
     }
 
@@ -461,7 +457,7 @@ const updateAppointmentMarkComplete = async (appointmentData) => {
       const appointment = await Appointment.findByIdAndUpdate(
         appointmentId,
         { markComplete: true, status: appointmentData.status },
-        { new: true },
+        { new: true }
       );
 
       if (appointment) {
@@ -479,24 +475,25 @@ const updateAppointmentMarkComplete = async (appointmentData) => {
       error: error,
     };
   }
-}
+};
 
 const getAppointmentLocations = async (doctorId) => {
   try {
     if (!doctorId) {
       return {
         statusCode: 400,
-        error: 'Doctor Id is required',
+        error: "Doctor Id is required",
       };
     }
 
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
+      "doctorId"
+    );
 
     if (!doctorProfile) {
       return {
         statusCode: 404,
-        error: 'Doctor profile not found',
+        error: "Doctor profile not found",
       };
     }
 
@@ -510,24 +507,25 @@ const getAppointmentLocations = async (doctorId) => {
       error: error.message,
     };
   }
-}
+};
 
 const getAppointmentDates = async (doctorId, locationId) => {
   try {
     if (!doctorId || !locationId) {
       return {
         statusCode: 400,
-        error: 'Doctor Id & Location Id is required',
+        error: "Doctor Id & Location Id is required",
       };
     }
 
-    const doctorProfile = await DoctorProfile.findOne({ doctorId })
-      .populate('doctorId');
+    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
+      "doctorId"
+    );
 
     if (!doctorProfile) {
       return {
         statusCode: 404,
-        error: 'Doctor profile not found',
+        error: "Doctor profile not found",
       };
     }
 
@@ -538,18 +536,18 @@ const getAppointmentDates = async (doctorId, locationId) => {
     if (!location) {
       return {
         statusCode: 404,
-        error: 'Location not found',
+        error: "Location not found",
       };
     }
 
     const daysOfWeek = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
 
     const days = location.days.map((day) => daysOfWeek.indexOf(day));
@@ -564,11 +562,11 @@ const getAppointmentDates = async (doctorId, locationId) => {
       currentDate.setDate(currentDate.getDate() + i);
 
       if (
-        days.includes(currentDate.getDay())
-        && !(currentDate >= fromDate && currentDate <= toDate)
+        days.includes(currentDate.getDay()) &&
+        !(currentDate >= fromDate && currentDate <= toDate)
       ) {
         currentDate.setDate(currentDate.getDate());
-        nextDates.push(currentDate.toLocaleDateString('en-CA'));
+        nextDates.push(currentDate.toLocaleDateString("en-CA"));
       }
     }
 
@@ -582,14 +580,14 @@ const getAppointmentDates = async (doctorId, locationId) => {
       error: error.message,
     };
   }
-}
+};
 
 const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
   try {
     if (!doctorId || !locationId || !date) {
       return {
         statusCode: 400,
-        error: 'Doctor Id, Location Id, and Date are required',
+        error: "Doctor Id, Location Id, and Date are required",
       };
     }
 
@@ -601,16 +599,18 @@ const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
     if (incomingDate < todayDate) {
       return {
         statusCode: 400,
-        error: 'Please select any future date',
+        error: "Please select any future date",
       };
     }
 
-    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate('doctorId');
+    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
+      "doctorId"
+    );
 
     if (!doctorProfile) {
       return {
         statusCode: 404,
-        error: 'Doctor profile not found',
+        error: "Doctor profile not found",
       };
     }
 
@@ -621,18 +621,18 @@ const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
     if (!location) {
       return {
         statusCode: 404,
-        error: 'Location not found',
+        error: "Location not found",
       };
     }
 
     const daysOfWeek = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
 
     const selectedDate = new Date(date);
@@ -674,16 +674,30 @@ const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
 
     if (selectedDate.toDateString() === now.toDateString()) {
       const minutes = now.getMinutes();
-      const roundedMinutes = minutes % timeslot === 0 ? minutes : Math.ceil(minutes / timeslot) * timeslot;
+      const roundedMinutes =
+        minutes % timeslot === 0
+          ? minutes
+          : Math.ceil(minutes / timeslot) * timeslot;
       startTime = new Date(now.setMinutes(roundedMinutes, 0));
       if (startTime < fromTime) startTime = fromTime;
 
-      startTime.setHours(startTime.getHours() + doctorProfile?.availabilityAfter);
+      startTime.setHours(
+        startTime.getHours() + doctorProfile?.availabilityAfter
+      );
     }
 
     const timeSlots = [];
-    for (let time = startTime; time < toTime; time.setMinutes(time.getMinutes() + timeslot)) {
-      timeSlots.push(new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    for (
+      let time = startTime;
+      time < toTime;
+      time.setMinutes(time.getMinutes() + timeslot)
+    ) {
+      timeSlots.push(
+        new Date(time).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
     }
 
     const appointmentBooked = await Appointment.find({
@@ -692,9 +706,11 @@ const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
       location: `${location.address}`,
     });
 
-    const bookedTimes = appointmentBooked.map((appointment) => appointment.time);
+    const bookedTimes = appointmentBooked.map(
+      (appointment) => appointment.time
+    );
     const availableTimeSlots = timeSlots.filter((slot) => {
-      const formattedTime = slot.replace(/^0/, '');
+      const formattedTime = slot.replace(/^0/, "");
       return !bookedTimes.includes(formattedTime);
     });
 
