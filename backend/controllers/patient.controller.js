@@ -138,7 +138,23 @@ const getDoctors = async (req, res) => {
   }
 };
 
+const deletePresciption = async (req, res) => {
+  try {
+    const { patientId, doctorId } = req.params;
+    const record = req.body;
+
+    const response = await patientService.deletePresciption(patientId, record);
+    if (response?.error) {
+      return res.status(response.statusCode).send(response.error);
+    }
+    res.status(response.statusCode).send({ data: response.data });
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
+  deletePresciption,
   getDoctors,
   registerPatient,
   generateOTP,

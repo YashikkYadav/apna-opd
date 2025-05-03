@@ -70,6 +70,25 @@
             </template>
           </v-card-text>
         </v-card>
+        <v-card-actions>
+          <v-row class="ma-0" no-gutters>
+            <v-col cols="6" class="pr-1">
+              <v-btn
+                color="red"
+                class="action-btn"
+                block
+                @click="initiateDelete(record)"
+              >
+                Delete
+              </v-btn>
+            </v-col>
+            <v-col cols="6" class="pl-1">
+              <v-btn color="green" class="action-btn" block @click="sendRecord">
+                Send
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
       </v-col>
     </v-row>
 
@@ -219,6 +238,17 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="confirmDelete" max-width="500">
+      <v-card>
+        <v-card-title class="text-h6">Confirm Deletion</v-card-title>
+        <v-card-text>Are you sure you want to delete this record?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="confirmDelete = false">Cancel</v-btn>
+          <v-btn color="red" text @click="deleteRecord">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -238,6 +268,8 @@ import {
 export default {
   data() {
     return {
+      confirmDelete: false,
+      recordToDelete: null,
       showSettings: false,
       showSettingsForSection: false,
       vitals: {
@@ -360,6 +392,24 @@ export default {
   methods: {
     isImage(url) {
       return /\.(jpe?g|png)$/i.test(url);
+    },
+    initiateDelete(record) {
+      this.confirmDelete = true;
+      this.recordToDelete = record;
+    },
+    async deleteRecord() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePatientStore().deletePrescrtiption(
+        patientId,
+        this.recordToDelete
+      );
+      this.recordToDelete = null;
+      this.confirmDelete = false;
+      window.location.reload();
+    },
+    sendRecord() {
+      // Implement your send logic here
+      console.log("Sending record:", this.record);
     },
     async fetchPatientDetails() {
       const patientId = this.$route.params.patientId;
@@ -1398,5 +1448,20 @@ export default {
   max-width: 80%;
   height: auto;
   object-fit: contain;
+}
+.action-btn {
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 </style>
