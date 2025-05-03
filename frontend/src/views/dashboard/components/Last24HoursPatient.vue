@@ -4,7 +4,7 @@
       <h2 class="card-title">Patients today</h2>
       <div class="d-flex">
         <h1 class="dashboard-title">{{ patient24hoursSum }}</h1>
-        <p class="tag">+49%</p>
+        <!-- <p class="tag">+49%</p> -->
       </div>
     </div>
     <div>

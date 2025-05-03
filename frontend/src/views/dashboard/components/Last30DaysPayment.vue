@@ -4,7 +4,7 @@
             <h2 class="card-title">Payment amount</h2>
             <div class="d-flex">
                 <h1 class="dashboard-title">₹{{ payment12MonthSum }}</h1>
-                <p class="tag">+59%</p>
+                <!-- <p class="tag">+59%</p> -->
             </div>
         </div>
         <div>
