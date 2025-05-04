@@ -1,5 +1,5 @@
 <template>
-  <v-container style="max-width: 100%;" class="history-page">
+  <v-container style="max-width: 100%" class="history-page">
     <h2 class="text-center mb-4">Patient Prescription Page</h2>
     <v-row class="justify-end mb-3">
       <!-- <v-col cols="auto">
@@ -21,7 +21,9 @@
         <p v-if="patient.age">Age: {{ patient.age }}</p>
         <p v-if="patient.bloodGroup">Blood Group: {{ patient.bloodGroup }}</p>
         <p v-if="patient.allergies">Allergies: {{ patient.allergies }}</p>
-        <p v-if="patient.dateOfBirth">Date of Birth: {{ formatedDate(patient.dateOfBirth) }}</p>
+        <p v-if="patient.dateOfBirth">
+          Date of Birth: {{ formatedDate(patient.dateOfBirth) }}
+        </p>
         <p v-if="patient.tags">Category: {{ patient.tags }}</p>
         <p v-if="patient.address">Address: {{ patient.address }}</p>
       </v-card-text>
@@ -39,13 +41,23 @@
     </v-row>
 
     <v-row>
-      <v-col v-for="record in prescriptionRecords" :key="record.id" cols="12" md="6">
+      <v-col
+        v-for="record in prescriptionRecords"
+        :key="record.id"
+        cols="12"
+        md="6"
+      >
         <v-card class="health-record-card mb-4">
           <v-card-title>
             <span class="font-weight-bold">Document:</span>
           </v-card-title>
           <v-card-text>
-            <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
+            <template v-if="isImage(record.fileUrl)">
+              <img :src="record.fileUrl" class="preview-image" />
+            </template>
+            <template v-else>
+              <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
+            </template>
           </v-card-text>
         </v-card>
       </v-col>
@@ -78,10 +90,10 @@
 </template>
 
 <script>
-import { checkAuth, getDateFormate } from '@/lib/utils/utils';
-import { usePatientStore } from '@/store/PatientStore';
-import { usePrescriptionStore } from '@/store/PrescriptionStore';
-import { useUiStore } from '@/store/UiStore';
+import { checkAuth, getDateFormate } from "@/lib/utils/utils";
+import { usePatientStore } from "@/store/PatientStore";
+import { usePrescriptionStore } from "@/store/PrescriptionStore";
+import { useUiStore } from "@/store/UiStore";
 
 export default {
   data() {
@@ -91,10 +103,10 @@ export default {
       ipdRecords: [],
       healthRecords: [],
       prescriptionRecords: [],
-      emailInput: '',
-      phoneInput: '',
+      emailInput: "",
+      phoneInput: "",
       pdfDialog: false,
-      pdfUrl: '',
+      pdfUrl: "",
     };
   },
   mounted() {
@@ -107,9 +119,12 @@ export default {
     }
   },
   methods: {
+    isImage(url) {
+      return /\.(jpe?g|png)$/i.test(url);
+    },
     async fetchPatientDetails() {
       const patientId = this.$route.params.patientId;
-      const res = await usePatientStore().getPatientDetailsApiCall(patientId)
+      const res = await usePatientStore().getPatientDetailsApiCall(patientId);
 
       if (res) {
         this.patient = res.patient;
@@ -117,7 +132,7 @@ export default {
     },
     async fetchHealthFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getHealthFileApiCall(patientId)
+      const res = await usePrescriptionStore().getHealthFileApiCall(patientId);
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
@@ -127,22 +142,24 @@ export default {
     },
     async fetchIpdFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getIpdFileApiCall(patientId)
+      const res = await usePrescriptionStore().getIpdFileApiCall(patientId);
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
-            this.ipdRecords.push(res.files[i]);
-          }
+          this.ipdRecords.push(res.files[i]);
+        }
       }
     },
     async fetchPrescriptionFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
+      const res = await usePrescriptionStore().getPrescriptionFileApiCall(
+        patientId
+      );
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
-            this.prescriptionRecords.push(res.files[i]);
-          }
+          this.prescriptionRecords.push(res.files[i]);
+        }
       }
     },
     triggerFileUpload(type) {
@@ -150,33 +167,41 @@ export default {
         this.$refs.healthFileInput.click();
       } else if (type === "ipd") {
         this.$refs.ipdFileInput.click();
-      } else if (type === 'prescription') {
+      } else if (type === "prescription") {
         this.$refs.prescriptionFileInput.click();
       }
     },
     pdfDialogHandle(item) {
       this.emailInput = this.patient.email;
       this.phoneInput = this.patient.phoneNumber;
-      this.pdfUrl = `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item.id}.pdf`;
+      this.pdfUrl = `${
+        import.meta.env.VITE_SERVER_URL
+      }/public/prescriptions/prescription_${item.id}.pdf`;
       this.pdfDialog = true;
     },
     closePdfDialog() {
-      this.pdfUrl = '';
+      this.pdfUrl = "";
       this.pdfDialog = false;
     },
     sharePrescription(method) {
-      if (method === 'WhatsApp/SMS') {
-        useUiStore().openNotificationMessage("Prescription shared via WhatsApp/SMS!");
-      } else if (method === 'Email') {
+      if (method === "WhatsApp/SMS") {
+        useUiStore().openNotificationMessage(
+          "Prescription shared via WhatsApp/SMS!"
+        );
+      } else if (method === "Email") {
         useUiStore().openNotificationMessage("Prescription sent via Email!");
-      } else if (method === 'Print') {
+      } else if (method === "Print") {
         useUiStore().openNotificationMessage("Prescription printed!");
       }
       this.closePdfDialog();
     },
     async handleFileUpload(type) {
       const fileInput =
-        type === "health" ? this.$refs.healthFileInput : type === "ipd" ? this.$refs.ipdFileInput : this.$refs.prescriptionFileInput;
+        type === "health"
+          ? this.$refs.healthFileInput
+          : type === "ipd"
+          ? this.$refs.ipdFileInput
+          : this.$refs.prescriptionFileInput;
       const file = fileInput.files[0];
 
       if (!file) {
@@ -192,14 +217,14 @@ export default {
         fileName: file.name,
         type: fileType,
         fileUrl: filePreviewUrl,
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
       };
 
       if (type === "health") {
         this.healthRecords.push(newRecord);
       } else if (type === "ipd") {
         this.ipdRecords.push(newRecord);
-      } else if (type === 'prescription') {
+      } else if (type === "prescription") {
         this.prescriptionRecords.push(newRecord);
       }
 
@@ -209,7 +234,10 @@ export default {
       formData.append("file", file);
       formData.append("fileType", type);
 
-      const res = await usePrescriptionStore().uploadFileApiCall(patientId, formData)
+      const res = await usePrescriptionStore().uploadFileApiCall(
+        patientId,
+        formData
+      );
     },
     createNewVisit() {
       console.log("Creating a new visit...");
@@ -220,6 +248,14 @@ export default {
     formatedDate(date) {
       return getDateFormate(date);
     },
-  }
+  },
 };
 </script>
+
+<style scoped>
+.preview-image {
+  max-width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+</style>

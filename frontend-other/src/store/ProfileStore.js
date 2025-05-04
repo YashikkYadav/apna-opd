@@ -20,6 +20,14 @@ export const useProfileStore = defineStore("profileStore", {
       const data = await ProfileService.ProfileAdd(this.healthServeId, payload);
       return data;
     },
+    async deleteImage(imageObject) {
+      const ProfileService = new AxiosProfile();
+      const deleteResponse = await ProfileService.DeleteImage(
+        this.healthServeId,
+        imageObject
+      );
+      return deleteResponse;
+    },
     reset() {
       this.$reset(); // Built-in Pinia function to reset to initial state
     },

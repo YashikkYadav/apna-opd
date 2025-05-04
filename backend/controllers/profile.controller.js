@@ -1,6 +1,7 @@
 const healthServerProfileService = require("../services/profile.service");
 const path = require("path");
 const multer = require("multer");
+const fs = require("fs");
 
 const createProfile = async (req, res) => {
   try {
@@ -10,12 +11,31 @@ const createProfile = async (req, res) => {
         cb(null, folder);
       },
       filename: (req, file, cb) => {
+        const folder = "public/health-serve-profile/";
         const uniqueSuffix = Date.now();
         const ext = path.extname(file.originalname);
-        cb(
-          null,
-          `${req.params.healthServeId}_${uniqueSuffix}_${file.fieldname}${ext}`
-        );
+        const healthServeId = req.params.healthServeId;
+        const newFileName = `${healthServeId}_${uniqueSuffix}_${file.fieldname}${ext}`;
+        if (file.fieldname === "profilePhoto") {
+          fs.readdir(folder, (err, files) => {
+            if (err) {
+              console.error("Failed to read directory:", err);
+              return cb(err);
+            }
+            const oldFiles = files.filter(
+              (f) =>
+                f.startsWith(`${healthServeId}`) && f.includes("profilePhoto")
+            );
+            oldFiles.forEach((f) => {
+              fs.unlink(path.join(folder, f), (err) => {
+                if (err) console.error("Failed to delete old file:", f, err);
+              });
+            });
+            cb(null, newFileName);
+          });
+        } else {
+          cb(null, newFileName);
+        }
       },
     });
 
@@ -85,7 +105,7 @@ const getAppointmentDetails = async (req, res) => {
     const { doctorId } = req.params;
 
     const healthServeProfile =
-      await doctorhealthServerProfileService.getAppointmentDetails(doctorId);
+      await healthServerProfileService.getAppointmentDetails(doctorId);
     if (healthServeProfile?.error) {
       return res
         .status(healthServeProfile.statusCode)
@@ -100,7 +120,27 @@ const getAppointmentDetails = async (req, res) => {
   }
 };
 
+const deleteImage = async (req, res) => {
+  try {
+    const { healthServeId } = req.params;
+    const image = req.body;
+    const deleteResponse = await healthServerProfileService.deleteImage(
+      healthServeId,
+      image
+    );
+    if (deleteResponse?.error) {
+      return res.status(deleteResponse.statusCode).send(deleteResponse.error);
+    }
+    return res
+      .status(deleteResponse.statusCode)
+      .json({ images: deleteResponse.images });
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
+  deleteImage,
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,

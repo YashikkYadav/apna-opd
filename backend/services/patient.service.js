@@ -3,6 +3,7 @@ const DoctorPatient = require("../models/doctorPatient");
 const { generatePatientUid, getAccessToken } = require("../utils/helpers");
 const { validatePatient } = require("../validations/patient.validation");
 const { sendTemplateMessage } = require("../utils/whatsapp");
+const FileUploader = require("../models/fileUploader");
 
 const registerPatient = async (patientData, doctorId) => {
   try {
@@ -20,6 +21,7 @@ const registerPatient = async (patientData, doctorId) => {
       tags,
       referredBy,
     } = patientData;
+    const otp = 1234;
 
     const patientValidation = validatePatient(patientData);
     if (!patientValidation.success) {
@@ -66,6 +68,7 @@ const registerPatient = async (patientData, doctorId) => {
       allergies,
       tags,
       referredBy,
+      otp,
     });
     await newPatient.save();
 
@@ -361,7 +364,25 @@ const getDoctors = async (patientId) => {
   }
 };
 
+const deletePresciption = async (patientId, record) => {
+  try {
+    const url = record.fileUrl;
+    const response = await FileUploader.deleteOne({
+      patientId,
+      fileUrl: url,
+    });
+    return {
+      statusCode: 200,
+      data: response.deletedCount,
+    };
+  } catch (error) {
+    console.log("Error while deleting the prescription form DB : ", error);
+    return { statusCode: 500, error: error };
+  }
+};
+
 module.exports = {
+  deletePresciption,
   getDoctors,
   registerPatient,
   generateOTP,

@@ -1,6 +1,7 @@
 const doctorProfileService = require("../services/doctorProfile.service");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const createDoctorProfile = async (req, res) => {
   try {
@@ -10,12 +11,30 @@ const createDoctorProfile = async (req, res) => {
         cb(null, folder);
       },
       filename: (req, file, cb) => {
+        const folder = "public/doctor-profile/";
         const uniqueSuffix = Date.now();
         const ext = path.extname(file.originalname);
-        cb(
-          null,
-          `${req.params.doctorId}_${uniqueSuffix}_${file.fieldname}${ext}`
-        );
+        const doctorId = req.params.doctorId;
+        const newFileName = `${doctorId}_${uniqueSuffix}_${file.fieldname}${ext}`;
+        if (file.fieldname === "profilePhoto") {
+          fs.readdir(folder, (err, files) => {
+            if (err) {
+              console.error("Failed to read directory:", err);
+              return cb(err);
+            }
+            const oldFiles = files.filter(
+              (f) => f.startsWith(`${doctorId}`) && f.includes("profilePhoto")
+            );
+            oldFiles.forEach((f) => {
+              fs.unlink(path.join(folder, f), (err) => {
+                if (err) console.error("Failed to delete old file:", f, err);
+              });
+            });
+            cb(null, newFileName);
+          });
+        } else {
+          cb(null, newFileName);
+        }
       },
     });
 
@@ -39,7 +58,6 @@ const createDoctorProfile = async (req, res) => {
       if (err) {
         return res.status(400).json({ message: err.message });
       }
-
       const doctorProfile = await doctorProfileService.createDoctorProfile(
         req.params.doctorId,
         req.body
@@ -113,9 +131,33 @@ const getPatients = async (req, res) => {
   }
 };
 
+const delelteDoctorImage = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const image = req.body;
+    const deleteResponse = await doctorProfileService.deleteDoctorImage(
+      doctorId,
+      image
+    );
+    if (deleteResponse?.error) {
+      return res
+        .status(deleteResponse.statusCode)
+        .json({ error: deleteResponse.images });
+    }
+    console.log("WOrking til heree fmoasiejalsij");
+    return res.status(200).json({
+      images: deleteResponse.images,
+    });
+  } catch (error) {
+    console.log("Error while deleting image:: ", error);
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
   getPatients,
+  delelteDoctorImage,
 };

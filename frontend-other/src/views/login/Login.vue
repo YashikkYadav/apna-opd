@@ -180,6 +180,7 @@ export default {
       ],
       password: "",
       email: "",
+      phone: "",
       form: {
         name: "",
         password: "",
