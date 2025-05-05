@@ -55,6 +55,7 @@ const register = async (data) => {
       healthServe: newHealthServe,
     };
   } catch (error) {
+    console.log("Error while creating healthServe in DB : ", error);
     return {
       statusCode: 500,
       error: error,

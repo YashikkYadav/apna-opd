@@ -19,6 +19,7 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password,
     } = doctorData;
+    console.log(doctorData);
 
     const doctorDataValidation = validateDoctor(doctorData);
     if (!doctorDataValidation.success) {
@@ -67,6 +68,7 @@ const registerDoctor = async (doctorData) => {
       },
     };
   } catch (error) {
+    console.log("Error creating/updating doctor in DB : ", error);
     return {
       statusCode: 500,
       error: error,
