@@ -106,10 +106,10 @@ const generateOTP = async (phoneNumber) => {
     const randomNumber = Math.floor(1000 + Math.random() * 9000);
 
     // await sendTemplateMessage(
-    //   phoneNumber,
-    //   'google_review',
-    //   'en',
-    //   [],
+    //   `+91${phoneNumber}`,
+    //   'otp_validation',
+    //   'en_US',
+    //   [randomNumber.toString()],
     // );
 
     await Patient.findOneAndUpdate(

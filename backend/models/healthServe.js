@@ -29,6 +29,17 @@ const healthServeSchema = new mongoose.Schema(
       required: true,
       type: String,
     },
+    subscriptionType: {
+      required: true,
+      type: String,
+    },
+    paymentStatus: {
+      type: Boolean,
+      default: false,
+    },
+    paymentObject: {
+      type: Object,
+    },
   },
   {
     timestamps: true,

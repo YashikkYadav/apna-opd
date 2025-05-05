@@ -1,39 +1,37 @@
 const axios = require('axios');
 
 const {
-  DOUBLE_TICK_API,
-  API_KEY,
+  ACCESS_TOKEN,
+  PHONE_NUMBER_ID,
+  WABA_ID,
 } = require('../config/config');
 
-const sendTemplateMessage = async(
+const sendTemplateMessage = async (
   phoneNumber,
   templateName,
   templateLanguage,
-  data
+  data,
 ) => {
   try {
     const response = await axios.post(
-      DOUBLE_TICK_API,
+      `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
       {
-        messages: [
-          {
-            to: `+91${phoneNumber}`,
-            content: {
-              templateName,
-              language: templateLanguage,
-              templateData: {
-                body: {
-                  placeholders: data,
-                },
-              },
-            },
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: `+91${phoneNumber}`,
+        type: 'template',
+        template: {
+          name: templateName,
+          language: {
+            code: templateLanguage,
           },
-        ],
+          components: createTemplateComponent(data),
+        },
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: API_KEY,
+          Authorization: 'Bearer' + ACCESS_TOKEN,
         },
       },
     );
@@ -46,6 +44,27 @@ const sendTemplateMessage = async(
       error: error,
     };
   }
+}
+
+const createTemplateComponent = (data) => {
+  if (data.length === 0) {
+    return [];
+  }
+
+  const parameters = [];
+  for (let i=0; i<data.length; i++) {
+    parameters.push({
+      type: 'text',
+      text: data[i],
+    });
+  }
+
+  return [
+    {
+      type: 'body',
+      parameters: parameters,
+    },
+  ];
 }
 
 module.exports = {
