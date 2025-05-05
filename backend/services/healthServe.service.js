@@ -8,10 +8,11 @@ const {
 const {
   validateHealthServe,
 } = require("../validations/healthServe.validation");
+const { createPaymentLinkForEntity } = require("./payment.service");
 
 const register = async (data) => {
   try {
-    const { type, name, phone, email, password, location } = data;
+    const { type, name, phone, email, password, location, subscriptionType } = data;
 
     const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
@@ -29,6 +30,8 @@ const register = async (data) => {
       };
     }
 
+    const paymentUrl = await createPaymentLinkForEntity(type, {name, phone, email}, subscriptionType);
+
     const hashedPassword = await getHashedPassword(password);
     const newHealthServe = new HealthServe({
       type,
@@ -37,6 +40,7 @@ const register = async (data) => {
       email,
       password: hashedPassword,
       location,
+      subscriptionType,
     });
     await newHealthServe.save();
 
@@ -53,6 +57,7 @@ const register = async (data) => {
     return {
       statusCode: 201,
       healthServe: newHealthServe,
+      paymentLink: paymentUrl?.paymentData?.short_url,
     };
   } catch (error) {
     return {
@@ -90,6 +95,15 @@ const login = async (data) => {
         error: "Health Serve not found",
       };
     }
+
+    // if (!healthServe.paymentStatus) {
+    //     const paymentUrl = await createPaymentLinkForEntity(healthServe.type, {name: healthServe.name, phone: healthServe.phoneNumber, email: healthServe.email}, healthServe.subscriptionType);
+
+    //     return {
+    //       statusCode: 400,
+    //       error: `Please complete your payment, You won't be able to login before completing payment. Link ${paymentUrl?.paymentData?.short_url}`,
+    //     };
+    // }
 
     const passwordCheck = await comparePassword(password, healthServe.password);
     if (!passwordCheck) {

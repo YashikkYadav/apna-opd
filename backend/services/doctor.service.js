@@ -6,6 +6,7 @@ const {
   getAccessToken,
 } = require("../utils/helpers");
 const DoctorProfile = require("../models/doctorProfile");
+const { createPaymentLinkForEntity } = require("./payment.service");
 
 const registerDoctor = async (doctorData) => {
   try {
@@ -18,6 +19,7 @@ const registerDoctor = async (doctorData) => {
       clinicName,
       speciality,
       password,
+      subscriptionType,
     } = doctorData;
 
     const doctorDataValidation = validateDoctor(doctorData);
@@ -40,6 +42,7 @@ const registerDoctor = async (doctorData) => {
       };
     }
 
+    const paymentUrl = await createPaymentLinkForEntity('doctor', {name, phone: phoneNumber, email}, subscriptionType);
     const hashedPassword = await getHashedPassword(password);
     const newDoctor = new Doctor({
       name,
@@ -50,6 +53,7 @@ const registerDoctor = async (doctorData) => {
       clinicName,
       speciality,
       password: hashedPassword,
+      subscriptionType,
     });
     await newDoctor.save();
 
@@ -64,7 +68,9 @@ const registerDoctor = async (doctorData) => {
         address: newDoctor.address,
         clinicName: newDoctor.clinicName,
         speciality: newDoctor.speciality,
+        subscriptionType: newDoctor.subscriptionType,
       },
+      paymentLink: paymentUrl?.paymentData?.short_url,
     };
   } catch (error) {
     return {
@@ -95,6 +101,15 @@ const loginDoctor = async (doctorData) => {
         error: "Doctor not found",
       };
     }
+
+    // if (!doctor.paymentStatus) {
+    //   const paymentUrl = await createPaymentLinkForEntity('doctor', {name: doctor.name, phone: doctor.phoneNumber, email: doctor.email}, subscriptionType);
+
+    //   return {
+    //     statusCode: 400,
+    //     error: `Please complete your payment, You won't be able to login before completing payment. Link ${paymentUrl?.paymentData?.short_url}`,
+    //   };
+    // }
 
     const isPasswordValid = await comparePassword(password, doctor.password);
     if (!isPasswordValid) {

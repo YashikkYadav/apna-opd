@@ -11,6 +11,10 @@ const paymentSchema = new mongoose.Schema(
       required: true,
       type: Number,
     },
+    subscriptionType: {
+      required: true,
+      type: String,
+    },
   },
   {
     timestamps: true,

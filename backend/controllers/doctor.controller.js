@@ -9,7 +9,12 @@ const registerDoctor = async (req, res) => {
       return res.status(doctor.statusCode).send(doctor.error);
     }
 
-    res.status(doctor.statusCode).json({ doctor: doctor.doctor });
+    res
+      .status(doctor.statusCode)
+      .json({
+        doctor: doctor.doctor,
+        paymentUrl: doctor.paymentLink,
+      });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }
