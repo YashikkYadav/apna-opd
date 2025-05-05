@@ -65,7 +65,7 @@ const register = async (data) => {
 
 const login = async (data) => {
   try {
-    const { phone, password } = data;
+    const { phone, password, type } = data;
 
     if (
       !phone ||
@@ -73,15 +73,18 @@ const login = async (data) => {
       phone === undefined ||
       !password ||
       password === null ||
-      password === undefined
+      password === undefined ||
+      !type ||
+      type === null ||
+      type === undefined
     ) {
       return {
         statusCode: 422,
-        error: "Missing field: Phone Number and Password",
+        error: "Missing field: Phone Number and Password or Type",
       };
     }
 
-    const healthServe = await HealthServe.findOne({ phone });
+    const healthServe = await HealthServe.findOne({ phone, type });
     if (!healthServe) {
       return {
         statusCode: 404,

@@ -5,8 +5,10 @@ const patientRoutes = require("./patient.routes");
 const invoiceRoutes = require("./invoice.routes");
 const libraryRoutes = require("./library.routes");
 const enquiryRoutes = require("./enquiry.routes");
+const paymentRoutes = require("./payment.routes");
 const dashboardRoutes = require("./dashboard.routes");
 const fileUploader = require("./fileUploader.routes");
+const contactLeadRoutes = require("./contactLead.routes");
 const healthServeRoutes = require("./healthServe.routes");
 const appointmentRoutes = require("./appointment.routes");
 const prescriptionRoutes = require("./prescription.routes");
@@ -18,6 +20,7 @@ const patientAppointmentRoutes = require("../routes/patientAppointment.routes");
 const prescriptionSectionRoutes = require("../routes/prescriptionSection.routes");
 const doctorMiddleware = require("../middlewares/doctor.middleware");
 const healthServeProfileRoutes = require("./profile.routes");
+const messageRoutes = require("./messages.routes");
 
 const router = express.Router();
 
@@ -38,19 +41,29 @@ router.use("/:doctorId/report", doctorMiddleware, dashboardRoutes);
 
 router.use("/:doctorId/invoice", doctorMiddleware, invoiceRoutes);
 
+router.use("/:doctorPatientId", messageRoutes);
+
 router.use(
   "/:doctorId/prescription/:patientId",
   doctorMiddleware,
   prescriptionRoutes
 );
 
+router.use("/:healthServeId/enquiry", enquiryRoutes);
+
+router.use("/health-serve", healthServeRoutes);
+
 router.use("/:patientId/file", fileUploader);
+
+router.use("/:patientId", patientRoutes);
 
 router.use("/:doctorId/medicine", doctorMiddleware, medicineLibraryRoutes);
 
 router.use("/:doctorId/template", doctorMiddleware, templateLibraryRoutes);
 
 router.use("/library", libraryRoutes);
+
+router.use("/payment", paymentRoutes);
 
 router.use("/:doctorId/dropdown", doctorMiddleware, dropdownLibraryRoutes);
 
@@ -60,8 +73,6 @@ router.use(
   prescriptionSectionRoutes
 );
 
-router.use("/health-serve", healthServeRoutes);
-
-router.use("/:healthServeId/enquiry", enquiryRoutes);
+router.use("/contact-lead", contactLeadRoutes);
 
 module.exports = router;

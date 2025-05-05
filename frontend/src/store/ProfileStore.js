@@ -18,11 +18,26 @@ export const useProfileStore = defineStore("profileStore", {
       const data = await ProfileService.ProfileAdd(this.doctorId, payload);
       return data;
     },
-    reset() {
-      this.$reset(); // Built-in Pinia function to reset to initial state
+    async getPatients() {
+      const ProfileService = new AxiosProfile();
+      const patientData = await ProfileService.PatientData(this.doctorId);
+      return patientData;
     },
-    getDoctorId() {
-      console.log("New Doctor Id : ", localStorage.doctorId);
+    async getChatMessages(id) {
+      const ProfileService = new AxiosProfile();
+      const chatMessageData = await ProfileService.ChatMessages(id);
+      return chatMessageData;
+    },
+    async deleteImage(imageObject) {
+      const ProfileService = new AxiosProfile();
+      const deletedRes = await ProfileService.DeleteImage(
+        this.doctorId,
+        imageObject
+      );
+      return deletedRes;
+    },
+    reset() {
+      this.$reset();
     },
   },
 });

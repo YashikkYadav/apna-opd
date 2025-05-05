@@ -1,10 +1,11 @@
-const Patient = require('../models/patient');
-const DoctorPatient = require('../models/doctorPatient');
-const { generatePatientUid, getAccessToken } = require('../utils/helpers');
-const { validatePatient } = require('../validations/patient.validation');
-const { sendTemplateMessage } = require('../utils/whatsapp');
+const Patient = require("../models/patient");
+const DoctorPatient = require("../models/doctorPatient");
+const { generatePatientUid, getAccessToken } = require("../utils/helpers");
+const { validatePatient } = require("../validations/patient.validation");
+const { sendTemplateMessage } = require("../utils/whatsapp");
+const FileUploader = require("../models/fileUploader");
 
-const registerPatient = async ( patientData, doctorId ) => {
+const registerPatient = async (patientData, doctorId) => {
   try {
     const {
       fullName,
@@ -20,6 +21,7 @@ const registerPatient = async ( patientData, doctorId ) => {
       tags,
       referredBy,
     } = patientData;
+    const otp = 1234;
 
     const patientValidation = validatePatient(patientData);
     if (!patientValidation.success) {
@@ -66,10 +68,11 @@ const registerPatient = async ( patientData, doctorId ) => {
       allergies,
       tags,
       referredBy,
+      otp,
     });
     await newPatient.save();
 
-    if (doctorId !== 'register') {
+    if (doctorId !== "register") {
       const doctorPatient = new DoctorPatient({
         doctorId,
         patientId: newPatient._id,
@@ -87,7 +90,7 @@ const registerPatient = async ( patientData, doctorId ) => {
       error: error,
     };
   }
-}
+};
 
 const generateOTP = async (phoneNumber) => {
   try {
@@ -96,7 +99,7 @@ const generateOTP = async (phoneNumber) => {
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
@@ -112,7 +115,7 @@ const generateOTP = async (phoneNumber) => {
     await Patient.findOneAndUpdate(
       { phoneNumber },
       { otp: 1234 },
-      { new: true },
+      { new: true }
     );
 
     return {
@@ -125,33 +128,30 @@ const generateOTP = async (phoneNumber) => {
       error: error,
     };
   }
-}
+};
 
 const validateOTP = async (phoneNumber, otp) => {
   try {
-    if (
-      !otp
-      || otp === null
-      || otp === undefined
-    ) {
+    if (!otp || otp === null || otp === undefined) {
       return {
         statusCode: 422,
-        error: 'Missing field: OTP',
-      }
+        error: "Missing field: OTP",
+      };
     }
     const patient = await Patient.findOne({ phoneNumber });
+    console.log(patient);
 
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
-    if ( patient.otp !== otp) {
+    if (patient.otp !== otp) {
       return {
         statusCode: 401,
-        error: 'Wrong OTP',
+        error: "Wrong OTP",
       };
     }
 
@@ -171,16 +171,16 @@ const validateOTP = async (phoneNumber, otp) => {
       error: error,
     };
   }
-}
+};
 
-const getPatientById = async ( patientId ) => {
+const getPatientById = async (patientId) => {
   try {
     const patient = await Patient.findById(patientId);
 
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
@@ -194,9 +194,14 @@ const getPatientById = async ( patientId ) => {
       error: error,
     };
   }
-}
+};
 
-const getAllPatients = async ( doctorId, page = 1, limit = 25, searchQuery = "" ) => {
+const getAllPatients = async (
+  doctorId,
+  page = 1,
+  limit = 25,
+  searchQuery = ""
+) => {
   try {
     const pageNumber = parseInt(page, 10) || 1;
     const limitNumber = parseInt(limit, 10) || 25;
@@ -227,7 +232,7 @@ const getAllPatients = async ( doctorId, page = 1, limit = 25, searchQuery = "" 
       doctorId,
       patientId: { $in: matchingPatientIds },
     })
-      .populate('patientId')
+      .populate("patientId")
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limitNumber);
@@ -250,9 +255,9 @@ const getAllPatients = async ( doctorId, page = 1, limit = 25, searchQuery = "" 
       error: error,
     };
   }
-}
+};
 
-const updatePatient = async ( patientId, patientData ) => {
+const updatePatient = async (patientId, patientData) => {
   try {
     const {
       fullName,
@@ -281,7 +286,7 @@ const updatePatient = async ( patientId, patientData ) => {
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
@@ -301,7 +306,7 @@ const updatePatient = async ( patientId, patientData ) => {
         tags,
         referredBy,
       },
-      { new: true },
+      { new: true }
     );
 
     return {
@@ -314,36 +319,71 @@ const updatePatient = async ( patientId, patientData ) => {
       error: error,
     };
   }
-}
+};
 
-const deletePatient = async ( doctorId, patientId ) => {
+const deletePatient = async (doctorId, patientId) => {
   try {
     if (!doctorId || !patientId) {
       return {
         statusCode: 403,
-        error: 'DoctorId & PatientId is required',
+        error: "DoctorId & PatientId is required",
       };
     }
 
-    const patient = await DoctorPatient.findOneAndDelete({ doctorId, patientId });
+    const patient = await DoctorPatient.findOneAndDelete({
+      doctorId,
+      patientId,
+    });
 
     if (!patient) {
       return {
         statusCode: 404,
-        error: 'Patient not found',
+        error: "Patient not found",
       };
     }
 
     return {};
   } catch (error) {
     return {
-      statusCode: 500, 
+      statusCode: 500,
       error: error,
     };
   }
-}
+};
+
+const getDoctors = async (patientId) => {
+  try {
+    const doctors = await DoctorPatient.find({ patientId }).populate(
+      "doctorId"
+    );
+
+    return { statusCode: 200, doctorData: doctors };
+  } catch (error) {
+    console.log("Error while fetching doctors from the DB : ", error);
+    return { statusCode: 500, error: error };
+  }
+};
+
+const deletePresciption = async (patientId, record) => {
+  try {
+    const url = record.fileUrl;
+    const response = await FileUploader.deleteOne({
+      patientId,
+      fileUrl: url,
+    });
+    return {
+      statusCode: 200,
+      data: response.deletedCount,
+    };
+  } catch (error) {
+    console.log("Error while deleting the prescription form DB : ", error);
+    return { statusCode: 500, error: error };
+  }
+};
 
 module.exports = {
+  deletePresciption,
+  getDoctors,
   registerPatient,
   generateOTP,
   validateOTP,

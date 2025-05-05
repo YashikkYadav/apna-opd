@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Loader from "./Loader";
 
@@ -14,7 +14,7 @@ export const useLoader = () => {
   return context;
 };
 
-export function LoaderProvider({ children }) {
+function LoaderProviderContent({ children }) {
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -30,5 +30,13 @@ export function LoaderProvider({ children }) {
       {loading && <Loader />}
       {children}
     </LoaderContext.Provider>
+  );
+}
+
+export function LoaderProvider({ children }) {
+  return (
+    <Suspense fallback={null}>
+      <LoaderProviderContent>{children}</LoaderProviderContent>
+    </Suspense>
   );
 }

@@ -18,6 +18,7 @@ const registerHealthServe = async (req, res) => {
 };
 
 const loginHealthServe = async (req, res) => {
+  console.log("Controller Reached ");
   try {
     const data = req.body;
 

@@ -4,7 +4,7 @@
             <h2 class="card-title">Invoices</h2>
             <div class="d-flex">
                 <h1 class="dashboard-title">{{ invoice12MonthSum }}</h1>
-                <p class="tag">+42%</p>
+                <!-- <p class="tag">+42%</p> -->
             </div>
         </div>
         <div>

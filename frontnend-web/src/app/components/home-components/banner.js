@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SearchBar from "./../common-components/SearchBar";
 
@@ -22,13 +23,13 @@ const Banner = () => {
                 Fully Medicine Solution for You
               </h1>
               <p className="text-base text-white mb-[29px]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam.
+                Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital. Whether you're looking for online doctor consultation, in-clinic visits, or the best OPD booking app — we make it easy to compare, choose, and book appointments with trusted doctors across India in minutes.
               </p>
-              <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold mb-[30px] md:mb-[67px] hover:text-white hover:border-white">
-                Get Started
-              </button>
+              <Link href="/find-doctor" passHref>
+                <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold mb-[30px] md:mb-[67px] hover:text-white hover:border-white">
+                  Get Started
+                </button>
+              </Link>
             </div>
             <div>
               <Image

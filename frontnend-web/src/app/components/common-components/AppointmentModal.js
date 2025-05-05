@@ -49,7 +49,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       }
     } catch (error) {
       toast.error(error?.response || "Failed to fetch locations");
-      console.error("Error fetching locations:", error);
+      console.log("Error fetching locations:", error);
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +64,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       }
     } catch (error) {
       toast.error(error?.response || "Failed to fetch available dates");
-      console.error("Error fetching dates:", error);
+      console.log("Error fetching dates:", error);
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +79,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       }
     } catch (error) {
       toast.error(error?.response || "Failed to fetch time slots");
-      console.error("Error fetching time slots:", error);
+      console.log("Error fetching time slots:", error);
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +135,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       onClose();
     } catch (error) {
       toast.error(error?.response?.data || error?.response || "Failed to book appointment");
-      console.error("Error booking appointment:", error);
+      console.log("Error booking appointment:", error);
     } finally {
       setIsLoading(false);
     }

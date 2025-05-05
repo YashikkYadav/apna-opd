@@ -19,7 +19,6 @@ export const useDashboardStore = defineStore("dashboardStore", {
       const data = await DashboardService.last30DaysEnquiryList(
         this.healthServeId
       );
-      console.log(data);
       return data;
     },
     async getLast30DaysInvoiceApiCall() {

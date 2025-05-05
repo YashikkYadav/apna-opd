@@ -8,13 +8,21 @@
         </div>
       </v-card-title>
       <v-card-text>
-        <p v-if="patientData.phoneNumber">Contact: {{ patientData.phoneNumber }}</p>
+        <p v-if="patientData.phoneNumber">
+          Contact: {{ patientData.phoneNumber }}
+        </p>
         <p v-if="patientData.email">Email: {{ patientData.email }}</p>
         <p v-if="patientData.gender">Gender: {{ patientData.gender }}</p>
         <p v-if="patientData.age">Age: {{ patientData.age }}</p>
-        <p v-if="patientData.bloodGroup">Blood Group: {{ patientData.bloodGroup }}</p>
-        <p v-if="patientData.allergies">Allergies: {{ patientData.allergies }}</p>
-        <p v-if="patientData.dateOfBirth">Date of Birth: {{ formatedDate(patientData.dateOfBirth) }}</p>
+        <p v-if="patientData.bloodGroup">
+          Blood Group: {{ patientData.bloodGroup }}
+        </p>
+        <p v-if="patientData.allergies">
+          Allergies: {{ patientData.allergies }}
+        </p>
+        <p v-if="patientData.dateOfBirth">
+          Date of Birth: {{ formatedDate(patientData.dateOfBirth) }}
+        </p>
         <p v-if="patientData.tags">Category: {{ patientData.tags }}</p>
         <p v-if="patientData.address">Address: {{ patientData.address }}</p>
       </v-card-text>
@@ -26,22 +34,61 @@
         <h4 class="section-title prescription-card-heading">Prescriptions</h4>
       </v-col>
       <v-col class="text-center v-col-3">
-        <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('prescription')">Upload Prescription</v-btn>
-        <input ref="prescriptionFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
-          @change="handleFileUpload('prescription')" />
+        <v-btn
+          class="saaro-btn"
+          color="#4caf50"
+          @click="triggerFileUpload('prescription')"
+          >Upload Prescription</v-btn
+        >
+        <input
+          ref="prescriptionFileInput"
+          type="file"
+          accept=".pdf,.png,.jpg,.jpeg"
+          class="d-none"
+          @change="handleFileUpload('prescription')"
+        />
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col v-for="record in prescriptionRecords" :key="record.id" cols="12" md="6">
+      <v-col
+        v-for="record in prescriptionRecords"
+        :key="record.id"
+        cols="12"
+        md="6"
+      >
         <v-card class="health-record-card mb-4">
           <v-card-title>
             <span class="font-weight-bold">Document:</span>
           </v-card-title>
           <v-card-text>
-            <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
+            <template v-if="isImage(record.fileUrl)">
+              <img :src="record.fileUrl" class="preview-image" />
+            </template>
+            <template v-else>
+              <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
+            </template>
           </v-card-text>
         </v-card>
+        <v-card-actions>
+          <v-row class="ma-0" no-gutters>
+            <v-col cols="6" class="pr-1">
+              <v-btn
+                color="red"
+                class="action-btn"
+                block
+                @click="initiateDelete(record)"
+              >
+                Delete
+              </v-btn>
+            </v-col>
+            <v-col cols="6" class="pl-1">
+              <v-btn color="green" class="action-btn" block @click="sendRecord">
+                Send
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
       </v-col>
     </v-row>
 
@@ -51,9 +98,19 @@
         <h4 class="section-title prescription-card-heading">Health Records</h4>
       </v-col>
       <v-col class="text-center v-col-3">
-        <v-btn class="saaro-btn" color="#4caf50" @click="triggerFileUpload('health')">Upload Health Record</v-btn>
-        <input ref="healthFileInput" type="file" accept=".pdf,.png,.jpg,.jpeg" class="d-none"
-          @change="handleFileUpload('health')" />
+        <v-btn
+          class="saaro-btn"
+          color="#4caf50"
+          @click="triggerFileUpload('health')"
+          >Upload Health Record</v-btn
+        >
+        <input
+          ref="healthFileInput"
+          type="file"
+          accept=".pdf,.png,.jpg,.jpeg"
+          class="d-none"
+          @change="handleFileUpload('health')"
+        />
       </v-col>
     </v-row>
 
@@ -76,23 +133,45 @@
         <v-card-title class="headline">Past Prescription</v-card-title>
         <v-card-text class="d-flex pr-0">
           <v-row class="w-75">
-            <v-col class="v-col-12 m-0" style="height: 80vh;">
-              <div style="border: 1px solid #ccc; height: 100%; overflow: hidden;">
-                <iframe :src="pdfUrl" width="100%" height="100%" style="border: none;"></iframe>
+            <v-col class="v-col-12 m-0" style="height: 80vh">
+              <div
+                style="border: 1px solid #ccc; height: 100%; overflow: hidden"
+              >
+                <iframe
+                  :src="pdfUrl"
+                  width="100%"
+                  height="100%"
+                  style="border: none"
+                ></iframe>
               </div>
             </v-col>
           </v-row>
           <v-row class="justify-center">
             <v-col class="v-col-10">
               <div class="text-center pb-10">
-                <v-text-field variant="outlined" v-model="emailInput" label="Email" outlined></v-text-field>
-                <v-btn class="saaro-btn" @click="sharePrescription('Email')">Email</v-btn>
+                <v-text-field
+                  variant="outlined"
+                  v-model="emailInput"
+                  label="Email"
+                  outlined
+                ></v-text-field>
+                <v-btn class="saaro-btn" @click="sharePrescription('Email')"
+                  >Email</v-btn
+                >
               </div>
               <div class="text-center">
-                <v-text-field variant="outlined" v-model="phoneInput" label="Phone Number" outlined></v-text-field>
-                <v-btn class="saaro-btn" @click="sharePrescription('WhatsApp/SMS')">WhatsApp/SMS</v-btn>
+                <v-text-field
+                  variant="outlined"
+                  v-model="phoneInput"
+                  label="Phone Number"
+                  outlined
+                ></v-text-field>
+                <v-btn
+                  class="saaro-btn"
+                  @click="sharePrescription('WhatsApp/SMS')"
+                  >WhatsApp/SMS</v-btn
+                >
               </div>
-
             </v-col>
           </v-row>
         </v-card-text>
@@ -108,9 +187,17 @@
         <v-card-title class="popup-title">Vitals Settings</v-card-title>
 
         <v-card-text class="popup-detail">
-          <v-text-field variant="outlined" v-model="newField.label" label="Field Name"></v-text-field>
-          <v-select variant="outlined" v-model="newField.type" label="Select Input Type"
-            :items="['text', 'date']"></v-select>
+          <v-text-field
+            variant="outlined"
+            v-model="newField.label"
+            label="Field Name"
+          ></v-text-field>
+          <v-select
+            variant="outlined"
+            v-model="newField.type"
+            label="Select Input Type"
+            :items="['text', 'date']"
+          ></v-select>
         </v-card-text>
 
         <v-card-actions class="popup-action">
@@ -125,15 +212,40 @@
         <v-card-title class="popup-title">Consult Settings</v-card-title>
 
         <v-card-text class="popup-detail">
-          <v-text-field variant="outlined" v-model="newSection.label" label="Section Name"></v-text-field>
-          <v-select variant="outlined" v-model="newSection.type" label="Select Input Type"
-            :items="['text', 'date']"></v-select>
-          <v-switch label="Is Printable?" color="#385D7E" v-model="newSection.isPrint"></v-switch>
+          <v-text-field
+            variant="outlined"
+            v-model="newSection.label"
+            label="Section Name"
+          ></v-text-field>
+          <v-select
+            variant="outlined"
+            v-model="newSection.type"
+            label="Select Input Type"
+            :items="['text', 'date']"
+          ></v-select>
+          <v-switch
+            label="Is Printable?"
+            color="#385D7E"
+            v-model="newSection.isPrint"
+          ></v-switch>
         </v-card-text>
 
         <v-card-actions class="popup-action">
-          <v-btn class="saaro-btn" text @click="showSettingsForSection = false">Cancel</v-btn>
+          <v-btn class="saaro-btn" text @click="showSettingsForSection = false"
+            >Cancel</v-btn
+          >
           <v-btn class="saaro-btn" text @click="addSection">Add Section</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="confirmDelete" max-width="500">
+      <v-card>
+        <v-card-title class="text-h6">Confirm Deletion</v-card-title>
+        <v-card-text>Are you sure you want to delete this record?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="confirmDelete = false">Cancel</v-btn>
+          <v-btn color="red" text @click="deleteRecord">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -141,17 +253,23 @@
 </template>
 
 <script>
-import { checkAuth, getDateFormate } from '@/lib/utils/utils';
-import { usePatientStore } from '@/store/PatientStore';
-import { useDropdownStore } from '@/store/DropdownStore';
-import { useTemplateStore } from '@/store/TemplateStore';
-import { useMedicineStore } from '@/store/MedicineStore';
-import { usePrescriptionStore } from '@/store/PrescriptionStore';
-import { useUiStore } from '@/store/UiStore';
-import { dosageSuggestionsData, durationSuggestionsData, frequencyOptions } from '@/faker/data';
+import { checkAuth, getDateFormate } from "@/lib/utils/utils";
+import { usePatientStore } from "@/store/PatientStore";
+import { useDropdownStore } from "@/store/DropdownStore";
+import { useTemplateStore } from "@/store/TemplateStore";
+import { useMedicineStore } from "@/store/MedicineStore";
+import { usePrescriptionStore } from "@/store/PrescriptionStore";
+import { useUiStore } from "@/store/UiStore";
+import {
+  dosageSuggestionsData,
+  durationSuggestionsData,
+  frequencyOptions,
+} from "@/faker/data";
 export default {
   data() {
     return {
+      confirmDelete: false,
+      recordToDelete: null,
       showSettings: false,
       showSettingsForSection: false,
       vitals: {
@@ -168,15 +286,23 @@ export default {
         { label: "Pulse", model: "pulse", type: "text", placeholder: "bpm" },
         { label: "Height", model: "height", type: "text", placeholder: "cm" },
         { label: "Weight", model: "weight", type: "text", placeholder: "kg" },
-        { label: "Temperature", model: "temperature", type: "text", placeholder: "°F" },
-        { label: "Pain Score", model: "painScore", type: "text", placeholder: "0" },
+        {
+          label: "Temperature",
+          model: "temperature",
+          type: "text",
+          placeholder: "°F",
+        },
+        {
+          label: "Pain Score",
+          model: "painScore",
+          type: "text",
+          placeholder: "0",
+        },
       ],
       dynamicSection: [],
       newField: { label: "", type: "text" },
       newSection: { label: "", isPrint: false, type: "text" },
-      drugAllergyList: [
-        { details: "", reaction: "" }
-      ],
+      drugAllergyList: [{ details: "", reaction: "" }],
       patientData: [],
       dosageSuggestions: dosageSuggestionsData,
       complaintSuggestions: [],
@@ -199,47 +325,47 @@ export default {
       medicationsTemplate: [],
       adviceTemplate: [],
       dialog: false,
-      prescriptionUrl: '',
-      visitNumber: '',
-      complaintsList: [{ name: '' }],
+      prescriptionUrl: "",
+      visitNumber: "",
+      complaintsList: [{ name: "" }],
       search: "",
-      historyList: [{ name: '' }],
-      drugAllergy: [{ name: '', details: '' }],
-      drugHistory: [{ name: '', details: '' }],
-      antiplatlet: [{ name: '', details: '' }],
-      previousSurgery: '',
-      physicalExamList: [{ name: '' }],
-      implantList: [
-        { type: "", details: "" }
-      ],
-      diagnosisList: [{ type: '', details: '' }],
+      historyList: [{ name: "" }],
+      drugAllergy: [{ name: "", details: "" }],
+      drugHistory: [{ name: "", details: "" }],
+      antiplatlet: [{ name: "", details: "" }],
+      previousSurgery: "",
+      physicalExamList: [{ name: "" }],
+      implantList: [{ type: "", details: "" }],
+      diagnosisList: [{ type: "", details: "" }],
       investigationAdviceList: [{ name: "", details: "" }],
       suggestions: ["Blood Test", "MRI Scan", "CT Scan", "X-Ray"],
-      provisional: '',
-      medications: [{ name: '', dosage: '', frequency: '', duration: '', notes: '' }],
-      adviceList: [{ name: '' }],
-      followUpDays: '',
-      followUpDate: '',
-      implant: [{ name: '', removalDate: '' }],
-      referredTo: { name: '', specialty: '' },
-      referredBy: { name: '', specialty: '' },
-      surgeryAdvised: '',
-      pdfDialog: false,
-      pdfUrl: '',
-      pastPrescriptions: [],
-      tags: '',
-      diagnosisHeaders: [
-        { text: 'Diagnosis Type', align: 'start', value: 'type' },
-        { text: 'Details', align: 'start', value: 'details' },
+      provisional: "",
+      medications: [
+        { name: "", dosage: "", frequency: "", duration: "", notes: "" },
       ],
-      emailInput: '',
-      phoneInput: '',
+      adviceList: [{ name: "" }],
+      followUpDays: "",
+      followUpDate: "",
+      implant: [{ name: "", removalDate: "" }],
+      referredTo: { name: "", specialty: "" },
+      referredBy: { name: "", specialty: "" },
+      surgeryAdvised: "",
+      pdfDialog: false,
+      pdfUrl: "",
+      pastPrescriptions: [],
+      tags: "",
+      diagnosisHeaders: [
+        { text: "Diagnosis Type", align: "start", value: "type" },
+        { text: "Details", align: "start", value: "details" },
+      ],
+      emailInput: "",
+      phoneInput: "",
       medicationHeaders: [
-        { text: 'Name', align: 'start', value: 'name' },
-        { text: 'Dosage', align: 'start', value: 'dosage' },
-        { text: 'Frequency', align: 'start', value: 'frequency' },
-        { text: 'Duration', align: 'start', value: 'duration' },
-        { text: 'Notes', align: 'start', value: 'notes' },
+        { text: "Name", align: "start", value: "name" },
+        { text: "Dosage", align: "start", value: "dosage" },
+        { text: "Frequency", align: "start", value: "frequency" },
+        { text: "Duration", align: "start", value: "duration" },
+        { text: "Notes", align: "start", value: "notes" },
       ],
       frequencyOptions: frequencyOptions,
       isDraft: false,
@@ -264,24 +390,49 @@ export default {
     }
   },
   methods: {
+    isImage(url) {
+      return /\.(jpe?g|png)$/i.test(url);
+    },
+    initiateDelete(record) {
+      this.confirmDelete = true;
+      this.recordToDelete = record;
+    },
+    async deleteRecord() {
+      const patientId = this.$route.params.patientId;
+      const res = await usePatientStore().deletePrescrtiption(
+        patientId,
+        this.recordToDelete
+      );
+      this.recordToDelete = null;
+      this.confirmDelete = false;
+      window.location.reload();
+    },
+    sendRecord() {
+      // Implement your send logic here
+      console.log("Sending record:", this.record);
+    },
     async fetchPatientDetails() {
       const patientId = this.$route.params.patientId;
-      const res = await usePatientStore().getPatientDetailsApiCall(patientId)
+      const res = await usePatientStore().getPatientDetailsApiCall(patientId);
 
       if (res) {
         this.emailInput = res.patient.email;
         this.phoneInput = res.patient.phoneNumber;
         this.tags = res.patient.tags;
-        this.patientData = res.patient
+        this.patientData = res.patient;
       }
     },
     async fetchPriscriptionSections() {
-      const res = await usePrescriptionStore().getPrescriptionSectionsApiCall()
+      const res = await usePrescriptionStore().getPrescriptionSectionsApiCall();
 
       if (res) {
         res.prescriptionSections.forEach((item) => {
-          const exists = this.dynamicFields.some(field => field.label === item.label);
-          const existsSection = this.dynamicSection.some(field => field.label === item.label);
+          const exists = this.dynamicFields.some(
+            (field) => field.label === item.label
+          );
+          const existsSection = this.dynamicSection.some(
+            (field) => field.label === item.label
+          );
 
           if (!exists && item.sectionType === "vitals") {
             this.dynamicFields.push({
@@ -289,20 +440,20 @@ export default {
               model: item.label,
               type: item.fieldType,
               placeholder: item.fieldType === "text" ? "Enter text" : "",
-            })
+            });
           } else if (!existsSection && item.sectionType === "consult") {
             this.dynamicSection.push({
               label: item.label,
               model: item.label,
               type: item.fieldType,
               placeholder: item.fieldType === "text" ? "Enter text" : "",
-            })
+            });
           }
-        })
+        });
       }
     },
     async fetchDropdowns() {
-      const res = await useDropdownStore().getAllDropdownsApiCall()
+      const res = await useDropdownStore().getAllDropdownsApiCall();
 
       if (res) {
         const templates = {};
@@ -312,7 +463,7 @@ export default {
             .toLowerCase()
             .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
               index === 0 ? word.toLowerCase() : word.toUpperCase()
-            )
+            );
 
           if (!templates[sectionName]) {
             templates[sectionName] = [];
@@ -323,31 +474,41 @@ export default {
           });
         });
 
-        this.complaintSuggestions = this.convertToDirectArray(templates.complaints) || [];
-        this.historySuggestions = this.convertToDirectArray(templates.history) || [];
-        this.physicalSuggestions = this.convertToDirectArray(templates["physical Examination"]) || [];
-        this.diagnosisSuggestions = this.convertToDirectArray(templates.diagnosis) || [];
-        this.provisionalDiagnosisSuggestions = this.convertToDirectArray(templates["provisional Diagnosis"]) || [];
-        this.investigationAdviceSuggestions = this.convertToDirectArray(templates["investigation Advice"]) || [];
-        this.adviceSuggestions = this.convertToDirectArray(templates.advice) || [];
-        this.doctorNameSuggestions = this.convertToDirectArray(templates.doctor) || [];
-        this.surgeryAdviceSuggestions = this.convertToDirectArray(templates["surgery Adviced"]) || [];
+        this.complaintSuggestions =
+          this.convertToDirectArray(templates.complaints) || [];
+        this.historySuggestions =
+          this.convertToDirectArray(templates.history) || [];
+        this.physicalSuggestions =
+          this.convertToDirectArray(templates["physical Examination"]) || [];
+        this.diagnosisSuggestions =
+          this.convertToDirectArray(templates.diagnosis) || [];
+        this.provisionalDiagnosisSuggestions =
+          this.convertToDirectArray(templates["provisional Diagnosis"]) || [];
+        this.investigationAdviceSuggestions =
+          this.convertToDirectArray(templates["investigation Advice"]) || [];
+        this.adviceSuggestions =
+          this.convertToDirectArray(templates.advice) || [];
+        this.doctorNameSuggestions =
+          this.convertToDirectArray(templates.doctor) || [];
+        this.surgeryAdviceSuggestions =
+          this.convertToDirectArray(templates["surgery Adviced"]) || [];
         this.tagsSuggestions = this.convertToDirectArray(templates.tags) || [];
       }
     },
     async fetchTemplates() {
-      const res = await useTemplateStore().getAllTemplatesApiCall()
+      const res = await useTemplateStore().getAllTemplatesApiCall();
 
       if (res) {
         const templates = {};
 
         res.templates.forEach((item) => {
-          const sectionName = item.sectionName
-            .toLowerCase()
-            .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
-              index === 0 ? word.toLowerCase() : word.toUpperCase()
-            )
-            .replace(/\s+/g, "") + "Template";
+          const sectionName =
+            item.sectionName
+              .toLowerCase()
+              .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+                index === 0 ? word.toLowerCase() : word.toUpperCase()
+              )
+              .replace(/\s+/g, "") + "Template";
 
           if (!templates[sectionName]) {
             templates[sectionName] = [];
@@ -355,13 +516,18 @@ export default {
 
           const formattedData = item.data
             .filter((dataItem) => {
-              return Object.values(dataItem).some((value) => value && value.trim());
+              return Object.values(dataItem).some(
+                (value) => value && value.trim()
+              );
             })
             .map((dataItem) => {
               if (sectionName === "complaintsTemplate") {
                 return { name: dataItem.name || "" };
               } else if (sectionName === "diagnosisTemplate") {
-                return { type: dataItem.name || "", details: dataItem.details || "" };
+                return {
+                  type: dataItem.name || "",
+                  details: dataItem.details || "",
+                };
               } else {
                 return dataItem;
               }
@@ -375,15 +541,17 @@ export default {
 
         this.complaintsTemplate = templates.complaintsTemplate || [];
         this.historyTemplate = templates.historyTemplate || [];
-        this.physicalExaminationTemplate = templates.physicalExaminationTemplate || [];
+        this.physicalExaminationTemplate =
+          templates.physicalExaminationTemplate || [];
         this.diagnosisTemplate = templates.diagnosisTemplate || [];
         this.medicationsTemplate = templates.medicationsTemplate || [];
         this.adviceTemplate = templates.adviceTemplate || [];
-        this.investigationAdviceTemplate = templates.investigationAdviceTemplate || [];
+        this.investigationAdviceTemplate =
+          templates.investigationAdviceTemplate || [];
       }
     },
     async fetchMedicines() {
-      const res = await useMedicineStore().getAllMedicinesApiCall()
+      const res = await useMedicineStore().getAllMedicinesApiCall();
 
       if (res) {
         this.medicineSuggestions = res.medicines.map((medicine) => ({
@@ -394,12 +562,14 @@ export default {
     },
     async fetchDraftPrescription() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getDraftPrescriptionApiCall(patientId)
+      const res = await usePrescriptionStore().getDraftPrescriptionApiCall(
+        patientId
+      );
 
       if (res) {
         const prescriptionData = res.prescription;
 
-        if (prescriptionData !== 'Prescription is not drafted yet.') {
+        if (prescriptionData !== "Prescription is not drafted yet.") {
           this.isDraft = true;
         }
 
@@ -408,15 +578,27 @@ export default {
         this.vitals.weight = prescriptionData.weight;
         this.vitals.pulse = prescriptionData.pulse;
         this.vitals.temperature = prescriptionData.temperature;
-        this.vitals.painScore = prescriptionData.painScore
+        this.vitals.painScore = prescriptionData.painScore;
 
-        this.complaintsList = prescriptionData.complaints?.length ? prescriptionData.complaints.map(complaint => ({ name: complaint })) : [{ name: "" }];
-        this.historyList = prescriptionData.history?.length ? prescriptionData.history.map(history => ({ name: history })) : [{ name: "" }];
+        this.complaintsList = prescriptionData.complaints?.length
+          ? prescriptionData.complaints.map((complaint) => ({
+              name: complaint,
+            }))
+          : [{ name: "" }];
+        this.historyList = prescriptionData.history?.length
+          ? prescriptionData.history.map((history) => ({ name: history }))
+          : [{ name: "" }];
         this.previousSurgery = prescriptionData.previousSurgery;
-        this.physicalExamList = prescriptionData.physicalExamination?.length ? prescriptionData.physicalExamination.map(complaint => ({ name: complaint })) : [{ name: "" }];
+        this.physicalExamList = prescriptionData.physicalExamination?.length
+          ? prescriptionData.physicalExamination.map((complaint) => ({
+              name: complaint,
+            }))
+          : [{ name: "" }];
         this.provisional = prescriptionData.provisional;
         this.investigationAdvice = prescriptionData.investigationsAdviced;
-        this.adviceList = prescriptionData.advice?.length ? prescriptionData.advice.map(advice => ({ name: advice })) : [{ name: "" }];
+        this.adviceList = prescriptionData.advice?.length
+          ? prescriptionData.advice.map((advice) => ({ name: advice }))
+          : [{ name: "" }];
         this.followUpDate = getDateFormate(prescriptionData.followUp?.date);
         this.followUpDays = prescriptionData.followUp?.days;
         this.surgeryAdvised = prescriptionData.surgeryAdvice;
@@ -434,22 +616,26 @@ export default {
           });
         }
         diagnosisListRes.push({
-          type: '',
-          details: '',
-        })
+          type: "",
+          details: "",
+        });
         this.diagnosisList = diagnosisListRes;
 
         const investigationAdviceList = [];
-        for (let i = 0; i < prescriptionData.investigationsAdviced?.length; i++) {
+        for (
+          let i = 0;
+          i < prescriptionData.investigationsAdviced?.length;
+          i++
+        ) {
           investigationAdviceList.push({
             name: prescriptionData.investigationsAdviced[i].name,
             details: prescriptionData.investigationsAdviced[i].details,
           });
         }
         investigationAdviceList.push({
-          name: '',
-          details: '',
-        })
+          name: "",
+          details: "",
+        });
         this.investigationAdviceList = investigationAdviceList;
 
         const implantList = [];
@@ -460,9 +646,9 @@ export default {
           });
         }
         implantList.push({
-          name: '',
-          removalDate: '',
-        })
+          name: "",
+          removalDate: "",
+        });
         this.implant = implantList;
 
         const drugAllergyList = [];
@@ -473,9 +659,9 @@ export default {
           });
         }
         drugAllergyList.push({
-          name: '',
-          details: '',
-        })
+          name: "",
+          details: "",
+        });
         this.drugAllergy = drugAllergyList;
 
         const drugHistoryList = [];
@@ -486,9 +672,9 @@ export default {
           });
         }
         drugHistoryList.push({
-          name: '',
-          details: '',
-        })
+          name: "",
+          details: "",
+        });
         this.drugHistory = drugHistoryList;
 
         const antiplatletList = [];
@@ -499,9 +685,9 @@ export default {
           });
         }
         antiplatletList.push({
-          name: '',
-          details: '',
-        })
+          name: "",
+          details: "",
+        });
         this.antiplatlet = antiplatletList;
 
         const medicationListRes = [];
@@ -516,13 +702,13 @@ export default {
           });
         }
         medicationListRes.push({
-          name: '',
-          dosage: '',
-          frequency: '',
-          duration: '',
-          notes: '',
-          composition: ''
-        })
+          name: "",
+          dosage: "",
+          frequency: "",
+          duration: "",
+          notes: "",
+          composition: "",
+        });
         this.medications = medicationListRes;
         this.fetchPrescriptions();
       }
@@ -530,7 +716,6 @@ export default {
     async fetchPrescriptions() {
       // const patientId = this.$route.params.patientId;
       // const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
-
       // if (res) {
       //   let counter = res.files.length;
       //   this.pastPrescriptions = res.files.map((item) => ({
@@ -550,7 +735,6 @@ export default {
       //     investigationsAdviced: item?.investigationsAdviced.map((invest) => invest.name),
       //     pdfUrl: `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item._id}.pdf`,
       //   }));
-
       //   if (!this.isDraft === true && this.pastPrescriptions.length > 0) {
       //     const item = this.pastPrescriptions[0];
       //     const drugList = [];
@@ -565,7 +749,6 @@ export default {
       //       details: '',
       //     })
       //     this.drugAllergy = drugList;
-
       //     const drugHList = [];
       //     for (let i = 0; i < item.drugHistory.length; i++) {
       //       drugHList.push({
@@ -578,7 +761,6 @@ export default {
       //       details: '',
       //     })
       //     this.drugHistory = drugHList;
-
       //     const antiplatlet = [];
       //     for (let i = 0; i < item.antiplatlet.length; i++) {
       //       antiplatlet.push({
@@ -591,7 +773,6 @@ export default {
       //       details: '',
       //     })
       //     this.antiplatlet = antiplatlet;
-
       //     const today = new Date();
       //     const implantList = [];
       //     for (let i = 0; i < item.implants.length; i++) {
@@ -608,10 +789,8 @@ export default {
       //       removalDate: '',
       //     })
       //     this.implant = implantList;
-
       //     this.tags = item.tags;
       //     this.provisional = item.provisional;
-
       //     const historyList = [];
       //     for (let i = 0; i < item.history.length; i++) {
       //       historyList.push({
@@ -624,7 +803,7 @@ export default {
     },
     async fetchHealthFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getHealthFileApiCall(patientId)
+      const res = await usePrescriptionStore().getHealthFileApiCall(patientId);
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
@@ -634,7 +813,7 @@ export default {
     },
     async fetchIpdFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getIpdFileApiCall(patientId)
+      const res = await usePrescriptionStore().getIpdFileApiCall(patientId);
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
@@ -644,7 +823,9 @@ export default {
     },
     async fetchPrescriptionFiles() {
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().getPrescriptionFileApiCall(patientId)
+      const res = await usePrescriptionStore().getPrescriptionFileApiCall(
+        patientId
+      );
 
       if (res) {
         for (let i = 0; i < res.files.length; i++) {
@@ -660,10 +841,12 @@ export default {
         fieldType: this.newField.type,
         placeholder: "Enter text",
         sectionType: "vitals",
-        printable: true
-      }
+        printable: true,
+      };
 
-      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(requestData)
+      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(
+        requestData
+      );
 
       if (res) {
         this.newField = { label: "", type: "text" };
@@ -680,33 +863,38 @@ export default {
         fieldType: this.newSection.type,
         placeholder: "Enter text",
         sectionType: "consult",
-        printable: this.newSection.isPrint
-      }
+        printable: this.newSection.isPrint,
+      };
 
-      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(requestData)
+      const res = await usePrescriptionStore().addPrescriptionSectionsApiCall(
+        requestData
+      );
 
       if (res) {
         this.fetchPriscriptionSections();
         this.newSection = { label: "", isPrint: false, type: "text" };
         this.showSettingsForSection = false;
-        useUiStore().openNotificationMessage("Consult Section Added Successfully!");
+        useUiStore().openNotificationMessage(
+          "Consult Section Added Successfully!"
+        );
       }
     },
     async AddDropdown(sectionName, sectionId, data, dropdownData) {
-      let notAvailableData
+      let notAvailableData;
 
       if (typeof data === "string") {
-        notAvailableData = dropdownData.includes(data.trim()) ? [] : [data.trim()];
+        notAvailableData = dropdownData.includes(data.trim())
+          ? []
+          : [data.trim()];
       } else {
-
         if (sectionName === "Diagnosis") {
           notAvailableData = data
-            .map(item => item.type.trim())
-            .filter(name => name && !dropdownData.includes(name));
+            .map((item) => item.type.trim())
+            .filter((name) => name && !dropdownData.includes(name));
         } else {
           notAvailableData = data
-            .map(item => item.name.trim())
-            .filter(name => name && !dropdownData.includes(name));
+            .map((item) => item.name.trim())
+            .filter((name) => name && !dropdownData.includes(name));
         }
       }
 
@@ -715,35 +903,41 @@ export default {
           const requestData = {
             sectionId: sectionId,
             sectionName: sectionName,
-            name: name
-          }
+            name: name,
+          };
 
-          const res = await useDropdownStore().AddDropdownApiCall(requestData)
+          const res = await useDropdownStore().AddDropdownApiCall(requestData);
 
           if (res) {
             this.fetchDropdowns();
-            useUiStore().openNotificationMessage("Dropdown Saved Successfully!");
+            useUiStore().openNotificationMessage(
+              "Dropdown Saved Successfully!"
+            );
           }
-        })
+        });
       }
     },
     async AddMedicineDropdown(data, dropdownData) {
-      let notAvailableData = data.map(item => (typeof item.name === "string" && item.name.trim())).filter(name => name && !dropdownData.includes(name));
+      let notAvailableData = data
+        .map((item) => typeof item.name === "string" && item.name.trim())
+        .filter((name) => name && !dropdownData.includes(name));
 
       if (notAvailableData.length > 0) {
         notAvailableData.map(async (name) => {
           const requestData = {
             composition: "-",
-            medicineName: name
-          }
+            medicineName: name,
+          };
 
-          const res = await useMedicineStore().AddMedicineApiCall(requestData)
+          const res = await useMedicineStore().AddMedicineApiCall(requestData);
 
           if (res) {
             this.fetchMedicines();
-            useUiStore().openNotificationMessage("Medicine Saved Successfully!");
+            useUiStore().openNotificationMessage(
+              "Medicine Saved Successfully!"
+            );
           }
-        })
+        });
       }
     },
     async savePrescription() {
@@ -755,7 +949,14 @@ export default {
         }));
 
       const formattedMedications = this.medications
-        .filter((item) => item.name || item.dosage || item.frequency || item.duration || item.notes)
+        .filter(
+          (item) =>
+            item.name ||
+            item.dosage ||
+            item.frequency ||
+            item.duration ||
+            item.notes
+        )
         .map((item) => ({
           name: item.name.name ? item.name.name : item.name,
           dosage: item.dosage || null,
@@ -798,14 +999,22 @@ export default {
           details: item.details || null,
         }));
 
-      const excludedFields = ["bp", "pulse", "weight", "height", "temperature", "painScore"];
+      const excludedFields = [
+        "bp",
+        "pulse",
+        "weight",
+        "height",
+        "temperature",
+        "painScore",
+      ];
 
       const formattedAdditionalVitals = Object.entries(this.vitals)
         .filter(([key]) => !excludedFields.includes(key))
         .map(([field, value]) => ({ field, value }));
 
-      const formattedAdditionalSections = Object.entries(this.additionalSectionsData)
-        .map(([field, value]) => ({ field, value }));
+      const formattedAdditionalSections = Object.entries(
+        this.additionalSectionsData
+      ).map(([field, value]) => ({ field, value }));
 
       const requestData = {
         bloodPressure: this.vitals.bp,
@@ -814,12 +1023,12 @@ export default {
         height: this.vitals.height,
         temperature: this.vitals.temperature,
         painScore: this.vitals.painScore,
-        complaints: this.complaintsList.map(item => item.name),
-        history: this.historyList.map(item => item.name),
-        physicalExamination: this.physicalExamList.map(item => item.name),
+        complaints: this.complaintsList.map((item) => item.name),
+        history: this.historyList.map((item) => item.name),
+        physicalExamination: this.physicalExamList.map((item) => item.name),
         diagnosis: formattedDiagnosis,
         medications: formattedMedications,
-        advice: this.adviceList.map(item => item.name),
+        advice: this.adviceList.map((item) => item.name),
         followUp: {
           days: this.followUpDays,
           date: this.followUpDate,
@@ -843,15 +1052,20 @@ export default {
         investigationsAdviced: formattedInvestigationAdvice,
         additionalVitals: formattedAdditionalVitals,
         additionalSections: formattedAdditionalSections,
-      }
+      };
 
       const patientId = this.$route.params.patientId;
 
-      const res = await usePrescriptionStore().savePrescriptionApiCall(patientId, requestData)
+      const res = await usePrescriptionStore().savePrescriptionApiCall(
+        patientId,
+        requestData
+      );
 
       if (res) {
-        useUiStore().openNotificationMessage("Prescription Saved Successfully!");
-        this.fetchDraftPrescription()
+        useUiStore().openNotificationMessage(
+          "Prescription Saved Successfully!"
+        );
+        this.fetchDraftPrescription();
       }
     },
     async endConsultation(status) {
@@ -863,7 +1077,14 @@ export default {
         }));
 
       const formattedMedications = this.medications
-        .filter((item) => item.name || item.dosage || item.frequency || item.duration || item.notes)
+        .filter(
+          (item) =>
+            item.name ||
+            item.dosage ||
+            item.frequency ||
+            item.duration ||
+            item.notes
+        )
         .map((item) => ({
           name: item.name.name ? item.name.name : item.name,
           dosage: item.dosage || null,
@@ -906,14 +1127,22 @@ export default {
           details: item.details || null,
         }));
 
-      const excludedFields = ["bp", "pulse", "weight", "height", "temperature", "painScore"];
+      const excludedFields = [
+        "bp",
+        "pulse",
+        "weight",
+        "height",
+        "temperature",
+        "painScore",
+      ];
 
       const formattedAdditionalVitals = Object.entries(this.vitals)
         .filter(([key]) => !excludedFields.includes(key))
         .map(([field, value]) => ({ field, value }));
 
-      const formattedAdditionalSections = Object.entries(this.additionalSectionsData)
-        .map(([field, value]) => ({ field, value }));
+      const formattedAdditionalSections = Object.entries(
+        this.additionalSectionsData
+      ).map(([field, value]) => ({ field, value }));
 
       const requestData = {
         bloodPressure: this.vitals.bp,
@@ -922,12 +1151,12 @@ export default {
         height: this.vitals.height,
         temperature: this.vitals.temperature,
         painScore: this.vitals.painScore,
-        complaints: this.complaintsList.map(item => item.name),
-        history: this.historyList.map(item => item.name),
-        physicalExamination: this.physicalExamList.map(item => item.name),
+        complaints: this.complaintsList.map((item) => item.name),
+        history: this.historyList.map((item) => item.name),
+        physicalExamination: this.physicalExamList.map((item) => item.name),
         diagnosis: formattedDiagnosis,
         medications: formattedMedications,
-        advice: this.adviceList.map(item => item.name),
+        advice: this.adviceList.map((item) => item.name),
         followUp: {
           days: this.followUpDays,
           date: this.followUpDate,
@@ -952,10 +1181,13 @@ export default {
         status: status,
         additionalVitals: formattedAdditionalVitals,
         additionalSections: formattedAdditionalSections,
-      }
+      };
 
       const patientId = this.$route.params.patientId;
-      const res = await usePrescriptionStore().endConsultationApiCall(patientId, requestData)
+      const res = await usePrescriptionStore().endConsultationApiCall(
+        patientId,
+        requestData
+      );
 
       if (res) {
         this.prescriptionUrl = res.pdfPath;
@@ -965,7 +1197,11 @@ export default {
     },
     async handleFileUpload(type) {
       const fileInput =
-        type === "health" ? this.$refs.healthFileInput :  type === "ipd" ? this.$refs.ipdFileInput : this.$refs.prescriptionFileInput;
+        type === "health"
+          ? this.$refs.healthFileInput
+          : type === "ipd"
+          ? this.$refs.ipdFileInput
+          : this.$refs.prescriptionFileInput;
       const file = fileInput.files[0];
 
       if (!file) {
@@ -981,14 +1217,14 @@ export default {
         fileName: file.name,
         type: fileType,
         fileUrl: filePreviewUrl,
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
       };
 
       if (type === "health") {
         this.healthRecords.push(newRecord);
       } else if (type === "ipd") {
         this.ipdRecords.push(newRecord);
-      } else if (type === 'prescription') {
+      } else if (type === "prescription") {
         this.prescriptionRecords.push(newRecord);
       }
 
@@ -998,10 +1234,15 @@ export default {
       formData.append("file", file);
       formData.append("fileType", type);
 
-      const res = await usePrescriptionStore().uploadFileApiCall(patientId, formData)
+      const res = await usePrescriptionStore().uploadFileApiCall(
+        patientId,
+        formData
+      );
 
       if (res) {
-        useUiStore().openNotificationMessage(`${type} record uploaded successfully!`);
+        useUiStore().openNotificationMessage(
+          `${type} record uploaded successfully!`
+        );
       }
     },
     closeModal() {
@@ -1015,15 +1256,17 @@ export default {
       return result;
     },
     convertToDirectArray(objArray) {
-      return objArray?.map(item => item.name);
+      return objArray?.map((item) => item.name);
     },
     focusNextInput(index, field) {
       const currentInput = document.activeElement;
       const allInputs = Array.from(document.querySelectorAll("input"));
-      const validInputs = allInputs.filter(input => {
+      const validInputs = allInputs.filter((input) => {
         const ariaLabel = input.getAttribute("aria-label") || "";
         const inputMode = input.getAttribute("inputmode") || "";
-        return inputMode !== "none" && !ariaLabel.toLowerCase().includes("open");
+        return (
+          inputMode !== "none" && !ariaLabel.toLowerCase().includes("open")
+        );
       });
 
       const currentIndex = validInputs.indexOf(currentInput);
@@ -1033,7 +1276,6 @@ export default {
       }
     },
     toggleEditComposition(item) {
-
       if (item.isEditingComposition) {
         item.isEditingComposition = false;
       } else {
@@ -1041,7 +1283,12 @@ export default {
       }
     },
     // Add New Feilds
-    dynamicHandleInput(item, listKey, keyFields = ["name"], isComposition = false) {
+    dynamicHandleInput(
+      item,
+      listKey,
+      keyFields = ["name"],
+      isComposition = false
+    ) {
       if (isComposition) {
         const selectedMedicine = this.medicineSuggestions.find(
           (suggestion) => suggestion.name === item.name?.name
@@ -1049,23 +1296,30 @@ export default {
 
         item.composition = selectedMedicine ? selectedMedicine.composition : "";
       }
-      if (this.isRowFilledDynamic(item, keyFields) && !this.hasEmptyRowDynamic(this[listKey], keyFields)) {
+      if (
+        this.isRowFilledDynamic(item, keyFields) &&
+        !this.hasEmptyRowDynamic(this[listKey], keyFields)
+      ) {
         this[listKey].push(this.createEmptyRowDynamic(keyFields));
       }
       this.removeEmptyRowsDynamic(listKey, keyFields);
     },
 
     isRowFilledDynamic(item, keyFields) {
-      return keyFields.some(field => item[field]?.trim());
+      return keyFields.some((field) => item[field]?.trim());
     },
 
     hasEmptyRowDynamic(list, keyFields) {
-      return list.some(row => keyFields.every(field => !row[field]?.trim()));
+      return list.some((row) =>
+        keyFields.every((field) => !row[field]?.trim())
+      );
     },
 
     removeEmptyRowsDynamic(listKey, keyFields) {
-      this[listKey] = this[listKey].filter((row, index) =>
-        this.isRowFilledDynamic(row, keyFields) || index === this[listKey].length - 1
+      this[listKey] = this[listKey].filter(
+        (row, index) =>
+          this.isRowFilledDynamic(row, keyFields) ||
+          index === this[listKey].length - 1
       );
     },
 
@@ -1075,26 +1329,28 @@ export default {
 
     // Add Template
     addTemplate(templateData, listKey, emptyItem) {
-      this[listKey] = this[listKey].filter(item =>
-        Object.values(item).some(value => value !== "")
+      this[listKey] = this[listKey].filter((item) =>
+        Object.values(item).some((value) => value !== "")
       );
 
       this[listKey].push(...templateData.data);
       this[listKey].push(emptyItem);
     },
     pdfDialogHandle(item) {
-      this.pdfUrl = `${import.meta.env.VITE_SERVER_URL}/public/prescriptions/prescription_${item.id}.pdf`;
+      this.pdfUrl = `${
+        import.meta.env.VITE_SERVER_URL
+      }/public/prescriptions/prescription_${item.id}.pdf`;
       this.pdfDialog = true;
     },
     closePdfDialog() {
-      this.pdfUrl = '';
+      this.pdfUrl = "";
       this.pdfDialog = false;
       // window.location.reload();
     },
     printPrescription() {
-      const iframe = document.createElement('iframe');
+      const iframe = document.createElement("iframe");
       iframe.src = this.pdfUrl;
-      iframe.style.display = 'none';
+      iframe.style.display = "none";
       document.body.appendChild(iframe);
 
       iframe.onload = () => {
@@ -1103,28 +1359,44 @@ export default {
       };
     },
     clearAll() {
-      this.visitNumber = '';
-      this.vitals = { bp: '', pulse: '', height: '', weight: '', temperature: '', painScore: '' };
-      this.complaintsList = [{ name: '' }];
-      this.historyList = [{ name: '' }];
-      this.physicalExamList = [{ name: '' }];
-      this.diagnosisList = [{ type: '', details: '' }];
-      this.adviceList = [{ name: '' }];
-      this.followUpDays = '';
-      this.followUpDate = '';
-      this.referredTo = { name: '', specialty: '' };
-      this.referredBy = { name: '', specialty: '' };
-      this.surgeryAdvised = '';
-      this.tags = '';
-      this.drugAllergy = [{ name: '', details: '' }];
-      this.drugHistory = [{ name: '', details: '' }];
-      this.antiplatlet = [{ name: '', details: '' }];
-      this.previousSurgery = '';
+      this.visitNumber = "";
+      this.vitals = {
+        bp: "",
+        pulse: "",
+        height: "",
+        weight: "",
+        temperature: "",
+        painScore: "",
+      };
+      this.complaintsList = [{ name: "" }];
+      this.historyList = [{ name: "" }];
+      this.physicalExamList = [{ name: "" }];
+      this.diagnosisList = [{ type: "", details: "" }];
+      this.adviceList = [{ name: "" }];
+      this.followUpDays = "";
+      this.followUpDate = "";
+      this.referredTo = { name: "", specialty: "" };
+      this.referredBy = { name: "", specialty: "" };
+      this.surgeryAdvised = "";
+      this.tags = "";
+      this.drugAllergy = [{ name: "", details: "" }];
+      this.drugHistory = [{ name: "", details: "" }];
+      this.antiplatlet = [{ name: "", details: "" }];
+      this.previousSurgery = "";
       this.investigationAdviceList = [{ name: "", details: "" }];
-      this.provisional = '';
-      this.medications = [{ name: '', dosage: '', frequency: '', duration: '', notes: '', composition: '' }];
-      this.implant = [{ name: '', removalDate: '' }];
-      this.pdfUrl = '';
+      this.provisional = "";
+      this.medications = [
+        {
+          name: "",
+          dosage: "",
+          frequency: "",
+          duration: "",
+          notes: "",
+          composition: "",
+        },
+      ];
+      this.implant = [{ name: "", removalDate: "" }];
+      this.pdfUrl = "";
     },
     calculateFollowUpDate() {
       if (this.followUpDays === null) {
@@ -1134,8 +1406,10 @@ export default {
 
       const today = new Date();
       const followUpDate = new Date(today);
-      followUpDate.setDate(followUpDate.getDate() + parseInt(this.followUpDays));
-      this.followUpDate = getDateFormate(followUpDate)
+      followUpDate.setDate(
+        followUpDate.getDate() + parseInt(this.followUpDays)
+      );
+      this.followUpDate = getDateFormate(followUpDate);
     },
     openPopup() {
       this.dialog = true;
@@ -1145,12 +1419,12 @@ export default {
       // window.location.reload();
     },
     sharePrescription(method) {
-      if (method === 'WhatsApp/SMS') {
-        alert('Prescription shared via WhatsApp/SMS!');
-      } else if (method === 'Email') {
-        alert('Prescription sent via Email!');
-      } else if (method === 'Print') {
-        alert('Prescription printed!');
+      if (method === "WhatsApp/SMS") {
+        alert("Prescription shared via WhatsApp/SMS!");
+      } else if (method === "Email") {
+        alert("Prescription sent via Email!");
+      } else if (method === "Print") {
+        alert("Prescription printed!");
       }
       this.closePopup();
     },
@@ -1159,7 +1433,7 @@ export default {
         this.$refs.healthFileInput.click();
       } else if (type === "ipd") {
         this.$refs.ipdFileInput.click();
-      } else if (type === 'prescription') {
+      } else if (type === "prescription") {
         this.$refs.prescriptionFileInput.click();
       }
     },
@@ -1169,3 +1443,25 @@ export default {
   },
 };
 </script>
+<style scoped>
+.preview-image {
+  max-width: 80%;
+  height: auto;
+  object-fit: contain;
+}
+.action-btn {
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+</style>
