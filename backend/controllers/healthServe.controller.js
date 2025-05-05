@@ -11,6 +11,7 @@ const registerHealthServe = async (req, res) => {
 
     res.status(healthServe.statusCode).json({
       healthServe: healthServe.healthServe,
+      paymentUrl: healthServe.paymentLink,
     });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
