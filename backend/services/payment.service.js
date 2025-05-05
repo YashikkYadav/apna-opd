@@ -1,5 +1,7 @@
 const axios = require('axios');
 const Payment = require('../models/payment');
+const Doctor = require('../models/doctor');
+const HealthServe = require('../models/healthServe');
 const { v4: uuidv4 } = require('uuid');
 
 const createPaymentObject = async (data) => {
@@ -165,8 +167,37 @@ const createPaymentLinkForAmount = async (amount, entityData) => {
 
 const webhook = async (requestData) => {
   try {
-    console.log('Request data: ', requestData);
-    console.log('Payload: ', requestData.payload);
+    if (requestData?.event === 'payment_link.paid') {
+      if (requestData?.payload?.payment?.entity?.notes?.entity === 'doctor') {
+        const rawPhoneNumber = requestData?.payload?.payment?.entity?.contact;
+        const sanitizedPhoneNumber = rawPhoneNumber.replace(/^\+91/, '');
+
+        const response = await Doctor.findOneAndUpdate({
+          phoneNumber: sanitizedPhoneNumber.toString(),
+        }, {
+          paymentStatus: true,
+          paymentObject: requestData.payload,
+        }, {
+          new: true,
+        });
+
+        console.log('Response here in webhook: ', response);
+      } else {
+        const rawPhoneNumber = requestData?.payload?.payment?.entity?.contact;
+        const sanitizedPhoneNumber = rawPhoneNumber.replace(/^\+91/, '');
+
+        const response = await HealthServe.findOneAndUpdate({
+          phone: sanitizedPhoneNumber.toString(),
+        }, {
+          paymentStatus: true,
+          paymentObject: requestData.payload,
+        }, {
+          new: true,
+        });
+
+        console.log('Response here in webhook: ', response);
+      }
+    }
   } catch (error) {
     return {
       statusCode: 500,
