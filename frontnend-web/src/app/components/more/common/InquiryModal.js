@@ -31,7 +31,7 @@ const InquiryModal = ({ profileData, serviceType, onClose }) => {
         `/${profileData._id}/enquiry`,
         payload
       );
-      console.log("response", response);
+
       if(response.enquiry){
         setSubmitSuccess(true);
         toast.success("Enquiry submitted successfully", {
