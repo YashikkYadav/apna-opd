@@ -90,7 +90,7 @@ const SearchResultsData = () => {
             </div>
 
             <div>
-              <SearchBar onSearch={handleSearch} />
+              <SearchBar onSearch={handleSearch} location={location} specialty={speciality} />
             </div>
           </div>
         </div>

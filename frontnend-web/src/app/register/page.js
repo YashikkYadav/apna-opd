@@ -27,7 +27,7 @@ const Register = () => {
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registerSuccess, setRegisterSuccess] = useState(true);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 

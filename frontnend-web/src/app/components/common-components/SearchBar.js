@@ -5,10 +5,11 @@ import { Form, Input } from "antd";
 import Image from "next/image";
 import debounce from "lodash/debounce";
 import { searchCities } from "../../services/locationService";
+import { toast, ToastContainer } from "react-toastify";
 
-const SearchBar = ({ onSearch }) => {
-  const [locationQuery, setLocationQuery] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+const SearchBar = ({ onSearch, location="", specialty="" }) => {
+  const [locationQuery, setLocationQuery] = useState(location);
+  const [searchQuery, setSearchQuery] = useState(specialty);
   const [locationOptions, setLocationOptions] = useState([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
@@ -57,7 +58,13 @@ const SearchBar = ({ onSearch }) => {
   }, []);
 
   const handleSearch = () => {
-    onSearch(locationQuery, searchQuery);
+    if(locationQuery || searchQuery){
+      onSearch(locationQuery, searchQuery);
+    }
+    else{
+      toast.dismiss();
+      toast.info("Please enter a location or Specialty");
+    }
   };
 
   const handleLocationSelect = (location) => {
@@ -193,6 +200,7 @@ const SearchBar = ({ onSearch }) => {
           Search
         </button>
       </Form>
+      <ToastContainer position="bottom-center" autoClose={1000} progressStyle={{ backgroundColor: "#3DB8F5" }} hideProgressBar ={true}/>
     </div>
   );
 };

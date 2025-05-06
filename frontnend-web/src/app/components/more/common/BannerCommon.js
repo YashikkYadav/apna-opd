@@ -1,12 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import InquiryModal from "./InquiryModal";
-
+import RatingModal from "../../../components/common-components/RatingModal";
+import { toast } from "react-toastify";
 const BannerCommon = ({ profileData, serviceType }) => {
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showRateModal, setShowRateModal] = useState(false);
   const router = useRouter();
 
   const handleBackToListing = () => {
@@ -20,6 +22,16 @@ const BannerCommon = ({ profileData, serviceType }) => {
       router.push('/');
     }
   };
+
+  const handleRatingSubmit = async ({ rating, feedback }) => {
+        try {
+            toast.success('Rating submitted successfully');
+            setShowRateModal(false);
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+            toast.error('Failed to submit rating. Please try again.');
+        }
+    };
 
   if (!profileData) return null;
 
@@ -89,6 +101,12 @@ const BannerCommon = ({ profileData, serviceType }) => {
                 >
                   Enquire
                 </button>
+                <button 
+                  className="underline px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hover:text-white"
+                  onClick={() => setShowRateModal(true)}
+                >
+                  Want to Rate?
+                </button>
                 {/* {serviceData.contactDetails?.phone && (
                   <a 
                     href={`tel:${serviceData.contactDetails.phone}`}
@@ -108,6 +126,13 @@ const BannerCommon = ({ profileData, serviceType }) => {
           profileData={profileData}
           serviceType={serviceType}
           onClose={() => setShowModal(false)}
+        />
+      )}
+      {showRateModal && (
+        <RatingModal
+          visible={showRateModal}
+          onClose={() => setShowRateModal(false)}
+          onSubmit={handleRatingSubmit}
         />
       )}
     </div>
