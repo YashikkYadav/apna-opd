@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
@@ -134,7 +133,7 @@ const BloodBank = ({serviceData}) => {
                       Availability: {bank.price ? `${bank.price} Units` : "N/A"}
                     </h2>
                     <button
-                      onClick={() => navigate.push(`/more/bloodBank/${bank.id}/details`)}
+                      onClick={() => navigate.push(`/more/bloodBank/${bank._id}/details`)}
                       className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

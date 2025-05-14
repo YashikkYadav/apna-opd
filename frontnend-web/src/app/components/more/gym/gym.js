@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { getServiceData, serviceTypes } from "../../../data/constants";
 import SearchBar from "../../common-components/SearchBar";
 import Pagination from "../common/Pagination";
 import { Select } from "antd";
@@ -19,8 +18,6 @@ const Gym = ({serviceData}) => {
     // Get all gym data
     setGymList(serviceData);
     setFilteredList(serviceData);
-
-
     setLoading(false);
   }, []);
 
@@ -141,7 +138,7 @@ const Gym = ({serviceData}) => {
                       ${gym.price}
                     </h2>
                     <button
-                      onClick={() => navigate.push(`/more/gym/${gym.id}/details`)}
+                      onClick={() => navigate.push(`/more/gym/${gym._id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

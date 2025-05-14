@@ -21,6 +21,7 @@ const registerDoctor = async (doctorData) => {
       password,
       subscriptionType,
     } = doctorData;
+    console.log(doctorData);
 
     const doctorDataValidation = validateDoctor(doctorData);
     if (!doctorDataValidation.success) {
@@ -73,6 +74,7 @@ const registerDoctor = async (doctorData) => {
       paymentLink: paymentUrl?.paymentData?.short_url,
     };
   } catch (error) {
+    console.log("Error creating/updating doctor in DB : ", error);
     return {
       statusCode: 500,
       error: error,

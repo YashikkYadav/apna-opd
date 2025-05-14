@@ -14,16 +14,17 @@ const Ambulance = ({ serviceData }) => {
   const [locations, setLocations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [location, setLocation] = useState(null);
   const navigate = useRouter();
 
   useEffect(() => {
     // Get all ambulance data
-    setAmbulanceList(serviceData);
-    setFilteredList(serviceData);
-
-
+    if (serviceData) {
+      setAmbulanceList(serviceData || []);
+      setFilteredList(serviceData || []);
+    }
     setLoading(false);
-  }, []);
+  }, [serviceData]);
 
   const handleSearch = () => {
     // This would be implemented with actual search logic
@@ -141,7 +142,7 @@ const Ambulance = ({ serviceData }) => {
                       $25
                     </h2>
                     <button
-                      onClick={() => navigate.push(`/more/ambulance/${ambulance.id}/details`)}
+                      onClick={() => navigate.push(`/more/ambulance/${ambulance._id}/details`)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details

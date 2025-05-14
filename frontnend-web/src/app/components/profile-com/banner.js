@@ -2,9 +2,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import AppointmentModal from "../common-components/AppointmentModal";
-
+import RatingModal from "../common-components/RatingModal";
+import { toast } from "react-toastify";
 const Banner = ({ doctorDetail }) => {
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+    const [showRateModal, setShowRateModal] = useState(false);
     
     // Check if a date falls within unavailability period
     const isDateUnavailable = (date) => {
@@ -62,8 +64,15 @@ const Banner = ({ doctorDetail }) => {
         availabilityAfter: doctorDetail?.availabilityAfter
     };
 
-    const nextAvailableDate = getNextAvailableDate();
-    const hasImmediateAvailability = Object.keys(doctorDetails.schedule)?.length > 0;
+    const handleRatingSubmit = async ({ rating, feedback }) => {
+        try {
+            toast.success('Rating submitted successfully');
+            setShowRateModal(false);
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+            toast.error('Failed to submit rating. Please try again.');
+        }
+    };
 
     return (
         <>
@@ -72,12 +81,6 @@ const Banner = ({ doctorDetail }) => {
                     <div className="flex flex-col pt-[60px] md:pt-[96px] pb-[60px] lg:pb-0">
                         <div className="title-24 text-white flex mb-[56px] flex-col sm:flex-row gap-[10px] sm:gap-0">
                             <span>Home </span> <Image
-                                className="-rotate-90 mx-[8px]"
-                                src="/images/down_arrow_white.svg"
-                                width={17}
-                                height={10}
-                                alt="Down Arrow"
-                            /><span>{doctorDetail?.doctor?.speciality}</span> <Image
                                 className="-rotate-90 mx-[8px]"
                                 src="/images/down_arrow_white.svg"
                                 width={17}
@@ -127,9 +130,12 @@ const Banner = ({ doctorDetail }) => {
                                     >
                                         Make an Appointment
                                     </button>
-                                    {/* <button className="px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold border-white border hover:border-white hover:text-white">
-                                        Consultation
-                                    </button> */}
+                                    <button 
+                                        onClick={() => setShowRateModal(true)}
+                                        className="underline px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hover:text-white"
+                                    >
+                                        Want to Rate?
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -141,6 +147,12 @@ const Banner = ({ doctorDetail }) => {
                 doctorDetails={doctorDetails}
                 visible={showAppointmentModal}
                 onClose={() => setShowAppointmentModal(false)}
+            />
+
+            <RatingModal
+                visible={showRateModal}
+                onClose={() => setShowRateModal(false)}
+                onSubmit={handleRatingSubmit}
             />
         </>
     );

@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Select, message } from "antd";
+import { Select, Spin, message } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
 import { searchCities } from "../services/locationService";
 import debounce from "lodash/debounce";
 import { Flip, toast, ToastContainer } from "react-toastify";
-import { specialties } from './../data/constants';
+import { specialties } from "./../data/constants";
 
 const Register = () => {
   const router = useRouter();
@@ -22,11 +22,12 @@ const Register = () => {
     rmcNumber: "",
     clinicName: "",
     speciality: "",
+    subscriptionType: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -45,6 +46,12 @@ const Register = () => {
     { value: "blood_donor", label: "Blood Donor" },
   ];
 
+  const subscriptionTypes = [
+    { value: "gold", label: "Gold" },
+    { value: "platinum", label: "Platinum" },
+    { value: "diamond", label: "Diamond" },
+  ];
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -52,6 +59,10 @@ const Register = () => {
 
   const handleTypeSelect = (value) => {
     setFormData((prev) => ({ ...prev, registrationFor: value }));
+  };
+
+  const handleSubscriptionTypeSelect = (value) => {
+    setFormData((prev) => ({ ...prev, subscriptionType: value }));
   };
 
   const togglePasswordVisibility = (field) => {
@@ -90,7 +101,6 @@ const Register = () => {
     }
   }, 300);
 
-  // Use the debounced function in the handler
   const handleLocationSearch = (value) => {
     debouncedLocationSearch(value);
   };
@@ -117,6 +127,7 @@ const Register = () => {
       clinicName: formData.clinicName,
       address: formData.location,
       speciality: formData.speciality,
+      subscriptionType: formData.subscriptionType,
     };
     try {
       const response = await axiosInstance.post("/doctor", payload);
@@ -127,15 +138,15 @@ const Register = () => {
           closeOnClick: false,
           transition: Flip,
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        setRegisterSuccess(true);
+        window.location.href = response.paymentUrl;
       }
     } catch (error) {
       const errorMessage =
-        typeof error?.response?.data === "string"
-          ? error.response.data
-          : error?.response?.data?.error ||
+        typeof error === "string"
+          ? error
+          : error[0].message ||
+            error?.response?.data?.error ||
             error?.response?.data[0]?.message ||
             "Something went wrong. Please try again.";
 
@@ -144,7 +155,7 @@ const Register = () => {
         autoClose: 2000,
       });
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -195,6 +206,7 @@ const Register = () => {
         email: formData.email,
         password: formData.password,
         location: formData.location,
+        subscriptionType: formData.subscriptionType,
       };
       const response = await axiosInstance.post("/health-serve/", payload); 
       if(response){
@@ -204,22 +216,28 @@ const Register = () => {
           closeOnClick: false,
           transition: Flip,
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 1000);
+        setRegisterSuccess(true);
+        window.location.href = response.paymentUrl;
       }
     } catch (error) {
-      const errorMessage =
-        typeof error?.response?.data === "string"
-          ? error.response.data
-          : error?.response?.data?.error ||
-            error?.response?.data[0]?.message ||
-            "Something went wrong. Please try again.";
+      if (typeof error === "string") {
+        toast.error(error, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      } else {
+        const errorMessage =
+          typeof error?.response?.data === "string"
+            ? error.response.data
+            : error?.response?.data?.error ||
+              error?.response?.data[0]?.message ||
+              "Something went wrong. Please try again.";
 
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 2000,
-      });
+        toast.error(errorMessage, {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -232,8 +250,26 @@ const Register = () => {
     };
   }, []);
 
-  return (
+  return registerSuccess ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
+        <h2 className="text-2xl font-bold text-center mb-6 text-green-600">
+          Register Success
+        </h2>
+        <p className="text-center text-sm mt-4">
+          Your registration has been successful!
+        </p>
+        <div className="flex flex-col items-center justify-center">
+          <p>Now you need to complete your profile to continue</p>
+          <a href="/#" className="text-blue-600 hover:underline">
+            Redirecting to Payment Page...
+          </a>
+          <Spin size="large" />
+        </div>
+      </div>
+    </div>
+  ) : (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 md:pt-[80px]">
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
         <form
@@ -241,7 +277,7 @@ const Register = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           {/* Registration Type */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Registration For
             </label>
@@ -250,6 +286,20 @@ const Register = () => {
               onChange={handleTypeSelect}
               placeholder="Select Registration Type"
               options={registrationTypes}
+              className="w-full"
+              required
+            />
+          </div>
+          {/* Subscription Type */}
+          <div className="md:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Subscription Type
+            </label>
+            <Select
+              value={formData.subscriptionType}
+              onChange={handleSubscriptionTypeSelect}
+              placeholder="Select Subscription Type"
+              options={subscriptionTypes}
               className="w-full"
               required
             />
@@ -363,9 +413,14 @@ const Register = () => {
                 </label>
                 <Select
                   value={formData.speciality}
-                  onChange={(value) => setFormData(prev => ({ ...prev, speciality: value }))}
+                  onChange={(value) =>
+                    setFormData((prev) => ({ ...prev, speciality: value }))
+                  }
                   placeholder="Select Speciality"
-                  options={specialties?.map(specialty => ({ value: specialty, label: specialty }))}
+                  options={specialties?.map((specialty) => ({
+                    value: specialty,
+                    label: specialty,
+                  }))}
                   className="w-full"
                   required
                 />
