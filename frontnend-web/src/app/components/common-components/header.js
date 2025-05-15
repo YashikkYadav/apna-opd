@@ -6,42 +6,55 @@ import { useRouter } from "next/navigation";
 import { CaretDownOutlined } from "@ant-design/icons";
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isFindDropdownOpen, setIsFindDropdownOpen] = useState(false);
   const menuRef = useRef(null);
   const router = useRouter();
 
-  const handleClickOnFind = (e) => {
+  const toggleMobileNav = () => {
+    setIsMobileNavOpen((prev) => !prev);
+    if (!isMobileNavOpen) {
+        setIsFindDropdownOpen(false);
+    }
+  };
+
+  const toggleFindDropdown = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setMenuOpen((prev) => !prev);
+    setIsFindDropdownOpen((prev) => !prev);
+  };
+
+  const closeAllMenus = () => {
+    setIsMobileNavOpen(false);
+    setIsFindDropdownOpen(false);
   };
 
   const handleNavigation = (route) => (e) => {
     e.stopPropagation();
-    setMenuOpen(false);
+    closeAllMenus();
     router.push(route);
   };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
+        closeAllMenus();
       }
     };
 
-    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     const handleRouteChange = () => {
-      setMenuOpen(false);
+      closeAllMenus();
     };
 
     window.addEventListener("beforeunload", handleRouteChange);
 
     return () => {
-      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
       window.removeEventListener("beforeunload", handleRouteChange);
     };
-  }, []);
+  }, [router]);
 
   const menuItems = [
     { label: "Doctors", route: "/find-doctor" },
@@ -69,43 +82,41 @@ const Header = () => {
               alt="Apna opd logo"
             />
           </Link>
-          {/* Hamburger Menu */}
-          <div className="flex items-center lg:hidden">
+          <div className="relative flex items-center lg:hidden">
             <button
               className="!text-[#3DB8F5] focus:outline-none text-4xl z-[9999999] hover:border-none"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={toggleMobileNav}
             >
-              {menuOpen ? "✖" : "☰"}
+              {isMobileNavOpen ? "✖" : "☰"}
             </button>
           </div>
           <div
             ref={menuRef}
-            className={`${
-              menuOpen ? "block" : "hidden"
-            } lg:block absolute lg:relative top-[80px] lg:top-auto right-9 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[200px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
+            className={`${isMobileNavOpen ? "block" : "hidden"
+            } lg:block absolute lg:relative top-[80px] lg:top-auto right-4 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[250px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
             <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px] mb-0">
               <li className="text-[#094B89] text-base font-bold">
-                <Link href="/" onClick={() => setMenuOpen(false)}>
+                <Link href="/" onClick={closeAllMenus}>
                   Home
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold relative">
                 <a
                   className="cursor-pointer hover:border-none hover:m-0 text-[#094B89] text-base font-bold bg-transparent flex items-center"
-                  onClick={handleClickOnFind}
+                  onClick={toggleFindDropdown}
                 >
-                  Find <CaretDownOutlined className="pl-1"/>
+                  Find <CaretDownOutlined className={`pl-1 transition-transform duration-200 ${isFindDropdownOpen ? "rotate-180" : ""}`}/>
                 </a>
-                {menuOpen && (
+                {isFindDropdownOpen && (
                   <div 
-                    className="cursor-pointer absolute top-[28px] left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-md bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent"
+                    className="cursor-pointer absolute top-[38px] left-[-60px] md:left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-lg bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <ul className="flex flex-col gap-1">
                       {menuItems?.map((item, index) => (
                         <div key={item.route}>
-                          <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1">
+                          <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1 text-sm">
                             <span
                               className="w-full block text-left hover:text-white hover:border-none"
                               onClick={handleNavigation(item.route)}
@@ -113,7 +124,7 @@ const Header = () => {
                               {item.label}
                             </span>
                           </li>
-                          {index < menuItems?.length - 1 && <hr />}
+                          {index < menuItems?.length - 1 && <hr className="my-1"/>}
                         </div>
                       ))}
                     </ul>
@@ -121,39 +132,48 @@ const Header = () => {
                 )}
               </li>
               <li className="text-[#094B89] text-base font-bold">
-                <Link href="/blog" onClick={() => setMenuOpen(false)}>
+                <Link href="/blog" onClick={closeAllMenus}>
                   Blog
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">
-                <Link href="/faq" onClick={() => setMenuOpen(false)}>
+                <Link href="/faq" onClick={closeAllMenus}>
                   FAQ
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">
-                <Link href="/about" onClick={() => setMenuOpen(false)}>
+                <Link href="/about" onClick={closeAllMenus}>
                   About
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">
-                <Link href="/contact" onClick={() => setMenuOpen(false)}>
+                <Link href="/contact" onClick={closeAllMenus}>
                   Contact
                 </Link>
               </li>
-              <li className="block lg:hidden">
-                <button
-                  className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold w-full"
-                  onClick={() => setMenuOpen(false)}
-                >
+              <li className="block lg:hidden mt-2">
+                <Link href="/find-doctor" 
+                   onClick={(e) => {
+                     e.preventDefault();
+                     closeAllMenus(); 
+                     router.push("/find-doctor");
+                   }}
+                   className="block w-full bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold text-center"
+                 >
                   Find now
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
 
-          <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hidden lg:block">
+          <Link href="/find-doctor" 
+            className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hidden lg:block"
+            onClick={(e) => { 
+              if(isFindDropdownOpen) setIsFindDropdownOpen(false);
+            }}
+          >
             Find now
-          </button>
+          </Link>
         </div>
       </div>
     </div>
