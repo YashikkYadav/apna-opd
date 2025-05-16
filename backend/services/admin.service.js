@@ -34,7 +34,6 @@ const createAdmin = async (adminData) => {
 const loginAdmin = async (adminData) => {
   try {
     const { userName, password } = adminData;
-    console.log(adminData);
 
     if (!userName && password) {
       return {
@@ -81,7 +80,6 @@ const loginAdmin = async (adminData) => {
 const getDoctors = async () => {
   try {
     const doctors = await Doctor.find({});
-
     return { statusCode: 200, doctors: doctors };
   } catch (error) {
     console.log("Error while fetching doctors from the DB : ", error);

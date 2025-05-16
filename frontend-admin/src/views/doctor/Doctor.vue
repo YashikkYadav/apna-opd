@@ -42,7 +42,6 @@
         v-model:items-per-page="itemsPerPage"
         :items-per-page-options="[
           { value: 5, title: '5' },
-          { value: 7, title: '7' },
           { value: 10, title: '10' },
           { value: 15, title: '15' },
           { value: -1, title: 'All' },
