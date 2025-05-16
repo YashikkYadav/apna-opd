@@ -6,24 +6,12 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <!-- <v-row>
       <v-col cols="6">
         <last-24-hours-enquiry />
       </v-col>
       <v-col cols="6">
         <last-30-days-enquiry/>
-      </v-col>
-      <!-- <v-col cols="4">
-        <last-30-days-invoice />
-      </v-col> -->
-    </v-row>
-
-    <!-- <v-row>
-      <v-col cols="6">
-        <comparision-data />
-      </v-col>
-      <v-col cols="6">
-        <last-30-days-payment />
       </v-col>
     </v-row> -->
   </v-container>

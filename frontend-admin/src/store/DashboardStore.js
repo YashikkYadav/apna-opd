@@ -3,7 +3,7 @@ import { AxiosDashboard } from "../apis/Dashboard";
 
 export const useDashboardStore = defineStore("dashboardStore", {
   state: () => ({
-    healthServeId: localStorage.getItem("doctor_id") || null,
+    healthServeId: localStorage.getItem("admin_id") || null,
   }),
 
   actions: {

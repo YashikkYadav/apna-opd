@@ -10,7 +10,7 @@
           <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
               <v-text-field
-                v-model="phone"
+                v-model="userName"
                 label="Phone"
                 :rules="[rules.required]"
                 variant="outlined"
@@ -43,41 +43,10 @@ import { useUiStore } from "@/store/UiStore";
 export default {
   data() {
     return {
-      healthServeType: null,
-      dropdownItems: [
-        { value: "doctor", label: "Doctor" },
-        { value: "ambulance", label: "Ambulance" },
-        { value: "gym", label: "Gym" },
-        { value: "yoga", label: "Yoga" },
-        { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
-        { value: "commercial_meditation", label: "Commercial Meditation" },
-        { value: "medical_store", label: "Medical Store" },
-        {
-          value: "nursing_medical_college",
-          label: "Nursing & Medical College",
-        },
-        { value: "blood_bank", label: "Blood Bank" },
-        { value: "physiotherapist", label: "Physiotherapist" },
-        { value: "blood_donor", label: "Blood Donor" },
-      ],
       password: "",
-      email: "",
-      phone: "",
-      form: {
-        name: "",
-        password: "",
-        phoneNumber: "",
-        email: "",
-        rmcNumber: "",
-        address: "",
-        clinicName: "",
-      },
+      userName: "",
       rules: {
         required: (value) => !!value || "This field is required.",
-        email: (value) =>
-          !value.trim() ||
-          /^[\w\.-]+@[\w\.-]+\.\w+$/.test(value.trim()) ||
-          "Enter a valid email.",
       },
       signIn: true,
     };
@@ -95,36 +64,16 @@ export default {
         return;
       }
       const requestData = {
-        phone: this.phone,
+        userName: this.userName,
         password: this.password,
-        type: this.healthServeType,
       };
       const res = await useAuthStore().LoginApiCall(requestData);
       if (res) {
-        localStorage.setItem("doctor_id", res?.healthServe?.id);
-        localStorage.setItem("access_token", res?.healthServe?.accessToken);
+        localStorage.setItem("admin_id", res?.admin?.id);
+        localStorage.setItem("access_token", res?.admin?.accessToken);
 
-        this.$router.push("/dashboard");
+        this.$router.push("/doctor");
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");
-      }
-    },
-
-    async onRegister() {
-      const isValid = await this.$refs.form.validate();
-
-      if (!isValid.valid) {
-        useUiStore().openNotificationMessage(
-          "Please fill in all required fields correctly!",
-          "",
-          "error"
-        );
-        return;
-      }
-      const res = await useAuthStore().RegisterApiCall(this.form);
-
-      if (res) {
-        this.signIn = true;
-        useUiStore().openNotificationMessage("Doctor Registered Successfully!");
       }
     },
   },

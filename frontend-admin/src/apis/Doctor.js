@@ -1,13 +1,13 @@
 import axiosAuthenticator from "@/plugins/axios";
 
-export class AxiosAuth {
+export class AxiosDoctor {
   apiClient;
   constructor() {
     this.apiClient = new axiosAuthenticator();
   }
 
-  Login(payload) {
-    return this.apiClient.post(`/admin/login`, payload);
+  Doctor(adminId) {
+    return this.apiClient.get(`/admin/${adminId}/doctor`);
   }
 
   Register(payload) {
