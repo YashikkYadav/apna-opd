@@ -24,7 +24,7 @@ const BlogDetail = ({ article }) => { // Accept article as a prop
                 <div className="flex items-center mb-[52px]">
                     {/* Placeholder for author image - can be added to blogData if available */}
                     <Image 
-                        src={article.authorImage || "/images/image_placeholder.svg"} 
+                        src={ (typeof article.authorImage === 'string' && article.authorImage) ? article.authorImage : "/images/image_placeholder.svg"} 
                         width={40} 
                         height={40} 
                         alt={article.drName || "Doctor Image"} 
@@ -40,7 +40,7 @@ const BlogDetail = ({ article }) => { // Accept article as a prop
                 {article.image && (
                     <div className="mb-[40px]">
                         <Image 
-                            src={article.image} 
+                            src={ (typeof article.image === 'string' && article.image) ? article.image : "/images/image_placeholder.svg"}
                             width={1024} // Adjust width as per design preference
                             height={545} // Adjust height as per design preference
                             alt={article.title || "Article banner image"} 
