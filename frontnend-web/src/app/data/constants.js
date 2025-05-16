@@ -420,7 +420,7 @@ export const getServiceData = async (serviceType, id = null) => {
   // }
   // return data || [];
   const data = await axios.get(
-    `http://localhost:8000/api/${id}/health-serve-profile`
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile`
   );
   return data || [];
 };

@@ -159,7 +159,7 @@ const Header = () => {
                      router.push("/find-doctor");
                    }}
                    className="block w-full bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold text-center"
-                 >
+                >
                   Find now
                 </Link>
               </li>
