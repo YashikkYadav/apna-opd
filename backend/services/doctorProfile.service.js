@@ -284,16 +284,21 @@ function deleteImageFile(filename) {
   });
 }
 
-const submitDoctorReview = async (doctorId, rating) => {
+const updateDoctorRating = async (doctorId, rating) => {
   try {
+    // Inline validation: ensure rating is a number between 0 and 5
+    if (typeof rating !== "number" || rating < 0 || rating > 5) {
+      return { statusCode: 400, error: "Rating must be a number and between 0 and 5" };
+    }
+
     const doctor = await DoctorProfile.findOne({ doctorId });
 
     if (!doctor) {
-      return { error: "Doctor not found", statusCode: 404 };
+      return { statusCode: 404, error: "Doctor not found" };
     }
 
-    const totalRating = doctor.averageRating * doctor.totalReviews;
-    const newTotalReviews = doctor.totalReviews + 1;
+    const totalRating = (doctor.averageRating || 0) * (doctor.totalReviews || 0);
+    const newTotalReviews = (doctor.totalReviews || 0) + 1;
     const newAverageRating = (totalRating + rating) / newTotalReviews;
 
     doctor.totalReviews = newTotalReviews;
@@ -301,63 +306,17 @@ const submitDoctorReview = async (doctorId, rating) => {
 
     await doctor.save();
 
-    return { doctorProfile: doctor, statusCode: 200 };
-  } catch (error) {
-    return { error: error.message, statusCode: 500 };
-  }
-};
-
-/**
- * Update or create average rating and total reviews for a doctor
- * Uses simple weighted average logic on reviews
- * rating: number - the new rating submitted by a user (e.g., 4.2)
- */
-const updateDoctorRating = async (doctorId, rating) => {
-  try {
-    // Validate rating range
-    if (rating < 0 || rating > 5) {
-      return {
-        statusCode: 400,
-        error: "Rating must be between 0 and 5",
-      };
-    }
-
-    // Find existing profile
-    const doctorProfile = await DoctorProfile.findOne({ doctorId });
-
-    if (!doctorProfile) {
-      return {
-        statusCode: 404,
-        error: "Doctor profile not found",
-      };
-    }
-
-    // Get current totals or initialize
-    let currentAvg = doctorProfile.averageRating || 0;
-    let totalReviews = doctorProfile.totalReviews || 0;
-
-    // Calculate new average rating with the new rating added
-    const newTotalReviews = totalReviews + 1;
-    const newAvgRating = (currentAvg * totalReviews + rating) / newTotalReviews;
-
-    // Update the doctor profile document
-    doctorProfile.averageRating = newAvgRating;
-    doctorProfile.totalReviews = newTotalReviews;
-
-    await doctorProfile.save();
-
     return {
       statusCode: 200,
-      doctorProfile,
+      doctorProfile: doctor,
     };
   } catch (error) {
-    console.log("Error while updating rating:", error);
-    return {
-      statusCode: 500,
-      error: error.message,
-    };
+    console.error("Error updating doctor rating:", error);
+    return { statusCode: 500, error: error.message };
   }
 };
+
+
 
 module.exports = {
   deleteDoctorImage,
@@ -366,5 +325,4 @@ module.exports = {
   getAppointmentDetails,
   getPatients,
   updateDoctorRating,
-
 };

@@ -4,7 +4,6 @@ const path = require("path");
 const fs = require("fs");
 const { validateRating } = require("../validations/doctorProfile.validation");
 
-
 const createDoctorProfile = async (req, res) => {
   try {
     const storage = multer.diskStorage({
@@ -182,7 +181,6 @@ const submitDoctorReviewController = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 module.exports = {
   createDoctorProfile,

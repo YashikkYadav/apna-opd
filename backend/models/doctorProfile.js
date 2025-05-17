@@ -63,6 +63,5 @@ const doctorProfileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 const DoctorProfile = mongoose.model("DoctorProfile", doctorProfileSchema);
 module.exports = DoctorProfile;
