@@ -2,7 +2,6 @@ const doctorProfileService = require("../services/doctorProfile.service");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { validateRating } = require("../validations/doctorProfile.validation");
 
 const createDoctorProfile = async (req, res) => {
   try {
@@ -17,6 +16,7 @@ const createDoctorProfile = async (req, res) => {
         const ext = path.extname(file.originalname);
         const doctorId = req.params.doctorId;
         const newFileName = `${doctorId}_${uniqueSuffix}_${file.fieldname}${ext}`;
+
         if (file.fieldname === "profilePhoto") {
           fs.readdir(folder, (err, files) => {
             if (err) {
@@ -73,7 +73,7 @@ const createDoctorProfile = async (req, res) => {
         .json({ doctorProfile: doctorProfile.doctorProfile });
     });
   } catch (error) {
-    console.log("Error while creating doctor profile : ", error);
+    console.log("Error while creating doctor profile:", error);
     res.status(500).send(`Error: ${error}`);
   }
 };
@@ -99,9 +99,7 @@ const getAppointmentDetails = async (req, res) => {
   try {
     const { doctorId } = req.params;
 
-    const doctorProfile = await doctorProfileService.getAppointmentDetails(
-      doctorId
-    );
+    const doctorProfile = await doctorProfileService.getAppointmentDetails(doctorId);
     if (doctorProfile?.error) {
       return res.status(doctorProfile.statusCode).send(doctorProfile.error);
     }
@@ -127,30 +125,26 @@ const getPatients = async (req, res) => {
       .status(patientData.statusCode)
       .json({ patientData: patientData.patientData });
   } catch (error) {
-    console.log("Error while fetching patient data from the db :: ", error);
+    console.log("Error while fetching patient data:", error);
     res.status(500).send(`Error: ${error}`);
   }
 };
 
-const delelteDoctorImage = async (req, res) => {
+const deleteDoctorImage = async (req, res) => {
   try {
     const { doctorId } = req.params;
     const image = req.body;
-    const deleteResponse = await doctorProfileService.deleteDoctorImage(
-      doctorId,
-      image
-    );
+
+    const deleteResponse = await doctorProfileService.deleteDoctorImage(doctorId, image);
     if (deleteResponse?.error) {
       return res
         .status(deleteResponse.statusCode)
         .json({ error: deleteResponse.images });
     }
-    console.log("WOrking til heree fmoasiejalsij");
-    return res.status(200).json({
-      images: deleteResponse.images,
-    });
+
+    return res.status(200).json({ images: deleteResponse.images });
   } catch (error) {
-    console.log("Error while deleting image:: ", error);
+    console.log("Error while deleting image:", error);
     res.status(500).send(`Error: ${error}`);
   }
 };
@@ -158,13 +152,19 @@ const delelteDoctorImage = async (req, res) => {
 const submitDoctorReviewController = async (req, res) => {
   try {
     const { doctorId } = req.params;
-    const ratingValidation = validateRating(req.body);
+    const { rating } = req.body;
 
-    if (!ratingValidation.success) {
-      return res.status(400).json({ errors: ratingValidation.errors });
+    // Basic inline validation
+    if (
+      typeof rating !== "number" ||
+      isNaN(rating) ||
+      rating < 1 ||
+      rating > 5
+    ) {
+      return res.status(400).json({
+        errors: [{ message: "Rating must be a number between 1 and 5." }],
+      });
     }
-
-    const { rating } = ratingValidation.data;
 
     const result = await doctorProfileService.updateDoctorRating(doctorId, rating);
 
@@ -187,6 +187,6 @@ module.exports = {
   getDoctorProfile,
   getAppointmentDetails,
   getPatients,
-  delelteDoctorImage,
+  deleteDoctorImage,
   submitDoctorReviewController,
 };

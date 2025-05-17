@@ -316,8 +316,6 @@ const updateDoctorRating = async (doctorId, rating) => {
   }
 };
 
-
-
 module.exports = {
   deleteDoctorImage,
   createDoctorProfile,
