@@ -68,4 +68,7 @@ const validateDoctorProfile = (profileData) => {
   };
 };
 
-module.exports = validateDoctorProfile;
+module.exports = {
+  validateDoctorProfile,
+};
+

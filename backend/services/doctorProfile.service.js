@@ -284,10 +284,43 @@ function deleteImageFile(filename) {
   });
 }
 
+const updateDoctorRating = async (doctorId, rating) => {
+  try {
+    // Inline validation: ensure rating is a number between 0 and 5
+    if (typeof rating !== "number" || rating < 0 || rating > 5) {
+      return { statusCode: 400, error: "Rating must be a number and between 0 and 5" };
+    }
+
+    const doctor = await DoctorProfile.findOne({ doctorId });
+
+    if (!doctor) {
+      return { statusCode: 404, error: "Doctor not found" };
+    }
+
+    const totalRating = (doctor.averageRating || 0) * (doctor.totalReviews || 0);
+    const newTotalReviews = (doctor.totalReviews || 0) + 1;
+    const newAverageRating = (totalRating + rating) / newTotalReviews;
+
+    doctor.totalReviews = newTotalReviews;
+    doctor.averageRating = parseFloat(newAverageRating.toFixed(1));
+
+    await doctor.save();
+
+    return {
+      statusCode: 200,
+      doctorProfile: doctor,
+    };
+  } catch (error) {
+    console.error("Error updating doctor rating:", error);
+    return { statusCode: 500, error: error.message };
+  }
+};
+
 module.exports = {
   deleteDoctorImage,
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
   getPatients,
+  updateDoctorRating,
 };
