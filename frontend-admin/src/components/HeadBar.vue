@@ -1,7 +1,8 @@
 <template>
   <div class="headbar">
     <div class="header-bar">
-      <v-row justify="end" align="center">
+      <v-row justify="space-between" align="center">
+        <span class="admin-panel-text">Admin Panel</span>
         <v-menu offset-y>
           <template v-slot:activator="{ props }">
             <v-btn flat icon v-bind="props" class="icon-spacing">
@@ -28,7 +29,9 @@ export default {
     handleLogout() {
       localStorage.removeItem("admin_id");
       localStorage.removeItem("access_token");
-      useProfileStore().reset();
+      if (typeof useProfileStore === "function") {
+        useProfileStore().reset();
+      }
 
       this.$router.push("/login");
       useUiStore().openNotificationMessage("You Are Successfully Logged Out!");
@@ -36,3 +39,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.admin-panel-text {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+}
+</style>
