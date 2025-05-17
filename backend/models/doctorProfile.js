@@ -24,67 +24,45 @@ const doctorProfileSchema = new mongoose.Schema(
       required: true,
       type: String,
     },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
+    totalReviews: {
+      type: Number,
+      default: 0,
+    },
     locations: [
       {
-        name: {
-          type: String,
-        },
-        address: {
-          type: String,
-        },
-        days: [
-          {
-            type: String,
-          },
-        ],
-        from: {
-          type: String,
-        },
-        to: {
-          type: String,
-        },
-        timeslot: {
-          type: Number,
-        },
+        name: { type: String },
+        address: { type: String },
+        days: [{ type: String }],
+        from: { type: String },
+        to: { type: String },
+        timeslot: { type: Number },
       },
     ],
     unavailabilityDate: {
-      from: {
-        type: Date,
-      },
-      to: {
-        type: Date,
-      },
+      from: { type: Date },
+      to: { type: Date },
     },
-    availabilityAfter: {
-      type: Number,
-    },
+    availabilityAfter: { type: Number },
     images: [
       {
-        url: {
-          type: String,
-          required: true,
-        },
+        url: { type: String, required: true },
         type: {
           type: String,
           enum: ["galleryImages", "profilePhoto"],
           required: true,
         },
-        timestamp: {
-          type: Number,
-          required: true,
-        },
-        filename: {
-          type: String,
-          required: true,
-        },
+        timestamp: { type: Number, required: true },
+        filename: { type: String, required: true },
       },
     ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
+
 
 const DoctorProfile = mongoose.model("DoctorProfile", doctorProfileSchema);
 module.exports = DoctorProfile;

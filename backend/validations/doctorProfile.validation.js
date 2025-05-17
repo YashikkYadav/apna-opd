@@ -68,4 +68,33 @@ const validateDoctorProfile = (profileData) => {
   };
 };
 
-module.exports = validateDoctorProfile;
+const RatingSchema = zod.object({
+  rating: zod
+    .number()
+    .min(0, { message: "Rating must be at least 0." })
+    .max(5, { message: "Rating cannot exceed 5." }),
+});
+
+const validateRating = (data) => {
+  const validationResult = RatingSchema.safeParse(data);
+  if (!validationResult.success) {
+    const errors = validationResult.error.errors.map((err) => ({
+      field: err.path[0],
+      message: err.message,
+    }));
+
+    return {
+      success: false,
+      errors,
+    };
+  }
+  return {
+    success: true,
+    data: validationResult.data,
+  };
+};
+
+module.exports = {
+  validateDoctorProfile,
+  validateRating,
+};

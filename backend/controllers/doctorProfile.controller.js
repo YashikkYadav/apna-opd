@@ -2,6 +2,8 @@ const doctorProfileService = require("../services/doctorProfile.service");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { validateRating } = require("../validations/doctorProfile.validation");
+
 
 const createDoctorProfile = async (req, res) => {
   try {
@@ -154,10 +156,39 @@ const delelteDoctorImage = async (req, res) => {
   }
 };
 
+const submitDoctorReviewController = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const ratingValidation = validateRating(req.body);
+
+    if (!ratingValidation.success) {
+      return res.status(400).json({ errors: ratingValidation.errors });
+    }
+
+    const { rating } = ratingValidation.data;
+
+    const result = await doctorProfileService.updateDoctorRating(doctorId, rating);
+
+    if (result.error) {
+      return res.status(result.statusCode).json({ error: result.error });
+    }
+
+    return res.status(result.statusCode).json({
+      message: "Rating updated successfully",
+      doctorProfile: result.doctorProfile,
+    });
+  } catch (error) {
+    console.error("Error in submitDoctorReviewController:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   createDoctorProfile,
   getDoctorProfile,
   getAppointmentDetails,
   getPatients,
   delelteDoctorImage,
+  submitDoctorReviewController,
 };
