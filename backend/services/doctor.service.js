@@ -43,7 +43,11 @@ const registerDoctor = async (doctorData) => {
       };
     }
 
-    const paymentUrl = await createPaymentLinkForEntity('doctor', {name, phone: phoneNumber, email}, subscriptionType);
+    const paymentUrl = await createPaymentLinkForEntity(
+      "doctor",
+      { name, phone: phoneNumber, email },
+      subscriptionType
+    );
     const hashedPassword = await getHashedPassword(password);
     const newDoctor = new Doctor({
       name,

@@ -21,9 +21,16 @@ const prescriptionSectionRoutes = require("../routes/prescriptionSection.routes"
 const doctorMiddleware = require("../middlewares/doctor.middleware");
 const healthServeProfileRoutes = require("./profile.routes");
 const messageRoutes = require("./messages.routes");
+const adminRoutes = require("./admin.routes");
+const userRoutes = require("./user.routes");
+const HealthServe = require("../models/healthServe");
+const Doctor = require("../models/doctor");
 
 const router = express.Router();
 
+router.use("/admin", adminRoutes);
+
+router.use("/user", userRoutes);
 // Centralizing all the routes in one file
 router.use("/doctor", doctorRoutes);
 
