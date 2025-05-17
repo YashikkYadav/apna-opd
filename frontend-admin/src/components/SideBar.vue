@@ -18,10 +18,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <router-link
-          to="/doctor"
-          style="text-decoration: none; color: inherit"
-        >
+        <router-link to="/doctor" style="text-decoration: none; color: inherit">
           <v-list-item
             prepend-icon="mdi-stethoscope"
             title="Doctor"
@@ -31,13 +28,107 @@
         </router-link>
 
         <router-link
-          to="/enquiry"
+          to="/ambulance"
           style="text-decoration: none; color: inherit"
         >
           <v-list-item
-            prepend-icon="mdi-file-document"
-            title="Enquiry"
-            value="enquiry"
+            prepend-icon="mdi-ambulance"
+            title="Ambulance"
+            value="ambulance"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+
+        <router-link to="/gym" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-dumbbell"
+            title="Gym"
+            value="gym"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link to="/yoga" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-yoga"
+            title="Yoga"
+            value="yoga"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/nasha_mukti_kendra"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-hospital"
+            title="Nasha Mukti Kendra"
+            value="nasha_mukti_kendra"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/commercial_meditation"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-peace"
+            title="Meditation"
+            value="meditation"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/medical_store"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-pill"
+            title="Medical Store"
+            value="medical_store"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/nursing_medical_college"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-school"
+            title="Nursing Medical College"
+            value="nursing_medical_college"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/blood_bank"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-water"
+            title="Blood Bank"
+            value="blood_bank"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/physiotherapist"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-doctor"
+            title="Physiotherapist"
+            value="physiotherapist"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/blood_donor"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-account"
+            title="Blood Donor"
+            value="blood_donor"
             class="custom-list-item"
           ></v-list-item>
         </router-link>

@@ -3,6 +3,7 @@ const Admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 const { getAccessToken, comparePassword } = require("../utils/helpers");
 const Doctor = require("../models/doctor");
+const HealthServe = require("../models/healthServe");
 
 const createAdmin = async (adminData) => {
   try {
@@ -87,7 +88,18 @@ const getDoctors = async () => {
   }
 };
 
+const getHealthServe = async (type) => {
+  try {
+    const healthServe = await HealthServe.find({ type: type });
+    return { statusCode: 200, healthServe: healthServe };
+  } catch (error) {
+    console.log("Error while fetching healthServe from the DB : ", error);
+    return { statusCode: 500, error: error };
+  }
+};
+
 module.exports = {
+  getHealthServe,
   createAdmin,
   loginAdmin,
   getDoctors,

@@ -50,8 +50,27 @@ const getDoctors = async (req, res) => {
   }
 };
 
+const getHealthServe = async (req, res) => {
+  const { type } = req.params;
+  try {
+    const healthServe = await adminService.getHealthServe(type);
+
+    if (healthServe?.error) {
+      res.status(healthServe.statusCode).json({ error: healthServe.error });
+    }
+
+    res
+      .status(healthServe.statusCode)
+      .json({ healthServe: healthServe.healthServe });
+  } catch (error) {
+    console.log("Error while fetching doctors : ", error);
+    res.status(500).send(`An error occurred ${error}`);
+  }
+};
+
 module.exports = {
   createAdmin,
   loginAdmin,
   getDoctors,
+  getHealthServe,
 };

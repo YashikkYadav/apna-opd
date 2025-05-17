@@ -10,4 +10,10 @@ admin.post("/login", adminController.loginAdmin);
 
 admin.get("/:adminId/doctor", adminMiddleware, adminController.getDoctors);
 
+admin.get(
+  "/:adminId/:type/healthServe",
+  adminMiddleware,
+  adminController.getHealthServe
+);
+
 module.exports = admin;

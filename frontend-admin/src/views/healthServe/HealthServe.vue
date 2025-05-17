@@ -2,7 +2,7 @@
   <v-container fluid>
     <div class="px-1 mb-5">
       <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
-        Doctors Directory
+        {{ serviceValue + " Directory" }}
       </h1>
     </div>
     <v-card class="pa-2 pa-md-4 rounded-xl shadow-xl">
@@ -19,7 +19,7 @@
         <v-text-field
           v-model="search"
           density="compact"
-          label="Search (Name, RMC, Email, Speciality)"
+          label="Search (Name,  Email, Location)"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           rounded="lg"
@@ -51,19 +51,9 @@
         class="elevation-0 rounded-lg"
         :loading="loading"
         loading-text="Fetching doctor data... Please wait."
-        no-data-text="No doctors found matching your criteria."
+        :no-data-text="`No ${serviceValue} found matching your criteria.`"
         item-value="rmcNumber"
       >
-        <template v-slot:item.speciality="{ item }">
-          <v-chip
-            variant="tonal"
-            size="small"
-            :color="item.speciality ? 'teal' : 'grey'"
-          >
-            {{ item.speciality || "N/A" }}
-          </v-chip>
-        </template>
-
         <template v-slot:item.createdAt="{ item }">
           <template v-if="item.createdAt">
             <div class="text-caption">
@@ -76,20 +66,6 @@
           <template v-else>
             <v-chip size="small" color="grey-lighten-1">N/A</v-chip>
           </template>
-        </template>
-
-        <template v-slot:item.paymentStatus="{ item }">
-          <v-chip
-            :color="getPaymentStatusColor(item.paymentStatus)"
-            size="small"
-            label
-            class="font-weight-medium"
-          >
-            <v-icon start size="small">{{
-              getPaymentStatusIcon(item.paymentStatus)
-            }}</v-icon>
-            {{ item.paymentStatus || "N/A" }}
-          </v-chip>
         </template>
 
         <template v-slot:item.phoneNumber="{ item }">
@@ -111,27 +87,93 @@
             {{ item.email }}
           </a>
         </template>
+
+        <template v-slot:item.location="{ item }">
+          <template v-if="item.location">
+            <div class="text-caption">
+              <div class="text-grey-darken-1">
+                {{ item.location }}
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <v-chip size="small" color="grey-lighten-1">N/A</v-chip>
+          </template>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>
 </template>
 
 <script setup>
-import { useDoctorStore } from "@/store/DoctorStore";
-import { ref, onMounted } from "vue";
+import { useHealthServeStore } from "@/store/HealthServeStore";
+import { ref, onMounted, computed, defineProps, watch } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
 
+const props = defineProps({
+  type: {
+    type: String,
+    default: "",
+  },
+});
+
+const healthServeTypes = ref([
+  {
+    ambulance: "Ambulance",
+    gym: "Gym",
+    yoga: "Yoga",
+    nasha_mukti_kendra: "Nasha Mukti Kendra",
+    commercial_meditation: "Commercial Meditation",
+    medical_store: "Medical Store",
+    nursing_medical_college: "Nursing & Medical College",
+    blood_bank: "Blood Bank",
+    physiotherapist: "Physiotherapist",
+    blood_donor: "Blood Donor",
+  },
+]);
+
 onMounted(() => {
   const router = useRouter();
+  if (props.type === "") {
+    router.push("/login");
+  }
   const auth = checkAuth(router);
   if (auth) {
-    fetchDoctors();
+    fetchHealthServe();
   }
+  watch(
+    () => props.type,
+    (newType, oldType) => {
+      if (newType !== oldType) {
+        const auth = checkAuth(router);
+        if (auth) {
+          fetchHealthServe();
+        } else {
+          console.warn("Authentication failed during type prop change.");
+        }
+      }
+    }
+  );
+});
+
+const serviceValue = computed(() => {
+  if (
+    props.type &&
+    healthServeTypes.value.length > 0 &&
+    healthServeTypes.value[0].hasOwnProperty(
+      props.type.toLowerCase().replace(/ /g, "_")
+    )
+  ) {
+    return healthServeTypes.value[0][
+      props.type.toLowerCase().replace(/ /g, "_")
+    ];
+  }
+  return null;
 });
 
 defineOptions({
-  name: "DoctorDataTable",
+  name: "healthServeDataTable",
 });
 
 const search = ref("");
@@ -148,7 +190,6 @@ const headers = ref([
     align: "start",
     cellClass: "font-weight-medium text-subtitle-2",
   },
-  { title: "RMC Number", key: "rmcNumber", sortable: true, align: "start" },
   {
     title: "Phone Number",
     key: "phoneNumber",
@@ -156,24 +197,20 @@ const headers = ref([
     align: "start",
   },
   { title: "Email", key: "email", sortable: false, align: "start" },
-  { title: "Speciality", key: "speciality", sortable: true, align: "center" },
-  {
-    title: "Payment Status",
-    key: "paymentStatus",
-    sortable: true,
-    align: "center",
-  },
+  { title: "Location", key: "location", sortable: false, align: "start" },
   { title: "Created At", key: "createdAt", sortable: true, align: "start" },
 ]);
 
-const fetchDoctors = async () => {
+const fetchHealthServe = async () => {
   loading.value = true;
-  const doctorStore = useDoctorStore();
+  const healthServeStore = useHealthServeStore();
   try {
-    const doctorData = await doctorStore.getDoctors();
-    items.value = Array.isArray(doctorData?.doctors) ? doctorData.doctors : [];
+    const healthServeData = await healthServeStore.getHealthServe(props.type);
+    items.value = Array.isArray(healthServeData?.healthServe)
+      ? healthServeData.healthServe
+      : [];
   } catch (error) {
-    console.error("Failed to fetch doctors:", error);
+    console.error("Failed to fetch healthServe:", error);
     items.value = [];
   } finally {
     loading.value = false;
@@ -209,7 +246,6 @@ const getPaymentStatusColor = (status) => {
   return "blue-grey";
 };
 
-// Helper function to determine icon for payment status
 const getPaymentStatusIcon = (status) => {
   if (!status) return "mdi-help-circle-outline";
   status = status.toLowerCase();
@@ -224,29 +260,25 @@ const getPaymentStatusIcon = (status) => {
 
 <style scoped>
 .v-container {
-  max-width: 1400px; /* Or your preferred max width */
+  max-width: 1400px;
 }
 
-/* Improve hover effect on rows */
 .v-data-table :deep(tbody tr:hover) {
-  background-color: #f5f5f5 !important; /* Or your preferred hover color */
+  background-color: #f5f5f5 !important;
 }
 
-/* Style for table headers */
 .v-data-table :deep(thead th) {
   font-size: 0.875rem !important;
   font-weight: bold !important;
-  color: #424242 !important; /* Darker grey for header text */
-  background-color: #fafafa !important;
+  color: #4d4d4d !important;
+  background-color: #d3d3d3 !important;
 }
 
-/* Consistent padding for cells */
 .v-data-table :deep(td) {
   padding: 10px 16px !important;
   font-size: 0.875rem;
 }
 
-/* Custom styling for the search bar */
 .v-text-field :deep(.v-field__input) {
   font-size: 0.9rem;
 }
@@ -254,7 +286,6 @@ const getPaymentStatusIcon = (status) => {
   font-size: 0.9rem;
 }
 
-/* Ensure chips don't grow too large */
 .v-chip {
   max-width: 150px;
   overflow: hidden;

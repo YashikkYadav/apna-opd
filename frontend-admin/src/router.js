@@ -1,11 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-// Import the components you want to route to
-import DashBoard from "./views/dashboard/DashBoard.vue";
 import Doctor from "./views/doctor/Doctor.vue";
-import Profile from "./views/profile/Profile.vue";
 import Login from "./views/login/Login.vue";
-import Enquiry from "./views/enquiry/Enquiry.vue";
+import HealthServe from "./views/healthServe/HealthServe.vue";
 
 const routes = [
   {
@@ -14,14 +11,92 @@ const routes = [
     component: Doctor,
   },
   {
-    path: "/enquiry",
-    name: "Enquiry",
-    component: Enquiry,
+    path: "/ambulance",
+    name: "Ambulance",
+    component: HealthServe,
+    props: {
+      type: "ambulance",
+    },
   },
   {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
+    path: "/gym",
+    name: "Gym",
+    component: HealthServe,
+    props: {
+      type: "gym",
+    },
+  },
+  {
+    path: "/yoga",
+    name: "Yoga",
+    component: HealthServe,
+    props: {
+      type: "yoga",
+    },
+  },
+  {
+    path: "/nasha_mukti_kendra",
+    name: "Nash Mukti Kendra",
+    component: HealthServe,
+    props: {
+      type: "nasha_mukti_kendra",
+    },
+  },
+  {
+    path: "/commercial_meditation",
+    name: "Commercial Meditaion",
+    component: HealthServe,
+    props: {
+      type: "commercial_meditation",
+    },
+  },
+  {
+    path: "/medical_store",
+    name: "Medical Store",
+    component: HealthServe,
+    props: {
+      type: "medical_store",
+    },
+  },
+  {
+    path: "/nursing_medical_college",
+    name: "Nursing Medical College",
+    component: HealthServe,
+    props: {
+      type: "nursing_medical_college",
+    },
+  },
+  {
+    path: "/nursing_medical_college",
+    name: "Nursing Medical College",
+    component: HealthServe,
+    props: {
+      type: "nursing_medical_college",
+    },
+  },
+  {
+    path: "/blood_bank",
+    name: "Blood Bank",
+    component: HealthServe,
+    props: {
+      type: "blood_bank",
+    },
+  },
+  {
+    path: "/physiotherapist",
+    name: "Physiotherapist",
+    component: HealthServe,
+    props: {
+      type: "physiotherapist",
+    },
+  },
+  {
+    path: "/blood_donor",
+    name: "Blood Donor",
+    component: HealthServe,
+    props: {
+      type: "blood_donor",
+    },
   },
   {
     path: "/login",
@@ -30,7 +105,7 @@ const routes = [
   },
   {
     path: "/:pathMatch(.*)*",
-    redirect: "/dashboard",
+    redirect: "/login",
   },
 ];
 
