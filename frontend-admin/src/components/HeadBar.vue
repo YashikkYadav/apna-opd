@@ -42,7 +42,8 @@ export default {
 
 <style scoped>
 .admin-panel-text {
-  font-size: 1.2em;
+  padding: 1rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #333;
 }

@@ -10,8 +10,6 @@ const createAdmin = async (req, res) => {
       return res.status(newAdmin.statusCode).json({ error: newAdmin.error });
     }
 
-    console.log(newAdmin);
-
     res.status(newAdmin.statusCode).json({ admin: newAdmin });
   } catch (error) {
     res.status(500).send(`Error occurred : ${error}`);
@@ -68,9 +66,42 @@ const getHealthServe = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const user = await adminService.getUsers();
+
+    if (user?.error) {
+      res.status(user.statusCode).json({ error: user.error });
+    }
+
+    res.status(user.statusCode).json({ user: user.user });
+  } catch (error) {
+    console.log("Error while fetching doctors : ", error);
+    res.status(500).send(`An error occurred ${error}`);
+  }
+};
+
+const getUserDetails = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const details = await adminService.getUserDetails(userId);
+
+    if (details?.error) {
+      res.status(details.statusCode).json({ error: details.error });
+    }
+
+    res.status(details.statusCode).json({ user: details.details });
+  } catch (error) {
+    console.log("Error while fetching doctors : ", error);
+    res.status(500).send(`An error occurred ${error}`);
+  }
+};
+
 module.exports = {
   createAdmin,
+  getUserDetails,
   loginAdmin,
   getDoctors,
+  getUsers,
   getHealthServe,
 };

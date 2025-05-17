@@ -132,6 +132,14 @@
             class="custom-list-item"
           ></v-list-item>
         </router-link>
+        <router-link to="/user" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-account-tie"
+            title="User"
+            value="user"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
       </v-list>
     </v-navigation-drawer>
   </div>

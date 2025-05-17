@@ -1,7 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const healthServeSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+      unique: true,
+    },
     type: {
       index: true,
       required: true,
@@ -43,8 +49,8 @@ const healthServeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const HealthServe = mongoose.model('HealthServe', healthServeSchema);
+const HealthServe = mongoose.model("HealthServe", healthServeSchema);
 module.exports = HealthServe;

@@ -10,6 +10,14 @@ admin.post("/login", adminController.loginAdmin);
 
 admin.get("/:adminId/doctor", adminMiddleware, adminController.getDoctors);
 
+admin.get("/:adminId/user", adminMiddleware, adminController.getUsers);
+
+admin.get(
+  "/:adminId/user/:userId",
+  adminMiddleware,
+  adminController.getUserDetails
+);
+
 admin.get(
   "/:adminId/:type/healthServe",
   adminMiddleware,

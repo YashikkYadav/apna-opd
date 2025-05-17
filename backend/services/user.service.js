@@ -1,32 +1,40 @@
-const adminSchema = require("../validations/admin.validation");
-const Admin = require("../models/admin");
+const UserSchema = require("../validations/user.validation");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { getAccessToken, comparePassword } = require("../utils/helpers");
 const Doctor = require("../models/doctor");
 const HealthServe = require("../models/healthServe");
-const User = require("../models/user");
-const { default: mongoose } = require("mongoose");
 
-const createAdmin = async (adminData) => {
+const createUser = async (userData) => {
   try {
-    adminSchema.parse(adminData);
+    UserSchema.parse(userData);
 
-    const existing = await Admin.findOne();
-    if (existing) {
-      return res.status(400).json({ message: "Admin account already exists." });
+    const existingUserWithEmail = await User.findOne({ email: userData.email });
+    if (existingUserWithEmail) {
+      return { statusCode: 400, error: "Email already exists." };
     }
 
-    const hashedPassword = await bcrypt.hash(adminData.password, 10);
-    const admin = new Admin({
-      username: adminData.username,
+    const existingUserWithPhone = await User.findOne({ phone: userData.phone });
+    if (existingUserWithPhone) {
+      return { statusCode: 400, error: "Phone number already exists." };
+    }
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const user = new User({
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      phone: userData.phone,
       password: hashedPassword,
     });
 
-    await admin.save();
+    await user.save();
 
-    return { statusCode: 200, admin: admin };
+    console.log(user);
+
+    return { statusCode: 200, User: user };
   } catch (error) {
-    console.log(`Error occurred while creating admin ::: ${error}`);
+    console.log(`Error occurred while creating User ::: ${error}`);
     if (error.name === "ZodError") {
       return { statusCode: 400, error: error.errors[0].message };
     }
@@ -34,9 +42,9 @@ const createAdmin = async (adminData) => {
   }
 };
 
-const loginAdmin = async (adminData) => {
+const loginUser = async (UserData) => {
   try {
-    const { userName, password } = adminData;
+    const { userName, password } = UserData;
 
     if (!userName && password) {
       return {
@@ -45,16 +53,16 @@ const loginAdmin = async (adminData) => {
       };
     }
 
-    const admin = await Admin.findOne({ username: userName });
+    const User = await User.findOne({ username: userName });
 
-    if (!admin) {
+    if (!User) {
       return {
         statusCode: 404,
-        error: "admin not found",
+        error: "User not found",
       };
     }
 
-    const isPasswordValid = await comparePassword(password, admin.password);
+    const isPasswordValid = await comparePassword(password, User.password);
     if (!isPasswordValid) {
       return {
         statusCode: 401,
@@ -62,12 +70,12 @@ const loginAdmin = async (adminData) => {
       };
     }
 
-    const accessToken = getAccessToken(admin);
+    const accessToken = getAccessToken(User);
 
     return {
       statusCode: 200,
-      admin: {
-        id: admin._id,
+      User: {
+        id: User._id,
         accessToken,
       },
     };
@@ -100,31 +108,6 @@ const getUsers = async () => {
   }
 };
 
-const getUserDetails = async (userId) => {
-  try {
-    const doctor = await Doctor.countDocuments({ userId: userId });
-    const userObj = new mongoose.Types.ObjectId(userId);
-    const healthServe = await HealthServe.aggregate([
-      { $match: { userId: userObj } },
-      { $group: { _id: "$type", count: { $sum: 1 } } },
-      { $project: { _id: 0, type: "$_id", count: 1 } },
-    ]);
-
-    let userDetails = [];
-
-    if (doctor || healthServe.length) {
-      userDetails = {
-        details: [{ type: "Doctor", count: doctor }, ...healthServe],
-      };
-    }
-
-    return { statusCode: 200, details: userDetails };
-  } catch (error) {
-    console.log("Error while fetching healthServe from the DB : ", error);
-    return { statusCode: 500, error: error };
-  }
-};
-
 const getHealthServe = async (type) => {
   try {
     const healthServe = await HealthServe.find({ type: type });
@@ -136,10 +119,9 @@ const getHealthServe = async (type) => {
 };
 
 module.exports = {
-  getUserDetails,
   getHealthServe,
-  createAdmin,
-  loginAdmin,
+  createUser,
+  loginUser,
   getUsers,
   getDoctors,
 };

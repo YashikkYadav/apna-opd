@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Doctor from "./views/doctor/Doctor.vue";
 import Login from "./views/login/Login.vue";
 import HealthServe from "./views/healthServe/HealthServe.vue";
+import User from "./views/user/User.vue";
 
 const routes = [
   {
@@ -97,6 +98,11 @@ const routes = [
     props: {
       type: "blood_donor",
     },
+  },
+  {
+    path: "/user",
+    name: "User",
+    component: User,
   },
   {
     path: "/login",

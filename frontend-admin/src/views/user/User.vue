@@ -2,7 +2,7 @@
   <v-container fluid>
     <div class="px-1 mb-5">
       <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
-        {{ serviceValue + " Directory" }}
+        {{ "User Directory" }}
       </h1>
     </div>
     <v-card class="pa-2 pa-md-4 rounded-xl shadow-xl">
@@ -19,7 +19,7 @@
         <v-text-field
           v-model="search"
           density="compact"
-          label="Search (Name,  Email, Location)"
+          label="Search (Name,  Email, Phone)"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           rounded="lg"
@@ -50,9 +50,9 @@
         density="comfortable"
         class="elevation-0 rounded-lg"
         :loading="loading"
-        loading-text="Fetching doctor data... Please wait."
-        :no-data-text="`No ${serviceValue} found matching your criteria.`"
-        item-value="rmcNumber"
+        loading-text="Fetching user data... Please wait."
+        :no-data-text="`No User found matching your criteria.`"
+        item-value="id"
       >
         <template v-slot:item.createdAt="{ item }">
           <template v-if="item.createdAt">
@@ -74,7 +74,7 @@
             class="text-decoration-none text-blue-darken-2"
           >
             <v-icon size="small" class="mr-1">mdi-phone</v-icon>
-            {{ item.phone}}
+            {{ item.phone }}
           </a>
         </template>
 
@@ -87,38 +87,54 @@
             {{ item.email }}
           </a>
         </template>
-
-        <template v-slot:item.location="{ item }">
-          <template v-if="item.location">
-            <div class="text-caption">
-              <div class="text-grey-darken-1">
-                {{ item.location }}
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <v-chip size="small" color="grey-lighten-1">N/A</v-chip>
-          </template>
+        <template v-slot:item.firstName="{ item }">
+          {{ item.firstName + " " + item.lastName }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon size="small" class="ms-2" @click="openDetailsModal(item)">
+            mdi-eye
+          </v-icon>
         </template>
       </v-data-table>
     </v-card>
+
+    <v-dialog v-model="showDetailsModal" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5">
+          User Profiles - {{ selectedUser?.firstName }}
+          {{ selectedUser?.lastName }}
+        </v-card-title>
+        <v-card-text>
+          <v-data-table
+            :headers="detailsHeaders"
+            :items="userDetails"
+            :items-per-page-options="[
+              { value: 5, title: '5' },
+              { value: 10, title: '10' },
+              { value: -1, title: 'All' },
+            ]"
+            class="elevation-0"
+          >
+            <template v-slot:no-data>
+              No profile details available for this user.
+            </template>
+          </v-data-table>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn color="error" @click="closeDetailsModal">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script setup>
-import { useHealthServeStore } from "@/store/HealthServeStore";
-import { ref, onMounted, computed, defineProps, watch } from "vue";
+import { useUserStore } from "@/store/UserStore";
+import { ref, onMounted, computed } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
 
-const props = defineProps({
-  type: {
-    type: String,
-    default: "",
-  },
-});
-
-const healthServeTypes = ref([
+const userTypes = ref([
   {
     ambulance: "Ambulance",
     gym: "Gym",
@@ -135,45 +151,27 @@ const healthServeTypes = ref([
 
 onMounted(() => {
   const router = useRouter();
-  if (props.type === "") {
-    router.push("/login");
-  }
   const auth = checkAuth(router);
   if (auth) {
-    fetchHealthServe();
+    fetchUser();
   }
-  watch(
-    () => props.type,
-    (newType, oldType) => {
-      if (newType !== oldType) {
-        const auth = checkAuth(router);
-        if (auth) {
-          fetchHealthServe();
-        } else {
-          console.warn("Authentication failed during type prop change.");
-        }
-      }
-    }
-  );
 });
 
 const serviceValue = computed(() => {
   if (
     props.type &&
-    healthServeTypes.value.length > 0 &&
-    healthServeTypes.value[0].hasOwnProperty(
+    userTypes.value.length > 0 &&
+    userTypes.value[0].hasOwnProperty(
       props.type.toLowerCase().replace(/ /g, "_")
     )
   ) {
-    return healthServeTypes.value[0][
-      props.type.toLowerCase().replace(/ /g, "_")
-    ];
+    return userTypes.value[0][props.type.toLowerCase().replace(/ /g, "_")];
   }
   return null;
 });
 
 defineOptions({
-  name: "healthServeDataTable",
+  name: "userDataTable",
 });
 
 const search = ref("");
@@ -185,7 +183,7 @@ const loading = ref(true);
 const headers = ref([
   {
     title: "Name",
-    key: "name",
+    key: "firstName",
     sortable: true,
     align: "start",
     cellClass: "font-weight-medium text-subtitle-2",
@@ -197,20 +195,18 @@ const headers = ref([
     align: "start",
   },
   { title: "Email", key: "email", sortable: false, align: "start" },
-  { title: "Location", key: "location", sortable: false, align: "start" },
   { title: "Created At", key: "createdAt", sortable: true, align: "start" },
+  { title: "Actions", key: "actions", sortable: false, align: "center" },
 ]);
 
-const fetchHealthServe = async () => {
+const fetchUser = async () => {
   loading.value = true;
-  const healthServeStore = useHealthServeStore();
+  const userStore = useUserStore();
   try {
-    const healthServeData = await healthServeStore.getHealthServe(props.type);
-    items.value = Array.isArray(healthServeData?.healthServe)
-      ? healthServeData.healthServe
-      : [];
+    const userData = await userStore.getUser();
+    items.value = Array.isArray(userData?.user) ? userData.user : [];
   } catch (error) {
-    console.error("Failed to fetch healthServe:", error);
+    console.error("Failed to fetch user:", error);
     items.value = [];
   } finally {
     loading.value = false;
@@ -256,6 +252,39 @@ const getPaymentStatusIcon = (status) => {
     return "mdi-alert-circle-outline";
   return "mdi-information-outline";
 };
+
+const showDetailsModal = ref(false);
+const selectedUser = ref(null);
+const userDetails = ref([]);
+const detailsHeaders = ref([
+  { title: "Profile Type", key: "type" },
+  { title: "Count", key: "count", align: "center" },
+]);
+
+const openDetailsModal = (user) => {
+  selectedUser.value = user;
+  fetchUserDetails();
+  showDetailsModal.value = true;
+};
+
+const fetchUserDetails = async () => {
+  const userStore = useUserStore();
+  try {
+    const userData = await userStore.getUserDetails(selectedUser.value._id);
+    userDetails.value = Array.isArray(userData?.user?.details)
+      ? userData.user.details
+      : [];
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+    userDetails.value = [];
+  }
+};
+
+const closeDetailsModal = () => {
+  showDetailsModal.value = false;
+  selectedUser.value = null;
+  userDetails.value = [];
+};
 </script>
 
 <style scoped>
@@ -291,5 +320,17 @@ const getPaymentStatusIcon = (status) => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.v-dialog {
+  padding-top: 30px;
+}
+
+.v-card {
+  padding: 20px;
+}
+
+.v-card-title {
+  padding-inline: 20px;
 }
 </style>
