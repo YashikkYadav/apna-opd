@@ -8,7 +8,6 @@ const Banner = ({ doctorDetail }) => {
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
     const [showRateModal, setShowRateModal] = useState(false);
     
-    // Check if a date falls within unavailability period
     const isDateUnavailable = (date) => {
         if (!doctorDetail?.unavailabilityDate) return false;
         const checkDate = new Date(date);
@@ -17,7 +16,6 @@ const Banner = ({ doctorDetail }) => {
         return checkDate >= fromDate && checkDate <= toDate;
     };
 
-    // Get the next available date considering availabilityAfter
     const getNextAvailableDate = () => {
         const today = new Date();
         const availableAfterDays = doctorDetail?.availabilityAfter || 0;
@@ -26,7 +24,6 @@ const Banner = ({ doctorDetail }) => {
         return nextDate;
     };
 
-    // Format the schedule based on the location data and availability
     const formatSchedule = () => {
         const location = doctorDetail?.locations?.[0];
         if (!location) return {};
@@ -35,7 +32,7 @@ const Banner = ({ doctorDetail }) => {
         const nextAvailableDate = getNextAvailableDate();
         let currentDate = new Date(nextAvailableDate);
         let daysFound = 0;
-        let maxDays = 14; // Look up to 14 days ahead
+        let maxDays = 14;
 
         while (daysFound < 7 && maxDays > 0) {
             const dayName = currentDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -69,7 +66,7 @@ const Banner = ({ doctorDetail }) => {
             toast.success('Rating submitted successfully');
             setShowRateModal(false);
         } catch (error) {
-            console.error('Error submitting rating:', error);
+            console.log('Error submitting rating:', error);
             toast.error('Failed to submit rating. Please try again.');
         }
     };

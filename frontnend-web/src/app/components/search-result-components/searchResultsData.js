@@ -12,18 +12,20 @@ const SearchResultsData = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0
   });
 
-  const fetchData = async (page = 1) => {
+  const fetchData = async (page = 1, loc = location, spec = speciality) => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/doctor/list?page=${page}&location=${location}&speciality=${speciality}`
+        `/doctor/list?page=${page}&location=${loc}&speciality=${spec}`
       );
+
       if (response.list?.doctorList) {
         setData(response.list.doctorList);
         setPagination({
@@ -44,10 +46,13 @@ const SearchResultsData = () => {
   const [speciality, setSpeciality] = useState("");
 
   useEffect(() => {
-    const locationQuery = searchParams.get("location");
-    const specialityQuery = searchParams.get("speciality");
-    setLocation(locationQuery);
-    setSpeciality(specialityQuery);
+    const loc = searchParams.get("location") || "";
+    const spec = searchParams.get("speciality") || "";
+
+    setLocation(loc);
+    setSpeciality(spec);
+
+    fetchData(1, loc, spec);
   }, [searchParams]);
 
   const handlePageChange = (page) => {
@@ -64,10 +69,6 @@ const SearchResultsData = () => {
   const handleDoctorDetails = (doctorId) => {
     router.push(`${doctorId}/profile`);
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
 

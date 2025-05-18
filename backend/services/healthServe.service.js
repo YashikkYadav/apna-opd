@@ -269,15 +269,26 @@ const getHealthServeList = async (page, location, type) => {
 
     const filter = {};
 
+    const extractCity = (rawLocation) => {
+      if (!rawLocation) return "";
+
+      return rawLocation
+        .toLowerCase()
+        .replace(/^the\s+/i, "")
+        .split(",")[0]
+        .trim();
+    };
+
+    location = extractCity(location);
     if (location) {
-      filter.location = { $regex: location, $options: "i" };
+      filter.location = { $regex: new RegExp(location, "i") }; 
     }
 
     if (type) {
       filter.type = type;
     }
 
-    const healthServeProfileList = await HealthServeProfile.find(filter);
+    const healthServeProfileList = await HealthServeProfile.find(filter).skip(skip).limit(limit);
 
     const total = await HealthServe.countDocuments(filter);
 
