@@ -9,6 +9,7 @@ const DoctorProfile = require("../models/doctorProfile");
 const { createPaymentLinkForEntity } = require("./payment.service");
 
 const registerDoctor = async (doctorData) => {
+  console.log(doctorData);
   try {
     const {
       name,
@@ -20,6 +21,7 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password,
       subscriptionType,
+      user,
     } = doctorData;
     console.log(doctorData);
 
@@ -59,6 +61,7 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password: hashedPassword,
       subscriptionType,
+      userId: user,
     });
     await newDoctor.save();
 

@@ -5,4 +5,5 @@ const user = express.Router();
 
 user.post("/create", userController.createUser);
 
+user.get("/", userController.getUsers);
 module.exports = user;
