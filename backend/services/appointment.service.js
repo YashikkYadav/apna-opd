@@ -174,7 +174,7 @@ const createAppointment = async (appointmentData, doctorId) => {
     }
 
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Get only today's date (00:00:00 time)
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     if (new Date(date) < today) {
       return {
@@ -528,7 +528,8 @@ const getAppointmentDates = async (doctorId, locationId) => {
         error: "Doctor profile not found",
       };
     }
-
+    console.log(doctorProfile);
+    console.log(locationId);
     const location = doctorProfile.locations.find(
       (loc) => loc._id.toString() === locationId
     );
