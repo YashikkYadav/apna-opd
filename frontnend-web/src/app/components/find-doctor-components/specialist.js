@@ -17,7 +17,7 @@ const Specialist = () => {
         },
     ]
     return (
-        <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pt-[60px] md:pt-[95px] pb-[60px] md:pb-[160px]">
+        <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pt-[60px] md:pt-[10rem] pb-[60px] md:pb-[160px] ">
             <div className="mb-[30px] md:mb-[56px] flex justify-between items-center">
                 <h1 className="title-48">Specialist</h1>
                 <Link href="/" className="title-24 text-[#094B89]">See All</Link>
