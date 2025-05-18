@@ -1,0 +1,35 @@
+{
+  "name": "saaro-health",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --port 5050",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "7.4.47",
+    "ant-design-vue": "^4.2.6",
+    "axios": "^1.7.9",
+    "lodash": "^4.17.21",
+    "path": "^0.12.7",
+    "pinia": "^2.3.1",
+    "roboto-fontface": "*",
+    "v-calendar": "^3.1.2",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vue3-apexcharts": "^1.8.0",
+    "vuetify": "^3.7.12"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "less": "^4.2.2",
+    "sass": "1.77.8",
+    "sass-embedded": "^1.77.8",
+    "unplugin-fonts": "^1.1.1",
+    "unplugin-vue-components": "^0.27.2",
+    "vite": "^6.2.0",
+    "vite-plugin-vuetify": "^2.0.3"
+  }
+}
