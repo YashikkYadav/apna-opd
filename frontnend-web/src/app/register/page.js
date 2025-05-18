@@ -266,7 +266,7 @@ const Register = () => {
   function convertUsersToSelectOptions(users) {
     return users?.map((user) => ({
       value: user._id,
-      label: user.firstName,
+      label: user.firstName + " " + user.lastName,
     }));
   }
 

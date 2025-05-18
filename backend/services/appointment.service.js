@@ -114,7 +114,6 @@ const validateOTP = async (patientData) => {
 
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
-    console.log(appointmentData);
     const { phoneNumber } = appointmentData;
 
     if (!phoneNumber) {
