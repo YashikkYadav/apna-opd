@@ -15,35 +15,37 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     locationId: "",
     date: "",
     time: "",
-    type: "Regular"
+    type: "Regular",
   });
 
   useEffect(() => {
     if (visible) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
       fetchLocations();
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
       setFormData({
         phoneNumber: "",
         location: "",
         locationId: "",
         date: "",
         time: "",
-        type: "Regular"
+        type: "Regular",
       });
       setAvailableDates([]);
       setTimeSlots([]);
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [visible, doctorDetails.doctorId]);
 
   const fetchLocations = async () => {
     try {
       setIsLoading(true);
-      const { locations } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/locations`);
+      const { locations } = await axiosInstance.get(
+        `/appointment/${doctorDetails.doctorId}/locations`
+      );
       if (locations) {
         setLocations(locations);
       }
@@ -58,7 +60,9 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   const fetchDates = async (locationId) => {
     try {
       setIsLoading(true);
-      const { dates } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/${locationId}/dates`);
+      const { dates } = await axiosInstance.get(
+        `/appointment/${doctorDetails.doctorId}/${locationId}/dates`
+      );
       if (dates) {
         setAvailableDates(dates);
       }
@@ -73,7 +77,9 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   const fetchTimeSlots = async (locationId, date) => {
     try {
       setIsLoading(true);
-      const { timeSlots } = await axiosInstance.get(`/appointment/${doctorDetails.doctorId}/${locationId}/date/${date}`);
+      const { timeSlots } = await axiosInstance.get(
+        `/appointment/${doctorDetails.doctorId}/${locationId}/date/${date}`
+      );
       if (timeSlots) {
         setTimeSlots(timeSlots);
       }
@@ -86,13 +92,17 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   };
 
   const handleLocationChange = async (e) => {
-    const selectedLocation = locations.find(loc => loc._id === e.target.value);
-    setFormData(prev => ({
+    const selectedLocation = locations.find(
+      (loc) => loc._id === e.target.value
+    );
+    console.log(locations);
+    console.log(e.target.value);
+    setFormData((prev) => ({
       ...prev,
       locationId: e.target.value,
       location: selectedLocation?.address || "",
       date: "",
-      time: ""
+      time: "",
     }));
     setTimeSlots([]);
     if (e.target.value) {
@@ -103,10 +113,10 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   };
 
   const handleDateChange = async (e) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       date: e.target.value,
-      time: ""
+      time: "",
     }));
     if (e.target.value && formData.locationId) {
       await fetchTimeSlots(formData.locationId, e.target.value);
@@ -116,25 +126,35 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    if (!formData.phoneNumber || !formData.date || !formData.location || !formData.time) {
+    if (
+      !formData.phoneNumber ||
+      !formData.date ||
+      !formData.location ||
+      !formData.time
+    ) {
       toast.error("Please fill all required fields");
       return;
     }
 
     try {
       setIsLoading(true);
-      await axiosInstance.post(`/appointment/${doctorDetails.doctorId}/book-appointment`, {
-        phoneNumber: formData.phoneNumber,
-        date: formData.date,
-        location: formData.location,
-        time: formData.time,
-        type: formData.type
-      });
-      
+      await axiosInstance.post(
+        `/appointment/${doctorDetails.doctorId}/book-appointment`,
+        {
+          phoneNumber: formData.phoneNumber,
+          date: formData.date,
+          location: formData.location,
+          time: formData.time,
+          type: formData.type,
+        }
+      );
+
       toast.success("Appointment booked successfully!");
       onClose();
     } catch (error) {
-      toast.error(error?.response?.data || error?.response || "Failed to book appointment");
+      toast.error(
+        error?.response?.data || error?.response || "Failed to book appointment"
+      );
       console.log("Error booking appointment:", error);
     } finally {
       setIsLoading(false);
@@ -156,8 +176,18 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           aria-label="Close modal"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
@@ -166,9 +196,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           <h2 className="text-2xl font-bold text-gray-900">
             Book Appointment with {doctorDetails.name}
           </h2>
-          <p className="text-gray-600 mt-2">
-            {doctorDetails.specialty}
-          </p>
+          <p className="text-gray-600 mt-2">{doctorDetails.specialty}</p>
         </div>
 
         {/* Content */}
@@ -183,7 +211,12 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
               className="w-full p-2 border rounded-md"
               placeholder="Enter your phone number"
               value={formData.phoneNumber}
-              onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  phoneNumber: e.target.value,
+                }))
+              }
             />
           </div>
 
@@ -239,13 +272,15 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
                 {timeSlots?.map((slot) => (
                   <button
                     key={slot}
-                    onClick={() => setFormData(prev => ({ ...prev, time: slot }))}
+                    onClick={() =>
+                      setFormData((prev) => ({ ...prev, time: slot }))
+                    }
                     disabled={isLoading}
                     className={`p-2 text-sm rounded-md transition-colors ${
                       formData.time === slot
                         ? "bg-[#3DB8F5] text-white"
                         : "bg-gray-100 hover:bg-gray-200 text-gray-800"
-                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     {slot}
                   </button>
@@ -266,7 +301,13 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={isLoading || !formData.phoneNumber || !formData.date || !formData.location || !formData.time}
+            disabled={
+              isLoading ||
+              !formData.phoneNumber ||
+              !formData.date ||
+              !formData.location ||
+              !formData.time
+            }
             className="px-6 py-2 bg-[#3DB8F5] text-white rounded-md hover:bg-[#69b6ff] disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             {isLoading ? "Booking..." : "Book Appointment"}
@@ -280,9 +321,13 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           </div>
         )}
       </div>
-      <ToastContainer position="bottom-center" autoClose={1800} hideProgressBar={true}/>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={1800}
+        hideProgressBar={true}
+      />
     </div>
   );
 };
 
-export default AppointmentModal; 
+export default AppointmentModal;

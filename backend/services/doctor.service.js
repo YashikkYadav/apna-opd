@@ -9,6 +9,7 @@ const DoctorProfile = require("../models/doctorProfile");
 const { createPaymentLinkForEntity } = require("./payment.service");
 
 const registerDoctor = async (doctorData) => {
+  console.log(doctorData);
   try {
     const {
       name,
@@ -20,6 +21,7 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password,
       subscriptionType,
+      user,
     } = doctorData;
     console.log(doctorData);
 
@@ -43,7 +45,11 @@ const registerDoctor = async (doctorData) => {
       };
     }
 
-    const paymentUrl = await createPaymentLinkForEntity('doctor', {name, phone: phoneNumber, email}, subscriptionType);
+    const paymentUrl = await createPaymentLinkForEntity(
+      "doctor",
+      { name, phone: phoneNumber, email },
+      subscriptionType
+    );
     const hashedPassword = await getHashedPassword(password);
     const newDoctor = new Doctor({
       name,
@@ -55,6 +61,7 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password: hashedPassword,
       subscriptionType,
+      userId: user,
     });
     await newDoctor.save();
 
@@ -174,19 +181,35 @@ const deleteDoctor = async (doctorId) => {
   }
 };
 
+function cleanedLocations(location) {
+  if (typeof location !== "string") {
+    return "";
+  }
+
+  const words = location.match(/[a-zA-Z]+/g);
+
+  if (words) {
+    return words.join(" ").toLowerCase();
+  } else {
+    return "";
+  }
+}
+
 const getDoctorList = async (page, location, speciality) => {
   try {
+    const cleanLocation = cleanedLocations(location).split(" ");
     const limit = 5;
     const skip = (page - 1) * limit;
 
     const pipeline = [];
-
     if (location) {
       pipeline.push({
         $match: {
           locations: {
             $elemMatch: {
-              address: { $regex: location, $options: "i" },
+              address: {
+                $in: cleanLocation.map((word) => new RegExp(word, "i")),
+              },
             },
           },
         },
@@ -195,7 +218,7 @@ const getDoctorList = async (page, location, speciality) => {
 
     pipeline.push({
       $lookup: {
-        from: "doctors", // collection name (plural, lowercase model name)
+        from: "doctors",
         localField: "doctorId",
         foreignField: "_id",
         as: "doctor",
@@ -233,6 +256,7 @@ const getDoctorList = async (page, location, speciality) => {
       totalItems: total,
     };
   } catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       error: error,
