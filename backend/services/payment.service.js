@@ -77,7 +77,7 @@ const createPaymentLinkForEntity = async (entityType, entityData, subscriptionTy
         "entity": entityType,
         "policy_name": "Registration Fees"
       },
-      "callback_url": "https://apnaopd.com/",
+      "callback_url": `${process.env.FRONTEND_URL}/success-registration`,
       "callback_method": "get"
     };
 
@@ -119,8 +119,17 @@ const createPaymentLinkForAmount = async (amount, entityData) => {
       };
     }
 
+    const queryParams = new URLSearchParams({
+      doctorName: entityData.doctorName,
+      appointmentDate: entityData.appointmentDate,
+      appointmentTime: entityData.appointmentTime,
+      appointmentMode: entityData.appointmentMode,
+      meetLink: entityData.meetLink,
+      location: entityData.location,
+    }).toString();
+
     let data = {
-      "amount": amount,
+      "amount": amount * 100,
       "currency": "INR",
       "accept_partial": false,
       "reference_id": "TS1995",
@@ -138,7 +147,7 @@ const createPaymentLinkForAmount = async (amount, entityData) => {
       "notes": {
         "policy_name": "Appointment Fees"
       },
-      "callback_url": "https://www.google.com/",
+      "callback_url": `${process.env.FRONTEND_URL}/success?${queryParams}`,
       "callback_method": "get"
     };
 
