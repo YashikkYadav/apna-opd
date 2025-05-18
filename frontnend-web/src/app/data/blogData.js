@@ -485,8 +485,10 @@ export const blogData = [
       <p>Say goodbye to long lines, rushed appointments, and crowded waiting rooms. With Apna OPD, you can consult a certified doctor online, in minutes. It's safe, reliable, and designed for your convenience.</p>
       <p><strong>Your health shouldn't wait. With Apna OPD, it doesn't have to.</strong></p>
     `
-  },
-  {
+  }
+]; 
+
+/*{
     slug: "power-of-plant-based-diet",
     date: "25 Sep, 2023",
     mins: 6,
@@ -646,5 +648,4 @@ export const blogData = [
         </div>
       </div>
     `
-  }
-]; 
+  }*/
