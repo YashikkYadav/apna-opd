@@ -139,7 +139,9 @@ const Register = () => {
           transition: Flip,
         });
         setRegisterSuccess(true);
-        window.location.href = response.paymentUrl;
+        setTimeout(() => {
+          window.location.href = response.paymentUrl;
+        }, 2000);
       }
     } catch (error) {
       const errorMessage =
@@ -217,7 +219,9 @@ const Register = () => {
           transition: Flip,
         });
         setRegisterSuccess(true);
-        window.location.href = response.paymentUrl;
+        setTimeout(() => {
+          window.location.href = response.paymentUrl;
+        }, 2000);
       }
     } catch (error) {
       if (typeof error === "string") {

@@ -8,9 +8,9 @@ const ArticleCard = ({slug, date, mins, title, drName, description, image}) => {
                 <Image 
                     src={image || "/images/image_placeholder.svg"}
                     alt={title || "Article image"}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-[8px]"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="rounded-t-[8px] object-cover"
                 />
             </div>
             <div className="py-[24px] px-[16px] flex flex-col flex-grow">

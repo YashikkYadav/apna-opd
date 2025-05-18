@@ -28,7 +28,7 @@ const BannerCommon = ({ profileData, serviceType }) => {
             toast.success('Rating submitted successfully');
             setShowRateModal(false);
         } catch (error) {
-            console.error('Error submitting rating:', error);
+            console.log('Error submitting rating:', error);
             toast.error('Failed to submit rating. Please try again.');
         }
     };
