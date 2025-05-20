@@ -124,7 +124,13 @@ const Footer = () => {
                 />
               </div>
               <p className="text-white">
-                8819 Ohio St. South Gate, California 90280
+                MIV ApnaOpd Healthcare Services Pvt Ltd
+                <br />
+                Ff 61, First Floor, JTM Mall, Jagatpura Flyover
+                <br />
+                JAIPUR, RAJASTHAN 302017
+                <br />
+                India
               </p>
             </div>
             <div className="flex">
