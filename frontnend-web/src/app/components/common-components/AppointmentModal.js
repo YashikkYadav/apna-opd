@@ -272,12 +272,31 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           </div>
 
           {}
-          {formData.appointmentType === "offline"
-            ? /* Phone Number */
-              formData.appointmentType && (
+          {formData.appointmentType === "offline" ? (
+            /* Phone Number */
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                "Phone Number*
+              </label>
+              <input
+                type="tel"
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter your phone number"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    phoneNumber: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          ) : (
+            formData.appointmentType && (
+              <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number*
+                    "Phone Number*
                   </label>
                   <input
                     type="tel"
@@ -292,9 +311,6 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
                     }
                   />
                 </div>
-              )
-            : /* Email Id*/
-              formData.appointmentType && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email Id
@@ -312,7 +328,9 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
                     }
                   />
                 </div>
-              )}
+              </>
+            )
+          )}
 
           {/* Location Selection */}
           {formData.appointmentType === "offline" && (
