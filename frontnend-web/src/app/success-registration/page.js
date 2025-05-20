@@ -90,6 +90,9 @@ export default function RegistrationSuccess() {
             <p className="text-center text-gray-700 mt-2">
               Now you need to complete your profile to continue.
             </p>
+            <p className="text-center text-gray-700 mt-2">
+              Log in to your dashboard using the same credentials and complete your profile.
+            </p>
           </div>
           
           {/* Redirect Information */}
