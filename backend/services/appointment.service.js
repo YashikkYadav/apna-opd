@@ -3,6 +3,7 @@ const Patient = require("../models/patient");
 const Appointment = require("../models/appointment");
 const DoctorProfile = require("../models/doctorProfile");
 const DoctorPatient = require("../models/doctorPatient");
+const paymentService = require("../services/payment.service");
 
 const { generatePatientUid } = require("../utils/helpers");
 const validateAppointment = require("../validations/appointment.validation");
@@ -114,23 +115,26 @@ const validateOTP = async (patientData) => {
 
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
-    const { phoneNumber } = appointmentData;
-
-    if (!phoneNumber) {
+    const { phoneNumber, email } = appointmentData;
+    if (!phoneNumber || !email) {
       return {
         statusCode: 400,
-        error: "Phone number is required",
+        error: "Both phone number and email are required",
       };
     }
 
     const patient = await Patient.findOne({ phoneNumber });
-    if (!patient) {
-      return {
-        statusCode: 404,
-        error: "Patient not found",
-      };
-    }
+    const count = await Patient.countDocuments({});
 
+    let newPatient;
+
+    if (!patient) {
+      newPatient = await Patient.create({
+        uid: "UID" + (count + 1),
+        phoneNumber,
+        fullName: email,
+      });
+    }
     const appointment = await createAppointment(appointmentData, doctorId);
 
     if (appointment.error) {
@@ -145,6 +149,7 @@ const bookAppointment = async (appointmentData, doctorId) => {
       appointment: appointment.appointment,
     };
   } catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       error: error,
@@ -154,6 +159,12 @@ const bookAppointment = async (appointmentData, doctorId) => {
 
 const createAppointment = async (appointmentData, doctorId) => {
   try {
+    const paymentLink = paymentService.createPaymentLinkForEntity("patient", {
+      name: appointmentData.email,
+      contact: appointmentData.phoneNumber,
+      email: appointmentData.email,
+    }, 'appointment', 'appointment');
+    return;
     const { date, location, time, type, phoneNumber } = appointmentData;
 
     const appointmentDataValidation = validateAppointment(appointmentData);

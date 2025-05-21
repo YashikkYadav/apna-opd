@@ -161,7 +161,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
 
   const handleSubmit = async () => {
     if (
-      (formData.appointmentType === "offline" && !formData.phoneNumber) ||
+      !formData.phoneNumber ||
       (formData.appointmentType === "online" && !formData.email) ||
       !formData.date ||
       !formData.location ||
@@ -189,6 +189,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
         await axiosInstance.post(
           `/appointment/${doctorDetails.doctorId}/book-appointment`,
           {
+            phoneNumber:formData.phoneNumber,
             email: formData.email,
             date: formData.date,
             location: formData.location,
