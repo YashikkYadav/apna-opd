@@ -216,9 +216,9 @@ const createAppointment = async (appointmentData, doctorId) => {
     const paymentData = await paymentService.createPaymentLinkForEntity(
       "patient",
       {
-        name: appointmentData.email,
+        name: patient.fullName?? "patient",
         contact: appointmentData.phoneNumber,
-        email: appointmentData.email,
+        email: patient.email,
       },
       "appointment",
       "appointment",

@@ -60,7 +60,7 @@ const createPaymentLinkForEntity = async (
     });
     let meetLink = "";
 
-    if (paymentType == "appointment" && mode === "online") {
+    if (paymentType === "appointment" && mode === "online") {
       meetLink = await googleService.getMeetLink(emails);
     } else {
       meetLink = appointment.location;
@@ -122,7 +122,7 @@ const createPaymentLinkForEntity = async (
         reminder_enable: true,
         notes: {
           entity: entityType,
-          policy_name: "Registration Fees",
+          policy_name: "Appointment Fees",
         },
         callback_url: `${
           process.env.FRONTEND_URL
