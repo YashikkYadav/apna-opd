@@ -66,6 +66,17 @@ const createPaymentLinkForEntity = async (
       meetLink = appointment.location;
     }
 
+    const params = new URLSearchParams({
+      meetLink,
+      doctorName: doctor.name,
+      appointmentDate: appointment.date
+        .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+        .toString()
+        .split(",")[0],
+      appointmentTime: appointment.time,
+      appointmentMode: mode,
+    });
+
     let data = {};
 
     if (paymentType === "registration") {
@@ -115,14 +126,7 @@ const createPaymentLinkForEntity = async (
         },
         callback_url: `${
           process.env.FRONTEND_URL
-        }/success?meetLink=${meetLink}&doctorName=${
-          doctor.name
-        }&appointmentDate=${
-          appointment.date
-            .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-            .toString()
-            .split(",")[0]
-        }&appointmentTime=${appointment.time}&appointmentMode=${mode}`,
+        }/success?${params.toString()}`,
         callback_method: "get",
       };
     }
