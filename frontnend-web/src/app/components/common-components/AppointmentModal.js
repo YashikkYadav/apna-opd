@@ -173,8 +173,9 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     }
     try {
       setIsLoading(true);
+      let response;
       if (formData.appointmentType === "offline") {
-        await axiosInstance.post(
+        response = await axiosInstance.post(
           `/appointment/${doctorDetails.doctorId}/book-appointment`,
           {
             phoneNumber: formData.phoneNumber,
@@ -186,10 +187,10 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           }
         );
       } else {
-        await axiosInstance.post(
+        response = await axiosInstance.post(
           `/appointment/${doctorDetails.doctorId}/book-appointment`,
           {
-            phoneNumber:formData.phoneNumber,
+            phoneNumber: formData.phoneNumber,
             email: formData.email,
             date: formData.date,
             location: formData.location,
@@ -199,9 +200,14 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
           }
         );
       }
+      console.log(response.appointment.paymentLink);
 
       toast.success("Appointment booked successfully!");
       onClose();
+
+      setTimeout(() => {
+        window.location.href = response.appointment.paymentLink;
+      }, 2000);
     } catch (error) {
       toast.error(
         error?.response?.data || error?.response || "Failed to book appointment"

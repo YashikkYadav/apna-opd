@@ -1,6 +1,19 @@
 const { google } = require("googleapis");
 const { OAuth2Client } = require("google-auth-library");
+const crypto = require("crypto");
 const calendar = google.calendar("v3");
+
+// === Your Token Store – Replace with real DB logic ===
+const tokenStore = {
+  access_token: null,
+  expiry_date: null,
+  refresh_token: process.env.GOOGLE_REFRESH_TOKEN, // Put your permanent refresh token in .env
+  save(tokens) {
+    this.access_token = tokens.access_token;
+    this.expiry_date = tokens.expiry_date;
+    // You can persist to a DB here if needed
+  },
+};
 
 const SCOPES = [
   "https://www.googleapis.com/auth/calendar",
@@ -18,7 +31,8 @@ function createOAuth2Client() {
 
 function getAuthUrl(oauth2Client) {
   return oauth2Client.generateAuthUrl({
-    access_type: "offline", // 'offline' for refresh token
+    access_type: "offline", // Needed for refresh_token
+    prompt: "consent", // Ensures refresh_token is returned
     scope: SCOPES,
   });
 }
@@ -29,20 +43,10 @@ async function getTokens(oauth2Client, code) {
     return tokens;
   } catch (error) {
     console.error("Error getting tokens:", error);
-    throw error; // Re-throw to be handled by caller
+    throw error;
   }
 }
 
-/**
- * Creates a Google Meet event on Google Calendar.
- * @param {google.auth.OAuth2} auth - The authenticated OAuth2 client.
- * @param {string} summary - The event summary.
- * @param {string} description - The event description.
- * @param {string} startDateTime - The start date/time in ISO format.
- * @param {string} endDateTime - The end date/time in ISO format.
- * @param {string[]} attendees - Array of attendee email addresses.
- * @returns {Promise<object>} - The created event object.
- */
 const createMeetEvent = async function (
   auth,
   summary,
@@ -53,8 +57,8 @@ const createMeetEvent = async function (
 ) {
   try {
     const event = {
-      summary: summary,
-      description: description,
+      summary,
+      description,
       start: {
         dateTime: startDateTime,
         timeZone: "America/Los_Angeles",
@@ -67,9 +71,7 @@ const createMeetEvent = async function (
       conferenceData: {
         createRequest: {
           requestId: crypto.randomUUID(),
-          conferenceSolutionKey: {
-            type: "hangoutsMeet",
-          },
+          conferenceSolutionKey: { type: "hangoutsMeet" },
         },
       },
       reminders: {
@@ -82,7 +84,7 @@ const createMeetEvent = async function (
     };
 
     const response = await calendar.events.insert({
-      auth: auth,
+      auth,
       calendarId: "primary",
       resource: event,
       conferenceDataVersion: 1,
@@ -98,40 +100,46 @@ const createMeetEvent = async function (
 const getMeetLink = async function (emails = []) {
   const oauth2Client = createOAuth2Client();
 
-  try {
-    const auth = oauth2Client.setCredentials({
-      access_token:
-        "ya29.a0AW4XtxjYW3rLajbKoaVp9JqQcC4N-UQ2kY7WjmRYXO-R40AGEuwo5V9Yppb2VlGl08ClKBIwsXV3B-2GYoZaWLrU_m7PzeyQq3LSsjucjizDMU1oEWk1r8SFEp3464yhlkWt_E_JL9StbPi73809G70uvU_EhsE3qUkd8hfRaCgYKAeoSARASFQHGX2MibvrtfMLqo86dPgcSt9ZEag0175",
-      refresh_token:
-        "1//0gd5sJepkrQLFCgYIARAAGBASNwF-L9IrFdnshCvKg2OdFrP7QAVXPxOWz8Cf6lVLsj9KzbtDa1cVkQkiOyyvpyGmBrxLb3q1GO8",
-      scope:
-        "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.events.readonly",
-      token_type: "Bearer",
-      refresh_token_expires_in: 604799,
-      expiry_date: 1747847236618,
-    });
+  // Set saved credentials
+  oauth2Client.setCredentials({
+    refresh_token: tokenStore.refresh_token,
+    access_token: tokenStore.access_token,
+    expiry_date: tokenStore.expiry_date,
+  });
 
+  try {
+    // Ensure access token is fresh
+    await oauth2Client.getAccessToken();
+
+    // Update token store with latest access token info
+    const { access_token, expiry_date } = oauth2Client.credentials;
+    tokenStore.save({ access_token, expiry_date });
+
+    // Now create the event
     const eventSummary = "Google Meet Event Example";
     const eventDescription =
       "This is a test event created with the Google Calendar API and Google Meet.";
-    const startDateTime = "2025-05-20T14:00:00-07:00"; 
+    const startDateTime = "2025-05-20T14:00:00-07:00";
     const endDateTime = "2025-05-20T15:00:00-07:00";
-    const attendees = ["shashlko2002@gmail.com", "shash2002lko@gmail.com"];
+
     const createdEvent = await createMeetEvent(
       oauth2Client,
       eventSummary,
       eventDescription,
       startDateTime,
       endDateTime,
-      attendees
+      emails
     );
-    
+
     return createdEvent.hangoutLink;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error while calling link url:", error);
+    throw error;
   }
 };
 
 module.exports = {
   getMeetLink,
+  getAuthUrl,
+  getTokens,
 };

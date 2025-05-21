@@ -115,8 +115,8 @@ const validateOTP = async (patientData) => {
 
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
-    const { phoneNumber, email } = appointmentData;
-    if (!phoneNumber || !email) {
+    const { phoneNumber, email, appointmentType } = appointmentData;
+    if (!phoneNumber || (appointmentType === "online" && !email)) {
       return {
         statusCode: 400,
         error: "Both phone number and email are required",
@@ -159,13 +159,8 @@ const bookAppointment = async (appointmentData, doctorId) => {
 
 const createAppointment = async (appointmentData, doctorId) => {
   try {
-    const paymentLink = paymentService.createPaymentLinkForEntity("patient", {
-      name: appointmentData.email,
-      contact: appointmentData.phoneNumber,
-      email: appointmentData.email,
-    }, 'appointment', 'appointment');
-    return;
-    const { date, location, time, type, phoneNumber } = appointmentData;
+    const { date, location, time, type, appointmentType, phoneNumber } =
+      appointmentData;
 
     const appointmentDataValidation = validateAppointment(appointmentData);
     if (!appointmentDataValidation.success) {
@@ -218,9 +213,31 @@ const createAppointment = async (appointmentData, doctorId) => {
     });
     await newAppointment.save();
 
+    const paymentData = await paymentService.createPaymentLinkForEntity(
+      "patient",
+      {
+        name: appointmentData.email,
+        contact: appointmentData.phoneNumber,
+        email: appointmentData.email,
+      },
+      "appointment",
+      "appointment",
+      doctorId,
+      newAppointment,
+      appointmentType
+    );
+
+    newAppointment._doc.paymentLink = paymentData.paymentLink;
+    console.log(appointmentType);
+    console.log(paymentData.meetLink);
+    if (appointmentType === "online") {
+      newAppointment.location = paymentData.meetLink;
+    }
+
     return {
       statusCode: 201,
-      appointment: newAppointment,
+      appointment: newAppointment.toObject(),
+      paymentLink: paymentData.paymentLink,
     };
   } catch (error) {
     return {

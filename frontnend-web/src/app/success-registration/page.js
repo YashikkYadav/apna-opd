@@ -38,7 +38,7 @@ export default function RegistrationSuccess() {
     
     // Set up redirect
     const timer = setTimeout(() => {
-      router.push('/');
+      router.push('/success');
     }, 10000);
     
     return () => {

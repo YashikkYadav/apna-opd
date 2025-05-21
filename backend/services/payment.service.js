@@ -40,10 +40,13 @@ const createPaymentLinkForEntity = async (
   entityData,
   subscriptionType,
   paymentType = "registration",
+  doctorId,
+  appointment,
+  mode,
   emails = []
 ) => {
+  const doctor = await Doctor.findOne({ _id: doctorId });
   try {
-    console.log("Check 1");
     if (!entityType || !entityData || !subscriptionType) {
       return {
         statusCode: 400,
@@ -56,10 +59,11 @@ const createPaymentLinkForEntity = async (
       subscriptionType,
     });
     let meetLink = "";
-    console.log(typeof paymentType);
-    console.log(paymentType);
-    if (paymentType == "appointment") {
+
+    if (paymentType == "appointment" && mode === "online") {
       meetLink = await googleService.getMeetLink(emails);
+    } else {
+      meetLink = appointment.location;
     }
 
     let data = {};
@@ -85,7 +89,7 @@ const createPaymentLinkForEntity = async (
           entity: entityType,
           policy_name: "Registration Fees",
         },
-        callback_url: `${process.env.FRONTEND_URL}/success-registration?`,
+        callback_url: `${process.env.FRONTEND_URL}/success-registration`,
         callback_method: "get",
       };
     } else {
@@ -109,12 +113,19 @@ const createPaymentLinkForEntity = async (
           entity: entityType,
           policy_name: "Registration Fees",
         },
-        callback_url: `${process.env.FRONTEND_URL}/success-registration?meetLink=${meetLink}`,
+        callback_url: `${
+          process.env.FRONTEND_URL
+        }/success?meetLink=${meetLink}&doctorName=${
+          doctor.name
+        }&appointmentDate=${
+          appointment.date
+            .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+            .toString()
+            .split(",")[0]
+        }&appointmentTime=${appointment.time}&appointmentMode=${mode}`,
         callback_method: "get",
       };
     }
-    console.log("Check 2");
-    console.log("Check 3");
 
     const response = await axios.post(
       "https://api.razorpay.com/v1/payment_links/",
@@ -130,12 +141,10 @@ const createPaymentLinkForEntity = async (
       }
     );
 
-    console.log("Payment Link : ", response.data);
-    return;
-
     return {
       statusCode: 201,
-      paymentData: response.data,
+      paymentLink: response.data.short_url,
+      meetLink: meetLink,
     };
   } catch (error) {
     console.log(error);
