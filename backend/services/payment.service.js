@@ -4,6 +4,7 @@ const Doctor = require("../models/doctor");
 const HealthServe = require("../models/healthServe");
 const { v4: uuidv4 } = require("uuid");
 const googleService = require("./google.service");
+const DoctorProfile = require("../models/doctorProfile");
 
 const createPaymentObject = async (data) => {
   try {
@@ -46,6 +47,8 @@ const createPaymentLinkForEntity = async (
   emails = []
 ) => {
   const doctor = await Doctor.findOne({ _id: doctorId });
+  const doctorProfile = await DoctorProfile.findOne({ doctorId });
+  emails.push(doctor.email);
   try {
     if (!entityType || !entityData || !subscriptionType) {
       return {
@@ -61,7 +64,8 @@ const createPaymentLinkForEntity = async (
     let meetLink = "";
 
     if (paymentType === "appointment" && mode === "online") {
-      meetLink = await googleService.getMeetLink(emails);
+      const time = combineDateTime(appointment.date, appointment.time);
+      meetLink = await googleService.getMeetLink(time, emails);
     } else {
       meetLink = appointment.location;
     }
@@ -105,7 +109,7 @@ const createPaymentLinkForEntity = async (
       };
     } else {
       data = {
-        amount: 100,
+        amount: doctorProfile.appointmentFee * 100,
         currency: "INR",
         accept_partial: false,
         reference_id: uuidv4(),
@@ -158,6 +162,20 @@ const createPaymentLinkForEntity = async (
     };
   }
 };
+
+function combineDateTime(dateStr, timeStr) {
+  const date = new Date(dateStr);
+
+  const [time, modifier] = timeStr.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (modifier === "PM" && hours !== 12) hours += 12;
+  if (modifier === "AM" && hours === 12) hours = 0;
+
+  date.setUTCHours(hours, minutes, 0, 0);
+
+  return date.toISOString();
+}
 
 const createPaymentLinkForAmount = async (amount, entityData) => {
   try {

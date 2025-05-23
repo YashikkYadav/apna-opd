@@ -159,7 +159,7 @@ const bookAppointment = async (appointmentData, doctorId) => {
 
 const createAppointment = async (appointmentData, doctorId) => {
   try {
-    const { date, location, time, type, appointmentType, phoneNumber } =
+    const { date, location, email, time, type, appointmentType, phoneNumber } =
       appointmentData;
 
     const appointmentDataValidation = validateAppointment(appointmentData);
@@ -213,10 +213,13 @@ const createAppointment = async (appointmentData, doctorId) => {
     });
     await newAppointment.save();
 
+    let emails = [];
+    emails.push(email);
+
     const paymentData = await paymentService.createPaymentLinkForEntity(
       "patient",
       {
-        name: patient.fullName?? "patient",
+        name: patient.fullName ?? "patient",
         contact: appointmentData.phoneNumber,
         email: patient.email,
       },
@@ -224,12 +227,12 @@ const createAppointment = async (appointmentData, doctorId) => {
       "appointment",
       doctorId,
       newAppointment,
-      appointmentType
+      appointmentType,
+      emails
     );
 
     newAppointment._doc.paymentLink = paymentData.paymentLink;
-    console.log(appointmentType);
-    console.log(paymentData.meetLink);
+
     if (appointmentType === "online") {
       newAppointment.location = paymentData.meetLink;
     }

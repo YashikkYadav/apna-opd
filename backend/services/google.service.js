@@ -97,10 +97,9 @@ const createMeetEvent = async function (
   }
 };
 
-const getMeetLink = async function (emails = []) {
+const getMeetLink = async function (time, emails = []) {
   const oauth2Client = createOAuth2Client();
 
-  // Set saved credentials
   oauth2Client.setCredentials({
     refresh_token: tokenStore.refresh_token,
     access_token: tokenStore.access_token,
@@ -108,19 +107,16 @@ const getMeetLink = async function (emails = []) {
   });
 
   try {
-    // Ensure access token is fresh
     await oauth2Client.getAccessToken();
 
-    // Update token store with latest access token info
     const { access_token, expiry_date } = oauth2Client.credentials;
     tokenStore.save({ access_token, expiry_date });
 
-    // Now create the event
     const eventSummary = "Google Meet Event Example";
     const eventDescription =
       "This is a test event created with the Google Calendar API and Google Meet.";
-    const startDateTime = "2025-05-20T14:00:00-07:00";
-    const endDateTime = "2025-05-20T15:00:00-07:00";
+    const startDateTime = time;
+    const endDateTime = addOneHourToISOString(time);
 
     const createdEvent = await createMeetEvent(
       oauth2Client,
@@ -137,6 +133,12 @@ const getMeetLink = async function (emails = []) {
     throw error;
   }
 };
+
+function addOneHourToISOString(isoString) {
+  const date = new Date(isoString);
+  const newDate = new Date(date.getTime() + 60 * 60 * 1000);
+  return newDate.toISOString();
+}
 
 module.exports = {
   getMeetLink,
