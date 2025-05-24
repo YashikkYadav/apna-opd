@@ -30,6 +30,9 @@ const router = express.Router();
 
 router.use("/admin", adminRoutes);
 
+router.get("/oauth2callback", async(req,res) => {
+})
+
 router.use("/user", userRoutes);
 // Centralizing all the routes in one file
 router.use("/doctor", doctorRoutes);

@@ -48,6 +48,18 @@
               >
               </v-text-field>
             </v-col>
+            <v-col>
+              <v-text-field
+                v-model="form.appointmentFee"
+                ref="appointmentFeeRef"
+                type="number"
+                label="Appointment Fee"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-text-field>
+            </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
@@ -396,6 +408,7 @@ export default {
         introduction: "",
         happyClients: 0,
         experience: 0,
+        appointmentFee: 0,
         about: "",
         from: "",
         to: "",
@@ -536,6 +549,7 @@ export default {
         formData.append("introduction", this.form.introduction);
         formData.append("happyClients", parseInt(this.form.happyClients));
         formData.append("experience", parseInt(this.form.experience));
+        formData.append("appointmentFee", parseInt(this.form.appointmentFee));
         formData.append("about", this.form.about);
         formData.append("locations", JSON.stringify(data.locations));
         formData.append(
@@ -543,7 +557,7 @@ export default {
           JSON.stringify(data.unavailabilityDate)
         );
         formData.append("availabilityAfter", data.availabilityAfter);
-
+        console.log(formData);
         const res = await useProfileStore().addDoctoreProfileApiCall(formData);
 
         if (res) {

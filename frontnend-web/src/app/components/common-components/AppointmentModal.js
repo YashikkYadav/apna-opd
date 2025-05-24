@@ -11,12 +11,25 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
   const [timeSlots, setTimeSlots] = useState([]);
   const [formData, setFormData] = useState({
     phoneNumber: "",
+    email: "",
     location: "",
     locationId: "",
     date: "",
     time: "",
     type: "Regular",
+    appointmentType: "",
   });
+
+  const appointmentTypes = [
+    {
+      value: "online",
+      label: "Online",
+    },
+    {
+      value: "offline",
+      label: "Offline",
+    },
+  ];
 
   useEffect(() => {
     if (visible) {
@@ -95,7 +108,6 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     const selectedLocation = locations.find(
       (loc) => loc._id === e.target.value
     );
-    console.log(locations);
     console.log(e.target.value);
     setFormData((prev) => ({
       ...prev,
@@ -118,6 +130,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       date: e.target.value,
       time: "",
     }));
+    console.log(formData.locationId);
     if (e.target.value && formData.locationId) {
       await fetchTimeSlots(formData.locationId, e.target.value);
     } else {
@@ -125,32 +138,76 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     }
   };
 
+  const handleAppointmentTypeChange = async (e) => {
+    setFormData((prev) => ({ ...prev, appointmentType: e.target.value }));
+    await fetchLocations();
+    if (e.target.value === "online") {
+      await fetchDates(locations[0]._id);
+    } else {
+      setAvailableDates([]);
+    }
+    console.log(e.target.value);
+  };
+
+  useEffect(() => {
+    if (formData.appointmentType === "online" && formData.locationId === "") {
+      setFormData((prev) => ({
+        ...prev,
+        locationId: locations[0]._id,
+        location: locations[0]?.address,
+      }));
+    }
+  }, [formData]);
+
   const handleSubmit = async () => {
     if (
       !formData.phoneNumber ||
+      (formData.appointmentType === "online" && !formData.email) ||
       !formData.date ||
       !formData.location ||
-      !formData.time
+      !formData.time ||
+      !formData.appointmentType
     ) {
       toast.error("Please fill all required fields");
       return;
     }
-
     try {
       setIsLoading(true);
-      await axiosInstance.post(
-        `/appointment/${doctorDetails.doctorId}/book-appointment`,
-        {
-          phoneNumber: formData.phoneNumber,
-          date: formData.date,
-          location: formData.location,
-          time: formData.time,
-          type: formData.type,
-        }
-      );
+      let response;
+      if (formData.appointmentType === "offline") {
+        response = await axiosInstance.post(
+          `/appointment/${doctorDetails.doctorId}/book-appointment`,
+          {
+            phoneNumber: formData.phoneNumber,
+            date: formData.date,
+            location: formData.location,
+            time: formData.time,
+            type: formData.type,
+            appointmentType: formData.appointmentType,
+          }
+        );
+      } else {
+        response = await axiosInstance.post(
+          `/appointment/${doctorDetails.doctorId}/book-appointment`,
+          {
+            phoneNumber: formData.phoneNumber,
+            email: formData.email,
+            date: formData.date,
+            location: formData.location,
+            time: formData.time,
+            type: formData.type,
+            appointmentType: formData.appointmentType,
+          }
+        );
+      }
+      console.log(response.appointment.paymentLink);
 
       toast.success("Appointment booked successfully!");
       onClose();
+
+      setTimeout(() => {
+        window.location.href = response.appointment.paymentLink;
+      }, 2000);
     } catch (error) {
       toast.error(
         error?.response?.data || error?.response || "Failed to book appointment"
@@ -201,44 +258,108 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
 
         {/* Content */}
         <div className="space-y-6">
-          {/* Phone Number */}
+          {/* Type Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number*
-            </label>
-            <input
-              type="tel"
-              className="w-full p-2 border rounded-md"
-              placeholder="Enter your phone number"
-              value={formData.phoneNumber}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  phoneNumber: e.target.value,
-                }))
-              }
-            />
-          </div>
-
-          {/* Location Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Location*
+              Select Appointment Type
             </label>
             <select
               className="w-full p-2 border rounded-md"
-              value={formData.locationId}
-              onChange={handleLocationChange}
+              value={formData.appointmentType}
+              onChange={handleAppointmentTypeChange}
               disabled={isLoading}
             >
-              <option value="">Select a location</option>
-              {locations?.map((location) => (
-                <option key={location._id} value={location._id}>
-                  {location.name} - {location.address}
+              <option value="">Select a type</option>
+              {appointmentTypes?.map((type, index) => (
+                <option key={index + "_" + type.value} value={type.value}>
+                  {type.label}
                 </option>
               ))}
             </select>
           </div>
+
+          {}
+          {formData.appointmentType === "offline" ? (
+            /* Phone Number */
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                "Phone Number*
+              </label>
+              <input
+                type="tel"
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter your phone number"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    phoneNumber: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          ) : (
+            formData.appointmentType && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    "Phone Number*
+                  </label>
+                  <input
+                    type="tel"
+                    className="w-full p-2 border rounded-md"
+                    placeholder="Enter your phone number"
+                    value={formData.phoneNumber}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        phoneNumber: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email Id
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full p-2 border rounded-md"
+                    placeholder="Enter your email id"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              </>
+            )
+          )}
+
+          {/* Location Selection */}
+          {formData.appointmentType === "offline" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Location*
+              </label>
+              <select
+                className="w-full p-2 border rounded-md"
+                value={formData.locationId}
+                onChange={handleLocationChange}
+                disabled={isLoading}
+              >
+                <option value="">Select a location</option>
+                {locations?.map((location) => (
+                  <option key={location._id} value={location._id}>
+                    {location.name} - {location.address}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Date Selection */}
           {availableDates?.length > 0 && (
@@ -303,7 +424,9 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
             onClick={handleSubmit}
             disabled={
               isLoading ||
-              !formData.phoneNumber ||
+              (formData.appointmentType === "offline" &&
+                !formData.phoneNumber) ||
+              (formData.appointmentType === "online" && !formData.email) ||
               !formData.date ||
               !formData.location ||
               !formData.time
