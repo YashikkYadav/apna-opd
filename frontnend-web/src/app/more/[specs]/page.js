@@ -4,6 +4,9 @@ import Image from "next/image";
 import { Select } from "antd";
 import SearchBarForServices from "../../components/common-components/SearchBarForServices";
 import Ambulance from "../../components/more/ambulance/ambulance";
+import Hospital from "../../components/more/hospital/hospital";
+import Vatenary from "../../components/more/vatenary/vatenary";
+import Emergency from "../../components/more/emergency/emergency";
 import Gym from "../../components/more/gym/gym";
 import Yoga from "../../components/more/yoga/yoga";
 import CommercialMeditation from "../../components/more/commercialMeditation/commercialMeditation";
@@ -29,10 +32,11 @@ const ServicePage = () => {
   const router = useRouter();
 
   const fetchData = async (locationQuery = "") => {
+    const sanitizedSpecs = params.specs.replace(/-/g, "_");
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/health-serve/list?location=${locationQuery}&type=${params.specs}`
+        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}`
       );
       if (response?.list?.healthServeProfileList) {
         setServiceData(response.list.healthServeProfileList);
@@ -58,6 +62,12 @@ const ServicePage = () => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
         return "Find Ambulance Services";
+      case serviceTypes.HOSPITAL:
+        return "Find Hospitals";
+      case serviceTypes.VATENARY:
+        return "Find Vatenary Services";
+      case serviceTypes.EMERGENCY:
+        return "Find Emergency Services";
       case serviceTypes.GYM:
         return "Find Fitness Centers & Gyms";
       case serviceTypes.YOGA:
@@ -85,6 +95,12 @@ const ServicePage = () => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
         return <Ambulance serviceData={serviceData} />;
+      case serviceTypes.HOSPITAL:
+        return <Hospital serviceData={serviceData} />;
+      case serviceTypes.VATENARY:
+        return <Vatenary serviceData={serviceData} />;
+      case serviceTypes.EMERGENCY:
+        return <Emergency serviceData={serviceData} />;
       case serviceTypes.GYM:
         return <Gym serviceData={serviceData} />;
       case serviceTypes.YOGA:
