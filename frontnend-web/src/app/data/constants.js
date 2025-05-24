@@ -37,6 +37,9 @@ export const getSpecialties = () => {
 
 export const serviceTypes = {
   AMBULANCE: "ambulance",
+  HOSPITAL: "hospital",
+  EMERGENCY: "emergency",
+  VATENARY: "vatenary",
   GYM: "gym",
   YOGA: "yoga",
   MEDITATION: "commercial-meditation",

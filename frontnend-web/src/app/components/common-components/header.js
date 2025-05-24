@@ -68,6 +68,9 @@ const Header = () => {
     { label: "Blood Bank", route: "/more/blood-bank" },
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Blood Donor", route: "/more/blood-donor" },
+    { label: "Hospital", route: "/more/hospital" },
+    { label: "Vatenary", route: "/more/vatenary" },
+    { label: "Emergency", route: "/more/emergency" },
   ];
 
   return (
