@@ -36,6 +36,9 @@ const Register = () => {
   // Registration type options
   const registrationTypes = [
     { value: "doctor", label: "Doctor" },
+    { value: "hospital", label: "Hospital" },
+    { value: "vatenary", label: "Vatenary" },
+    { value: "emergency", label: "Emergency Service" },
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
     { value: "yoga", label: "Yoga" },
@@ -134,7 +137,7 @@ const Register = () => {
       address: formData.location,
       speciality: formData.speciality,
       subscriptionType: formData.subscriptionType,
-      user: formData.user,
+      user: formData.user === "Select User" ? null : formData.user,
     };
     try {
       const response = await axiosInstance.post("/doctor", payload);
@@ -266,7 +269,7 @@ const Register = () => {
   function convertUsersToSelectOptions(users) {
     return users?.map((user) => ({
       value: user._id,
-      label: user.firstName,
+      label: user.firstName + " " + user.lastName,
     }));
   }
 
@@ -277,7 +280,7 @@ const Register = () => {
   const fetchUsers = async () => {
     const userData = await axiosInstance.get("/user");
     const temp = convertUsersToSelectOptions(userData.user);
-    setUsers(temp);
+    setUsers([{ value: "", label: "Select User" }, ...temp]);
   };
 
   return registerSuccess ? (
@@ -337,7 +340,7 @@ const Register = () => {
           {/* User*/}
           <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              User
+              User <span className="text-gray-400">(Optional)</span>
             </label>
             <Select
               value={formData.user}
@@ -345,7 +348,6 @@ const Register = () => {
               placeholder="Select Subscription Type"
               options={users}
               className="w-full"
-              required
             />
           </div>
 

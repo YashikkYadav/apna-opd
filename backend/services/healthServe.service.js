@@ -287,10 +287,16 @@ const getHealthServeList = async (page, location, type) => {
     if (type) {
       filter.type = type;
     }
-
-    const healthServeProfileList = await HealthServeProfile.find(filter).skip(skip).limit(limit);
-
-    const total = await HealthServe.countDocuments(filter);
+    let healthServeProfileList;
+    let total;
+    if(type === "hospital" || type === "blood_donor"){
+      healthServeProfileList = await HealthServe.find(filter).skip(skip).limit(limit);
+      total = await HealthServe.countDocuments(filter);
+    }
+    else{
+      healthServeProfileList = await HealthServeProfile.find(filter).skip(skip).limit(limit);
+      total = await HealthServe.countDocuments(filter);
+    }
 
     return {
       statusCode: 200,
