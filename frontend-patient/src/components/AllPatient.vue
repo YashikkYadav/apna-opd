@@ -8,7 +8,7 @@
       </v-col>
 
       <v-col cols="4" class="text-end mb-2">
-        <v-btn className="saaro-btn" color="#8f6cb4" @click="openDialog" large>
+        <v-btn className="saaro-btn" color="#7f6cb4" @click="openDialog" large>
           Register Patient
         </v-btn>
       </v-col>

@@ -1,11 +1,88 @@
 <template>
   <v-container fluid>
-    <div class="px-1 mb-5 flex justify-between">
-      <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
-        Doctors Directory
-      </h1>
-      <AddDoctor />
-    </div>
+    <v-row class="flex justify-between">
+      <v-col cols="8">
+        <div class="px-1 mb-5">
+          <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
+            Doctors Directory
+          </h1>
+        </div>
+      </v-col>
+      <v-col cols="4" class="text-end">
+        <v-btn class="saaro-btn" color="#8f6cb4" @click="openDoctorDialog" large>
+          Register Doctor </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-dialog v-model="isDoctorFormOpen" persistent max-width="600px">
+      <v-card>
+        <v-card-title class="d-flex justify-space-between align-center">
+          <span class="text-h5">Register New Doctor</span>
+          <v-btn icon="mdi-close" variant="text" @click="closeDoctorDialog"></v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-form ref="doctorFormRef">
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newDoctorData.name"
+                    label="Doctor's Name"
+                    variant="outlined"
+                    :rules="[v => !!v || 'Name is required']"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newDoctorData.phoneNumber"
+                    label="Phone Number"
+                    variant="outlined"
+                    :rules="[v => !!v || 'Phone number is required']"
+                    required
+                    type="tel"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newDoctorData.email"
+                    label="Email"
+                    variant="outlined"
+                    :rules="[
+                      v => !!v || 'Email is required',
+                      v => /.+@.+\..+/.test(v) || 'Email must be valid'
+                    ]"
+                    required
+                    type="email"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newDoctorData.clinicName"
+                    label="Clinic Name"
+                    variant="outlined"
+                    :rules="[v => !!v || 'Clinic name is required']"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue-grey-darken-1" variant="text" @click="closeDoctorDialog">
+            Cancel
+          </v-btn>
+          <v-btn color="primary" variant="elevated" @click="submitDoctorForm">
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-card class="pa-2 pa-md-4 rounded-xl shadow-xl">
       <v-card-title
         class="d-flex flex-column flex-sm-row align-center pe-2 pb-4"
@@ -122,7 +199,7 @@ import { useHospitalStore } from "@/store/HospitalStore";
 import { ref, onMounted } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
-import AddDoctor from "@/components/AddDoctor.vue";
+// Removed: import AddDoctor from "@/components/AddDoctor.vue"; as it's replaced by the inline dialog
 
 onMounted(() => {
   const router = useRouter();
@@ -141,6 +218,16 @@ const currentPage = ref(1);
 const itemsPerPage = ref(5);
 const items = ref([]);
 const loading = ref(true);
+
+// For the new Doctor Registration Dialog
+const isDoctorFormOpen = ref(false); // Changed from isOpenDialog for clarity
+const doctorFormRef = ref(null); // Reference to the form for validation
+const newDoctorData = ref({
+  name: "",
+  phoneNumber: "",
+  email: "",
+  clinicName: "",
+});
 
 const headers = ref([
   {
@@ -179,6 +266,42 @@ const fetchDoctors = async () => {
     items.value = [];
   } finally {
     loading.value = false;
+  }
+};
+
+// Renamed openDialog to openDoctorDialog for clarity
+const openDoctorDialog = () => {
+  isDoctorFormOpen.value = true;
+};
+
+const closeDoctorDialog = () => {
+  isDoctorFormOpen.value = false;
+  // Reset form fields
+  newDoctorData.value = {
+    name: "",
+    phoneNumber: "",
+    email: "",
+    clinicName: "",
+  };
+  if (doctorFormRef.value) {
+    doctorFormRef.value.resetValidation(); // Reset Vuetify form validation state
+  }
+};
+
+const submitDoctorForm = async () => {
+  if (doctorFormRef.value) {
+    const { valid } = await doctorFormRef.value.validate();
+    if (valid) {
+      console.log("New Doctor Data Submitted:", JSON.parse(JSON.stringify(newDoctorData.value)));
+      // Here you would typically send the data to a backend API
+      // For now, we just log it and close the dialog
+      closeDoctorDialog();
+      // Optionally, you might want to refresh the doctors list or add the new doctor to it locally
+      // For example: items.value.push({ ...newDoctorData.value, /* other default fields */ });
+      // await fetchDoctors(); // Or refetch
+    } else {
+      console.log("Form validation failed.");
+    }
   }
 };
 
@@ -262,5 +385,17 @@ const getPaymentStatusIcon = (status) => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Dialog styling consistency */
+.v-dialog .v-card-title {
+  padding: 16px 24px;
+  font-size: 1.25rem; /* Vuetify default h5 */
+}
+.v-dialog .v-card-text {
+  padding: 0px 24px 20px; /* Adjust padding as needed */
+}
+.v-dialog .v-card-actions {
+  padding: 8px 24px 16px;
 }
 </style>
