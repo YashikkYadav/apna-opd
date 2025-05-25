@@ -1,181 +1,266 @@
 <template>
-    <v-container fluid>
-        <!-- Search Bar and Add Patient Button -->
-        <v-row class="align-center mb-4">
-            <v-col cols="8" class="mt-4">
-                <v-text-field v-model="search" append-inner-icon="mdi-magnify" label="Name,Phone,UID" variant="solo"
-                    max-width="350" rounded="pill" class="rounded-xl" @change="filterData"></v-text-field>
-            </v-col>
+  <v-container fluid>
+    <div class="px-1 mb-5 flex justify-between">
+      <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
+        Doctors Directory
+      </h1>
+      <AddDoctor />
+    </div>
+    <v-card class="pa-2 pa-md-4 rounded-xl shadow-xl">
+      <v-card-title
+        class="d-flex flex-column flex-sm-row align-center pe-2 pb-4"
+      >
+        <span
+          class="text-h6 font-weight-medium text-blue-grey-darken-2 mb-2 mb-sm-0"
+        >
+          <v-icon start color="primary">mdi-account-group</v-icon>
+          Professionals List
+        </span>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          density="compact"
+          label="Search (Name, RMC, Email, Speciality)"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          rounded="lg"
+          flat
+          hide-details
+          single-line
+          clearable
+          style="max-width: 400px"
+          class="mt-2 mt-sm-0"
+        ></v-text-field>
+      </v-card-title>
 
-            <v-col cols="4" class="text-end mb-2">
-                <v-btn className="saaro-btn" color="#8f6cb4" @click="openDialog" large>
-                    Register Patient
-                </v-btn>
-            </v-col>
-        </v-row>
+      <v-divider class="mb-1"></v-divider>
 
-        <!-- Data Table -->
-        <v-card title="Patients" flat>
-            <v-data-table-server :headers="headers" :items="patients" :search="search" class="table grey-head"
-                :page.sync="currentPageNumber" :items-length="totalPatients" :items-per-page="limit"
-                @update:page="pageUpdateFunction" :options.sync="options" @update:items-per-page="perPageUpdateFunction">
-                <template v-if="isLoading" v-slot:body>
-                    <tr v-for="n in 6" :key="n">
-                        <td v-for="header in headers" :key="header.key">
-                            <v-skeleton-loader type="text"></v-skeleton-loader>
-                        </td>
-                    </tr>
-                </template>
-                <template v-slot:[`item.Tags`]="{ item }">
-                    <v-chip v-if="item.Tags" color="red">
-                        {{ item.Tags }}
-                    </v-chip>
-                </template>
-                <template v-slot:[`item.action`]="{ item }">
-                    <router-link :to="`/${item.id}/view-history`" style="text-decoration: none; color: inherit;">
-                        <v-btn className="saaro-btn" color="#8f6cb4" small>
-                            View History
-                        </v-btn>
-                    </router-link>
-                    <v-btn icon class="delete-btn ml-2" @click="editDialog(item.id)">
-                        <v-icon color="7A7A7A">mdi-pencil-outline</v-icon>
-                    </v-btn>
-                    <v-btn icon class="delete-btn ml-2" @click="openDeleteDialog(item.id)">
-                        <v-icon color="7A7A7A">mdi-trash-can</v-icon>
-                    </v-btn>
-                </template>
-            </v-data-table-server>
-        </v-card>
-    </v-container>
-    <patient-add-edit-model :dialog="dialog" :isEditModel="isEdit" :patientId="this.patientId" @close-dialog="dialog = false;"
-        @fetch-patients="fetchPatients" />
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :search="search"
+        v-model:page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :items-per-page-options="[
+          { value: 5, title: '5' },
+          { value: 10, title: '10' },
+          { value: 15, title: '15' },
+          { value: -1, title: 'All' },
+        ]"
+        hover
+        density="comfortable"
+        class="elevation-0 rounded-lg"
+        :loading="loading"
+        loading-text="Fetching doctor data... Please wait."
+        no-data-text="No doctors found matching your criteria."
+        item-value="rmcNumber"
+      >
+        <template v-slot:item.speciality="{ item }">
+          <v-chip
+            variant="tonal"
+            size="small"
+            :color="item.speciality ? 'teal' : 'grey'"
+          >
+            {{ item.speciality || "N/A" }}
+          </v-chip>
+        </template>
 
-    <common-model :commonModel="isDeleteModalOpen" @close-dialog="isDeleteModalOpen = false" @actions="onDeletePatient"
-        title="Delete Patient" description="Are you sure you want to delete patient?" />
+        <template v-slot:item.createdAt="{ item }">
+          <template v-if="item.createdAt">
+            <div class="text-caption">
+              <div>{{ formatDate(item.createdAt) }}</div>
+              <div class="text-grey-darken-1">
+                {{ formatTime(item.createdAt) }}
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <v-chip size="small" color="grey-lighten-1">N/A</v-chip>
+          </template>
+        </template>
+
+        <template v-slot:item.paymentStatus="{ item }">
+          <v-chip
+            :color="getPaymentStatusColor(item.paymentStatus)"
+            size="small"
+            label
+            class="font-weight-medium"
+          >
+            <v-icon start size="small">{{
+              getPaymentStatusIcon(item.paymentStatus)
+            }}</v-icon>
+            {{ item.paymentStatus || "N/A" }}
+          </v-chip>
+        </template>
+
+        <template v-slot:item.phoneNumber="{ item }">
+          <a
+            :href="`tel:${item.phoneNumber}`"
+            class="text-decoration-none text-blue-darken-2"
+          >
+            <v-icon size="small" class="mr-1">mdi-phone</v-icon>
+            {{ item.phoneNumber }}
+          </a>
+        </template>
+
+        <template v-slot:item.email="{ item }">
+          <a
+            :href="`mailto:${item.email}`"
+            class="text-decoration-none text-blue-darken-2"
+          >
+            <v-icon size="small" class="mr-1">mdi-email</v-icon>
+            {{ item.email }}
+          </a>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 
-<script>
-import { debounce } from "lodash";
-import { usePatientStore } from '@/store/PatientStore';
-import { useUiStore } from '@/store/UiStore';
-import { checkAuth } from '@/lib/utils/utils';
-import PatientAddEditModel from '../../components/PatientAddEditModel.vue'
-import CommonModel from '@/components/CommonModel.vue';
+<script setup>
+import { useHospitalStore } from "@/store/HospitalStore";
+import { ref, onMounted } from "vue";
+import { checkAuth } from "@/lib/utils/utils";
+import { useRouter } from "vue-router";
+import AddDoctor from "@/components/AddDoctor.vue";
 
-export default {
-    name: "patient",
-    components: {
-        PatientAddEditModel,
-        CommonModel
-    },
-    data() {
-        return {
-            search: "",
-            dialog: false,
-            isDeleteModalOpen: false,
-            isLoading: true,
-            isEdit: false,
-            patients: [],
-            patientId: "",
-            currentPageNumber: 1,
-            limit: 25,
-            totalPatients: 0,
-            options: {
-                page: 1,
-                itemsPerPage: 25,
-            },
-            headers: [
-                { key: "UID", title: "UID" },
-                { key: "Name", title: "Name" },
-                { key: "Phone", title: "Phone" },
-                { key: "Date", title: "Last Visit" },
-                { key: "Tags", title: "Category" },
-                { key: "action", title: "Action", sortable: false },
-            ],
-            debouncedSearch: null
-        };
-    },
-    mounted() {
-        const auth = checkAuth(this.$router);
-        if (auth) {
-            this.fetchPatients();
-        }
-        this.debouncedSearch = debounce(this.filterData, 500);
-    },
-    methods: {
-        async fetchPatients() {
-            const res = await usePatientStore().getAllPatientApiCall(this.currentPageNumber, this.limit, this.search)
-            if (res) {
-                this.isLoading = false;
-                this.patients = res.patient.map((patient) => ({
-                    id: patient.patientId?._id,
-                    UID: patient.patientId?.uid,
-                    Name: patient.patientId?.fullName,
-                    Phone: patient.patientId?.phoneNumber,
-                    Date: new Date(patient?.updatedAt).toLocaleDateString('en-GB'),
-                    Tags: patient.patientId?.tags,
-                    Action: "",
-                }));
+onMounted(() => {
+  const router = useRouter();
+  const auth = checkAuth(router);
+  if (auth) {
+    fetchDoctors();
+  }
+});
 
-                if (res.pagination) {
-                    this.totalPatients = res.pagination.totalPatients || 0;
-                }
-            }
-        },
+defineOptions({
+  name: "DoctorDataTable",
+});
 
-        async onDeletePatient() {
-            const res = await usePatientStore().deletePatientApiCall(this.patientId)
+const search = ref("");
+const currentPage = ref(1);
+const itemsPerPage = ref(5);
+const items = ref([]);
+const loading = ref(true);
 
-            this.isDeleteModalOpen = false;
-            this.patientId = ""
-            this.fetchPatients();
-            useUiStore().openNotificationMessage("Patient Deleted Successfully!");
-        },
+const headers = ref([
+  {
+    title: "Name",
+    key: "name",
+    sortable: true,
+    align: "start",
+    cellClass: "font-weight-medium text-subtitle-2",
+  },
+  { title: "RMC Number", key: "rmcNumber", sortable: true, align: "start" },
+  {
+    title: "Phone Number",
+    key: "phoneNumber",
+    sortable: false,
+    align: "start",
+  },
+  { title: "Email", key: "email", sortable: false, align: "start" },
+  { title: "Speciality", key: "speciality", sortable: true, align: "center" },
+  {
+    title: "Payment Status",
+    key: "paymentStatus",
+    sortable: true,
+    align: "center",
+  },
+  { title: "Created At", key: "createdAt", sortable: true, align: "start" },
+]);
 
-        openDialog() {
-            this.dialog = true;
-            this.patientId = null
-            this.isEdit = false;
-        },
+const fetchDoctors = async () => {
+  loading.value = true;
+  const hospitalStore = useHospitalStore();
+  try {
+    const doctorData = await hospitalStore.getDoctors();
+    items.value = Array.isArray(doctorData?.doctors) ? doctorData.doctors : [];
+  } catch (error) {
+    console.error("Failed to fetch doctors:", error);
+    items.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
 
-        editDialog(id) {
-            this.patientId = id
-            this.dialog = true;
-            this.isEdit = true;
-        },
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
 
-        openDeleteDialog(id) {
-            this.isDeleteModalOpen = true;
-            this.patientId = id
-        },
-        pageUpdateFunction(newPageNumber) {
-            this.currentPageNumber = newPageNumber;
-            this.fetchPatients();
-        },
-        perPageUpdateFunction(newPageNumber) {
-            this.limit = newPageNumber;
-            this.fetchPatients();
-        },
-        filterData() {
-            this.currentPageNumber = 1;
-            this.fetchPatients();
-        }
-    },
-    watch: {
-        search: {
-            handler(newVal) {
-                this.debouncedSearch();
-            },
-            immediate: false
-        },
-        options: {
-            handler() {
-                this.limit = this.options.itemsPerPage;
-                this.currentPageNumber = this.options.page;
-                this.fetchPatients();
-            },
-            deep: true
-        }
-    },
+const formatTime = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const getPaymentStatusColor = (status) => {
+  if (!status) return "grey";
+  status = status.toLowerCase();
+  if (status === "paid" || status === "completed") return "green-darken-1";
+  if (status === "pending" || status === "processing") return "orange-darken-1";
+  if (status === "failed" || status === "cancelled" || status === "unpaid")
+    return "red-darken-1";
+  return "blue-grey";
+};
+
+// Helper function to determine icon for payment status
+const getPaymentStatusIcon = (status) => {
+  if (!status) return "mdi-help-circle-outline";
+  status = status.toLowerCase();
+  if (status === "paid" || status === "completed")
+    return "mdi-check-circle-outline";
+  if (status === "pending" || status === "processing") return "mdi-timer-sand";
+  if (status === "failed" || status === "cancelled" || status === "unpaid")
+    return "mdi-alert-circle-outline";
+  return "mdi-information-outline";
 };
 </script>
+
+<style scoped>
+.v-container {
+  max-width: 1400px; /* Or your preferred max width */
+}
+
+/* Improve hover effect on rows */
+.v-data-table :deep(tbody tr:hover) {
+  background-color: #f5f5f5 !important; /* Or your preferred hover color */
+}
+
+/* Style for table headers */
+.v-data-table :deep(thead th) {
+  font-size: 0.875rem !important;
+  font-weight: bold !important;
+  color: #424242 !important; /* Darker grey for header text */
+  background-color: #fafafa !important;
+}
+
+/* Consistent padding for cells */
+.v-data-table :deep(td) {
+  padding: 10px 16px !important;
+  font-size: 0.875rem;
+}
+
+/* Custom styling for the search bar */
+.v-text-field :deep(.v-field__input) {
+  font-size: 0.9rem;
+}
+.v-text-field :deep(label.v-label) {
+  font-size: 0.9rem;
+}
+
+/* Ensure chips don't grow too large */
+.v-chip {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>

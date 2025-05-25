@@ -2,13 +2,13 @@
   <div id="app">
     <div class="loginBox">
       <div class="inner">
-        <div class="signIn" v-if="step1">
+        <div class="signIn" v-if="signIn">
           <div class="top">
             <img class="logo" src="../../assets/apna_opd_logo.jpg" />
-            <div class="title">Sign In Patient</div>
+            <div class="title">Sign in</div>
           </div>
 
-          <v-form ref="loginForm" @submit.prevent="handleStep1">
+          <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
               <v-text-field
                 v-model="phone"
@@ -16,24 +16,13 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                class="email-input"
               >
               </v-text-field>
-            </div>
 
-            <input type="submit" value="Continue" class="action" />
-          </v-form>
-        </div>
-        <div class="signIn" v-else>
-          <div class="top">
-            <img class="logo" src="../../assets/apna_opd_logo.jpg" />
-            <div class="title">Sign In Patient</div>
-          </div>
-
-          <v-form ref="loginForm" @submit.prevent="handleSubmit">
-            <div class="form">
               <v-text-field
                 v-model="password"
-                label="OTP"
+                label="Password"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
@@ -44,6 +33,111 @@
 
             <input type="submit" value="Login" class="action" />
           </v-form>
+          <!-- <div class="subtitle">
+            Don't have an account?
+            <span class="subtitle-action" @click="signIn = !signIn">
+            <span class="subtitle-action">
+              Create Account
+            </span>
+          </div> -->
+        </div>
+
+        <div class="register" v-else>
+          <div class="top">
+            <img class="logo" src="../../assets/apna_opd_logo.jpg" />
+            <div class="title">Create an Account</div>
+          </div>
+
+          <v-form ref="form">
+            <div class="form ragister-form">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.name"
+                    label="Name"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.email"
+                    label="Email"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.phoneNumber"
+                    label="Phone Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.password"
+                    label="Password"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="12">
+                  <v-text-field
+                    v-model="form.address"
+                    label="address"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.clinicName"
+                    label="Clinic Name"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="form.rmcNumber"
+                    label="RMC Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </div>
+          </v-form>
+
+          <button class="action" @click="onRegister">Create Account</button>
+          <div class="subtitle">
+            Already have an account?
+            <span class="subtitle-action" @click="signIn = !signIn">
+              Sign In
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +151,7 @@ import { useUiStore } from "@/store/UiStore";
 export default {
   data() {
     return {
-      step1: true,
+      healthServeType: 'hospital',
       password: "",
       phone: "",
       form: {
@@ -80,19 +174,6 @@ export default {
     };
   },
   methods: {
-    async handleStep1() {
-      const isValid = await this.$refs.loginForm.validate();
-
-      if (!isValid.valid) {
-        useUiStore().openNotificationMessage(
-          "Please fill in all required fields correctly!",
-          "",
-          "error"
-        );
-        return;
-      }
-      this.step1 = false;
-    },
     async handleSubmit() {
       const isValid = await this.$refs.loginForm.validate();
 
@@ -106,15 +187,16 @@ export default {
       }
 
       const requestData = {
-        phoneNumber: this.phone,
-        otp: parseInt(this.password),
+        phone: this.phone,
+        password: this.password,
+        type: this.healthServeType,
       };
 
       const res = await useAuthStore().LoginApiCall(requestData);
-
+      console.log(res);
       if (res) {
-        localStorage.setItem("doctor_id", res.patient.id);
-        localStorage.setItem("access_token", res.patient.accessToken);
+        localStorage.setItem("hospital_id", res?.healthServe?.id);
+        localStorage.setItem("access_token", res?.healthServe?.accessToken);
 
         this.$router.push("/doctors");
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");

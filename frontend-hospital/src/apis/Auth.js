@@ -7,7 +7,8 @@ export class AxiosAuth {
     }
 
     Login(payload) {
-        return this.apiClient.post(`/patient/validate-otp`, payload)
+        console.log("In auth api : ",payload);
+        return this.apiClient.post(`/hospital/login`, payload)
     }
 
     Register(payload) {

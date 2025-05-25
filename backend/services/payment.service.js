@@ -46,9 +46,11 @@ const createPaymentLinkForEntity = async (
   mode,
   emails = []
 ) => {
-  const doctor = await Doctor.findOne({ _id: doctorId });
-  const doctorProfile = await DoctorProfile.findOne({ doctorId });
-  emails.push(doctor.email);
+  if (doctorId) {
+    const doctor = await Doctor.findOne({ _id: doctorId });
+    const doctorProfile = await DoctorProfile.findOne({ doctorId });
+    emails.push(doctor.email);
+  }
   try {
     if (!entityType || !entityData || !subscriptionType) {
       return {

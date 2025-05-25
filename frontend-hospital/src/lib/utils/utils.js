@@ -1,5 +1,5 @@
 export const checkAuth = (router) => {
-  const doctorId = localStorage.getItem('doctor_id');
+  const doctorId = localStorage.getItem('hospital_id');
   const accessToken = localStorage.getItem('access_token');
 
   if (!doctorId || !accessToken) {
