@@ -5,7 +5,7 @@ import Treatment from "../components/find-doctor-components/treatment";
 const FindDoctor = () => {
     return (
         <div className="pt-[80px]">
-            <BannerWithSearch title="Find Our Specialist Doctors" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."/>
+            <BannerWithSearch title="Find Our Specialist Doctors" description="Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital."/>
             <Specialist/>
             <Treatment/>
         </div>

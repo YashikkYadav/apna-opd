@@ -7,47 +7,63 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
+
 const DetailsPage = () => {
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
-  const  specs = params.specs;
-  const  specsId = params.specsId;
+  const specs = params.specs;
+  const specsId = params.specsId;
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(
+      
+      const listResponse = await axiosInstance.get(
         `/health-serve/list?&location=&type=${specs}`
       );
 
-      if (response?.list?.healthServeProfileList) {
-        response.list.healthServeProfileList?.forEach((item) => {
-          if (item._id === specsId) {
-            setProfileData(item);
-            console.log("item", item);
-          }
-        });
-      }
-      if (!response?.list?.healthServeProfileList) {
-        setError(`No data found for ${params.specs} with ID ${params.specsId}`);
+      if (!listResponse?.list?.healthServeProfileList) {
+        setError(`No data found for ${specs}`);
         return;
+      }
+
+      const basicProfile = listResponse.list.healthServeProfileList.find(
+        (item) => item._id === specsId
+      );
+
+      if (!basicProfile) {
+        setError(`No data found for ${specs} with ID ${specsId}`);
+        return;
+      }
+
+      const detailResponse = await axiosInstance.get(
+        `/${basicProfile.healthServeId}/health-serve-profile`
+      );
+
+      if (detailResponse?.healthServeProfile) {
+        setProfileData({
+          ...basicProfile,
+          ...detailResponse.healthServeProfile
+        });
+      } else {
+        setProfileData(basicProfile);
       }
 
     } catch (error) {
       console.log("Error fetching service details:", error);
-      setError("Failed to load details. Please try again later.");
+      setError(error?.response?.data?.error?.message || "Failed to load details. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (params.specs && params.specsId) {
+    if (specs && specsId) {
       fetchData();
     }
-  }, []);
+  }, [specs, specsId]);
 
   if (loading) return <Loader />;
   
@@ -69,9 +85,11 @@ const DetailsPage = () => {
         profileData={profileData} 
         serviceType={specs} 
       />
-      {/* <ImageGalleryCommon 
-        images={.images || []}
-      /> */}
+      {profileData?.images && profileData.images.length > 0 && (
+        <ImageGalleryCommon 
+          images={profileData.images}
+        />
+      )}
       <SuggestedService 
         serviceType={specs}
         currentId={specsId}

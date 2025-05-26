@@ -417,13 +417,20 @@ export const servicesData = {
 
 // Getter functions for services
 export const getServiceData = async (serviceType, id = null) => {
-  // const data = servicesData[serviceType];
-  // if (id) {
-  //   return data?.find((item) => item.id === parseInt(id)) || null;
-  // }
-  // return data || [];
-  const data = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile`
-  );
-  return data || [];
+  try {
+    if (!id) {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/health-serve/list?type=${serviceType}`
+      );
+      return response?.list?.healthServeProfileList || [];
+    }
+    
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile`
+    );
+    return response?.healthServeProfile || null;
+  } catch (error) {
+    console.error('Error fetching service data:', error);
+    return [];
+  }
 };
