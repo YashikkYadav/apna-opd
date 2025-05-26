@@ -46,9 +46,11 @@ const createPaymentLinkForEntity = async (
   mode,
   emails = []
 ) => {
-  const doctor = await Doctor.findOne({ _id: doctorId });
-  const doctorProfile = await DoctorProfile.findOne({ doctorId });
-  emails.push(doctor.email);
+  if (doctorId) {
+    const doctor = await Doctor.findOne({ _id: doctorId });
+    const doctorProfile = await DoctorProfile.findOne({ doctorId });
+    emails.push(doctor.email);
+  }
   try {
     if (!entityType || !entityData || !subscriptionType) {
       return {
@@ -63,29 +65,33 @@ const createPaymentLinkForEntity = async (
     });
     let meetLink = "";
 
-    if (paymentType === "appointment" && mode === "online") {
-      const time = combineDateTime(appointment.date, appointment.time);
-      meetLink = await googleService.getMeetLink(time, emails);
-    } else {
-      meetLink = appointment.location;
+    if (paymentType === "appointment") {
+      if (mode === "online") {
+        const time = combineDateTime(appointment.date, appointment.time);
+        meetLink = await googleService.getMeetLink(time, emails);
+      } else {
+        meetLink = appointment.location;
+      }
     }
 
-    const params = new URLSearchParams({
-      meetLink,
-      doctorName: doctor.name,
-      appointmentDate: appointment.date
-        .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-        .toString()
-        .split(",")[0],
-      appointmentTime: appointment.time,
-      appointmentMode: mode,
-    });
+    if (paymentType === "appointment") {
+      const params = new URLSearchParams({
+        meetLink,
+        doctorName: doctor.name,
+        appointmentDate: appointment.date
+          .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+          .toString()
+          .split(",")[0],
+        appointmentTime: appointment.time,
+        appointmentMode: mode,
+      });
+    }
 
     let data = {};
 
     if (paymentType === "registration") {
       data = {
-        amount: entity.amount * 100,
+        amount: entity ? entity.amount * 100 : 100,
         currency: "INR",
         accept_partial: false,
         reference_id: uuidv4(),

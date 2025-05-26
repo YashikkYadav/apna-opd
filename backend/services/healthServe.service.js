@@ -57,7 +57,7 @@ const register = async (data) => {
     return {
       statusCode: 201,
       healthServe: newHealthServe,
-      paymentLink: paymentUrl?.paymentData?.short_url,
+      paymentLink: paymentUrl?.paymentLink,
     };
   } catch (error) {
     console.log("Error while creating healthServe in DB : ", error);
