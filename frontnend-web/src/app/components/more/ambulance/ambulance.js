@@ -61,10 +61,10 @@ const Ambulance = ({ serviceData }) => {
                 </h4>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-between">
-              <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
+            <div className="flex flex-row sm:flex-col justify-end">
+              {/* <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
                 ₹{ambulance.price || ""}
-              </h2>
+              </h2> */}
               <button
                 onClick={() => navigate.push(`/more/ambulance/${ambulance._id}/details`)}
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

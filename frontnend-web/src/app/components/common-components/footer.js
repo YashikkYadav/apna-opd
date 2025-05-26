@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <>
       <div className="max-w-[1270px] mx-auto py-[63px] px-[15px] sm:px-[30px]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-7">
           <div className="max-w-[240px] auto-cols-[minmax(0,2fr)]]">
             <div className="mb-[20px]">
               <Image
@@ -73,41 +73,22 @@ const Footer = () => {
               Our Social Media
             </h6>
             <ul className="flex flex-col gap-[16px]">
-              <li className="text-base text-[#2E2E2E]">
+              {/* <li className="text-base text-[#2E2E2E]">
                 <Link href="/"> Medium </Link>
+              </li> */}
+              <li className="text-base text-[#2E2E2E]">
+                <Link href="https://www.instagram.com/apnaopdhealthservices/" target="__blank"> Instagram </Link>
               </li>
               <li className="text-base text-[#2E2E2E]">
-                <Link href="/"> Instagram </Link>
+                <Link href="https://www.facebook.com/share/1LNcUZMyyL/" target="__blank"> Facebook </Link>
               </li>
-              <li className="text-base text-[#2E2E2E]">
-                <Link href="/"> Facebook </Link>
-              </li>
-              <li className="text-base text-[#2E2E2E]">
+              {/* <li className="text-base text-[#2E2E2E]">
                 <Link href="/"> Twitter </Link>
-              </li>
+              </li> */}
               <li className="text-base text-[#2E2E2E]">
-                <Link href="/"> Youtube </Link>
+                <Link href="https://youtube.com/@apnaopdhealthservices?si=bU1kDxAQuTNuycng" target="__blank"> Youtube </Link>
               </li>
             </ul>
-          </div>
-          <div className="mt-[9px] 2xl:min-w-[296px]">
-            <h6 className="text-base text-[#094B89] font-bold mb-[15px] sm:mb-[24px]">
-              Join a Newsletter
-            </h6>
-            <Form name="subscribeForm" className="flex flex-col w-full">
-              <label className="text-base text-[#2E2E2E] mb-[8px]">
-                Your Email
-              </label>
-              <Form.Item name="search" className="mb-[24px] sm:w-full">
-                <Input
-                  placeholder="Enter Your Email"
-                  className="h-[50px] border-[#CCCCCC] text-base"
-                />
-              </Form.Item>
-              <button className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit">
-                Subscribe
-              </button>
-            </Form>
           </div>
         </div>
       </div>
@@ -142,7 +123,7 @@ const Footer = () => {
                   alt="Apna opd logo"
                 />
               </div>
-              <p className="text-white">hello@meetdoctor.com</p>
+              <p className="text-white">support@apnaopd.com</p>
             </div>
             <div className="flex">
               <div className="mr-[16px]">
@@ -153,7 +134,28 @@ const Footer = () => {
                   alt="Apna opd logo"
                 />
               </div>
-              <p className="text-white">+271 386-647-3637</p>
+              <p className="text-white">+91 7427807857</p>
+            </div>
+            <div className="flex">
+              <div className="2xl:min-w-[296px]">
+                <h6 className="text-base text-[#f4f4f4] font-bold mb-[15px] sm:mb-[24px]">
+                  Join a Newsletter
+                </h6>
+                <Form name="subscribeForm" className="flex flex-col w-full">
+                  <label className="text-base text-[#f6f5f5] mb-[8px]">
+                    Your Email
+                  </label>
+                  <Form.Item name="search" className="mb-[24px] sm:w-full">
+                    <Input
+                      placeholder="Enter Your Email"
+                      className="h-[50px] border-[#CCCCCC] text-base"
+                    />
+                  </Form.Item>
+                  <button className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit">
+                    Subscribe
+                  </button>
+                </Form>
+              </div>
             </div>
           </div>
         </div>

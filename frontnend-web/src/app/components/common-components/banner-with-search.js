@@ -22,9 +22,7 @@ const BannerWithSearch = ({ title, description }) => {
                 Fully Medicine Solution for You
               </h1>
               <p className="text-base text-white mb-[29px]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam.
+                Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital.
               </p>
               <button className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold mb-[30px] md:mb-[67px] hover:text-white hover:border-white">
                 Get Started
