@@ -16,13 +16,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Apna OPD",
-  description: "Apna OPD is a platform for booking appointments with doctors.",
+  title: 'Apna OPD',
+  description: 'A leading OPD booking platform in India that helps users find doctors and book appointments with ease.',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+    other: {
+      rel: 'apple-touch-icon',
+      url: '/favicon.ico',
+    },
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning

@@ -61,7 +61,7 @@ const Emergency = ({ serviceData }) => {
                 </h4>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-between">
+            {/* <div className="flex flex-row sm:flex-col justify-between">
               <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
                 ₹{emergency.price || ""}
               </h2>
@@ -71,7 +71,7 @@ const Emergency = ({ serviceData }) => {
               >
                 Details
               </button>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

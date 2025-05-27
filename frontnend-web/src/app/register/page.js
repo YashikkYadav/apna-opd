@@ -184,9 +184,16 @@ const Register = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
+    // Password validation only for non-blood-donor registrations
+    if (formData.registrationFor !== "blood_donor") {
+      if (!formData.password || !formData.confirmPassword) {
+        toast.error("Password is required!");
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        toast.error("Passwords do not match!");
+        return;
+      }
     }
 
     if (!formData.registrationFor) {
@@ -217,10 +224,14 @@ const Register = () => {
         name: formData.name,
         phone: formData.mobile,
         email: formData.email,
-        password: formData.password,
         location: formData.location,
         subscriptionType: formData.subscriptionType,
       };
+
+      if (formData.registrationFor !== "blood_donor") {
+        payload.password = formData.password;
+      }
+
       const response = await axiosInstance.post("/health-serve/", payload);
       if (response) {
         toast.success("Registration successful!", {
@@ -231,7 +242,11 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         setTimeout(() => {
-          window.location.href = response.paymentUrl;
+          if (formData.registrationFor !== "blood_donor" && response.paymentUrl) {
+            window.location.href = response.paymentUrl;
+          } else {
+            router.push("/");
+          }
         }, 2000);
       }
     } catch (error) {
@@ -260,6 +275,7 @@ const Register = () => {
 
   // Clean up debounce on unmount
   useEffect(() => {
+    setRegisterSuccess(false);
     fetchUsers();
     return () => {
       debouncedLocationSearch.cancel();
@@ -273,10 +289,6 @@ const Register = () => {
     }));
   }
 
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   const fetchUsers = async () => {
     const userData = await axiosInstance.get("/user");
     const temp = convertUsersToSelectOptions(userData.user);
@@ -287,18 +299,26 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6 text-green-600">
-          Register Success
+          Registration Success
         </h2>
         <p className="text-center text-sm mt-4">
           Your registration has been successful!
         </p>
-        <div className="flex flex-col items-center justify-center">
-          <p>Now you need to complete your profile to continue</p>
-          <a href="/#" className="text-blue-600 hover:underline">
-            Redirecting to Payment Page...
-          </a>
-          <Spin size="large" />
-        </div>
+        {formData.registrationFor !== "blood_donor" && (
+          <div className="flex flex-col items-center justify-center">
+            <p>Now you need to complete your payment to continue</p>
+            <a href="/#" className="text-blue-600 hover:underline">
+              Redirecting to Payment Page...
+            </a>
+          </div>
+        )}
+        {formData.registrationFor === "blood_donor" && (
+          <div className="flex flex-col items-center justify-center">
+            <p>Thank you for registering as a blood donor!</p>
+            <p>Redirecting to home page...</p>
+          </div>
+        )}
+        <Spin size="large" />
       </div>
     </div>
   ) : (
@@ -324,19 +344,21 @@ const Register = () => {
             />
           </div>
           {/* Subscription Type */}
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Subscription Type
-            </label>
-            <Select
-              value={formData.subscriptionType}
-              onChange={handleSubscriptionTypeSelect}
-              placeholder="Select Subscription Type"
-              options={subscriptionTypes}
-              className="w-full"
-              required
-            />
-          </div>
+          {formData.registrationFor !== "blood_donor" && 
+           ( <div className="md:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subscription Type
+              </label>
+              <Select
+                value={formData.subscriptionType}
+                onChange={handleSubscriptionTypeSelect}
+                placeholder="Select Subscription Type"
+                options={subscriptionTypes}
+                className="w-full"
+                required
+                />
+            </div>
+          )}
           {/* User*/}
           <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -475,7 +497,7 @@ const Register = () => {
           )}
 
           {/* Password */}
-          <div className="relative">
+          {formData.registrationFor !== "blood_donor" && <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
@@ -504,10 +526,10 @@ const Register = () => {
                 />
               </span>
             </div>
-          </div>
+          </div>}
 
           {/* Confirm Password */}
-          <div className="relative">
+          {formData.registrationFor !== "blood_donor" && <div className="relative">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
@@ -536,7 +558,7 @@ const Register = () => {
                 />
               </span>
             </div>
-          </div>
+          </div>}
 
           {/* Submit Button */}
           <button

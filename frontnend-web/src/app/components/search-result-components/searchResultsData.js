@@ -83,9 +83,7 @@ const SearchResultsData = () => {
                   Find Our Specialist Doctors
                 </h1>
                 <p className="text-base text-white mb-[88px] text-center">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam.
+                  Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital.  Whether you're looking for online doctor consultation, in-clinic visits, or the best OPD booking app — we make it easy to compare, choose, and book appointments with trusted doctors across India in minutes.
                 </p>
               </div>
             </div>
@@ -184,10 +182,10 @@ const SearchResultsData = () => {
                       </h4>
                     </div>
                   </div>
-                  <div className="flex flex-row sm:flex-col justify-between">
-                    <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
+                  <div className="flex flex-row sm:flex-col justify-end">
+                    {/* <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
                       $25
-                    </h2>
+                    </h2> */}
                     <button
                       onClick={() => handleDoctorDetails(item._id)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

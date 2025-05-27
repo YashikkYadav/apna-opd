@@ -12,7 +12,7 @@ const { createPaymentLinkForEntity } = require("./payment.service");
 
 const register = async (data) => {
   try {
-    const { type, name, phone, email, password, location, subscriptionType } = data;
+    let { type, name, phone, email, password, location, subscriptionType } = data;
 
     const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
@@ -29,10 +29,20 @@ const register = async (data) => {
         error: "Health Serve with same number already exist",
       };
     }
+    type = type.replace("-", "_");
 
-    const paymentUrl = await createPaymentLinkForEntity(type, {name, phone, email}, subscriptionType);
+    let paymentUrl;
+    if(type !== "blood_donor"){
+      paymentUrl = await createPaymentLinkForEntity(type, {name, phone, email}, subscriptionType);
+    }else{
+      paymentUrl = null;
+    }
 
-    const hashedPassword = await getHashedPassword(password);
+    let hashedPassword = null;
+    if (type !== "blood_donor") {
+      hashedPassword = await getHashedPassword(password);
+    }
+
     const newHealthServe = new HealthServe({
       type,
       name,
