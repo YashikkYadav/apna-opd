@@ -9,8 +9,14 @@
         </div>
       </v-col>
       <v-col cols="4" class="text-end">
-        <v-btn class="saaro-btn" color="#8f6cb4" @click="openDoctorDialog" large>
-          Register Doctor </v-btn>
+        <v-btn
+          class="saaro-btn"
+          color="#8f6cb4"
+          @click="openDoctorDialog"
+          large
+        >
+          Register Doctor
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -18,7 +24,11 @@
       <v-card>
         <v-card-title class="d-flex justify-space-between align-center">
           <span class="text-h5">Register New Doctor</span>
-          <v-btn icon="mdi-close" variant="text" @click="closeDoctorDialog"></v-btn>
+          <v-btn
+            icon="mdi-close"
+            variant="text"
+            @click="closeDoctorDialog"
+          ></v-btn>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
@@ -30,7 +40,7 @@
                     v-model="newDoctorData.name"
                     label="Doctor's Name"
                     variant="outlined"
-                    :rules="[v => !!v || 'Name is required']"
+                    :rules="[(v) => !!v || 'Name is required']"
                     required
                   ></v-text-field>
                 </v-col>
@@ -39,7 +49,7 @@
                     v-model="newDoctorData.phoneNumber"
                     label="Phone Number"
                     variant="outlined"
-                    :rules="[v => !!v || 'Phone number is required']"
+                    :rules="[(v) => !!v || 'Phone number is required']"
                     required
                     type="tel"
                   ></v-text-field>
@@ -50,8 +60,8 @@
                     label="Email"
                     variant="outlined"
                     :rules="[
-                      v => !!v || 'Email is required',
-                      v => /.+@.+\..+/.test(v) || 'Email must be valid'
+                      (v) => !!v || 'Email is required',
+                      (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
                     ]"
                     required
                     type="email"
@@ -62,7 +72,26 @@
                     v-model="newDoctorData.clinicName"
                     label="Clinic Name"
                     variant="outlined"
-                    :rules="[v => !!v || 'Clinic name is required']"
+                    :rules="[(v) => !!v || 'Clinic name is required']"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-select
+                    v-model="newDoctorData.speciality"
+                    :items="specialties"
+                    label="Speciality"
+                    variant="outlined"
+                    :rules="[(v) => !!v || 'Speciality is required']"
+                    required
+                  ></v-select>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newDoctorData.address"
+                    label="Address"
+                    variant="outlined"
+                    :rules="[(v) => !!v || 'Address is required']"
                     required
                   ></v-text-field>
                 </v-col>
@@ -73,7 +102,11 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue-grey-darken-1" variant="text" @click="closeDoctorDialog">
+          <v-btn
+            color="blue-grey-darken-1"
+            variant="text"
+            @click="closeDoctorDialog"
+          >
             Cancel
           </v-btn>
           <v-btn color="primary" variant="elevated" @click="submitDoctorForm">
@@ -199,6 +232,7 @@ import { useHospitalStore } from "@/store/HospitalStore";
 import { ref, onMounted } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
+import { useUiStore } from "@/store/UiStore";
 // Removed: import AddDoctor from "@/components/AddDoctor.vue"; as it's replaced by the inline dialog
 
 onMounted(() => {
@@ -212,6 +246,31 @@ onMounted(() => {
 defineOptions({
   name: "DoctorDataTable",
 });
+
+const specialties = [
+  "Cardiologist",
+  "Dermatologist",
+  "Neurologist",
+  "Pediatrician",
+  "Orthopedic Surgeon",
+  "Gynecologist",
+  "Ophthalmologist",
+  "Psychiatrist",
+  "Endocrinologist",
+  "Oncologist",
+  "Urologist",
+  "Gastroenterologist",
+  "Pulmonologist",
+  "Rheumatologist",
+  "Allergist",
+  "Nurse",
+];
+
+const subscriptionTypes = [
+  { value: "gold", label: "Gold" },
+  { value: "platinum", label: "Platinum" },
+  { value: "diamond", label: "Diamond" },
+];
 
 const search = ref("");
 const currentPage = ref(1);
@@ -227,6 +286,8 @@ const newDoctorData = ref({
   phoneNumber: "",
   email: "",
   clinicName: "",
+  speciality: "",
+  address: "",
 });
 
 const headers = ref([
@@ -292,13 +353,21 @@ const submitDoctorForm = async () => {
   if (doctorFormRef.value) {
     const { valid } = await doctorFormRef.value.validate();
     if (valid) {
-      console.log("New Doctor Data Submitted:", JSON.parse(JSON.stringify(newDoctorData.value)));
-      // Here you would typically send the data to a backend API
-      // For now, we just log it and close the dialog
+      console.log(
+        "New Doctor Data Submitted:",
+        JSON.parse(JSON.stringify(newDoctorData.value))
+      );
+      const newDoctor = JSON.parse(JSON.stringify(newDoctorData.value));
+      const hospitalStore = useHospitalStore();
+      const newDoctorResult = hospitalStore.registerDoctor(newDoctor);
+      if (newDoctor.data.success) {
+        useUiStore().openNotificationMessage("Doctor registered successfully!");
+      } else {
+        useUiStore().openNotificationMessage(
+          "Error occured while registration : "
+        );
+      }
       closeDoctorDialog();
-      // Optionally, you might want to refresh the doctors list or add the new doctor to it locally
-      // For example: items.value.push({ ...newDoctorData.value, /* other default fields */ });
-      // await fetchDoctors(); // Or refetch
     } else {
       console.log("Form validation failed.");
     }

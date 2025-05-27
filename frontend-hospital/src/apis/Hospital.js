@@ -11,7 +11,7 @@ export class AxiosHospital {
     return this.apiClient.get(`/hospital/${hospitalId}/doctor`);
   }
 
-  Register(payload) {
-    return this.apiClient.post(`/doctor`, payload);
+  Register(hospitalId, payload) {
+    return this.apiClient.post(`hospital/${hospitalId}/doctor`, payload);
   }
 }

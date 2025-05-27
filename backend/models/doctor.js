@@ -6,7 +6,6 @@ const doctorSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
-      unique: true,
     },
     name: {
       required: true,

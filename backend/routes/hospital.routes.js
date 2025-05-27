@@ -8,6 +8,8 @@ hospital.post("/login", healthServeController.loginHealthServe);
 
 hospital.get("/:hospitalId/doctor", hospitalController.getDoctors);
 
+hospital.post("/:hospitalId/doctor", hospitalController.registerDoctor);
+
 // hospital.get("/:hospitalId/user", hospitalMiddleware, hospitalController.getUsers);
 
 // hospital.get(

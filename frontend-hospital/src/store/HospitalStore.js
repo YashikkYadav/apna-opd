@@ -11,5 +11,10 @@ export const useHospitalStore = defineStore("hospitalStore", {
       const data = await HopitalService.Doctor(this.hospitalId);
       return data;
     },
+    async registerDoctor(payload) {
+      const hospitalService = new AxiosHospital();
+      const data = await hospitalService.Register(this.hospitalId, payload);
+      return data;
+    },
   },
 });
