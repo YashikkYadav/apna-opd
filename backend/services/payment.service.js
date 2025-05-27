@@ -155,6 +155,8 @@ const createPaymentLinkForEntity = async (
       }
     );
 
+    console.log(response.data.short_url);
+
     return {
       statusCode: 201,
       paymentLink: response.data.short_url,

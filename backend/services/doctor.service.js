@@ -78,7 +78,7 @@ const registerDoctor = async (doctorData) => {
     }
     const newDoctor = new Doctor(data);
     await newDoctor.save();
-
+    console.log("payment instide the service ", paymentUrl);
     return {
       statusCode: 201,
       doctor: {
@@ -92,7 +92,7 @@ const registerDoctor = async (doctorData) => {
         speciality: newDoctor.speciality,
         subscriptionType: newDoctor.subscriptionType,
       },
-      paymentLink: paymentUrl?.paymentData?.short_url,
+      paymentLink: paymentUrl,
     };
   } catch (error) {
     console.log("Error creating/updating doctor in DB : ", error);
@@ -295,19 +295,21 @@ const ratingDoctor = async (doctorId, rating) => {
         error: "Doctor profile not found",
       };
     }
-    
-    const newRating = (doctorProfile.rating * doctorProfile.ratingCount + rating) / (doctorProfile.ratingCount + 1);
+
+    const newRating =
+      (doctorProfile.rating * doctorProfile.ratingCount + rating) /
+      (doctorProfile.ratingCount + 1);
     const newRatingCount = doctorProfile.ratingCount + 1;
-    
+
     await DoctorProfile.findByIdAndUpdate(
       doctorProfile._id,
       {
         rating: newRating,
-        ratingCount: newRatingCount
+        ratingCount: newRatingCount,
       },
       { runValidators: false }
     );
-    
+
     return {
       statusCode: 200,
       message: "Doctor rating updated successfully",
