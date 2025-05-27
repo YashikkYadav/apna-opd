@@ -61,7 +61,6 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password: hashedPassword,
       subscriptionType,
-      userId: user,
     };
     if (user) {
       data = {
