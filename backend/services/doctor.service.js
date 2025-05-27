@@ -51,7 +51,7 @@ const registerDoctor = async (doctorData) => {
       subscriptionType
     );
     const hashedPassword = await getHashedPassword(password);
-    const newDoctor = new Doctor({
+    let data = {
       name,
       rmcNumber,
       phoneNumber,
@@ -61,8 +61,22 @@ const registerDoctor = async (doctorData) => {
       speciality,
       password: hashedPassword,
       subscriptionType,
-      userId: user,
-    });
+    };
+    if (user) {
+      data = {
+        name,
+        rmcNumber,
+        phoneNumber,
+        email,
+        address,
+        clinicName,
+        speciality,
+        password: hashedPassword,
+        subscriptionType,
+        userId: user,
+      };
+    }
+    const newDoctor = new Doctor(data);
     await newDoctor.save();
 
     return {
