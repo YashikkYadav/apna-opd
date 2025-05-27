@@ -63,6 +63,14 @@ const doctorProfileSchema = new mongoose.Schema(
     availabilityAfter: {
       type: Number,
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
+    },
     images: [
       {
         url: {

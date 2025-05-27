@@ -31,5 +31,9 @@ doctor.delete(
   doctorController.deleteDoctor,
 );
 
+doctor.post(
+  '/rating',
+  doctorController.ratingDoctor,
+);
 
 module.exports = doctor;
