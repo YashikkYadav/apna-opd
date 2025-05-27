@@ -23,7 +23,6 @@ const registerDoctor = async (doctorData) => {
       subscriptionType,
       user,
     } = doctorData;
-    console.log(doctorData);
 
     const doctorDataValidation = validateDoctor(doctorData);
     if (!doctorDataValidation.success) {

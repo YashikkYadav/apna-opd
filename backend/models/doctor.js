@@ -64,7 +64,6 @@ const doctorSchema = new mongoose.Schema(
       type: String,
     },
     subscriptionType: {
-      required: true,
       type: String,
     },
     paymentStatus: {

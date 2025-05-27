@@ -2,6 +2,7 @@ const Doctor = require("../models/doctor.js");
 const HealthServe = require("../models/healthServe.js");
 const HospitalDoctor = require("../models/hospitalDoctor.js");
 const doctorService = require("../services/doctor.service.js");
+const mongoose = require("mongoose");
 const { z } = require("zod");
 
 const createHospital = async (healthServeData) => {
@@ -33,35 +34,41 @@ const createHospital = async (healthServeData) => {
 
 const registerDoctor = async (doctorData, hospitalId) => {
   try {
-    console.log(doctorData);
-
     let doctor = await Doctor.findOne({ phoneNumber: doctorData.phoneNumber });
-
+    console.log("check 1");
+    console.log(hospitalId);
     try {
       if (!doctor) {
+        console.log("check 2");
         doctor = await doctorService.registerDoctor({
           ...doctorData,
           password: "12345678",
         });
       }
       if (doctor.error) {
+        console.log("check 3");
         console.log(doctor.error);
+        return {
+          statusCode: doctor.statusCode,
+          success: false,
+          message: doctor.error,
+        };
       }
     } catch (error) {
+      console.log("check 4");
       return {
         statusCode: 500,
         success: false,
         message: "Error creating the doctor",
       };
     }
-    console.log("Doctor Id : ", doctor);
 
     const hospitalDoctor = await HospitalDoctor.create({
-      healthServeId: hospitalId,
-      doctorId: doctor._id,
+      healthServeId: hospitalId.hospitalId,
+      doctorId: doctor.doctor.id,
     });
 
-    if (!createdDoctor || !hospitalDoctor) {
+    if (!doctor || !hospitalDoctor) {
       return {
         statusCode: 404,
         success: false,

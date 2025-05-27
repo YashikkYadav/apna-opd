@@ -359,8 +359,9 @@ const submitDoctorForm = async () => {
       );
       const newDoctor = JSON.parse(JSON.stringify(newDoctorData.value));
       const hospitalStore = useHospitalStore();
-      const newDoctorResult = hospitalStore.registerDoctor(newDoctor);
-      if (newDoctor.data.success) {
+      const newDoctorResult = await hospitalStore.registerDoctor(newDoctor);
+      closeDoctorDialog();
+      if (newDoctorResult.success) {
         useUiStore().openNotificationMessage("Doctor registered successfully!");
       } else {
         useUiStore().openNotificationMessage(
