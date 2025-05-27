@@ -264,10 +264,53 @@ const getDoctorList = async (page, location, speciality) => {
   }
 };
 
+const ratingDoctor = async (doctorId, rating) => {
+  try {
+    rating = typeof rating === "string" ? parseInt(rating) : rating;
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return {
+        statusCode: 404,
+        error: "Doctor not found",
+      };
+    }
+    const doctorProfile = await DoctorProfile.findOne({ doctorId: doctorId });
+    if (!doctorProfile) {
+      return {
+        statusCode: 404,
+        error: "Doctor profile not found",
+      };
+    }
+    
+    const newRating = (doctorProfile.rating * doctorProfile.ratingCount + rating) / (doctorProfile.ratingCount + 1);
+    const newRatingCount = doctorProfile.ratingCount + 1;
+    
+    await DoctorProfile.findByIdAndUpdate(
+      doctorProfile._id,
+      {
+        rating: newRating,
+        ratingCount: newRatingCount
+      },
+      { runValidators: false }
+    );
+    
+    return {
+      statusCode: 200,
+      message: "Doctor rating updated successfully",
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
+
 module.exports = {
   registerDoctor,
   loginDoctor,
   getDoctor,
   deleteDoctor,
   getDoctorList,
+  ratingDoctor,
 };

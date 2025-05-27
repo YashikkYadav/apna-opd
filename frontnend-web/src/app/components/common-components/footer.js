@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <>
       <div className="max-w-[1270px] mx-auto py-[63px] px-[15px] sm:px-[30px]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-7">
           <div className="max-w-[240px] auto-cols-[minmax(0,2fr)]]">
             <div className="mb-[20px]">
               <Image
@@ -90,6 +90,25 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+          <div className="mt-[9px] 2xl:min-w-[296px]">
+            <h6 className="text-base text-[#094B89] font-bold mb-[15px] sm:mb-[24px]">
+              Join a Newsletter
+            </h6>
+            <Form name="subscribeForm" className="flex flex-col w-full">
+              <label className="text-base text-[#2E2E2E] mb-[8px]">
+                Your Email
+              </label>
+              <Form.Item name="search" className="mb-[24px] sm:w-full">
+                <Input
+                  placeholder="Enter Your Email"
+                  className="h-[50px] border-[#CCCCCC] text-base"
+                />
+              </Form.Item>
+              <button className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit">
+                Subscribe
+              </button>
+            </Form>
+          </div>
         </div>
       </div>
       <div className="bg-[#0C65A0] py-[40px]">
@@ -135,27 +154,6 @@ const Footer = () => {
                 />
               </div>
               <p className="text-white">+91 7427807857</p>
-            </div>
-            <div className="flex">
-              <div className="2xl:min-w-[296px]">
-                <h6 className="text-base text-[#f4f4f4] font-bold mb-[15px] sm:mb-[24px]">
-                  Join a Newsletter
-                </h6>
-                <Form name="subscribeForm" className="flex flex-col w-full">
-                  <label className="text-base text-[#f6f5f5] mb-[8px]">
-                    Your Email
-                  </label>
-                  <Form.Item name="search" className="mb-[24px] sm:w-full">
-                    <Input
-                      placeholder="Enter Your Email"
-                      className="h-[50px] border-[#CCCCCC] text-base"
-                    />
-                  </Form.Item>
-                  <button className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit">
-                    Subscribe
-                  </button>
-                </Form>
-              </div>
             </div>
           </div>
         </div>
