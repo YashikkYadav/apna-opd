@@ -4,6 +4,7 @@ import { useState } from "react";
 import AppointmentModal from "../common-components/AppointmentModal";
 import RatingModal from "../common-components/RatingModal";
 import { toast } from "react-toastify";
+import axiosInstance from "@/app/config/axios";
 const Banner = ({ doctorDetail }) => {
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
     const [showRateModal, setShowRateModal] = useState(false);
@@ -63,8 +64,16 @@ const Banner = ({ doctorDetail }) => {
 
     const handleRatingSubmit = async ({ rating, feedback }) => {
         try {
-            toast.success('Rating submitted successfully');
-            setShowRateModal(false);
+            const response = await axiosInstance.post(`/doctor/rating`, {
+                doctorId: doctorDetail?.doctor?._id,
+                rating,
+            });
+            if (response.status === 200) {
+                toast.success('Rating submitted successfully');
+                setShowRateModal(false);
+            } else {
+                toast.error('Failed to submit rating. Please try again.');
+            }
         } catch (error) {
             console.log('Error submitting rating:', error);
             toast.error('Failed to submit rating. Please try again.');
