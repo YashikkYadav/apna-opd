@@ -74,7 +74,7 @@ const getUsers = async (req, res) => {
       res.status(user.statusCode).json({ error: user.error });
     }
 
-    res.status(user.statusCode).json({ user: user.healthServe });
+    res.status(user.statusCode).json({ user: user.user });
   } catch (error) {
     console.log("Error while fetching doctors : ", error);
     res.status(500).send(`An error occurred ${error}`);
@@ -83,4 +83,5 @@ const getUsers = async (req, res) => {
 
 module.exports = {
   createUser,
+  getUsers,
 };

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const BloodDonar = ({ serviceData }) => {
-  const [bloodBankList, setBloodBankList] = useState([]);
+const Emergency = ({ serviceData }) => {
+  const [emergencyList, setEmergencyList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
@@ -12,7 +12,7 @@ const BloodDonar = ({ serviceData }) => {
 
   useEffect(() => {
     if (serviceData) {
-      setBloodBankList(serviceData || []);
+      setEmergencyList(serviceData || []);
       setFilteredList(serviceData || []);
     }
   }, [serviceData]);
@@ -24,54 +24,54 @@ const BloodDonar = ({ serviceData }) => {
 
   return (
     <>
-      <h2 className="title-48 mb-[24px]">Blood Donors Near You</h2>
+      <h2 className="title-48 mb-[24px]">Result for Emergency Services</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {bloodBankList?.length} results
+        Showing {currentItems?.length} of {emergencyList?.length} results
       </p>
       <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((bank) => (
+        {currentItems?.map((emergency) => (
           <div
-            key={bank._id}
+            key={emergency._id}
             className="flex flex-col sm:flex-row justify-between mb-[32px]"
           >
             <div className="flex flex-col sm:flex-row">
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    bank?.images && Array.isArray(bank.images) && bank.images?.length > 0
-                      ? bank.images[0]
+                    emergency?.images && Array.isArray(emergency.images) && emergency.images?.length > 0
+                      ? emergency.images[0]
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
                   height={180}
-                  alt="Blood Donor"
+                  alt="Emergency Service"
                   className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#D9534F] mb-[8px]">
-                  Blood Donation & Storage
+                <p className="text-base text-[#5151E1] mb-[8px]">
+                  Emergency Services
                 </p>
-                <h3 className="title-24 mb-[8px]">{bank.name}</h3>
+                <h3 className="title-32 mb-[8px]">{emergency.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {bank.rating || "N/A"}
+                  Rating: {emergency.rating}
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                  {bank.location}
+                  {emergency.name}
                 </h4>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-between">
-              {/* <h4 className="title-24 !text-[#D9534F] md:mt-[19px] text-end">
-                Availability: {bank.price ? `${bank.price} Units` : "N/A"}
-              </h4> */}
-              {/* <button
-                onClick={() => navigate.push(`/more/bloodDonor/${bank._id}/details`)}
-                className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+            {/* <div className="flex flex-row sm:flex-col justify-between">
+              <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
+                ₹{emergency.price || ""}
+              </h2>
+              <button
+                onClick={() => navigate.push(`/more/emergency/${emergency._id}/details`)}
+                className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details
-              </button> */}
-            </div>
+              </button>
+            </div> */}
           </div>
         ))}
       </div>
@@ -79,4 +79,4 @@ const BloodDonar = ({ serviceData }) => {
   );
 };
 
-export default BloodDonar;
+export default Emergency;

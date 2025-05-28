@@ -23,6 +23,7 @@ const Register = () => {
     clinicName: "",
     speciality: "",
     subscriptionType: "",
+    user: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -30,10 +31,14 @@ const Register = () => {
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [users, setUsers] = useState([]);
 
   // Registration type options
   const registrationTypes = [
     { value: "doctor", label: "Doctor" },
+    { value: "hospital", label: "Hospital" },
+    { value: "vatenary", label: "Vatenary" },
+    { value: "emergency", label: "Emergency Service" },
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
     { value: "yoga", label: "Yoga" },
@@ -63,6 +68,10 @@ const Register = () => {
 
   const handleSubscriptionTypeSelect = (value) => {
     setFormData((prev) => ({ ...prev, subscriptionType: value }));
+  };
+
+  const handleUserChange = (value) => {
+    setFormData((prev) => ({ ...prev, user: value }));
   };
 
   const togglePasswordVisibility = (field) => {
@@ -128,6 +137,7 @@ const Register = () => {
       address: formData.location,
       speciality: formData.speciality,
       subscriptionType: formData.subscriptionType,
+      user: formData.user === "Select User" ? null : formData.user,
     };
     try {
       const response = await axiosInstance.post("/doctor", payload);
@@ -139,11 +149,13 @@ const Register = () => {
           transition: Flip,
         });
         setRegisterSuccess(true);
+        console.log("Payment response : ", response);
         setTimeout(() => {
-          window.location.href = response.paymentUrl;
+          window.location.href = response.paymentUrl.paymentLink;
         }, 2000);
       }
     } catch (error) {
+      console.log(error);
       const errorMessage =
         typeof error === "string"
           ? error
@@ -182,11 +194,11 @@ const Register = () => {
       toast.error("Please select a registration type!");
       return;
     }
-    if(formData.registrationFor === "doctor" && !formData.rmcNumber){
+    if (formData.registrationFor === "doctor" && !formData.rmcNumber) {
       toast.error("Please enter RMC Number!");
       return;
     }
-    if(formData.registrationFor === "doctor" && !formData.clinicName){
+    if (formData.registrationFor === "doctor" && !formData.clinicName) {
       toast.error("Please enter Clinic Name!");
       return;
     }
@@ -194,7 +206,7 @@ const Register = () => {
       toast.error("Please select a location!");
       return;
     }
-    if(formData.registrationFor === "doctor"){
+    if (formData.registrationFor === "doctor") {
       handleDoctorRegistration();
       return;
     }
@@ -210,8 +222,8 @@ const Register = () => {
         location: formData.location,
         subscriptionType: formData.subscriptionType,
       };
-      const response = await axiosInstance.post("/health-serve/", payload); 
-      if(response){
+      const response = await axiosInstance.post("/health-serve/", payload);
+      if (response) {
         toast.success("Registration successful!", {
           position: "top-center",
           autoClose: 1500,
@@ -249,10 +261,28 @@ const Register = () => {
 
   // Clean up debounce on unmount
   useEffect(() => {
+    fetchUsers();
     return () => {
       debouncedLocationSearch.cancel();
     };
   }, []);
+
+  function convertUsersToSelectOptions(users) {
+    return users?.map((user) => ({
+      value: user._id,
+      label: user.firstName + " " + user.lastName,
+    }));
+  }
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
+
+  const fetchUsers = async () => {
+    const userData = await axiosInstance.get("/user");
+    const temp = convertUsersToSelectOptions(userData.user);
+    setUsers([{ value: "", label: "Select User" }, ...temp]);
+  };
 
   return registerSuccess ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -306,6 +336,19 @@ const Register = () => {
               options={subscriptionTypes}
               className="w-full"
               required
+            />
+          </div>
+          {/* User*/}
+          <div className="md:col-span-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              User <span className="text-gray-400">(Optional)</span>
+            </label>
+            <Select
+              value={formData.user}
+              onChange={handleUserChange}
+              placeholder="Select Subscription Type"
+              options={users}
+              className="w-full"
             />
           </div>
 

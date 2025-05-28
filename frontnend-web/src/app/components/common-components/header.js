@@ -67,7 +67,8 @@ const Header = () => {
     { label: "Nursing & Medical College", route: "/more/nursing-college" },
     { label: "Blood Bank", route: "/more/blood-bank" },
     { label: "Physiotherapist", route: "/more/physiotherapist" },
-    { label: "Blood Donor", route: "/more/blood-donor" },
+    { label: "Hospital", route: "/more/hospital" },
+    { label: "Vatenary", route: "/more/vatenary" },
   ];
 
   return (
@@ -134,6 +135,16 @@ const Header = () => {
               <li className="text-[#094B89] text-base font-bold">
                 <Link href="/blog" onClick={closeAllMenus}>
                   Blog
+                </Link>
+              </li>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/more/blood-donor" onClick={closeAllMenus}>
+                  Blood Donor
+                </Link>
+              </li>
+              <li className="text-[#094B89] text-base font-bold">
+                <Link href="/more/emergency" onClick={closeAllMenus}>
+                  Emergency
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">

@@ -20,6 +20,10 @@ const doctorProfileSchema = new mongoose.Schema(
       required: true,
       type: Number,
     },
+    appointmentFee: {
+      required: true,
+      type: Number,
+    },
     about: {
       required: true,
       type: String,
@@ -58,6 +62,14 @@ const doctorProfileSchema = new mongoose.Schema(
     },
     availabilityAfter: {
       type: Number,
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
     },
     images: [
       {

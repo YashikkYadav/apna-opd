@@ -3,6 +3,7 @@ const Patient = require("../models/patient");
 const Appointment = require("../models/appointment");
 const DoctorProfile = require("../models/doctorProfile");
 const DoctorPatient = require("../models/doctorPatient");
+const paymentService = require("../services/payment.service");
 
 const { generatePatientUid } = require("../utils/helpers");
 const validateAppointment = require("../validations/appointment.validation");
@@ -114,24 +115,26 @@ const validateOTP = async (patientData) => {
 
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
-    console.log(appointmentData);
-    const { phoneNumber } = appointmentData;
-
-    if (!phoneNumber) {
+    const { phoneNumber, email, appointmentType } = appointmentData;
+    if (!phoneNumber || (appointmentType === "online" && !email)) {
       return {
         statusCode: 400,
-        error: "Phone number is required",
+        error: "Both phone number and email are required",
       };
     }
 
     const patient = await Patient.findOne({ phoneNumber });
-    if (!patient) {
-      return {
-        statusCode: 404,
-        error: "Patient not found",
-      };
-    }
+    const count = await Patient.countDocuments({});
 
+    let newPatient;
+
+    if (!patient) {
+      newPatient = await Patient.create({
+        uid: "UID" + (count + 1),
+        phoneNumber,
+        fullName: email,
+      });
+    }
     const appointment = await createAppointment(appointmentData, doctorId);
 
     if (appointment.error) {
@@ -146,6 +149,7 @@ const bookAppointment = async (appointmentData, doctorId) => {
       appointment: appointment.appointment,
     };
   } catch (error) {
+    console.log(error);
     return {
       statusCode: 500,
       error: error,
@@ -155,7 +159,8 @@ const bookAppointment = async (appointmentData, doctorId) => {
 
 const createAppointment = async (appointmentData, doctorId) => {
   try {
-    const { date, location, time, type, phoneNumber } = appointmentData;
+    const { date, location, email, time, type, appointmentType, phoneNumber } =
+      appointmentData;
 
     const appointmentDataValidation = validateAppointment(appointmentData);
     if (!appointmentDataValidation.success) {
@@ -174,7 +179,7 @@ const createAppointment = async (appointmentData, doctorId) => {
     }
 
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Get only today's date (00:00:00 time)
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     if (new Date(date) < today) {
       return {
@@ -208,9 +213,34 @@ const createAppointment = async (appointmentData, doctorId) => {
     });
     await newAppointment.save();
 
+    let emails = [];
+    emails.push(email);
+
+    const paymentData = await paymentService.createPaymentLinkForEntity(
+      "patient",
+      {
+        name: patient.fullName ?? "patient",
+        contact: appointmentData.phoneNumber,
+        email: patient.email,
+      },
+      "appointment",
+      "appointment",
+      doctorId,
+      newAppointment,
+      appointmentType,
+      emails
+    );
+
+    newAppointment._doc.paymentLink = paymentData.paymentLink;
+
+    if (appointmentType === "online") {
+      newAppointment.location = paymentData.meetLink;
+    }
+
     return {
       statusCode: 201,
-      appointment: newAppointment,
+      appointment: newAppointment.toObject(),
+      paymentLink: paymentData.paymentLink,
     };
   } catch (error) {
     return {
@@ -528,7 +558,8 @@ const getAppointmentDates = async (doctorId, locationId) => {
         error: "Doctor profile not found",
       };
     }
-
+    console.log(doctorProfile);
+    console.log(locationId);
     const location = doctorProfile.locations.find(
       (loc) => loc._id.toString() === locationId
     );

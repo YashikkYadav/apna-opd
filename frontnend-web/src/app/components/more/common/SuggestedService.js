@@ -11,16 +11,18 @@ const SuggestedService = ({ serviceType, currentId }) => {
   useEffect(() => {
     const fetch = async () => {
       if (serviceType && typeof window !== "undefined") {
-        // Convert serviceType to the format used in constants.js
-        const type = serviceType.replace(/-/g, "_");
-        // Get all services of this type
-        const allServices = await getServiceData(type);
-        // Filter out the current service and limit to 2
-        const filteredServices = allServices
-          .filter((service) => service.id.toString() !== currentId)
-          ?.slice(0, 2);
+        try {
+          const type = serviceType.replace(/-/g, "_");
+          const allServices = await getServiceData(type);
+          const filteredServices = allServices
+            .filter((service) => service._id !== currentId)
+            ?.slice(0, 2);
 
-        setServices(filteredServices);
+          setServices(filteredServices);
+        } catch (error) {
+          console.error('Error fetching suggested services:', error);
+          setServices([]);
+        }
       }
     };
     fetch();
@@ -50,39 +52,35 @@ const SuggestedService = ({ serviceType, currentId }) => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
         {services?.map((service) => (
-          <div key={service.id} className="flex justify-between">
+          <div key={service._id} className="flex justify-between">
             <div className="flex flex-col lg:flex-row w-full">
               <div className="lg:mr-[10px] xl:mr-[32px]">
-                {/* <Image
+                <Image
                   src={service.images?.[0] || "/images/image_placeholder.svg"}
                   width={200}
                   height={200}
-                  alt={service.title}
+                  alt={service.name}
                   className="rounded-[8px] w-full object-cover lg:max-w-[200px] max-h-[200px]"
-                /> */}
+                  unoptimized={service.images?.[0]?.endsWith('.svg')}
+                />
               </div>
-              <div className="flex flex-col">
-                <div className="pt-[16px] pb-[16px] lg:pt-0">
-                  <h3 className="title-32 mb-[8px]">{service.title}</h3>
-                  <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                    {service.experience || "Experienced Service Provider"}
-                  </p>
-                  <h4 className="title-24 text-[#808080] !font-medium">
-                    {service.contactDetails?.address ||
-                      "Location not specified"}
-                  </h4>
-                </div>
-                <div className="flex justify-between lg:flex-col xl:flex-row">
-                  <h2 className="title-32 !text-[#5151E1]">
-                    {service.price ? `₹${service.price}` : "Contact for price"}
-                  </h2>
-                  <button
-                    className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold hover:bg-[#69b6ff]"
-                    onClick={() => handleDetailsClick(service.id)}
-                  >
-                    Details
-                  </button>
-                </div>
+              
+              <div className="pt-[16px] pb-[16px] lg:pt-0">
+                <h3 className="title-32 mb-[8px]">{service.name}</h3>
+                <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
+                  {service.experience || "Experienced Service Provider"}
+                </p>
+                <h4 className="title-24 text-[#808080] !font-medium">
+                  {service.location || "Location not specified"}
+                </h4>
+              </div>
+              <div className="flex justify-between lg:flex-col xl:flex-row">
+                <button
+                  className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold hover:bg-[#69b6ff]"
+                  onClick={() => handleDetailsClick(service._id)}
+                >
+                  Details
+                </button>
               </div>
             </div>
           </div>

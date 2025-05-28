@@ -3,18 +3,16 @@ import Link from "next/link";
 import ArticleCard from "../common-components/article-card";
 import Image from "next/image";
 import { Form, Input } from "antd";
-import { blogData } from "../../data/blogData"; // Import blog data
+import { blogData } from "../../data/blogData";
 
 const { TextArea } = Input;
 
-const BlogDetail = ({ article }) => { // Accept article as a prop
+const BlogDetail = ({ article }) => {
     if (!article) {
-        // This case should ideally be handled by the page component, 
-        // but as a fallback:
+        // fallback:
         return <p className="text-center py-10">Article data is not available.</p>;
     }
 
-    // Filter out the current article and get, for example, 3 other articles
     const relatedArticles = blogData.filter(a => a.slug !== article.slug).slice(0, 3);
 
     return (
@@ -22,14 +20,18 @@ const BlogDetail = ({ article }) => { // Accept article as a prop
             <div className="max-w-[1024px] mx-auto pb-[60px] md:pb-[120px]">
                 <h1 className="title-48 mb-[44px]">{article.title}</h1>
                 <div className="flex items-center mb-[52px]">
-                    {/* Placeholder for author image - can be added to blogData if available */}
-                    <Image 
-                        src={ (typeof article.authorImage === 'string' && article.authorImage) ? article.authorImage : "/images/image_placeholder.svg"} 
-                        width={40} 
-                        height={40} 
-                        alt={article.drName || "Doctor Image"} 
-                        className="bg-white rounded-full h-[40px] w-[40px] mr-[16px] object-cover"
-                    />
+
+                    <div className="relative w-[40px] h-[40px] mr-[16px]">
+                        <img 
+                            src={article.authorImage || "/images/image_placeholder.svg"}
+                            alt={article.drName || "Doctor Image"}
+                            className="bg-white rounded-full w-full h-full object-contain"
+                            onError={(e) => {
+                                console.log("Image load error");
+                                e.target.src = "/images/image_placeholder.svg";
+                            }}
+                        />
+                    </div>
                     <div className="text-base font-bold mr-[22px]">By {article.drName}</div>
                     <div className="text-[#808080] text-base gap-[8px] flex items-center font-bold">
                         <span>{article.date}</span><span className="h-[4px] w-[4px] bg-[#808080] rounded-full"></span><span>{article.mins} minutes read</span>
@@ -38,13 +40,15 @@ const BlogDetail = ({ article }) => { // Accept article as a prop
                 
                 {/* Main article image */}
                 {article.image && (
-                    <div className="mb-[40px]">
-                        <Image 
-                            src={ (typeof article.image === 'string' && article.image) ? article.image : "/images/image_placeholder.svg"}
-                            width={1024} // Adjust width as per design preference
-                            height={545} // Adjust height as per design preference
-                            alt={article.title || "Article banner image"} 
+                    <div className="mb-[40px] relative">
+                        <img 
+                            src={article.image}
+                            alt={article.title || "Article banner image"}
                             className="w-full max-h-[545px] object-cover rounded-[8px]"
+                            onError={(e) => {
+                                console.log("Main image load error");
+                                e.target.src = "/images/image_placeholder.svg";
+                            }}
                         />
                     </div>
                 )}

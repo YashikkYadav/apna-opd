@@ -54,7 +54,7 @@ const RatingModal = ({ visible, onClose, onSubmit }) => {
                     ))}
                 </div>
 
-                <div className="mb-6">
+                {/* <div className="mb-6">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                         Your Feedback (Optional)
                     </label>
@@ -65,7 +65,7 @@ const RatingModal = ({ visible, onClose, onSubmit }) => {
                         value={feedback}
                         onChange={(e) => setFeedback(e.target.value)}
                     ></textarea>
-                </div>
+                </div> */}
 
                 <div className="flex justify-end space-x-4">
                     <button

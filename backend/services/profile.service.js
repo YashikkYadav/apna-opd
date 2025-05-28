@@ -68,25 +68,40 @@ async function getImagesById(targetId) {
 
 const getHealthServeProfile = async (healthServeId) => {
   try {
-    if (!healthServeId || healthServeId === "" || healthServeId === null) {
+    if (!healthServeId || healthServeId === "null" || healthServeId === "undefined") {
       return {
         statusCode: 400,
-        message: "Health serve ID is required",
+        error: {
+          message: "Health serve ID is required"
+        }
       };
     }
+
     const healthServeProfile = await HealthServeProfile.findOne({
-      healthServeId,
+      healthServeId: healthServeId
     }).populate("healthServeId");
+
+    if (!healthServeProfile) {
+      return {
+        statusCode: 404,
+        error: {
+          message: "Health serve profile not found"
+        }
+      };
+    }
 
     return {
       statusCode: 200,
       healthServeProfile,
     };
   } catch (error) {
-    console.log("Error occured in fetching health serve profile :: ", error);
+    console.log("Error occurred in fetching health serve profile :: ", error);
     return {
       statusCode: 500,
-      error: error,
+      error: {
+        message: "Internal server error",
+        details: error.message
+      }
     };
   }
 };

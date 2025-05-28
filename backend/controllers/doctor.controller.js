@@ -85,10 +85,26 @@ const getDoctorList = async (req, res) => {
   }
 };
 
+const ratingDoctor = async (req, res) => {
+  try {
+    const { doctorId ,rating } = req.body;
+
+    const doctor = await doctorService.ratingDoctor(doctorId, rating);
+    if (doctor?.error) {
+      return res.status(doctor.statusCode).send(doctor.error);
+    }
+
+    res.status(doctor.statusCode).json({ message: "Rating submitted successfully" });
+  } catch (error) {
+    res.status(500).send(`Error ${error}`);
+  }
+};
+
 module.exports = {
   registerDoctor,
   loginDoctor,
   getDoctor,
   deleteDoctor,
   getDoctorList,
+  ratingDoctor,
 };
