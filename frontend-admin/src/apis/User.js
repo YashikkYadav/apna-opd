@@ -13,4 +13,8 @@ export class AxiosUser {
   Detail(adminId, userId) {
     return this.apiClient.get(`/admin/${adminId}/user/${userId}`);
   }
+
+  Register(payload) {
+    return this.apiClient.post(`/user/create`, payload);
+  }
 }
