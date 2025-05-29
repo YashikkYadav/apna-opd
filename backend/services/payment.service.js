@@ -46,9 +46,11 @@ const createPaymentLinkForEntity = async (
   mode,
   emails = []
 ) => {
+  let doctor;
+  let doctorProfile;
   if (doctorId) {
-    const doctor = await Doctor.findOne({ _id: doctorId });
-    const doctorProfile = await DoctorProfile.findOne({ doctorId });
+    doctor = await Doctor.findOne({ _id: doctorId });
+    doctorProfile = await DoctorProfile.findOne({ doctorId });
     emails.push(doctor.email);
   }
   try {
@@ -74,8 +76,9 @@ const createPaymentLinkForEntity = async (
       }
     }
 
+    let params;
     if (paymentType === "appointment") {
-      const params = new URLSearchParams({
+      params = new URLSearchParams({
         meetLink,
         doctorName: doctor.name,
         appointmentDate: appointment.date
@@ -115,7 +118,9 @@ const createPaymentLinkForEntity = async (
       };
     } else {
       data = {
-        amount: doctorProfile.appointmentFee * 100,
+        amount: doctorProfile.appointmentFee
+          ? doctorProfile.appointmentFee * 100
+          : 1 * 100,
         currency: "INR",
         accept_partial: false,
         reference_id: uuidv4(),
