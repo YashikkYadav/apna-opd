@@ -16,8 +16,10 @@ import NursingCollege from "../../components/more/nursingCollege/nursingCollege"
 import BloodBank from "../../components/more/bloodBank/bloodBank";
 import Physiotherapist from "../../components/more/physiotherapist/physiotherapist";
 import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
+import Nurse from "../../components/more/nurse/nurse";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
+import Pagination from "../../components/more/common/Pagination";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/config/axios";
 import { useRouter } from "next/navigation";
@@ -29,17 +31,23 @@ const ServicePage = () => {
   const searchParams = useSearchParams();
   const specs = params.specs;
   const [serviceData, setServiceData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const router = useRouter();
 
-  const fetchData = async (locationQuery = "") => {
+  const fetchData = async (locationQuery = "", page = 1) => {
     const sanitizedSpecs = params.specs.replace(/-/g, "_");
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}`
+        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}`
       );
       if (response?.list?.healthServeProfileList) {
         setServiceData(response.list.healthServeProfileList);
+        setCurrentPage(response.list.currentPage || 1);
+        setTotalPages(response.list.totalPages || 1);
+        setTotalItems(response.list.totalItems || 0);
       }
     } catch (error) {
       console.log("error", error);
@@ -86,6 +94,8 @@ const ServicePage = () => {
         return "Find Physiotherapists";
       case serviceTypes.BLOOD_DONOR:
         return "Find Blood Donors";
+      case serviceTypes.NURSE:
+        return "Find Nursing Services";
       default:
         return "Find Services";
     }
@@ -119,6 +129,8 @@ const ServicePage = () => {
         return <Physiotherapist serviceData={serviceData} />;
       case serviceTypes.BLOOD_DONOR:
         return <BloodDonor serviceData={serviceData} />;
+      case serviceTypes.NURSE:
+        return <Nurse serviceData={serviceData} />;
       default:
         return <div>Service not found</div>;
     }
@@ -130,6 +142,12 @@ const ServicePage = () => {
     } else {
       router.push(`/more/${params.specs}`);
     }
+  };
+
+  const handlePageChange = (page) => {
+    const locationQuery = searchParams.get("location") || "";
+    setCurrentPage(page);
+    fetchData(locationQuery, page);
   };
 
   return (
@@ -189,6 +207,13 @@ const ServicePage = () => {
           
           <div className="lg:w-[66%]">
             {renderServiceComponent()}
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
           </div>
         </div>
       </div>

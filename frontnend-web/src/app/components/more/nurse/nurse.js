@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const CommercialMeditation = ({ serviceData }) => {
-  const [commercialMeditationList, setCommercialMeditationList] = useState([]);
+const Nurse = ({ serviceData }) => {
+  const [nurseList, setNurseList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
@@ -12,7 +12,7 @@ const CommercialMeditation = ({ serviceData }) => {
 
   useEffect(() => {
     if (serviceData) {
-      setCommercialMeditationList(serviceData || []);
+      setNurseList(serviceData || []);
       setFilteredList(serviceData || []);
     }
   }, [serviceData]);
@@ -24,53 +24,53 @@ const CommercialMeditation = ({ serviceData }) => {
 
   return (
     <>
-      <h2 className="title-48 mb-[24px]">Commercial Meditation Near You</h2>
+      <h2 className="title-48 mb-[24px]">Nursing Services Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {commercialMeditationList?.length} results
+        Showing {currentItems?.length} of {nurseList?.length} results
       </p>
       <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((commercialMeditation) => (
+        {currentItems?.map((nurse) => (
           <div
-            key={commercialMeditation._id}
+            key={nurse._id}
             className="flex flex-col sm:flex-row justify-between mb-[32px]"
           >
             <div className="flex flex-col sm:flex-row">
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    commercialMeditation?.images &&
-                    Array.isArray(commercialMeditation.images) &&
-                    commercialMeditation.images?.length > 0
-                      ? commercialMeditation.images[0]
+                    nurse?.images &&
+                    Array.isArray(nurse.images) &&
+                    nurse.images?.length > 0
+                      ? nurse.images[0]
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
                   height={180}
-                  alt="Commercial Meditation"
+                  alt="Nurse"
                   className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
                 <p className="text-base text-[#5151E1] mb-[8px]">
-                  Commercial Meditation
+                  Nursing Services
                 </p>
-                <h3 className="title-24 mb-[8px]">{commercialMeditation.title}</h3>
+                <h3 className="title-24 mb-[8px]">{nurse.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {commercialMeditation.rating || "N/A"}
+                  Rating: {nurse.rating || "N/A"}
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                  {commercialMeditation.name}
+                    {nurse.name}
                 </h4>
               </div>
             </div>
             <div className="flex flex-row sm:flex-col justify-end">
               {/* Optional price display */}
               {/* <h2 className="title-24 !text-[#5151E1] md:mt-[19px] text-end">
-                ₹{commercialMeditation.price || "N/A"}
+                ₹{nurse.price || "N/A"}
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/commercial-meditation/${commercialMeditation._id}/details`)
+                  navigate.push(`/more/nurse/${nurse._id}/details`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
@@ -84,4 +84,4 @@ const CommercialMeditation = ({ serviceData }) => {
   );
 };
 
-export default CommercialMeditation;
+export default Nurse;
