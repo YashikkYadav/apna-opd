@@ -1,6 +1,7 @@
 const { Mongoose, default: mongoose } = require("mongoose");
 const Enquiry = require("../models/enquiry");
 const { validateEnquiry } = require("../validations/enquiry.validation");
+const HealthServeProfile = require("../models/healthServeProfile");
 
 const createEnquiry = async (healthServeId, data) => {
   try {
@@ -75,7 +76,16 @@ const getAllEnquiries = async (
       };
     }
 
-    let searchFilter = { healthServeId };
+    const healthServe = await HealthServeProfile.findOne({healthServeId});
+
+    if (!healthServe) {
+      return {
+        statusCode: 404,
+        error: "Health Serve not found",
+      };
+    }
+
+    let searchFilter = { healthServeId: healthServe._id };
 
     if (searchQuery) {
       searchFilter.$or = [

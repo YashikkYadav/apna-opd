@@ -149,8 +149,9 @@ const Register = () => {
           transition: Flip,
         });
         setRegisterSuccess(true);
+        console.log("Payment response : ", response);
         setTimeout(() => {
-          window.location.href = response.paymentUrl;
+          window.location.href = response.paymentUrl.paymentLink;
         }, 2000);
       }
     } catch (error) {

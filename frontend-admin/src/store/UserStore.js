@@ -16,5 +16,10 @@ export const useUserStore = defineStore("healthServeStore", {
       const data = await UserService.Detail(this.adminId, userId);
       return data;
     },
+    async registerUser(payload) {
+      const UserService = new AxiosUser();
+      const data = await UserService.Register(payload);
+      return data;
+    },
   },
 });

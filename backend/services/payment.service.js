@@ -46,9 +46,11 @@ const createPaymentLinkForEntity = async (
   mode,
   emails = []
 ) => {
+  let doctor;
+  let doctorProfile;
   if (doctorId) {
-    const doctor = await Doctor.findOne({ _id: doctorId });
-    const doctorProfile = await DoctorProfile.findOne({ doctorId });
+    doctor = await Doctor.findOne({ _id: doctorId });
+    doctorProfile = await DoctorProfile.findOne({ doctorId });
     emails.push(doctor.email);
   }
   try {
@@ -65,29 +67,34 @@ const createPaymentLinkForEntity = async (
     });
     let meetLink = "";
 
-    if (paymentType === "appointment" && mode === "online") {
-      const time = combineDateTime(appointment.date, appointment.time);
-      meetLink = await googleService.getMeetLink(time, emails);
-    } else {
-      meetLink = appointment.location;
+    if (paymentType === "appointment") {
+      if (mode === "online") {
+        const time = combineDateTime(appointment.date, appointment.time);
+        meetLink = await googleService.getMeetLink(time, emails);
+      } else {
+        meetLink = appointment.location;
+      }
     }
 
-    const params = new URLSearchParams({
-      meetLink,
-      doctorName: doctor.name,
-      appointmentDate: appointment.date
-        .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-        .toString()
-        .split(",")[0],
-      appointmentTime: appointment.time,
-      appointmentMode: mode,
-    });
+    let params;
+    if (paymentType === "appointment") {
+      params = new URLSearchParams({
+        meetLink,
+        doctorName: doctor.name,
+        appointmentDate: appointment.date
+          .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+          .toString()
+          .split(",")[0],
+        appointmentTime: appointment.time,
+        appointmentMode: mode,
+      });
+    }
 
     let data = {};
 
     if (paymentType === "registration") {
       data = {
-        amount: entity.amount * 100,
+        amount: entity ? entity.amount * 100 : 100,
         currency: "INR",
         accept_partial: false,
         reference_id: uuidv4(),
@@ -111,7 +118,9 @@ const createPaymentLinkForEntity = async (
       };
     } else {
       data = {
-        amount: doctorProfile.appointmentFee * 100,
+        amount: doctorProfile.appointmentFee
+          ? doctorProfile.appointmentFee * 100
+          : 1 * 100,
         currency: "INR",
         accept_partial: false,
         reference_id: uuidv4(),
@@ -150,6 +159,8 @@ const createPaymentLinkForEntity = async (
         },
       }
     );
+
+    console.log(response.data.short_url);
 
     return {
       statusCode: 201,

@@ -10,7 +10,7 @@ const createUser = async (req, res) => {
       return res.status(newUser.statusCode).json({ error: newUser.error });
     }
 
-    res.status(newUser.statusCode).json({ User: newUser });
+    res.status(newUser.statusCode).json({ User: newUser.User });
   } catch (error) {
     res.status(500).send(`Error occurred : ${error}`);
   }

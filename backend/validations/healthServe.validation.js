@@ -20,7 +20,8 @@ const HealthSchema = zod.object({
   password: zod
     .string()
     .min(8, { message: 'Password must contain at least 8 characters.' })
-    .trim(),
+    .trim()
+    .optional(),
   location: zod
     .string()
     .min(1, { message: 'Address cannot be empty.' })
@@ -39,6 +40,17 @@ const validateHealthServe = (data) => {
     return {
       success: false,
       errors,
+    };
+  }
+
+  //  non-blood-donor types
+  if (data.type !== 'blood_donor' && !data.password) {
+    return {
+      success: false,
+      errors: [{
+        field: 'password',
+        message: 'Password is required for non-blood-donor registrations.'
+      }]
     };
   }
 

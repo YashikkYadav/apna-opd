@@ -7,7 +7,7 @@ export const blogData = [
     description: "Learn how to consult a doctor online in India with this complete guide by Apna OPD. Discover easy steps, benefits, and tips for secure, private, and convenient medical care.",
     drName: "Apna OPD Content Team",
     image: "/images/blog/mindfulness-meditation.png",
-    authorImage: "/images/authors/apna-opd-logo-author.png", // Generic author image
+    authorImage: "/images/apna-opd-logo.svg", // Generic author image
     content: `
       <div class="space-y-6">
         <p class="text-lg leading-relaxed">In today's fast-paced digital world, healthcare is evolving at an incredible speed. One of the most transformative changes is online doctor consultations. Whether you live in a metro city or a small town, accessing quality healthcare is now just a few clicks away. Apna OPD is here to guide you through the simple steps of consulting a doctor online in India—safely, conveniently, and effectively.</p>
@@ -135,7 +135,7 @@ export const blogData = [
     description: "Talk to a doctor from home with Apna OPD. Discover how our easy online consultation service brings trusted medical care to your doorstep—anytime, anywhere.",
     drName: "Apna OPD Content Team",
     image: "/images/blog/hydration.webp",
-    authorImage: "/images/authors/apna-opd-logo-author.png",
+    authorImage: "/images/apna-opd-logo.svg",
     content: `
       <div class="space-y-6">
         <p class="text-lg leading-relaxed">Healthcare has changed. Now, you no longer need to travel or wait in long queues to speak with a doctor. Whether it's a minor health issue or a chronic condition follow-up, you can now consult a doctor from the comfort of your home. Thanks to Apna OPD, getting expert medical advice has never been easier, faster, or more convenient.</p>
@@ -252,7 +252,7 @@ export const blogData = [
     description: "Online OPD is revolutionizing Indian healthcare. Discover why digital doctor consultations with Apna OPD are the future—convenient, affordable, and accessible to all.",
     drName: "Apna OPD Content Team",
     image: "/images/blog/gut-health.png",
-    authorImage: "/images/authors/apna-opd-logo-author.png",
+    authorImage: "/images/apna-opd-logo.svg",
     content: `
       <div class="space-y-6">
         <p class="text-lg leading-relaxed">In recent years, India has witnessed a revolutionary shift in how healthcare is accessed and delivered. The rise of online OPD (Outpatient Department) platforms has redefined the traditional doctor-patient relationship, offering convenience, speed, and accessibility like never before. With platforms like Apna OPD leading the way, online consultations are becoming the future of Indian healthcare—and for good reason.</p>
@@ -356,7 +356,7 @@ export const blogData = [
     description: "Need a doctor fast? Book a trusted medical consultation within minutes on Apna OPD. Quick, easy, and secure healthcare from your home.",
     drName: "Apna OPD Content Team",
     image: "/images/blog/sleep.png",
-    authorImage: "/images/authors/apna-opd-logo-author.png",
+    authorImage: "/images/apna-opd-logo.svg",
     content: `
       <div class="space-y-6">
         <p class="text-lg leading-relaxed">When you're feeling unwell, time matters. Whether it's a sudden fever, a skin allergy, a child's cold, or a recurring migraine—you shouldn't have to wait in long queues or spend hours traveling to find medical help. Apna OPD brings expert healthcare to your fingertips, helping you book a doctor's appointment within minutes—from the comfort of your home.</p>
@@ -429,7 +429,7 @@ export const blogData = [
     description: "Tired of hospital queues? Consult a certified doctor online in minutes with Apna OPD. Safe, fast, and convenient medical care at your fingertips.",
     drName: "Apna OPD Content Team",
     image: "/images/blog/stress-management.avif",
-    authorImage: "/images/authors/apna-opd-logo-author.png",
+    authorImage: "/images/apna-opd-logo.svg",
     content: `
       <p>Gone are the days when visiting a doctor meant traveling for hours, waiting endlessly in crowded hospital lobbies, and juggling your busy schedule. With Apna OPD, you can now consult a qualified doctor online in just a few minutes, right from the comfort of your home.</p>
       <p>Simple, fast, and stress-free healthcare is now just a click away.</p>

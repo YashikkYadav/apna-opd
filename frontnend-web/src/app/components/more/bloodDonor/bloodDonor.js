@@ -62,9 +62,9 @@ const BloodDonar = ({ serviceData }) => {
               </div>
             </div>
             <div className="flex flex-row sm:flex-col justify-between">
-              <h4 className="title-24 !text-[#D9534F] md:mt-[19px] text-end">
+              {/* <h4 className="title-24 !text-[#D9534F] md:mt-[19px] text-end">
                 Availability: {bank.price ? `${bank.price} Units` : "N/A"}
-              </h4>
+              </h4> */}
               {/* <button
                 onClick={() => navigate.push(`/more/bloodDonor/${bank._id}/details`)}
                 className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

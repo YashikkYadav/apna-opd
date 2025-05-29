@@ -19,7 +19,7 @@
         <v-text-field
           v-model="search"
           density="compact"
-          label="Search (Name,  Email, Phone)"
+          label="Search (Name, Email, Phone)"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
           rounded="lg"
@@ -30,6 +30,14 @@
           style="max-width: 400px"
           class="mt-2 mt-sm-0"
         ></v-text-field>
+        <v-btn
+          color="primary"
+          class="ml-sm-4 mt-2 mt-sm-0"
+          @click="openCreateUserModal"
+        >
+          <v-icon start>mdi-plus</v-icon>
+          Create User
+        </v-btn>
       </v-card-title>
 
       <v-divider class="mb-1"></v-divider>
@@ -125,6 +133,62 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="showCreateUserModal" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5">Create New User</v-card-title>
+        <v-card-text>
+          <v-form ref="createUserForm" @submit.prevent="submitCreateUserForm">
+            <v-text-field
+              v-model="newUser.firstName"
+              label="First Name"
+              variant="outlined"
+              density="compact"
+              class="mb-4"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="newUser.lastName"
+              label="Last Name"
+              variant="outlined"
+              density="compact"
+              class="mb-4"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="newUser.email"
+              label="Email"
+              type="email"
+              variant="outlined"
+              density="compact"
+              class="mb-4"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="newUser.phone"
+              label="Phone Number"
+              variant="outlined"
+              density="compact"
+              class="mb-4"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="newUser.password"
+              label="Password"
+              type="password"
+              variant="outlined"
+              density="compact"
+              class="mb-4"
+              required
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn color="error" @click="closeCreateUserModal">Cancel</v-btn>
+          <v-btn color="primary" @click="submitCreateUserForm">Submit</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -133,6 +197,7 @@ import { useUserStore } from "@/store/UserStore";
 import { ref, onMounted, computed } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
+import { useUiStore } from "@/store/UiStore";
 
 const userTypes = ref([
   {
@@ -284,6 +349,65 @@ const closeDetailsModal = () => {
   showDetailsModal.value = false;
   selectedUser.value = null;
   userDetails.value = [];
+};
+
+// New state for Create User Modal
+const showCreateUserModal = ref(false);
+const newUser = ref({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  password: "",
+});
+const createUserForm = ref(null); // Ref for the v-form
+
+const openCreateUserModal = () => {
+  newUser.value = {
+    // Reset form fields when opening
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+  };
+  // Reset validation state of the form
+  if (createUserForm.value) {
+    createUserForm.value.resetValidation();
+  }
+  showCreateUserModal.value = true;
+};
+
+const closeCreateUserModal = () => {
+  showCreateUserModal.value = false;
+  if (createUserForm.value) {
+    createUserForm.value.reset(); // Reset form fields and validation
+  }
+};
+
+const submitCreateUserForm = async () => {
+  try {
+    const payload = {
+      firstName: newUser.value.firstName,
+      lastName: newUser.value.lastName,
+      email: newUser.value.email,
+      phone: newUser.value.phone,
+      password: newUser.value.password,
+    };
+
+    console.log("Sending payload to backend:", payload);
+    const userStore = useUserStore();
+
+    const data = await userStore.registerUser(payload);
+    
+    if (data.User) {
+      fetchUser();
+      useUiStore().openNotificationMessage("User registered");
+    }
+    closeCreateUserModal();
+  } catch (error) {
+    console.error("Error submitting user creation form:", error);
+  }
 };
 </script>
 

@@ -25,6 +25,14 @@ const healthServeProfileSchema = new mongoose.Schema(
     introduction: {
       type: String,
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    ratingCount: {
+      type: Number,
+      default: 0,
+    },
     images: [
       {
         url: {

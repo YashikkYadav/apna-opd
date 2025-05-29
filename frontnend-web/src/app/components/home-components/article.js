@@ -30,7 +30,7 @@ const Article = () => {
     return (
         <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pt-[60px] md:pt-[140px]">
             <h1 className="text-center title-48 mb-[32px]">Read top articles from Health Experts</h1>
-            <p className="text-base text-[#808080] max-w-[608px] mx-auto text-center mb-[56px]">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut et enim ad minim veniam.</p>
+            <p className="text-base text-[#808080] max-w-[608px] mx-auto text-center mb-[56px]">Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px]">
                 {
                     data?.map((item, index) => (

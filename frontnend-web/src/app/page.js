@@ -13,7 +13,7 @@ export default function Home() {
       <FourPoints />
       <Consult />
       <WhatOurUsers />
-      <Article/>
+      {/* <Article/> */}
       <About />
       <GetInTouch />
     </div>
