@@ -19,6 +19,7 @@ import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
 import Nurse from "../../components/more/nurse/nurse";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
+import Pagination from "../../components/more/common/Pagination";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/config/axios";
 import { useRouter } from "next/navigation";
@@ -30,17 +31,23 @@ const ServicePage = () => {
   const searchParams = useSearchParams();
   const specs = params.specs;
   const [serviceData, setServiceData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const router = useRouter();
 
-  const fetchData = async (locationQuery = "") => {
+  const fetchData = async (locationQuery = "", page = 1) => {
     const sanitizedSpecs = params.specs.replace(/-/g, "_");
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}`
+        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}`
       );
       if (response?.list?.healthServeProfileList) {
         setServiceData(response.list.healthServeProfileList);
+        setCurrentPage(response.list.currentPage || 1);
+        setTotalPages(response.list.totalPages || 1);
+        setTotalItems(response.list.totalItems || 0);
       }
     } catch (error) {
       console.log("error", error);
@@ -137,6 +144,12 @@ const ServicePage = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    const locationQuery = searchParams.get("location") || "";
+    setCurrentPage(page);
+    fetchData(locationQuery, page);
+  };
+
   return (
     <div className="pt-[80px]">
       <div className="bg-[#0D7EB7] banner-with-search">
@@ -194,6 +207,13 @@ const ServicePage = () => {
           
           <div className="lg:w-[66%]">
             {renderServiceComponent()}
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
           </div>
         </div>
       </div>
