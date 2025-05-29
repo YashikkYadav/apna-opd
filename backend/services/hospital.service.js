@@ -35,19 +35,14 @@ const createHospital = async (healthServeData) => {
 const registerDoctor = async (doctorData, hospitalId) => {
   try {
     let doctor = await Doctor.findOne({ phoneNumber: doctorData.phoneNumber });
-    console.log("check 1");
-    console.log(hospitalId);
     try {
       if (!doctor) {
-        console.log("check 2");
         doctor = await doctorService.registerDoctor({
           ...doctorData,
           password: "12345678",
         });
       }
       if (doctor.error) {
-        console.log("check 3");
-        console.log(doctor.error);
         return {
           statusCode: doctor.statusCode,
           success: false,
@@ -55,7 +50,6 @@ const registerDoctor = async (doctorData, hospitalId) => {
         };
       }
     } catch (error) {
-      console.log("check 4");
       return {
         statusCode: 500,
         success: false,

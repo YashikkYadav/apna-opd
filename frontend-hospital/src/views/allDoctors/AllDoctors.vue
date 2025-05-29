@@ -88,6 +88,15 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
+                    v-model="newDoctorData.rmcNumber"
+                    label="RMC Number"
+                    variant="outlined"
+                    :rules="[(v) => !!v || 'RMC Number is required']"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
                     v-model="newDoctorData.address"
                     label="Address"
                     variant="outlined"
@@ -165,13 +174,13 @@
         no-data-text="No doctors found matching your criteria."
         item-value="rmcNumber"
       >
-        <template v-slot:item.speciality="{ item }">
+        <template v-slot:item.doctorId="{ item }">
           <v-chip
             variant="tonal"
             size="small"
-            :color="item.speciality ? 'teal' : 'grey'"
+            :color="item.doctorId.speciality ? 'teal' : 'grey'"
           >
-            {{ item.speciality || "N/A" }}
+            {{ item.doctorId.speciality | "N/A" }}
           </v-chip>
         </template>
 
@@ -191,7 +200,7 @@
 
         <template v-slot:item.paymentStatus="{ item }">
           <v-chip
-            :color="getPaymentStatusColor(item.paymentStatus)"
+            :color="getPaymentStatusColor(item.doctorId.paymentStatus)"
             size="small"
             label
             class="font-weight-medium"
@@ -199,8 +208,12 @@
             <v-icon start size="small">{{
               getPaymentStatusIcon(item.paymentStatus)
             }}</v-icon>
-            {{ item.paymentStatus || "N/A" }}
+            {{ item.doctorId.paymentStatus || "N/A" }}
           </v-chip>
+        </template>
+
+        <template v-slot:item.doctorId.name="{ item }">
+          {{ item.doctorId.name }}
         </template>
 
         <template v-slot:item.phoneNumber="{ item }">
@@ -209,7 +222,7 @@
             class="text-decoration-none text-blue-darken-2"
           >
             <v-icon size="small" class="mr-1">mdi-phone</v-icon>
-            {{ item.phoneNumber }}
+            {{ item.doctorId.phoneNumber }}
           </a>
         </template>
 
@@ -219,7 +232,7 @@
             class="text-decoration-none text-blue-darken-2"
           >
             <v-icon size="small" class="mr-1">mdi-email</v-icon>
-            {{ item.email }}
+            {{ item.doctorId.email }}
           </a>
         </template>
       </v-data-table>
@@ -278,27 +291,32 @@ const itemsPerPage = ref(5);
 const items = ref([]);
 const loading = ref(true);
 
-// For the new Doctor Registration Dialog
-const isDoctorFormOpen = ref(false); // Changed from isOpenDialog for clarity
-const doctorFormRef = ref(null); // Reference to the form for validation
+const isDoctorFormOpen = ref(false);
+const doctorFormRef = ref(null);
 const newDoctorData = ref({
   name: "",
   phoneNumber: "",
   email: "",
   clinicName: "",
   speciality: "",
+  rmcNumber: "",
   address: "",
 });
 
 const headers = ref([
   {
     title: "Name",
-    key: "name",
+    key: "doctorId.name",
     sortable: true,
     align: "start",
     cellClass: "font-weight-medium text-subtitle-2",
   },
-  { title: "RMC Number", key: "rmcNumber", sortable: true, align: "start" },
+  {
+    title: "RMC Number",
+    key: "doctorId.rmcNumber",
+    sortable: true,
+    align: "start",
+  },
   {
     title: "Phone Number",
     key: "phoneNumber",
@@ -306,10 +324,15 @@ const headers = ref([
     align: "start",
   },
   { title: "Email", key: "email", sortable: false, align: "start" },
-  { title: "Speciality", key: "speciality", sortable: true, align: "center" },
+  {
+    title: "Speciality",
+    key: "doctorId.speciality",
+    sortable: true,
+    align: "center",
+  },
   {
     title: "Payment Status",
-    key: "paymentStatus",
+    key: "doctorId.paymentStatus",
     sortable: true,
     align: "center",
   },
@@ -322,6 +345,7 @@ const fetchDoctors = async () => {
   try {
     const doctorData = await hospitalStore.getDoctors();
     items.value = Array.isArray(doctorData?.doctors) ? doctorData.doctors : [];
+    console.log(items.value[0].doctorId.speciality);
   } catch (error) {
     console.error("Failed to fetch doctors:", error);
     items.value = [];
@@ -345,7 +369,7 @@ const closeDoctorDialog = () => {
     clinicName: "",
   };
   if (doctorFormRef.value) {
-    doctorFormRef.value.resetValidation(); // Reset Vuetify form validation state
+    doctorFormRef.value.resetValidation();
   }
 };
 

@@ -5,7 +5,7 @@ const getDoctors = async (req, res) => {
   try {
     const hospitalId = req.params;
 
-    const doctors = await healthServeService.getDoctors();
+    const doctors = await healthServeService.getDoctors(hospitalId);
 
     if (doctors?.error) {
       return res.status(doctors.statusCode).send(doctors.error);

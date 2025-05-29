@@ -325,7 +325,7 @@ const getHealthServeList = async (page, location, type) => {
 const getDoctors = async (hospitalId) => {
   try {
     const doctors = await HospitalDoctor.find({
-      healthServeId: hospitalId,
+      healthServeId: hospitalId.hospitalId,
     }).populate("doctorId");
 
     if (!doctors) {
