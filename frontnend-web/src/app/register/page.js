@@ -9,7 +9,6 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 import { specialties } from "./../data/constants";
 
 const Register = () => {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     type: "",
     name: "",
@@ -24,6 +23,8 @@ const Register = () => {
     speciality: "",
     subscriptionType: "",
     user: "",
+    bloodGroup: "",
+    homeService: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -49,12 +50,29 @@ const Register = () => {
     { value: "blood_bank", label: "Blood Bank" },
     { value: "physiotherapist", label: "Physiotherapist" },
     { value: "blood_donor", label: "Blood Donor" },
+    { value: "nursing_staff", label: "Nursing Staff" },
   ];
 
   const subscriptionTypes = [
     { value: "gold", label: "Gold" },
     { value: "platinum", label: "Platinum" },
     { value: "diamond", label: "Diamond" },
+  ];
+
+  const bloodGroupOptions = [
+    { value: "A+", label: "A+" },
+    { value: "A-", label: "A-" },
+    { value: "B+", label: "B+" },
+    { value: "B-", label: "B-" },
+    { value: "AB+", label: "AB+" },
+    { value: "AB-", label: "AB-" },
+    { value: "O+", label: "O+" },
+    { value: "O-", label: "O-" },
+  ];
+
+  const homeServiceOptions = [
+    { value: "yes", label: "Yes" },
+    { value: "no", label: "No" },
   ];
 
   const handleChange = (e) => {
@@ -72,6 +90,14 @@ const Register = () => {
 
   const handleUserChange = (value) => {
     setFormData((prev) => ({ ...prev, user: value }));
+  };
+
+  const handleBloodGroupChange = (value) => {
+    setFormData((prev) => ({ ...prev, bloodGroup: value }));
+  };
+
+  const handleHomeServiceChange = (value) => {
+    setFormData((prev) => ({ ...prev, homeService: value }));
   };
 
   const togglePasswordVisibility = (field) => {
@@ -206,6 +232,14 @@ const Register = () => {
       toast.error("Please select a location!");
       return;
     }
+    if (formData.registrationFor === "blood_donor" && !formData.bloodGroup) {
+      toast.error("Please select or enter your blood group!");
+      return;
+    }
+    if (formData.registrationFor === "nursing_staff" && !formData.homeService) {
+      toast.error("Please specify if you provide home service!");
+      return;
+    }
     if (formData.registrationFor === "doctor") {
       handleDoctorRegistration();
       return;
@@ -222,6 +256,15 @@ const Register = () => {
         location: formData.location,
         subscriptionType: formData.subscriptionType,
       };
+      
+      if (formData.registrationFor === "blood_donor") {
+        payload.bloodGroup = formData.bloodGroup;
+      }
+
+      if (formData.registrationFor === "nursing_staff") {
+        payload.homeService = formData.homeService;
+      }
+      
       const response = await axiosInstance.post("/health-serve/", payload);
       if (response) {
         toast.success("Registration successful!", {
@@ -341,7 +384,7 @@ const Register = () => {
           {/* User*/}
           <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              User <span className="text-gray-400">(Optional)</span>
+              User <span className="text-gray-400 text-xs">(Optional)</span>
             </label>
             <Select
               value={formData.user}
@@ -473,6 +516,43 @@ const Register = () => {
                 />
               </div>
             </>
+          )}
+
+          {formData.registrationFor === "blood_donor" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Blood Group
+              </label>
+              <Select
+                showSearch
+                value={formData.bloodGroup}
+                onChange={handleBloodGroupChange}
+                placeholder="Type or select blood group"
+                options={bloodGroupOptions}
+                className="w-full"
+                filterOption={(input, option) =>
+                  option?.label?.toLowerCase().includes(input.toLowerCase())
+                }
+                allowClear
+                required
+              />
+            </div>
+          )}
+
+          {formData.registrationFor === "nursing_staff" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Home Service / Door Service
+              </label>
+              <Select
+                value={formData.homeService}
+                onChange={handleHomeServiceChange}
+                placeholder="Do you provide home service?"
+                options={homeServiceOptions}
+                className="w-full"
+                required
+              />
+            </div>
           )}
 
           {/* Password */}

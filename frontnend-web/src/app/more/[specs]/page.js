@@ -16,6 +16,7 @@ import NursingCollege from "../../components/more/nursingCollege/nursingCollege"
 import BloodBank from "../../components/more/bloodBank/bloodBank";
 import Physiotherapist from "../../components/more/physiotherapist/physiotherapist";
 import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
+import Nurse from "../../components/more/nurse/nurse";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
 import { useEffect, useState } from "react";
@@ -86,6 +87,8 @@ const ServicePage = () => {
         return "Find Physiotherapists";
       case serviceTypes.BLOOD_DONOR:
         return "Find Blood Donors";
+      case serviceTypes.NURSE:
+        return "Find Nursing Services";
       default:
         return "Find Services";
     }
@@ -119,6 +122,8 @@ const ServicePage = () => {
         return <Physiotherapist serviceData={serviceData} />;
       case serviceTypes.BLOOD_DONOR:
         return <BloodDonor serviceData={serviceData} />;
+      case serviceTypes.NURSE:
+        return <Nurse serviceData={serviceData} />;
       default:
         return <div>Service not found</div>;
     }
