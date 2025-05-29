@@ -1,4 +1,4 @@
-<template>
+<template class="create-rx-page">
   <v-container fluid>
     <!-- Search Bar and Add Patient Button -->
     <v-row class="align-center mb-4">
@@ -8,7 +8,7 @@
       </v-col>
 
       <v-col cols="4" class="text-end mb-2">
-        <v-btn className="saaro-btn" color="#7f6cb4" @click="openDialog" large>
+        <v-btn className="saaro-btn" color="#8f6cb4" @click="openDialog" large>
           Register Patient
         </v-btn>
       </v-col>
@@ -19,21 +19,26 @@
       <template v-slot:text></template>
       <v-divider></v-divider>
 
-      <v-data-table :headers="headers" :items="patients" :search="search" class="table">
+      <v-data-table :headers="headers" :items="patients" :search="search" class="tablee">
+        <template v-if="isLoading" v-slot:body>
+          <tr v-for="n in 6" :key="n">
+            <td v-for="header in headers" :key="header.key">
+              <v-skeleton-loader type="text"></v-skeleton-loader>
+            </td>
+          </tr>
+        </template>
         <template v-slot:[`item.Tags`]="{ item }">
           <v-chip v-if="item.Tags" color="red">
             {{ item.Tags }}
           </v-chip>
         </template>
+
         <template v-slot:[`item.action`]="{ item }">
-          <router-link :to="`/${item.id}/view-history`" style="text-decoration: none; color: inherit;">
-            <v-btn className="saaro-btn" color="#8f6cb4" small @click="onViewHistory(item.Name)">
-              View History
+          <router-link :to="`/${item.id}/consult`" style="text-decoration: none; color: inherit;">
+            <v-btn className="saaro-btn" color="#8f6cb4" small @click="consultPatient(item.Name)">
+              Consult
             </v-btn>
           </router-link>
-          <v-btn icon class="delete-btn ml-2" @click="onDeletePatient(item.Name)">
-            <v-icon color="7A7A7A">mdi-trash-can</v-icon>
-          </v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -67,10 +72,10 @@
             </v-row>
             <v-row>
               <v-col class="v-col-12">
-            <v-text-field v-model="form.alternateNumber" label="Alternate Phone Number (Optional)"
-              placeholder="e.g. 9988776655" variant="outlined" outlined dense>
-            </v-text-field>
-          </v-col>
+                <v-text-field v-model="form.alternateNumber" label="Alternate Phone Number (Optional)"
+                  placeholder="e.g. 9988776655" variant="outlined" outlined dense>
+                </v-text-field>
+              </v-col>
             </v-row>
             <!-- Name Section -->
             <v-row>
@@ -91,8 +96,8 @@
               <v-col cols="6">
                 <v-menu v-model="menu" :close-on-content-click="false" transition="scale-transition" offset-y>
                   <template #activator="{ on, attrs }">
-                    <v-text-field v-model="form.dateOfBirth" label="Date of Birth" :readonly="false" variant="outlined" type="date"
-                      dense v-bind="attrs" v-on="on">
+                    <v-text-field v-model="form.dateOfBirth" label="Date of Birth" :readonly="false" variant="outlined"
+                      type="date" dense v-bind="attrs" v-on="on">
                       <!-- <template #prepend>
                         <v-icon>mdi-calendar</v-icon>
                       </template> -->
@@ -124,21 +129,20 @@
             <v-row>
               <v-col class="v-col-12">
                 <v-textarea v-model="form.address" label="Address" variant="outlined" dense rows="3" auto-grow>
-            </v-textarea>
+                </v-textarea>
               </v-col>
             </v-row>
 
 
 
             <!-- Address -->
-            
+
 
             <!-- File Upload -->
 
 
             <!-- More Options -->
-            <v-btn text class="my-3 saaro-btn" variant="outlined"
-              @click="moreOptions = !moreOptions">
+            <v-btn text class="my-3 saaro-btn" variant="outlined" @click="moreOptions = !moreOptions">
               <v-icon class="mr-1">mdi-dots-horizontal</v-icon>
               More Options
             </v-btn>
@@ -188,13 +192,14 @@ export default {
       search: "",
       dialog: false,
       moreOptions: false,
+      isLoading: true,
       patients: [],
       headers: [
         { key: "UID", title: "UID" },
         { key: "Name", title: "Name" },
         { key: "Phone", title: "Phone" },
         { key: "Date", title: "Last Visit" },
-        { key: "Tags", title: "Tags" },
+        { key: "Tags", title: "Category" },
         { key: "action", title: "Action", sortable: false },
       ],
       form: {
@@ -227,6 +232,7 @@ export default {
       accessToken: '',
     };
   },
+
   methods: {
     openDialog() {
       this.dialog = true;
@@ -257,7 +263,8 @@ export default {
           referredBy: this.form.referredBy,
         };
 
-        fetch(`${import.meta.env.VITE_SERVER_URL}/api/patient/${this.doctorId}`, {
+        const doctorId = localStorage.getItem('doctor_id');
+        fetch(`${import.meta.env.VITE_SERVER_URL}/api/patient/${doctorId}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -265,11 +272,15 @@ export default {
           body: JSON.stringify(requestData),
         })
           .then((response) => {
+            const contentType = response.headers.get('content-type');
             if (!response.ok) {
-              return response.json().then((errorData) => {
-                console.error("Error:", errorData);
-                throw new Error("Failed to fetch");
-              });
+              if (contentType && !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                  this.showSnackbar(text, true);
+                  this.isTemplateDetailModalOpen = false;
+                  throw new Error(`Error ${response.status}: ${text}`);
+                });
+              }
             }
             return response.json();
           })
@@ -296,6 +307,10 @@ export default {
     fetchPatients() {
       fetch(`${import.meta.env.VITE_SERVER_URL}/api/patient/get-all/${this.doctorId}`, {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: this.accessToken,
+        },
       })
         .then((response) => {
           if (!response.ok) {
@@ -314,8 +329,9 @@ export default {
             Phone: patient.patientId.phoneNumber,
             Date: new Date(patient.updatedAt).toLocaleDateString('en-GB'),
             Tags: patient.patientId.tags,
-            Action: "", // Customize as needed
+            Action: "",
           }));
+          this.isLoading = false
         })
         .catch((error) => {
           console.error("Network Error:", error.message);
@@ -330,6 +346,7 @@ export default {
     if (!this.doctorId || !this.accessToken) {
       this.$router.push('/login');
     }
+
     this.fetchPatients();
   },
 };
@@ -370,6 +387,7 @@ export default {
 
 .delete-btn:hover {
   background: rgba(0, 0, 0, 0.05);
+  /* Optional hover effect */
 }
 
 .delete-btn .v-btn__overlay {
@@ -387,7 +405,8 @@ export default {
 .more-btn {
   color: #6ec1e4 !important;
 }
-.icon-btn{
+
+.icon-btn {
   box-shadow: none;
 }
 </style>

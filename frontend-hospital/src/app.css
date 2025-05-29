@@ -1,0 +1,414 @@
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+.v-main {
+  background-color: #f3f4f6;
+}
+
+.saaro-btn {
+    background-color: #d4ebff !important;
+    color: #385D7E !important;
+    border-radius: 40px;
+    padding: 5px 22px !important;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #385D7E !important;
+    width: max-content !important;
+}
+
+.search-box .v-input__control .v-field {
+    border-radius: 20px !important;
+}
+
+.prescription-page .v-card--variant-elevated {
+    border-radius: 20px !important;
+}
+
+.prescription-page .v-table__wrapper {
+    padding-bottom: 10px !important;
+}
+
+/* .prescription-page .v-data-table-footer {
+    display: none !important;
+} */
+.history-box .v-field__field {
+    height: 310px !important;
+}
+
+.provisional-box {
+    height: 196px;
+}
+
+.provisional-box .v-input {
+    height: 170px;
+}
+
+.provisional-box .v-field-label {
+    top: 25% !important;
+}
+
+.prescription-page .v-data-table__td {
+    border: none !important;
+}
+
+.prescription-page .v-toolbar-title__placeholder {
+    color: #385D7E !important;
+    font-weight: 800;
+}
+
+.prescription-page .prescription-page-icon i {
+    color: #385D7E !important;
+}
+
+.prescription-page .v-data-table-header__content {
+    color: #747474;
+}
+
+.prescription-page .mdi-menu-down {
+    display: none;
+}
+
+.health-record-card {
+    height: 450px;
+}
+
+.health-record-card .v-btn {
+    /* margin-left: 30px !important; */
+    position: absolute;
+    right: 20px;
+}
+
+.health-record-card iframe {
+    width: 100% !important;
+    height: 320px;
+    border: none;
+}
+
+.record-card {
+    height: 450px;
+}
+
+.record-card .v-btn {
+    /* margin-left: 30px !important; */
+    position: absolute;
+    right: 20px;
+}
+
+.record-card iframe {
+    width: 100% !important;
+    height: 320px;
+    border: none;
+}
+
+
+.v-table__wrapper tr td {
+    color: #747474;
+}
+
+.provisional-box .v-field__field {
+    height: 160px;
+}
+
+.prescription-page .fix-box .v-field {
+    width: 50px;
+}
+
+.prescription-page .fix-box-1 .v-field {
+    width: 50px;
+}
+
+.prescription-card-heading {
+    border-bottom: 1px solid #d2d2d2;
+    padding-bottom: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+}
+
+.v-field__input {
+    color: #747474 !important;
+}
+
+.add-patient-popup .v-input__details {
+    display: none !important;
+}
+
+.v-menu>.v-overlay__content {
+    max-width: 100px !important;
+}
+
+.template .v-overlay__content {
+    max-width: max-content !important;
+}
+
+.investigation-template .v-toolbar__content {
+    justify-content: space-between;
+}
+
+.removable .v-data-table__th {
+    display: none;
+}
+
+.removable .v-table__wrapper {
+    padding-top: 14px;
+}
+
+.v-combobox .v-combobox__selection-text {
+    overflow: visible !important;
+    white-space: wrap !important;
+    word-break: break-all !important;
+}
+
+.v-combobox__selection {
+    height: auto !important;
+}
+
+.v-toolbar__content {
+    height: 50px !important;
+}
+
+.prescription-page .v-toolbar-title__placeholder {
+    font-size: 1.1rem;
+}
+
+.lable-dev {
+    padding-bottom: 5px !important;
+}
+
+.prescription-page .v-data-table-header__content {
+    padding-bottom: 5px !important;
+    padding-top: 17px !important;
+    line-height: 24px !important;
+    font-size: 13px !important;
+}
+
+.add-details .v-table .v-table__wrapper>table>thead>tr>th,
+.add-details .v-table .v-table__wrapper>table>tbody>tr:not(:last-child)>td {
+    border-bottom: 0 !important;
+}
+
+.add-details header {
+    background-color: #d4ebff !important;
+}
+
+.add-details .v-toolbar__content>.v-toolbar-title {
+    margin-inline-start: 0;
+}
+
+.template-table {
+    border-radius: 20px !important;
+    box-shadow: none !important;
+}
+
+.template-table .v-data-table thead {
+    background-color: #e0e3e6 !important;
+}
+
+.template-table .v-table__wrapper {
+    border-radius: 0;
+}
+
+.template-table .delete-btn {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.v-btn--variant-elevated {
+    box-shadow: none !important;
+
+}
+
+.sidebar.v-navigation-drawer .v-list {
+    padding: 0 16px;
+}
+
+.sidebar .v-list-item__prepend>.v-icon~.v-list-item__spacer {
+    width: 16px;
+}
+
+.sidebar .v-list-group__items .v-list-item {
+    padding-inline-start: 55px !important;
+}
+
+.sidebar .v-list-item-title {
+    font-size: 0.875rem;
+    line-height: 1.5715;
+}
+
+.sidebar .v-list-group--open {
+    background: #d4ebff85 !important;
+    border-radius: 8px;
+}
+
+.sidebar .v-list-item {
+    border-radius: 8px !important;
+}
+
+.medication-table .head {
+    padding-bottom: 5px !important;
+    padding-top: 17px !important;
+    line-height: 24px !important;
+    font-size: 13px !important;
+    color: #747474;
+    border-bottom: none !important;
+}
+
+.popup-card {
+    border-radius: 12px !important;
+}
+
+.popup-title,
+.popup-action {
+    padding: 16px 16px !important;
+}
+
+.popup-detail {
+    padding: 8px 16px !important;
+}
+
+.popup-detail .v-field,
+.popup-detail .v-table {
+    border-radius: 12px !important;
+
+}
+
+.popup-detail .v-toolbar {
+    border-radius: 12px 10px 0 0 !important;
+}
+
+.v-overlay__content {
+    border-radius: 5px !important;
+}
+
+.v-overlay__content .v-list {
+    min-width: 120px !important;
+}
+
+.v-overlay__content>.v-list::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+/* Track */
+.v-overlay__content>.v-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 12px;
+}
+
+/* Handle */
+.v-overlay__content>.v-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+}
+
+/* Handle on hover */
+.v-overlay__content>.v-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.v-overlay__content .v-list-item-title,
+.v-overlay__content .v-list-item {
+    font-size: 0.9rem !important;
+}
+
+.v-overlay__content .v-list-item--density-default.v-list-item--one-line {
+    min-height: 37px !important;
+}
+
+.v-navigation-drawer--rail .v-icon::before {
+    font-size: 22px !important;
+}
+
+.v-navigation-drawer--rail .v-list-item__prepend {
+    padding-left: 8px;
+}
+
+.rounded-pill.v-field {
+    border-radius: 9999px !important;
+}
+
+.que-table .mdi-checkbox-marked::before,
+.que-table .v-data-table td,
+.que-table .mdi-minus-box {
+    color: #385D7E !important;
+}
+
+.v-snackbar__content {
+    font-weight: 500 !important;
+}
+
+.v-snackbar--bottom {
+    --v-layout-left: 0 !important;
+}
+
+.apexcharts-text tspan {
+    fill: #9ca3af !important;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.remove-lines .apexcharts-grid-borders,
+.remove-lines .apexcharts-xaxis-tick,
+.remove-lines .apexcharts-gridline {
+    display: none;
+}
+
+.custom-snackbar {
+    bottom: auto !important;
+    left: auto !important;
+    right: 172px !important;
+}
+
+.vitals .v-text-field .v-input__details {
+    display: none;
+}
+
+.invoice-table .v-table__wrapper>table>thead>tr>th:last-child {
+    padding-left: 27px !important;
+}
+
+.v-field--disabled {
+    opacity: 40 !important;
+}
+
+.v-card {
+    border-radius: 20px;
+}
+
+.ant-notification {
+    z-index: 999999 !important;
+}
+
+.ant-notification-notice-description {
+    white-space: break-spaces !important;
+}
+
+.v-skeleton-loader__text {
+    margin: 14px 0;
+    height: 15px;
+}
+
+.v-field {
+    border-radius: 12px !important;
+}
+
+.queue .v-toolbar {
+    background-color: #ffffff;
+    border-radius: 20px !important;
+}
+
+@media screen and (max-width: 1279px) {
+    .v-main {
+        padding-left: 56px;
+    }
+
+    .v-navigation-drawer {
+        transform: none !important;
+    }
+}
