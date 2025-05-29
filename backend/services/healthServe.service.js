@@ -1,5 +1,6 @@
 const HealthServe = require("../models/healthServe");
 const HealthServeProfile = require("../models/healthServeProfile");
+const HospitalDoctor = require("../models/hospitalDoctor");
 const {
   getAccessToken,
   getHashedPassword,
@@ -291,7 +292,7 @@ const getHealthServeList = async (page, location, type) => {
 
     location = extractCity(location);
     if (location) {
-      filter.location = { $regex: new RegExp(location, "i") }; 
+      filter.location = { $regex: new RegExp(location, "i") };
     }
 
     if (type) {
@@ -299,12 +300,15 @@ const getHealthServeList = async (page, location, type) => {
     }
     let healthServeProfileList;
     let total;
-    if(type === "hospital" || type === "blood_donor"){
-      healthServeProfileList = await HealthServe.find(filter).skip(skip).limit(limit);
+    if (type === "hospital" || type === "blood_donor") {
+      healthServeProfileList = await HealthServe.find(filter)
+        .skip(skip)
+        .limit(limit);
       total = await HealthServe.countDocuments(filter);
-    }
-    else{
-      healthServeProfileList = await HealthServeProfile.find(filter).skip(skip).limit(limit);
+    } else {
+      healthServeProfileList = await HealthServeProfile.find(filter)
+        .skip(skip)
+        .limit(limit);
       total = await HealthServe.countDocuments(filter);
     }
 
@@ -323,6 +327,22 @@ const getHealthServeList = async (page, location, type) => {
   }
 };
 
+const getDoctors = async (hospitalId) => {
+  try {
+    const doctors = await HospitalDoctor.find({
+      healthServeId: hospitalId.hospitalId,
+    }).populate("doctorId");
+
+    if (!doctors) {
+      return { statusCode: 404, error: "No doctors for this hospital" };
+    }
+
+    return { statusCode: 200, doctors: doctors };
+  } catch (error) {
+    return { statusCode: 500, error: error };
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -331,4 +351,5 @@ module.exports = {
   updateHealthServe,
   deleteHealthServe,
   getHealthServeList,
+  getDoctors,
 };

@@ -7,6 +7,7 @@ const libraryRoutes = require("./library.routes");
 const enquiryRoutes = require("./enquiry.routes");
 const paymentRoutes = require("./payment.routes");
 const dashboardRoutes = require("./dashboard.routes");
+const hospitalRoutes = require("./hospital.routes");
 const fileUploader = require("./fileUploader.routes");
 const contactLeadRoutes = require("./contactLead.routes");
 const healthServeRoutes = require("./healthServe.routes");
@@ -29,6 +30,8 @@ const Doctor = require("../models/doctor");
 const router = express.Router();
 
 router.use("/admin", adminRoutes);
+
+router.use("/hospital", hospitalRoutes);
 
 router.get("/oauth2callback", async(req,res) => {
 })
