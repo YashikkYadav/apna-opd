@@ -5,31 +5,22 @@ import { useRouter } from "next/navigation";
 
 const BloodDonar = ({ serviceData }) => {
   const [bloodBankList, setBloodBankList] = useState([]);
-  const [filteredList, setFilteredList] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
   const navigate = useRouter();
 
   useEffect(() => {
     if (serviceData) {
       setBloodBankList(serviceData || []);
-      setFilteredList(serviceData || []);
     }
   }, [serviceData]);
-
-  // Get current items
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
       <h2 className="title-48 mb-[24px]">Blood Donors Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {bloodBankList?.length} results
+        Showing {bloodBankList?.length} results
       </p>
       <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((bank) => (
+        {bloodBankList?.map((bank) => (
           <div
             key={bank._id}
             className="flex flex-col sm:flex-row justify-between mb-[32px]"
@@ -54,7 +45,7 @@ const BloodDonar = ({ serviceData }) => {
                 </p>
                 <h3 className="title-24 mb-[8px]">{bank.name}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {bank.rating || "N/A"}
+                  Blood Group: {bank.bloodGroup || "N/A"}
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
                   {bank.location}

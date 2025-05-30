@@ -69,6 +69,7 @@ const Header = () => {
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Hospital", route: "/more/hospital" },
     { label: "Vatenary", route: "/more/vatenary" },
+    { label: "Nurse", route: "/more/nurse" },
   ];
 
   return (

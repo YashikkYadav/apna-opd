@@ -9,7 +9,6 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 import { specialties } from "./../data/constants";
 
 const Register = () => {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     type: "",
     name: "",
@@ -24,6 +23,8 @@ const Register = () => {
     speciality: "",
     subscriptionType: "",
     user: "",
+    bloodGroup: "",
+    homeService: "",
   });
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -32,6 +33,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [users, setUsers] = useState([]);
+  const router = useRouter();
 
   // Registration type options
   const registrationTypes = [
@@ -49,12 +51,29 @@ const Register = () => {
     { value: "blood_bank", label: "Blood Bank" },
     { value: "physiotherapist", label: "Physiotherapist" },
     { value: "blood_donor", label: "Blood Donor" },
+    { value: "nursing_staff", label: "Nursing Staff" },
   ];
 
   const subscriptionTypes = [
     { value: "gold", label: "Gold" },
     { value: "platinum", label: "Platinum" },
     { value: "diamond", label: "Diamond" },
+  ];
+
+  const bloodGroupOptions = [
+    { value: "A+", label: "A+" },
+    { value: "A-", label: "A-" },
+    { value: "B+", label: "B+" },
+    { value: "B-", label: "B-" },
+    { value: "AB+", label: "AB+" },
+    { value: "AB-", label: "AB-" },
+    { value: "O+", label: "O+" },
+    { value: "O-", label: "O-" },
+  ];
+
+  const homeServiceOptions = [
+    { value: "yes", label: "Yes" },
+    { value: "no", label: "No" },
   ];
 
   const handleChange = (e) => {
@@ -72,6 +91,14 @@ const Register = () => {
 
   const handleUserChange = (value) => {
     setFormData((prev) => ({ ...prev, user: value }));
+  };
+
+  const handleBloodGroupChange = (value) => {
+    setFormData((prev) => ({ ...prev, bloodGroup: value }));
+  };
+
+  const handleHomeServiceChange = (value) => {
+    setFormData((prev) => ({ ...prev, homeService: value }));
   };
 
   const togglePasswordVisibility = (field) => {
@@ -185,13 +212,17 @@ const Register = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword && formData.registrationFor !== "blood_donor") {
       toast.error("Passwords do not match!");
       return;
     }
 
     if (!formData.registrationFor) {
       toast.error("Please select a registration type!");
+      return;
+    }
+    if (formData.registrationFor !== "blood_donor" && !formData.subscriptionType) {
+      toast.error("Please select a subscription type!");
       return;
     }
     if (formData.registrationFor === "doctor" && !formData.rmcNumber) {
@@ -206,6 +237,14 @@ const Register = () => {
       toast.error("Please select a location!");
       return;
     }
+    if (formData.registrationFor === "blood_donor" && !formData.bloodGroup) {
+      toast.error("Please select or enter your blood group!");
+      return;
+    }
+    if (formData.registrationFor === "nursing_staff" && !formData.homeService) {
+      toast.error("Please specify if you provide home service!");
+      return;
+    }
     if (formData.registrationFor === "doctor") {
       handleDoctorRegistration();
       return;
@@ -218,11 +257,23 @@ const Register = () => {
         name: formData.name,
         phone: formData.mobile,
         email: formData.email,
-        password: formData.password,
         location: formData.location,
-        subscriptionType: formData.subscriptionType,
       };
-      const response = await axiosInstance.post("/health-serve/", payload);
+      
+      if (formData.registrationFor !== "blood_donor") {
+        payload.password = formData.password;
+        payload.subscriptionType = formData.subscriptionType;
+      }
+      
+      if (formData.registrationFor === "blood_donor") {
+        payload.bloodGroup = formData.bloodGroup;
+      }
+      
+      if (formData.registrationFor === "nursing_staff") {
+        payload.homeService = formData.homeService;
+      }
+      
+     const response = await axiosInstance.post("/health-serve/", payload);
       if (response) {
         toast.success("Registration successful!", {
           position: "top-center",
@@ -232,7 +283,11 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         setTimeout(() => {
-          window.location.href = response.paymentUrl;
+          if (formData.registrationFor !== "blood_donor" && response.paymentUrl) {
+            window.location.href = response.paymentUrl;
+          } else {
+            router.push("/");
+          }
         }, 2000);
       }
     } catch (error) {
@@ -325,9 +380,10 @@ const Register = () => {
             />
           </div>
           {/* Subscription Type */}
-          <div className="md:col-span-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Subscription Type
+          {formData.registrationFor !== "blood_donor" && (
+            <div className="md:col-span-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subscription Type
             </label>
             <Select
               value={formData.subscriptionType}
@@ -336,12 +392,13 @@ const Register = () => {
               options={subscriptionTypes}
               className="w-full"
               required
-            />
-          </div>
+              />
+            </div>
+          )}
           {/* User*/}
           <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              User <span className="text-gray-400">(Optional)</span>
+              User <span className="text-gray-400 text-xs">(Optional)</span>
             </label>
             <Select
               value={formData.user}
@@ -475,10 +532,48 @@ const Register = () => {
             </>
           )}
 
+          {formData.registrationFor === "blood_donor" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Blood Group
+              </label>
+              <Select
+                showSearch
+                value={formData.bloodGroup}
+                onChange={handleBloodGroupChange}
+                placeholder="Type or select blood group"
+                options={bloodGroupOptions}
+                className="w-full"
+                filterOption={(input, option) =>
+                  option?.label?.toLowerCase().includes(input.toLowerCase())
+                }
+                allowClear
+                required
+              />
+            </div>
+          )}
+
+          {formData.registrationFor === "nursing_staff" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Home Service / Door Service
+              </label>
+              <Select
+                value={formData.homeService}
+                onChange={handleHomeServiceChange}
+                placeholder="Do you provide home service?"
+                options={homeServiceOptions}
+                className="w-full"
+                required
+              />
+            </div>
+          )}
+
           {/* Password */}
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+          {formData.registrationFor !== "blood_donor" && (
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
             </label>
             <div className="relative">
               <input
@@ -503,13 +598,15 @@ const Register = () => {
                   width={20}
                   height={20}
                 />
-              </span>
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Confirm Password */}
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          {formData.registrationFor !== "blood_donor" && (
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
             <div className="relative">
@@ -535,9 +632,10 @@ const Register = () => {
                   width={20}
                   height={20}
                 />
-              </span>
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Submit Button */}
           <button

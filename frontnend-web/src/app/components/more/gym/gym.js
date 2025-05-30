@@ -17,14 +17,14 @@ const Gym = ({ serviceData }) => {
     }
   }, [serviceData]);
 
-  // Get current items
+  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
-      <h2 className="title-48 mb-[24px]">Result for Fitness Centers</h2>
+      <h2 className="title-48 mb-[24px]">Gyms Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
         Showing {currentItems?.length} of {gymList?.length} results
       </p>
@@ -38,36 +38,40 @@ const Gym = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    gym?.images && Array.isArray(gym.images) && gym.images?.length > 0
+                    gym?.images &&
+                    Array.isArray(gym.images) &&
+                    gym.images?.length > 0
                       ? gym.images[0]
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
                   height={180}
-                  alt="Fitness Center"
+                  alt="Gym"
                   className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
                 <p className="text-base text-[#5151E1] mb-[8px]">
-                  Fitness Center
+                  Gym
                 </p>
-                <h3 className="title-32 mb-[8px]">{gym.title}</h3>
+                <h3 className="title-24 mb-[8px]">{gym.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {gym.rating}
+                  Rating: {gym.rating || "N/A"}
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
                   {gym.name}
                 </h4>
-                <h2 className="title-16 text-[#808080] !font-medium">
-                  {gym.location}
-                </h2>
               </div>
             </div>
             <div className="flex flex-row sm:flex-col justify-end">
-
+              {/* Optional price display */}
+              {/* <h2 className="title-24 !text-[#5151E1] md:mt-[19px] text-end">
+                ₹{gym.price || "N/A"}
+              </h2> */}
               <button
-                onClick={() => navigate.push(`/more/gym/${gym._id}/details`)}
+                onClick={() =>
+                  navigate.push(`/more/gym/${gym._id}/details`)
+                }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details
