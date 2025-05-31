@@ -100,6 +100,22 @@ const routes = [
     },
   },
   {
+    path: "/nursing-staff",
+    name: "Nursing Staff",
+    component: HealthServe,
+    props: {
+      type: "nursing_staff",
+    },
+  },
+  {
+    path: "/veterinary",
+    name: "Veterinary",
+    component: HealthServe,
+    props: {
+      type: "vatenary",
+    },
+  },
+  {
     path: "/user",
     name: "User",
     component: User,

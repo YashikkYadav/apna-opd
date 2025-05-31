@@ -130,6 +130,8 @@ const healthServeTypes = ref([
     blood_bank: "Blood Bank",
     physiotherapist: "Physiotherapist",
     blood_donor: "Blood Donor",
+    nursing_staff: "Nursing Staff",
+    vatenary : "Veterinary"
   },
 ]);
 
