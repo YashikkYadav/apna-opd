@@ -107,7 +107,7 @@
 
 <script setup>
 import { useHealthServeStore } from "@/store/HealthServeStore";
-import { ref, onMounted, computed, defineProps, watch } from "vue";
+import { ref, onMounted, computed, defineProps, watch, onUnmounted } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
 
@@ -135,27 +135,26 @@ const healthServeTypes = ref([
 
 onMounted(() => {
   const router = useRouter();
-  if (props.type === "") {
-    router.push("/login");
-  }
-  const auth = checkAuth(router);
-  if (auth) {
-    fetchHealthServe();
-  }
+  fetchHealthServe();
   watch(
     () => props.type,
-    (newType, oldType) => {
-      if (newType !== oldType) {
-        const auth = checkAuth(router);
-        if (auth) {
-          fetchHealthServe();
-        } else {
-          console.warn("Authentication failed during type prop change.");
-        }
+    async (newType) => {
+      if (!newType) {
+        router.push("/login");
+        return;
       }
-    }
+  
+      const auth = checkAuth(router);
+      if (auth) {
+        await fetchHealthServe();
+      } else {
+        console.warn("Authentication failed.");
+      }
+    },
   );
 });
+
+
 
 const serviceValue = computed(() => {
   if (
@@ -209,6 +208,7 @@ const fetchHealthServe = async () => {
     items.value = Array.isArray(healthServeData?.healthServe)
       ? healthServeData.healthServe
       : [];
+
   } catch (error) {
     console.error("Failed to fetch healthServe:", error);
     items.value = [];
@@ -256,6 +256,11 @@ const getPaymentStatusIcon = (status) => {
     return "mdi-alert-circle-outline";
   return "mdi-information-outline";
 };
+
+onUnmounted(() => {
+  const healthServeStore = useHealthServeStore();
+  healthServeStore.$dispose();
+});
 </script>
 
 <style scoped>

@@ -194,7 +194,7 @@
 
 <script setup>
 import { useUserStore } from "@/store/UserStore";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import { checkAuth } from "@/lib/utils/utils";
 import { useRouter } from "vue-router";
 import { useUiStore } from "@/store/UiStore";
@@ -409,6 +409,11 @@ const submitCreateUserForm = async () => {
     console.error("Error submitting user creation form:", error);
   }
 };
+
+onUnmounted(() => {
+  const userStore = useUserStore();
+  userStore.$dispose();
+});
 </script>
 
 <style scoped>
