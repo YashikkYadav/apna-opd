@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import AppointmentModal from "../common-components/AppointmentModal";
 import RatingModal from "../common-components/RatingModal";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axiosInstance from "@/app/config/axios";
 const Banner = ({ doctorDetail }) => {
     const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -160,6 +160,7 @@ const Banner = ({ doctorDetail }) => {
                 onClose={() => setShowRateModal(false)}
                 onSubmit={handleRatingSubmit}
             />
+            <ToastContainer position="top-center" hideProgressBar={true} autoClose={2000}/>
         </>
     );
 }

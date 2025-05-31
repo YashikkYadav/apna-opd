@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "../common-components/SearchBar";
+import StarRating from "../common-components/StarRating";
 import Pagination from "./../more/common/Pagination";
 import axiosInstance from "@/app/config/axios";
 
@@ -182,10 +183,30 @@ const SearchResultsData = () => {
                       </h4>
                     </div>
                   </div>
-                  <div className="flex flex-row sm:flex-col justify-end">
+                  <div className="flex flex-row sm:flex-col justify-between">
                     {/* <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
                       $25
                     </h2> */}
+                    <div className="mt-[24px]">
+                      {(item.rating > 0 || item.ratingCount > 0) ? (
+                        <StarRating 
+                          rating={item.rating || 0} 
+                          ratingCount={item.ratingCount || 0}
+                          size="sm"
+                          showCount={true}
+                        />
+                      ) : (
+                        <div className="flex items-center">
+                          <StarRating 
+                            rating={0} 
+                            ratingCount={0}
+                            size="sm"
+                            showCount={false}
+                          />
+                          <span className="text-sm text-gray-500 ml-2">No reviews yet</span>
+                        </div>
+                      )}
+                    </div>
                     <button
                       onClick={() => handleDoctorDetails(item._id)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

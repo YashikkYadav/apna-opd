@@ -4,7 +4,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import InquiryModal from "./InquiryModal";
 import RatingModal from "../../../components/common-components/RatingModal";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import axiosInstance from "@/app/config/axios";
+import { message } from 'antd';
 const BannerCommon = ({ profileData, serviceType }) => {
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -23,15 +25,25 @@ const BannerCommon = ({ profileData, serviceType }) => {
     }
   };
 
-  const handleRatingSubmit = async ({ rating, feedback }) => {
-        try {
-            toast.success('Rating submitted successfully');
-            setShowRateModal(false);
-        } catch (error) {
-            console.log('Error submitting rating:', error);
-            toast.error('Failed to submit rating. Please try again.');
-        }
-    };
+  const handleRatingSubmit = async ({ rating }) => {
+    try {
+      const response = await axiosInstance.post(`/health-serve/rating`, {
+          healthServeId: profileData?._id,
+          rating,
+      });
+
+      if (response.message && response) {
+          toast.success('Rating submitted successfully');
+          setShowRateModal(false);
+      } else {
+          toast.error('Failed to submit rating. Please try again.');
+      }
+
+    } catch (error) {
+        console.log('Error submitting rating:', error);
+        toast.error('Failed to submit rating. Please try again.');
+    }
+  };
 
   if (!profileData) return null;
 
@@ -135,6 +147,7 @@ const BannerCommon = ({ profileData, serviceType }) => {
           onSubmit={handleRatingSubmit}
         />
       )}
+      <ToastContainer position="top-center" autoClose={2000} hideProgressBar />
     </div>
   );
 };
