@@ -56,7 +56,7 @@ const NashaMukti = ({ serviceData }) => {
                 </p>
                 <h3 className="title-32 mb-[8px]">{kendra.name}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {kendra.rating || "N/A"}
+                  Rating: {kendra.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
                   {kendra.location}
