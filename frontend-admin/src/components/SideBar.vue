@@ -132,6 +132,22 @@
             class="custom-list-item"
           ></v-list-item>
         </router-link>
+        <router-link to="/nursing-staff" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-mother-nurse"
+            title="Nursing Staff"
+            value="Nursing Staff"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link to="/veterinary" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-dog"
+            title="Veterinary"
+            value="Veterinary"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
         <router-link to="/user" style="text-decoration: none; color: inherit">
           <v-list-item
             prepend-icon="mdi-account-tie"
