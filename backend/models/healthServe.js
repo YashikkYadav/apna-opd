@@ -29,12 +29,18 @@ const healthServeSchema = new mongoose.Schema(
     password: {
       type: String,
       required: function() {
-        return this.type !== 'blood_donor';
-      }
+        return this.type !== "blood_donor";
+      },
     },
     location: {
       index: true,
       required: true,
+      type: String,
+    },
+    bloodGroup: {
+      type: String,
+    },
+    homeService: {
       type: String,
     },
     subscriptionType: {

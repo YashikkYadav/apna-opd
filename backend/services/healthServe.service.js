@@ -13,7 +13,7 @@ const { createPaymentLinkForEntity } = require("./payment.service");
 
 const register = async (data) => {
   try {
-    let { type, name, phone, email, password, location, subscriptionType } = data;
+    let { type, name, phone, email, password, location, subscriptionType, bloodGroup, homeService } = data;
 
     const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
@@ -44,7 +44,7 @@ const register = async (data) => {
       hashedPassword = await getHashedPassword(password);
     }
 
-    const newHealthServe = new HealthServe({
+    const healthServeData = {
       type,
       name,
       phone,
@@ -52,7 +52,17 @@ const register = async (data) => {
       password: hashedPassword,
       location,
       subscriptionType,
-    });
+    };
+
+    if (type === "blood_donor" && bloodGroup) {
+      healthServeData.bloodGroup = bloodGroup;
+    }
+    
+    if (type === "nursing_staff" && homeService) {
+      healthServeData.homeService = homeService;
+    }
+
+    const newHealthServe = new HealthServe(healthServeData);
     await newHealthServe.save();
 
     // const newHealthServeProfile = new HealthServeProfile({
@@ -307,9 +317,9 @@ const getHealthServeList = async (page, location, type) => {
       total = await HealthServe.countDocuments(filter);
     } else {
       healthServeProfileList = await HealthServeProfile.find(filter)
-        .skip(skip)
-        .limit(limit);
-      total = await HealthServe.countDocuments(filter);
+         .skip(skip)
+         .limit(limit);
+      total = await HealthServeProfile.countDocuments(filter);
     }
 
     return {
