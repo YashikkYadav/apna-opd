@@ -16,5 +16,10 @@ healthServe.put("/:healthServeId", healthServeController.updateHealthServe);
 
 healthServe.delete("/:healthServeId", healthServeController.deleteHealthServe);
 
+healthServe.post(
+  "/rating",
+  healthServeController.ratingHealthServe
+);
+
 
 module.exports = healthServe;

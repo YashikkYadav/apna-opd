@@ -66,4 +66,5 @@ const getAppointmentDetails = async (req, res) => {
 
 module.exports = {
   getHealthServeProfile,
+  getAppointmentDetails,
 };

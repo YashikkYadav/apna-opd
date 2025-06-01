@@ -56,7 +56,7 @@ const BloodBank = ({ serviceData }) => {
                 </p>
                 <h3 className="title-24 mb-[8px]">{bloodBank.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {bloodBank.rating || "N/A"}
+                  Rating: {bloodBank.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
                   {bloodBank.name}
