@@ -52,6 +52,7 @@ const Register = () => {
     { value: "physiotherapist", label: "Physiotherapist" },
     { value: "blood_donor", label: "Blood Donor" },
     { value: "nursing_staff", label: "Nursing Staff" },
+    { value: "radiologist", label: "Radiologist" },
   ];
 
   const subscriptionTypes = [
@@ -681,12 +682,12 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm mt-4">
+        {/* <p className="text-center text-sm mt-4">
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 hover:underline">
             Login
           </a>
-        </p>
+        </p> */}
       </div>
       <ToastContainer
         position="top-center"
