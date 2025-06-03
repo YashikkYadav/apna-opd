@@ -58,7 +58,7 @@ const register = async (data) => {
       healthServeData.bloodGroup = bloodGroup;
     }
     
-    if (type === "nursing_staff" && homeService) {
+    if ((type === "nursing_staff" || type === "vatenary") && homeService) {
       healthServeData.homeService = homeService;
     }
 
@@ -353,6 +353,52 @@ const getDoctors = async (hospitalId) => {
   }
 };
 
+const ratingHealthServe = async (healthServeId, rating) => {
+  try {
+
+    rating = typeof rating === "string" ? parseInt(rating) : rating;
+
+    if (rating < 1 || rating > 5) {
+      return {
+        statusCode: 400,
+        error: "Rating must be between 1 and 5",
+      };
+    }
+
+    const healthServeProfile = await HealthServeProfile.findById(healthServeId);
+    if (!healthServeProfile) {
+      return {
+        statusCode: 404,
+        error: "Health Serve profile not found",
+      };
+    }
+
+    const newRating =
+      (healthServeProfile.rating * healthServeProfile.ratingCount + rating) /
+      (healthServeProfile.ratingCount + 1);
+    const newRatingCount = healthServeProfile.ratingCount + 1;
+
+    await HealthServeProfile.findByIdAndUpdate(
+      healthServeProfile._id,
+      {
+        rating: newRating,
+        ratingCount: newRatingCount,
+      },
+      { runValidators: false }
+    );
+
+    return {
+      statusCode: 200,
+      message: "Health Serve rating updated successfully",
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -362,4 +408,5 @@ module.exports = {
   deleteHealthServe,
   getHealthServeList,
   getDoctors,
+  ratingHealthServe,
 };

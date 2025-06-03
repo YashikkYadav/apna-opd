@@ -39,7 +39,7 @@ export const serviceTypes = {
   AMBULANCE: "ambulance",
   HOSPITAL: "hospital",
   EMERGENCY: "emergency",
-  VATENARY: "vatenary",
+  VATENARY: "veterinary",
   GYM: "gym",
   YOGA: "yoga",
   MEDITATION: "commercial-meditation",

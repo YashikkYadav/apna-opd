@@ -135,6 +135,21 @@ const getHealthServeList = async (req, res) => {
   }
 };
 
+const ratingHealthServe = async (req, res) => {
+  try {
+    const { healthServeId ,rating } = req.body;
+
+    const healthServe = await healthServeService.ratingHealthServe(healthServeId, rating);
+    if (healthServe?.error) {
+      return res.status(healthServe.statusCode).send(healthServe.error);
+    }
+
+    res.status(healthServe.statusCode).json({ message: healthServe.message });
+  } catch (error) {
+    res.status(500).send(`Error ${error}`);
+  }
+};
+
 module.exports = {
   registerHealthServe,
   loginHealthServe,
@@ -143,4 +158,5 @@ module.exports = {
   updateHealthServe,
   deleteHealthServe,
   getHealthServeList,
+  ratingHealthServe,
 };

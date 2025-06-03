@@ -115,6 +115,11 @@ const createPaymentLinkForEntity = async (
         },
         callback_url: `${process.env.FRONTEND_URL}/success-registration`,
         callback_method: "get",
+        options: {
+          order: {
+            offers: ["offer_QbRlrpHkhwAiff"],
+          },
+        },
       };
     } else {
       data = {
@@ -143,6 +148,11 @@ const createPaymentLinkForEntity = async (
           process.env.FRONTEND_URL
         }/success?${params.toString()}`,
         callback_method: "get",
+        options: {
+          order: {
+            offers: ["offer_QbRlrpHkhwAiff"],
+          },
+        },
       };
     }
 

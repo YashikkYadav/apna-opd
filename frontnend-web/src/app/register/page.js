@@ -39,7 +39,7 @@ const Register = () => {
   const registrationTypes = [
     { value: "doctor", label: "Doctor" },
     { value: "hospital", label: "Hospital" },
-    { value: "vatenary", label: "Vatenary" },
+    { value: "vatenary", label: "Veterinary" },
     { value: "emergency", label: "Emergency Service" },
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
@@ -82,6 +82,7 @@ const Register = () => {
   };
 
   const handleTypeSelect = (value) => {
+    console.log(value);
     setFormData((prev) => ({ ...prev, registrationFor: value }));
   };
 
@@ -212,7 +213,10 @@ const Register = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword && formData.registrationFor !== "blood_donor") {
+    if (
+      formData.password !== formData.confirmPassword &&
+      formData.registrationFor !== "blood_donor"
+    ) {
       toast.error("Passwords do not match!");
       return;
     }
@@ -221,7 +225,10 @@ const Register = () => {
       toast.error("Please select a registration type!");
       return;
     }
-    if (formData.registrationFor !== "blood_donor" && !formData.subscriptionType) {
+    if (
+      formData.registrationFor !== "blood_donor" &&
+      !formData.subscriptionType
+    ) {
       toast.error("Please select a subscription type!");
       return;
     }
@@ -241,7 +248,11 @@ const Register = () => {
       toast.error("Please select or enter your blood group!");
       return;
     }
-    if (formData.registrationFor === "nursing_staff" && !formData.homeService) {
+    if (
+      (formData.registrationFor === "nursing_staff" ||
+        formData.registrationFor === "vatenary") &&
+      !formData.homeService
+    ) {
       toast.error("Please specify if you provide home service!");
       return;
     }
@@ -259,21 +270,24 @@ const Register = () => {
         email: formData.email,
         location: formData.location,
       };
-      
+
       if (formData.registrationFor !== "blood_donor") {
         payload.password = formData.password;
         payload.subscriptionType = formData.subscriptionType;
       }
-      
+
       if (formData.registrationFor === "blood_donor") {
         payload.bloodGroup = formData.bloodGroup;
       }
-      
-      if (formData.registrationFor === "nursing_staff") {
+
+      if (
+        formData.registrationFor === "nursing_staff" ||
+        formData.registrationFor === "vatenary"
+      ) {
         payload.homeService = formData.homeService;
       }
-      
-     const response = await axiosInstance.post("/health-serve/", payload);
+
+      const response = await axiosInstance.post("/health-serve/", payload);
       if (response) {
         toast.success("Registration successful!", {
           position: "top-center",
@@ -283,7 +297,10 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         setTimeout(() => {
-          if (formData.registrationFor !== "blood_donor" && response.paymentUrl) {
+          if (
+            formData.registrationFor !== "blood_donor" &&
+            response.paymentUrl
+          ) {
             window.location.href = response.paymentUrl;
           } else {
             router.push("/");
@@ -384,14 +401,14 @@ const Register = () => {
             <div className="md:col-span-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subscription Type
-            </label>
-            <Select
-              value={formData.subscriptionType}
-              onChange={handleSubscriptionTypeSelect}
-              placeholder="Select Subscription Type"
-              options={subscriptionTypes}
-              className="w-full"
-              required
+              </label>
+              <Select
+                value={formData.subscriptionType}
+                onChange={handleSubscriptionTypeSelect}
+                placeholder="Select Subscription Type"
+                options={subscriptionTypes}
+                className="w-full"
+                required
               />
             </div>
           )}
@@ -553,7 +570,7 @@ const Register = () => {
             </div>
           )}
 
-          {formData.registrationFor === "nursing_staff" && (
+          {/* {formData.registrationFor === "nursing_staff" && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Home Service / Door Service
@@ -567,37 +584,37 @@ const Register = () => {
                 required
               />
             </div>
-          )}
+          )} */}
 
           {/* Password */}
           {formData.registrationFor !== "blood_donor" && (
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md pr-10"
-                required
-              />
-              <span
-                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                onClick={() => togglePasswordVisibility("password")}
-              >
-                <img
-                  src={
-                    showPassword
-                      ? "/register/eyeClose.svg"
-                      : "/register/eye.svg"
-                  }
-                  alt="toggle password visibility"
-                  width={20}
-                  height={20}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md pr-10"
+                  required
                 />
+                <span
+                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                  onClick={() => togglePasswordVisibility("password")}
+                >
+                  <img
+                    src={
+                      showPassword
+                        ? "/register/eyeClose.svg"
+                        : "/register/eye.svg"
+                    }
+                    alt="toggle password visibility"
+                    width={20}
+                    height={20}
+                  />
                 </span>
               </div>
             </div>
@@ -607,33 +624,50 @@ const Register = () => {
           {formData.registrationFor !== "blood_donor" && (
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md pr-10"
-                required
-              />
-              <span
-                className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                onClick={() => togglePasswordVisibility("confirmPassword")}
-              >
-                <img
-                  src={
-                    showConfirmPassword
-                      ? "/register/eyeClose.svg"
-                      : "/register/eye.svg"
-                  }
-                  alt="toggle confirm password visibility"
-                  width={20}
-                  height={20}
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md pr-10"
+                  required
                 />
+                <span
+                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                >
+                  <img
+                    src={
+                      showConfirmPassword
+                        ? "/register/eyeClose.svg"
+                        : "/register/eye.svg"
+                    }
+                    alt="toggle confirm password visibility"
+                    width={20}
+                    height={20}
+                  />
                 </span>
               </div>
+            </div>
+          )}
+
+          {(formData.registrationFor === "vatenary" ||
+            formData.registrationFor === "nursing_staff") && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Home Service / Door Service
+              </label>
+              <Select
+                value={formData.homeService}
+                onChange={handleHomeServiceChange}
+                placeholder="Do you provide home service?"
+                options={homeServiceOptions}
+                className="w-full"
+                required
+              />
             </div>
           )}
 
