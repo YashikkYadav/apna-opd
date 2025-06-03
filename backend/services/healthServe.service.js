@@ -13,7 +13,17 @@ const { createPaymentLinkForEntity } = require("./payment.service");
 
 const register = async (data) => {
   try {
-    let { type, name, phone, email, password, location, subscriptionType, bloodGroup, homeService } = data;
+    let {
+      type,
+      name,
+      phone,
+      email,
+      password,
+      location,
+      subscriptionType,
+      bloodGroup,
+      homeService,
+    } = data;
 
     const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
@@ -33,9 +43,13 @@ const register = async (data) => {
     type = type.replace("-", "_");
 
     let paymentUrl;
-    if(type !== "blood_donor"){
-      paymentUrl = await createPaymentLinkForEntity(type, {name, phone, email}, subscriptionType);
-    }else{
+    if (type !== "blood_donor") {
+      paymentUrl = await createPaymentLinkForEntity(
+        type,
+        { name, phone, email },
+        subscriptionType
+      );
+    } else {
       paymentUrl = null;
     }
 
@@ -57,7 +71,7 @@ const register = async (data) => {
     if (type === "blood_donor" && bloodGroup) {
       healthServeData.bloodGroup = bloodGroup;
     }
-    
+
     if ((type === "nursing_staff" || type === "vatenary") && homeService) {
       healthServeData.homeService = homeService;
     }
@@ -222,6 +236,7 @@ const getAllHealthServes = async (
 };
 
 const updateHealthServe = async (healthServeId, data) => {
+  console.log("update health serve called");
   try {
     const { type, name, phone, email, location } = data;
 
@@ -238,7 +253,7 @@ const updateHealthServe = async (healthServeId, data) => {
       {
         type,
         name,
-        phone,
+        phone: phone ?? isHealthServeExist.phone,
         email,
         location,
       },
@@ -310,16 +325,27 @@ const getHealthServeList = async (page, location, type) => {
     }
     let healthServeProfileList;
     let total;
+
     if (type === "hospital" || type === "blood_donor") {
       healthServeProfileList = await HealthServe.find(filter)
         .skip(skip)
         .limit(limit);
       total = await HealthServe.countDocuments(filter);
     } else {
-      healthServeProfileList = await HealthServeProfile.find(filter)
-         .skip(skip)
-         .limit(limit);
-      total = await HealthServeProfile.countDocuments(filter);
+      healthServeProfileList = await HealthServe.aggregate([
+        { $match: filter },
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: "healthserveprofiles", 
+            localField: "_id",
+            foreignField: "healthServeId",
+            as: "profiles",
+          },
+        },
+      ]);
+      total = healthServeProfileList.length;
     }
 
     return {
@@ -355,7 +381,6 @@ const getDoctors = async (hospitalId) => {
 
 const ratingHealthServe = async (healthServeId, rating) => {
   try {
-
     rating = typeof rating === "string" ? parseInt(rating) : rating;
 
     if (rating < 1 || rating > 5) {
