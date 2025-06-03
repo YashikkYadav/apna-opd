@@ -39,7 +39,7 @@ const DetailsPage = () => {
       }
 
       const detailResponse = await axiosInstance.get(
-        `/${basicProfile.healthServeId}/health-serve-profile`
+        `/${specsId}/health-serve-profile`
       );
 
       if (detailResponse?.healthServeProfile) {
