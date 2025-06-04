@@ -24,8 +24,7 @@ const register = async (data) => {
       bloodGroup,
       homeService,
     } = data;
-
-    const healthServeValidation = validateHealthServe(data);
+const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
       return {
         statusCode: 400,
