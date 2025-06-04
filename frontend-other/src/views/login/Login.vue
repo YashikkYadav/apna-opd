@@ -177,6 +177,7 @@ export default {
         { value: "blood_bank", label: "Blood Bank" },
         { value: "physiotherapist", label: "Physiotherapist" },
         { value: "blood_donor", label: "Blood Donor" },
+        { value: "vatenary", label: "Vaterinary" },
       ],
       password: "",
       email: "",

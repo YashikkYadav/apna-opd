@@ -38,8 +38,10 @@ const Physiotherapist = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    physio?.images && Array.isArray(physio.images) && physio.images?.length > 0
-                      ? physio.images[0]
+                    physio.profiles &&
+                    physio.profiles.length > 0 &&
+                    physio.profiles[0].images.length > 0
+                      ? physio.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}

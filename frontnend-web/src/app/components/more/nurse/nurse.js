@@ -38,10 +38,10 @@ const Nurse = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    nurse?.images &&
-                    Array.isArray(nurse.images) &&
-                    nurse.images?.length > 0
-                      ? nurse.images[0]
+                    nurse.profiles &&
+                    nurse.profiles.length > 0 &&
+                    nurse.profiles[0].images.length > 0
+                      ? nurse.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -59,7 +59,7 @@ const Nurse = ({ serviceData }) => {
                   Rating: {nurse.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                    {nurse.name}
+                  {nurse.name}
                 </h4>
               </div>
             </div>

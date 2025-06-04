@@ -29,8 +29,10 @@ const BloodDonar = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    bank?.images && Array.isArray(bank.images) && bank.images?.length > 0
-                      ? bank.images[0]
+                    bank.profiles &&
+                    bank.profiles.length > 0 &&
+                    bank.profiles[0].images.length > 0
+                      ? bank.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
