@@ -79,15 +79,15 @@ const register = async (data) => {
     const newHealthServe = new HealthServe(healthServeData);
     await newHealthServe.save();
 
-    // const newHealthServeProfile = new HealthServeProfile({
-    //   healthServeId: newHealthServe._id,
-    //   type,
-    //   name,
-    //   phone,
-    //   email,
-    //   location,
-    // });
-    // await newHealthServeProfile.save();
+    const newHealthServeProfile = new HealthServeProfile({
+      healthServeId: newHealthServe._id,
+      type,
+      name,
+      phone,
+      email,
+      location,
+    });
+    await newHealthServeProfile.save();
 
     return {
       statusCode: 201,
