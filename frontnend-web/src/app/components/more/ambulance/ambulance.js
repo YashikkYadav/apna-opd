@@ -11,6 +11,7 @@ const Ambulance = ({ serviceData }) => {
   const navigate = useRouter();
 
   useEffect(() => {
+    console.log(serviceData);
     if (serviceData) {
       setAmbulanceList(serviceData || []);
       setFilteredList(serviceData || []);
@@ -38,10 +39,10 @@ const Ambulance = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    ambulance?.images &&
-                    Array.isArray(ambulance.images) &&
-                    ambulance.images?.length > 0
-                      ? ambulance.images[0]
+                    ambulance.profiles &&
+                    ambulance.profiles.length > 0 &&
+                    ambulance.profiles[0].images.length > 0
+                      ? ambulance.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}

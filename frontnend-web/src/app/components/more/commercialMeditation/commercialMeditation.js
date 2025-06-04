@@ -26,7 +26,8 @@ const CommercialMeditation = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Commercial Meditation Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {commercialMeditationList?.length} results
+        Showing {currentItems?.length} of {commercialMeditationList?.length}{" "}
+        results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((commercialMeditation) => (
@@ -38,10 +39,10 @@ const CommercialMeditation = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    commercialMeditation?.images &&
-                    Array.isArray(commercialMeditation.images) &&
-                    commercialMeditation.images?.length > 0
-                      ? commercialMeditation.images[0]
+                    commercialMeditation.profiles &&
+                    commercialMeditation.profiles.length > 0 &&
+                    commercialMeditation.profiles[0].images.length > 0
+                      ? commercialMeditation.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -54,7 +55,9 @@ const CommercialMeditation = ({ serviceData }) => {
                 <p className="text-base text-[#5151E1] mb-[8px]">
                   Commercial Meditation
                 </p>
-                <h3 className="title-24 mb-[8px]">{commercialMeditation.title}</h3>
+                <h3 className="title-24 mb-[8px]">
+                  {commercialMeditation.title}
+                </h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
                   Rating: {commercialMeditation.rating?.toFixed(1) || "N/A"} / 5
                 </p>
@@ -70,7 +73,9 @@ const CommercialMeditation = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/commercial-meditation/${commercialMeditation._id}/details`)
+                  navigate.push(
+                    `/more/commercial-meditation/${commercialMeditation._id}/details`
+                  )
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

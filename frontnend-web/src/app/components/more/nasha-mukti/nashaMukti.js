@@ -40,8 +40,10 @@ const NashaMukti = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    kendra?.images && Array.isArray(kendra.images) && kendra.images?.length > 0
-                      ? kendra.images[0]
+                    kendra.profiles &&
+                    kendra.profiles.length > 0 &&
+                    kendra.profiles[0].images.length > 0
+                      ? kendra.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -68,7 +70,9 @@ const NashaMukti = ({ serviceData }) => {
                 Availability: {kendra.price ? `${kendra.price} Units` : "N/A"}
               </h2>
               <button
-                onClick={() => navigate.push(`/more/nashaMukti/${kendra._id}/details`)}
+                onClick={() =>
+                  navigate.push(`/more/nashaMukti/${kendra._id}/details`)
+                }
                 className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details

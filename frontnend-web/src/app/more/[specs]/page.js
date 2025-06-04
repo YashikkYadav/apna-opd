@@ -86,7 +86,7 @@ const ServicePage = () => {
         return "Find Nasha Mukti Kendras";
       case serviceTypes.MEDICAL_STORE:
         return "Find Medical Stores";
-      case serviceTypes.NURSING_COLLEGE:
+      case serviceTypes.NURSING_MEDICAL_COLLEGE:
         return "Find Nursing Colleges";
       case serviceTypes.BLOOD_BANK:
         return "Find Blood Banks";
@@ -121,7 +121,7 @@ const ServicePage = () => {
         return <NashamuktiKendra serviceData={serviceData} />;
       case serviceTypes.MEDICAL_STORE:
         return <MedicalStore serviceData={serviceData} />;
-      case serviceTypes.NURSING_COLLEGE:
+      case serviceTypes.NURSING_MEDICAL_COLLEGE:
         return <NursingCollege serviceData={serviceData} />;
       case serviceTypes.BLOOD_BANK:
         return <BloodBank serviceData={serviceData} />;
@@ -185,7 +185,7 @@ const ServicePage = () => {
                 prefix={
                   <Image
                     className="mr-3"
-                    src="/images/blue_location.svg"
+                    src={"/images/blue_location.svg"}
                     width={24}
                     height={24}
                     alt="Location Icon"
