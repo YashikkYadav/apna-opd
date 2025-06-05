@@ -24,11 +24,13 @@ const DetailsPage = () => {
         `/health-serve/list?&location=&type=${specs}`
       );
 
+      console.log(listResponse);
+
       if (!listResponse?.list?.healthServeProfileList) {
         setError(`No data found for ${specs}`);
         return;
       }
-
+      
       const basicProfile = listResponse.list.healthServeProfileList.find(
         (item) => item._id === specsId
       );
@@ -39,7 +41,7 @@ const DetailsPage = () => {
       }
 
       const detailResponse = await axiosInstance.get(
-        `/${basicProfile.healthServeId}/health-serve-profile`
+        `/${specsId}/health-serve-profile`
       );
 
       if (detailResponse?.healthServeProfile) {

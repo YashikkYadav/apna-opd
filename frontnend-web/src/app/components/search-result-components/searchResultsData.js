@@ -34,6 +34,7 @@ const SearchResultsData = () => {
           totalPages: response.list.totalPages,
           totalItems: response.list.totalItems,
         });
+        console.log(response.list.doctorList);
       }
     } catch (error) {
       console.log("error", error);
@@ -163,7 +164,7 @@ const SearchResultsData = () => {
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src="/images/image_placeholder.svg"
+                        src={item.images[0]?.url ?? "/images/image_placeholder.svg"}
                         width={180}
                         height={180}
                         alt="Working Men"

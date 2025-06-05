@@ -38,8 +38,10 @@ const Vatenary = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    vatenary?.images && Array.isArray(vatenary.images) && vatenary.images?.length > 0
-                      ? vatenary.images[0]
+                    vatenary.profiles &&
+                    vatenary.profiles.length > 0 &&
+                    vatenary.profiles[0].images.length > 0
+                      ? vatenary.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -66,7 +68,9 @@ const Vatenary = ({ serviceData }) => {
                 ₹{vatenary.price || ""}
               </h2>
               <button
-                onClick={() => navigate.push(`/more/vatenary/${vatenary._id}/details`)}
+                onClick={() =>
+                  navigate.push(`/more/vatenary/${vatenary._id}/details`)
+                }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details

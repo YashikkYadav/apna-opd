@@ -6,7 +6,7 @@ import InquiryModal from "./InquiryModal";
 import RatingModal from "../../../components/common-components/RatingModal";
 import { toast, ToastContainer } from "react-toastify";
 import axiosInstance from "@/app/config/axios";
-import { message } from 'antd';
+import { message } from "antd";
 const BannerCommon = ({ profileData, serviceType }) => {
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -21,27 +21,26 @@ const BannerCommon = ({ profileData, serviceType }) => {
 
   const handleHomeClick = () => {
     if (mounted) {
-      router.push('/');
+      router.push("/");
     }
   };
 
   const handleRatingSubmit = async ({ rating }) => {
     try {
       const response = await axiosInstance.post(`/health-serve/rating`, {
-          healthServeId: profileData?._id,
-          rating,
+        healthServeId: profileData?._id,
+        rating,
       });
 
       if (response.message && response) {
-          toast.success('Rating submitted successfully');
-          setShowRateModal(false);
+        toast.success("Rating submitted successfully");
+        setShowRateModal(false);
       } else {
-          toast.error('Failed to submit rating. Please try again.');
+        toast.error("Failed to submit rating. Please try again.");
       }
-
     } catch (error) {
-        console.log('Error submitting rating:', error);
-        toast.error('Failed to submit rating. Please try again.');
+      console.log("Error submitting rating:", error);
+      toast.error("Failed to submit rating. Please try again.");
     }
   };
 
@@ -52,7 +51,13 @@ const BannerCommon = ({ profileData, serviceType }) => {
       <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto">
         <div className="flex flex-col pt-[60px] md:pt-[96px] pb-[60px] lg:pb-0">
           <div className="title-24 text-white flex mb-[56px] flex-col sm:flex-row gap-[10px] sm:gap-0">
-            <span className="cursor-pointer mr-[10px]" onClick={handleHomeClick}>Home </span>{"  "}
+            <span
+              className="cursor-pointer mr-[10px]"
+              onClick={handleHomeClick}
+            >
+              Home{" "}
+            </span>
+            {"  "}
             <Image
               className="-rotate-90 mx-[8px]"
               src="/images/down_arrow_white.svg"
@@ -61,9 +66,12 @@ const BannerCommon = ({ profileData, serviceType }) => {
               alt="Down Arrow"
             />
             <span className="cursor-pointer" onClick={handleBackToListing}>
-              {serviceType.replace(/-/g, ' ').replace(/_/g, ' ').split(' ')?.map(
-                word => word.charAt(0).toUpperCase() + word?.slice(1)
-              ).join(' ')}
+              {serviceType
+                .replace(/-/g, " ")
+                .replace(/_/g, " ")
+                .split(" ")
+                ?.map((word) => word.charAt(0).toUpperCase() + word?.slice(1))
+                .join(" ")}
             </span>{" "}
             <Image
               className="-rotate-90 mx-[8px]"
@@ -75,13 +83,17 @@ const BannerCommon = ({ profileData, serviceType }) => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
             <div className="flex lg:mr-[20px]">
-              {/* <Image
-                src={profileData.images?.[0] || "/images/image_placeholder.svg"}
+              <Image
+                src={
+                  profileData?.images && profileData?.images.length
+                    ? profileData?.images[0]?.url
+                    : "/images/image_placeholder.svg"
+                }
                 width={504}
                 height={608}
                 alt={profileData.name}
                 className="h-[400px] md:h-[604px] object-cover rounded-t-[8px] rounded-b-[8px] lg:rounded-b-none"
-              /> */}
+              />
             </div>
             <div className="flex flex-col justify-center pb-[20px]">
               <div className="mb-[32px]">
@@ -100,20 +112,22 @@ const BannerCommon = ({ profileData, serviceType }) => {
                   {profileData.location || "Address not available"}
                 </p>
               </div>
-              
+
               <div className="mb-[32px]">
                 <h3 className="title-32 text-white">
-                  {profileData.price ? `Service Cost: ₹${profileData.price}` : "Contact for pricing"}
+                  {profileData.price
+                    ? `Service Cost: ₹${profileData.price}`
+                    : "Contact for pricing"}
                 </h3>
               </div>
               <div className="flex flex-col sm:flex-row gap-[15px]">
-                <button 
+                <button
                   className="px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold border-white border hover:border-white hover:text-white"
                   onClick={() => setShowModal(true)}
                 >
                   Enquire
                 </button>
-                <button 
+                <button
                   className="underline px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hover:text-white"
                   onClick={() => setShowRateModal(true)}
                 >
@@ -132,9 +146,9 @@ const BannerCommon = ({ profileData, serviceType }) => {
           </div>
         </div>
       </div>
-      
+
       {showModal && (
-        <InquiryModal 
+        <InquiryModal
           profileData={profileData}
           serviceType={serviceType}
           onClose={() => setShowModal(false)}

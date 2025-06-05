@@ -12,6 +12,7 @@ const NursingCollege = ({ serviceData }) => {
   const navigate = useRouter();
 
   useEffect(() => {
+    console.log(currentItems);
     if (serviceData) {
       setNursingCollegeList(serviceData || []);
       setFilteredList(serviceData || []);
@@ -40,8 +41,10 @@ const NursingCollege = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    college?.images && Array.isArray(college.images) && college.images?.length > 0
-                      ? college.images[0]
+                    college.profiles &&
+                    college.profiles.length > 0 &&
+                    college.profiles[0].images.length > 0
+                      ? college.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -68,7 +71,9 @@ const NursingCollege = ({ serviceData }) => {
                 Availability: {college.price ? `${college.price} Units` : "N/A"}
               </h2>
               <button
-                onClick={() => navigate.push(`/more/nursingCollege/${college._id}/details`)}
+                onClick={() =>
+                  navigate.push(`/more/nursing_medical_college/${college._id}/details`)
+                }
                 className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details

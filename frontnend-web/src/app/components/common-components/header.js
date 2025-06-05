@@ -64,7 +64,7 @@ const Header = () => {
     { label: "Commercial Meditation", route: "/more/commercial-meditation" },
     { label: "Nasha Mukti Kendra", route: "/more/nasha-mukti-kendra" },
     { label: "Medical Store", route: "/more/medical-store" },
-    { label: "Nursing & Medical College", route: "/more/nursing-college" },
+    { label: "Nursing & Medical College", route: "/more/nursing-medical-college" },
     { label: "Blood Bank", route: "/more/blood-bank" },
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Radiologist", route: "/more/radiologist" },

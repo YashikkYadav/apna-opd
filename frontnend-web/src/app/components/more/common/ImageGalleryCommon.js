@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const ImageGalleryCommon = ({ images = [] }) => {
@@ -13,18 +13,16 @@ const ImageGalleryCommon = ({ images = [] }) => {
   return (
     <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pb-[60px] sm:pb-[70px]">
       <h1 className="title-48 mb-[42px]">Image Gallery</h1>
-
       {/* Main selected image */}
       <div className="mb-6">
         <Image
-          src={galleryImages[selectedImage]}
+          src={galleryImages[selectedImage].url}
           width={1000}
           height={600}
           alt={`Gallery image ${selectedImage + 1}`}
           className="w-full h-[400px] object-cover rounded-lg shadow-md"
         />
       </div>
-
       {/* Thumbnail grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
         {galleryImages.map((image, index) => (
@@ -36,7 +34,7 @@ const ImageGalleryCommon = ({ images = [] }) => {
             onClick={() => setSelectedImage(index)}
           >
             <Image
-              src={image}
+              src={image.url}
               width={200}
               height={200}
               alt={`thumbnail image ${index + 1}`}

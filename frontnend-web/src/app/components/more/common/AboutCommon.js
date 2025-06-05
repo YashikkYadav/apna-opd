@@ -8,7 +8,7 @@ const AboutCommon = ({ profileData, serviceType }) => {
         <div className="flex flex-col justify-center">
           <h1 className="title-48 mb-[24px]">About {profileData.name}</h1>
           <p className="text-[#808080] text-base mb-[40px]">
-            {profileData.description || 
+            {profileData.about || 
               `This is a premium ${serviceType} service provider offering high-quality services to meet your needs. With a focus on customer satisfaction and professional excellence, we strive to deliver the best experience possible.`}
           </p>
           <div className="flex flex-col gap-[32px]">
