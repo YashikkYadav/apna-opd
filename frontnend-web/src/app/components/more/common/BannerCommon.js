@@ -85,7 +85,9 @@ const BannerCommon = ({ profileData, serviceType }) => {
             <div className="flex lg:mr-[20px]">
               <Image
                 src={
-                  profileData?.images[0].url || "/images/image_placeholder.svg"
+                  profileData?.images && profileData?.images.length
+                    ? profileData?.images[0]?.url
+                    : "/images/image_placeholder.svg"
                 }
                 width={504}
                 height={608}

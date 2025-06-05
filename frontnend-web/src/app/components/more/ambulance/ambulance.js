@@ -57,7 +57,7 @@ const Ambulance = ({ serviceData }) => {
                 </p>
                 <h3 className="title-24 mb-[8px]">{ambulance.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {ambulance.rating?.toFixed(1) || "N/A"} / 5
+                  Rating: {ambulance?.profiles[0]?.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
                   {ambulance.name}
