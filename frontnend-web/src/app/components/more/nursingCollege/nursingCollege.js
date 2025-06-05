@@ -54,7 +54,7 @@ const NursingCollege = ({ serviceData }) => {
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#D9534F] mb-[8px]">
+                <p className="text-base text-[#3DB8F5] mb-[8px]">
                   Nursing College
                 </p>
                 <h3 className="title-32 mb-[8px]">{college.name}</h3>
@@ -66,15 +66,14 @@ const NursingCollege = ({ serviceData }) => {
                 </h4>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-between">
-              <h2 className="title-48 !text-[#D9534F] md:mt-[19px] text-end">
-                Availability: {college.price ? `${college.price} Units` : "N/A"}
-              </h2>
+            <div className="flex flex-row sm:flex-col justify-end">
               <button
                 onClick={() =>
-                  navigate.push(`/more/nursing_medical_college/${college._id}/details`)
+                  navigate.push(
+                    `/more/nursing_medical_college/${college._id}/details`
+                  )
                 }
-                className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+                className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details
               </button>
