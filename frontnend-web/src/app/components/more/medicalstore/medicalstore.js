@@ -38,10 +38,10 @@ const MedicalStore = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    medicalStore?.images &&
-                    Array.isArray(medicalStore.images) &&
-                    medicalStore.images?.length > 0
-                      ? medicalStore.images[0]
+                    medicalStore.profiles &&
+                    medicalStore.profiles.length > 0 &&
+                    medicalStore.profiles[0].images.length > 0
+                      ? medicalStore.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
@@ -70,7 +70,9 @@ const MedicalStore = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/medicalstore/${medicalStore._id}/details`)
+                  navigate.push(
+                    `/more/medicalstore/${medicalStore._id}/details`
+                  )
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

@@ -38,10 +38,10 @@ const Gym = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    gym?.images &&
-                    Array.isArray(gym.images) &&
-                    gym.images?.length > 0
-                      ? gym.images[0]
+                    gym.profiles &&
+                    gym.profiles.length > 0 &&
+                    gym.profiles[0].images.length > 0
+                      ? gym.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
