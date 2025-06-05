@@ -53,9 +53,6 @@ const Register = () => {
     { value: "blood_donor", label: "Blood Donor" },
     { value: "nursing_staff", label: "Nursing Staff" },
     { value: "radiologist", label: "Radiologist" },
-    { value: "ayurvedic", label: "Ayurvedic" },
-    { value: "homoeopathic", label: "Homoeopathic" },
-    { value: "unani", label: "Unani" },
   ];
 
   const subscriptionTypes = [
