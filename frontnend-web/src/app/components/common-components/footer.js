@@ -49,14 +49,14 @@ const Footer = () => {
             </h6>
             <ul className="flex flex-col gap-[16px]">
               <li className="text-base text-[#2E2E2E]">
+                <Link href="/blog"> Blogs </Link>
+              </li>
+              <li className="text-base text-[#2E2E2E]">
                 <Link href="/find-doctor"> Our Doctors </Link>
               </li>
               {/* <li className="text-base text-[#2E2E2E]">
                 <Link href="/profile"> Profile </Link>
               </li> */}
-              <li className="text-base text-[#2E2E2E]">
-                <Link href="/blog"> Blog </Link>
-              </li>
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/faq"> FAQ </Link>
               </li>

@@ -67,6 +67,7 @@ const Header = () => {
     { label: "Nursing & Medical College", route: "/more/nursing-medical-college" },
     { label: "Blood Bank", route: "/more/blood-bank" },
     { label: "Physiotherapist", route: "/more/physiotherapist" },
+    { label: "Radiologist", route: "/more/radiologist" },
     { label: "Hospital", route: "/more/hospital" },
     { label: "Vatenary", route: "/more/vatenary" },
     { label: "Nurse", route: "/more/nurse" },
@@ -132,11 +133,6 @@ const Header = () => {
                     </ul>
                   </div>
                 )}
-              </li>
-              <li className="text-[#094B89] text-base font-bold">
-                <Link href="/blog" onClick={closeAllMenus}>
-                  Blog
-                </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">
                 <Link href="/more/blood-donor" onClick={closeAllMenus}>
