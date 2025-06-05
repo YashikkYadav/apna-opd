@@ -12,6 +12,7 @@ const NursingCollege = ({ serviceData }) => {
   const navigate = useRouter();
 
   useEffect(() => {
+    console.log(currentItems);
     if (serviceData) {
       setNursingCollegeList(serviceData || []);
       setFilteredList(serviceData || []);
@@ -71,7 +72,7 @@ const NursingCollege = ({ serviceData }) => {
               </h2>
               <button
                 onClick={() =>
-                  navigate.push(`/more/nursingCollege/${college._id}/details`)
+                  navigate.push(`/more/nursing_medical_college/${college._id}/details`)
                 }
                 className="bg-[#D9534F] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
