@@ -27,4 +27,8 @@ export class AxiosProfile {
       data: imageObject,
     });
   }
+
+  Appointments(doctorId) {
+    return this.apiClient.get(`/doctor/${doctorId}/appointment`);
+  }
 }

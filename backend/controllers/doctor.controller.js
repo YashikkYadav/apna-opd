@@ -9,12 +9,10 @@ const registerDoctor = async (req, res) => {
       return res.status(doctor.statusCode).send(doctor.error);
     }
 
-    res
-      .status(doctor.statusCode)
-      .json({
-        doctor: doctor.doctor,
-        paymentUrl: doctor.paymentLink,
-      });
+    res.status(doctor.statusCode).json({
+      doctor: doctor.doctor,
+      paymentUrl: doctor.paymentLink,
+    });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }
@@ -73,7 +71,11 @@ const getDoctorList = async (req, res) => {
     const location = req.query.location || null;
     const speciality = req.query.speciality || null;
 
-    const doctorList = await doctorService.getDoctorList(page,location,speciality);
+    const doctorList = await doctorService.getDoctorList(
+      page,
+      location,
+      speciality
+    );
 
     if (doctorList?.error) {
       return res.status(doctorList.statusCode).send(doctorList.error);
@@ -87,21 +89,43 @@ const getDoctorList = async (req, res) => {
 
 const ratingDoctor = async (req, res) => {
   try {
-    const { doctorId ,rating } = req.body;
+    const { doctorId, rating } = req.body;
 
     const doctor = await doctorService.ratingDoctor(doctorId, rating);
     if (doctor?.error) {
       return res.status(doctor.statusCode).send(doctor.error);
     }
 
-    res.status(doctor.statusCode).json({ message: "Rating submitted successfully" });
+    res
+      .status(doctor.statusCode)
+      .json({ message: "Rating submitted successfully" });
   } catch (error) {
     res.status(500).send(`Error ${error}`);
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+
+    const appointments = await doctorService.getAppointments(doctorId);
+
+    if (appointments.error) {
+      res.status(appointments.statusCode).json({ error: appointments.error });
+    }
+
+    res
+      .status(appointments.statusCode)
+      .json({ appointments: appointments.appointments });
+  } catch (error) {
+    console.log(`Error in doctor appointment Controller ${error}`);
+    return res.status(500).json({ error });
+  }
+};
+
 module.exports = {
   registerDoctor,
+  getAppointments,
   loginDoctor,
   getDoctor,
   deleteDoctor,
