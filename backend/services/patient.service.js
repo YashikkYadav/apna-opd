@@ -398,7 +398,21 @@ const getAppointments = async (patientId) => {
   }
 };
 
+const deleteAppointment = async (appointmentId) => {
+  try {
+    const appointment = await Appointment.findByIdAndDelete(appointmentId);
+    if (!appointment) {
+      return { statusCode: 404, error: "Appointment not found" };
+    }
+    return { statusCode: 200, message: "Appointment deleted successfully" };
+  } catch (error) {
+    console.log(`Error in deleting appointment service ${error}`);
+    return { statusCode: 500, error: `Internal server error : ${error}` };
+  }
+};
+
 module.exports = {
+  deleteAppointment,
   getAppointments,
   deletePresciption,
   getDoctors,

@@ -86,19 +86,54 @@
         </template>
 
         <template v-slot:item.created="{ item }">
-          <v-chip
-            :color="
-              item.status === 'Pending' ? 'orange-lighten-2' : 'green-lighten-2'
-            "
-            size="small"
-            label
-          >
+          <v-chip size="small" label>
             {{ formatISODateToLocaleDateTime(item.createdAt) }}
           </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            icon
+            color="red-darken-1"
+            variant="text"
+            @click="deleteAppointment(item._id)"
+          >
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </v-card>
   </v-container>
+
+  <v-dialog v-model="showDeleteDialog" max-width="400">
+    <v-card rounded="lg">
+      <v-card-title class="d-flex justify-space-between align-center">
+        <span class="text-h6 text-red-darken-1">Confirm Deletion</span>
+        <v-btn icon variant="text" @click="showDeleteDialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-card-text class="text-medium-emphasis">
+        Are you sure you want to delete this appointment? This action cannot be
+        undone.
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn
+          color="blue-grey-lighten-2"
+          variant="flat"
+          @click="showDeleteDialog = false"
+          rounded="lg"
+          >Cancel</v-btn
+        >
+        <v-btn
+          color="red-darken-1"
+          variant="flat"
+          @click="confirmDelete"
+          rounded="lg"
+          >Delete</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -107,6 +142,9 @@ import { useUiStore } from "@/store/UiStore";
 import { onMounted, ref } from "vue";
 
 const appointments = ref([]);
+const showDeleteDialog = ref(false); // Renamed from 'show' for clarity
+const appointmentToDelete = ref(null);
+const search = ref(""); // Added search ref for the text field
 
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
@@ -118,6 +156,7 @@ const headers = ref([
   { title: "Time", key: "time", sortable: true },
   { title: "Status", key: "status" },
   { title: "Created At", key: "created", sortable: true },
+  { title: "Actions", value: "actions", sortable: false },
 ]);
 
 onMounted(() => {
@@ -133,6 +172,25 @@ const fetchAppointments = async () => {
     return;
   }
   appointments.value = appointmentsData.appointments;
+};
+
+const deleteAppointment = (id) => {
+  appointmentToDelete.value = id;
+  showDeleteDialog.value = true;
+};
+
+const confirmDelete = async () => {
+  appointments.value = appointments.value.filter(
+    (appointment) => appointment._id !== appointmentToDelete.value
+  );
+  const doctorStore = useProfileStore();
+  const deletion = await doctorStore.deleteAppointment(
+    appointmentToDelete.value
+  );
+  const uiStore = useUiStore();
+  uiStore.openNotificationMessage("Appointment deleted successfully");
+  showDeleteDialog.value = false;
+  appointmentToDelete.value = null;
 };
 
 function formatISODateToLocaleDateTime(isoString) {

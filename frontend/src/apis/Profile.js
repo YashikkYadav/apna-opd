@@ -31,4 +31,8 @@ export class AxiosProfile {
   Appointments(doctorId) {
     return this.apiClient.get(`/doctor/${doctorId}/appointment`);
   }
+
+  DeleteAppointment(doctorId) {
+    return this.apiClient.delete(`/doctor/${doctorId}/appointment`);
+  }
 }
