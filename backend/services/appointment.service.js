@@ -170,12 +170,24 @@ const createAppointment = async (appointmentData, doctorId) => {
       };
     }
 
-    const patient = await Patient.findOne({ phoneNumber });
+    let patient = await Patient.findOne({ phoneNumber });
+    const count = await Patient.countDocuments({});
+
     if (!patient) {
-      return {
-        statusCode: 404,
-        error: "Patient not found",
-      };
+      patient = await Patient.create({
+        uid: "UID" + (count + 1),
+        fullName: "Patient",
+        phoneNumber,
+        email,
+        otp: 1234,
+      });
+
+      const newDoctorPatient = new DoctorPatient({
+        doctorId,
+        patientId: patient._id,
+      });
+
+      await newDoctorPatient.save();
     }
 
     const now = new Date();
