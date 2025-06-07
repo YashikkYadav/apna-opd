@@ -21,6 +21,8 @@ patient.put("/:patientId", patientController.updatePatient);
 
 patient.get("/:patientId/get-doctors", patientController.getDoctors);
 
+patient.get("/:patientId/appointment", patientController.getAppointments);
+
 patient.delete("/:doctorId/:patientId", patientController.deletePatient);
 
 module.exports = patient;

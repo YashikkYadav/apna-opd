@@ -153,7 +153,27 @@ const deletePresciption = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+
+    const appointments = await patientService.getAppointments(patientId);
+
+    if (appointments.error) {
+      res.status(appointments.statusCode).json({ error: appointments.error });
+    }
+
+    res
+      .status(appointments.statusCode)
+      .json({ appointments: appointments.appointments });
+  } catch (error) {
+    console.log(`Error in doctor appointment Controller ${error}`);
+    return res.status(500).json({ error });
+  }
+};
+
 module.exports = {
+  getAppointments,
   deletePresciption,
   getDoctors,
   registerPatient,

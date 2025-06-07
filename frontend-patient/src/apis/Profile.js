@@ -21,4 +21,8 @@ export class AxiosProfile {
   ChatMessages(doctorPatientId) {
     return this.apiClient.get(`/${doctorPatientId}/get-messages`);
   }
+
+  Appointments(doctorId) {
+    return this.apiClient.get(`/patient/${doctorId}/appointment`);
+  }
 }

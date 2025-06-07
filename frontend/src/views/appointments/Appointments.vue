@@ -114,6 +114,7 @@ onMounted(() => {
 const fetchAppointments = async () => {
   const doctorStore = useProfileStore();
   const appointmentsData = await doctorStore.getAppointments();
+  console.log(appointments);
   if (appointmentsData.error) {
     const uiStore = useUiStore();
     uiStore.openNotificationMessage("Error fetching the appointments");
