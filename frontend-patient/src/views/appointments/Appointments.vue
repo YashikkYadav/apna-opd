@@ -1,131 +1,212 @@
 <template>
-    <v-container fluid>
-        <v-row>
-            <!-- Left Side: Calendar -->
-            <v-col cols="8">
-                <v-card elevation="3" class="pa-4">
-                    <v-sheet class="d-flex" height="54" tile>
-                        <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense
-                            hide-details></v-select>
-                        <v-select v-model="weekday" :items="weekdays" class="ma-2" label="Weekdays" item-title="title"
-                            item-value="value" variant="outlined" dense hide-details></v-select>
-                    </v-sheet>
-                    <v-sheet>
-                        <v-calendar ref="calendar" v-model="value" :events="events" :view-mode="type"
-                            :weekdays="weekday"></v-calendar>
-                    </v-sheet>
-                </v-card>
-            </v-col>
+  <v-container fluid>
+    <h1 class="mb-5">Appointments</h1>
+    <v-card class="pa-2 pa-md-4 rounded-xl shadow-xl">
+      <v-card-title
+        class="d-flex flex-column flex-sm-row align-center pe-2 pb-4"
+      >
+        <span
+          class="text-h6 font-weight-medium text-blue-grey-darken-2 mb-2 mb-sm-0"
+        >
+          <v-icon start color="primary">mdi-calendar-check</v-icon>
+          Upcoming Appointments
+        </span>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          density="compact"
+          label="Search (Patient Name, Type, Location, Status)"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          rounded="lg"
+          flat
+          hide-details
+          single-line
+          clearable
+          style="max-width: 400px"
+          class="mt-2 mt-sm-0"
+        ></v-text-field>
+      </v-card-title>
 
-            <!-- Right Side: Today's Schedule -->
-            <v-col cols="4">
-                <v-card elevation="3" class="pa-4">
-                    <v-card-title class="text-h6 font-weight-bold">
-                        Today's Schedule
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" text>+ Add Appointment</v-btn>
-                    </v-card-title>
-                    <v-divider class="my-2"></v-divider>
-                    <v-list>
-                        <v-list-item v-for="(appointment, index) in appointments" :key="index" class="hoverable"
-                            @click="viewDetails(appointment)">
-                            <v-list-item-content>
-                                <v-list-item-title class="font-weight-bold">
-                                    {{ appointment.name }}
-                                </v-list-item-title>
-                                <v-list-item-subtitle>{{ appointment.time }}</v-list-item-subtitle>
-                            </v-list-item-content>
-                            <v-icon color="grey">mdi-chevron-right</v-icon>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+      <v-divider class="mb-1"></v-divider>
+
+      <v-data-table
+        :headers="headers"
+        :items="appointments"
+        :search="search"
+        v-model:page="currentPage"
+        v-model:items-per-page="itemsPerPage"
+        :items-per-page-options="[
+          { value: 5, title: '5' },
+          { value: 10, title: '10' },
+          { value: 15, title: '15' },
+          { value: -1, title: 'All' },
+        ]"
+        hover
+        density="comfortable"
+        class="elevation-0 rounded-lg"
+        loading-text="Fetching appointments data... Please wait."
+        no-data-text="No appointments found matching your criteria."
+        item-value="_id"
+      >
+        <template v-slot:item.patientName="{ item }">
+          {{ item?.doctorId?.name }}
+        </template>
+
+        <template v-slot:item.type="{ item }">
+          <v-chip
+            :color="
+              item.type === 'Regular' ? 'blue-lighten-2' : 'purple-lighten-2'
+            "
+            size="small"
+            label
+          >
+            {{ item.type }}
+          </v-chip>
+        </template>
+
+        <template v-slot:item.location="{ item }">
+          {{ item.location }}
+        </template>
+
+        <template v-slot:item.time="{ item }">
+          {{ item.time }}
+        </template>
+
+        <template v-slot:item.status="{ item }">
+          <v-chip
+            :color="
+              item.status === 'Pending' ? 'orange-lighten-2' : 'green-lighten-2'
+            "
+            size="small"
+            label
+          >
+            {{ item.status }}
+          </v-chip>
+        </template>
+
+        <template v-slot:item.created="{ item }">
+          <v-chip size="small" label>
+            {{ formatISODateToLocaleDateTime(item.createdAt) }}
+          </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            icon
+            color="red-darken-1"
+            variant="text"
+            @click="deleteAppointment(item._id)"
+          >
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
+
+  <v-dialog v-model="showDeleteDialog" max-width="400">
+    <v-card rounded="lg">
+      <v-card-title class="d-flex justify-space-between align-center">
+        <span class="text-h6 text-red-darken-1">Confirm Deletion</span>
+        <v-btn icon variant="text" @click="showDeleteDialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-card-text class="text-medium-emphasis">
+        Are you sure you want to delete this appointment? This action cannot be
+        undone.
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn
+          color="blue-grey-lighten-2"
+          variant="flat"
+          @click="showDeleteDialog = false"
+          rounded="lg"
+          >Cancel</v-btn
+        >
+        <v-btn
+          color="red-darken-1"
+          variant="flat"
+          @click="confirmDelete"
+          rounded="lg"
+          >Delete</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
-<script>
-import { useDate } from "vuetify";
+<script setup>
+import { useProfileStore } from "@/store/ProfileStore";
+import { useUiStore } from "@/store/UiStore";
+import { onMounted, ref } from "vue";
 
-export default {
-    name: "Appointments",
-    data: () => ({
-        type: "week",
-        types: ["month", "week", "day"], // View mode options for the calendar
-        weekday: [0, 1, 2, 3, 4, 5, 6], // Default weekday setup
-        weekdays: [
-            { title: "Sun - Sat", value: [0, 1, 2, 3, 4, 5, 6] },
-            { title: "Mon - Sun", value: [1, 2, 3, 4, 5, 6, 0] },
-            { title: "Mon - Fri", value: [1, 2, 3, 4, 5] },
-            { title: "Mon, Wed, Fri", value: [1, 3, 5] },
-        ],
-        value: [new Date()], // Current date focus
-        events: [
-            {
-                title: "Yash Makwana",
-                start: new Date("Mon Feb 17 2025 10:00:00 GMT+0530 (India Standard Time)"),
-                end: new Date("Mon Feb 17 2025 12:00:00 GMT+0530 (India Standard Time)"),
-                color: "blue",
-                allDay: false,
-            },
-            {
-                title: "Irfan",
-                start: new Date("Mon Feb 16 2025 13:00:00 GMT+0530 (India Standard Time)"),
-                end: new Date("Mon Feb 16 2025 18:00:00 GMT+0530 (India Standard Time)"),
-                color: "blue",
-                allDay: false,
-            }
-        ], // Placeholder for events on the calendar
-        appointments: [
-            { name: "Prakhar Verma", time: "10:00 AM", details: "Routine Checkup" },
-            { name: "Richa Gupta", time: "1:00 PM", details: "Consultation" },
-            { name: "Kunal Chopra", time: "11:00 AM", details: "Follow-Up" },
-            { name: "Anmol Dixit", time: "2:00 PM", details: "Surgery Discussion" },
-        ],
-        colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-        titles: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
-    }),
-    mounted() {
-        const adapter = useDate();
-        // this.getEvents({
-        //   start: adapter.startOfDay(adapter.startOfMonth(new Date())),
-        //   end: adapter.endOfDay(adapter.endOfMonth(new Date())),
-        // });
-    },
-    methods: {
-        // Generate random events for the calendar
-        getEvents({ start, end }) {
-            const events = [];
-            const min = start;
-            const max = end;
-            const days = (max.getTime() - min.getTime()) / 86400000;
-            const eventCount = this.rnd(days, days + 20);
+const appointments = ref([]);
+const showDeleteDialog = ref(false); // Renamed from 'show' for clarity
+const appointmentToDelete = ref(null);
+const search = ref(""); // Added search ref for the text field
 
-            for (let i = 0; i < eventCount; i++) {
-                const allDay = this.rnd(0, 3) === 0;
-                const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-                const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-                const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-                const second = new Date(first.getTime() + secondTimestamp);
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
-                events.push({
-                    title: this.titles[this.rnd(0, this.titles.length - 1)],
-                    start: first,
-                    end: second,
-                    color: this.colors[this.rnd(0, this.colors.length - 1)],
-                    allDay: !allDay,
-                });
-            }
+const headers = ref([
+  { title: "Patient Name", key: "patientName", sortable: true },
+  { title: "Type", key: "type", sortable: true },
+  { title: "Location", key: "location", sortable: true },
+  { title: "Time", key: "time", sortable: true },
+  { title: "Status", key: "status" },
+  { title: "Created At", key: "created", sortable: true },
+  { title: "Actions", value: "actions", sortable: false },
+]);
 
-            this.events = events;
-            console.log("sdasasdas", this.events, events)
-        },
-        rnd(a, b) {
-            return Math.floor((b - a + 1) * Math.random()) + a;
-        },
-        viewDetails(appointment) {
-            alert('Appointment Details:\n${appointment.name} - ${appointment.details}');
-        },
-    },
+onMounted(() => {
+  fetchAppointments();
+});
+
+const fetchAppointments = async () => {
+  const doctorStore = useProfileStore();
+  const appointmentsData = await doctorStore.getAppointments();
+  if (appointmentsData.error) {
+    const uiStore = useUiStore();
+    uiStore.openNotificationMessage("Error fetching the appointments");
+    return;
+  }
+  appointments.value = appointmentsData.appointments;
 };
+
+const deleteAppointment = (id) => {
+  appointmentToDelete.value = id;
+  showDeleteDialog.value = true;
+};
+
+const confirmDelete = async () => {
+  appointments.value = appointments.value.filter(
+    (appointment) => appointment._id !== appointmentToDelete.value
+  );
+  const doctorStore = useProfileStore();
+  const deletion = await doctorStore.deleteAppointment(
+    appointmentToDelete.value
+  );
+  const uiStore = useUiStore();
+  uiStore.openNotificationMessage("Appointment deleted successfully");
+  showDeleteDialog.value = false;
+  appointmentToDelete.value = null;
+};
+
+function formatISODateToLocaleDateTime(isoString) {
+  const date = new Date(isoString);
+  const dateOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const timeOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+  const formattedDate = date.toLocaleDateString(undefined, dateOptions);
+  const formattedTime = date.toLocaleTimeString(undefined, timeOptions);
+  return `${formattedDate}, ${formattedTime}`;
+}
 </script>

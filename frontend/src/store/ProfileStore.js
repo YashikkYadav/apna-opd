@@ -36,6 +36,12 @@ export const useProfileStore = defineStore("profileStore", {
       );
       return deletedRes;
     },
+    async getAppointments() {
+      const profileService = new AxiosProfile();
+      const doctorId = this.doctorId;
+      const appointments = await profileService.Appointments(doctorId);
+      return appointments;
+    },
     reset() {
       this.$reset();
     },

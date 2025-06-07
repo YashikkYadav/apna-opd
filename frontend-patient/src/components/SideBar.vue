@@ -40,6 +40,17 @@
           ></v-list-item>
         </router-link>
         <router-link
+          :to="`/appointment`"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-file-document"
+            title="Appointment"
+            value="appointment"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
           to="/messages"
           style="text-decoration: none; color: inherit"
         >

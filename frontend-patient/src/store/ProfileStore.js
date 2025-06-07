@@ -27,5 +27,16 @@ export const useProfileStore = defineStore("profileStore", {
       const chatMessageData = await ProfileService.ChatMessages(id);
       return chatMessageData;
     },
+    async getAppointments() {
+      const profileService = new AxiosProfile();
+      const doctorId = this.doctorId;
+      const appointments = await profileService.Appointments(doctorId);
+      return appointments;
+    },
+    async deleteAppointment(appointmentId) {
+      const profileService = new AxiosProfile();
+      const appointments = await profileService.DeleteAppointment(appointmentId);
+      return appointments;
+    },
   },
 });

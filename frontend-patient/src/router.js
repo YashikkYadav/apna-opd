@@ -6,6 +6,7 @@ import Messages from './views/messages/Messages.vue';
 import Login from './views/login/Login.vue';
 import ViewHistory from './views/viewHistory/ViewHistory.vue';
 import Consult from './views/consult/consult.vue';
+import Appointments from './views/appointments/Appointments.vue';
 
 const routes = [
   {
@@ -23,7 +24,11 @@ const routes = [
     name:'View History',
     component: ViewHistory
   },
-
+  { 
+    path:'/appointment',
+    name:'Appointment',
+    component: Appointments 
+  },
   {
     path: '/messages',
     name:'Messages',

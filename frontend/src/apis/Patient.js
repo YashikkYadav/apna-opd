@@ -36,4 +36,8 @@ export class AxiosPatient {
       }
     );
   }
+
+  GetAppointments(doctorId) {
+    return this.apiClient.get(`/patient/${patientId}/appointmet`);
+  }
 }

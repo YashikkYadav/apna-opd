@@ -13,4 +13,5 @@ export class AxiosDoctor {
   Register(payload) {
     return this.apiClient.post(`/doctor`, payload);
   }
+
 }
