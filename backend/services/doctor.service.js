@@ -324,13 +324,15 @@ const ratingDoctor = async (doctorId, rating) => {
 
 const getAppointments = async (doctorId) => {
   try {
-    const appointments = await Appointment.find({ doctorId });
+    const appointments = await Appointment.find({ doctorId }).populate(
+      "patientId"
+    );
 
     if (!appointments) {
       return { statusCode: 203, error: "No appointments available" };
     }
 
-    return { statusCode: 200, appointments: appointments};
+    return { statusCode: 200, appointments: appointments };
   } catch (error) {
     console.log(`Error in doctor appointment service ${error}`);
     return { statusCode: 500, error: `Internal server error : ${error}` };
