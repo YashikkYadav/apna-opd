@@ -2,6 +2,7 @@
 import { Form, Input, message, Select, Upload } from "antd";
 import { UploadOutlined } from '@ant-design/icons';
 import axiosInstance from "@/app/config/axios";
+import { toast } from "react-toastify";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -26,7 +27,7 @@ const CareerForm = () => {
       });
 
       if (res?.careerLead) {
-        message.success("Your application has been submitted successfully. We will get back to you shortly.");
+        toast.success("Your application has been submitted successfully!");
         form.resetFields();
       } else {
         message.error(res?.data?.message || "Something went wrong.");

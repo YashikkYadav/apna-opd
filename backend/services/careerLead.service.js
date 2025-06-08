@@ -3,7 +3,7 @@ const config = require("../config/config");
 
 const createCareerLead = async (careerLeadData) => {
   try {
-    const { name, email, phone, description, resumePath } = careerLeadData;
+    const { name, email, phone, description, resumePath, role } = careerLeadData;
 
     const resumeUrl = config.BASE_URL + "/" + resumePath;
 
@@ -19,6 +19,7 @@ const createCareerLead = async (careerLeadData) => {
       name,
       email,
       phone,
+      role,
       resumeUrl,
       description,
     });

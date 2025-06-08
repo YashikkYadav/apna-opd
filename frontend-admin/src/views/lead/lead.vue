@@ -166,6 +166,7 @@ const headers = computed(() => {
       { title: "Name", key: "name", sortable: true, align: "start" },
       { title: "Email", key: "email", sortable: false, align: "start" },
       { title: "Phone", key: "phone", sortable: false, align: "start" },
+      { title: "Role", key: "role", sortable: false, align: "start" },
       {
         title: "Description",
         key: "description",
