@@ -5,4 +5,6 @@ const careerLead = express.Router({ mergeParams: true });
 
 careerLead.post("/", careerLeadController.createCareerLead);
 
+careerLead.get("/", careerLeadController.getCareerLeads);
+
 module.exports = careerLead;

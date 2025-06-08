@@ -11,5 +11,10 @@ export const useHealthServeStore = defineStore("healthServeStore", {
       const data = await HealthServeService.HealthServe(this.adminId, type);
       return data;
     },
+    async getLead(type) {
+      const HealthServeService = new AxiosHealthServe();
+      const data = await HealthServeService.Lead(this.adminId, type);
+      return data;
+    },
   },
 });

@@ -23,6 +23,29 @@ const createContactLead = async (req, res) => {
   }
 }
 
+const getContactLeads = async (req, res) => {
+  try {
+
+    const contactLeads = await contactLeadService.getContactLeads();
+    if (contactLeads?.error) {
+      return res
+        .status(contactLeads.statusCode)
+        .send(contactLeads.error);
+    }
+
+    res
+      .status(contactLeads.statusCode)
+      .json({
+        contactLeads: contactLeads.contactLeads,
+      });
+  } catch(error) {
+    res
+      .status(500)
+      .send(`Error: ${error}`);
+  }
+}
+
 module.exports = {
   createContactLead,
+  getContactLeads
 };

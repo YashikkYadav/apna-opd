@@ -39,6 +39,28 @@
           ></v-list-item>
         </router-link>
 
+        <router-link
+          to="/career"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-briefcase-eye-outline"
+            title="Career"
+            value="career"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/contact"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-phone"
+            title="Contact"
+            value="contact"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
         <router-link to="/gym" style="text-decoration: none; color: inherit">
           <v-list-item
             prepend-icon="mdi-dumbbell"

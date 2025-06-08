@@ -1,23 +1,14 @@
-const CareerLead = require('../models/careerLead');
+const CareerLead = require("../models/careerLead");
 
-const createCareerLead = async ( careerLeadData ) => {
+const createCareerLead = async (careerLeadData) => {
   try {
-    const {
-      name,
-      email,
-      phone,
-      description,
-    } = careerLeadData;
+    const { name, email, phone, description } = careerLeadData;
 
-    if (
-      !name
-      || !email
-      || !phone
-      || !description
-    ) {
+    if (!name || !email || !phone || !description) {
       return {
         statusCode: 400,
-        error: 'Please enter all the required fields (name, email, phone number and description)',
+        error:
+          "Please enter all the required fields (name, email, phone number and description)",
       };
     }
 
@@ -39,8 +30,32 @@ const createCareerLead = async ( careerLeadData ) => {
       error: error,
     };
   }
-}
+};
+
+const careerLeads = async () => {
+  try {
+    const careerLeads = await CareerLead.find({});
+
+    if (!careerLeads || careerLeads.length === 0) {
+      return {
+        statusCode: 203,
+        error: "No career leads found",
+      };
+    }
+
+    return {
+      statusCode: 200,
+      careerLeads,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+};
 
 module.exports = {
+  getCareerLeads: careerLeads,
   createCareerLead,
 };
