@@ -72,10 +72,12 @@ const Header = () => {
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Radiologist", route: "/more/radiologist" },
     { label: "Hospital", route: "/more/hospital" },
-    // Home Service Section
-    { label: "Home Service", type: "heading" }, // New heading for Home Service
-    { label: "Vatenary", route: "/more/vatenary" },
+    { label: "Home Service", type: "heading" }, 
+    { label: "divider", type: "divider" },
+    { label: "Veterinary", route: "/more/vatenary" },
+    { label: "divider", type: "divider" },
     { label: "Nurse", route: "/more/nurse" },
+    { label: "divider", type: "divider" },
     { label: "Laboratory", route: "/more/laboratory" },
   ];
 
