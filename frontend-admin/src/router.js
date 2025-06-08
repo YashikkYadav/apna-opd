@@ -116,6 +116,14 @@ const routes = [
     },
   },
   {
+    path: "/laboratory",
+    name: "Laboratory",
+    component: HealthServe,
+    props: {
+      type: "laboratory",
+    },
+  },
+  {
     path: "/user",
     name: "User",
     component: User,

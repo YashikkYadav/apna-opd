@@ -132,7 +132,21 @@
             class="custom-list-item"
           ></v-list-item>
         </router-link>
-        <router-link to="/nursing-staff" style="text-decoration: none; color: inherit">
+        <router-link
+          to="/laboratory"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-microscope"
+            title="Laboratory"
+            value="Laboratory"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
+        <router-link
+          to="/nursing-staff"
+          style="text-decoration: none; color: inherit"
+        >
           <v-list-item
             prepend-icon="mdi-mother-nurse"
             title="Nursing Staff"
@@ -140,7 +154,10 @@
             class="custom-list-item"
           ></v-list-item>
         </router-link>
-        <router-link to="/veterinary" style="text-decoration: none; color: inherit">
+        <router-link
+          to="/veterinary"
+          style="text-decoration: none; color: inherit"
+        >
           <v-list-item
             prepend-icon="mdi-dog"
             title="Veterinary"
