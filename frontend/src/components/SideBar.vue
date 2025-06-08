@@ -1,36 +1,85 @@
 <template>
   <div class="sidebar">
-    <v-navigation-drawer expand-on-hover rail @mouseover="onHover(true)" @mouseleave="onHover(false)">
+    <v-navigation-drawer
+      expand-on-hover
+      rail
+      @mouseover="onHover(true)"
+      @mouseleave="onHover(false)"
+    >
       <v-list>
         <v-list-item class="logo">
           <v-list-item-content>
-            <v-img src="../assets/apna_opd_logo.svg" alt="Logo" style="height: auto;" class="ml-0 logo-image my-5"></v-img>
+            <v-img
+              src="../assets/apna_opd_logo.svg"
+              alt="Logo"
+              style="height: auto"
+              class="ml-0 logo-image my-5"
+            ></v-img>
           </v-list-item-content>
         </v-list-item>
 
-        <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-view-dashboard" title="Dashboard" value="dashboard"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/dashboard"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-view-dashboard"
+            title="Dashboard"
+            value="dashboard"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
-        <router-link to="/invoice" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-file-document" title="Invoice" value="invoice"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/appointments"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-note-check-outline"
+            title="Appointments"
+            value="appointments"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
+        <router-link
+          to="/invoice"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-file-document"
+            title="Invoice"
+            value="invoice"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
         <!-- <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
           <v-list-item prepend-icon="mdi-account-group" title="Patient Queue" value="patientQueue"
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <router-link to="/create-rx" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-prescription" title="Prescription" value="createRx"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/create-rx"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-prescription"
+            title="Prescription"
+            value="createRx"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
-        <router-link to="/all-patients" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-account-multiple" title="All Patients" value="allPatients"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/all-patients"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-account-multiple"
+            title="All Patients"
+            value="allPatients"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
         <!-- <router-link to="/appointments" style="text-decoration: none; color: inherit;">
@@ -41,9 +90,16 @@
         <!-- <v-list-item prepend-icon="mdi-hospital-building" title="IPD" value="ipd"
           class="custom-list-item"></v-list-item> -->
 
-        <router-link to="/messages" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-message" title="Messages" value="messages"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/messages"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-message"
+            title="Messages"
+            value="messages"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
         <!-- <router-link to="/social" style="text-decoration: none; color: inherit;">
@@ -90,31 +146,39 @@ export default {
     return {
       drawer: true,
       rail: false,
-    }
+    };
   },
   computed: {
     activeRoute() {
       return this.$route.path;
-    }
+    },
   },
   methods: {
     onHover(state) {
       if (!state) {
-        const items = document.querySelector(".sidebar-drawer .v-list-group__items");
-        const moreItem = document.querySelector(".more-btn-sidebar")
+        const items = document.querySelector(
+          ".sidebar-drawer .v-list-group__items"
+        );
+        const moreItem = document.querySelector(".more-btn-sidebar");
 
         items.style.display = "none";
         moreItem.style.display = "none";
       } else {
-        const items = document.querySelector(".sidebar-drawer .v-list-group__items");
-        const moreItem = document.querySelector(".more-btn-sidebar")
-        if (this.activeRoute === "/template-library" || this.activeRoute === "/medicine-library" || this.activeRoute === "/dropdown-library") {
+        const items = document.querySelector(
+          ".sidebar-drawer .v-list-group__items"
+        );
+        const moreItem = document.querySelector(".more-btn-sidebar");
+        if (
+          this.activeRoute === "/template-library" ||
+          this.activeRoute === "/medicine-library" ||
+          this.activeRoute === "/dropdown-library"
+        ) {
           items.style.display = "block";
         }
 
         moreItem.style.display = "block";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

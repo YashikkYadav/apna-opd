@@ -53,9 +53,7 @@ const Register = () => {
     { value: "blood_donor", label: "Blood Donor" },
     { value: "nursing_staff", label: "Nursing Staff" },
     { value: "radiologist", label: "Radiologist" },
-    { value: "ayurvedic", label: "Ayurvedic" },
-    { value: "homoeopathic", label: "Homoeopathic" },
-    { value: "unani", label: "Unani" },
+    { value: "laboratory", label: "Laboratory" },
   ];
 
   const subscriptionTypes = [
@@ -254,7 +252,9 @@ const Register = () => {
     }
     if (
       (formData.registrationFor === "nursing_staff" ||
-        formData.registrationFor === "vatenary") &&
+        formData.registrationFor === "vatenary" ||
+        formData.registrationFor === "physiotherapist" ||
+        formData.registrationFor === "laboratory") &&
       !formData.homeService
     ) {
       toast.error("Please specify if you provide home service!");
@@ -658,8 +658,10 @@ const Register = () => {
             </div>
           )}
 
-          {(formData.registrationFor === "vatenary" ||
-            formData.registrationFor === "nursing_staff") && (
+          {(formData.registrationFor === "physiotherapist" ||
+            formData.registrationFor === "vatenary" ||
+            formData.registrationFor === "nursing_staff" ||
+            formData.registrationFor === "laboratory") && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Home Service / Door Service

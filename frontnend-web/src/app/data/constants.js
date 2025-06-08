@@ -18,6 +18,9 @@ export const specialties = [
   "Rheumatologist",
   "Allergist",
   "Nurse",
+  "Ayurvedic",
+  "Homoeopathic",
+  "Unani",
 ];
 
 // Update getLocations to be async and use the locationService
@@ -51,6 +54,7 @@ export const serviceTypes = {
   BLOOD_DONOR: "blood-donor",
   NURSE: "nurse",
   RADIOLOGIST: "radiologist",
+  LABORATORY: "laboratory",
 };
 
 // Sample data structure for different services
@@ -426,13 +430,13 @@ export const getServiceData = async (serviceType, id = null) => {
       );
       return response?.list?.healthServeProfileList || [];
     }
-    
+
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile`
     );
     return response?.healthServeProfile || null;
   } catch (error) {
-    console.error('Error fetching service data:', error);
+    console.error("Error fetching service data:", error);
     return [];
   }
 };

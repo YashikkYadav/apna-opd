@@ -9,4 +9,8 @@ export class AxiosHealthServe {
   HealthServe(adminId, type) {
     return this.apiClient.get(`/admin/${adminId}/${type}/healthServe`);
   }
+
+  Lead(adminId, type) {
+    return this.apiClient.get(`/${type}-lead`);
+  }
 }

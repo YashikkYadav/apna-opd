@@ -7,6 +7,7 @@ const {
 } = require("../utils/helpers");
 const DoctorProfile = require("../models/doctorProfile");
 const { createPaymentLinkForEntity } = require("./payment.service");
+const Appointment = require("../models/appointment");
 
 const registerDoctor = async (doctorData) => {
   console.log(doctorData);
@@ -321,7 +322,25 @@ const ratingDoctor = async (doctorId, rating) => {
   }
 };
 
+const getAppointments = async (doctorId) => {
+  try {
+    const appointments = await Appointment.find({ doctorId }).populate(
+      "patientId"
+    );
+
+    if (!appointments) {
+      return { statusCode: 203, error: "No appointments available" };
+    }
+
+    return { statusCode: 200, appointments: appointments };
+  } catch (error) {
+    console.log(`Error in doctor appointment service ${error}`);
+    return { statusCode: 500, error: `Internal server error : ${error}` };
+  }
+};
+
 module.exports = {
+  getAppointments,
   registerDoctor,
   loginDoctor,
   getDoctor,

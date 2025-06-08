@@ -4,6 +4,7 @@ const { generatePatientUid, getAccessToken } = require("../utils/helpers");
 const { validatePatient } = require("../validations/patient.validation");
 const { sendTemplateMessage } = require("../utils/whatsapp");
 const FileUploader = require("../models/fileUploader");
+const Appointment = require("../models/appointment");
 
 const registerPatient = async (patientData, doctorId) => {
   try {
@@ -139,7 +140,6 @@ const validateOTP = async (phoneNumber, otp) => {
       };
     }
     const patient = await Patient.findOne({ phoneNumber });
-    console.log(patient);
 
     if (!patient) {
       return {
@@ -381,7 +381,39 @@ const deletePresciption = async (patientId, record) => {
   }
 };
 
+const getAppointments = async (patientId) => {
+  try {
+    const appointments = await Appointment.find({ patientId }).populate(
+      "doctorId"
+    );
+
+    if (!appointments) {
+      return { statusCode: 203, error: "No appointments available" };
+    }
+
+    return { statusCode: 200, appointments: appointments };
+  } catch (error) {
+    console.log(`Error in doctor appointment service ${error}`);
+    return { statusCode: 500, error: `Internal server error : ${error}` };
+  }
+};
+
+const deleteAppointment = async (appointmentId) => {
+  try {
+    const appointment = await Appointment.findByIdAndDelete(appointmentId);
+    if (!appointment) {
+      return { statusCode: 404, error: "Appointment not found" };
+    }
+    return { statusCode: 200, message: "Appointment deleted successfully" };
+  } catch (error) {
+    console.log(`Error in deleting appointment service ${error}`);
+    return { statusCode: 500, error: `Internal server error : ${error}` };
+  }
+};
+
 module.exports = {
+  deleteAppointment,
+  getAppointments,
   deletePresciption,
   getDoctors,
   registerPatient,

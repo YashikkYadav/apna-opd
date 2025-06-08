@@ -14,7 +14,7 @@ const Header = () => {
   const toggleMobileNav = () => {
     setIsMobileNavOpen((prev) => !prev);
     if (!isMobileNavOpen) {
-        setIsFindDropdownOpen(false);
+      setIsFindDropdownOpen(false);
     }
   };
 
@@ -64,13 +64,19 @@ const Header = () => {
     { label: "Commercial Meditation", route: "/more/commercial-meditation" },
     { label: "Nasha Mukti Kendra", route: "/more/nasha-mukti-kendra" },
     { label: "Medical Store", route: "/more/medical-store" },
-    { label: "Nursing & Medical College", route: "/more/nursing-medical-college" },
+    {
+      label: "Nursing & Medical College",
+      route: "/more/nursing-medical-college",
+    },
     { label: "Blood Bank", route: "/more/blood-bank" },
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Radiologist", route: "/more/radiologist" },
     { label: "Hospital", route: "/more/hospital" },
+    // Home Service Section
+    { label: "Home Service", type: "heading" }, // New heading for Home Service
     { label: "Vatenary", route: "/more/vatenary" },
     { label: "Nurse", route: "/more/nurse" },
+    { label: "Laboratory", route: "/more/laboratory" },
   ];
 
   return (
@@ -95,7 +101,8 @@ const Header = () => {
           </div>
           <div
             ref={menuRef}
-            className={`${isMobileNavOpen ? "block" : "hidden"
+            className={`${
+              isMobileNavOpen ? "block" : "hidden"
             } lg:block absolute lg:relative top-[80px] lg:top-auto right-4 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[250px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
             <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px] mb-0">
@@ -109,25 +116,48 @@ const Header = () => {
                   className="cursor-pointer hover:border-none hover:m-0 text-[#094B89] text-base font-bold bg-transparent flex items-center"
                   onClick={toggleFindDropdown}
                 >
-                  Find <CaretDownOutlined className={`pl-1 transition-transform duration-200 ${isFindDropdownOpen ? "rotate-180" : ""}`}/>
+                  Find{" "}
+                  <CaretDownOutlined
+                    className={`pl-1 transition-transform duration-200 ${
+                      isFindDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </a>
                 {isFindDropdownOpen && (
-                  <div 
+                  <div
                     className="cursor-pointer absolute top-[38px] left-[-60px] md:left-[-80px] z-[9999999] h-[300px] w-[200px] rounded-md shadow-lg bg-white p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <ul className="flex flex-col gap-1">
                       {menuItems?.map((item, index) => (
-                        <div key={item.route}>
-                          <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1 text-sm">
-                            <span
-                              className="w-full block text-left hover:text-white hover:border-none"
-                              onClick={handleNavigation(item.route)}
-                            >
+                        <div key={index}>
+                          {" "}
+                          {/* Using index as key for simplicity here, but a unique ID is better in production */}
+                          {item.type === "divider" ? (
+                            <hr className="my-1 border-t border-gray-200" />
+                          ) : item.type === "heading" ? (
+                            <li className="py-1 px-1 text-sm font-semibold text-gray-700">
                               {item.label}
-                            </span>
-                          </li>
-                          {index < menuItems?.length - 1 && <hr className="my-1"/>}
+                            </li>
+                          ) : (
+                            <li className="hover:bg-[#3DB8F5] hover:text-white rounded-md p-1 text-sm">
+                              <span
+                                className="w-full block text-left hover:text-white hover:border-none"
+                                onClick={handleNavigation(item.route)}
+                              >
+                                {item.label}
+                              </span>
+                            </li>
+                          )}
+                          {/* No divider after actual menu items as they are now conditionally rendered above */}
+                          {item.type !== "divider" &&
+                            item.type !== "heading" &&
+                            index <
+                              menuItems.filter(
+                                (i) =>
+                                  i.type !== "divider" && i.type !== "heading"
+                              ).length -
+                                1 && <hr className="my-1" />}
                         </div>
                       ))}
                     </ul>
@@ -160,13 +190,14 @@ const Header = () => {
                 </Link>
               </li>
               <li className="block lg:hidden mt-2">
-                <Link href="/find-doctor" 
-                   onClick={(e) => {
-                     e.preventDefault();
-                     closeAllMenus(); 
-                     router.push("/find-doctor");
-                   }}
-                   className="block w-full bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold text-center"
+                <Link
+                  href="/find-doctor"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    closeAllMenus();
+                    router.push("/find-doctor");
+                  }}
+                  className="block w-full bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold text-center"
                 >
                   Find now
                 </Link>
@@ -174,10 +205,11 @@ const Header = () => {
             </ul>
           </div>
 
-          <Link href="/find-doctor" 
+          <Link
+            href="/find-doctor"
             className="bg-[#3DB8F5] px-[31px] py-[10px] rounded-[8px] text-base text-white font-bold hidden lg:block"
-            onClick={(e) => { 
-              if(isFindDropdownOpen) setIsFindDropdownOpen(false);
+            onClick={(e) => {
+              if (isFindDropdownOpen) setIsFindDropdownOpen(false);
             }}
           >
             Find now

@@ -131,7 +131,7 @@ const getDoctors = async (req, res) => {
     if (doctors?.error) {
       return res.status(doctors.statusCode).send(doctors.error);
     }
-
+    console.log(doctors);
     res.status(doctors.statusCode).send({ doctorData: doctors.doctorData });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
@@ -153,7 +153,44 @@ const deletePresciption = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+
+    const appointments = await patientService.getAppointments(patientId);
+
+    if (appointments.error) {
+      res.status(appointments.statusCode).json({ error: appointments.error });
+    }
+
+    res
+      .status(appointments.statusCode)
+      .json({ appointments: appointments.appointments });
+  } catch (error) {
+    console.log(`Error in doctor appointment Controller ${error}`);
+    return res.status(500).json({ error });
+  }
+};
+
+const deleteAppointment = async (req, res) => {
+  try {
+    const {  appointmentId } = req.params;
+
+    const response = await patientService.deleteAppointment(
+      appointmentId
+    );
+    if (response?.error) {
+      return res.status(response.statusCode).send(response.error);
+    }
+    res.status(response.statusCode).send({ data: response.data });
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+};
+
 module.exports = {
+  getAppointments,
+  deleteAppointment,
   deletePresciption,
   getDoctors,
   registerPatient,

@@ -1,8 +1,8 @@
-const ContactLead = require("../models/contactLead");
+const CareerLead = require("../models/careerLead");
 
-const createContactLead = async (contactLeadData) => {
+const createCareerLead = async (careerLeadData) => {
   try {
-    const { name, email, phone, description } = contactLeadData;
+    const { name, email, phone, description } = careerLeadData;
 
     if (!name || !email || !phone || !description) {
       return {
@@ -12,17 +12,17 @@ const createContactLead = async (contactLeadData) => {
       };
     }
 
-    const newContactLead = new ContactLead({
+    const newCareerLead = new CareerLead({
       name,
       email,
       phone,
       description,
     });
-    await newContactLead.save();
+    await newCareerLead.save();
 
     return {
       statusCode: 201,
-      contactLead: newContactLead,
+      careerLead: newCareerLead,
     };
   } catch (error) {
     return {
@@ -32,20 +32,20 @@ const createContactLead = async (contactLeadData) => {
   }
 };
 
-const getContactLeads = async () => {
+const careerLeads = async () => {
   try {
-    const contactLeads = await ContactLead.find({});
+    const careerLeads = await CareerLead.find({});
 
-    if (!contactLeads || contactLeads.length === 0) {
+    if (!careerLeads || careerLeads.length === 0) {
       return {
         statusCode: 203,
-        error: "No contact leads found",
+        error: "No career leads found",
       };
     }
 
     return {
       statusCode: 200,
-      contactLeads,
+      careerLeads,
     };
   } catch (error) {
     return {
@@ -56,6 +56,6 @@ const getContactLeads = async () => {
 };
 
 module.exports = {
-  getContactLeads,
-  createContactLead,
+  getCareerLeads: careerLeads,
+  createCareerLead,
 };

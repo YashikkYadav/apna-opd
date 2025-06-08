@@ -27,4 +27,12 @@ export class AxiosProfile {
       data: imageObject,
     });
   }
+
+  Appointments(doctorId) {
+    return this.apiClient.get(`/doctor/${doctorId}/appointment`);
+  }
+
+  DeleteAppointment(doctorId) {
+    return this.apiClient.delete(`/doctor/${doctorId}/appointment`);
+  }
 }

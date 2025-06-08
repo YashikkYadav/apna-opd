@@ -3,20 +3,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const NursingCollege = ({ serviceData }) => {
-  const [nursingCollegeList, setNursingCollegeList] = useState([]);
+const Laboratory = ({ serviceData }) => {
+  const [laboratoryList, setRadiologistList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const navigate = useRouter();
 
   useEffect(() => {
-    console.log(currentItems);
     if (serviceData) {
-      setNursingCollegeList(serviceData || []);
+      setRadiologistList(serviceData || []);
       setFilteredList(serviceData || []);
-      setLoading(false);
     }
   }, [serviceData]);
 
@@ -27,52 +24,49 @@ const NursingCollege = ({ serviceData }) => {
 
   return (
     <>
-      <h2 className="title-48 mb-[24px]">Nursing Colleges Near You</h2>
+      <h2 className="title-48 mb-[24px]">Top Laboratories Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {nursingCollegeList?.length} results
+        Showing {currentItems?.length} of {laboratoryList?.length} results
       </p>
       <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((college) => (
+        {currentItems?.map((laboratory) => (
           <div
-            key={college._id}
+            key={laboratory._id}
             className="flex flex-col sm:flex-row justify-between mb-[32px]"
           >
             <div className="flex flex-col sm:flex-row">
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    college.profiles &&
-                    college.profiles.length > 0 &&
-                    college.profiles[0].images.length > 0
-                      ? college.profiles[0].images[0].url
+                    laboratory?.images && Array.isArray(laboratory.images) && laboratory.images?.length > 0
+                      ? laboratory.images[0]
                       : "/images/image_placeholder.svg"
                   }
                   width={180}
                   height={180}
-                  alt="Nursing College"
+                  alt="laboratory"
                   className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#3DB8F5] mb-[8px]">
-                  Nursing College
+                <p className="text-base text-[#5151E1] mb-[8px]">
+                  laboratory
                 </p>
-                <h3 className="title-32 mb-[8px]">{college.name}</h3>
+                <h3 className="title-32 mb-[8px]">{laboratory.name}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {college.rating?.toFixed(1) || "N/A"} / 5
+                  Rating: {laboratory.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                  {college.location}
+                  {laboratory.location}
                 </h4>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-end">
+            <div className="flex flex-row sm:flex-col justify-between">
+              <h4 className="title-24 !text-[#5151E1] md:mt-[19px] text-end">
+                Fees: ${laboratory.price || "N/A"}
+              </h4>
               <button
-                onClick={() =>
-                  navigate.push(
-                    `/more/nursing_medical_college/${college._id}/details`
-                  )
-                }
+                onClick={() => navigate.push(`/more/laboratory/${laboratory._id}/details`)}
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details
@@ -85,4 +79,4 @@ const NursingCollege = ({ serviceData }) => {
   );
 };
 
-export default NursingCollege;
+export default Laboratory;

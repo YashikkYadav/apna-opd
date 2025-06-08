@@ -18,6 +18,7 @@ import Physiotherapist from "../../components/more/physiotherapist/physiotherapi
 import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
 import Nurse from "../../components/more/nurse/nurse";
 import Radiologist from "../../components/more/radiologist/radiologist";
+import Laboratory from "@/app/components/more/laboratory/laboratory";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
 import Pagination from "../../components/more/common/Pagination";
@@ -99,6 +100,8 @@ const ServicePage = () => {
         return "Find Nursing Services";
       case serviceTypes.RADIOLOGIST:
         return "Find Radiologists";
+      case serviceTypes.LABORATORY:
+        return "Find Laboratories";
       default:
         return "Find Services";
     }
@@ -136,6 +139,8 @@ const ServicePage = () => {
         return <Nurse serviceData={serviceData} />;
       case serviceTypes.RADIOLOGIST:
         return <Radiologist serviceData={serviceData} />;
+      case serviceTypes.LABORATORY:
+        return <Laboratory serviceData={serviceData} />;
       default:
         return <div>Service not found</div>;
     }

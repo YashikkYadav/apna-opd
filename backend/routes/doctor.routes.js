@@ -31,6 +31,11 @@ doctor.delete(
   doctorController.deleteDoctor,
 );
 
+doctor.get(
+  '/:doctorId/appointment',
+  doctorController.getAppointments,
+);
+
 doctor.post(
   '/rating',
   doctorController.ratingDoctor,
