@@ -127,12 +127,10 @@ const Footer = () => {
                 />
               </div>
               <p className="text-white">
-                MIV ApnaOpd Healthcare Services Pvt Ltd
-                <br />
+                MIV ApnaOpd Healthcare Services Pvt Ltd 
                 Ff 61, First Floor, JTM Mall, Jagatpura Flyover
                 <br />
                 JAIPUR, RAJASTHAN 302017
-                <br />
                 India
               </p>
             </div>
