@@ -15,6 +15,10 @@ const careerLeadSchema = new mongoose.Schema({
     required: true,
     type: Number,
   },
+  resumeUrl: {
+    type: String,
+    default: null,
+  },
   description: {
     required: true,
     type: String,
