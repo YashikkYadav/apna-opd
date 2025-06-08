@@ -81,9 +81,62 @@
             {{ item.description || "N/A" }}
           </div>
         </template>
+
+        <template v-if="props.type === 'career'" v-slot:item.actions="{ item }">
+          <v-btn
+            icon
+            color="blue-darken-1"
+            variant="text"
+            @click="showResume(item.resumeUrl)"
+          >
+            <v-icon>mdi-eye</v-icon>
+          </v-btn>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>
+  <v-dialog v-model="showResumeModal" max-width="900px">
+    <v-card rounded="lg" class="d-flex flex-column" style="height: 90vh">
+      <v-card-title class="d-flex justify-space-between align-center">
+        <span class="text-h6">Resume Viewer</span>
+        <!-- Close button to hide the dialog -->
+        <v-btn icon variant="text" @click="showResumeModal = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-divider></v-divider>
+      <v-card-text class="flex-grow-1 pa-0" style="height: 90vh">
+        <iframe
+          v-if="resumeUrl"
+          :src="resumeUrl"
+          width="100%"
+          height="100%"
+          frameborder="0"
+          title="Resume PDF Viewer"
+        >
+          Your browser does not support PDFs. Please download the PDF to view
+          it.
+        </iframe>
+        <!-- Fallback message if resumeUrl is not available -->
+        <div v-else class="d-flex align-center justify-center fill-height">
+          <p class="text-medium-emphasis">No resume to display.</p>
+        </div>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <!-- Card Actions Section for the close button -->
+      <v-card-actions class="justify-end pa-3">
+        <v-btn
+          color="blue-grey-lighten-2"
+          variant="flat"
+          @click="showResumeModal = false"
+          rounded="lg"
+          >Close</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -104,13 +157,42 @@ const currentPage = ref(1);
 const itemsPerPage = ref(5);
 const items = ref([]);
 const loading = ref(true);
+const showResumeModal = ref(false);
+const resumeUrl = ref("");
 
-const headers = ref([
-  { title: "Name", key: "name", sortable: true, align: "start" },
-  { title: "Email", key: "email", sortable: false, align: "start" },
-  { title: "Phone", key: "phone", sortable: false, align: "start" },
-  { title: "Description", key: "description", sortable: false, align: "start" },
-]);
+const headers = computed(() => {
+  if (props.type === "career") {
+    return [
+      { title: "Name", key: "name", sortable: true, align: "start" },
+      { title: "Email", key: "email", sortable: false, align: "start" },
+      { title: "Phone", key: "phone", sortable: false, align: "start" },
+      {
+        title: "Description",
+        key: "description",
+        sortable: false,
+        align: "start",
+      },
+      {
+        title: "View Resume",
+        value: "actions",
+        sortable: false,
+        align: "center",
+      },
+    ];
+  } else {
+    return [
+      { title: "Name", key: "name", sortable: true, align: "start" },
+      { title: "Email", key: "email", sortable: false, align: "start" },
+      { title: "Phone", key: "phone", sortable: false, align: "start" },
+      {
+        title: "Description",
+        key: "description",
+        sortable: false,
+        align: "start",
+      },
+    ];
+  }
+});
 
 const fetchHealthServe = async () => {
   loading.value = true;
@@ -128,6 +210,11 @@ const fetchHealthServe = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const showResume = (url = "") => {
+  resumeUrl.value = url;
+  showResumeModal.value = !showResumeModal.value;
 };
 
 const leadTypes = {
