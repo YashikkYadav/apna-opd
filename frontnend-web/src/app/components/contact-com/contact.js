@@ -3,12 +3,16 @@ import { Form, Input, message } from "antd";
 import axiosInstance from "@/app/config/axios";
 const { TextArea } = Input;
 
-const Contact = () => {
+const Contact = ({isCareer}) => {
     const [form] = Form.useForm();
 
     const handleSubmit = async (values) => {
         try {
-            const res = await axiosInstance.post("/contact-lead", values);
+            if(!isCareer) {
+                const res = await axiosInstance.post("/contact-lead", values);
+            }else {
+                const res = await axiosInstance.post("/career-lead", values);
+            }
 
             if (res?.contactLead) {
                 alert("Your data is saved, we will get back to you shortly");
