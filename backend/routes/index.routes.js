@@ -25,6 +25,7 @@ const messageRoutes = require("./messages.routes");
 const adminRoutes = require("./admin.routes");
 const userRoutes = require("./user.routes");
 const HealthServe = require("../models/healthServe");
+const careerLeadRoutes = require("./careerLead.routes")
 const Doctor = require("../models/doctor");
 
 const router = express.Router();
@@ -87,5 +88,7 @@ router.use(
 );
 
 router.use("/contact-lead", contactLeadRoutes);
+
+router.use("/career-lead", careerLeadRoutes);
 
 module.exports = router;

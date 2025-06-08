@@ -74,7 +74,7 @@
             class="text-decoration-none text-blue-darken-2"
           >
             <v-icon size="small" class="mr-1">mdi-phone</v-icon>
-            {{ item.phone}}
+            {{ item.phone }}
           </a>
         </template>
 
@@ -131,7 +131,8 @@ const healthServeTypes = ref([
     physiotherapist: "Physiotherapist",
     blood_donor: "Blood Donor",
     nursing_staff: "Nursing Staff",
-    vatenary : "Veterinary"
+    vatenary: "Veterinary",
+    laboratory: "Laboratory",
   },
 ]);
 
@@ -145,18 +146,16 @@ onMounted(() => {
         router.push("/login");
         return;
       }
-  
+
       const auth = checkAuth(router);
       if (auth) {
         await fetchHealthServe();
       } else {
         console.warn("Authentication failed.");
       }
-    },
+    }
   );
 });
-
-
 
 const serviceValue = computed(() => {
   if (
@@ -210,7 +209,6 @@ const fetchHealthServe = async () => {
     items.value = Array.isArray(healthServeData?.healthServe)
       ? healthServeData.healthServe
       : [];
-
   } catch (error) {
     console.error("Failed to fetch healthServe:", error);
     items.value = [];

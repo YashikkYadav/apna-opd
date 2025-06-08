@@ -4,6 +4,7 @@ import Doctor from "./views/doctor/Doctor.vue";
 import Login from "./views/login/Login.vue";
 import HealthServe from "./views/healthServe/HealthServe.vue";
 import User from "./views/user/User.vue";
+import Lead from "./views/lead/lead.vue";
 
 const routes = [
   {
@@ -113,6 +114,30 @@ const routes = [
     component: HealthServe,
     props: {
       type: "vatenary",
+    },
+  },
+  {
+    path: "/laboratory",
+    name: "Laboratory",
+    component: HealthServe,
+    props: {
+      type: "laboratory",
+    },
+  },
+  {
+    path: "/career",
+    name: "Career",
+    component: Lead,
+    props: {
+      type: "career",
+    },
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: Lead,
+    props: {
+      type: "contact",
     },
   },
   {

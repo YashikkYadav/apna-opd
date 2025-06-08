@@ -54,6 +54,7 @@ export const serviceTypes = {
   BLOOD_DONOR: "blood-donor",
   NURSE: "nurse",
   RADIOLOGIST: "radiologist",
+  LABORATORY: "laboratory",
 };
 
 // Sample data structure for different services

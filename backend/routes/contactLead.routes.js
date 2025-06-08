@@ -8,4 +8,10 @@ contactLead.post(
   contactLeadController.createContactLead,
 );
 
+
+contactLead.get(
+  '/',
+  contactLeadController.getContactLeads,
+);
+
 module.exports = contactLead;

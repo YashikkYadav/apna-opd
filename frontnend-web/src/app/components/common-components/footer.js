@@ -66,6 +66,9 @@ const Footer = () => {
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/contact"> Contact Us </Link>
               </li>
+              <li className="text-base text-[#2E2E2E]">
+                <Link href="/career"> Careers </Link>
+              </li>
             </ul>
           </div>
           <div className="mt-[9px]">

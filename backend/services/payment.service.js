@@ -141,8 +141,9 @@ const createPaymentLinkForEntity = async (
         },
         reminder_enable: true,
         notes: {
-          entity: entityType,
+          entity: "patient",
           policy_name: "Appointment Fees",
+          doctorId: doctorId,
         },
         callback_url: `${
           process.env.FRONTEND_URL
@@ -282,6 +283,24 @@ const webhook = async (requestData) => {
           {
             new: true,
           }
+        );
+
+        console.log("Response here in webhook: ", response);
+      } else if (
+        requestData?.payload?.payment?.entity?.notes?.entity === "patient"
+      ) {
+        const rawPhoneNumber = requestData?.payload?.payment?.entity?.contact;
+        const sanitizedPhoneNumber = rawPhoneNumber.replace(/^\+91/, "");
+
+        const response = await Appointment.findOneAndUpdate(
+          { doctorId: requestData?.payload?.payment?.entity?.notes?.doctorId },
+          {
+            $set: {
+              paymentStatus: true,
+              paymentObject: requestData.payload,
+            },
+          },
+          { new: true }
         );
 
         console.log("Response here in webhook: ", response);
