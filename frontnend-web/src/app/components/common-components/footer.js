@@ -56,7 +56,7 @@ const Footer = () => {
             </h6>
             <ul className="flex flex-col gap-[16px]">
               <li className="text-base text-[#2E2E2E]">
-                <Link href="/whyChooseUs">Why Choose Us</Link>
+                <Link href="/why-choose-us">Why Choose Us</Link>
               </li>
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/blog"> Blogs </Link>
@@ -117,7 +117,7 @@ const Footer = () => {
                   className="h-[50px] border-[#CCCCCC] text-base"
                 />
               </Form.Item>
-              <button required type="submit"  className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit" onClick={handleSubscribe}>
+              <button required  type="submit"  className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit" onClick={handleSubscribe}>
                 Subscribe
               </button>
             </Form>
