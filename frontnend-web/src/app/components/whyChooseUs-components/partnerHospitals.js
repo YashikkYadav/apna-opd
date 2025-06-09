@@ -29,8 +29,8 @@ const hospitals = [
     glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6", 
   },
   {
-    logo: "/images/hospitals/ehcc.png",
-    name: "EHCC Hospital",
+    logo: "/images/hospitals/amar.png",
+    name: "Amar Jain Hospital",
     city: "Jaipur",
     glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6", 
   },

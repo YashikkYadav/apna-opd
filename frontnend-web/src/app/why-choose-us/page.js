@@ -5,8 +5,9 @@ import DiagnosticLabs from "../components/whyChooseUs-components/diagnosticLabs"
 import PartnerHospitals from "../components/whyChooseUs-components/partnerHospitals";
 import ImpactNumbers from "../components/whyChooseUs-components/impactNumbers";
 import PatientTestimonials from "../components/whyChooseUs-components/patientTestimonials";
+import HeroSection2 from "../components/whyChooseUs-components/heroSection2";
 
-const WhyChooseUs = () => {
+const WhyChoose = () => {
     return (
         <div className="pt-[80px]">
             <HeroSection/>
@@ -15,9 +16,10 @@ const WhyChooseUs = () => {
             <PartnerHospitals/>
             <DiagnosticLabs/>
             <PatientTestimonials/>
+            <HeroSection2/>
             <CTASection/>
         </div>
     );
 }
 
-export default WhyChooseUs;
+export default WhyChoose;
