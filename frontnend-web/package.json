@@ -12,10 +12,12 @@
     "antd": "^5.24.9",
     "axios": "^1.8.4",
     "dotenv": "^16.5.0",
+    "framer-motion": "^12.16.0",
     "lodash": "^4.17.21",
     "next": "15.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
     "untun": "^0.1.3"
   },
