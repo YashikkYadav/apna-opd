@@ -2,10 +2,17 @@
 import { Form, Input } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
 
 const Footer = () => {
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    toast.success('Thank you for subscribing to our newsletter');
+  }
+
   return (
     <>
+    <ToastContainer />
       <div className="max-w-[1270px] mx-auto py-[63px] px-[15px] sm:px-[30px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-7">
           <div className="max-w-[240px] auto-cols-[minmax(0,2fr)]]">
@@ -48,6 +55,9 @@ const Footer = () => {
               Resource
             </h6>
             <ul className="flex flex-col gap-[16px]">
+              <li className="text-base text-[#2E2E2E]">
+                <Link href="/whyChooseUs">Why Choose Us</Link>
+              </li>
               <li className="text-base text-[#2E2E2E]">
                 <Link href="/blog"> Blogs </Link>
               </li>
@@ -107,7 +117,7 @@ const Footer = () => {
                   className="h-[50px] border-[#CCCCCC] text-base"
                 />
               </Form.Item>
-              <button className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit">
+              <button required type="submit"  className="bg-[#3DB8F5] px-[38px] py-[10px] rounded-[8px] text-lg text-white font-bold w-fit" onClick={handleSubscribe}>
                 Subscribe
               </button>
             </Form>
