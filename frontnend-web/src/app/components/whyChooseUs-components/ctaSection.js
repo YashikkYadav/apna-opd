@@ -2,6 +2,7 @@
 import React from "react";
 import { FaRegCheckCircle, FaClinicMedical, FaHandshake } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const buttonData = [
   {
@@ -47,6 +48,13 @@ const outlinedBtn =
   "border-2 border-white md:border-blue-200 text-white bg-transparent hover:bg-white hover:text-[#22a6f3] md:shadow";
 
 const CTASection = () => {
+  const router = useRouter();
+  const handleClick = (idx) => {
+    if (idx === 0) router.push("/find-doctor");
+    else if (idx === 1) router.push("/register");
+    else if (idx === 2) router.push("/contact");
+  };
+
   return (
     <section className="w-full bg-gradient-to-br from-[#274060] to-[#38a3d1] py-16 px-2 md:px-0">
       <div className="max-w-6xl mx-auto flex flex-col items-center justify-center">
@@ -74,6 +82,7 @@ const CTASection = () => {
             {buttonData.slice(0, 2).map((btn, idx) => (
               <motion.button
                 key={btn.label}
+                onClick={() => handleClick(idx)}
                 variants={itemVariants}
                 whileHover={
                   btn.glow
@@ -100,6 +109,7 @@ const CTASection = () => {
             ))}
           </div>
           <motion.button
+            onClick={() => handleClick(2)}
             variants={itemVariants}
             whileHover={
               buttonData[2].glow
@@ -135,6 +145,7 @@ const CTASection = () => {
           {buttonData.map((btn, idx) => (
             <motion.button
               key={btn.label}
+              onClick={() => handleClick(idx)}
               variants={itemVariants}
               whileHover={
                 btn.glow

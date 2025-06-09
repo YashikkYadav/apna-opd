@@ -14,32 +14,27 @@ const labs = [
     logo: "/images/labs/red.png",
     name: "Redcliffe Labs",
     subtitle: "Advanced Diagnostics",
-    glow: "0 0 0 1px #2563EB, 0 0 8px #2563EB",
-  },
+    glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6",  },
   {
     logo: "/images/labs/thy.png",
     name: "Thyrocare",
     subtitle: "Specialized Testing",
-    glow: "0 0 0 1px #1D4ED8, 0 0 8px #1D4ED8",
-  },
+    glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6",  },
   {
     logo: "/images/labs/metro.png",
     name: "Metropolis Labs",
     subtitle: "Premium Diagnostics",
-    glow: "0 0 0 1px #60A5FA, 0 0 8px #60A5FA",
-  },
+    glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6",  },
   {
     logo: "/images/labs/srl.png",
     name: "SRL Diagnostics",
     subtitle: "Nationwide Network",
-    glow: "0 0 0 1px #38BDF8, 0 0 8px #38BDF8",
-  },
+    glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6",  },
   {
     logo: "/images/labs/path.png",
     name: "Pathkind Labs",
     subtitle: "Quality Assured",
-    glow: "0 0 0 1px #0EA5E9, 0 0 8px #0EA5E9",
-  },
+    glow: "0 0 0 1px #3B82F6, 0 0 8px #3B82F6",  },
 ];
 
 const cardVariants = {

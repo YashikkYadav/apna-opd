@@ -107,7 +107,7 @@ const Header = () => {
               isMobileNavOpen ? "block" : "hidden"
             } lg:block absolute lg:relative top-[80px] lg:top-auto right-4 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[250px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
-            <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[20px] mb-0">
+            <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px] mb-0">
               <li className="text-[#094B89] text-base font-bold">
                 <Link href="/" onClick={closeAllMenus}>
                   Home
@@ -179,11 +179,6 @@ const Header = () => {
               <li className="text-[#094B89] text-base font-bold">
                 <Link href="/faq" onClick={closeAllMenus}>
                   FAQ
-                </Link>
-              </li>
-              <li className="text-[#094B89] text-base font-bold">
-                <Link href="/whyChooseUs" onClick={closeAllMenus}>
-                  Why-Choose-Us
                 </Link>
               </li>
               <li className="text-[#094B89] text-base font-bold">

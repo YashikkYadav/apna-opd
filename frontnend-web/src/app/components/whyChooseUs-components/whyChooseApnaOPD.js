@@ -8,37 +8,31 @@ const features = [
     icon: <FaUserCheck className="text-blue-400 text-2xl" />,
     title: "Verified Doctors Only",
     desc: "Every healthcare professional on our platform is thoroughly verified for credentials and expertise.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
   {
     icon: <FaCalendarCheck className="text-purple-400 text-2xl" />,
     title: "Live Appointment Availability",
     desc: "Real-time scheduling with instant confirmation and automated reminders for your convenience.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
   {
     icon: <FaLayerGroup className="text-pink-400 text-2xl" />,
     title: "All-in-One Healthcare Platform",
     desc: "Find doctors, hospitals, labs, and book appointments all from a single trusted platform.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
   {
     icon: <FaStar className="text-yellow-400 text-2xl" />,
     title: "Patient Reviews",
     desc: "Make informed decisions with genuine patient reviews and ratings for every healthcare provider.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
   {
     icon: <FaMapMarkedAlt className="text-green-400 text-2xl" />,
     title: "Location-Based Search",
     desc: "Find the nearest healthcare providers with detailed directions and contact information.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
   {
     icon: <FaMoneyBillWave className="text-cyan-400 text-2xl" />,
     title: "No Hidden Charges",
     desc: "Transparent pricing with no booking fees or hidden costs. What you see is what you pay.",
-    glow: "0 0 0 2px #a78bfa, 0 0 12px #a78bfa",
   },
 ];
 
@@ -48,15 +42,17 @@ const cardVariants = {
 };
 
 const WhyChooseApnaOPD = () => {
+
   return (
-    <section className="w-full py-12 px-2 md:px-0 relative overflow-hidden min-h-[61vh]" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
-      {/* Grid overlay */}
-      <div className="absolute inset-0 pointer-events-none z-0" style={{background: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px'}}></div>
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-5 text-white drop-shadow-lg">
+    <section className="w-full min-h-[70vh] py-20 px-1 md:px-0 relative flex flex-col items-center justify-center overflow-hidden bg-white">
+      <div className="max-w-5xl mx-auto w-full z-10">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-2 text-gray-800">
           Why Choose Apna OPD?
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-5">
+        <p className="text-center text-gray-400 mb-6 text-base max-w-xl mx-auto">
+          Discover the benefits of using Apna OPD for your healthcare needs
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {features.map((feature, idx) => (
             <motion.div
               key={idx}
@@ -64,18 +60,16 @@ const WhyChooseApnaOPD = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
-              whileHover={{ scale: 1.04, boxShadow: feature.glow }}
-              className="backdrop-blur-md bg-white/20 border border-white/30 rounded-2xl shadow-lg flex flex-col items-start justify-start py-7 px-5 min-h-[126px] transition-transform duration-200 cursor-pointer outline-none hover:bg-white/30"
+              whileHover={{ scale: 1.04, boxShadow: '0 0 0 2px #3B82F6, 0 0 8px #3B82F6' }}
+              className="bg-white rounded-xl shadow flex flex-col items-center justify-center py-6 px-2 min-h-[120px] transition-transform duration-200 cursor-pointer outline-none"
             >
-              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-white/40 mb-3.5 shadow">
+              <div className="flex items-center justify-center w-14 h-14 mb-3 bg-white/80 rounded-xl shadow">
                 {React.cloneElement(feature.icon, { className: feature.icon.props.className + ' text-[1.4rem]' })}
               </div>
-              <div className="font-bold text-white mb-1 drop-shadow text-[1.25rem]">
+              <div className="text-base md:text-lg font-bold text-gray-800 text-center mb-1">
                 {feature.title}
               </div>
-              <div className="text-white/90 drop-shadow-sm text-[1.08rem]">
-                {feature.desc}
-              </div>
+              <div className="text-gray-400 text-sm text-center">{feature.desc}</div>
             </motion.div>
           ))}
         </div>
