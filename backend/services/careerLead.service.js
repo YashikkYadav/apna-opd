@@ -1,8 +1,11 @@
 const CareerLead = require("../models/careerLead");
+const config = require("../config/config");
 
 const createCareerLead = async (careerLeadData) => {
   try {
-    const { name, email, phone, description } = careerLeadData;
+    const { name, email, phone, description, resumePath, role } = careerLeadData;
+
+    const resumeUrl = config.BASE_URL + "/" + resumePath;
 
     if (!name || !email || !phone || !description) {
       return {
@@ -16,6 +19,8 @@ const createCareerLead = async (careerLeadData) => {
       name,
       email,
       phone,
+      role,
+      resumeUrl,
       description,
     });
     await newCareerLead.save();

@@ -1,5 +1,6 @@
 import BannerWithTitle from "../components/common-components/banner-with-title";
 import Contact from "../components/contact-com/contact";
+import CareerForm from "../components/contact-com/career";
 
 const CareerPage = () => {
   return (
@@ -47,8 +48,7 @@ const CareerPage = () => {
           </div>
         </div>
       </div>
-
-      <Contact isCareer={true}/>
+      <CareerForm />
     </div>
   );
 };
