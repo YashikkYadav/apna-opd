@@ -5,19 +5,11 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const images = [
   // 6 unique hospital equipment images from Unsplash
-  "/images/heroCarousel/hc1.jpg",
-  "/images/heroCarousel/hc2.jpg",
-  "/images/heroCarousel/hc3.jpg",
-  "/images/heroCarousel/hc4.jpg",
-  "/images/heroCarousel/hc5.jpg",
-  "/images/heroCarousel/hc6.jpg",
-  "/images/heroCarousel/hc7.jpg",
-  "/images/heroCarousel/hc8.jpg",
-  "/images/heroCarousel/hc9.jpg",
-  "/images/heroCarousel/hc10.jpg",
-  "/images/heroCarousel/hc11.jpg",
-  "/images/heroCarousel/hc12.jpg",
-  "/images/heroCarousel/hc13.jpg",
+  "/images/heroCarousel/heroCarou1.png",
+  "/images/heroCarousel/heroCarou2.png",
+  "/images/heroCarousel/heroCarou3.png",
+  "/images/heroCarousel/heroCarou4.png",
+  "/images/heroCarousel/heroCarou5.png",
 ];
 
 const variants = {
