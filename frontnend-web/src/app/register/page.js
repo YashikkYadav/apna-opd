@@ -379,7 +379,7 @@ const Register = () => {
       </div>
     </div>
   ) : (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 md:pt-[80px]">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 md:pt-[90px]">
       <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
         <form
@@ -478,6 +478,46 @@ const Register = () => {
             />
           </div>
 
+          {/* Address */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Address
+            </label>
+            <textarea type="textArea" name="address" value={formData.address} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          </div>
+
+          {/* Pin Code */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Pin Code
+            </label>
+            <input type="text" name="pinCode" value={formData.pinCode} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          </div>
+
+          {/* City */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              City
+            </label>
+            <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          </div>
+
+          {/* Locality */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Locality
+            </label>
+            <input type="text" name="locality" value={formData.locality} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          </div>
+
+          {/* State */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              State
+            </label>
+            <input type="text" name="state" value={formData.state} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+          </div>
+
           {/* Location */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -486,7 +526,7 @@ const Register = () => {
             <Select
               showSearch
               value={formData.location}
-              placeholder="Search for a city"
+              placeholder="Search for a Location"
               onSearch={handleLocationSearch}
               onChange={handleLocationChange}
               loading={locationLoading}
