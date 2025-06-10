@@ -195,9 +195,13 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         console.log("Payment response : ", response);
-        setTimeout(() => {
-          window.location.href = response.paymentUrl.paymentLink;
-        }, 2000);
+        if(response.paymentUrl){
+          setTimeout(() => {
+            window.location.href = response.paymentUrl.paymentLink;
+          }, 2000);
+        }else{
+          router.push('/');
+        }
       }
     } catch (error) {
       console.log(error);
