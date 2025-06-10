@@ -5,12 +5,19 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const images = [
   // 6 unique hospital equipment images from Unsplash
-  "https://images.unsplash.com/photo-1519494080410-f9aa8f52f1e1?auto=format&fit=crop&w=800&q=80", // MRI machine
-  "https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=800&q=80", // Hospital bed
-  "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80", // Operating room
-  "https://images.unsplash.com/photo-1511174511562-5f97f4f4e0c8?auto=format&fit=crop&w=800&q=80", // Stethoscope
-  "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80", // X-ray machine
-  "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80", // Hospital monitor
+  "/images/heroCarousel/hc1.jpg",
+  "/images/heroCarousel/hc2.jpg",
+  "/images/heroCarousel/hc3.jpg",
+  "/images/heroCarousel/hc4.jpg",
+  "/images/heroCarousel/hc5.jpg",
+  "/images/heroCarousel/hc6.jpg",
+  "/images/heroCarousel/hc7.jpg",
+  "/images/heroCarousel/hc8.jpg",
+  "/images/heroCarousel/hc9.jpg",
+  "/images/heroCarousel/hc10.jpg",
+  "/images/heroCarousel/hc11.jpg",
+  "/images/heroCarousel/hc12.jpg",
+  "/images/heroCarousel/hc13.jpg",
 ];
 
 const variants = {
