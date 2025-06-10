@@ -70,7 +70,7 @@ const Hospital = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/hospital/full-details`)
+                  navigate.push(`/more/full-details`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
