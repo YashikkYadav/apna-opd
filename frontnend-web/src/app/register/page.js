@@ -25,7 +25,14 @@ const Register = () => {
     user: "",
     bloodGroup: "",
     homeService: "",
+    address: "",
+    pinCode: "",
+    city: "",
+    locality: "",
+    state: "",
+    isCash: "",
   });
+
   const [locationOptions, setLocationOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +40,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [users, setUsers] = useState([]);
+  const [showPaymentTypeModal, setShowPaymentTypeModal] = useState(false);
   const router = useRouter();
 
   // Registration type options
@@ -164,11 +172,18 @@ const Register = () => {
       password: formData.password,
       rmcNumber: formData.rmcNumber,
       clinicName: formData.clinicName,
-      address: formData.location,
+      location: formData.location,
+      address: formData.address,
+      pinCode: formData.pinCode,
+      city: formData.city,
+      locality: formData.locality,
+      state: formData.state,
       speciality: formData.speciality,
       subscriptionType: formData.subscriptionType,
       user: formData.user === "Select User" ? null : formData.user,
+      isCash: formData.isCash,
     };
+
     try {
       const response = await axiosInstance.post("/doctor", payload);
       if (response.doctor) {
@@ -180,9 +195,13 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         console.log("Payment response : ", response);
-        setTimeout(() => {
-          window.location.href = response.paymentUrl.paymentLink;
-        }, 2000);
+        if(response.paymentUrl){
+          setTimeout(() => {
+            window.location.href = response.paymentUrl.paymentLink;
+          }, 2000);
+        }else{
+          router.push('/');
+        }
       }
     } catch (error) {
       console.log(error);
@@ -190,9 +209,9 @@ const Register = () => {
         typeof error === "string"
           ? error
           : error[0].message ||
-            error?.response?.data?.error ||
-            error?.response?.data[0]?.message ||
-            "Something went wrong. Please try again.";
+          error?.response?.data?.error ||
+          error?.response?.data[0]?.message ||
+          "Something went wrong. Please try again.";
 
       toast.error(errorMessage, {
         position: "top-center",
@@ -202,7 +221,15 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
+    const userName = users.filter(user => user.value === formData.user)[0].label;
+    console.log(userName);
+    if (userName.trim() === "Vinod" && formData.isCash === "") {
+      setShowPaymentTypeModal(true);
+      return;
+    } else {
+      setShowPaymentTypeModal(false);
+    }
 
     // Validation checks
     if (!validateEmail(formData.email)) {
@@ -246,6 +273,22 @@ const Register = () => {
       toast.error("Please select a location!");
       return;
     }
+    if (!formData.address) {
+      toast.error("Please enter address!");
+      return;
+    }
+    if (!formData.pinCode) {
+      toast.error("Please enter pincode!");
+      return;
+    }
+    if (!formData.city) {
+      toast.error("Please enter city!");
+      return;
+    }
+    if (!formData.state) {
+      toast.error("Please enter state!");
+      return;
+    }
     if (formData.registrationFor === "blood_donor" && !formData.bloodGroup) {
       toast.error("Please select or enter your blood group!");
       return;
@@ -273,6 +316,12 @@ const Register = () => {
         phone: formData.mobile,
         email: formData.email,
         location: formData.location,
+        address: formData.address,
+        pinCode: formData.pinCode,
+        city: formData.city,
+        locality: formData.locality,
+        state: formData.state,
+        isCash: formData.isCash
       };
 
       if (formData.registrationFor !== "blood_donor") {
@@ -322,8 +371,8 @@ const Register = () => {
           typeof error?.response?.data === "string"
             ? error.response.data
             : error?.response?.data?.error ||
-              error?.response?.data[0]?.message ||
-              "Something went wrong. Please try again.";
+            error?.response?.data[0]?.message ||
+            "Something went wrong. Please try again.";
 
         toast.error(errorMessage, {
           position: "top-center",
@@ -359,6 +408,15 @@ const Register = () => {
     const temp = convertUsersToSelectOptions(userData.user);
     setUsers([{ value: "", label: "Select User" }, ...temp]);
   };
+
+  const handlePaymentChoice = (choice) => {
+    setFormData(prev => ({ ...prev, isCash: choice }));
+    onClose();
+  };
+
+  const onClose = () => {
+    setShowPaymentTypeModal(false);
+  }
 
   return registerSuccess ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -702,20 +760,20 @@ const Register = () => {
             formData.registrationFor === "vatenary" ||
             formData.registrationFor === "nursing_staff" ||
             formData.registrationFor === "laboratory") && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Home Service / Door Service
-              </label>
-              <Select
-                value={formData.homeService}
-                onChange={handleHomeServiceChange}
-                placeholder="Do you provide home service?"
-                options={homeServiceOptions}
-                className="w-full"
-                required
-              />
-            </div>
-          )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Home Service / Door Service
+                </label>
+                <Select
+                  value={formData.homeService}
+                  onChange={handleHomeServiceChange}
+                  placeholder="Do you provide home service?"
+                  options={homeServiceOptions}
+                  className="w-full"
+                  required
+                />
+              </div>
+            )}
 
           {/* Submit Button */}
           <button
@@ -734,6 +792,36 @@ const Register = () => {
           </a>
         </p> */}
       </div>
+      {showPaymentTypeModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md mx-4">
+            <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center">Choose Payment Method</h2>
+
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => handlePaymentChoice("cash")}
+                className="bg-blue-600 text-white py-2 px-4 rounded-xl hover:bg-blue-700 transition"
+              >
+                Pay with Cash
+              </button>
+
+              <button
+                onClick={() => handlePaymentChoice("razorpay")}
+                className="bg-blue-100 text-blue-700 py-2 px-4 rounded-xl hover:bg-blue-200 transition"
+              >
+                Pay with Razorpay
+              </button>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="mt-6 text-sm text-blue-500 hover:underline block text-center"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       <ToastContainer
         position="top-center"
         hideProgressBar

@@ -17,12 +17,18 @@ const registerDoctor = async (doctorData) => {
       rmcNumber,
       phoneNumber,
       email,
+      location,
       address,
+      pincode,
+      locality,
+      state,
+      city,
       clinicName,
       speciality,
       password,
       subscriptionType,
       user,
+      isCash,
     } = doctorData;
 
     const doctorDataValidation = validateDoctor(doctorData);
@@ -45,7 +51,7 @@ const registerDoctor = async (doctorData) => {
       };
     }
 
-    const paymentUrl = await createPaymentLinkForEntity(
+    let paymentUrl = await createPaymentLinkForEntity(
       "doctor",
       { name, phone: phoneNumber, email },
       subscriptionType
@@ -56,7 +62,12 @@ const registerDoctor = async (doctorData) => {
       rmcNumber,
       phoneNumber,
       email,
+      location,
       address,
+      pincode,
+      locality,
+      state,
+      city,
       clinicName,
       speciality,
       password: hashedPassword,
@@ -68,7 +79,12 @@ const registerDoctor = async (doctorData) => {
         rmcNumber,
         phoneNumber,
         email,
+        location,
         address,
+        pincode,
+        locality,
+        state,
+        city,
         clinicName,
         speciality,
         password: hashedPassword,
@@ -76,6 +92,12 @@ const registerDoctor = async (doctorData) => {
         userId: user,
       };
     }
+    if (isCash === 'cash') {
+      data.paymentStatus = true;
+      data.paymentObject = { type: "cash" };
+      paymentUrl = null;
+    }
+
     const newDoctor = new Doctor(data);
     await newDoctor.save();
     console.log("payment instide the service ", paymentUrl);
@@ -87,7 +109,12 @@ const registerDoctor = async (doctorData) => {
         rmcNumber: newDoctor.rmcNumber,
         phoneNumber: newDoctor.phoneNumber,
         email: newDoctor.email,
+        location: newDoctor.location,
         address: newDoctor.address,
+        pincode: newDoctor.pinCode,
+        locality: newDoctor.locality,
+        state: newDoctor.state,
+        city: newDoctor.city,
         clinicName: newDoctor.clinicName,
         speciality: newDoctor.speciality,
         subscriptionType: newDoctor.subscriptionType,
