@@ -14,7 +14,7 @@ export default function HospitalLocationCard() {
       {/* Title */}
       <div className="flex items-center gap-4 mb-12">
         <span className="text-4xl text-pink-500"><FaMapMarkerAlt /></span>
-        <h2 className="text-4xl md:text-5xl font-extrabold text-[#5B6EF6]">Location & Contact</h2>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-blue-700">Location & Contact</h2>
       </div>
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -30,7 +30,7 @@ export default function HospitalLocationCard() {
           <div>
             <div className="font-bold text-2xl mb-4">Contact Information</div>
             <div className="flex items-start gap-4 mb-4 text-lg">
-              <span className="bg-[#7B6EF6]/20 text-[#7B6EF6] rounded-full p-3 text-2xl"><FaMapMarkerAlt /></span>
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl"><FaMapMarkerAlt /></span>
               <div>
                 <span className="font-bold">Address:</span><br />
                 Sector 19, Phase II, Dwarka<br />
@@ -38,7 +38,7 @@ export default function HospitalLocationCard() {
               </div>
             </div>
             <div className="flex items-start gap-4 mb-4 text-lg">
-              <span className="bg-[#7B6EF6]/20 text-[#7B6EF6] rounded-full p-3 text-2xl"><FaPhoneAlt /></span>
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl"><FaPhoneAlt /></span>
               <div>
                 <span className="font-bold">Phone:</span><br />
                 +91-11-4055-5555<br />
@@ -46,7 +46,7 @@ export default function HospitalLocationCard() {
               </div>
             </div>
             <div className="flex items-start gap-4 mb-4 text-lg">
-              <span className="bg-[#7B6EF6]/20 text-[#7B6EF6] rounded-full p-3 text-2xl"><FaEnvelope /></span>
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl"><FaEnvelope /></span>
               <div>
                 <span className="font-bold">Email:</span><br />
                 info@maxhealthcare.com<br />
@@ -54,14 +54,14 @@ export default function HospitalLocationCard() {
               </div>
             </div>
             <div className="flex items-start gap-4 mb-4 text-lg">
-              <span className="bg-[#7B6EF6]/20 text-[#7B6EF6] rounded-full p-3 text-2xl"><FaGlobe /></span>
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl"><FaGlobe /></span>
               <div>
                 <span className="font-bold">Website:</span><br />
                 www.maxhealthcare.in
               </div>
             </div>
             <div className="flex items-start gap-4 text-lg">
-              <span className="bg-[#7B6EF6]/20 text-[#7B6EF6] rounded-full p-3 text-2xl"><FaClock /></span>
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl"><FaClock /></span>
               <div>
                 <span className="font-bold">Visiting Hours:</span><br />
                 OPD: 8:00 AM - 8:00 PM<br />

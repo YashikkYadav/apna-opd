@@ -10,8 +10,8 @@ const features = [
   { icon: <MdEmergency className="text-pink-400 text-2xl" />, text: "24/7 Emergency" },
   { icon: <FaBed className="text-pink-300 text-2xl" />, text: "500+ Beds" },
   { icon: <BsShieldCheck className="text-green-400 text-2xl" />, text: "NABH Accredited" },
-  { icon: <FaUserMd className="text-blue-400 text-2xl" />, text: "50+ Specialists" },
-  { icon: <RiBankCardLine className="text-blue-400 text-2xl" />, text: "Insurance Accepted" },
+  { icon: <FaUserMd className="text-blue-600 text-2xl" />, text: "50+ Specialists" },
+  { icon: <RiBankCardLine className="text-blue-600 text-2xl" />, text: "Insurance Accepted" },
 ];
 
 export default function HospitalFeatureCard() {
@@ -20,11 +20,11 @@ export default function HospitalFeatureCard() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="flex flex-col mx-2 my-2 md:flex-row items-center justify-center bg-[#7A90A6]/80 rounded-2xl shadow-lg p-8 md:p-12 gap-8 md:gap-16 relative overflow-hidden"
+      className="flex flex-col mx-2 my-2 md:flex-row items-center justify-center bg-[#0C65A0] rounded-2xl shadow-lg p-8 md:p-12 gap-8 md:gap-16 relative overflow-hidden"
       style={{ minHeight: 340 }}
     >
       {/* Left: Hospital Image */}
-      <div className="flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
+      <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
           src="/images/max.png"
           alt="Max Super Speciality Hospital"
@@ -63,10 +63,14 @@ export default function HospitalFeatureCard() {
         </div>
         {/* Call Now Button */}
         <button
-          className="mt-8 flex items-center gap-2 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-8 py-3 rounded-full shadow-lg transition text-lg"
-          onClick={() => window.open('tel:+911140555555')}
+          className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+          onClick={() => {
+            if (window.confirm('Do you want to call Max Super Speciality Hospital?')) {
+              window.location.href = 'tel:+911140555555';
+            }
+          }}
         >
-          <FaPhoneAlt className="text-xl" />
+          <FaPhoneAlt className="text-2xl" />
           Call Now
         </button>
       </div>

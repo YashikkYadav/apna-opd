@@ -1,6 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
-import { FaUserMd, FaGraduationCap, FaStar, FaCalendarAlt, FaLanguage } from "react-icons/fa";
+import { FaUserMd, FaGraduationCap, FaStar, FaCalendarAlt, FaLanguage, FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { useState, useRef } from "react";
 
 const departments = [
   {
@@ -22,6 +24,7 @@ const departments = [
           { label: "Sat: 9AM-12PM" },
         ],
         fee: 800,
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
       },
       {
         initials: "PM",
@@ -37,6 +40,39 @@ const departments = [
           { label: "Sat: 10AM-2PM" },
         ],
         fee: 1000,
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "AK",
+        name: "Dr. Arun Kumar",
+        title: "Pediatric Cardiologist",
+        qualification: "MD, DM, Fellowship in Pediatric Cardiology",
+        rating: 4.7,
+        reviews: 156,
+        experience: 10,
+        languages: ["Hindi", "English", "Punjabi"],
+        available: [
+          { label: "Mon, Wed, Fri: 11AM-3PM" },
+          { label: "Sat: 9AM-1PM" },
+        ],
+        fee: 1200,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "SG",
+        name: "Dr. Sneha Gupta",
+        title: "Cardiac Electrophysiologist",
+        qualification: "MD, DM, Fellowship in Cardiac Electrophysiology",
+        rating: 4.9,
+        reviews: 142,
+        experience: 8,
+        languages: ["Hindi", "English", "Marathi"],
+        available: [
+          { label: "Tue, Thu: 9AM-1PM" },
+          { label: "Sat: 2PM-5PM" },
+        ],
+        fee: 1500,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
@@ -58,6 +94,7 @@ const departments = [
           { label: "Mon, Wed, Fri: 10AM-1PM" },
         ],
         fee: 900,
+        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=400&fit=crop",
       },
       {
         initials: "SG",
@@ -72,6 +109,39 @@ const departments = [
           { label: "Tue, Thu: 11AM-2PM" },
         ],
         fee: 950,
+        image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "RK",
+        name: "Dr. Rahul Khanna",
+        title: "Sports Medicine Specialist",
+        qualification: "MS Orthopedics, Fellowship in Sports Medicine",
+        rating: 4.8,
+        reviews: 98,
+        experience: 7,
+        languages: ["English", "Hindi", "Punjabi"],
+        available: [
+          { label: "Mon-Fri: 2PM-5PM" },
+          { label: "Sat: 10AM-1PM" },
+        ],
+        fee: 1100,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "PS",
+        name: "Dr. Priya Singh",
+        title: "Joint Replacement Specialist",
+        qualification: "MS Orthopedics, Fellowship in Joint Replacement",
+        rating: 4.9,
+        reviews: 112,
+        experience: 9,
+        languages: ["English", "Hindi", "Gujarati"],
+        available: [
+          { label: "Tue, Thu: 9AM-12PM" },
+          { label: "Sat: 2PM-5PM" },
+        ],
+        fee: 1300,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
@@ -93,6 +163,7 @@ const departments = [
           { label: "Mon-Fri: 2PM-5PM" },
         ],
         fee: 950,
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
       },
       {
         initials: "AM",
@@ -107,6 +178,39 @@ const departments = [
           { label: "Mon, Wed: 10AM-1PM" },
         ],
         fee: 1000,
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "RK",
+        name: "Dr. Ravi Kumar",
+        title: "Epilepsy Specialist",
+        qualification: "MD, DM Neurology, Fellowship in Epilepsy",
+        rating: 4.9,
+        reviews: 88,
+        experience: 9,
+        languages: ["English", "Hindi", "Tamil"],
+        available: [
+          { label: "Tue, Thu: 11AM-2PM" },
+          { label: "Sat: 9AM-12PM" },
+        ],
+        fee: 1200,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "NS",
+        name: "Dr. Neha Sharma",
+        title: "Movement Disorder Specialist",
+        qualification: "MD, DM Neurology, Fellowship in Movement Disorders",
+        rating: 4.8,
+        reviews: 76,
+        experience: 7,
+        languages: ["English", "Hindi", "Marathi"],
+        available: [
+          { label: "Mon, Wed: 2PM-5PM" },
+          { label: "Fri: 10AM-1PM" },
+        ],
+        fee: 1100,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
@@ -128,6 +232,7 @@ const departments = [
           { label: "Mon-Sat: 11AM-2PM" },
         ],
         fee: 700,
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
       },
       {
         initials: "VK",
@@ -142,6 +247,39 @@ const departments = [
           { label: "Tue, Thu: 9AM-12PM" },
         ],
         fee: 750,
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "AP",
+        name: "Dr. Anjali Patel",
+        title: "Pediatric Neurologist",
+        qualification: "MD Pediatrics, Fellowship in Pediatric Neurology",
+        rating: 4.9,
+        reviews: 92,
+        experience: 8,
+        languages: ["English", "Hindi", "Gujarati"],
+        available: [
+          { label: "Mon, Wed: 2PM-5PM" },
+          { label: "Sat: 10AM-1PM" },
+        ],
+        fee: 1000,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "MK",
+        name: "Dr. Mohit Kumar",
+        title: "Pediatric Cardiologist",
+        qualification: "MD Pediatrics, Fellowship in Pediatric Cardiology",
+        rating: 4.8,
+        reviews: 78,
+        experience: 6,
+        languages: ["English", "Hindi", "Punjabi"],
+        available: [
+          { label: "Tue, Thu: 11AM-2PM" },
+          { label: "Fri: 9AM-12PM" },
+        ],
+        fee: 1200,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
@@ -163,6 +301,7 @@ const departments = [
           { label: "Mon-Fri: 10AM-1PM" },
         ],
         fee: 850,
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
       },
       {
         initials: "NS",
@@ -177,6 +316,39 @@ const departments = [
           { label: "Wed, Fri: 2PM-5PM" },
         ],
         fee: 900,
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "SK",
+        name: "Dr. Shweta Kapoor",
+        title: "Infertility Specialist",
+        qualification: "MD, DGO, Fellowship in Reproductive Medicine",
+        rating: 4.9,
+        reviews: 86,
+        experience: 8,
+        languages: ["English", "Hindi", "Punjabi"],
+        available: [
+          { label: "Mon, Wed: 2PM-5PM" },
+          { label: "Sat: 10AM-1PM" },
+        ],
+        fee: 1500,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "RK",
+        name: "Dr. Ritu Khanna",
+        title: "High-Risk Pregnancy Specialist",
+        qualification: "MD, DGO, Fellowship in Maternal-Fetal Medicine",
+        rating: 4.8,
+        reviews: 92,
+        experience: 9,
+        languages: ["English", "Hindi", "Gujarati"],
+        available: [
+          { label: "Tue, Thu: 9AM-12PM" },
+          { label: "Fri: 2PM-5PM" },
+        ],
+        fee: 1300,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
@@ -198,6 +370,7 @@ const departments = [
           { label: "Tue, Thu: 3PM-6PM" },
         ],
         fee: 1200,
+        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
       },
       {
         initials: "SM",
@@ -212,31 +385,77 @@ const departments = [
           { label: "Mon, Fri: 11AM-2PM" },
         ],
         fee: 1250,
+        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "AK",
+        name: "Dr. Arun Kumar",
+        title: "Radiation Oncologist",
+        qualification: "MD, DM Radiation Oncology",
+        rating: 4.9,
+        reviews: 75,
+        experience: 7,
+        languages: ["English", "Hindi", "Tamil"],
+        available: [
+          { label: "Mon, Wed: 2PM-5PM" },
+          { label: "Sat: 10AM-1PM" },
+        ],
+        fee: 1400,
+        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
+      },
+      {
+        initials: "PS",
+        name: "Dr. Priya Sharma",
+        title: "Pediatric Oncologist",
+        qualification: "MD, DM Pediatric Oncology",
+        rating: 4.8,
+        reviews: 68,
+        experience: 6,
+        languages: ["English", "Hindi", "Marathi"],
+        available: [
+          { label: "Tue, Thu: 11AM-2PM" },
+          { label: "Fri: 9AM-12PM" },
+        ],
+        fee: 1500,
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
       },
     ],
   },
 ];
 
 function DoctorCard({ doctor }) {
+  const router = useRouter();
+
+  const handleBookAppointment = () => {
+    router.push(`/book-appointment?doctor=${encodeURIComponent(doctor.name)}`);
+  };
+
   return (
     <motion.div
-      whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px #7B6EF6" }}
-      className="bg-white rounded-2xl shadow p-6 flex flex-col gap-4 min-w-[320px] max-w-[420px] mx-auto"
+      whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
+      className="bg-white rounded-2xl shadow px-4 py-4 flex flex-col gap-4 max-w-[420px] min-w-[320px] h-full"
     >
       <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#6A8DFF] to-[#9B6EF6] flex items-center justify-center text-2xl font-bold text-white">
-          {doctor.initials}
+        <div className="relative w-20 h-20">
+          <img
+            src={doctor.image}
+            alt={doctor.name}
+            className="w-full h-full rounded-full object-cover border-2 border-blue-700"
+          />
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold">
+            {doctor.initials}
+          </div>
         </div>
         <div>
           <div className="text-xl font-bold text-gray-900">{doctor.name}</div>
-          <div className="text-[#6A8DFF] font-semibold text-base cursor-pointer hover:underline">{doctor.title}</div>
+          <div className="text-blue-600 font-semibold text-base cursor-pointer hover:underline">{doctor.title}</div>
         </div>
       </div>
-      <div className="flex flex-wrap gap-4 text-gray-700 text-base items-center">
+      <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1"><FaGraduationCap /> {doctor.qualification}</span>
         <span className="flex items-center gap-1"><FaStar className="text-yellow-400" /> {doctor.rating}/5 ({doctor.reviews} reviews)</span>
       </div>
-      <div className="flex flex-wrap gap-4 text-gray-700 text-base items-center">
+      <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1"><FaCalendarAlt /> {doctor.experience} Years Experience</span>
         <span className="flex items-center gap-1"><FaLanguage /> {doctor.languages.join(", ")}</span>
       </div>
@@ -244,20 +463,20 @@ function DoctorCard({ doctor }) {
         <div className="font-semibold mb-2">Available:</div>
         <div className="flex flex-wrap gap-2">
           {doctor.available.map((slot, idx) => (
-            <span key={idx} className="bg-[#6A8DFF] text-white px-4 py-1 rounded-full text-sm font-semibold">
+            <span key={idx} className="bg-blue-700 text-white px-4 py-1 rounded-full text-sm font-semibold">
               {slot.label}
             </span>
           ))}
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-2 w-full">
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-auto">
         <span className="bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-full flex items-center justify-center w-full sm:w-auto text-sm">
           ₹{doctor.fee} Consultation Fee
         </span>
-        <button className="bg-[#7B6EF6] text-white font-bold px-4 py-2 rounded-full hover:bg-[#6A8DFF] transition w-full sm:w-auto text-base">
+        <button onClick={() => {router.push("/find-doctor")}} className="bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition w-full sm:w-auto text-xs">
           Book Appointment
         </button>
-        <button className="border-2 border-[#7B6EF6] text-[#7B6EF6] font-bold px-4 py-2 rounded-full hover:bg-[#F7F9FB] transition w-full sm:w-auto text-base">
+        <button onClick={() => {router.push("/find-doctor")}} className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs">
           View Profile
         </button>
       </div>
@@ -265,7 +484,82 @@ function DoctorCard({ doctor }) {
   );
 }
 
+function DepartmentSection({ dept }) {
+  const scrollContainerRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = direction === 'left' ? -400 : 400;
+      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="mb-10">
+      {/* Department Header */}
+      <div className="flex items-center gap-3 mb-4">
+        <span className="text-2xl">{dept.emoji}</span>
+        <span className="font-bold text-lg text-blue-600">{dept.name} Department</span>
+      </div>
+      <div className="bg-blue-700 rounded-xl p-4 mb-6">
+        <span className="text-white font-semibold text-base">{dept.emoji} {dept.name} Department</span>
+        <div className="text-white text-base font-medium mt-1">{dept.desc}</div>
+      </div>
+
+      {/* Doctors Scroll Container */}
+      <div className="relative">
+        {/* Left Arrow */}
+        {showLeftArrow && (
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-blue-700 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+          >
+            <FaChevronLeft size={20} />
+          </button>
+        )}
+
+        {/* Doctors Scroll Area */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {dept.doctors.map((doctor) => (
+            <div key={doctor.name} className="pl-9 snap-start flex-none w-[calc(50%-1rem)]">
+              <DoctorCard doctor={doctor} />
+            </div>
+          ))}
+        </div>
+
+        {/* Right Arrow */}
+        {showRightArrow && (
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-blue-700 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+          >
+            <FaChevronRight size={20} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function HospitalDoctorsCard() {
+  const [showAll, setShowAll] = useState(false);
+  const visibleDepartments = showAll ? departments : departments.slice(0, 3);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -277,28 +571,26 @@ export default function HospitalDoctorsCard() {
       {/* Title */}
       <div className="flex items-center gap-3 mb-8">
         <span className="text-3xl">👨‍⚕️</span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#7B6EF6]">Our Doctors</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Our Doctors</h2>
       </div>
+
       {/* Departments */}
-      {departments.map((dept) => (
-        <div key={dept.name} className="mb-10">
-          {/* Department Header */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-2xl">{dept.emoji}</span>
-            <span className="font-bold text-lg text-[#7B6EF6]">{dept.name} Department</span>
-          </div>
-          <div className="bg-gradient-to-r from-[#6A8DFF] to-[#9B6EF6] rounded-xl p-4 mb-6">
-            <span className="text-white font-semibold text-base">{dept.emoji} {dept.name} Department</span>
-            <div className="text-white text-base font-medium mt-1">{dept.desc}</div>
-          </div>
-          {/* Doctors Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {dept.doctors.map((doctor) => (
-              <DoctorCard key={doctor.name} doctor={doctor} />
-            ))}
-          </div>
-        </div>
+      {visibleDepartments.map((dept) => (
+        <DepartmentSection key={dept.name} dept={dept} />
       ))}
+
+      {/* Show More Button */}
+      {departments.length > 3 && (
+        <motion.button
+          onClick={() => setShowAll(!showAll)}
+          className="w-full flex items-center rounded-full justify-center gap-2 py-4 text-blue-700 font-semibold hover:text-blue-800 hover:border-blue-700 transition-colors"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <span>{showAll ? "Show Less" : "Show More Departments"}</span>
+          <FaChevronDown className={`transform transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+        </motion.button>
+      )}
     </motion.div>
   );
 } 

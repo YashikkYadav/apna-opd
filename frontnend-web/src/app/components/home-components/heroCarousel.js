@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Image from "next/image";
 
 const images = [
   // 6 unique hospital equipment images from Unsplash
@@ -32,20 +33,47 @@ const variants = {
 };
 
 const swipeConfidenceThreshold = 80;
+const AUTOPLAY_DURATION = 4000; // 4 seconds
 
 const HeroCarousel = () => {
   const [[page, direction], setPage] = useState([0, 0]);
   const imageIndex = ((page % images.length) + images.length) % images.length;
   const timeoutRef = useRef(null);
   const touchStartX = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Preload images
+  useEffect(() => {
+    const preloadImages = () => {
+      const imagePromises = images.map((src) => {
+        return new Promise((resolve, reject) => {
+          const img = new window.Image();
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = src;
+        });
+      });
+
+      Promise.all(imagePromises)
+        .then(() => setIsLoading(false))
+        .catch((error) => {
+          console.error("Error preloading images:", error);
+          setIsLoading(false); // Continue even if some images fail to load
+        });
+    };
+
+    preloadImages();
+  }, []);
 
   // Autoplay
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setPage(([p]) => [p + 1, 1]);
-    }, 3000);
+    if (!isLoading) {
+      timeoutRef.current = setTimeout(() => {
+        setPage(([p]) => [p + 1, 1]);
+      }, AUTOPLAY_DURATION);
+    }
     return () => clearTimeout(timeoutRef.current);
-  }, [page]);
+  }, [page, isLoading]);
 
   // Touch handlers
   const handleTouchStart = (e) => {
@@ -68,7 +96,7 @@ const HeroCarousel = () => {
 
   return (
     <section className="w-full flex justify-center items-center bg-white">
-      <div className="relative w-full mt-2 mx-4 md:mx-6 h-[220px] md:h-[420px] flex items-center overflow-hidden rounded-2xl shadow-lg">
+      <div className="relative w-full mt-2 mx-4 md:mx-2 h-[220px] md:h-[420px] flex items-center overflow-hidden rounded-2xl shadow-lg">
         {/* Left Arrow */}
         <button
           className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-blue-100 rounded-full p-2 shadow transition hidden md:block"
@@ -84,19 +112,26 @@ const HeroCarousel = () => {
           onTouchEnd={handleTouchEnd}
         >
           <AnimatePresence initial={false} custom={direction}>
-            <motion.img
+            <motion.div
               key={imageIndex}
-              src={images[imageIndex]}
-              alt="carousel"
               custom={direction}
               variants={variants}
               initial="enter"
               animate="center"
               exit="exit"
               transition={{ type: "spring", stiffness: 400, damping: 40, duration: 0.5 }}
-              className="object-cover w-full h-full rounded-2xl shadow-lg"
-              draggable={false}
-            />
+              className="w-full h-full relative"
+            >
+              <Image
+                src={images[imageIndex]}
+                alt="carousel"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                className="object-cover rounded-2xl shadow-lg"
+                draggable={false}
+              />
+            </motion.div>
           </AnimatePresence>
         </div>
         {/* Right Arrow */}
