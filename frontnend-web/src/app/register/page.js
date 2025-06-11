@@ -220,7 +220,8 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e = null) => {
+    console.log("handle submit called");
     e?.preventDefault();
     const userName = users.filter(user => user.value === formData.user)[0].label;
     console.log(userName);
@@ -416,6 +417,7 @@ const Register = () => {
 
   const onClose = () => {
     setShowPaymentTypeModal(false);
+    handleSubmit();
   }
 
   return registerSuccess ? (
