@@ -104,6 +104,10 @@ const register = async (data) => {
     });
     await newHealthServeProfile.save();
 
+    if(isCash === 'cash') {
+      paymentUrl = null;
+    }
+
     return {
       statusCode: 201,
       healthServe: newHealthServe,
