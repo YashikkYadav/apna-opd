@@ -28,15 +28,15 @@ export default function HospitalFacilitiesCard() {
     >
       {/* Title */}
       <div className="flex items-center gap-3 mb-8">
-        <FaHospitalAlt className="text-3xl text-[#7B6EF6]" />
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#7B6EF6]">Facilities & Services</h2>
+        <FaHospitalAlt className="text-3xl text-blue-700" />
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Facilities & Services</h2>
       </div>
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {facilities.map((facility) => (
           <motion.div
             key={facility.name}
-            whileHover={{ scale: 1.04, boxShadow: "0 0 0 4px #7B6EF6" }}
+            whileHover={{ scale: 1.04, boxShadow: "0 0 0 4px blue" }}
             className="flex flex-col items-center justify-center bg-[#F7F9FB] rounded-2xl p-6 min-h-[120px] text-gray-800 shadow-md transition-all"
           >
             <div className="text-4xl mb-3">{facility.emoji}</div>

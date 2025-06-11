@@ -45,15 +45,15 @@ export default function HospitalTestimonialsCard() {
       {/* Title */}
       <div className="flex items-center gap-3 mb-8">
         <span className="text-3xl text-yellow-400"><FaStar /></span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-[#5B6EF6]">Patient Reviews & Testimonials</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Patient Reviews & Testimonials</h2>
       </div>
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {testimonials.map((t, idx) => (
           <motion.div
             key={idx}
-            whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px #5B6EF6" }}
-            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[200px] border-l-4 border-[#5B6EF6]/40 hover:border-[#5B6EF6] transition-all flex flex-col"
+            whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
+            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[200px] border-l-4 border-blue-500 hover:border-blue-700 transition-all flex flex-col"
           >
             <div className="flex items-center gap-1 mb-2">
               {[...Array(t.stars)].map((_, i) => (
