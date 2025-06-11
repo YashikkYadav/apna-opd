@@ -27,8 +27,23 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    address: {
+    location : {
       required: true,
+      type: String,
+    },
+    pinCode: {
+      type: String,
+    },
+    locality: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    address: {
       type: String,
     },
     clinicName: {

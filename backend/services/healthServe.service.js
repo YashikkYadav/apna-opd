@@ -20,11 +20,17 @@ const register = async (data) => {
       email,
       password,
       location,
+      address,
+      pinCode,
+      city,
+      locality,
+      state,
       subscriptionType,
       bloodGroup,
       homeService,
+      isCash,
     } = data;
-const healthServeValidation = validateHealthServe(data);
+    const healthServeValidation = validateHealthServe(data);
     if (!healthServeValidation.success) {
       return {
         statusCode: 400,
@@ -42,7 +48,7 @@ const healthServeValidation = validateHealthServe(data);
     type = type.replace("-", "_");
 
     let paymentUrl;
-    if (type !== "blood_donor") {
+    if (type !== "blood_donor" || isCash === 'cash') {
       paymentUrl = await createPaymentLinkForEntity(
         type,
         { name, phone, email },
@@ -64,8 +70,18 @@ const healthServeValidation = validateHealthServe(data);
       email,
       password: hashedPassword,
       location,
+      address,
+      pinCode,
+      city,
+      locality,
+      state,
       subscriptionType,
     };
+
+    if (isCash === 'cash') {
+      healthServeData.paymentStatus = true;
+      healthServeData.paymentObject = { type: "cash" };
+    }
 
     if (type === "blood_donor" && bloodGroup) {
       healthServeData.bloodGroup = bloodGroup;
@@ -337,7 +353,7 @@ const getHealthServeList = async (page, location, type) => {
         { $limit: limit },
         {
           $lookup: {
-            from: "healthserveprofiles", 
+            from: "healthserveprofiles",
             localField: "_id",
             foreignField: "healthServeId",
             as: "profiles",
