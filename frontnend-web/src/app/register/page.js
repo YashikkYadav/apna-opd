@@ -195,11 +195,11 @@ const Register = () => {
         });
         setRegisterSuccess(true);
         console.log("Payment response : ", response);
-        if(response.paymentUrl){
+        if (response.paymentUrl) {
           setTimeout(() => {
             window.location.href = response.paymentUrl.paymentLink;
           }, 2000);
-        }else{
+        } else {
           router.push('/');
         }
       }
@@ -220,18 +220,18 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = async (e = null) => {
+  const handleSubmit = async (e) => {
     console.log("handle submit called");
     e?.preventDefault();
     const userName = users.filter(user => user.value === formData.user)[0].label;
-    console.log(userName);
+    console.log(formData.isCash)
+    console.log(userName.trim())
     if (userName.trim() === "Vinod" && formData.isCash === "") {
       setShowPaymentTypeModal(true);
       return;
-    } else {
-      setShowPaymentTypeModal(false);
     }
 
+    console.log("handle submit called 1");
     // Validation checks
     if (!validateEmail(formData.email)) {
       toast.error("Please enter a valid email address!");
@@ -309,6 +309,7 @@ const Register = () => {
       return;
     }
 
+    console.log("handle submit called 2");
     setIsSubmitting(true);
     try {
       const payload = {
@@ -400,10 +401,6 @@ const Register = () => {
     }));
   }
 
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   const fetchUsers = async () => {
     const userData = await axiosInstance.get("/user");
     const temp = convertUsersToSelectOptions(userData.user);
@@ -415,9 +412,14 @@ const Register = () => {
     onClose();
   };
 
+  useEffect(() => {
+    if (formData.isCash !== "") {
+      handleSubmit();
+    }
+  }, [formData])
+
   const onClose = () => {
     setShowPaymentTypeModal(false);
-    handleSubmit();
   }
 
   return registerSuccess ? (
