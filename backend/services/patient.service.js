@@ -32,27 +32,27 @@ const registerPatient = async (patientData, doctorId) => {
       };
     }
 
-    // const patient = await Patient.findOne({ phoneNumber });
-    // if (patient) {
-    //   const doctorPatient = await DoctorPatient.findOne({ patientId: patient._id, doctorId });
+    const patient = await Patient.findOne({ phoneNumber });
+    if (patient) {
+      const doctorPatient = await DoctorPatient.findOne({ patientId: patient._id, doctorId });
 
-    //   if (!doctorPatient) {
-    //     const doctorPatient = new DoctorPatient({
-    //       doctorId,
-    //       patientId: patient._id,
-    //     });
-    //     await doctorPatient.save();
-    //     return {
-    //       statusCode: 201,
-    //       patient: patient,
-    //     };
-    //   }
+      if (!doctorPatient) {
+        const doctorPatient = new DoctorPatient({
+          doctorId,
+          patientId: patient._id,
+        });
+        await doctorPatient.save();
+        return {
+          statusCode: 201,
+          patient: patient,
+        };
+      }
 
-    //   return {
-    //     statusCode: 409,
-    //     error: `Patient with ${phoneNumber} already exist`,
-    //   };
-    // }
+      return {
+        statusCode: 409,
+        error: `Patient with ${phoneNumber} already exist`,
+      };
+    }
 
     const uid = await generatePatientUid();
     const newPatient = new Patient({
