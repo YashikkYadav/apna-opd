@@ -52,7 +52,7 @@
       </v-col>
 
       <!-- Chat Window -->
-      <v-col cols="12" md="8" class="pa-3">
+      <v-col v-if="selectedChatId" cols="12" md="8" class="pa-3">
         <v-card style="height: 90vh">
           <v-card-title class="d-flex align-center">
             <v-avatar class="mr-3" size="40">
@@ -225,7 +225,7 @@ export default {
     },
     handleTyping() {
       if (this.typingTimeout) clearTimeout(this.typingTimeout);
-      this.typingStatus = "doctor is typing...";
+      this.typingStatus = "patient is typing...";
       this.typingTimeout = setTimeout(() => {
         this.typingStatus = "";
       }, 2000);

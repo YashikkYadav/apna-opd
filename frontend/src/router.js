@@ -111,4 +111,14 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('doctor_id') && !!localStorage.getItem('access_token');
+
+  if (to.path === '/login' && isAuthenticated) {
+    return next('/dashboard');
+  }
+
+  next();
+});
+
 export default router;

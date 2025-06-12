@@ -177,7 +177,7 @@ export default {
           localStorage.setItem('doctor_id', data.doctor.id);
           localStorage.setItem('access_token', data.doctor.accessToken);
 
-          this.$router.push('/create-rx');
+          this.$router.push('/dashboard');
         })
         .catch((error) => {
           console.error("Network Error:", error.message);
@@ -220,11 +220,12 @@ export default {
   },
 
   mounted() {
+    console.log("Component Mounted");
     const doctorId = localStorage.getItem('doctor_id');
     const accessToken = localStorage.getItem('access_token');
 
     if (doctorId && accessToken) {
-      this.$router.push('/invoice');
+      this.$router.push('/dashboard');
     }
   },
 
