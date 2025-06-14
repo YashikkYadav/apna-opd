@@ -27,7 +27,7 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    location : {
+    location: {
       required: true,
       type: String,
     },
@@ -55,6 +55,8 @@ const doctorSchema = new mongoose.Schema(
       enum: [
         "Cardiologist",
         "Dermatologist",
+        "Dentist",
+        "ENT",
         "Neurologist",
         "Pediatrician",
         "Orthopedic Surgeon",
@@ -68,8 +70,10 @@ const doctorSchema = new mongoose.Schema(
         "Pulmonologist",
         "Rheumatologist",
         "Allergist",
-        "Nurse",
-        "Ambulance",
+        "Ayurvedic",
+        "Homoeopathic",
+        "Unani",
+        "Other",
       ],
       required: true,
     },
