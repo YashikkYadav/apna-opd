@@ -10,7 +10,6 @@ const { createPaymentLinkForEntity } = require("./payment.service");
 const Appointment = require("../models/appointment");
 
 const registerDoctor = async (doctorData) => {
-  console.log(doctorData);
   try {
     const {
       name,
