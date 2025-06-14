@@ -1,5 +1,5 @@
 const moment = require("moment");
-const healthServeProfile = require("../models/healthServeProfile");
+const HealthServe = require("../models/healthServe");
 const HealthServeProfile = require("../models/healthServeProfile");
 const { default: mongoose } = require("mongoose");
 const fs = require("fs");
@@ -14,13 +14,22 @@ const createProfile = async (healthServeId, profileData) => {
       about: profileData.about,
       experience: profileData.experience,
       introduction: profileData.introduction,
-      address: profileData.address,
-      city: profileData.city,
-      locality: profileData.locality,
-      state: profileData.state,
-      pincode: profileData.pincode,
       images: healthServeProfileImages,
     };
+
+    const updatedHealthServe = await HealthServe.findOneAndUpdate(
+      { _id: healthServeId },
+      {
+        $set: {
+          address: profileData.address,
+          pincode: profileData.pincode,
+          city: profileData.city,
+          locality: profileData.locality,
+          state: profileData.state,
+        },
+      },
+      { new: true }
+    );
 
     const healthServeProfile = await HealthServeProfile.findOneAndUpdate(
       { healthServeId },

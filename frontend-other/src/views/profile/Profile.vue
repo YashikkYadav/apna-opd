@@ -148,7 +148,6 @@
               <v-text-field
                 v-model="form.pincode"
                 label="Pincode"
-                type="number"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
@@ -264,9 +263,15 @@ export default {
       const res = await useProfileStore().getHealthServeApiCall();
       this.images = res.healthServeProfile.images;
       if (res.healthServeProfile !== null) {
+        console.log(res);
         this.form.introduction = res.healthServeProfile.introduction;
         this.form.about = res.healthServeProfile.about;
         this.form.experience = res.healthServeProfile.experience;
+        this.form.address = res.healthServeProfile.healthServeId.address;
+        this.form.city = res.healthServeProfile.healthServeId.city;
+        this.form.locality = res.healthServeProfile.healthServeId.locality;
+        this.form.state = res.healthServeProfile.healthServeId.state;
+        this.form.pincode = res.healthServeProfile.healthServeId.pincode;
       }
     },
     async onSubmit() {
