@@ -21,11 +21,25 @@ const routes = [
     name: "Login",
     component: Login,
   },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/doctors",
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('hospital_id') && !!localStorage.getItem('access_token');
+
+  if (to.path === '/login' && isAuthenticated) {
+    return next('/doctors');
+  }
+
+  next();
 });
 
 export default router;
