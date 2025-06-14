@@ -1,22 +1,25 @@
 const specialties = [
-    "Cardiologist",
-    "Dermatologist",
-    "Neurologist",
-    "Pediatrician",
-    "Orthopedic Surgeon",
-    "Gynecologist",
-    "Ophthalmologist",
-    "Psychiatrist",
-    "Endocrinologist",
-    "Oncologist",
-    "Urologist",
-    "Gastroenterologist",
-    "Pulmonologist",
-    "Rheumatologist",
-    "Allergist",
-    "Nurse",
-    "Ambulance"
-  ];
+  "Cardiologist",
+  "Dermatologist",
+  "Dentist",
+  "ENT",
+  "Neurologist",
+  "Pediatrician",
+  "Orthopedic Surgeon",
+  "Gynecologist",
+  "Ophthalmologist",
+  "Psychiatrist",
+  "Endocrinologist",
+  "Oncologist",
+  "Urologist",
+  "Gastroenterologist",
+  "Pulmonologist",
+  "Rheumatologist",
+  "Allergist",
+  "Ayurvedic",
+  "Homoeopathic",
+  "Unani",
+  "Other",
+];
 
-  module.exports = specialties;
-  
+module.exports = specialties;
