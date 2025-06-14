@@ -124,9 +124,29 @@
             <iframe :src="record.fileUrl" class="preview-pdf"></iframe>
           </v-card-text>
         </v-card>
+
+    <v-card-actions>
+      <v-row class="ma-0" no-gutters>
+        <v-col cols="6" class="pr-1">
+          <v-btn
+            color="red"
+            class="action-btn"
+            block
+            @click="initiateDelete(record)"
+          >
+            Delete
+          </v-btn>
+        </v-col>
+        <v-col cols="6" class="pl-1">
+          <v-btn color="green" class="action-btn" block @click="sendRecord">
+            Send
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card-actions>
+
       </v-col>
     </v-row>
-
     <!-- Prescription Dialog -->
     <v-dialog v-model="pdfDialog" class="height: auto">
       <v-card class="print-popup w-66">
