@@ -4,6 +4,8 @@ import { searchCities } from "../services/locationService";
 export const specialties = [
   "Cardiologist",
   "Dermatologist",
+  "Dentist",
+  "ENT",
   "Neurologist",
   "Pediatrician",
   "Orthopedic Surgeon",
@@ -17,10 +19,10 @@ export const specialties = [
   "Pulmonologist",
   "Rheumatologist",
   "Allergist",
-  "Nurse",
   "Ayurvedic",
   "Homoeopathic",
   "Unani",
+  "Other",
 ];
 
 // Update getLocations to be async and use the locationService
