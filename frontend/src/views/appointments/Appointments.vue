@@ -123,3 +123,15 @@ const fetchAppointments = async () => {
   appointments.value = appointmentsData.appointments;
 };
 </script>
+<style scoped>
+.v-data-table :deep(tbody tr:hover) {
+  background-color: #f5f5f5 !important;
+}
+
+.v-data-table :deep(thead th) {
+  font-size: 0.875rem !important;
+  font-weight: bold !important;
+  color: #4d4d4d !important;
+  background-color: #d3d3d3 !important;
+}
+</style>

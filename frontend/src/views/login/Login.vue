@@ -196,7 +196,7 @@ export default {
         localStorage.setItem("doctor_id", res.doctor.id);
         localStorage.setItem("access_token", res.doctor.accessToken);
 
-        this.$router.push("/create-rx");
+        this.$router.push("/dashboard");
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");
       }
     },

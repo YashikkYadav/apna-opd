@@ -9,7 +9,7 @@ export default {
     const accessToken = localStorage.getItem('access_token');
 
     if (doctorId && accessToken) {
-      this.$router.push('/create-rx');
+      this.$router.push('/dashboard');
     } else {
       this.$router.push('/login');
     }
