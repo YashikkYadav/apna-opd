@@ -99,6 +99,62 @@
             </div>
           </v-row>
         </v-card>
+        <v-card class="section-card">
+          <v-toolbar
+            class="mb-4"
+            flat
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Address</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.address"
+                label="Address"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.locality"
+                label="Locality"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.city"
+                label="City"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.state"
+                label="State"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.pincode"
+                label="Pincode"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+          </v-row>
+        </v-card>
       </div>
     </v-container>
     <v-container style="max-width: 100%">
@@ -144,6 +200,11 @@ export default {
         introduction: "",
         experience: null,
         about: "",
+        address: "",
+        locality: "",
+        city: "",
+        pincode: "",
+        state: "",
       },
       rules: {
         required: (value) => !!value || "This field is required.",
@@ -202,9 +263,15 @@ export default {
       const res = await useProfileStore().getHealthServeApiCall();
       this.images = res.healthServeProfile.images;
       if (res.healthServeProfile !== null) {
+        console.log(res);
         this.form.introduction = res.healthServeProfile.introduction;
         this.form.about = res.healthServeProfile.about;
         this.form.experience = res.healthServeProfile.experience;
+        this.form.address = res.healthServeProfile.healthServeId.address;
+        this.form.city = res.healthServeProfile.healthServeId.city;
+        this.form.locality = res.healthServeProfile.healthServeId.locality;
+        this.form.state = res.healthServeProfile.healthServeId.state;
+        this.form.pincode = res.healthServeProfile.healthServeId.pincode;
       }
     },
     async onSubmit() {
@@ -215,6 +282,11 @@ export default {
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
+        formData.append("address", this.form.address);
+        formData.append("locality", this.form.locality);
+        formData.append("city", this.form.city);
+        formData.append("pincode", this.form.pincode);
+        formData.append("state", this.form.state);
 
         if (this.profileImage) {
           formData.append("profilePhoto", this.profileImage);
