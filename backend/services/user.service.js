@@ -9,6 +9,8 @@ const createUser = async (userData) => {
   try {
     UserSchema.parse(userData);
 
+    console.log(userData);
+
     const existingUserWithEmail = await User.findOne({ email: userData.email });
     if (existingUserWithEmail) {
       return { statusCode: 400, error: "Email already exists." };
@@ -19,13 +21,10 @@ const createUser = async (userData) => {
       return { statusCode: 400, error: "Phone number already exists." };
     }
 
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
     const user = new User({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
+      name: userData.name,
       email: userData.email,
       phone: userData.phone,
-      password: hashedPassword,
     });
 
     await user.save();

@@ -96,7 +96,9 @@
           </a>
         </template>
         <template v-slot:item.firstName="{ item }">
-          {{ item.firstName + " " + item.lastName }}
+          {{
+            item.firstName ? item.firstName + " " + item.lastName : item.name
+          }}
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon size="small" class="ms-2" @click="openDetailsModal(item)">
@@ -109,8 +111,7 @@
     <v-dialog v-model="showDetailsModal" max-width="600">
       <v-card>
         <v-card-title class="text-h5">
-          User Profiles - {{ selectedUser?.firstName }}
-          {{ selectedUser?.lastName }}
+          User Profiles - {{ selectedUser?.firstName + selectedUser?.lastName }}
         </v-card-title>
         <v-card-text>
           <v-data-table
@@ -140,16 +141,8 @@
         <v-card-text>
           <v-form ref="createUserForm" @submit.prevent="submitCreateUserForm">
             <v-text-field
-              v-model="newUser.firstName"
-              label="First Name"
-              variant="outlined"
-              density="compact"
-              class="mb-4"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="newUser.lastName"
-              label="Last Name"
+              v-model="newUser.name"
+              label="Name"
               variant="outlined"
               density="compact"
               class="mb-4"
@@ -167,15 +160,6 @@
             <v-text-field
               v-model="newUser.phone"
               label="Phone Number"
-              variant="outlined"
-              density="compact"
-              class="mb-4"
-              required
-            ></v-text-field>
-            <v-text-field
-              v-model="newUser.password"
-              label="Password"
-              type="password"
               variant="outlined"
               density="compact"
               class="mb-4"
@@ -351,27 +335,20 @@ const closeDetailsModal = () => {
   userDetails.value = [];
 };
 
-// New state for Create User Modal
 const showCreateUserModal = ref(false);
 const newUser = ref({
-  firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   phone: "",
-  password: "",
 });
 const createUserForm = ref(null); // Ref for the v-form
 
 const openCreateUserModal = () => {
   newUser.value = {
-    // Reset form fields when opening
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     phone: "",
-    password: "",
   };
-  // Reset validation state of the form
   if (createUserForm.value) {
     createUserForm.value.resetValidation();
   }
@@ -381,25 +358,22 @@ const openCreateUserModal = () => {
 const closeCreateUserModal = () => {
   showCreateUserModal.value = false;
   if (createUserForm.value) {
-    createUserForm.value.reset(); // Reset form fields and validation
+    createUserForm.value.reset();
   }
 };
 
 const submitCreateUserForm = async () => {
   try {
     const payload = {
-      firstName: newUser.value.firstName,
-      lastName: newUser.value.lastName,
+      name: newUser.value.name,
       email: newUser.value.email,
       phone: newUser.value.phone,
-      password: newUser.value.password,
     };
 
-    console.log("Sending payload to backend:", payload);
     const userStore = useUserStore();
 
     const data = await userStore.registerUser(payload);
-    
+
     if (data.User) {
       fetchUser();
       useUiStore().openNotificationMessage("User registered");
