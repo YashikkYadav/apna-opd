@@ -1,5 +1,6 @@
 const moment = require("moment");
 const DoctorProfile = require("../models/doctorProfile");
+const Doctor = require("../models/doctor");
 const validateDoctorProfile = require("../validations/doctorProfile.validation");
 const { validateLocationSchedule } = require("../utils/doctorTiming");
 const path = require("path");
@@ -48,7 +49,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
       }
     }
 
-    const updatedDoc = await Model.findOneAndUpdate(
+    const updatedDoc = await Doctor.findOneAndUpdate(
       { _id: doctorId },
       {
         $set: {

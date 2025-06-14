@@ -172,7 +172,6 @@
               <v-text-field
                 v-model="form.pincode"
                 label="Pincode"
-                type="number"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
@@ -583,6 +582,11 @@ export default {
         this.form.from =
           res.doctorProfile.unavailabilityDate?.from.split("T")[0];
         this.form.to = res.doctorProfile.unavailabilityDate?.to.split("T")[0];
+        this.form.address = res.doctorProfile.doctorId?.address;
+        this.form.locality = res.doctorProfile.doctorId?.locality;
+        this.form.state = res.doctorProfile.doctorId?.state;
+        this.form.city = res.doctorProfile.doctorId?.city;
+        this.form.pincode = res.doctorProfile.doctorId?.pincode;
       }
 
       console.log(res);
@@ -619,7 +623,7 @@ export default {
         formData.append("address", JSON.stringify(data.address));
         formData.append("locality", JSON.stringify(data.locality));
         formData.append("city", JSON.stringify(data.city));
-        formData.append("city", JSON.stringify(data.state));
+        formData.append("state", JSON.stringify(data.state));
         formData.append("pincode", JSON.stringify(data.pincode));
         formData.append(
           "unavailabilityDate",
