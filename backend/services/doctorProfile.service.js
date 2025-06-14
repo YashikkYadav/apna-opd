@@ -16,6 +16,11 @@ const createDoctorProfile = async (doctorId, profileData) => {
       appointmentFee,
       about,
       locations,
+      address,
+      locality,
+      city,
+      state,
+      pincode,
       unavailabilityDate,
       availabilityAfter,
     } = profileData;
@@ -42,6 +47,20 @@ const createDoctorProfile = async (doctorId, profileData) => {
         };
       }
     }
+
+    const updatedDoc = await Model.findOneAndUpdate(
+      { _id: doctorId },
+      {
+        $set: {
+          address,
+          pincode,
+          city,
+          locality,
+          state,
+        },
+      },
+      { new: true }
+    );
 
     const doctorProfile = await DoctorProfile.findOne({ doctorId });
     if (doctorProfile) {
@@ -83,6 +102,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
     return {
       statusCode: 201,
       doctorProfile: newDoctorProfile,
+      doctor: updatedDoc,
     };
   } catch (error) {
     console.log("Error while inserting in databaes", error);

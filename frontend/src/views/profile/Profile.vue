@@ -129,6 +129,64 @@
             flat
             style="column-gap: 20px; padding: 0px 20px"
           >
+            <v-toolbar-title class="ml-3">Address</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.address"
+                label="Address"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.locality"
+                label="Locality"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.city"
+                label="City"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.state"
+                label="State"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.pincode"
+                label="Pincode"
+                type="number"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <v-card class="section-card">
+          <v-toolbar
+            class="mb-4"
+            flat
+            style="column-gap: 20px; padding: 0px 20px"
+          >
             <v-toolbar-title class="ml-3">Unavailability Date</v-toolbar-title>
           </v-toolbar>
           <v-row class="about-item">
@@ -406,13 +464,17 @@ export default {
       galleryImages: [],
       form: {
         introduction: "",
-        happyClients: 0,
-        experience: 0,
-        appointmentFee: 0,
+        happyClients: null,
+        experience: null,
         about: "",
         from: "",
         to: "",
         delay: "",
+        address: "",
+        pincode: "",
+        city: "",
+        locality: "",
+        state: "",
         locations: [
           {
             name: "",
@@ -517,11 +579,13 @@ export default {
             timeslot: null,
           },
         ];
-        this.form.delay = res.doctorProfile.availabilityAfter;
+        this.form.delay = res.doctorProfile?.availabilityAfter;
         this.form.from =
-          res.doctorProfile.unavailabilityDate.from.split("T")[0];
-        this.form.to = res.doctorProfile.unavailabilityDate.to.split("T")[0];
+          res.doctorProfile.unavailabilityDate?.from.split("T")[0];
+        this.form.to = res.doctorProfile.unavailabilityDate?.to.split("T")[0];
       }
+
+      console.log(res);
     },
     async onSubmit() {
       const { valid } = await this.$refs.form.validate();
@@ -552,6 +616,11 @@ export default {
         formData.append("appointmentFee", parseInt(this.form.appointmentFee));
         formData.append("about", this.form.about);
         formData.append("locations", JSON.stringify(data.locations));
+        formData.append("address", JSON.stringify(data.address));
+        formData.append("locality", JSON.stringify(data.locality));
+        formData.append("city", JSON.stringify(data.city));
+        formData.append("city", JSON.stringify(data.state));
+        formData.append("pincode", JSON.stringify(data.pincode));
         formData.append(
           "unavailabilityDate",
           JSON.stringify(data.unavailabilityDate)
