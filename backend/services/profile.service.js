@@ -14,6 +14,11 @@ const createProfile = async (healthServeId, profileData) => {
       about: profileData.about,
       experience: profileData.experience,
       introduction: profileData.introduction,
+      address: profileData.address,
+      city: profileData.city,
+      locality: profileData.locality,
+      state: profileData.state,
+      pincode: profileData.pincode,
       images: healthServeProfileImages,
     };
 
@@ -68,25 +73,29 @@ async function getImagesById(targetId) {
 
 const getHealthServeProfile = async (healthServeId) => {
   try {
-    if (!healthServeId || healthServeId === "null" || healthServeId === "undefined") {
+    if (
+      !healthServeId ||
+      healthServeId === "null" ||
+      healthServeId === "undefined"
+    ) {
       return {
         statusCode: 400,
         error: {
-          message: "Health serve ID is required"
-        }
+          message: "Health serve ID is required",
+        },
       };
     }
 
     const healthServeProfile = await HealthServeProfile.findOne({
-      healthServeId: healthServeId
+      healthServeId: healthServeId,
     }).populate("healthServeId");
 
     if (!healthServeProfile) {
       return {
         statusCode: 404,
         error: {
-          message: "Health serve profile not found"
-        }
+          message: "Health serve profile not found",
+        },
       };
     }
 
@@ -100,8 +109,8 @@ const getHealthServeProfile = async (healthServeId) => {
       statusCode: 500,
       error: {
         message: "Internal server error",
-        details: error.message
-      }
+        details: error.message,
+      },
     };
   }
 };
