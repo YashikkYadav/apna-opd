@@ -263,6 +263,8 @@ defineOptions({
 const specialties = [
   "Cardiologist",
   "Dermatologist",
+  "Dentist",
+  "ENT",
   "Neurologist",
   "Pediatrician",
   "Orthopedic Surgeon",
@@ -276,7 +278,10 @@ const specialties = [
   "Pulmonologist",
   "Rheumatologist",
   "Allergist",
-  "Nurse",
+  "Ayurvedic",
+  "Homoeopathic",
+  "Unani",
+  "Other",
 ];
 
 const subscriptionTypes = [
