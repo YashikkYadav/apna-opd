@@ -42,7 +42,7 @@
                     variant="outlined"
                     :rules="[(v) => !!v || 'Name is required']"
                     required
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -52,7 +52,7 @@
                     :rules="[(v) => !!v || 'Phone number is required']"
                     required
                     type="tel"
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -65,16 +65,7 @@
                     ]"
                     required
                     type="email"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.clinicName"
-                    label="Clinic Name"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Clinic name is required']"
-                    required
-                  ></v-text-field>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-select
@@ -84,25 +75,17 @@
                     variant="outlined"
                     :rules="[(v) => !!v || 'Speciality is required']"
                     required
-                  ></v-select>
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
-                    v-model="newDoctorData.rmcNumber"
-                    label="RMC Number"
+                    v-model="newDoctorData.password"
+                    label="Password"
                     variant="outlined"
-                    :rules="[(v) => !!v || 'RMC Number is required']"
+                    :rules="[(v) => !!v || 'Password is required']"
                     required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.address"
-                    label="Address"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Address is required']"
-                    required
-                  ></v-text-field>
+                    type="password"
+                  />
                 </v-col>
               </v-row>
             </v-container>
@@ -115,12 +98,11 @@
             color="blue-grey-darken-1"
             variant="text"
             @click="closeDoctorDialog"
+            >Cancel</v-btn
           >
-            Cancel
-          </v-btn>
-          <v-btn color="primary" variant="elevated" @click="submitDoctorForm">
-            Submit
-          </v-btn>
+          <v-btn color="primary" variant="elevated" @click="submitDoctorForm"
+            >Submit</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -302,10 +284,9 @@ const newDoctorData = ref({
   name: "",
   phoneNumber: "",
   email: "",
-  clinicName: "",
   speciality: "",
-  rmcNumber: "",
-  address: "",
+  password: "",
+  isHospital: "",
 });
 
 const headers = ref([

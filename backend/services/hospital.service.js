@@ -39,7 +39,7 @@ const registerDoctor = async (doctorData, hospitalId) => {
       if (!doctor) {
         doctor = await doctorService.registerDoctor({
           ...doctorData,
-          password: "12345678",
+          hospitalId
         });
       }
       if (doctor.error) {

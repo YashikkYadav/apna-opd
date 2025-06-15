@@ -1,5 +1,6 @@
 const moment = require("moment");
 const DoctorProfile = require("../models/doctorProfile");
+const Doctor = require("../models/doctor");
 const validateDoctorProfile = require("../validations/doctorProfile.validation");
 const { validateLocationSchedule } = require("../utils/doctorTiming");
 const path = require("path");
@@ -16,6 +17,11 @@ const createDoctorProfile = async (doctorId, profileData) => {
       appointmentFee,
       about,
       locations,
+      address,
+      locality,
+      city,
+      state,
+      pincode,
       unavailabilityDate,
       availabilityAfter,
     } = profileData;
@@ -42,6 +48,20 @@ const createDoctorProfile = async (doctorId, profileData) => {
         };
       }
     }
+
+    const updatedDoc = await Doctor.findOneAndUpdate(
+      { _id: doctorId },
+      {
+        $set: {
+          address,
+          pincode,
+          city,
+          locality,
+          state,
+        },
+      },
+      { new: true }
+    );
 
     const doctorProfile = await DoctorProfile.findOne({ doctorId });
     if (doctorProfile) {
@@ -83,6 +103,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
     return {
       statusCode: 201,
       doctorProfile: newDoctorProfile,
+      doctor: updatedDoc,
     };
   } catch (error) {
     console.log("Error while inserting in databaes", error);

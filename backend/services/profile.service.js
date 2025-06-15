@@ -1,5 +1,5 @@
 const moment = require("moment");
-const healthServeProfile = require("../models/healthServeProfile");
+const HealthServe = require("../models/healthServe");
 const HealthServeProfile = require("../models/healthServeProfile");
 const { default: mongoose } = require("mongoose");
 const fs = require("fs");
@@ -16,6 +16,20 @@ const createProfile = async (healthServeId, profileData) => {
       introduction: profileData.introduction,
       images: healthServeProfileImages,
     };
+
+    const updatedHealthServe = await HealthServe.findOneAndUpdate(
+      { _id: healthServeId },
+      {
+        $set: {
+          address: profileData.address,
+          pincode: profileData.pincode,
+          city: profileData.city,
+          locality: profileData.locality,
+          state: profileData.state,
+        },
+      },
+      { new: true }
+    );
 
     const healthServeProfile = await HealthServeProfile.findOneAndUpdate(
       { healthServeId },
@@ -68,25 +82,29 @@ async function getImagesById(targetId) {
 
 const getHealthServeProfile = async (healthServeId) => {
   try {
-    if (!healthServeId || healthServeId === "null" || healthServeId === "undefined") {
+    if (
+      !healthServeId ||
+      healthServeId === "null" ||
+      healthServeId === "undefined"
+    ) {
       return {
         statusCode: 400,
         error: {
-          message: "Health serve ID is required"
-        }
+          message: "Health serve ID is required",
+        },
       };
     }
 
     const healthServeProfile = await HealthServeProfile.findOne({
-      healthServeId: healthServeId
+      healthServeId: healthServeId,
     }).populate("healthServeId");
 
     if (!healthServeProfile) {
       return {
         statusCode: 404,
         error: {
-          message: "Health serve profile not found"
-        }
+          message: "Health serve profile not found",
+        },
       };
     }
 
@@ -100,8 +118,8 @@ const getHealthServeProfile = async (healthServeId) => {
       statusCode: 500,
       error: {
         message: "Internal server error",
-        details: error.message
-      }
+        details: error.message,
+      },
     };
   }
 };

@@ -31,7 +31,7 @@ const doctorSchema = new mongoose.Schema(
       required: true,
       type: String,
     },
-    pinCode: {
+    pincode: {
       type: String,
     },
     locality: {

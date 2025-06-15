@@ -40,7 +40,7 @@ const healthServeSchema = new mongoose.Schema(
     address: {
       type: String,
     },
-    pinCode: {
+    pincode: {
       type: String,
     },
     locality: {

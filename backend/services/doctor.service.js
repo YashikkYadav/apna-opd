@@ -8,9 +8,9 @@ const {
 const DoctorProfile = require("../models/doctorProfile");
 const { createPaymentLinkForEntity } = require("./payment.service");
 const Appointment = require("../models/appointment");
+const HealthServe = require("../models/healthServe");
 
-const registerDoctor = async (doctorData) => {
-  console.log(doctorData);
+const registerDoctor = async (doctorData, hospitalId = null) => {
   try {
     const {
       name,
@@ -29,14 +29,17 @@ const registerDoctor = async (doctorData) => {
       subscriptionType,
       user,
       isCash,
+      hospitalId,
     } = doctorData;
 
-    const doctorDataValidation = validateDoctor(doctorData);
-    if (!doctorDataValidation.success) {
-      return {
-        statusCode: 400,
-        error: doctorDataValidation.errors,
-      };
+    if (!hospitalId) {
+      const doctorDataValidation = validateDoctor(doctorData);
+      if (!doctorDataValidation.success) {
+        return {
+          statusCode: 400,
+          error: doctorDataValidation.errors,
+        };
+      }
     }
 
     let doctor =
@@ -57,24 +60,8 @@ const registerDoctor = async (doctorData) => {
       subscriptionType
     );
     const hashedPassword = await getHashedPassword(password);
-    let data = {
-      name,
-      rmcNumber,
-      phoneNumber,
-      email,
-      location,
-      address,
-      pincode,
-      locality,
-      state,
-      city,
-      clinicName,
-      speciality,
-      password: hashedPassword,
-      subscriptionType,
-    };
-    if (user) {
-      data = {
+    if (!hospitalId) {
+      let data = {
         name,
         rmcNumber,
         phoneNumber,
@@ -89,38 +76,80 @@ const registerDoctor = async (doctorData) => {
         speciality,
         password: hashedPassword,
         subscriptionType,
-        userId: user,
+      };
+      if (user) {
+        data = {
+          name,
+          rmcNumber,
+          phoneNumber,
+          email,
+          location,
+          address,
+          pincode,
+          locality,
+          state,
+          city,
+          clinicName,
+          speciality,
+          password: hashedPassword,
+          subscriptionType,
+          userId: user,
+        };
+      }
+      if (isCash === "cash") {
+        data.paymentStatus = true;
+        data.paymentObject = { type: "cash" };
+        paymentUrl = null;
+      }
+
+      const newDoctor = new Doctor(data);
+      await newDoctor.save();
+      console.log("payment instide the service ", paymentUrl);
+      return {
+        statusCode: 201,
+        doctor: {
+          id: newDoctor._id,
+          name: newDoctor.name,
+          rmcNumber: newDoctor.rmcNumber,
+          phoneNumber: newDoctor.phoneNumber,
+          email: newDoctor.email,
+          location: newDoctor.location,
+          address: newDoctor.address,
+          pincode: newDoctor.pinCode,
+          locality: newDoctor.locality,
+          state: newDoctor.state,
+          city: newDoctor.city,
+          clinicName: newDoctor.clinicName,
+          speciality: newDoctor.speciality,
+          subscriptionType: newDoctor.subscriptionType,
+        },
+        paymentLink: paymentUrl,
+      };
+    } else {
+      const hospital = await HealthServe.findById(hospitalId.hospitalId);
+      const newDoctor = new Doctor({
+        name: name,
+        rmcNumber: "N/A",
+        phoneNumber: phoneNumber,
+        email: email,
+        location: hospital.location,
+        address: hospital.address ?? "N/A",
+        pincode: hospital.pincode ?? "N/A",
+        locality: hospital.locality ?? "N/A",
+        state: hospital.state ?? "N/A",
+        city: hospital.city ?? "N/A",
+        clinicName: hospital.name ?? "N/A",
+        speciality: speciality,
+        subscriptionType: hospital.subscriptionType ?? "N/A",
+        password: hashedPassword,
+      });
+      await newDoctor.save();
+
+      return {
+        statusCode: 201,
+        doctor: newDoctor,
       };
     }
-    if (isCash === 'cash') {
-      data.paymentStatus = true;
-      data.paymentObject = { type: "cash" };
-      paymentUrl = null;
-    }
-
-    const newDoctor = new Doctor(data);
-    await newDoctor.save();
-    console.log("payment instide the service ", paymentUrl);
-    return {
-      statusCode: 201,
-      doctor: {
-        id: newDoctor._id,
-        name: newDoctor.name,
-        rmcNumber: newDoctor.rmcNumber,
-        phoneNumber: newDoctor.phoneNumber,
-        email: newDoctor.email,
-        location: newDoctor.location,
-        address: newDoctor.address,
-        pincode: newDoctor.pinCode,
-        locality: newDoctor.locality,
-        state: newDoctor.state,
-        city: newDoctor.city,
-        clinicName: newDoctor.clinicName,
-        speciality: newDoctor.speciality,
-        subscriptionType: newDoctor.subscriptionType,
-      },
-      paymentLink: paymentUrl,
-    };
   } catch (error) {
     console.log("Error creating/updating doctor in DB : ", error);
     return {
