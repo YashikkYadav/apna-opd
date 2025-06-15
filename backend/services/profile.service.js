@@ -23,7 +23,7 @@ const createProfile = async (healthServeId, profileData) => {
       experience: profileData.experience,
       introduction: profileData.introduction,
       images: healthServeProfileImages,
-      keyStatistics: parseIfString(profileData.keyStatistics),
+      keyStats: parseIfString(profileData.keyStats),
       accreditations: parseIfString(profileData.accreditations),
       awards: parseIfString(profileData.awards),
       departments: parseIfString(profileData.departments),

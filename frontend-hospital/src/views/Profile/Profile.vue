@@ -367,7 +367,7 @@
             v-for="(testimonial, index) in form.testimonials"
             :key="index"
             class="mb-4"
-            style="padding: 20px;"
+            style="padding: 20px"
           >
             <div
               class="pa-4"
@@ -662,7 +662,7 @@ export default {
         this.form.payments = profile.payments || [];
         this.form.specialServices = profile.specialServices || [];
         this.form.testimonials = profile.testimonials || [];
-        this.form.keyStatistics = profile.keyStatistics || [];
+        this.form.keyStats = profile.keyStats || [];
       }
     },
     async onSubmit() {
