@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "@mdi/js": "^7.4.47",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
     "lodash": "^4.17.21",
@@ -20,6 +21,7 @@
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vue3-apexcharts": "^1.8.0",
+    "vue3-toastify": "^0.2.8",
     "vuetify": "^3.7.12"
   },
   "devDependencies": {
