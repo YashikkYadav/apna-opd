@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Doctors from "./views/allDoctors/AllDoctors.vue";
 import Login from "./views/login/Login.vue";
 import Appointments from "./views/appointments/Appointments.vue";
+import Profile from "./views/Profile/Profile.vue";
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
     component: Login,
   },
   {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/doctors",
   },
@@ -33,10 +39,12 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('hospital_id') && !!localStorage.getItem('access_token');
+  const isAuthenticated =
+    !!localStorage.getItem("hospital_id") &&
+    !!localStorage.getItem("access_token");
 
-  if (to.path === '/login' && isAuthenticated) {
-    return next('/doctors');
+  if (to.path === "/login" && isAuthenticated) {
+    return next("/doctors");
   }
 
   next();

@@ -17,6 +17,12 @@
             </v-btn>
           </template>
           <v-list>
+            <router-link
+              to="/profile"
+              style="text-decoration: none; color: inherit"
+            >
+              <v-list-item>Profile</v-list-item>
+            </router-link>
             <v-list-item @click="handleLogout">Logout</v-list-item>
           </v-list>
         </v-menu>
