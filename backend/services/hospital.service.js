@@ -39,6 +39,7 @@ const registerDoctor = async (doctorData, hospitalId) => {
       if (!doctor) {
         doctor = await doctorService.registerDoctor({
           ...doctorData,
+          hospitalId
         });
       }
       if (doctor.error) {
