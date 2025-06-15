@@ -8,9 +8,7 @@ const healthServeProfileSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "HealthServe",
     },
-    about: {
-      type: String,
-    },
+    about: String,
     phone: {
       type: String,
       unique: true,
@@ -19,12 +17,8 @@ const healthServeProfileSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    experience: {
-      type: Number,
-    },
-    introduction: {
-      type: String,
-    },
+    experience: Number,
+    introduction: String,
     rating: {
       type: Number,
       default: 0,
@@ -52,6 +46,24 @@ const healthServeProfileSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+      },
+    ],
+    keyStats: [String],
+    accreditations: [String],
+    awards: [String],
+    departments: [String],
+    facilities: [String],
+    insurance: [String],
+    payments: [String],
+    healthPackages: [String],
+    specialServices: [String],
+    testimonials: [
+      {
+        rating: Number,
+        title: String,
+        text: String,
+        author: String,
+        context: String,
       },
     ],
   },

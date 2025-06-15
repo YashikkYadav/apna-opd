@@ -102,7 +102,7 @@
         <v-card class="section-card">
           <v-toolbar
             class="mb-4"
-            flat
+            flatdiv
             style="column-gap: 20px; padding: 0px 20px"
           >
             <v-toolbar-title class="ml-3">Address</v-toolbar-title>
@@ -155,6 +155,273 @@
             </v-col>
           </v-row>
         </v-card>
+        <!-- Hospital Overview Section -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Hospital Overview</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.keyStats"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.keyStats"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('keyStats', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('keyStats')"
+                >+ Add Key Statistic</v-btn
+              >
+            </v-col>
+            <v-col cols="12">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.accreditations"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.accreditations"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('accreditations', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('accreditations')"
+                >+ Add Accreditation</v-btn
+              >
+            </v-col>
+            <v-col cols="12">
+              <v-chip-group column multiple v-model="form.awards" class="mb-2">
+                <v-chip
+                  v-for="(item, index) in form.awards"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('awards', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('awards')">+ Add Award</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <!-- Departments -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Departments</v-toolbar-title>
+          </v-toolbar>
+          <div class="p-10" style="padding: 20px">
+            <v-select
+              v-model="form.departments"
+              :items="departmentsList"
+              label="Select Departments"
+              multiple
+              chips
+              clearable
+              variant="outlined"
+              dense
+            ></v-select>
+          </div>
+        </v-card>
+
+        <!-- Facilities -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
+          </v-toolbar>
+          <div style="padding: 20px">
+            <v-select
+              v-model="form.facilities"
+              :items="facilitiesList"
+              label="Select Facilities"
+              multiple
+              chips
+              clearable
+              variant="outlined"
+              dense
+            ></v-select>
+          </div>
+        </v-card>
+
+        <!-- Insurance & Payment -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Insurance & Payment</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.insurance"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.insurance"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('insurance', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('insurance')"
+                >+ Add Insurance</v-btn
+              >
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.payments"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.payments"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('payments', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('payments')"
+                >+ Add Payment Method</v-btn
+              >
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.healthPackages"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.healthPackages"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('healthPackages', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('healthPackages')"
+                >+ Add Health Package</v-btn
+              >
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-chip-group
+                column
+                multiple
+                v-model="form.specialServices"
+                class="mb-2"
+              >
+                <v-chip
+                  v-for="(item, index) in form.specialServices"
+                  :key="index"
+                  closable
+                  @click:close="removeItem('specialServices', index)"
+                  >{{ item }}</v-chip
+                >
+              </v-chip-group>
+              <v-btn @click="openItemDialog('specialServices')"
+                >+ Add Special Service</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <!-- Testimonials -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Testimonials</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addTestimonial">+ Add Testimonial</v-btn>
+          <div
+            v-for="(testimonial, index) in form.testimonials"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px;"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-rating
+                v-model="testimonial.rating"
+                label="Rating"
+                dense
+                background-color="grey lighten-2"
+                color="primary"
+                class="mb-3"
+              ></v-rating>
+
+              <v-text-field
+                v-model="testimonial.title"
+                label="Title"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-textarea
+                v-model="testimonial.text"
+                label="Text"
+                dense
+                outlined
+                auto-grow
+                hide-details
+                class="mb-3"
+              ></v-textarea>
+
+              <v-text-field
+                v-model="testimonial.author"
+                label="Author"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTestimonial(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
       </div>
     </v-container>
     <v-container style="max-width: 100%">
@@ -173,6 +440,24 @@
       </v-row>
     </v-container>
   </v-form>
+
+  <v-dialog v-model="itemDialog" max-width="500">
+    <v-card style="padding: 20px">
+      <v-card-title class="text-h6">Add New {{ itemType }}</v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="newItemText"
+          label="Enter value"
+          variant="outlined"
+          dense
+        />
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn text @click="itemDialog = false">Cancel</v-btn>
+        <v-btn color="primary" @click="addItemFromDialog">Add</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
   <!-- Delete Confirmation Modal -->
   <div v-if="showModal" class="modal-overlay">
@@ -205,10 +490,67 @@ export default {
         city: "",
         pincode: "",
         state: "",
+        keyStats: [],
+        accreditations: [],
+        awards: [],
+        departments: [],
+        facilities: [],
+        insurance: [],
+        payments: [],
+        healthPackages: [],
+        specialServices: [],
+        testimonials: [],
       },
       rules: {
         required: (value) => !!value || "This field is required.",
       },
+      departmentsList: [
+        "Cardiology",
+        "Gynecology",
+        "Dentistry",
+        "Ophthalmology",
+        "Neurology",
+        "Orthopedics",
+        "Pediatrics",
+        "Oncology",
+        "ENT",
+        "Dermatology",
+        "Psychiatry",
+        "Urology",
+        "Gastroenterology",
+        "Endocrinology",
+        "Rheumatology",
+        "Pulmonology",
+        "Nephrology",
+        "Hematology",
+        "Infectious Disease",
+        "Emergency Medicine",
+      ],
+      facilitiesList: [
+        "24/7 Emergency",
+        "Dialysis",
+        "ICU/CCU",
+        "NICU",
+        "Operation Theater",
+        "Diagnostic Lab",
+        "Pharmacy",
+        "Radiology",
+        "Blood Bank",
+        "Cafeteria",
+        "Parking",
+        "Wheelchair Access",
+        "ATM",
+        "Free WiFi",
+        "Air Conditioning",
+        "Security",
+        "Housekeeping",
+        "Laundry",
+        "Medical Store",
+        "Waiting Area",
+      ],
+      itemDialog: false,
+      itemType: "",
+      newItemText: "",
       signIn: true,
       isShowMessage: false,
       galleryImages: [],
@@ -232,6 +574,39 @@ export default {
     },
   },
   methods: {
+    addItem(field) {
+      if (this.form[field].length >= 6) return;
+      const newItem = prompt(`Add new item to ${field}`);
+      if (newItem) this.form[field].push(newItem);
+    },
+    removeItem(field, index) {
+      this.form[field].splice(index, 1);
+    },
+    addTestimonial() {
+      if (this.form.testimonials.length >= 6) return;
+      this.form.testimonials.push({
+        rating: 0,
+        title: "",
+        text: "",
+        author: "",
+        context: "",
+      });
+    },
+    removeTestimonial(index) {
+      this.form.testimonials.splice(index, 1);
+    },
+    openItemDialog(type) {
+      if (this.form[type].length >= 6) return;
+      this.itemType = type;
+      this.newItemText = "";
+      this.itemDialog = true;
+    },
+    addItemFromDialog() {
+      if (this.newItemText.trim()) {
+        this.form[this.itemType].push(this.newItemText.trim());
+      }
+      this.itemDialog = false;
+    },
     confirmDelete(img) {
       this.imageToDelete = img;
       this.showModal = true;
@@ -261,17 +636,33 @@ export default {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getHealthServeApiCall();
-      this.images = res.healthServeProfile.images;
-      if (res.healthServeProfile !== null) {
+      const profile = res.healthServeProfile;
+
+      if (profile) {
         console.log(res);
-        this.form.introduction = res.healthServeProfile.introduction;
-        this.form.about = res.healthServeProfile.about;
-        this.form.experience = res.healthServeProfile.experience;
-        this.form.address = res.healthServeProfile.healthServeId.address;
-        this.form.city = res.healthServeProfile.healthServeId.city;
-        this.form.locality = res.healthServeProfile.healthServeId.locality;
-        this.form.state = res.healthServeProfile.healthServeId.state;
-        this.form.pincode = res.healthServeProfile.healthServeId.pincode;
+        this.images = profile.images;
+
+        const hs = profile.healthServeId;
+
+        this.form.introduction = profile.introduction || "";
+        this.form.about = profile.about || "";
+        this.form.experience = profile.experience || "";
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+
+        this.form.accreditations = profile.accreditations || [];
+        this.form.awards = profile.awards || [];
+        this.form.departments = profile.departments || [];
+        this.form.facilities = profile.facilities || [];
+        this.form.healthPackages = profile.healthPackages || [];
+        this.form.insurance = profile.insurance || [];
+        this.form.payments = profile.payments || [];
+        this.form.specialServices = profile.specialServices || [];
+        this.form.testimonials = profile.testimonials || [];
+        this.form.keyStatistics = profile.keyStatistics || [];
       }
     },
     async onSubmit() {
@@ -287,6 +678,25 @@ export default {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
+        formData.append("keyStats", JSON.stringify(this.form.keyStats));
+        formData.append(
+          "accreditations",
+          JSON.stringify(this.form.accreditations)
+        );
+        formData.append("awards", JSON.stringify(this.form.awards));
+        formData.append("departments", JSON.stringify(this.form.departments));
+        formData.append("facilities", JSON.stringify(this.form.facilities));
+        formData.append("insurance", JSON.stringify(this.form.insurance));
+        formData.append("payments", JSON.stringify(this.form.payments));
+        formData.append(
+          "healthPackages",
+          JSON.stringify(this.form.healthPackages)
+        );
+        formData.append(
+          "specialServices",
+          JSON.stringify(this.form.specialServices)
+        );
+        formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
           formData.append("profilePhoto", this.profileImage);
@@ -295,7 +705,9 @@ export default {
         this.galleryImages.forEach((file, index) => {
           formData.append("galleryImages", file);
         });
-
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ":", pair[1]);
+        }
         const res = await useProfileStore().addHealthServeProfileApiCall(
           formData
         );
