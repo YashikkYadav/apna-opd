@@ -68,15 +68,6 @@
                   />
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.clinicName"
-                    label="Clinic Name"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Clinic name is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
                   <v-select
                     v-model="newDoctorData.speciality"
                     :items="specialties"
@@ -84,70 +75,6 @@
                     variant="outlined"
                     :rules="[(v) => !!v || 'Speciality is required']"
                     required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.rmcNumber"
-                    label="RMC Number"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'RMC Number is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.location"
-                    label="Location"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Location is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.address"
-                    label="Address"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Address is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.locality"
-                    label="Locality"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Locality is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.city"
-                    label="City"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'City is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.state"
-                    label="State"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'State is required']"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newDoctorData.pincode"
-                    label="Pincode"
-                    variant="outlined"
-                    :rules="[(v) => !!v || 'Pincode is required']"
-                    required
-                    type="number"
                   />
                 </v-col>
                 <v-col cols="12">
@@ -357,16 +284,9 @@ const newDoctorData = ref({
   name: "",
   phoneNumber: "",
   email: "",
-  clinicName: "",
   speciality: "",
-  rmcNumber: "",
-  location: "",
-  address: "",
-  locality: "",
-  city: "",
-  state: "",
-  pincode: "",
   password: "",
+  isHospital: "",
 });
 
 const headers = ref([
