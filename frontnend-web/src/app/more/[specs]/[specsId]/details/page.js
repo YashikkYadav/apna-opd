@@ -7,6 +7,20 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
+import HospitalFeatureCard from '@/app/components/more/hospital/HospitalFeatureCard'
+import HospitalOverviewCard from '@/app/components/more/hospital/HospitalOverviewCard'
+import HospitalDepartmentsCard from '@/app/components/more/hospital/HospitalDepartmentsCard'
+import HospitalDoctorsCard from '@/app/components/more/hospital/HospitalDoctorsCard'
+import HospitalFacilitiesCard from '@/app/components/more/hospital/HospitalFacilitiesCard'
+import HospitalInsuranceCard from '@/app/components/more/hospital/HospitalInsuranceCard'
+import HospitalLocationCard from '@/app/components/more/hospital/HospitalLocationCard'
+import HospitalTestimonialsCard from '@/app/components/more/hospital/HospitalTestimonialsCard'
+import HospitalQuickActionsCard from '@/app/components/more/hospital/HospitalQuickActionsCard'
+
+import { FaBed, FaUserMd } from "react-icons/fa";
+import { MdEmergency } from "react-icons/md";
+import { BsShieldCheck } from "react-icons/bs";
+import { RiBankCardLine } from "react-icons/ri";
 
 const DetailsPage = () => {
   const params = useParams();
@@ -78,25 +92,41 @@ const DetailsPage = () => {
   }
 
   return (
-    <div className="pt-[80px]">
-      <BannerCommon 
-        profileData={profileData} 
-        serviceType={specs} 
-      />
-      <AboutCommon 
-        profileData={profileData} 
-        serviceType={specs} 
-      />
-      {profileData?.images && profileData.images.length > 0 && (
-        <ImageGalleryCommon 
-          images={profileData.images}
+    console.log(specs),
+    specs === 'hospital' ? (
+      <div className="pt-24">
+        <HospitalFeatureCard hospitalData={profileData} />
+        <HospitalOverviewCard hospitalData={profileData} />
+        <HospitalDepartmentsCard hospitalData={profileData} />
+        <HospitalDoctorsCard hospitalData={profileData} />
+        <HospitalFacilitiesCard hospitalData={profileData} />
+        <HospitalInsuranceCard hospitalData={profileData} />
+        <HospitalLocationCard hospitalData={profileData} />
+        <HospitalTestimonialsCard hospitalData={profileData} />
+        <HospitalQuickActionsCard hospitalData={profileData} />
+      </div>
+    ) : (
+      console.log(profileData),
+      <div className="pt-[80px]">
+        <BannerCommon 
+          profileData={profileData} 
+          serviceType={specs} 
         />
-      )}
-      <SuggestedService 
-        serviceType={specs}
-        currentId={specsId}
-      />
-    </div>
+        <AboutCommon 
+          profileData={profileData} 
+          serviceType={specs} 
+        />
+        {profileData?.images && profileData.images.length > 0 && (
+          <ImageGalleryCommon 
+            images={profileData.images}
+          />
+        )}
+        <SuggestedService 
+          serviceType={specs}
+          currentId={specsId}
+        />
+      </div>
+    )
   );
 };
 
