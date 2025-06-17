@@ -79,11 +79,7 @@ const DetailsPage = () => {
   }
 
   if (specs === "hospital") {
-    return (
-      <div className="pt-[120px] text-center text-2xl font-semibold">
-        <FullDetailsPage />
-      </div>
-    );
+    return <FullDetailsPage profileData={profileData} />;
   }
 
   return (
