@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HospitalFeatureCard from "@/app/components/more/hospital/HospitalFeatureCard";
 import HospitalOverviewCard from "@/app/components/more/hospital/HospitalOverviewCard";
 import HospitalDepartmentsCard from "@/app/components/more/hospital/HospitalDepartmentsCard";
@@ -9,10 +9,13 @@ import HospitalLocationCard from "@/app/components/more/hospital/HospitalLocatio
 import HospitalTestimonialsCard from "@/app/components/more/hospital/HospitalTestimonialsCard";
 import HospitalQuickActionsCard from "@/app/components/more/hospital/HospitalQuickActionsCard";
 
-const FullDetailsPage = () => {
+const FullDetailsPage = ({profileData}) => {
+  useEffect(()=>{
+    console.log(profileData);
+  })
   return (
     <div className="pt-24">
-      <HospitalFeatureCard />
+      <HospitalFeatureCard profileData={profileData}  />
       <HospitalOverviewCard />
       <HospitalDepartmentsCard />
       <HospitalDoctorsCard />
