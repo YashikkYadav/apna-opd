@@ -51,15 +51,13 @@ const Hospital = ({ serviceData }) => {
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#5151E1] mb-[8px]">
-                  Hospital
-                </p>
+                <p className="text-base text-[#5151E1] mb-[8px]">Hospital</p>
                 <h3 className="title-24 mb-[8px]">{hospital.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                    Rating: {hospital.rating?.toFixed(1) || "N/A"} / 5
+                  Rating: {hospital.rating?.toFixed(1) || "N/A"} / 5
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                    {hospital.name}
+                  {hospital.name}
                 </h4>
               </div>
             </div>
@@ -70,7 +68,7 @@ const Hospital = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/full-details`)
+                  navigate.push(`/more/hospital/${hospital._id}/details`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

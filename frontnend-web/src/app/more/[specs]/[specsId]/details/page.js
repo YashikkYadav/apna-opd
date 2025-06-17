@@ -7,6 +7,7 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
+import FullDetailsPage from "@/app/components/more/hospital/hospitalDetail";
 
 const DetailsPage = () => {
   const params = useParams();
@@ -19,18 +20,16 @@ const DetailsPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+
       const listResponse = await axiosInstance.get(
         `/health-serve/list?&location=&type=${specs}`
       );
-
-      console.log(listResponse);
 
       if (!listResponse?.list?.healthServeProfileList) {
         setError(`No data found for ${specs}`);
         return;
       }
-      
+
       const basicProfile = listResponse.list.healthServeProfileList.find(
         (item) => item._id === specsId
       );
@@ -47,15 +46,17 @@ const DetailsPage = () => {
       if (detailResponse?.healthServeProfile) {
         setProfileData({
           ...basicProfile,
-          ...detailResponse.healthServeProfile
+          ...detailResponse.healthServeProfile,
         });
       } else {
         setProfileData(basicProfile);
       }
-
     } catch (error) {
       console.log("Error fetching service details:", error);
-      setError(error?.response?.data?.error?.message || "Failed to load details. Please try again later.");
+      setError(
+        error?.response?.data?.error?.message ||
+          "Failed to load details. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -68,7 +69,7 @@ const DetailsPage = () => {
   }, [specs, specsId]);
 
   if (loading) return <Loader />;
-  
+
   if (error) {
     return (
       <div className="pt-[120px] text-center">
@@ -77,25 +78,22 @@ const DetailsPage = () => {
     );
   }
 
+  if (specs === "hospital") {
+    return (
+      <div className="pt-[120px] text-center text-2xl font-semibold">
+        <FullDetailsPage />
+      </div>
+    );
+  }
+
   return (
     <div className="pt-[80px]">
-      <BannerCommon 
-        profileData={profileData} 
-        serviceType={specs} 
-      />
-      <AboutCommon 
-        profileData={profileData} 
-        serviceType={specs} 
-      />
-      {profileData?.images && profileData.images.length > 0 && (
-        <ImageGalleryCommon 
-          images={profileData.images}
-        />
+      <BannerCommon profileData={profileData} serviceType={specs} />
+      <AboutCommon profileData={profileData} serviceType={specs} />
+      {profileData?.images?.length > 0 && (
+        <ImageGalleryCommon images={profileData.images} />
       )}
-      <SuggestedService 
-        serviceType={specs}
-        currentId={specsId}
-      />
+      <SuggestedService serviceType={specs} currentId={specsId} />
     </div>
   );
 };
