@@ -10,11 +10,29 @@ const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
 
+    const parseIfString = (field) => {
+      try {
+        return typeof field === "string" ? JSON.parse(field) : field;
+      } catch {
+        return [];
+      }
+    };
+
     const updateData = {
       about: profileData.about,
       experience: profileData.experience,
       introduction: profileData.introduction,
       images: healthServeProfileImages,
+      keyStats: parseIfString(profileData.keyStats),
+      accreditations: parseIfString(profileData.accreditations),
+      awards: parseIfString(profileData.awards),
+      departments: parseIfString(profileData.departments),
+      facilities: parseIfString(profileData.facilities),
+      insurance: parseIfString(profileData.insurance),
+      payments: parseIfString(profileData.payments),
+      healthPackages: parseIfString(profileData.healthPackages),
+      specialServices: parseIfString(profileData.specialServices),
+      testimonials: parseIfString(profileData.testimonials),
     };
 
     const updatedHealthServe = await HealthServe.findOneAndUpdate(
@@ -45,7 +63,7 @@ const createProfile = async (healthServeId, profileData) => {
     console.log(error);
     return {
       statusCode: 500,
-      error: error,
+      error,
     };
   }
 };

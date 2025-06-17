@@ -223,12 +223,16 @@ const Register = () => {
   const handleSubmit = async (e) => {
     console.log("handle submit called");
     e?.preventDefault();
-    const userName = users.filter(user => user.value === formData.user)[0].label;
-    console.log(formData.isCash)
-    console.log(userName.trim())
-    if (userName.trim() === "Vinod" && formData.isCash === "") {
-      setShowPaymentTypeModal(true);
-      return;
+    
+    // Only check for Vinod if a user is actually selected
+    if (formData.user) {
+      const selectedUser = users.find(user => user.value === formData.user);
+      const userName = selectedUser ? selectedUser.label : '';
+      
+      if (userName.trim() === "Vinod" && formData.isCash === "") {
+        setShowPaymentTypeModal(true);
+        return;
+      }
     }
 
     console.log("handle submit called 1");

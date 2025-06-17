@@ -5,6 +5,7 @@ import Doctors from "./views/allDoctors/AllDoctors.vue";
 import Login from "./views/login/Login.vue";
 import Appointments from "./views/appointments/Appointments.vue";
 import Profile from "./views/Profile/Profile.vue";
+import ProfileNew from "./components/ProfileNew.vue"
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: Profile,
+  },
+  {
+    path: "/profile/new",
+    component: ProfileNew
   },
   {
     path: "/:pathMatch(.*)*",
