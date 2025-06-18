@@ -76,21 +76,6 @@ const DetailsPage = () => {
       </div>
     );
   }
-
-  if (specs === "hospital") {
-    return <FullDetailsPage profileData={profileData} />;
-  }
-
-  return (
-    <div className="pt-[80px]">
-      <BannerCommon profileData={profileData} serviceType={specs} />
-      <AboutCommon profileData={profileData} serviceType={specs} />
-      {profileData?.images?.length > 0 && (
-        <ImageGalleryCommon images={profileData.images} />
-      )}
-      <SuggestedService serviceType={specs} currentId={specsId} />
-    </div>
-  );
 };
 
 export default DetailsPage;
