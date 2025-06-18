@@ -7,6 +7,7 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
+
 import HospitalFeatureCard from '@/app/components/more/hospital/HospitalFeatureCard'
 import HospitalOverviewCard from '@/app/components/more/hospital/HospitalOverviewCard'
 import HospitalDepartmentsCard from '@/app/components/more/hospital/HospitalDepartmentsCard'
@@ -26,6 +27,7 @@ import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 
+
 const DetailsPage = () => {
   const params = useParams();
   const [loading, setLoading] = useState(true);
@@ -37,18 +39,16 @@ const DetailsPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+
       const listResponse = await axiosInstance.get(
         `/health-serve/list?&location=&type=${specs}`
       );
-
-      console.log(listResponse);
 
       if (!listResponse?.list?.healthServeProfileList) {
         setError(`No data found for ${specs}`);
         return;
       }
-      
+
       const basicProfile = listResponse.list.healthServeProfileList.find(
         (item) => item._id === specsId
       );
@@ -65,15 +65,17 @@ const DetailsPage = () => {
       if (detailResponse?.healthServeProfile) {
         setProfileData({
           ...basicProfile,
-          ...detailResponse.healthServeProfile
+          ...detailResponse.healthServeProfile,
         });
       } else {
         setProfileData(basicProfile);
       }
-
     } catch (error) {
       console.log("Error fetching service details:", error);
-      setError(error?.response?.data?.error?.message || "Failed to load details. Please try again later.");
+      setError(
+        error?.response?.data?.error?.message ||
+          "Failed to load details. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -86,7 +88,7 @@ const DetailsPage = () => {
   }, [specs, specsId]);
 
   if (loading) return <Loader />;
-  
+
   if (error) {
     return (
       <div className="pt-[120px] text-center">
@@ -94,6 +96,7 @@ const DetailsPage = () => {
       </div>
     );
   }
+
 
   let content;
   switch (specs) {
@@ -140,6 +143,7 @@ const DetailsPage = () => {
   }
 
   return content;
+
 };
 
 export default DetailsPage;

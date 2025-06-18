@@ -1,10 +1,3 @@
-"use client";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { FaStar, FaBed, FaUserMd, FaRegHospital, FaPhoneAlt } from "react-icons/fa";
-import { MdEmergency } from "react-icons/md";
-import { BsShieldCheck } from "react-icons/bs";
-import { RiBankCardLine } from "react-icons/ri";
 
 export default function HospitalFeatureCard({ hospitalData }) {
   const { name, image, type, rating, reviews } = hospitalData || {};
