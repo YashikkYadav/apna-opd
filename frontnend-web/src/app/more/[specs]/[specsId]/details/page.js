@@ -16,6 +16,10 @@ import HospitalInsuranceCard from '@/app/components/more/hospital/HospitalInsura
 import HospitalLocationCard from '@/app/components/more/hospital/HospitalLocationCard'
 import HospitalTestimonialsCard from '@/app/components/more/hospital/HospitalTestimonialsCard'
 import HospitalQuickActionsCard from '@/app/components/more/hospital/HospitalQuickActionsCard'
+import NurseSearch from '@/app/components/more/nurse/NurseSearch'
+import NurseListings from '@/app/components/more/nurse/NurseListings'
+import WhyChooseUs from '@/app/components/more/nurse/WhyChooseUs'
+import PatientTestimonials from '@/app/components/more/nurse/PatientTestimonials'
 
 import { FaBed, FaUserMd } from "react-icons/fa";
 import { MdEmergency } from "react-icons/md";
@@ -91,43 +95,51 @@ const DetailsPage = () => {
     );
   }
 
-  return (
-    console.log(specs),
-    specs === 'hospital' ? (
-      <div className="pt-24">
-        <HospitalFeatureCard hospitalData={profileData} />
-        <HospitalOverviewCard hospitalData={profileData} />
-        <HospitalDepartmentsCard hospitalData={profileData} />
-        <HospitalDoctorsCard hospitalData={profileData} />
-        <HospitalFacilitiesCard hospitalData={profileData} />
-        <HospitalInsuranceCard hospitalData={profileData} />
-        <HospitalLocationCard hospitalData={profileData} />
-        <HospitalTestimonialsCard hospitalData={profileData} />
-        <HospitalQuickActionsCard hospitalData={profileData} />
-      </div>
-    ) : (
-      console.log(profileData),
-      <div className="pt-[80px]">
-        <BannerCommon 
-          profileData={profileData} 
-          serviceType={specs} 
-        />
-        <AboutCommon 
-          profileData={profileData} 
-          serviceType={specs} 
-        />
-        {profileData?.images && profileData.images.length > 0 && (
-          <ImageGalleryCommon 
-            images={profileData.images}
-          />
-        )}
-        <SuggestedService 
-          serviceType={specs}
-          currentId={specsId}
-        />
-      </div>
-    )
-  );
+  let content;
+  switch (specs) {
+    case 'nurse':
+      content = (
+        <div className="pt-[80px]">
+      <DoctorFeatureCard doctorData={profileData} specs={specs}/>
+      <DoctorOverviewCar doctorData={profileData} specs={specs}/>
+      <DoctorSpecialistsCard doctorData={profileData} />
+      <ImageGallery images={profileData.images} />
+      <HospitalLocationCard hospitalData={profileData} />
+      <DoctorTestimonialsCard testimonials={profileData.testimonials} />
+      <Faqs doctorDetails={profileData} />
+    </div>
+      );
+      break;
+    case 'hospital':
+      content = (
+        <div className="pt-24">
+          <HospitalFeatureCard hospitalData={profileData}/>
+          <HospitalOverviewCard hospitalData={profileData} />
+          <HospitalDepartmentsCard hospitalData={profileData} />
+          <HospitalDoctorsCard hospitalData={profileData} />
+          <HospitalFacilitiesCard hospitalData={profileData} />
+          <HospitalInsuranceCard hospitalData={profileData} />
+          <HospitalLocationCard hospitalData={profileData} />
+          <HospitalTestimonialsCard hospitalData={profileData} />
+          <HospitalQuickActionsCard hospitalData={profileData} />
+        </div>
+      );
+      break;
+    default:
+      content = (
+        <div className="pt-[80px]">
+          <BannerCommon profileData={profileData} serviceType={specs} />
+          <AboutCommon profileData={profileData} serviceType={specs} />
+          {profileData?.images && profileData.images.length > 0 && (
+            <ImageGalleryCommon images={profileData.images} />
+          )}
+          <SuggestedService serviceType={specs} currentId={specsId} />
+        </div>
+      );
+      break;
+  }
+
+  return content;
 };
 
 export default DetailsPage;

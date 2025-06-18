@@ -4,426 +4,7 @@ import { FaUserMd, FaGraduationCap, FaStar, FaCalendarAlt, FaLanguage, FaChevron
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
 
-const departments = [
-  {
-    name: "Cardiology",
-    emoji: "❤️",
-    desc: "Expert cardiologists providing comprehensive heart care",
-    doctors: [
-      {
-        initials: "DS",
-        name: "Dr. Rajesh Sharma",
-        title: "Senior Cardiologist",
-        qualification: "MD, DM Cardiology",
-        rating: 4.9,
-        reviews: 234,
-        experience: 15,
-        languages: ["Hindi", "English"],
-        available: [
-          { label: "Mon-Fri: 9AM-1PM" },
-          { label: "Sat: 9AM-12PM" },
-        ],
-        fee: 800,
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "PM",
-        name: "Dr. Priya Mehta",
-        title: "Interventional Cardiologist",
-        qualification: "MD, DM, Fellowship",
-        rating: 4.8,
-        reviews: 189,
-        experience: 12,
-        languages: ["Hindi", "English", "Gujarati"],
-        available: [
-          { label: "Tue-Thu: 2PM-6PM" },
-          { label: "Sat: 10AM-2PM" },
-        ],
-        fee: 1000,
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "AK",
-        name: "Dr. Arun Kumar",
-        title: "Pediatric Cardiologist",
-        qualification: "MD, DM, Fellowship in Pediatric Cardiology",
-        rating: 4.7,
-        reviews: 156,
-        experience: 10,
-        languages: ["Hindi", "English", "Punjabi"],
-        available: [
-          { label: "Mon, Wed, Fri: 11AM-3PM" },
-          { label: "Sat: 9AM-1PM" },
-        ],
-        fee: 1200,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "SG",
-        name: "Dr. Sneha Gupta",
-        title: "Cardiac Electrophysiologist",
-        qualification: "MD, DM, Fellowship in Cardiac Electrophysiology",
-        rating: 4.9,
-        reviews: 142,
-        experience: 8,
-        languages: ["Hindi", "English", "Marathi"],
-        available: [
-          { label: "Tue, Thu: 9AM-1PM" },
-          { label: "Sat: 2PM-5PM" },
-        ],
-        fee: 1500,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-  {
-    name: "Orthopedics",
-    emoji: "🦴",
-    desc: "Bone and joint care with robotic surgery",
-    doctors: [
-      {
-        initials: "AK",
-        name: "Dr. Amit Kumar",
-        title: "Orthopedic Surgeon",
-        qualification: "MS, DNB Orthopedics",
-        rating: 4.7,
-        reviews: 150,
-        experience: 10,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon, Wed, Fri: 10AM-1PM" },
-        ],
-        fee: 900,
-        image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "SG",
-        name: "Dr. Sneha Gupta",
-        title: "Consultant Orthopedic Surgeon",
-        qualification: "MS Orthopedics",
-        rating: 4.6,
-        reviews: 120,
-        experience: 8,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Tue, Thu: 11AM-2PM" },
-        ],
-        fee: 950,
-        image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "RK",
-        name: "Dr. Rahul Khanna",
-        title: "Sports Medicine Specialist",
-        qualification: "MS Orthopedics, Fellowship in Sports Medicine",
-        rating: 4.8,
-        reviews: 98,
-        experience: 7,
-        languages: ["English", "Hindi", "Punjabi"],
-        available: [
-          { label: "Mon-Fri: 2PM-5PM" },
-          { label: "Sat: 10AM-1PM" },
-        ],
-        fee: 1100,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "PS",
-        name: "Dr. Priya Singh",
-        title: "Joint Replacement Specialist",
-        qualification: "MS Orthopedics, Fellowship in Joint Replacement",
-        rating: 4.9,
-        reviews: 112,
-        experience: 9,
-        languages: ["English", "Hindi", "Gujarati"],
-        available: [
-          { label: "Tue, Thu: 9AM-12PM" },
-          { label: "Sat: 2PM-5PM" },
-        ],
-        fee: 1300,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-  {
-    name: "Neurology",
-    emoji: "🧠",
-    desc: "Brain and spine treatment by experts",
-    doctors: [
-      {
-        initials: "SK",
-        name: "Dr. Sunita Kapoor",
-        title: "Consultant Neurologist",
-        qualification: "MD, DM Neurology",
-        rating: 4.8,
-        reviews: 120,
-        experience: 11,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon-Fri: 2PM-5PM" },
-        ],
-        fee: 950,
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "AM",
-        name: "Dr. Anil Mehra",
-        title: "Senior Neurologist",
-        qualification: "MD, DM Neurology",
-        rating: 4.7,
-        reviews: 105,
-        experience: 13,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon, Wed: 10AM-1PM" },
-        ],
-        fee: 1000,
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "RK",
-        name: "Dr. Ravi Kumar",
-        title: "Epilepsy Specialist",
-        qualification: "MD, DM Neurology, Fellowship in Epilepsy",
-        rating: 4.9,
-        reviews: 88,
-        experience: 9,
-        languages: ["English", "Hindi", "Tamil"],
-        available: [
-          { label: "Tue, Thu: 11AM-2PM" },
-          { label: "Sat: 9AM-12PM" },
-        ],
-        fee: 1200,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "NS",
-        name: "Dr. Neha Sharma",
-        title: "Movement Disorder Specialist",
-        qualification: "MD, DM Neurology, Fellowship in Movement Disorders",
-        rating: 4.8,
-        reviews: 76,
-        experience: 7,
-        languages: ["English", "Hindi", "Marathi"],
-        available: [
-          { label: "Mon, Wed: 2PM-5PM" },
-          { label: "Fri: 10AM-1PM" },
-        ],
-        fee: 1100,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-  {
-    name: "Pediatrics",
-    emoji: "👶",
-    desc: "Comprehensive child healthcare",
-    doctors: [
-      {
-        initials: "RS",
-        name: "Dr. Ritu Singh",
-        title: "Pediatrician",
-        qualification: "MD Pediatrics",
-        rating: 4.9,
-        reviews: 98,
-        experience: 9,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon-Sat: 11AM-2PM" },
-        ],
-        fee: 700,
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "VK",
-        name: "Dr. Varun Khanna",
-        title: "Consultant Pediatrician",
-        qualification: "MD Pediatrics",
-        rating: 4.8,
-        reviews: 85,
-        experience: 7,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Tue, Thu: 9AM-12PM" },
-        ],
-        fee: 750,
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "AP",
-        name: "Dr. Anjali Patel",
-        title: "Pediatric Neurologist",
-        qualification: "MD Pediatrics, Fellowship in Pediatric Neurology",
-        rating: 4.9,
-        reviews: 92,
-        experience: 8,
-        languages: ["English", "Hindi", "Gujarati"],
-        available: [
-          { label: "Mon, Wed: 2PM-5PM" },
-          { label: "Sat: 10AM-1PM" },
-        ],
-        fee: 1000,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "MK",
-        name: "Dr. Mohit Kumar",
-        title: "Pediatric Cardiologist",
-        qualification: "MD Pediatrics, Fellowship in Pediatric Cardiology",
-        rating: 4.8,
-        reviews: 78,
-        experience: 6,
-        languages: ["English", "Hindi", "Punjabi"],
-        available: [
-          { label: "Tue, Thu: 11AM-2PM" },
-          { label: "Fri: 9AM-12PM" },
-        ],
-        fee: 1200,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-  {
-    name: "Gynecology",
-    emoji: "👩‍⚕️",
-    desc: "Women's health and maternity care",
-    doctors: [
-      {
-        initials: "AP",
-        name: "Dr. Anjali Patel",
-        title: "Gynecologist",
-        qualification: "MD, DGO",
-        rating: 4.8,
-        reviews: 110,
-        experience: 13,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon-Fri: 10AM-1PM" },
-        ],
-        fee: 850,
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "NS",
-        name: "Dr. Neha Sinha",
-        title: "Consultant Gynecologist",
-        qualification: "MD, DGO",
-        rating: 4.7,
-        reviews: 95,
-        experience: 10,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Wed, Fri: 2PM-5PM" },
-        ],
-        fee: 900,
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "SK",
-        name: "Dr. Shweta Kapoor",
-        title: "Infertility Specialist",
-        qualification: "MD, DGO, Fellowship in Reproductive Medicine",
-        rating: 4.9,
-        reviews: 86,
-        experience: 8,
-        languages: ["English", "Hindi", "Punjabi"],
-        available: [
-          { label: "Mon, Wed: 2PM-5PM" },
-          { label: "Sat: 10AM-1PM" },
-        ],
-        fee: 1500,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "RK",
-        name: "Dr. Ritu Khanna",
-        title: "High-Risk Pregnancy Specialist",
-        qualification: "MD, DGO, Fellowship in Maternal-Fetal Medicine",
-        rating: 4.8,
-        reviews: 92,
-        experience: 9,
-        languages: ["English", "Hindi", "Gujarati"],
-        available: [
-          { label: "Tue, Thu: 9AM-12PM" },
-          { label: "Fri: 2PM-5PM" },
-        ],
-        fee: 1300,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-  {
-    name: "Oncology",
-    emoji: "🧪",
-    desc: "Cancer treatment and care",
-    doctors: [
-      {
-        initials: "VK",
-        name: "Dr. Vikram Khanna",
-        title: "Oncologist",
-        qualification: "MD, DM Oncology",
-        rating: 4.7,
-        reviews: 90,
-        experience: 8,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Tue, Thu: 3PM-6PM" },
-        ],
-        fee: 1200,
-        image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "SM",
-        name: "Dr. Shalini Mehra",
-        title: "Consultant Oncologist",
-        qualification: "MD, DM Oncology",
-        rating: 4.8,
-        reviews: 80,
-        experience: 9,
-        languages: ["English", "Hindi"],
-        available: [
-          { label: "Mon, Fri: 11AM-2PM" },
-        ],
-        fee: 1250,
-        image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "AK",
-        name: "Dr. Arun Kumar",
-        title: "Radiation Oncologist",
-        qualification: "MD, DM Radiation Oncology",
-        rating: 4.9,
-        reviews: 75,
-        experience: 7,
-        languages: ["English", "Hindi", "Tamil"],
-        available: [
-          { label: "Mon, Wed: 2PM-5PM" },
-          { label: "Sat: 10AM-1PM" },
-        ],
-        fee: 1400,
-        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&h=400&fit=crop",
-      },
-      {
-        initials: "PS",
-        name: "Dr. Priya Sharma",
-        title: "Pediatric Oncologist",
-        qualification: "MD, DM Pediatric Oncology",
-        rating: 4.8,
-        reviews: 68,
-        experience: 6,
-        languages: ["English", "Hindi", "Marathi"],
-        available: [
-          { label: "Tue, Thu: 11AM-2PM" },
-          { label: "Fri: 9AM-12PM" },
-        ],
-        fee: 1500,
-        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop",
-      },
-    ],
-  },
-];
-
-function DoctorCard({ doctor }) {
+function DoctorCard({ doctor }) {     
   const router = useRouter();
 
   const handleBookAppointment = () => {
@@ -447,7 +28,7 @@ function DoctorCard({ doctor }) {
           </div>
         </div>
         <div>
-          <div className="text-xl font-bold text-gray-900">{doctor.name}</div>
+          <div className="text-xl font-bold text-gray-900">Dr. {doctor.name}</div>
           <div className="text-blue-600 font-semibold text-base cursor-pointer hover:underline">{doctor.title}</div>
         </div>
       </div>
@@ -485,6 +66,7 @@ function DoctorCard({ doctor }) {
 }
 
 function DepartmentSection({ dept }) {
+
   const scrollContainerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -516,7 +98,7 @@ function DepartmentSection({ dept }) {
         <div className="text-white text-base font-medium mt-1">{dept.desc}</div>
       </div>
 
-      {/* Doctors Scroll Container */}
+      {/* Doctors Scroll Container */}  
       <div className="relative">
         {/* Left Arrow */}
         {showLeftArrow && (
@@ -537,7 +119,7 @@ function DepartmentSection({ dept }) {
         >
           {dept.doctors.map((doctor) => (
             <div key={doctor.name} className="pl-9 snap-start flex-none w-[calc(50%-1rem)]">
-              <DoctorCard doctor={doctor} />
+              <DoctorCard doctor={doctor} />  
             </div>
           ))}
         </div>
@@ -556,7 +138,9 @@ function DepartmentSection({ dept }) {
   );
 }
 
-export default function HospitalDoctorsCard() {
+export default function HospitalDoctorsCard({ hospitalData }) { 
+  const departments = hospitalData?.ourDoctors || [];
+
   const [showAll, setShowAll] = useState(false);
   const visibleDepartments = showAll ? departments : departments.slice(0, 3);
 
@@ -576,11 +160,11 @@ export default function HospitalDoctorsCard() {
 
       {/* Departments */}
       {visibleDepartments.map((dept) => (
-        <DepartmentSection key={dept.name} dept={dept} />
+        <DepartmentSection key={dept.name} dept={dept} /> 
       ))}
 
       {/* Show More Button */}
-      {departments.length > 3 && (
+      {departments.length > 3 && ( 
         <motion.button
           onClick={() => setShowAll(!showAll)}
           className="w-full flex items-center rounded-full justify-center gap-2 py-4 text-blue-700 font-semibold hover:text-blue-800 hover:border-blue-700 transition-colors"

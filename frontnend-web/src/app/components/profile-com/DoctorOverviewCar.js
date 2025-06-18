@@ -2,11 +2,9 @@
 import { motion } from "framer-motion";
 import { FaHospitalAlt } from "react-icons/fa";
 
-
-
-export default function HospitalOverviewCard({ hospitalData }) {
-    const overviewData = hospitalData?.overviewData || [];
-    return (
+export default function DoctorOverviewCar({doctorData, specs}) {
+  const overviewData = doctorData?.overviewData || [];
+  return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -17,12 +15,15 @@ export default function HospitalOverviewCard({ hospitalData }) {
       {/* Title */}
       <div className="flex items-center gap-3 mb-8">
         <FaHospitalAlt className="text-3xl text-blue-700" />
-        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Hospital Overview</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
+          {(specs && typeof specs === 'string' && specs.length > 0)
+            ? specs.charAt(0).toUpperCase() + specs.slice(1)
+            : "Overview"}
+        </h2>
       </div>
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* About, Key Statistics, Accreditations */}
-        {overviewData.map((item, idx) => (
+      <div className="flex flex-wrap gap-6">
+      {overviewData.map((item, idx) => (
           <motion.div
             key={item.title}
             whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}

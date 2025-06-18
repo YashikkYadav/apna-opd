@@ -1,21 +1,19 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaStar, FaBed, FaUserMd, FaRegHospital, FaPhoneAlt } from "react-icons/fa";
+import { FaStar, FaBed, FaUserMd, FaRegHospital, FaPhoneAlt, FaMapMarkerAlt, FaRegCalendarCheck } from "react-icons/fa";
 import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 
-export default function HospitalFeatureCard({ hospitalData }) {
-  const { name, image, type, rating, reviews } = hospitalData || {};
-  console.log(image,name,type,rating,reviews);
-
+export default function HospitalFeatureCard({ doctorData, specs }) {
+  const { name, image, type, rating, reviews, consultationFee, phone } = doctorData || {};
+  
   const features = [
-    { icon: <MdEmergency className="text-pink-400 text-2xl" />, text: "24/7 Emergency", dynamicValue: hospitalData?.emergency24x7 },
-    { icon: <FaBed className="text-pink-300 text-2xl" />, text: "+ Beds", dynamicValue: hospitalData?.numberOfBeds },
-    { icon: <BsShieldCheck className="text-green-400 text-2xl" />, text: "NABH Accredited", dynamicValue: hospitalData?.nabhAccredited },
-    { icon: <FaUserMd className="text-blue-400 text-2xl" />, text: "+ Specialists", dynamicValue: hospitalData?.numberOfSpecialists },
-    { icon: <RiBankCardLine className="text-blue-400 text-2xl" />, text: "Insurance Accepted", dynamicValue: hospitalData?.insuranceAccepted },
+    { icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />, text: "+Years Experience", dynamicValue: doctorData.yearsOfService },
+    { icon: <FaUserMd className="text-purple-400 text-2xl" />, text: doctorData.feature1, dynamicValue: null },
+    { icon: <FaRegHospital className="text-pink-400 text-2xl" />, text: doctorData.feature2, dynamicValue: null },
+    ...(specs !== 'nurse' ? [{ icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />, text: doctorData.feature3, dynamicValue: null }] : []),
   ];
 
   return (
@@ -29,11 +27,11 @@ export default function HospitalFeatureCard({ hospitalData }) {
       {/* Left: Hospital Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
-          src={image || '/images/d1.png'}
+          src={image}
           alt={name}
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
+          className="bg-gray-300 rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
         />
       </div>
       {/* Right: Content */}
@@ -67,6 +65,11 @@ export default function HospitalFeatureCard({ hospitalData }) {
             </div>
           ))}
         </div>
+        {specs === 'doctor' && (
+          <div className="mt-2 bg-green-500 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
+            ₹{consultationFee} consultationFee
+          </div>
+        )}
         {/* Call Now Button */}
         <button
           className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"

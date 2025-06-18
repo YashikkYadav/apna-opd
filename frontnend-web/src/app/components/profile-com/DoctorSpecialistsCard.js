@@ -1,9 +1,11 @@
 "use client";
+import { specialists } from "@/app/data/constants";
 import { motion } from "framer-motion";
 import { FaRegCreditCard } from "react-icons/fa";
 
-export default function HospitalInsuranceCard({ hospitalData }) {
-  const insuranceData = hospitalData?.insuranceData || [];
+export default function DoctorSpecialistsCard({ doctorData }) {
+  const specialists = doctorData?.specialists || [];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -15,21 +17,21 @@ export default function HospitalInsuranceCard({ hospitalData }) {
       {/* Title */}
       <div className="flex items-center gap-3 mb-8">
         <span className="text-3xl text-blue-700"><FaRegCreditCard /></span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Insurance & Payment</h2>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Specialists & Services</h2>
       </div>
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* First row: 3 cards */}
-        {insuranceData.map((section) => (
+        {specialists.map((section) => (
           <motion.div
             key={section.title}
             whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
-            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
+            className="bg-[#F7F9FB] rounded-2xl p-5 min-h-[200px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
           >
             <h3 className="text-lg font-bold text-blue-600 mb-2">{section.title}</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 list-disc">
               {section.items.map((item, idx) => (
-                <li key={idx} className="text-gray-700">{item}</li>
+                <li key={idx} className="text-gray-700 ml-4">{item}</li>
               ))}
             </ul>
           </motion.div>
