@@ -7,7 +7,6 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
-import FullDetailsPage from "@/app/components/more/hospital/hospitalDetail";
 
 const DetailsPage = () => {
   const params = useParams();
