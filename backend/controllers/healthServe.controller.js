@@ -115,7 +115,7 @@ const deleteHealthServe = async (req, res) => {
 
 const getHealthServeList = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page) || 0;
     const location = req.query.location || null;
     const type = req.query.type || null;
 

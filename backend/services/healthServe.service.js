@@ -48,7 +48,7 @@ const register = async (data) => {
     type = type.replace("-", "_");
 
     let paymentUrl;
-    if (type !== "blood_donor" || isCash === 'cash') {
+    if (type !== "blood_donor" || isCash === "cash") {
       paymentUrl = await createPaymentLinkForEntity(
         type,
         { name, phone, email },
@@ -78,7 +78,7 @@ const register = async (data) => {
       subscriptionType,
     };
 
-    if (isCash === 'cash') {
+    if (isCash === "cash") {
       healthServeData.paymentStatus = true;
       healthServeData.paymentObject = { type: "cash" };
     }
@@ -104,7 +104,7 @@ const register = async (data) => {
     });
     await newHealthServeProfile.save();
 
-    if(isCash === 'cash') {
+    if (isCash === "cash") {
       paymentUrl = null;
     }
 
@@ -346,9 +346,13 @@ const getHealthServeList = async (page, location, type) => {
     let total;
 
     if (type === "hospital" || type === "blood_donor") {
-      healthServeProfileList = await HealthServe.find(filter)
-        .skip(skip)
-        .limit(limit);
+      if (!page) {
+        healthServeProfileList = await HealthServe.find(filter);
+      } else {
+        healthServeProfileList = await HealthServe.find(filter)
+          .skip(skip)
+          .limit(limit);
+      }
       total = await HealthServe.countDocuments(filter);
     } else {
       healthServeProfileList = await HealthServe.aggregate([
