@@ -20,10 +20,12 @@ const DetailsPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-
+      console.log(`/health-serve/list?&location=&type=${specs}`);
       const listResponse = await axiosInstance.get(
         `/health-serve/list?&location=&type=${specs}`
       );
+
+      console.log(listResponse);
 
       if (!listResponse?.list?.healthServeProfileList) {
         setError(`No data found for ${specs}`);
@@ -63,6 +65,7 @@ const DetailsPage = () => {
   };
 
   useEffect(() => {
+    console.log({ specs, specsId });
     if (specs && specsId) {
       fetchData();
     }
