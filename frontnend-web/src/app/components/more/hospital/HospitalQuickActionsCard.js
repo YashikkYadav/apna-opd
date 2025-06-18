@@ -30,7 +30,7 @@ const actions = [
     title: "Health Packages",
     desc: "Comprehensive health checkup packages",
     button: "View Packages",
-    link: "/find-doctor",
+    link: "/more/laboratory",
   },
 ];
 
