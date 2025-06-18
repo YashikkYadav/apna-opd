@@ -5,6 +5,9 @@ const { default: mongoose } = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const config = require("../config/config");
+const HospitalDoctor = require("../models/hospitalDoctor");
+const DoctorProfile = require("../models/doctorProfile");
+const Doctor = require("../models/doctor");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -113,7 +116,7 @@ const getHealthServeProfile = async (healthServeId) => {
       };
     }
 
-    const healthServeProfile = await HealthServeProfile.findOne({
+    let healthServeProfile = await HealthServeProfile.findOne({
       healthServeId: healthServeId,
     }).populate("healthServeId");
 
@@ -124,6 +127,31 @@ const getHealthServeProfile = async (healthServeId) => {
           message: "Health serve profile not found",
         },
       };
+    }
+
+    if (healthServeProfile.healthServeId.type === "hospital") {
+      const hospitalDoctors = await HospitalDoctor.find({
+        healthServeId,
+      }).select("doctorId");
+
+      const doctorIds = hospitalDoctors.map((doc) => doc.doctorId);
+
+      const doctors = await Doctor.find({ _id: { $in: doctorIds } });
+
+      const doctorProfiles = await DoctorProfile.find({
+        doctorId: { $in: doctorIds },
+      });
+
+      const doctorsWithProfiles = doctors.map((doctor) => {
+        const profile = doctorProfiles.find(
+          (p) => p.doctorId.toString() === doctor._id.toString()
+        );
+        return {
+          ...doctor.toObject(),
+          doctorProfile: profile || null,
+        };
+      });
+      healthServeProfile._doc.doctors = doctorsWithProfiles;
     }
 
     return {
