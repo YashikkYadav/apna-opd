@@ -57,13 +57,6 @@ const DetailsPage = () => {
         error?.response?.data?.error?.message ||
           "Failed to load details. Please try again later."
       );
-      if (error) {
-        return (
-          <div className="pt-[120px] text-center">
-            <h2 className="text-2xl text-red-500">{error}</h2>
-          </div>
-        );
-      }
     } finally {
       setLoading(false);
     }
@@ -77,7 +70,16 @@ const DetailsPage = () => {
 
   if (loading) return <Loader />;
 
+  if (error) {
+    return (
+      <div className="pt-[120px] text-center">
+        <h2 className="text-2xl text-red-500">{error}</h2>
+      </div>
+    );
+  }
+
   if (specs === "hospital") {
+    console.log(profileData);
     return <FullDetailsPage profileData={profileData} />;
   }
 
