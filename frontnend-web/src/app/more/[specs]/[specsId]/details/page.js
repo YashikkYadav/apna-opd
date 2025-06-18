@@ -7,6 +7,7 @@ import ImageGalleryCommon from "../../../../components/more/common/ImageGalleryC
 import SuggestedService from "../../../../components/more/common/SuggestedService";
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
+import FullDetailsPage from "@/app/components/more/hospital/hospitalDetail";
 
 const DetailsPage = () => {
   const params = useParams();
@@ -56,6 +57,13 @@ const DetailsPage = () => {
         error?.response?.data?.error?.message ||
           "Failed to load details. Please try again later."
       );
+      if (error) {
+        return (
+          <div className="pt-[120px] text-center">
+            <h2 className="text-2xl text-red-500">{error}</h2>
+          </div>
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -69,13 +77,20 @@ const DetailsPage = () => {
 
   if (loading) return <Loader />;
 
-  if (error) {
-    return (
-      <div className="pt-[120px] text-center">
-        <h2 className="text-2xl text-red-500">{error}</h2>
-      </div>
-    );
+  if (specs === "hospital") {
+    return <FullDetailsPage profileData={profileData} />;
   }
+
+  return (
+    <div className="pt-[80px]">
+      <BannerCommon profileData={profileData} serviceType={specs} />
+      <AboutCommon profileData={profileData} serviceType={specs} />
+      {profileData?.images?.length > 0 && (
+        <ImageGalleryCommon images={profileData.images} />
+      )}
+      <SuggestedService serviceType={specs} currentId={specsId} />
+    </div>
+  );
 };
 
 export default DetailsPage;
