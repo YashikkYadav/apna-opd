@@ -1,3 +1,27 @@
+"use client";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import {
+  FaStar,
+  FaBed,
+  FaStarHalfAlt,
+  FaUserMd,
+  FaRegStar,
+  FaRegHospital,
+  FaPhoneAlt,
+} from "react-icons/fa";
+import { MdEmergency } from "react-icons/md";
+import { BsShieldCheck } from "react-icons/bs";
+import { RiBankCardLine } from "react-icons/ri";
+
+const allowedFeatures = [
+  "24/7 Emergency",
+  "500+ Beds",
+  "NABH Accredited",
+  "50+ Specialists",
+  "Insurance Accepted",
+];
+
 const features = [
   {
     icon: <MdEmergency className="text-pink-400 text-2xl" />,

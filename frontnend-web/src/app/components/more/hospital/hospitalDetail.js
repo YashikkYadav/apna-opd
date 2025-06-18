@@ -1,3 +1,12 @@
+import HospitalDepartmentsCard from "./HospitalDepartmentsCard";
+import HospitalDoctorsCard from "./HospitalDoctorsCard";
+import HospitalFacilitiesCard from "./HospitalFacilitiesCard";
+import HospitalFeatureCard from "./HospitalFeatureCard";
+import HospitalInsuranceCard from "./HospitalInsuranceCard";
+import HospitalLocationCard from "./HospitalLocationCard";
+import HospitalOverviewCard from "./HospitalOverviewCard";
+import HospitalQuickActionsCard from "./HospitalQuickActionsCard";
+import HospitalTestimonialsCard from "./HospitalTestimonialsCard";
 
 const FullDetailsPage = ({profileData}) => {
   return (
