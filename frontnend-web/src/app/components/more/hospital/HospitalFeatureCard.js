@@ -97,7 +97,7 @@ export default function HospitalFeatureCard({ profileData }) {
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
           src={
-            profileData && profileData.images
+            profileData && profileData.images && profileData.images[0]
               ? profileData.images[0].url
               : "/images/max.png"
           }
