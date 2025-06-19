@@ -181,7 +181,10 @@
                 >
               </v-chip-group>
               <v-btn @click="openItemDialog('keyStats')"
-                >+ Add Key Statistic</v-btn
+                >+ Add Key Statistic
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -200,7 +203,10 @@
                 >
               </v-chip-group>
               <v-btn @click="openItemDialog('accreditations')"
-                >+ Add Accreditation</v-btn
+                >+ Add Accreditation
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -213,7 +219,12 @@
                   >{{ item }}</v-chip
                 >
               </v-chip-group>
-              <v-btn @click="openItemDialog('awards')">+ Add Award</v-btn>
+              <v-btn @click="openItemDialog('awards')"
+                >+ Add Award
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
@@ -575,7 +586,7 @@ export default {
   },
   methods: {
     addItem(field) {
-      if (this.form[field].length >= 6) return;
+      if (this.form[field].length >= 5) return;
       const newItem = prompt(`Add new item to ${field}`);
       if (newItem) this.form[field].push(newItem);
     },
@@ -583,7 +594,7 @@ export default {
       this.form[field].splice(index, 1);
     },
     addTestimonial() {
-      if (this.form.testimonials.length >= 6) return;
+      if (this.form.testimonials.length >= 5) return;
       this.form.testimonials.push({
         rating: 0,
         title: "",
@@ -595,8 +606,20 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
+    isNotFive(type) {
+      return (
+        type != "insurance" &&
+        type != "payments" &&
+        type != "healthPackages" &&
+        type != "specialServices"
+      );
+    },
     openItemDialog(type) {
-      if (this.form[type].length >= 6) return;
+      if (
+        (this.form[type].length >= 5 && this.isNotFive(type)) ||
+        this.form[type].length >= 7
+      )
+        return;
       this.itemType = type;
       this.newItemText = "";
       this.itemDialog = true;
