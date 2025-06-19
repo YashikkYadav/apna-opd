@@ -1,20 +1,53 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaStar, FaBed, FaUserMd, FaRegHospital, FaPhoneAlt, FaMapMarkerAlt, FaRegCalendarCheck } from "react-icons/fa";
+import {
+  FaStar,
+  FaBed,
+  FaUserMd,
+  FaRegHospital,
+  FaPhoneAlt,
+  FaMapMarkerAlt,
+  FaRegCalendarCheck,
+} from "react-icons/fa";
 import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 
-export default function HospitalFeatureCard({ doctorData, specs }) {
-  const { name, image, type, rating, reviews, consultationFee, phone } = doctorData || {};
-  
+export default function DoctorFeatureCard({ doctorData, specs }) {
+  const { name, images, type, rating, reviews, appointmentFee, phone } =
+    doctorData || {};
+
   const features = [
-    { icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />, text: "+Years Experience", dynamicValue: doctorData.yearsOfService },
-    { icon: <FaUserMd className="text-purple-400 text-2xl" />, text: doctorData.feature1, dynamicValue: null },
-    { icon: <FaRegHospital className="text-pink-400 text-2xl" />, text: doctorData.feature2, dynamicValue: null },
-    ...(specs !== 'nurse' ? [{ icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />, text: doctorData.feature3, dynamicValue: null }] : []),
+    {
+      icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />,
+      text: "+Years Experience",
+      dynamicValue: doctorData.experience,
+    },
+    {
+      icon: <FaUserMd className="text-purple-400 text-2xl" />,
+      text: "+ Happy Clients",
+      dynamicValue: doctorData.happyClients,
+    },
+    {
+      icon: <FaRegHospital className="text-pink-400 text-2xl" />,
+      text: "",
+      dynamicValue: doctorData.doctor.clinicName,
+    },
+    ...(specs !== "nurse"
+      ? [
+          {
+            icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
+            text: "",
+            dynamicValue: doctorData.doctor.location,
+          },
+        ]
+      : []),
   ];
+
+  function getProfileImage(images) {
+    return images.find((image) => image.type === "profilePhoto");
+  }
 
   return (
     <motion.div
@@ -27,7 +60,11 @@ export default function HospitalFeatureCard({ doctorData, specs }) {
       {/* Left: Hospital Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
-          src={image}
+          src={
+            images && images.length
+              ? getProfileImage(images).url
+              : "/images/d1.png"
+          }
           alt={name}
           width={340}
           height={340}
@@ -44,14 +81,20 @@ export default function HospitalFeatureCard({ doctorData, specs }) {
         </p>
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
-          {rating && [...Array(rating)].map((_, i) => (
-            <FaStar key={i} className="text-yellow-400 text-2xl" />
-          ))}
-          {rating && [...Array(5 - rating)].map((_, i) => (
-            <FaStar key={i} className="text-gray-300 text-2xl" />
-          ))}
-          <span className="text-white text-xl font-semibold ml-2">{rating}/5</span>
-          <span className="text-white/70 text-lg ml-2">({reviews} reviews)</span>
+          {rating &&
+            [...Array(rating)].map((_, i) => (
+              <FaStar key={i} className="text-yellow-400 text-2xl" />
+            ))}
+          {rating &&
+            [...Array(5 - rating)].map((_, i) => (
+              <FaStar key={i} className="text-gray-300 text-2xl" />
+            ))}
+          <span className="text-white text-xl font-semibold ml-2">
+            {rating}/5
+          </span>
+          <span className="text-white/70 text-lg ml-2">
+            ({reviews} reviews)
+          </span>
         </div>
         {/* Features */}
         <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-2">
@@ -65,9 +108,9 @@ export default function HospitalFeatureCard({ doctorData, specs }) {
             </div>
           ))}
         </div>
-        {specs === 'doctor' && (
+        {specs === "doctor" && (
           <div className="mt-2 bg-green-500 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
-            ₹{consultationFee} consultationFee
+            ₹{appointmentFee} consultationFee
           </div>
         )}
         {/* Call Now Button */}
@@ -88,4 +131,4 @@ export default function HospitalFeatureCard({ doctorData, specs }) {
       <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
     </motion.div>
   );
-} 
+}

@@ -2,6 +2,7 @@ import Image from "next/image";
 
 const ImageGallery = ({ doctorDetail }) => {
   const data = ["", "", "", "", "", ""];
+  console.log(doctorDetail);
   return (
     <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pb-[60px] sm:pb-[70px]">
       <h1 className="title-48 mb-[42px]">Image Gallery</h1>
