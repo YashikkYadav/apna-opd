@@ -1,11 +1,13 @@
 "use client";
 import { useParams } from "next/navigation";
-import AboutDoctor from "../../components/profile-com/aboutDoctor";
-import Banner from "../../components/profile-com/banner";
-import ImageGallery from "../../components/profile-com/imageGallery";
-import OtherSpecialist from "../../components/profile-com/otherSpecialist";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/config/axios";
+import ImageGallery from "../components/profile-com/DocImageGallery";
+import HospitalLocationCard from "../components/more/hospital/HospitalLocationCard";
+import DoctorFeatureCard from "../components/profile-com/DoctorFeatureCard";
+import DoctorOverviewCar from "../components/profile-com/DoctorOverviewCar";
+import DoctorTestimonialsCard from "../components/profile-com/DoctorTestimonialsCard";
+import DoctorSpecialistsCard from "../components/profile-com/DoctorSpecialistsCard";
 
 const ProfilePage = () => {
   const params = useParams();
@@ -33,10 +35,13 @@ const ProfilePage = () => {
   }, []);
   return (
     <div className="pt-[80px]">
-      <Banner doctorDetail={doctorDetail} />
-      <AboutDoctor doctorDetail={doctorDetail} />
-      <ImageGallery doctorDetail={doctorDetail} />
-      <OtherSpecialist doctorDetail={doctorDetail} />
+      <DoctorFeatureCard doctorData={doctorDetail} />
+      <DoctorOverviewCar doctorData={doctorDetail} />
+      <DoctorSpecialistsCard doctorData={doctorDetail} />
+      <ImageGallery images={doctorDetail.images} />
+      <HospitalLocationCard hospitalData={doctorDetail} />
+      <DoctorTestimonialsCard testimonials={doctorDetail.testimonials} />
+      <Faqs doctorDetails={doctorDetail} />
     </div>
   );
 };
