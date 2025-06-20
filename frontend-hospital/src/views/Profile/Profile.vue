@@ -153,6 +153,11 @@
                 dense
               />
             </v-col>
+            <v-col cols="12" class="text-end">
+              <v-btn color="primary" @click="openMapDialog">
+                Select Location on Map
+              </v-btn>
+            </v-col>
           </v-row>
         </v-card>
         <!-- Hospital Overview Section -->
@@ -181,7 +186,10 @@
                 >
               </v-chip-group>
               <v-btn @click="openItemDialog('keyStats')"
-                >+ Add Key Statistic</v-btn
+                >+ Add Key Statistic
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -200,7 +208,10 @@
                 >
               </v-chip-group>
               <v-btn @click="openItemDialog('accreditations')"
-                >+ Add Accreditation</v-btn
+                >+ Add Accreditation
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
               >
             </v-col>
             <v-col cols="12">
@@ -213,7 +224,12 @@
                   >{{ item }}</v-chip
                 >
               </v-chip-group>
-              <v-btn @click="openItemDialog('awards')">+ Add Award</v-btn>
+              <v-btn @click="openItemDialog('awards')"
+                >+ Add Award
+                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
+                  >(max. 5)</span
+                ></v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
@@ -469,8 +485,20 @@
       </div>
     </div>
   </div>
+  <v-dialog v-model="mapDialog" max-width="800">
+    <v-card>
+      <v-card-title>Select Location</v-card-title>
+      <v-card-text>
+        <div id="map" style="height: 400px; width: 100%"></div>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn text @click="mapDialog = false">Cancel</v-btn>
+        <v-btn color="primary" @click="confirmLocation">Confirm</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
-
 <script>
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
@@ -500,7 +528,12 @@ export default {
         healthPackages: [],
         specialServices: [],
         testimonials: [],
+        googleMapLink: "",
       },
+      mapDialog: false,
+      map: null,
+      marker: null,
+      selectedLatLng: null,
       rules: {
         required: (value) => !!value || "This field is required.",
       },
@@ -574,8 +607,55 @@ export default {
     },
   },
   methods: {
+    openMapDialog() {
+      this.mapDialog = true;
+      this.$nextTick(() => {
+        if (!this.map) {
+          const mapEl = document.getElementById("map");
+          this.map = new google.maps.Map(mapEl, {
+            center: { lat: 28.6139, lng: 77.209 }, // default: Delhi
+            zoom: 12,
+          });
+
+          this.map.addListener("click", (e) => {
+            if (this.marker) this.marker.setMap(null);
+            this.selectedLatLng = e.latLng;
+            this.marker = new google.maps.Marker({
+              position: e.latLng,
+              map: this.map,
+            });
+          });
+        }
+      });
+    },
+    async confirmLocation() {
+      if (!this.selectedLatLng) return;
+
+      const geocoder = new google.maps.Geocoder();
+      const { lat, lng } = this.selectedLatLng.toJSON();
+
+      try {
+        const response = await geocoder.geocode({ location: { lat, lng } });
+        const result = response.results[0];
+        this.form.address = result.formatted_address;
+
+        for (const comp of result.address_components) {
+          if (comp.types.includes("locality")) this.form.city = comp.long_name;
+          if (comp.types.includes("administrative_area_level_1"))
+            this.form.state = comp.long_name;
+          if (comp.types.includes("postal_code"))
+            this.form.pincode = comp.long_name;
+        }
+
+        this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
+      } catch (err) {
+        console.error("Geocoding failed", err);
+      }
+
+      this.mapDialog = false;
+    },
     addItem(field) {
-      if (this.form[field].length >= 6) return;
+      if (this.form[field].length >= 5) return;
       const newItem = prompt(`Add new item to ${field}`);
       if (newItem) this.form[field].push(newItem);
     },
@@ -583,7 +663,7 @@ export default {
       this.form[field].splice(index, 1);
     },
     addTestimonial() {
-      if (this.form.testimonials.length >= 6) return;
+      if (this.form.testimonials.length >= 5) return;
       this.form.testimonials.push({
         rating: 0,
         title: "",
@@ -595,8 +675,20 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
+    isNotFive(type) {
+      return (
+        type != "insurance" &&
+        type != "payments" &&
+        type != "healthPackages" &&
+        type != "specialServices"
+      );
+    },
     openItemDialog(type) {
-      if (this.form[type].length >= 6) return;
+      if (
+        (this.form[type].length >= 5 && this.isNotFive(type)) ||
+        this.form[type].length >= 7
+      )
+        return;
       this.itemType = type;
       this.newItemText = "";
       this.itemDialog = true;

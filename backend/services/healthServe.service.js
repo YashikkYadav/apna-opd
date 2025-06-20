@@ -346,6 +346,7 @@ const getHealthServeList = async (page, location, type) => {
     let total;
 
     if (type === "hospital" || type === "blood_donor") {
+      console.log(page);
       if (!page) {
         healthServeProfileList = await HealthServe.find(filter);
       } else {
@@ -355,20 +356,35 @@ const getHealthServeList = async (page, location, type) => {
       }
       total = await HealthServe.countDocuments(filter);
     } else {
-      healthServeProfileList = await HealthServe.aggregate([
-        { $match: filter },
-        { $skip: skip },
-        { $limit: limit },
-        {
-          $lookup: {
-            from: "healthserveprofiles",
-            localField: "_id",
-            foreignField: "healthServeId",
-            as: "profiles",
+      if (!page) {
+        healthServeProfileList = await HealthServe.aggregate([
+          { $match: filter },
+          {
+            $lookup: {
+              from: "healthserveprofiles",
+              localField: "_id",
+              foreignField: "healthServeId",
+              as: "profiles",
+            },
           },
-        },
-      ]);
-      total = healthServeProfileList.length;
+        ]);
+        total = healthServeProfileList.length;
+      } else {
+        healthServeProfileList = await HealthServe.aggregate([
+          { $match: filter },
+          { $skip: skip },
+          { $limit: limit },
+          {
+            $lookup: {
+              from: "healthserveprofiles",
+              localField: "_id",
+              foreignField: "healthServeId",
+              as: "profiles",
+            },
+          },
+        ]);
+        total = healthServeProfileList.length;
+      }
     }
 
     return {
