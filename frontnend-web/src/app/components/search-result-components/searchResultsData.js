@@ -17,7 +17,7 @@ const SearchResultsData = () => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
-    totalItems: 0
+    totalItems: 0,
   });
 
   const fetchData = async (page = 1, loc = location, spec = speciality) => {
@@ -85,13 +85,22 @@ const SearchResultsData = () => {
                   Find Our Specialist Doctors
                 </h1>
                 <p className="text-base text-white mb-[88px] text-center">
-                  Apna OPD is your all-in-one India healthcare platform to find doctors by specialty, location, or hospital.  Whether you're looking for online doctor consultation, in-clinic visits, or the best OPD booking app — we make it easy to compare, choose, and book appointments with trusted doctors across India in minutes.
+                  Apna OPD is your all-in-one India healthcare platform to find
+                  doctors by specialty, location, or hospital. Whether you're
+                  looking for online doctor consultation, in-clinic visits, or
+                  the best OPD booking app — we make it easy to compare, choose,
+                  and book appointments with trusted doctors across India in
+                  minutes.
                 </p>
               </div>
             </div>
 
             <div>
-              <SearchBar onSearch={handleSearch} location={location} specialty={speciality} />
+              <SearchBar
+                onSearch={handleSearch}
+                location={location}
+                specialty={speciality}
+              />
             </div>
           </div>
         </div>
@@ -149,12 +158,18 @@ const SearchResultsData = () => {
             </div>
           </div>
           <div className="lg:w-[66%]">
-            <h2 className="title-48 mb-[24px]">Result for {speciality || "Paediatrics"}</h2>
-            {data?.length > 0 ? (<p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              Showing {data?.length} of {pagination.totalItems} results
-            </p>):(<p className="title-24 text-[#808080] !font-normal mb-[56px]">
-              No doctors Registered as of now.
-            </p>)}
+            <h2 className="title-48 mb-[24px]">
+              Result for {speciality || "Paediatrics"}
+            </h2>
+            {data?.length > 0 ? (
+              <p className="title-24 text-[#808080] !font-normal mb-[56px]">
+                Showing {data?.length} of {pagination.totalItems} results
+              </p>
+            ) : (
+              <p className="title-24 text-[#808080] !font-normal mb-[56px]">
+                No doctors Registered as of now.
+              </p>
+            )}
             <div className="flex flex-col gap-[32px]">
               {data?.map((item) => (
                 <div
@@ -164,7 +179,9 @@ const SearchResultsData = () => {
                   <div className="flex flex-col sm:flex-row">
                     <div className="sm:mr-[32px]">
                       <Image
-                        src={item.images[0]?.url ?? "/images/image_placeholder.svg"}
+                        src={
+                          item.images[0]?.url ?? "/images/image_placeholder.svg"
+                        }
                         width={180}
                         height={180}
                         alt="Working Men"
@@ -177,7 +194,8 @@ const SearchResultsData = () => {
                       </p>
                       <h3 className="title-32 mb-[8px]">{item.doctor.name}</h3>
                       <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                        {`${item.experience} Years of Experience` || "10 Years of Experience"}
+                        {`${item.experience} Years of Experience` ||
+                          "10 Years of Experience"}
                       </p>
                       <h4 className="title-24 text-[#808080] !font-medium">
                         {item.doctor.clinicName || "California Medical Center"}
@@ -189,27 +207,29 @@ const SearchResultsData = () => {
                       $25
                     </h2> */}
                     <div className="mt-[24px]">
-                      {(item.rating > 0 || item.ratingCount > 0) ? (
-                        <StarRating 
-                          rating={item.rating || 0} 
+                      {item.rating > 0 || item.ratingCount > 0 ? (
+                        <StarRating
+                          rating={item.rating || 0}
                           ratingCount={item.ratingCount || 0}
                           size="sm"
                           showCount={true}
                         />
                       ) : (
                         <div className="flex items-center">
-                          <StarRating 
-                            rating={0} 
+                          <StarRating
+                            rating={0}
                             ratingCount={0}
                             size="sm"
                             showCount={false}
                           />
-                          <span className="text-sm text-gray-500 ml-2">No reviews yet</span>
+                          <span className="text-sm text-gray-500 ml-2">
+                            No reviews yet
+                          </span>
                         </div>
                       )}
                     </div>
                     <button
-                      onClick={() => handleDoctorDetails(item._id)}
+                      onClick={() => handleDoctorDetails(item.doctor._id)}
                       className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
                     >
                       Details
@@ -218,11 +238,13 @@ const SearchResultsData = () => {
                 </div>
               ))}
             </div>
-            {pagination.totalPages > 1 && <Pagination
-              currentPage={pagination.currentPage}
-              totalPages={pagination.totalPages}
-              onPageChange={handlePageChange}
-            />}
+            {pagination.totalPages > 1 && (
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
           </div>
         </div>
       </div>

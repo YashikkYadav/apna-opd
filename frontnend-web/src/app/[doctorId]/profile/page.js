@@ -18,13 +18,11 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/doctor/list?page=1&location=&speciality=`
-        );
-        const list = response?.list?.doctorList || [];
-        const foundDoctor = list.find((item) => item._id === doctorId);
-        if (foundDoctor) {
-          console.log(foundDoctor);
+        const response = await axiosInstance.get(`/doctor/profile/${doctorId}`);
+        console.log(response);
+
+        const foundDoctor = response?.doctorProfile;
+        if (foundDoctor && foundDoctor._id) {
           setDoctorDetail(foundDoctor);
         } else {
           setNotFound(true);
@@ -53,10 +51,10 @@ const ProfilePage = () => {
   return (
     <div className="pt-[80px]">
       <DoctorFeatureCard doctorData={doctorDetail} specs={"doctor"} />
-      {/* <DoctorOverviewCar doctorData={doctorDetail} specs={"Doctor Overview"} /> */}
-      {/* <DoctorSpecialistsCard doctorData={doctorDetail} /> */}
+      <DoctorOverviewCar doctorData={doctorDetail} specs={"Doctor Overview"} />
+      <DoctorSpecialistsCard doctorData={doctorDetail} />
       <ImageGallery doctorDetail={doctorDetail} />
-      <HospitalLocationCard profileData={doctorDetail.doctor} />
+      <HospitalLocationCard profileData={doctorDetail.doctorId} />
       <DoctorTestimonialsCard testimonials={doctorDetail.testimonials} />
       <Faqs doctorDetails={doctorDetail} />
     </div>

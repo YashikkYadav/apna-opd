@@ -32,14 +32,14 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
     {
       icon: <FaRegHospital className="text-pink-400 text-2xl" />,
       text: "",
-      dynamicValue: doctorData.doctor.clinicName,
+      dynamicValue: doctorData.doctorId.clinicName,
     },
     ...(specs !== "nurse"
       ? [
           {
             icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
             text: "",
-            dynamicValue: doctorData.doctor.location,
+            dynamicValue: doctorData.doctorId.location,
           },
         ]
       : []),
@@ -108,7 +108,7 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
             </div>
           ))}
         </div>
-        {specs === "doctor" && (
+        {specs === "doctorId" && (
           <div className="mt-2 bg-green-500 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
             ₹{appointmentFee} consultationFee
           </div>
