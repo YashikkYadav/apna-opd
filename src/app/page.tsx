@@ -1,103 +1,325 @@
-import Image from "next/image";
+'use client';
+
+import React, { useRef, useState } from 'react';
+import {
+  Calendar,
+  MapPin,
+  Home as HomeIcon,
+  CalendarPlus,
+  Package,
+  User,
+  Stethoscope,
+  MessageCircle,
+  HelpCircle,
+  Headphones,
+  ChevronDown,
+  Phone,
+  Star,
+  AlertCircle,
+  GraduationCap,
+  Languages,
+  Award,
+  HeartPulse,
+} from 'lucide-react';
+import Image from 'next/image';
+import { doctor, mainPackages, testimonials, mainFaqs } from "./data";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const packagesRef = useRef<HTMLDivElement>(null);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const stars = Array(5).fill(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+  return (
+    <div className="min-h-screen bg-[#f6fafd] py-6 px-2 md:px-0">
+      {/* Hero/Doctor Card */}
+      <div className="max-w-7xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden mt-6">
+        {/* Background Circles */}
+        <div className="absolute -top-16 -left-16 w-72 h-72 bg-blue-300/30 rounded-full z-0" />
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-300/30 rounded-full z-0" />
+        {/* Therapist Photo - now square with rounded corners */}
+        <div className="relative z-10 flex-shrink-0 flex items-center justify-center">
+          <div className="w-56 h-56 md:w-72 md:h-72 rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 flex items-center justify-center text-6xl font-bold text-white shadow-lg relative overflow-hidden">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-T3ZfSx2hyuNb-IcIVQCcjZnSR_hPI2V6dg&s"
+              alt="Dr. Priya Sharma"
+              width={288}
+              height={288}
+              className="object-cover w-full h-full rounded-2xl"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">✓</span>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        {/* Info Section */}
+        <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">Dr. Priya Sharma</h1>
+          <h2 className="text-xl md:text-2xl font-semibold mt-2">Female • Certified Physiotherapist</h2>
+          <div className="flex flex-wrap gap-4 my-4">
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
+              <Calendar className="w-5 h-5" />
+              <span>8 Years Experience</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
+              <MapPin className="w-5 h-5" />
+              <span>Malviya Nagar, Jaipur</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
+              <HomeIcon className="w-5 h-5" />
+              <span>5km radius for home visits</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-yellow-300 text-2xl">★★★★★</span>
+            <span className="ml-2 text-lg">4.8 (127 reviews)</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-3">
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">Home Visit Available</span>
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">Clinic Based</span>
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">Certified</span>
+            <span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">Insurance Accepted</span>
+          </div>
+          {/* CTA Buttons */}
+          <div className="flex flex-col md:flex-row gap-4 mt-6">
+            <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-8 py-3 flex items-center gap-2 shadow-lg transition text-lg">
+              <CalendarPlus className="w-5 h-5" />
+              Book Session
+            </button>
+            <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-8 py-3 flex items-center gap-2 backdrop-blur transition text-lg">
+              <Package className="w-5 h-5" />
+              Explore Packages
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Overview Section as 3 Cards */}
+      <div className="max-w-7xl mx-auto mt-12 px-2">
+        <div className="flex items-center gap-3 mb-8">
+          <User className="w-8 h-8 text-blue-600" />
+          <h2 className="text-4xl font-extrabold text-blue-700">Overview</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* About Card */}
+          <div className="bg-[#f6fafd] rounded-2xl shadow-md p-7 text-gray-800">
+            <h3 className="text-2xl font-bold text-blue-700 mb-3 flex items-center gap-2"><HeartPulse className="w-6 h-6 text-pink-500" />About</h3>
+            <p className="text-base leading-relaxed">
+              Dr. Priya Sharma is a highly experienced physiotherapist with 8 years of dedicated practice in rehabilitation and pain management. She specializes in post-operative care, elderly rehabilitation, and sports recovery. Her patient-centered approach combines evidence-based treatments with compassionate care, helping patients achieve optimal recovery and improved quality of life.
+            </p>
+          </div>
+          {/* Education & Certifications Card */}
+          <div className="bg-[#f6fafd] rounded-2xl shadow-md p-7 text-gray-800">
+            <h3 className="text-2xl font-bold text-blue-700 mb-3 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-blue-400" />Education & Certifications</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><span className="font-semibold">Education:</span> BPT, MPT (Orthopedics)</li>
+              <li><span className="font-semibold">Certifications:</span> Dry Needling, Manual Therapy</li>
+              <li><span className="font-semibold">Special Interests:</span> Post-Op Care, Elderly Rehab, Sports Recovery</li>
+            </ul>
+          </div>
+          {/* Languages Card */}
+          <div className="bg-[#f6fafd] rounded-2xl shadow-md p-7 text-gray-800 border-2 border-blue-400">
+            <h3 className="text-2xl font-bold text-blue-700 mb-3 flex items-center gap-2"><Languages className="w-6 h-6 text-green-500" />Languages</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Hindi</li>
+              <li>English</li>
+              <li>Rajasthani</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Conditions Treated */}
+      <div className="max-w-7xl mx-auto mt-12 px-2">
+        <section className="rounded-xl p-6 md:p-10 shadow-md bg-[#1573ad] text-white">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-6 section-title">
+            <Stethoscope className="w-6 h-6 text-white" />
+            Conditions Treated
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {doctor.conditions.map((c) => (
+              <button
+                key={c.label}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full px-6 py-3 text-base transition shadow-md focus:outline-none"
+                type="button"
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Therapy Packages */}
+      <div className="max-w-7xl mx-auto mt-12 px-2" ref={packagesRef}>
+        <section className="bg-transparent rounded-xl p-0 shadow-none border-none" id="packages">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-6 text-gray-800 section-title">
+            <Package className="w-6 h-6 text-blue-600" />
+            Therapy Packages
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {mainPackages.slice(0, 3).map((pkg) => (
+              <div
+                key={pkg.title}
+                className="bg-white border-2 border-blue-400 rounded-2xl shadow-md p-7 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-bold text-blue-900 uppercase flex-1">{pkg.title}</h3>
+                    <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">{pkg.discount}</span>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 mb-3">
+                    {pkg.details.map((d) => (
+                      <div key={d.label} className="flex items-center gap-2 text-gray-700">
+                        <Calendar className="w-4 h-4 text-blue-400" />
+                        <span className="font-semibold">{d.value}</span>
+                        <span className="text-xs text-gray-500">{d.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-2xl font-bold text-blue-500 mb-2">
+                    {pkg.price} <span className="text-base text-gray-400 line-through font-normal">{pkg.oldPrice}</span>
+                  </div>
+                  <ul className="list-disc pl-5 mb-4 text-gray-700">
+                    {pkg.benefits.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex flex-wrap gap-3 mt-4">
+                  <button className="bg-green-100 text-green-700 font-semibold rounded-full px-5 py-2 text-base">₹ Consultation Fee</button>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-6 py-2 text-base">Book Appointment</button>
+                  <button className="border-2 border-blue-600 text-blue-600 font-semibold rounded-full px-6 py-2 text-base bg-white">View Profile</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          {mainPackages.length > 3 && (
+            <div className="flex justify-center mt-8">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-8 py-3 text-lg shadow-md">View All</button>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* Location & Contact Section (moved here) */}
+      <div className="max-w-7xl mx-auto mt-12 px-2">
+        <h2 className="text-3xl font-extrabold text-blue-700 mb-8 flex items-center gap-3">
+          <MapPin className="w-8 h-8 text-pink-500" />
+          Location & Contact
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Map View Card */}
+          <div className="bg-slate-100 rounded-2xl p-10 flex flex-col justify-center items-start min-h-[260px]">
+            <div className="flex items-center gap-4 mb-2">
+              <span className="text-4xl">🌍</span>
+              <div className="text-xl font-bold text-slate-800">Interactive<br />Map View</div>
+            </div>
+            <div className="mt-6 text-lg text-slate-500 font-semibold">GARG ENT<br />&MULTISPECIALTY<br />HOSPITAL</div>
+          </div>
+          {/* Contact Info Card */}
+          <div className="bg-slate-100 rounded-2xl p-10 min-h-[260px] flex flex-col justify-center">
+            <div className="text-2xl font-bold text-slate-900 mb-6">Contact Information</div>
+            <div className="flex items-start gap-4 mb-4">
+              <div className="bg-blue-100 p-3 rounded-full"><MapPin className="w-6 h-6 text-blue-600" /></div>
+              <div>
+                <div className="font-bold text-slate-800">Address:</div>
+                <div className="text-slate-700">MAIN SIKAR ROAD JAIPUR, JAIPUR, Jaipur, Rajasthan, 302039</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 mb-4">
+              <div className="bg-blue-100 p-3 rounded-full"><Phone className="w-6 h-6 text-blue-600" /></div>
+              <div>
+                <div className="font-bold text-slate-800">Phone:</div>
+                <div className="text-slate-700">9079901861</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="bg-blue-100 p-3 rounded-full"><MessageCircle className="w-6 h-6 text-blue-600" /></div>
+              <div>
+                <div className="font-bold text-slate-800">Email:</div>
+                <div className="text-slate-700">DR.PRATEEK@GMAIL.COM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials (upgraded to match reference) */}
+      <div className="max-w-7xl mx-auto mt-12 px-2">
+        <h2 className="text-3xl font-extrabold text-blue-700 mb-8 flex items-center gap-3">
+          <Star className="w-8 h-8 text-yellow-400" />
+          Patient Reviews & Testimonials
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {testimonials.map((t, i) => (
+            <div key={i} className="bg-slate-100 rounded-2xl p-10 border-l-4 border-blue-400 flex flex-col justify-between min-h-[220px]">
+              <div className="text-4xl text-blue-300 mb-2">“”</div>
+              <div className="text-lg text-slate-700 font-medium mb-4">{t.text}</div>
+              <div className="flex items-center gap-2 mt-auto">
+                <span className="text-yellow-400 text-xl">{'★'.repeat(t.rating) + (t.rating < 5 ? '☆'.repeat(5 - t.rating) : '')}</span>
+                <span className="text-slate-500 font-semibold ml-2">{t.info}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div className="max-w-7xl mx-auto mt-12 px-2">
+        <section className="rounded-xl p-6 md:p-10 shadow-md bg-[#1573ad] text-white">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-6">
+            <HelpCircle className="w-6 h-6 text-white" />
+            Frequently Asked Questions
+          </h2>
+          <div className="flex flex-col gap-4">
+            {mainFaqs.map((f, i) => (
+              <div key={i} className="bg-white text-[#1573ad] rounded-xl shadow-md border-l-4 border-blue-400 overflow-hidden">
+                <button
+                  className="w-full flex justify-between items-center p-5 font-semibold text-left focus:outline-none"
+                  onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
+                >
+                  <span>{f.q}</span>
+                  <ChevronDown
+                    className={`w-6 h-6 text-blue-500 transition-transform ${openFAQ === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                <div
+                  className={`px-5 pb-4 text-base transition-all duration-300 ${openFAQ === i ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}
+                >
+                  {f.a}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Support */}
+      <div className="max-w-7xl mx-auto mt-12 px-2 mb-12">
+        <section className="rounded-xl p-6 md:p-10 shadow-md bg-[#1573ad] text-white">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-6">
+            <Headphones className="w-6 h-6 text-white" />
+            Need Help or Support?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <a
+              href="#"
+              className="bg-white border-2 border-blue-400 text-[#1573ad] rounded-xl p-8 flex flex-col items-center text-center shadow-md hover:scale-105 hover:shadow-blue-200 transition"
+            >
+              <div className="text-4xl mb-3">💬</div>
+              <div className="font-bold text-lg mb-1">Chat on WhatsApp</div>
+              <div className="text-base text-blue-500">Quick responses</div>
+            </a>
+            <a
+              href="#"
+              className="bg-white border-2 border-blue-400 text-[#1573ad] rounded-xl p-8 flex flex-col items-center text-center shadow-md hover:scale-105 hover:shadow-blue-200 transition"
+            >
+              <div className="text-4xl mb-3">📞</div>
+              <div className="font-bold text-lg mb-1">Call Support</div>
+              <div className="text-base text-blue-500">9am - 8pm</div>
+            </a>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,2 @@
+// This is a binary file and will be created from the provided base64 data.
+// The base64 data will be decoded and saved as doctor.jpg in the public directory. 
