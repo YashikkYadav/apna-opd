@@ -66,7 +66,7 @@ const Laboratory = ({ serviceData }) => {
                 Fees: ${laboratory.price || "N/A"}
               </h4>
               <button
-                onClick={() => navigate.push(`/more/laboratory/${laboratory._id}/details`)}
+                onClick={() => navigate.push(`/detail/healthlab/${laboratory._id}`)}
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details

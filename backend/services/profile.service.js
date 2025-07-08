@@ -8,6 +8,9 @@ const config = require("../config/config");
 const HospitalDoctor = require("../models/hospitalDoctor");
 const DoctorProfile = require("../models/doctorProfile");
 const Doctor = require("../models/doctor");
+const physiotherapistsProfile = require("../models/physiotherapistsProfile");
+const healthlabProfile = require("../models/healthlabProfile");
+const pharmacyProfile = require("../models/pharmacyProfile");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -301,9 +304,89 @@ function deleteImageFile(filename) {
   });
 }
 
+const addHealthServeProfileData = async (data) => {
+  try {
+
+    let healthServeProfile = await HealthServe.findById(data.healthServeId);
+
+    let Model;
+
+    // Determine model based on type
+    switch (healthServeProfile.type) {
+      case 'physiotherapist':
+        Model = pharmacyProfile;
+        break;
+      case 'medical_store':
+        Model = pharmacyProfile;
+        break;
+      case 'laboratory':
+        Model = healthlabProfile;
+        break;
+      default:
+        throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
+    }
+
+    const filter = { healthServeId: data.healthServeId };
+    const update = { $set: data };
+    const options = { new: true, upsert: true };
+
+    const doc = await Model.findOneAndUpdate(filter, update, options);
+    return {
+      statusCode: 201,
+      healthServeProfile: doc, // return saved document
+    };
+
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+}
+
+const getHealthServeProfileData = async (healthServeId) => {
+  try {
+
+
+ let healthServeProfile = await HealthServe.findById(healthServeId);
+
+    let Model;
+
+    console.log('healthServeProfile.type',healthServeProfile.type)
+    // Determine model based on type
+    switch (healthServeProfile.type) {
+      case 'physiotherapist':
+        Model = pharmacyProfile;
+        break;
+      case 'medical_store':
+        Model = pharmacyProfile;
+        break;
+      case 'laboratory':
+        Model = healthlabProfile;
+        break;
+      default:
+        throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
+    }
+
+    const doc = await Model.findOne({ healthServeId });
+    return {
+      statusCode: 201,
+      healthServeProfile: doc, // return saved document,
+      healthServeUser:healthServeProfile
+    };
+
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+}
 module.exports = {
   deleteImage,
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
+  addHealthServeProfileData,
+  getHealthServeProfileData
 };

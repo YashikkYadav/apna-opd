@@ -15,4 +15,8 @@ healthServeProfileRoute.get(
   doctorProfileController.getAppointmentDetails
 );
 
+
+healthServeProfileRoute.post("/profile-data/",profileController.profileData)
+healthServeProfileRoute.get("/profile-data/",profileController.getProfileData)
+
 module.exports = healthServeProfileRoute;

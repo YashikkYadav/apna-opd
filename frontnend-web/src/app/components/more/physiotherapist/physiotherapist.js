@@ -68,11 +68,12 @@ const Physiotherapist = ({ serviceData }) => {
                 Fees: ${physio.price || "N/A"}
               </h4>
               <button
-                onClick={() => navigate.push(`/more/physiotherapist/${physio._id}/details`)}
+                // onClick={() => navigate.push(`/more/physiotherapist/${physio._id}/details`)}
+                onClick={() => navigate.push(`/detail/physiotherapist/${physio._id}`)}
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details
-              </button>
+              </button> 
             </div>
           </div>
         ))}
