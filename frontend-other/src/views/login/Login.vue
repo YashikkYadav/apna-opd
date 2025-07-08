@@ -10,34 +10,14 @@
 
           <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
-              <v-select
-                v-model="healthServeType"
-                :items="dropdownItems"
-                label="Select Option"
-                variant="outlined"
-                dense
-                :rules="[rules.required]"
-                item-value="value"
-                item-title="label"
-              ></v-select>
-              <v-text-field
-                v-model="phone"
-                label="Phone"
-                :rules="[rules.required]"
-                variant="outlined"
-                dense
-                class="email-input"
-              >
+              <v-select v-model="healthServeType" :items="dropdownItems" label="Select Option" variant="outlined" dense
+                :rules="[rules.required]" item-value="value" item-title="label"></v-select>
+              <v-text-field v-model="phone" label="Phone" :rules="[rules.required]" variant="outlined" dense
+                class="email-input">
               </v-text-field>
 
-              <v-text-field
-                v-model="password"
-                label="Password"
-                :rules="[rules.required]"
-                variant="outlined"
-                dense
-                type="password"
-              >
+              <v-text-field v-model="password" label="Password" :rules="[rules.required]" variant="outlined" dense
+                type="password">
               </v-text-field>
             </div>
 
@@ -62,79 +42,42 @@
             <div class="form ragister-form">
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.name"
-                    label="Name"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.name" label="Name" :rules="[rules.required]" variant="outlined" dense>
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.email"
-                    label="Email"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.email" label="Email" :rules="[rules.required]" variant="outlined" dense>
                   </v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.phoneNumber"
-                    label="Phone Number"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.phoneNumber" label="Phone Number" :rules="[rules.required]"
+                    variant="outlined" dense>
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.password"
-                    label="Password"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.password" label="Password" :rules="[rules.required]" variant="outlined"
+                    dense>
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="12">
-                  <v-text-field
-                    v-model="form.address"
-                    label="address"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.address" label="address" :rules="[rules.required]" variant="outlined"
+                    dense>
                   </v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.clinicName"
-                    label="Clinic Name"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.clinicName" label="Clinic Name" variant="outlined" dense>
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.rmcNumber"
-                    label="RMC Number"
-                    :rules="[rules.required]"
-                    variant="outlined"
-                    dense
-                  >
+                  <v-text-field v-model="form.rmcNumber" label="RMC Number" :rules="[rules.required]" variant="outlined"
+                    dense>
                   </v-text-field>
                 </v-col>
               </v-row>
@@ -179,6 +122,8 @@ export default {
         { value: "blood_donor", label: "Blood Donor" },
         { value: "nurse", label: "Nursing Staff" },
         { value: "vatenary", label: "Vaterinary" },
+        { value: "laboratory", label: "Laboratory" },
+
       ],
       password: "",
       email: "",
@@ -226,6 +171,10 @@ export default {
       if (res) {
         localStorage.setItem("doctor_id", res?.healthServe?.id);
         localStorage.setItem("access_token", res?.healthServe?.accessToken);
+        localStorage.setItem("user_type", res?.healthServe?.type);
+
+        // localStorage.setItem("access_token", res?.healthServe?.accessToken);
+
 
         this.$router.push("/dashboard");
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");

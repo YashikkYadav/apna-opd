@@ -2,12 +2,6 @@
   <div class="headbar">
     <div class="header-bar">
       <v-row justify="end" align="center">
-        <!-- <v-btn flat icon class="icon-spacing">
-                    <v-icon>mdi-bell</v-icon>
-                </v-btn> -->
-
-        <!-- Profile Menu -->
-        <!-- <span class="user-name">Dr. Nitin Negi</span> -->
         <v-menu offset-y>
           <template v-slot:activator="{ props }">
             <v-btn flat icon v-bind="props" class="icon-spacing">
@@ -17,10 +11,7 @@
             </v-btn>
           </template>
           <v-list>
-            <router-link
-              to="/profile"
-              style="text-decoration: none; color: inherit"
-            >
+            <router-link :to="profileLink" style="text-decoration: none; color: inherit">
               <v-list-item>Profile</v-list-item>
             </router-link>
             <v-list-item @click="handleLogout">Logout</v-list-item>
@@ -37,6 +28,34 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 
 export default {
+  data() {
+    return {
+      userType: null,
+
+    };
+  },
+  computed: {
+    profileLink() {
+      console.log("User Type:", this.userType); // 🔴 console log for debugging
+
+      switch (this.userType) {
+        case "physiotherapist":
+          return "/profile/physiotherapist";
+        case "laboratory":
+          return "/profile/healthlab";
+        case "medical_store":
+          return "/profile/pharmacy";
+        default:
+          return "/profile";
+      }
+    },
+  },
+  created() {
+    // ✅ Fetch user type from localStorage or your Pinia store here
+    this.userType = localStorage.getItem('user_type') || "default"; // update according to your structure
+
+    console.log("Fetched User Type:", this.userType);
+  },
   methods: {
     handleLogout() {
       localStorage.removeItem("doctor_id");

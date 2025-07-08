@@ -92,6 +92,7 @@ const register = async (data) => {
     }
 
     const newHealthServe = new HealthServe(healthServeData);
+    
     await newHealthServe.save();
 
     const newHealthServeProfile = new HealthServeProfile({
@@ -169,12 +170,14 @@ const login = async (data) => {
     }
 
     const accessToken = getAccessToken(healthServe);
+    
     return {
       statusCode: 200,
       healthServe: {
         id: healthServe._id,
         phone,
         accessToken,
+        type:healthServe.type
       },
     };
   } catch (error) {

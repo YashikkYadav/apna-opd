@@ -3,6 +3,29 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 
+
+const profileData = async (req, res) => {
+  const healthServeId = req.params.healthServeId;
+  const data = req.body
+  data.healthServeId = healthServeId
+
+
+  // console.log('asdaaad',JSON.stringify(req.body))
+  // return 
+
+  const healthServeProfileData =
+    await healthServerProfileService.addHealthServeProfileData(data);
+  res.status(200).json({ message: "data save", healthServeProfileData });
+}
+
+const getProfileData = async (req, res) => {
+  const healthServeId = req.params.healthServeId;
+
+  const healthServeProfileData =
+    await healthServerProfileService.getHealthServeProfileData(healthServeId);
+  res.status(200).json({ message: "data save", healthServeProfileData });
+}
+
 const createProfile = async (req, res) => {
   try {
     const storage = multer.diskStorage({
@@ -144,4 +167,6 @@ module.exports = {
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
+  profileData,
+  getProfileData
 };
