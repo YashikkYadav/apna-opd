@@ -68,11 +68,11 @@ const PharmacyStorePage = () => {
         try {
             console.log('🔄 Fetching pharmacy data...');
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`)
-            const { healthServeProfile, healthServeUser,statusCode } = response?.data?.healthServeProfileData
+            const { healthServeProfile, healthServeUser, statusCode } = response?.data?.healthServeProfileData
             set_res_data({
                 healthProfile: healthServeProfile, otherData: healthServeUser
             })
-            console.log("response", healthServeProfile, healthServeUser,response?.data,statusCode===201)
+            console.log("response", healthServeProfile, healthServeUser, response?.data, statusCode === 201)
             // const response = await fetch('http://localhost:3000/api/pharmacy', {
             //     cache: 'no-store',
             //     headers: {
@@ -81,13 +81,13 @@ const PharmacyStorePage = () => {
             //     }
             // });
 
-            if (statusCode===201) {
-      
+            if (statusCode === 201) {
+
 
                 setData(healthServeProfile);
                 setDataVersion(prev => prev + 1); // Force re-render
 
-                
+
 
                 setLastUpdate(new Date());
 
@@ -118,7 +118,7 @@ const PharmacyStorePage = () => {
     }, [fetchData]);
 
     const filteredMedicines = useMemo(() => {
-        let filtered = data.medicines.filter((medicine) => {
+        let filtered = data?.medicines.filter((medicine) => {
             const matchesSearch =
                 medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 medicine.salt.toLowerCase().includes(searchTerm.toLowerCase());
@@ -137,15 +137,15 @@ const PharmacyStorePage = () => {
 
         // Sort medicines
         if (sortBy === "name") {
-            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            filtered?.sort((a, b) => a.name.localeCompare(b.name));
         } else if (sortBy === "price") {
-            filtered.sort((a, b) => a.price - b.price);
+            filtered?.sort((a, b) => a.price - b.price);
         } else if (sortBy === "discount") {
-            filtered.sort((a, b) => b.discount - a.discount);
+            filtered?.sort((a, b) => b.discount - a.discount);
         }
 
         return filtered;
-    }, [data.medicines, searchTerm, selectedCategory, showInStockOnly, showDiscountedOnly, sortBy, dataVersion]);
+    }, [data?.medicines, searchTerm, selectedCategory, showInStockOnly, showDiscountedOnly, sortBy, dataVersion]);
 
     const addToCart = (medicine) => {
         const existingItem = cart.find((item) => item.id === medicine.id);
@@ -177,10 +177,10 @@ const PharmacyStorePage = () => {
     const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-    const acceptsPrescriptions = data.features.some(
+    const acceptsPrescriptions = data?.features.some(
         f => f.label && f.label.trim().toLowerCase() === 'accepts prescriptions' && f.enabled
     );
-    console.log('Features:', data.features, 'Accepts Prescriptions:', acceptsPrescriptions);
+    console.log('Features:', data?.features, 'Accepts Prescriptions:', acceptsPrescriptions);
 
     if (loading) {
         return (
@@ -233,7 +233,7 @@ const PharmacyStorePage = () => {
                 {/* Pharmacy Info */}
                 <div className="relative z-10 flex-1 flex flex-col justify-center text-white w-full md:w-auto">
                     <div className="flex items-center justify-between mb-4">
-                        
+
                         <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">{res_data?.otherData?.name}</h1>
                         <div className="flex items-center gap-2">
                             <button
@@ -265,7 +265,7 @@ const PharmacyStorePage = () => {
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2 mb-4">
-                        {data.features.filter(f => f.enabled).map((feature, index) => (
+                        {data?.features.filter(f => f.enabled).map((feature, index) => (
                             <span key={`${feature.label}-${index}-${dataVersion}`} className="bg-green-500 px-3 py-1 rounded-full text-sm">
                                 {feature.label}
                             </span>
@@ -276,10 +276,14 @@ const PharmacyStorePage = () => {
                             <ShoppingCart className="w-5 h-5" />
                             Order Medicines
                         </button>
+                        <a 
+                            href={`tel:${res_data?.otherData?.phone}`}
+                        >
                         <button className="bg-blue-500 text-white font-semibold rounded-full px-8 py-3 flex items-center gap-2 shadow-lg transition text-lg">
                             <Phone className="w-5 h-5" />
                             Call Now
                         </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -384,7 +388,7 @@ const PharmacyStorePage = () => {
                     <h2 className="text-4xl font-extrabold text-blue-700">Available Medicines</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredMedicines.map((medicine) => (
+                    {filteredMedicines?.map((medicine) => (
                         <div
                             key={medicine.id}
                             className="relative bg-white rounded-2xl border-2 border-blue-200 shadow-sm hover:shadow-lg transition-all duration-300 p-6 flex flex-col justify-between min-h-[420px]"
@@ -445,7 +449,7 @@ const PharmacyStorePage = () => {
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Our Features</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {data.features.map((feature, index) => (
+                    {data?.features.map((feature, index) => (
                         <div key={index} className={`p-4 rounded-lg border ${feature.enabled ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
                             <div className="flex items-center">
                                 <div className={`w-3 h-3 rounded-full mr-3 ${feature.enabled ? 'bg-green-500' : 'bg-gray-400'}`}></div>
@@ -505,7 +509,7 @@ const PharmacyStorePage = () => {
                     </h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {data.reviews.map((review, index) => (
+                    {data?.reviews.map((review, index) => (
                         <div
                             key={index}
                             className="bg-[#fafdff] border-2 border-blue-200 rounded-2xl p-8 shadow-sm flex flex-col justify-between min-h-[220px] relative"
@@ -589,7 +593,7 @@ const PharmacyStorePage = () => {
                         <span className="text-3xl">❓</span> Frequently Asked Questions
                     </h2>
                     <div className="space-y-6">
-                        {data.faqs.map((faq, index) => (
+                        {data?.faqs.map((faq, index) => (
                             <details
                                 key={index}
                                 className="bg-white border-2 border-blue-400 rounded-2xl shadow-sm px-6 py-4 cursor-pointer group transition-all duration-200"
@@ -624,7 +628,13 @@ const PharmacyStorePage = () => {
                             <span className="mb-4">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><ellipse cx="24" cy="24" rx="24" ry="24" fill="url(#chatGradient)" /><path d="M34 32.5c-1.1 0-2.2-.2-3.2-.6-1-.4-2-.9-2.9-1.6l-1.1-.8c-.3-.2-.7-.2-1 0l-2.1 1.2c-2.2-1.1-4.1-2.9-5.2-5.2l1.2-2.1c.2-.3.2-.7 0-1l-.8-1.1c-.7-.9-1.2-1.9-1.6-2.9-.4-1-.6-2.1-.6-3.2 0-1.1.2-2.2.6-3.2.4-1 .9-2 1.6-2.9.7-.9 1.6-1.6 2.6-2.1C22.1 8.2 23 8 24 8c1.1 0 2.2.2 3.2.6 1 .4 2 .9 2.9 1.6.9.7 1.6 1.6 2.1 2.6.5 1 .7 2.1.7 3.2 0 1.1-.2 2.2-.6 3.2-.4 1-.9 2-1.6 2.9l-.8 1.1c-.2.3-.2.7 0 1l1.2 2.1c-1.1 2.2-2.9 4.1-5.2 5.2l-2.1-1.2c-.3-.2-.7-.2-1 0l-.8 1.1c-.7.9-1.2 1.9-1.6 2.9-.4 1-.6 2.1-.6 3.2 0 1.1.2 2.2.6 3.2.4 1 .9 2 1.6 2.9.7.9 1.6 1.6 2.6 2.1C25.9 39.8 25 40 24 40z" fill="#B0B7C3" /></svg>
                             </span>
-                            <div className="text-xl font-bold text-[#1877b7] mb-1">Chat on WhatsApp</div>
+                            <a
+                                href={`https://wa.me/91${res_data?.otherData?.phone}`} // Replace with your actual WhatsApp number (with country code, no + or dashes)
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <div className="text-xl font-bold text-[#1877b7] mb-1">Chat on WhatsApp</div>
+                            </a>
                             <div className="text-blue-500 text-base">Quick responses</div>
                         </div>
                         {/* Call Card */}
@@ -778,10 +788,10 @@ const PharmacyStorePage = () => {
             {/* Debug Panel - Remove in production */}
             <div className="fixed top-4 left-4 bg-black/80 text-white p-3 rounded-lg text-xs z-50 max-w-xs">
                 <div className="font-bold mb-2">Debug Info:</div>
-                <div>Features: {data.features.filter(f => f.enabled).length} enabled</div>
-                <div>Medicines: {data.medicines.length} total</div>
-                <div>Reviews: {data.reviews.length} total</div>
-                <div>FAQs: {data.faqs.length} total</div>
+                <div>Features: {data?.features.filter(f => f.enabled).length} enabled</div>
+                <div>Medicines: {data?.medicines.length} total</div>
+                <div>Reviews: {data?.reviews.length} total</div>
+                <div>FAQs: {data?.faqs.length} total</div>
                 <div>Data Version: {dataVersion}</div>
                 <div>Last Updated: {lastUpdate?.toLocaleTimeString() || 'Never'}</div>
             </div>

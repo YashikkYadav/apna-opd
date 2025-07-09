@@ -514,7 +514,7 @@ export default {
 
         // if (!response.ok) throw new Error('Failed to load data')
         const data = response?.healthServeProfileData?.healthServeProfile
-        if (data.doctorInfo) {
+        if (data && data.doctorInfo) {
           this.name = data.doctorInfo.name || ''
           this.specialty = data.doctorInfo.specialty || ''
           this.location.address = data.doctorInfo.location || ''
@@ -524,12 +524,14 @@ export default {
           this.features = data.doctorInfo.features || []
           this.conditions = (data.doctorInfo.conditions || []).map(c => c.label || c)
         }
-        if (data.certifications) this.certifications = [...data.certifications]
-        if (data.highlights) this.highlights = [...data.highlights]
-        if (data.services) this.services = [...data.services]
-        if (data.packages) this.packages = [...data.packages]
-        if (data.reviews) this.reviews = [...data.reviews]
-        if (data.faqs) this.faqs = [...data.faqs]
+
+        if (data?.certifications) this.certifications = [...data.certifications]
+        if (data?.highlights) this.highlights = [...data.highlights]
+        if (data?.services) this.services = [...data.services]
+        if (data?.packages) this.packages = [...data.packages]
+        if (data?.reviews) this.reviews = [...data.reviews]
+        if (data?.faqs) this.faqs = [...data.faqs]
+
       } catch (error) {
         this.message = 'Error loading data: ' + error.message
         this.messageType = 'error'

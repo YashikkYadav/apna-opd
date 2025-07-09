@@ -24,18 +24,18 @@ import {
 import Image from 'next/image';
 import axios from 'axios';
 const getAverageRating = (reviews) => {
-  if (!reviews || reviews.length === 0) return 0;
+    if (!reviews || reviews.length === 0) return 0;
 
-  const total = reviews.reduce((acc, curr) => acc + curr.rating, 0);
-  return (total / reviews.length).toFixed(1); // rounded to 1 decimal
+    const total = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+    return (total / reviews.length).toFixed(1); // rounded to 1 decimal
 };
 export default function Home() {
     const params = useParams();
     const id = params.id;
     const packagesRef = useRef(null);
     const [openFAQ, setOpenFAQ] = useState(null);
-    const [data,setData]=useState({
-        healthProfile:null,otherData:null
+    const [data, setData] = useState({
+        healthProfile: null, otherData: null
     })
 
     const stars = Array(5).fill(0);
@@ -44,11 +44,11 @@ export default function Home() {
         const fetchData = async () => {
 
             const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`)
-            const {healthServeProfile,healthServeUser}=response_data?.data?.healthServeProfileData
+            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData
             setData({
-                healthProfile:healthServeProfile,otherData:healthServeUser
+                healthProfile: healthServeProfile, otherData: healthServeUser
             })
-            console.log("response_data",healthServeProfile,healthServeUser)
+            console.log("response_data", healthServeProfile, healthServeUser)
         }
         fetchData()
     }, [])
@@ -93,18 +93,18 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                         <span className="text-yellow-300 text-2xl">★★★★★</span>
-                        <span className="ml-2 text-lg">{getAverageRating(data?.healthProfile?.reviews)} ({data?.healthProfile?.reviews.length||0})</span>
+                        <span className="ml-2 text-lg">{getAverageRating(data?.healthProfile?.reviews)} ({data?.healthProfile?.reviews.length || 0})</span>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-3">
                         {
-                            data?.healthProfile?.doctorInfo?.features.map((item)=>(
+                            data?.healthProfile?.doctorInfo?.features?.map((item) => (
                                 <>
-                                {item.enabled &&<span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">{item.label}</span>}
+                                    {item.enabled && <span className="bg-white/20 px-3 py-1 rounded-full text-sm backdrop-blur">{item.label}</span>}
                                 </>
 
                             ))
                         }
-                      
+
                     </div>
                     {/* CTA Buttons */}
                     <div className="flex flex-col md:flex-row gap-4 mt-6">
@@ -163,7 +163,7 @@ export default function Home() {
                         Conditions Treated
                     </h2>
                     <div className="flex flex-wrap gap-4">
-                        {data?.healthProfile?.doctorInfo?.conditions.map((c) => (
+                        {data?.healthProfile?.doctorInfo?.conditions?.map((c) => (
                             <button
                                 key={c.label}
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-full px-6 py-3 text-base transition shadow-md focus:outline-none"
@@ -184,7 +184,7 @@ export default function Home() {
                         Therapy Packages
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {data?.healthProfile?.packages.slice(0, 3).map((pkg) => (
+                        {data?.healthProfile?.packages?.slice(0, 3).map((pkg) => (
                             <div
                                 key={pkg.title}
                                 className="bg-white border-2 border-blue-400 rounded-2xl shadow-md p-7 flex flex-col justify-between"
@@ -207,7 +207,7 @@ export default function Home() {
                                         {pkg.price} <span className="text-base text-gray-400 line-through font-normal">{pkg.oldPrice}</span>
                                     </div>
                                     <ul className="list-disc pl-5 mb-4 text-gray-700">
-                                        {pkg?.benefits &&pkg?.benefits?.map((b) => (
+                                        {pkg?.benefits && pkg?.benefits?.map((b) => (
                                             <li key={b}>{b}</li>
                                         ))}
                                     </ul>
@@ -330,15 +330,19 @@ export default function Home() {
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <a
-                            href="#"
+                            href={`https://wa.me/91${data?.otherData?.phone}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="bg-white border-2 border-blue-400 text-[#1573ad] rounded-xl p-8 flex flex-col items-center text-center shadow-md hover:scale-105 hover:shadow-blue-200 transition"
                         >
                             <div className="text-4xl mb-3">💬</div>
+
                             <div className="font-bold text-lg mb-1">Chat on WhatsApp</div>
+
                             <div className="text-base text-blue-500">Quick responses</div>
                         </a>
                         <a
-                            href="#"
+                            href={`tel:${data?.otherData?.phone}`}
                             className="bg-white border-2 border-blue-400 text-[#1573ad] rounded-xl p-8 flex flex-col items-center text-center shadow-md hover:scale-105 hover:shadow-blue-200 transition"
                         >
                             <div className="text-4xl mb-3">📞</div>
