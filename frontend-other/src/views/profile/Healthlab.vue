@@ -22,7 +22,7 @@
             <!-- Keep only v-card-text and forms/tables -->
             <!-- Header -->
             <v-card class="mb-6" elevation="2">
-                <v-card-title class="bg-[#1573ad] text-white">
+                <v-card-title class=" text-white">
                     <v-icon left>mdi-flask</v-icon>
                     HealthLab Admin Dashboard
                 </v-card-title>
@@ -478,10 +478,10 @@ export default {
                         this.packagesData = data.packages.map(pkg => ({
                             ...pkg,
                             tests: Array.isArray(pkg.tests)
-                            ? pkg.tests
-                            : typeof pkg.tests === 'string'
-                            ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean)
-                            : []
+                                ? pkg.tests
+                                : typeof pkg.tests === 'string'
+                                    ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean)
+                                    : []
                         }));
                     }
                     if (data.reviews) {
@@ -490,7 +490,7 @@ export default {
                     if (data.faqs) {
                         this.faqData = [...data.faqs];
                     }
-            }
+                }
             } catch (error) {
                 console.error('Error loading data:', error)
                 this.message = 'Error loading data: ' + error.message
@@ -519,10 +519,11 @@ export default {
                     faqs: this.faqData
                 }
                 const response = await useProfileStore().addProfileData(data);
+                console.log("response", response)
 
-                if (!response.ok) {
-                    const err = await response.json()
-                    this.message = 'Error saving data: ' + (err.error || response.statusText)
+                if (!response?.healthServeProfileData?.ok) {
+                    // const err = await response.json()
+                    this.message = 'Error saving data: ' + (response?.healthServeProfileData.error)
                     this.messageType = 'error'
                     this.saving = false
                     return
@@ -746,7 +747,6 @@ export default {
     margin-right: 32px;
 }
 
-.bg-\[#1573ad\],
 .bg-blue-50,
 .bg-green-50,
 .bg-orange-50,
