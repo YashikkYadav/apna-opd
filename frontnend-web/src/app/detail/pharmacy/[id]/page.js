@@ -212,13 +212,17 @@ const PharmacyStorePage = () => {
     return (
         <div className="min-h-screen bg-[#f6fafd] py-6 px-2 md:px-0">
             {/* Hero Section */}
-            <div className="max-w-7xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden mt-6">
+            <div className="max-w-7xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden mt-20">
                 {/* Background Circles */}
                 <div className="absolute -top-16 -left-16 w-72 h-72 bg-blue-300/30 rounded-full z-0" />
                 <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-300/30 rounded-full z-0" />
                 {/* Pharmacy Image Frame */}
-                <div className="w-56 h-56 md:w-72 md:h-72 rounded-2xl bg-gradient-to-tr from-blue-500 to-green-200 flex items-center justify-center text-6xl font-bold text-white shadow-lg relative overflow-hidden">
-                    <Image
+                <div className="relative z-10 flex-shrink-0 flex items-center justify-center md:w-max lg:w-max w-full ">
+                    <div className="w-[90%] h-56 aspect-[1/1] md:w-72 md:h-72 md:aspect-auto md:max-w-none lg:h-72 lg:w-72
+                            transition-all duration-50 ease-in-out 
+                            rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 
+                            flex items-center justify-center text-6xl font-bold text-white 
+                            shadow-lg relative overflow-hidden"><Image
                         src="/pharmacy-image.jpg" // Replace with your pharmacy image path
                         alt="Pharmacy"
                         width={288}
@@ -229,6 +233,7 @@ const PharmacyStorePage = () => {
                     <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">
                         ✓
                     </span>
+                </div>
                 </div>
                 {/* Pharmacy Info */}
                 <div className="relative z-10 flex-1 flex flex-col justify-center text-white w-full md:w-auto">

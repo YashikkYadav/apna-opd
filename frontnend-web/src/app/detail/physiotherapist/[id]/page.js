@@ -55,19 +55,22 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-[#f6fafd] py-6 px-2 md:px-0">
             {/* Hero/Doctor Card */}
-            <div className="max-w-7xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden mt-6">
+            <div className="max-w-7xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden mt-20">
                 {/* Background Circles */}
                 <div className="absolute -top-16 -left-16 w-72 h-72 bg-blue-300/30 rounded-full z-0" />
                 <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-300/30 rounded-full z-0" />
                 {/* Therapist Photo - now square with rounded corners */}
-                <div className="relative z-10 flex-shrink-0 flex items-center justify-center">
-                    <div className="w-56 h-56 md:w-72 md:h-72 rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 flex items-center justify-center text-6xl font-bold text-white shadow-lg relative overflow-hidden">
+                <div className="relative z-10 flex-shrink-0 flex items-center justify-center md:w-max lg:w-max w-full ">
+                    <div className="w-[90%] h-56 aspect-[1/1] md:w-72 md:h-72 md:aspect-auto md:max-w-none lg:h-72 lg:w-72
+                            transition-all duration-50 ease-in-out 
+                            rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 
+                            flex items-center justify-center text-6xl font-bold text-white 
+                            shadow-lg relative overflow-hidden">
                         <Image
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-T3ZfSx2hyuNb-IcIVQCcjZnSR_hPI2V6dg&s"
                             alt="Dr. Priya Sharma"
-                            width={288}
-                            height={288}
-                            className="object-cover w-full h-full rounded-2xl"
+                            fill
+                            className="rounded-2xl object-cover"
                             priority
                         />
                         <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">✓</span>
@@ -112,7 +115,7 @@ export default function Home() {
                             <CalendarPlus className="w-5 h-5" />
                             Book Session
                         </button>
-                        <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-8 py-3 flex items-center gap-2 backdrop-blur transition text-lg">
+                        <button className="bg-white/20 text-white border border-white/30 font-semibold rounded-full px-6 md:px-8 py-3 flex items-center gap-2 backdrop-blur-sm  transition-colors duration-200 text-base md:text-lg">
                             <Package className="w-5 h-5" />
                             Explore Packages
                         </button>

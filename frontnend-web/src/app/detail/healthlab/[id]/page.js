@@ -141,15 +141,19 @@ export default function HealthLabPage() {
         <div className="min-h-screen bg-[#f6fafd]">
             {/* Hero Section */}
             <section className="relative bg-[#1573ad] text-white py-12 overflow-hidden rounded-b-3xl shadow-xl mb-12">
-                <div className="container mx-auto px-4 max-w-6xl">
+                <div className="container mx-auto px-4 max-w-6xl mt-20">
                     <div className="max-w-6xl mx-auto rounded-3xl shadow-2xl bg-[#1573ad] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
                         {/* Background Circles */}
                         <div className="absolute -top-16 -left-16 w-72 h-72 bg-blue-300/30 rounded-full z-0" />
                         <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-300/30 rounded-full z-0" />
 
                         {/* Lab Image */}
-                        <div className="relative z-10 flex-shrink-0">
-                            <div className="w-56 h-56 md:w-72 md:h-72 rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 flex items-center justify-center text-6xl font-bold text-white shadow-lg relative overflow-hidden">
+                        <div className="relative z-10 flex-shrink-0 flex items-center justify-center md:w-max lg:w-max w-full ">
+                            <div className="w-[90%] h-56 aspect-[1/1] md:w-72 md:h-72 md:aspect-auto md:max-w-none lg:h-72 lg:w-72
+                            transition-all duration-50 ease-in-out 
+                            rounded-2xl bg-gradient-to-tr from-pink-500 to-yellow-300 
+                            flex items-center justify-center text-6xl font-bold text-white 
+                            shadow-lg relative overflow-hidden">
                                 <Image
                                     src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400&h=400&fit=crop&crop=center"
                                     alt="HealthLab Diagnostics"
@@ -186,7 +190,7 @@ export default function HealthLabPage() {
                                 <a href="#packages" className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                                     <PackageIcon className="w-4 h-4" /> Browse Packages
                                 </a>
-                                <a 
+                                <a
                                     href={`tel:${res_data?.otherData?.phone}`}
                                 >
                                     <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
