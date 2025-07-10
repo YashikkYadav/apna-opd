@@ -462,28 +462,35 @@ export default {
                 console.log("response", response)
 
                 // if (!response.ok) throw new Error('Failed to load data')
-                const data = response?.healthServeProfileData?.healthServeProfile
-                if (data.labInfo) {
-                    this.labInfo = { ...data.labInfo }
-                }
-                if (data.certifications) {
-                    this.certifications = [...data.certifications]
-                }
-                if (data.tests) {
-                    this.testsData = data.tests.map(t => ({ ...t }))
-                }
-                if (data.packages) {
-                    this.packagesData = data.packages.map(pkg => ({
-                        ...pkg,
-                        tests: Array.isArray(pkg.tests) ? pkg.tests : (typeof pkg.tests === 'string' ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean) : [])
-                    }))
-                }
-                if (data.reviews) {
-                    this.reviewsData = [...data.reviews]
-                }
-                if (data.faqs) {
-                    this.faqData = [...data.faqs]
-                }
+                const data = response?.healthServeProfileData?.healthServeProfile;
+
+                if (data) {
+                    if (data.labInfo) {
+                        this.labInfo = { ...data.labInfo };
+                    }
+                    if (data.certifications) {
+                        this.certifications = [...data.certifications];
+                    }
+                    if (data.tests) {
+                        this.testsData = data.tests.map(t => ({ ...t }));
+                    }
+                    if (data.packages) {
+                        this.packagesData = data.packages.map(pkg => ({
+                            ...pkg,
+                            tests: Array.isArray(pkg.tests)
+                            ? pkg.tests
+                            : typeof pkg.tests === 'string'
+                            ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean)
+                            : []
+                        }));
+                    }
+                    if (data.reviews) {
+                        this.reviewsData = [...data.reviews];
+                    }
+                    if (data.faqs) {
+                        this.faqData = [...data.faqs];
+                    }
+            }
             } catch (error) {
                 console.error('Error loading data:', error)
                 this.message = 'Error loading data: ' + error.message

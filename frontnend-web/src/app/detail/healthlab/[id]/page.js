@@ -25,10 +25,10 @@ import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import axios from "axios";
 const getAverageRating = (reviews) => {
-  if (!reviews || reviews.length === 0) return 0;
+    if (!reviews || reviews.length === 0) return 0;
 
-  const total = reviews.reduce((acc, curr) => acc + curr.rating, 0);
-  return (total / reviews.length).toFixed(1); // rounded to 1 decimal
+    const total = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+    return (total / reviews.length).toFixed(1); // rounded to 1 decimal
 };
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -76,15 +76,15 @@ export default function HealthLabPage() {
                 console.log("response", healthServeProfile, healthServeUser, response?.data, statusCode === 201)
 
                 setLabInfo(healthServeUser)
-                const data=healthServeProfile
+                const data = healthServeProfile
                 if (statusCode === 201) {
-                    setTestsData(data.tests || []);
-                    setPackagesData(data.packages || []);
-                    setReviewsData(data.reviews || []);
-                    setFaqData(data.faqs || []);
-                    setLabInfo(data.labInfo || {});
-                    setCertifications(data.certifications || []);
-                    setHighlights(data.highlights || []);
+                    setTestsData(data?.tests || []);
+                    setPackagesData(data?.packages || []);
+                    setReviewsData(data?.reviews || []);
+                    setFaqData(data?.faqs || []);
+                    setLabInfo(data?.labInfo || {});
+                    setCertifications(data?.certifications || []);
+                    setHighlights(data?.highlights || []);
                 } else {
                     setError('Failed to load healthlab data');
                 }
@@ -173,7 +173,7 @@ export default function HealthLabPage() {
                                 </div>
                                 <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
                                     <Star className="w-5 h-5 text-yellow-300" />
-                                    {getAverageRating(res_data?.healthProfile?.reviews) || 0}/5 • {res_data?.healthProfile?.reviews?.length||0} Reviews
+                                    {getAverageRating(res_data?.healthProfile?.reviews) || 0}/5 • {res_data?.healthProfile?.reviews?.length || 0} Reviews
                                 </div>
                             </div>
                             <p className="mt-2 mb-4 text-lg opacity-90">
@@ -186,12 +186,22 @@ export default function HealthLabPage() {
                                 <a href="#packages" className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                                     <PackageIcon className="w-4 h-4" /> Browse Packages
                                 </a>
-                                <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                                    <Phone className="w-4 h-4" /> Call Now
-                                </button>
-                                <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                                    <MessageCircle className="w-4 h-4" /> WhatsApp
-                                </button>
+                                <a 
+                                    href={`tel:${res_data?.otherData?.phone}`}
+                                >
+                                    <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                                        <Phone className="w-4 h-4" /> Call Now
+                                    </button>
+                                </a>
+                                <a
+                                    href={`https://wa.me/91${res_data?.otherData?.phone}`} // Replace with your actual WhatsApp number (with country code, no + or dashes)
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                                        <MessageCircle className="w-4 h-4" /> WhatsApp
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -437,7 +447,7 @@ export default function HealthLabPage() {
                             <div className="text-xl font-bold text-slate-800">Interactive<br />Map View</div>
                         </div>
                         <div className="mt-6 text-lg text-slate-500 font-semibold">
-                            {(res_data?.otherData?.name ?res_data?.otherData?.name.toUpperCase() : '')}<br />
+                            {(res_data?.otherData?.name ? res_data?.otherData?.name.toUpperCase() : '')}<br />
                             {(res_data?.otherData?.location ? res_data?.otherData?.location.toUpperCase() : '')}
                         </div>
                     </div>
