@@ -227,12 +227,12 @@ export default function HealthLabPage() {
                         <div className="bg-white/10 rounded-xl p-6 border-2 border-blue-300">
                             <h3 className="text-xl font-bold text-white mb-4">Key Features</h3>
                             <div className="flex flex-col gap-4">
-                                {highlights.map((h) => (
-                                    <div key={h.title} className="flex items-center gap-4 bg-white/20 rounded-lg p-3 shadow-sm">
-                                        {h.icon}
+                                {highlights?.map((h) => (
+                                    <div key={h?.title} className="flex items-center gap-4 bg-white/20 rounded-lg p-3 shadow-sm">
+                                        {h?.icon}
                                         <div>
-                                            <div className="font-semibold text-white">{h.title}</div>
-                                            <div className="text-xs text-blue-100">{h.desc}</div>
+                                            <div className="font-semibold text-white">{h?.title}</div>
+                                            <div className="text-xs text-blue-100">{h?.desc}</div>
                                         </div>
                                     </div>
                                 ))}
@@ -322,21 +322,21 @@ export default function HealthLabPage() {
                                     <div key={test.id} className="bg-white rounded-2xl p-6 shadow-md border-2 border-blue-300 hover:border-pink-400 transition-all flex flex-col justify-between">
                                         <div className="flex items-center justify-between mb-3">
                                             <div>
-                                                <div className="text-lg font-bold text-blue-900 mb-1">{test.name}</div>
-                                                {test.popular && <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">Popular</span>}
+                                                <div className="text-lg font-bold text-blue-900 mb-1">{test?.name}</div>
+                                                {test?.popular && <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">Popular</span>}
                                             </div>
                                             <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-indigo-400 to-purple-600 text-white text-2xl text-center">{test.icon}</div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-2 text-slate-500 text-sm mb-3">
-                                            <div className="flex items-center gap-2"><FlaskConical className="w-4 h-4" /> {test.sampleType}</div>
-                                            <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {test.reportTime}</div>
-                                            <div className="flex items-center gap-2">{test.homeCollection ? <Home className="w-4 h-4" /> : <User className="w-4 h-4" />} {test.homeCollection ? 'Home Collection' : 'Lab Visit'}</div>
+                                            <div className="flex items-center gap-2"><FlaskConical className="w-4 h-4" /> {test?.sampleType}</div>
+                                            <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {test?.reportTime}</div>
+                                            <div className="flex items-center gap-2">{test?.homeCollection ? <Home className="w-4 h-4" /> : <User className="w-4 h-4" />} {test?.homeCollection ? 'Home Collection' : 'Lab Visit'}</div>
                                             <div className="flex items-center gap-2"><FileText className="w-4 h-4" /> Digital Report</div>
                                         </div>
                                         <div className="flex items-center justify-between border-t pt-4 mt-2">
                                             <div className="flex items-center gap-2">
-                                                <span className="text-emerald-600 font-bold text-lg">₹{test.discountedPrice}</span>
-                                                <span className="line-through text-slate-400 text-base">₹{test.originalPrice}</span>
+                                                <span className="text-emerald-600 font-bold text-lg">₹{test?.discountedPrice}</span>
+                                                <span className="line-through text-slate-400 text-base">₹{test?.originalPrice}</span>
                                                 <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">{discount}% OFF</span>
                                             </div>
                                             <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-4 py-2 flex items-center gap-2 shadow transition" onClick={() => { setShowModal(true); setModalTest(test.name); }}>
@@ -359,12 +359,12 @@ export default function HealthLabPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-7 mt-6">
                             {packagesData.map((pkg, idx) => {
-                                const discount = Math.round((1 - pkg.discountedPrice / pkg.originalPrice) * 100);
+                                const discount = Math.round((1 - pkg?.discountedPrice / pkg?.originalPrice) * 100);
                                 return (
                                     <div key={pkg.id} className="bg-white rounded-2xl p-7 shadow-md border-2 border-blue-300 hover:border-pink-400 transition-all flex flex-col justify-between mb-4">
                                         <div className="grid grid-cols-[1fr_auto] gap-4 items-start mb-3">
                                             <div>
-                                                <h3 className="text-lg font-bold text-blue-900 mb-1 flex items-center gap-2">{pkg.name} {pkg.popular && <Star className="w-4 h-4 text-yellow-400" />}</h3>
+                                                <h3 className="text-lg font-bold text-blue-900 mb-1 flex items-center gap-2">{pkg?.name} {pkg?.popular && <Star className="w-4 h-4 text-yellow-400" />}</h3>
                                                 <div className="flex flex-wrap gap-2 mb-2">
                                                     <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1"><FlaskConical className="w-3 h-3" /> {pkg.testsCount} Parameters</span>
                                                     <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1"><User className="w-3 h-3" /> {pkg.recommendedFor}</span>
@@ -373,8 +373,8 @@ export default function HealthLabPage() {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-emerald-600 font-bold text-xl">₹{pkg.discountedPrice}</div>
-                                                <div className="text-slate-400 line-through text-sm">₹{pkg.originalPrice}</div>
+                                                <div className="text-emerald-600 font-bold text-xl">₹{pkg?.discountedPrice}</div>
+                                                <div className="text-slate-400 line-through text-sm">₹{pkg?.originalPrice}</div>
                                                 <div className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold inline-block mt-1">{discount}% OFF</div>
                                                 <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-4 py-2 flex items-center gap-2 shadow transition mt-3 w-full" onClick={() => { setShowModal(true); setModalTest(pkg.name); }}>
                                                     <ClipboardList className="w-4 h-4" /> Book Package
@@ -382,14 +382,14 @@ export default function HealthLabPage() {
                                             </div>
                                         </div>
                                         <div className="bg-blue-50 rounded-lg p-4 mt-2">
-                                            <button className="flex justify-between items-center w-full font-semibold text-pink-600" onClick={() => setOpenPackage(openPackage === pkg.id ? null : pkg.id)}>
-                                                <span>Tests Included ({pkg.testsCount})</span>
-                                                <ChevronDown className={classNames("w-5 h-5 transition-transform", openPackage === pkg.id ? "rotate-180" : "")} />
+                                            <button className="flex justify-between items-center w-full font-semibold text-pink-600" onClick={() => setOpenPackage(openPackage === pkg?.id ? null : pkg?.id)}>
+                                                <span>Tests Included ({pkg?.testsCount})</span>
+                                                <ChevronDown className={classNames("w-5 h-5 transition-transform", openPackage === pkg?.id ? "rotate-180" : "")} />
                                             </button>
-                                            <div className={classNames("grid grid-cols-2 gap-2 mt-2 transition-all overflow-hidden", openPackage === pkg.id ? "max-h-40" : "max-h-0")}
-                                                style={{ transition: 'max-height 0.3s', maxHeight: openPackage === pkg.id ? 200 : 0 }}>
-                                                {Array.isArray(pkg.tests) && pkg.tests.map((test, testIndex) => (
-                                                    <div key={`${pkg.id}-test-${testIndex}-${test}`} className="bg-white px-3 py-1 rounded text-xs text-blue-700 border border-blue-200">{test}</div>
+                                            <div className={classNames("grid grid-cols-2 gap-2 mt-2 transition-all overflow-hidden", openPackage === pkg?.id ? "max-h-40" : "max-h-0")}
+                                                style={{ transition: 'max-height 0.3s', maxHeight: openPackage === pkg?.id ? 200 : 0 }}>
+                                                {Array.isArray(pkg?.tests) && pkg?.tests?.map((test, testIndex) => (
+                                                    <div key={`${pkg?.id}-test-${testIndex}-${test}`} className="bg-white px-3 py-1 rounded text-xs text-blue-700 border border-blue-200">{test}</div>
                                                 ))}
                                             </div>
                                         </div>
@@ -412,21 +412,21 @@ export default function HealthLabPage() {
                         <button className="bg-white/20 text-white font-semibold px-4 py-2 rounded-full">Home Collection</button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {reviewsData.map((review) => (
-                            <div key={review.id} className="bg-white rounded-xl p-6 border-l-4 border-pink-400 shadow-md">
+                        {reviewsData &&reviewsData?.map((review) => (
+                            <div key={review?.id} className="bg-white rounded-xl p-6 border-l-4 border-pink-400 shadow-md">
                                 <div className="flex justify-between items-start mb-2">
                                     <div>
-                                        <h4 className="font-bold text-blue-900 mb-1">{review.name}</h4>
-                                        <small className="text-slate-500">Booked: {review.test}</small>
+                                        <h4 className="font-bold text-blue-900 mb-1">{review?.name}</h4>
+                                        <small className="text-slate-500">Booked: {review?.test}</small>
                                     </div>
                                     <div className="text-right">
                                         <div className="flex gap-1 text-yellow-400 text-lg">
-                                            {Array.from({ length: review.rating }).map((_, i) => <Star key={`${review.id}-star-${i}`} className="w-4 h-4" fill="currentColor" />)}
+                                            {Array.from({ length: review?.rating }).map((_, i) => <Star key={`${review.id}-star-${i}`} className="w-4 h-4" fill="currentColor" />)}
                                         </div>
-                                        <small className="text-slate-400">{review.date}</small>
+                                        <small className="text-slate-400">{review?.date}</small>
                                     </div>
                                 </div>
-                                <p className="text-slate-700 mt-2">{review.comment}</p>
+                                <p className="text-slate-700 mt-2">{review?.comment}</p>
                             </div>
                         ))}
                     </div>
@@ -484,18 +484,18 @@ export default function HealthLabPage() {
                 <div className="container mx-auto px-4 max-w-6xl">
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><PackageIcon className="w-6 h-6 text-white" /> Frequently Asked Questions</h2>
                     <div className="flex flex-col gap-4">
-                        {faqData.map((faq, i) => (
-                            <div key={`faq-${i}-${faq.question.substring(0, 20)}`} className="bg-white rounded-xl shadow-md border-l-4 border-pink-400 overflow-hidden">
+                        {faqData?.map((faq, i) => (
+                            <div key={`faq-${i}-${faq?.question.substring(0, 20)}`} className="bg-white rounded-xl shadow-md border-l-4 border-pink-400 overflow-hidden">
                                 <button
                                     className="w-full flex justify-between items-center p-5 font-semibold text-left focus:outline-none"
                                     onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
                                 >
-                                    <span>{faq.question}</span>
+                                    <span>{faq?.question}</span>
                                     <ChevronDown className={classNames("w-6 h-6 text-pink-500 transition-transform", openFAQ === i ? "rotate-180" : "")} />
                                 </button>
                                 <div className={classNames("px-5 pb-4 text-base transition-all duration-300", openFAQ === i ? "max-h-40 opacity-100" : "max-h-0 opacity-0", "overflow-hidden")}
                                 >
-                                    {faq.answer}
+                                    {faq?.answer}
                                 </div>
                             </div>
                         ))}

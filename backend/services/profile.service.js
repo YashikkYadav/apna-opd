@@ -333,6 +333,7 @@ const addHealthServeProfileData = async (data) => {
     const doc = await Model.findOneAndUpdate(filter, update, options);
     return {
       statusCode: 201,
+      ok:true,
       healthServeProfile: doc, // return saved document
     };
 
@@ -340,6 +341,7 @@ const addHealthServeProfileData = async (data) => {
     return {
       statusCode: 500,
       error: error.message,
+      ok:false
     };
   }
 }
@@ -369,15 +371,18 @@ const getHealthServeProfileData = async (healthServeId) => {
     }
 
     const doc = await Model.findOne({ healthServeId });
+    
     return {
       statusCode: 201,
       healthServeProfile: doc, // return saved document,
-      healthServeUser:healthServeProfile
+      healthServeUser:healthServeProfile,
+      ok:true
     };
 
   } catch (error) {
     return {
       statusCode: 500,
+      ok:true,
       error: error.message,
     };
   }

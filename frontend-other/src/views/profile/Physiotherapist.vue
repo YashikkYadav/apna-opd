@@ -418,10 +418,11 @@ export default {
 
         const response = await useProfileStore().addProfileData(data);
 
+                console.log("response",response?.healthServeProfileData?.ok)
 
-        if (!response.ok) {
-          const err = await response.json()
-          this.message = 'Error saving data: ' + (err.error || response.statusText)
+        if (!response?.healthServeProfileData?.ok) {
+          // const err = await response.json()
+          this.message = 'Error saving data: ' + (response?.healthServeProfileData.error )
           this.messageType = 'error'
           this.saving = false
           return
