@@ -508,12 +508,16 @@ export default {
         const response = await useProfileStore().addProfileData(data);
         
     
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+         if (!response?.healthServeProfileData?.ok) {
+          // const err = await response.json()
+          this.message = 'Error saving data: ' + (response?.healthServeProfileData.error )
+          this.messageType = 'error'
+          this.saving = false
+          return
         }
         
-        const result = await response.json()
-        console.log('Save response:', result)
+        // const result = await response.json()
+        // console.log('Save response:', result)
         
         if (showLoading) {
           this.showMessage('Data saved successfully!', 'success')

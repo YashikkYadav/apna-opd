@@ -186,13 +186,13 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {data?.healthProfile?.packages?.slice(0, 3).map((pkg) => (
                             <div
-                                key={pkg.title}
+                                key={pkg?.title}
                                 className="bg-white border-2 border-blue-400 rounded-2xl shadow-md p-7 flex flex-col justify-between"
                             >
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
-                                        <h3 className="text-lg font-bold text-blue-900 uppercase flex-1">{pkg.name}</h3>
-                                        <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">{pkg.discount}</span>
+                                        <h3 className="text-lg font-bold text-blue-900 uppercase flex-1">{pkg?.name}</h3>
+                                        <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">{pkg?.discount}</span>
                                     </div>
                                     <div className="grid grid-cols-1 gap-2 mb-3">
                                         {pkg?.details && pkg?.details?.map((d) => (
@@ -204,7 +204,7 @@ export default function Home() {
                                         ))}
                                     </div>
                                     <div className="text-2xl font-bold text-blue-500 mb-2">
-                                        {pkg.price} <span className="text-base text-gray-400 line-through font-normal">{pkg.oldPrice}</span>
+                                        {pkg?.price} <span className="text-base text-gray-400 line-through font-normal">{pkg?.oldPrice}</span>
                                     </div>
                                     <ul className="list-disc pl-5 mb-4 text-gray-700">
                                         {pkg?.benefits && pkg?.benefits?.map((b) => (
@@ -220,7 +220,7 @@ export default function Home() {
                             </div>
                         ))}
                     </div>
-                    {data?.healthProfile?.packages.length > 3 && (
+                    {data?.healthProfile?.packages?.length > 3 && (
                         <div className="flex justify-center mt-8">
                             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-8 py-3 text-lg shadow-md">View All</button>
                         </div>
