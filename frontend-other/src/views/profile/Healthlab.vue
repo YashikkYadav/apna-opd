@@ -462,7 +462,6 @@ export default {
                 console.log("response", response)
 
                 // if (!response.ok) throw new Error('Failed to load data')
-
                 const data = response?.healthServeProfileData?.healthServeProfile;
 
                 if (data) {
@@ -483,7 +482,6 @@ export default {
                             : typeof pkg.tests === 'string'
                             ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean)
                             : []
-
                         }));
                     }
                     if (data.reviews) {
@@ -493,7 +491,6 @@ export default {
                         this.faqData = [...data.faqs];
                     }
             }
-
             } catch (error) {
                 console.error('Error loading data:', error)
                 this.message = 'Error loading data: ' + error.message
@@ -523,9 +520,9 @@ export default {
                 }
                 const response = await useProfileStore().addProfileData(data);
 
-                if (!response?.healthServeProfileData?.ok) {
-                    // const err = await response.json()
-                    this.message = 'Error saving data: ' + (response?.healthServeProfileData.error)
+                if (!response.ok) {
+                    const err = await response.json()
+                    this.message = 'Error saving data: ' + (err.error || response.statusText)
                     this.messageType = 'error'
                     this.saving = false
                     return
@@ -749,7 +746,7 @@ export default {
     margin-right: 32px;
 }
 
-
+.bg-\[#1573ad\],
 .bg-blue-50,
 .bg-green-50,
 .bg-orange-50,
