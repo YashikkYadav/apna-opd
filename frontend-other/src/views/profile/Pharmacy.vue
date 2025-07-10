@@ -686,18 +686,20 @@ export default {
     // Private method to load data on mount
     async loadData() {
       try {
-         const response = await useProfileStore().getProfileData();
-        console.log("response",response)
-        const data = response?.healthServeProfileData?.healthServeProfile
+        const response = await useProfileStore().getProfileData();
+        console.log("response", response);
 
-        // Update local data
-        if (data.features) this.features = data.features
-        if (data.medicines) this.medicines = data.medicines
-        if (data.reviews) this.reviews = data.reviews
-        if (data.faqs) this.faqs = data.faqs
+        const data = response?.healthServeProfileData?.healthServeProfile;
+
+        if (data) {
+          if (data.features) this.features = data.features;
+          if (data.medicines) this.medicines = data.medicines;
+          if (data.reviews) this.reviews = data.reviews;
+          if (data.faqs) this.faqs = data.faqs;
+        } 
       } catch (error) {
-        console.error('Failed to load data:', error)
-        this.showMessage(`Failed to load data: ${error.message}`, 'error')
+        console.error("Failed to load data:", error);
+        this.showMessage(`Failed to load data: ${error.message}`, "error");
       }
     },
   }
