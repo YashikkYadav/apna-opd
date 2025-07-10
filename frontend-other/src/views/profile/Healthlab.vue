@@ -749,7 +749,7 @@ export default {
     margin-right: 32px;
 }
 
-.bg-\[#1573ad\],
+
 .bg-blue-50,
 .bg-green-50,
 .bg-orange-50,
