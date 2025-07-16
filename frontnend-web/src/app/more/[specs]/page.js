@@ -19,6 +19,7 @@ import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
 import Nurse from "../../components/more/nurse/nurse";
 import Radiologist from "../../components/more/radiologist/radiologist";
 import Laboratory from "@/app/components/more/laboratory/laboratory";
+import IvfClinic from "@/app/components/more/ivfClinic/ivfClinic";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
 import Pagination from "../../components/more/common/Pagination";
@@ -102,6 +103,8 @@ const ServicePage = () => {
         return "Find Radiologists";
       case serviceTypes.LABORATORY:
         return "Find Laboratories";
+      case serviceTypes.IVFCLINIC:
+        return "Find IVF Clinics";
       default:
         return "Find Services";
     }
@@ -141,6 +144,8 @@ const ServicePage = () => {
         return <Radiologist serviceData={serviceData} />;
       case serviceTypes.LABORATORY:
         return <Laboratory serviceData={serviceData} />;
+      case serviceTypes.IVFCLINIC:
+        return <IvfClinic serviceData={serviceData} />
       default:
         return <div>Service not found</div>;
     }
