@@ -8,7 +8,8 @@ const LeadFertilitySpecialist = ({
     experience_years = "{{experience_years}}",
     specializations = "{{specializations}}",
     couples_treated = "{{couples_treated}}",
-    imageUrl = "/images/max.png"
+    imageUrl = "/images/max.png",
+    data
 }) => {
     const info = [
         { label: 'EXPERIENCE', value: `${experience_years}+ Years in Fertility & IVF` },
@@ -40,7 +41,7 @@ const LeadFertilitySpecialist = ({
                     <div>
                         <h2 className="text-3xl font-extrabold text-blue-700 flex items-center gap-2">
                             <FaUserMd className="text-2xl text-blue-500" />
-                            Dr. {doctor_name}
+                            Dr. {data?.name}
                         </h2>
                         <p className="text-gray-700 pt-3 text-base font-medium leading-relaxed">
                             Compassionate fertility expert with a strong track record of success in IVF and reproductive health. Dedicated to guiding couples through their parenthood journey.

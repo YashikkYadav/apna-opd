@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaStar, FaHeartbeat, FaUsers, FaRupeeSign, FaFlask } from 'react-icons/fa';
 import { MdSupport, MdTrendingUp } from 'react-icons/md';
 
-const WhyChoose = ({ clinicName = "{{clinic_name}}" }) => {
+const WhyChoose = ({ data }) => {
     const features = [
         {
             icon: <MdTrendingUp className="text-blue-600 text-2xl" />,
@@ -48,7 +48,7 @@ const WhyChoose = ({ clinicName = "{{clinic_name}}" }) => {
             {/* Title */}
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 text-left">
-                    Why Choose <span className="text-blue-500 underline">{clinicName}</span>?
+                    Why Choose {data?.name}?
                 </h2>
             </div>
 

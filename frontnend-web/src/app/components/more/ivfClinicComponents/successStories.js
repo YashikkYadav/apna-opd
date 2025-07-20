@@ -2,18 +2,18 @@
 import { motion } from 'framer-motion';
 import { FaHeart } from 'react-icons/fa';
 
-const SuccessStories = ({ clinic_name = "{{clinic_name}}", doctor_name = "{{doctor_name}}" }) => {
+const SuccessStories = ({ data, doctor_name = "{{doctor_name}}" }) => {
     const testimonials = [
         {
-            quote: `After 5 years of trying, we had almost given up hope. Dr. ${doctor_name} and the team at ${clinic_name} gave us the miracle we had been praying for. Our little angel is now 6 months old!`,
+            quote: `After 5 years of trying, we had almost given up hope. Dr. ${data?.name} and the team at ${data?.name} gave us the miracle we had been praying for. Our little angel is now 6 months old!`,
             author: 'Priya & Raj, Age 32–35',
         },
         {
-            quote: `The care and compassion we received at ${clinic_name} was exceptional. The staff made us feel comfortable throughout our IVF journey. We're now proud parents of twins!`,
+            quote: `The care and compassion we received at ${data?.name} was exceptional. The staff made us feel comfortable throughout our IVF journey. We're now proud parents of twins!`,
             author: 'Sneha & Amit, Age 28–31',
         },
         {
-            quote: `Professional, caring, and successful – that’s how I would describe ${clinic_name}. They turned our fertility struggles into a beautiful success story. Thank you for making us parents!`,
+            quote: `Professional, caring, and successful – that’s how I would describe ${data?.name}. They turned our fertility struggles into a beautiful success story. Thank you for making us parents!`,
             author: 'Kavya & Suresh, Age 35–38',
         },
     ];
@@ -30,7 +30,7 @@ const SuccessStories = ({ clinic_name = "{{clinic_name}}", doctor_name = "{{doct
             <div className="mb-10">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <FaHeart className="text-2xl text-blue-700" />
-                    Success Stories from {clinic_name}
+                    Success Stories from {data?.name}
                 </h2>
             </div>
 

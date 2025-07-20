@@ -3,27 +3,27 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const FAQSection = ({ vetName = 'Dr. Mehra' }) => {
+const FAQSection = ({ data }) => {
     const faqs = [
         {
-            question: `What animals does ${vetName} treat?`,
-            answer: `${vetName} treats a variety of animals including dogs, cats, rabbits, and some exotic pets.`,
+            question: `What is the success rate of IVF at ${data?.name}?`,
+            answer: `Our IVF success rates vary by age group, but we maintain consistently high success rates of ${6}% across all age categories. We provide detailed success rate breakdowns during your consultation to set realistic expectations.`,
         },
         {
-            question: 'How do I book a consultation?',
-            answer: 'You can book a consultation online through our website or by calling our support team.',
+            question: 'Is IVF painful or risky?',
+            answer: 'IVF is generally well-tolerated with minimal discomfort. Our experienced team uses the latest techniques to minimize any discomfort. We provide comprehensive pre-treatment counseling to address all your concerns about the procedure.',
         },
         {
-            question: 'Can I get a prescription online?',
-            answer: 'Yes, our veterinarians can provide digital prescriptions after an online consultation.',
+            question: 'What’s the ideal age to start fertility treatment?',
+            answer: 'While fertility naturally declines with age, we successfully treat patients across all age groups. Early intervention generally leads to better outcomes, but it’s never too late to explore your options with our fertility specialists.',
         },
         {
-            question: 'Is emergency care available?',
-            answer: 'Yes, emergency care is available 24/7 at select locations. Please call ahead if possible.',
+            question: 'Do you offer EMI or financial counseling?',
+            answer: 'Yes, we offer flexible payment options including EMI facilities and financial counseling to make fertility treatments more accessible. Our team will work with you to find a payment plan that suits your budget.',
         },
         {
-            question: 'Are follow-ups free?',
-            answer: 'Yes, follow-ups within 7 days of your original consultation are free of charge.',
+            question: 'Can I consult online first?',
+            answer: 'Absolutely! We offer online consultations through Apna OPD platform. This allows you to discuss your concerns with our specialists from the comfort of your home before deciding on an in-person visit.',
         },
     ];
 

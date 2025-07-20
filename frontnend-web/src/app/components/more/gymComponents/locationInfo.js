@@ -49,7 +49,7 @@ const VisitUsToday = ({
             <div className="text-left mb-12">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Visit Us Today</h2>
                 <p className="text-gray-600 text-lg mt-2">
-                    Conveniently located in the heart of {healthProfile?.location}
+                    Conveniently located in the heart of {healthProfile?.address}
                 </p>
             </div>
 
@@ -58,7 +58,7 @@ const VisitUsToday = ({
                 <GoLocation className="text-blue-500 text-xl mt-[2px]" />
                 <div>
                     <p className="font-semibold text-gray-800">Address:</p>
-                    <p className="text-gray-600 text-base mt-1">{healthProfile?.location}</p>
+                    <p className="text-gray-600 text-base mt-1">{healthProfile?.address}</p>
                 </div>
             </div>
 

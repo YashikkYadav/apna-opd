@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import PhysiotherapyHero from '@/app/components/more/physiotherapist.js/physioHeroSection';
-import PhysioFAQS from '@/app/components/more/physiotherapist.js/physioFaqs';
-import OverviewSection from '@/app/components/more/physiotherapist.js/physioOverview';
-import ConditionsTreated from '@/app/components/more/physiotherapist.js/conditionsTreated';
-import PhysioLocation from '@/app/components/more/physiotherapist.js/physioLocation';
-import PhysioReviews from '@/app/components/more/physiotherapist.js/physioReviews';
-import SupportOptions from '@/app/components/more/physiotherapist.js/physioSupport';
-import TherapyPackages from '@/app/components/more/physiotherapist.js/therapy';
+import PhysiotherapyHero from '@/app/components/more/physiotherapistComponents/physioHeroSection';
+import PhysioFAQS from '@/app/components/more/physiotherapistComponents/physioFaqs';
+import OverviewSection from '@/app/components/more/physiotherapistComponents/physioOverview';
+import ConditionsTreated from '@/app/components/more/physiotherapistComponents/conditionsTreated';
+import PhysioLocation from '@/app/components/more/physiotherapistComponents/physioLocation';
+import PhysioReviews from '@/app/components/more/physiotherapistComponents/physioReviews';
+import SupportOptions from '@/app/components/more/physiotherapistComponents/physioSupport';
+import TherapyPackages from '@/app/components/more/physiotherapistComponents/therapy';
 import Image from 'next/image';
 import axios from 'axios';
 

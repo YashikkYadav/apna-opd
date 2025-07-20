@@ -11,11 +11,11 @@ function getStarIcons(rating) {
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   for (let i = 0; i < fullStars; i++) {
-    stars.push(<FaStar key={`full-${i}`} className="text-yellow-300 text-xl" />);
+    stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-xl" />);
   }
 
   if (hasHalfStar) {
-    stars.push(<FaStarHalfAlt key="half" className="text-yellow-300 text-xl" />);
+    stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-xl" />);
   }
 
   for (let i = 0; i < emptyStars; i++) {
@@ -32,6 +32,7 @@ const ClinicHeroSection = ({
   imageUrl = "/images/clinic-hero.jpg",
   rating = 4.6,
   reviewCount = 78,
+  data
 }) => {
   return (
     <motion.section
@@ -58,7 +59,7 @@ const ClinicHeroSection = ({
       {/* Right: Content */}
       <div className="z-10 flex-1 space-y-5 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-          {clinic_name} – Trusted IVF Center in {city}
+          {data?.name} – Trusted IVF Center in {data?.location}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">

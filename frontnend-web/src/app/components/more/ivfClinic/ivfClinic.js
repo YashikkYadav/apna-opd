@@ -70,7 +70,7 @@ const IvfClinic = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/ivf-clinic/${clinic._id}`)
+                  navigate.push(`/detail/ivfClinic/${clinic._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

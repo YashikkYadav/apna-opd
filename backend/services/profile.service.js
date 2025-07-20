@@ -334,6 +334,9 @@ const addHealthServeProfileData = async (data) => {
       case 'gym':
         Model = healthlabProfile
         break
+      case 'ivf_clinic':
+        Model = healthlabProfile
+        break
       default:
         throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
     }
@@ -388,6 +391,9 @@ const getHealthServeProfileData = async (healthServeId) => {
         Model = healthlabProfile
         break
       case 'gym':
+        Model = healthlabProfile
+        break
+      case 'ivf_clinic':
         Model = healthlabProfile
         break
       default:

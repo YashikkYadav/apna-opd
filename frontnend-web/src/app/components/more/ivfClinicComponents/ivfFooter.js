@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const IvfFooter = ({ clinicName = '{{clinic_name}}' }) => {
+const IvfFooter = ({ data}) => {
   return (
     <motion.footer
       initial={{ opacity: 0, y: 40 }}
@@ -13,7 +13,7 @@ const IvfFooter = ({ clinicName = '{{clinic_name}}' }) => {
     >
       <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
         Your Parenthood Journey Begins with{' '}
-        <span className="underline decoration-white">{clinicName}</span>
+        <span className="underline decoration-white">{data?.name}</span>
       </h2>
 
       <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -37,7 +37,7 @@ const IvfFooter = ({ clinicName = '{{clinic_name}}' }) => {
         </motion.a>
       </div>
 
-      <p className="text-sm text-blue-200">© 2024 {clinicName}. All rights reserved.</p>
+      <p className="text-sm text-blue-200">© 2024 {data?.name}. All rights reserved.</p>
     </motion.footer>
   );
 };

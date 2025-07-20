@@ -62,6 +62,7 @@ const Register = () => {
     { value: "nursing_staff", label: "Nursing Staff" },
     { value: "radiologist", label: "Radiologist" },
     { value: "laboratory", label: "Laboratory" },
+    {value:"ivf_clinic",label:"IVF Clinic"}
   ];
 
   const subscriptionTypes = [

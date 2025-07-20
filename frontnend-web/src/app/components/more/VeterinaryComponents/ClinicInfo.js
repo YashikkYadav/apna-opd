@@ -18,7 +18,7 @@ const ClinicInfoSection = ({
         {
             icon: <FaMapMarkerAlt className="text-blue-600 text-xl" />,
             label: "Address:",
-            value: `${healthProfile?.location}`,
+            value: `${healthProfile?.address}`,
         },
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
@@ -79,7 +79,7 @@ const ClinicInfoSection = ({
                     <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Interactive Map</p>
                     <p className="text-gray-600">Google Maps integration will be embedded here.</p>
                     <p className="mt-2 text-gray-500 font-medium">
-                        Location: {healthProfile?.location}
+                        Location: {healthProfile?.address}
                     </p>
                 </div>
             </div>

@@ -11,17 +11,18 @@ const VisitClinic = ({
     phone = '{{phone_number}}',
     whatsapp = '{{whatsapp_number}}',
     timings = '{{timings}}',
+    data
 }) => {
     const items = [
         {
             icon: <FaMapMarkerAlt className="text-blue-600 text-xl" />,
             label: 'Address:',
-            value: `${fullAddress}, ${city} - ${pincode}`,
+            value: `${data?.address}`,
         },
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: 'Phone:',
-            value: phone,
+            value: data?.phone,
             highlight: true,
         },
         {
@@ -46,7 +47,7 @@ const VisitClinic = ({
             className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
         >
             <h3 className="text-3xl font-extrabold text-blue-700 flex items-center gap-2 mb-8">
-                <IoLocationSharp className="text-blue-700 text-2xl" /> Visit {clinicName}
+                <IoLocationSharp className="text-blue-700 text-2xl" /> Visit {data?.name}
             </h3>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -78,7 +79,7 @@ const VisitClinic = ({
                     <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Interactive Map</p>
                     <p className="text-gray-600">Google Maps integration will be embedded here.</p>
                     <p className="mt-2 text-gray-500 font-medium">
-                        Location: {city}, {pincode}
+                        Location: {data?.address}
                     </p>
                 </div>
             </div>

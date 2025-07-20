@@ -41,7 +41,7 @@ const services = [
   },
 ];
 
-const FertilityServices = ({ clinicName = '{{clinic_name}}' }) => {
+const FertilityServices = ({ data }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -53,7 +53,7 @@ const FertilityServices = ({ clinicName = '{{clinic_name}}' }) => {
       {/* Title */}
       <div className="mb-8 text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
-          Fertility Services at <span className="text-blue-500">{clinicName}</span>
+          Fertility Services at <span className="text-blue-500">{data?.name}</span>
         </h2>
       </div>
 

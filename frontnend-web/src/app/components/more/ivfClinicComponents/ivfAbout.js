@@ -8,9 +8,10 @@ const ClinicAboutSection = ({
     city = "{{city}}",
     years_in_service = "{{years_in_service}}",
     authority = "{{authority}}",
-    success_rate = "{{success_rate}}"
+    success_rate = "{{success_rate}}",
+    data
 }) => {
-    const description = `${clinic_name} has been a beacon of hope for couples seeking fertility treatments in ${city} for over ${years_in_service} years. Our state-of-the-art facility combines cutting-edge technology with compassionate care to help you achieve your dream of parenthood.`;
+    const description = `${data?.name} has been a beacon of hope for couples seeking fertility treatments in ${data?.location} for over ${years_in_service} years. Our state-of-the-art facility combines cutting-edge technology with compassionate care to help you achieve your dream of parenthood.`;
 
     const items = [
         { label: "🏥 Licensed By", value: authority },
@@ -30,7 +31,7 @@ const ClinicAboutSection = ({
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <FaHospitalAlt className="text-3xl text-blue-700" />
-                    About {clinic_name}
+                    About {data?.name}
                 </h2>
             </div>
 

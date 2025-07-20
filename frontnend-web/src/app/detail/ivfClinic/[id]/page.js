@@ -48,15 +48,15 @@ export default function IvfPage() {
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <ClinicHeroSection />
-                    <ClinicAboutSection />
-                    <FertilityServices />
-                    <LeadFertilitySpecialist />
-                    <SuccessStories />
-                    <VisitClinic />
-                    <WhyChoose />
-                    <FAQSection />
-                    <IvfFooter />
+                    <ClinicHeroSection data={data?.otherData}/>
+                    <ClinicAboutSection data={data?.otherData}/>
+                    <FertilityServices data={data?.otherData}/>
+                    <LeadFertilitySpecialist data={data?.otherData}/>
+                    <SuccessStories data={data?.otherData}/>
+                    <VisitClinic data={data?.otherData}/>
+                    <WhyChoose data={data?.otherData}/>
+                    <FAQSection data={data?.otherData}/>
+                    <IvfFooter data={data?.otherData}/>
                 </div>
             </main>
         </div>
