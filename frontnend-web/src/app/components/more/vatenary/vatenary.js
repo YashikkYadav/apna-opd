@@ -39,8 +39,8 @@ const Vatenary = ({ serviceData }) => {
                 <Image
                   src={
                     vatenary.profiles &&
-                    vatenary.profiles.length > 0 &&
-                    vatenary.profiles[0].images.length > 0
+                      vatenary.profiles.length > 0 &&
+                      vatenary.profiles[0].images.length > 0
                       ? vatenary.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
@@ -69,7 +69,7 @@ const Vatenary = ({ serviceData }) => {
               </h2>
               <button
                 onClick={() =>
-                  navigate.push(`/more/vatenary/${vatenary._id}/details`)
+                  navigate.push(`/detail/Veterinary/${vatenary._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

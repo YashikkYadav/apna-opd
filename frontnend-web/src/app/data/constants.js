@@ -57,6 +57,7 @@ export const serviceTypes = {
   NURSE: "nurse",
   RADIOLOGIST: "radiologist",
   LABORATORY: "laboratory",
+  IVFCLINIC:'ivf-clinic'
 };
 
 // Sample data structure for different services
@@ -418,6 +419,30 @@ export const servicesData = {
       contactDetails: {
         phone: "+91 98765 43226",
         address: "456 Blood Donor Avenue, Mumbai",
+      },
+    },
+  ],
+  ivf_clinic: [
+    {
+      id: 1,
+      title: "Star Clinic",
+      rating: 4.8,
+      price: 25,
+      images: ["/images/medical1.jpg"],
+      contactDetails: {
+        phone: "+91 98765 43221",
+        address: "123 clinic Street, Delhi",
+      },
+    },
+    {
+      id: 2,
+      title: "Amor Clinic",
+      rating: 4.7,
+      price: 20,
+      images: ["/images/medical2.jpg"],
+      contactDetails: {
+        phone: "+91 98765 43222",
+        address: "456 clinic Avenue, Mumbai",
       },
     },
   ],

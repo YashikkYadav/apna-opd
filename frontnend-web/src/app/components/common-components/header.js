@@ -75,10 +75,11 @@ const Header = () => {
     { label: "Home Service", type: "heading" }, 
     { label: "divider", type: "divider" },
     { label: "Veterinary", route: "/more/vatenary" },
-    { label: "divider", type: "divider" },
     { label: "Nurse", route: "/more/nurse" },
     { label: "divider", type: "divider" },
     { label: "Laboratory", route: "/more/laboratory" },
+    { label: "divider", type: "divider" },
+    { label: "IVF Clinic", route: "/more/ivf-clinic" },
   ];
 
   return (
