@@ -4,7 +4,7 @@ import { FaMapMarkerAlt, FaPhoneAlt, FaLaptopMedical, FaRupeeSign } from "react-
 import { IoLocationSharp } from "react-icons/io5";
 
 const ClinicInfoSection = ({
-    healthProfile,profileData
+    healthProfile,profileData,data
 }) => {
     const {
         clinic_name,
@@ -18,12 +18,12 @@ const ClinicInfoSection = ({
         {
             icon: <FaMapMarkerAlt className="text-blue-600 text-xl" />,
             label: "Address:",
-            value: `${healthProfile?.address}`,
+            value: `${data?.address}`,
         },
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: "Phone:",
-            value: healthProfile?.phone,
+            value: data?.phone,
             highlight: true,
         },
         {
@@ -79,7 +79,7 @@ const ClinicInfoSection = ({
                     <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Interactive Map</p>
                     <p className="text-gray-600">Google Maps integration will be embedded here.</p>
                     <p className="mt-2 text-gray-500 font-medium">
-                        Location: {healthProfile?.address}
+                        Location: {data?.address}
                     </p>
                 </div>
             </div>

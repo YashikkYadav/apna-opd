@@ -17,17 +17,19 @@ const CollegeOverview = ({
     email = 'info@visiontech.edu.in',
     description = 'Get to know VisionTech – your gateway to excellence in medical education.',
     imageUrl = '/images/college-campus.jpg',
-    healthProfile
+    healthProfile,
+    data,
+
 }) => {
     const items = [
         {
             label: 'College Information',
             value: (
                 <>
-                    <p><strong>Name:</strong> {healthProfile?.name}</p>
+                    <p><strong>Name:</strong> {data?.name}</p>
                     <p><strong>Type:</strong> {type}</p>
                     <p><strong>Established:</strong> {established_year}</p>
-                    <p><strong>Location:</strong> {healthProfile?.location}</p>
+                    <p><strong>Location:</strong> {data?.location}</p>
                 </>
             )
         },
@@ -45,9 +47,9 @@ const CollegeOverview = ({
             label: 'Contact Details',
             value: (
                 <>
-                    <p><strong>Address:</strong> {healthProfile?.location}</p>
-                    <p><strong>Phone:</strong> {healthProfile?.phone}</p>
-                    <p><strong>Email:</strong> {healthProfile?.email}</p>
+                    <p><strong>Address:</strong> {data?.location}</p>
+                    <p><strong>Phone:</strong> {data?.phone}</p>
+                    <p><strong>Email:</strong> {data?.email}</p>
                 </>
             )
         }
@@ -71,7 +73,7 @@ const CollegeOverview = ({
                             College Overview
                         </h2>
                     </div>
-                    <p className="text-gray-700 text-lg font-medium max-w-2xl">{description}</p>
+                    <p className="text-gray-700 text-lg font-medium max-w-2xl">{healthProfile?.about}</p>
                 </div>
 
                 <div className="flex-shrink-0 w-full md:w-[300px]">

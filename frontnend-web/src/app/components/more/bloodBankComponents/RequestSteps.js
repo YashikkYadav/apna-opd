@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { FaClipboardList } from 'react-icons/fa';
 
-const RequestSteps = ({ healthProfile }) => {
+const RequestSteps = ({ healthProfile,data }) => {
     const steps = [
         {
             step: 1,
@@ -44,7 +44,7 @@ const RequestSteps = ({ healthProfile }) => {
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
                     <FaClipboardList className="text-3xl text-blue-700" />
 
-                    How to Request Blood from <span className="text-blue-500">{healthProfile?.name ?? "Dummy Name"}</span>
+                    How to Request Blood from <span className="text-blue-500">{data?.name ?? "Dummy Name"}</span>
                 </h2>
             </div>
 

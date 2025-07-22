@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 
-const ReviewSection = ({ reviewsData = [] }) => {
+const ReviewSection = ({ healthProfile }) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -21,7 +21,7 @@ const ReviewSection = ({ reviewsData = [] }) => {
 
             {/* Reviews */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {reviewsData.map((review, index) => (
+                {healthProfile?.testimonials?.map((review, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.03 }}

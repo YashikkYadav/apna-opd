@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FlaskConical, ShieldCheck, Award, Zap, Sparkles } from 'lucide-react';
 
 const AboutSection = ({
+    healthProfile,
     about = 'Leading healthcare diagnostics provider with over 15 years of excellence in pathology and radiology services. We combine state-of-the-art technology with expert medical professionals to deliver accurate and timely results.',
     certifications = ['NABL Accredited', 'ISO 9001:2015', 'ICMR Approved'],
     highlights = [
@@ -45,7 +46,7 @@ const AboutSection = ({
 
             {/* Description */}
             <p className="text-black-100 text-lg leading-relaxed mb-8 max-w-4xl">
-                {about}
+                {healthProfile?.about}
             </p>
 
             {/* Grid: Certifications + Key Features */}
@@ -57,7 +58,7 @@ const AboutSection = ({
                 >
                     <h3 className="text-xl font-bold text-blue-700 mb-4">Certifications & Accreditations</h3>
                     <div className="flex flex-wrap gap-4">
-                        {certifications.map((cert, idx) => (
+                        {healthProfile?.awards?.map((cert, idx) => (
                             <div
                                 key={idx}
                                 className="bg-white border border-blue-200 rounded-xl px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-50 transition"
@@ -75,16 +76,12 @@ const AboutSection = ({
                 >
                     <h3 className="text-xl font-bold text-blue-700 mb-4">Key Features</h3>
                     <div className="grid grid-cols-1 gap-4">
-                        {highlights.map((h, idx) => (
+                        {healthProfile?.facilities?.map((title, idx) => (
                             <div
                                 key={idx}
                                 className="flex items-start gap-4 bg-white border border-blue-100 rounded-xl p-4 shadow-sm hover:bg-blue-50 transition"
                             >
-                                <div className="flex-shrink-0">{h.icon}</div>
-                                <div>
-                                    <div className="font-semibold text-blue-800">{h.title}</div>
-                                    <div className="text-sm text-gray-600">{h.desc}</div>
-                                </div>
+                                <div className="font-semibold text-blue-800">{title}</div>
                             </div>
                         ))}
                     </div>

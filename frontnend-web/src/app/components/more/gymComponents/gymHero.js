@@ -31,7 +31,8 @@ const HeroSection = ({
     rating = 4.6,
     reviewCount = 312,
     imageUrl = "/images/gym-default.jpg",
-    healthProfile
+    healthProfile,
+    data
 }) => {
     return (
         <motion.section
@@ -48,7 +49,7 @@ const HeroSection = ({
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
                     src={imageUrl}
-                    alt={healthProfile?.name}
+                    alt={data?.name}
                     width={320}
                     height={320}
                     className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -58,18 +59,18 @@ const HeroSection = ({
             {/* Right Content */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Train at {healthProfile?.name}
+                    Train at {data?.name}
                 </h1>
 
                 <p className="text-white/90 text-lg max-w-xl">
-                    Top-rated gym in <strong>{healthProfile?.location}</strong> with modern equipment, elite trainers, and 24/7 access. Your transformation starts now.
+                    {healthProfile?.introduction}
                 </p>
 
                 {/* Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
                     {getStarIcons(rating)}
-                    <span className="text-white text-xl font-semibold ml-2">{rating}/5</span>
-                    <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
+                    <span className="text-white text-xl font-semibold ml-2">{healthProfile?.rating}/5</span>
+                    <span className="text-white/70 text-lg ml-2">({healthProfile?.reviewCount} reviews)</span>
                 </div>
 
                 {/* Tags */}

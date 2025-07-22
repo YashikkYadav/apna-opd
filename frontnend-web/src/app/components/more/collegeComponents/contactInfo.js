@@ -11,19 +11,20 @@ const ContactAndLocation = ({
     collegeName = '{{college_name}}',
     city = '{{city}}',
     state = '{{state}}',
-    healthProfile
+    healthProfile,
+    data
 }) => {
     const items = [
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: "Phone:",
-            value: healthProfile?.phone,
+            value: data?.phone,
             highlight: true,
         },
         {
             icon: <FaEnvelope className="text-blue-600 text-xl" />,
             label: "Email:",
-            value: healthProfile?.email,
+            value: data?.email,
         },
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
@@ -34,7 +35,7 @@ const ContactAndLocation = ({
         {
             icon: <FaMapMarkerAlt className="text-blue-600 text-xl" />,
             label: "Address:",
-            value: healthProfile?.address,
+            value: data?.address,
         },
     ];
 
@@ -95,7 +96,7 @@ const ContactAndLocation = ({
                     <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Google Map</p>
                     <p className="text-gray-600">Map integration will be placed here</p>
                     <p className="mt-2 text-gray-500 font-medium">
-                        {healthProfile?.name}, {healthProfile?.address}
+                        {data?.name}, {data?.address}
                     </p>
                     <div className="bg-blue-200 w-full h-48 mt-4 rounded-md flex items-center justify-center">
                         <span className="text-blue-700 font-semibold">Map Placeholder</span>

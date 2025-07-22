@@ -5,7 +5,7 @@ const FeatureTag = ({ enabled }) => (
     <span
         className={`text-xs font-semibold px-3 py-1 rounded-full ${
             enabled
-                ? 'bg-green-100 text-green-800'
+                ? 'bg-blue-700 text-blue-800'
                 : 'bg-gray-100 text-gray-600'
         }`}
     >
@@ -15,16 +15,16 @@ const FeatureTag = ({ enabled }) => (
 
 const FeatureCard = ({ label, enabled }) => (
     <motion.div
-        whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(34,197,94,0.2)' }}
+        whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(9, 137, 234, 0.2)' }}
         className={`rounded-2xl p-6 min-h-[160px] border-l-4 transition-all ${
             enabled
-                ? 'bg-green-50 border-green-500'
+                ? 'bg-blue-50 border-blue-500'
                 : 'bg-gray-50 border-gray-300'
         }`}
     >
         <h4
             className={`text-lg font-bold ${
-                enabled ? 'text-green-700' : 'text-gray-600'
+                enabled ? 'text-blue-700' : 'text-gray-600'
             }`}
         >
             {label}
@@ -35,7 +35,7 @@ const FeatureCard = ({ label, enabled }) => (
     </motion.div>
 );
 
-const FeatureHighlights=({ features = [] })=> {
+const FeatureHighlights=({healthProfile })=> {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -49,8 +49,8 @@ const FeatureHighlights=({ features = [] })=> {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {features.map((feature, idx) => (
-                    <FeatureCard key={idx} {...feature} />
+                {healthProfile?.facilities.map((feature, idx) => (
+                    <FeatureCard key={idx} label={feature} />
                 ))}
             </div>
         </motion.section>

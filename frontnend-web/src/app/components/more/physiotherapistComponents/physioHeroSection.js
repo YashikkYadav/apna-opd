@@ -25,10 +25,10 @@ function getStarIcons(rating) {
     return stars;
 }
 
-const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
-    const rating = healthProfile?.rating || 4.8;
-    const reviewCount = healthProfile?.reviews?.length || 45;
-    const features = healthProfile?.doctorInfo?.features || [];
+const PhysiotherapyHero = ({ data, healthProfile }) => {
+    const rating = healthProfile?.rating;
+    const reviewCount = healthProfile?.reviews?.length ;
+    const features = healthProfile?.doctorInfo?.features;
 
     return (
         <motion.section
@@ -63,7 +63,7 @@ const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">
-                    Female • 8 Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
+                    Female • {healthProfile?.experience} Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
                 </p>
 
                 {/* Star Ratings */}

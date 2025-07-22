@@ -22,41 +22,30 @@ export default function IvfPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`);
-                const profileData = res?.data?.healthServeProfileData;
-
-                if (!profileData) {
-                    console.warn("Backend error:", res?.data?.error);
-                    return;
-                }
-
-                const { healthServeProfile, healthServeUser } = profileData;
-                setData({
-                    healthProfile: healthServeProfile,
-                    otherData: healthServeUser
-                });
-                console.log("1:", healthServeUser, data?.otherData);
-            } catch (err) {
-                console.error("Request failed:", err);
-            }
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            const { healthServeProfile } = response_data.data;
+            setData({
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeId:", healthServeProfile?.healthServeId);
         };
-
         fetchData();
     }, [id]);
     return (
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <ClinicHeroSection data={data?.otherData}/>
-                    <ClinicAboutSection data={data?.otherData}/>
-                    <FertilityServices data={data?.otherData}/>
-                    <LeadFertilitySpecialist data={data?.otherData}/>
-                    <SuccessStories data={data?.otherData}/>
-                    <VisitClinic data={data?.otherData}/>
-                    <WhyChoose data={data?.otherData}/>
-                    <FAQSection data={data?.otherData}/>
-                    <IvfFooter data={data?.otherData}/>
+                    <ClinicHeroSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <ClinicAboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <FertilityServices data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <LeadFertilitySpecialist data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <SuccessStories data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <VisitClinic data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <WhyChoose data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <FAQSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <IvfFooter data={data?.otherData} healthProfile={data?.healthProfile} />
                 </div>
             </main>
         </div>

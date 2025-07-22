@@ -25,26 +25,15 @@ export default function VeterinaryPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`);
-                const profileData = res?.data?.healthServeProfileData;
-
-                if (!profileData) {
-                    console.warn("Backend error:", res?.data?.error);
-                    return;
-                }
-
-                const { healthServeProfile, healthServeUser } = profileData;
-                setData({
-                    healthProfile: healthServeProfile,
-                    otherData: healthServeUser
-                });
-                console.log(healthServeUser, data?.otherData);
-            } catch (err) {
-                console.error("Request failed:", err);
-            }
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            const { healthServeProfile } = response_data.data;
+            setData({
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeId:", healthServeProfile?.healthServeId);
         };
-
         fetchData();
     }, [id]);
 
@@ -52,18 +41,18 @@ export default function VeterinaryPage() {
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <CollegeHeroSection healthProfile={data?.otherData}/>
-                    <CollegeOverview healthProfile={data?.otherData}/>
-                    <CoursesOffered healthProfile={data?.otherData}/>
-                    <WhyChooseCollege healthProfile={data?.otherData}/>
-                    <CampusFacilities healthProfile={data?.otherData}/>
-                    <PlacementAndInternship healthProfile={data?.otherData} />
-                    <Faculty healthProfile={data?.otherData}/>
-                    <AdmissionProcess healthProfile={data?.otherData}/>
-                    <StudentTestimonials healthProfile={data?.otherData}/>
-                    <ContactAndLocation healthProfile={data?.otherData}/>
-                    <RelatedColleges healthProfile={data?.otherData}/>
-                    <CollegeFooter healthProfile={data?.otherData}/>
+                    <CollegeHeroSection  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <CollegeOverview  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <CoursesOffered  data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    <WhyChooseCollege  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <CampusFacilities  data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    <PlacementAndInternship  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <Faculty  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <AdmissionProcess  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <StudentTestimonials  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <ContactAndLocation  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <RelatedColleges  data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    <CollegeFooter  data={data?.otherData} healthProfile={data?.healthProfile}/>
                 </div>
             </main>
 

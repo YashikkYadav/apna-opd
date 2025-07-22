@@ -19,7 +19,7 @@ const LocationAndContact = ({ data }) => {
         email,
         website,
         hours = { 'Mon–Sun': '8:00 AM – 11:00 PM' },
-    } = data?.otherData || {};
+    } = data || {};
 
     const fullAddress = [address, location].filter(Boolean).join(', ');
 

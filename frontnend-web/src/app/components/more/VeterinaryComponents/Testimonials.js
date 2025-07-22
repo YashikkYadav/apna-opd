@@ -22,7 +22,7 @@ const testimonials = [
     },
 ];
 
-export default function Testimonials() {
+export default function Testimonials({healthProfile}) {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -36,7 +36,7 @@ export default function Testimonials() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {testimonials.map((t, index) => (
+                {healthProfile?.testimonials?.map((t, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.2)' }}
@@ -54,7 +54,7 @@ export default function Testimonials() {
                             <strong>{t.vetName}</strong> {t.text}
                         </p>
                         <p className="font-semibold text-blue-800">
-                            – {t.name}, <span className="text-gray-600">{t.role}</span>
+                            – {t.author}, <span className="text-gray-600">{t.role}</span>
                         </p>
                     </motion.div>
                 ))}

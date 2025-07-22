@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 
 const VetProfileSection = ({
-    healthProfile,profileData
+    healthProfile,profileData,data
 
 }) => {
     const {
@@ -14,7 +14,7 @@ const VetProfileSection = ({
     
     } = profileData || {}
     const info = [
-        { label: 'EXPERIENCE', value: `${experience_years}+ Years` },
+        { label: 'EXPERIENCE', value: `${healthProfile?.experience}+ Years` },
         { label: 'SPECIALIZATION', value: specialization },
         { label: 'LANGUAGES', value: languages },
         { label: 'CONSULTATION FEE', value: `₹${fee}` },
@@ -46,10 +46,10 @@ const VetProfileSection = ({
                 <div className="flex-1 space-y-6">
                     <div>
                         <h2 className="text-3xl font-extrabold text-blue-700">
-                            Dr. {healthProfile?.name ?? "dummy" }, {qualifications}
+                            Dr. {data?.name ?? "dummy" }, {qualifications}
                         </h2>
                         <p className="text-gray-700 pt-3 text-base font-medium leading-relaxed">
-                            Dedicated veterinary expert with {experience_years}+ years of experience in {specialization}. Committed to compassionate, high-quality care for your beloved animals.
+                            {healthProfile?.about}
                         </p>
                     </div>
 

@@ -12,9 +12,9 @@ const renderStars = (count) =>
         )
     );
 
-const PatientReviews = ({ data }) => {
-    const reviews = data?.healthProfile?.reviews || [];
+const PatientReviews = ({ healthProfile }) => {
 
+    console.log(healthProfile);
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -32,19 +32,27 @@ const PatientReviews = ({ data }) => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {reviews.map((review, idx) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {healthProfile?.testimonials?.map((t, index) => (
                     <motion.div
-                        key={idx}
-                        whileHover={{ scale: 1.03, boxShadow: '0 0 0 3px rgba(59,130,246,0.2)' }}
-                        className="bg-[#F7F9FB] rounded-2xl p-8 min-h-[220px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
+                        key={index}
+                        whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.2)' }}
+                        className="bg-[#F7F9FB] border-l-4 border-blue-500 hover:border-blue-700 rounded-2xl p-6 transition-all duration-300"
                     >
-                        <div className="text-4xl text-blue-300 mb-2">“”</div>
-                        <p className="text-gray-700 text-base font-medium mb-4">{review.comment}</p>
-                        <div className="flex items-center gap-3 mt-auto">
-                            <div className="flex gap-1">{renderStars(review.rating)}</div>
-                            <span className="text-gray-600 font-semibold">{review.name}</span>
+                        <div className="text-3xl text-blue-400 mb-2">“”</div>
+                        <div className="flex mb-3">
+                            {Array(5)
+                                .fill()
+                                .map((_, i) => (
+                                    <span key={i} className="text-yellow-400 text-lg">★</span>
+                                ))}
                         </div>
+                        <p className="text-gray-700 mb-4">
+                            <strong>{t.vetName}</strong> {t.text}
+                        </p>
+                        <p className="font-semibold text-blue-800">
+                            – {t.author}, <span className="text-gray-600">{t.role}</span>
+                        </p>
                     </motion.div>
                 ))}
             </div>

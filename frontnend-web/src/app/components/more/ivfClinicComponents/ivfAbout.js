@@ -9,13 +9,14 @@ const ClinicAboutSection = ({
     years_in_service = "{{years_in_service}}",
     authority = "{{authority}}",
     success_rate = "{{success_rate}}",
-    data
+    data,
+    healthProfile
 }) => {
     const description = `${data?.name} has been a beacon of hope for couples seeking fertility treatments in ${data?.location} for over ${years_in_service} years. Our state-of-the-art facility combines cutting-edge technology with compassionate care to help you achieve your dream of parenthood.`;
 
     const items = [
         { label: "🏥 Licensed By", value: authority },
-        { label: "📅 Years in Service", value: years_in_service },
+        { label: "📅 Years in Service", value: healthProfile?.experience },
         { label: "📈 Success Rate", value: `${success_rate}%` },
     ];
 
@@ -37,7 +38,7 @@ const ClinicAboutSection = ({
 
             {/* Description */}
             <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">
-                {description}
+                {healthProfile?.about}
             </p>
 
             {/* Cards */}

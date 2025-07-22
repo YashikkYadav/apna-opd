@@ -25,26 +25,30 @@ export default function Home() {
 
     useEffect(() => {
         const fetchData = async () => {
-
-            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`)
-            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            const { healthServeProfile } = response_data.data;
             setData({
-                healthProfile: healthServeProfile, otherData: healthServeUser
-            })
-            console.log("response_data", healthServeProfile, healthServeUser)
-        }
-        fetchData()
-    }, [])
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeId:", healthServeProfile?.healthServeId);
+        };
+        fetchData();
+    }, [id]);
     return (
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <PhysiotherapyHero data={data?.otherData} />
-                    <OverviewSection data={data} />
-                    <ConditionsTreated data={data?.otherData} />
+                    <PhysiotherapyHero
+                        data={data?.otherData}
+                        healthProfile={data?.healthProfile}
+                    />
+                    <OverviewSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <ConditionsTreated data={data?.otherData} healthProfile={data?.healthProfile} />
                     <TherapyPackages data={data?.otherData} packagesRef={packagesRef} />
-                    <PhysioLocation data={data?.otherData} />
-                    <PhysioReviews data={data} />
+                    <PhysioLocation data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <PhysioReviews data={data?.otherData} healthProfile={data?.healthProfile} />
                     <PhysioFAQS data={data} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} />
                     <SupportOptions />
                 </div>

@@ -3,34 +3,38 @@ import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaPhoneAlt, FaWhatsapp, FaClock } from 'react-icons/fa';
 import { IoLocationSharp } from "react-icons/io5";
 const Contact = ({
-    profileData,healthProfile
+    profileData, healthProfile, data
 }) => {
-
     const {
-        fullAddress,
-        city,
-        pincode,
+        name,
+        address,
+        location,
         phone,
+        email,
+    } = data || {};
+
+    const fullAddress = [address, location].filter(Boolean).join(', ');
+    const {
         whatsapp,
         openHours,
-    } = profileData || {};
+    } = data || {};
 
     const items = [
         {
             icon: <FaMapMarkerAlt className="text-blue-600 text-xl" />,
             label: "Address:",
-            value: healthProfile?.address,
+            value: fullAddress,
         },
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: "Phone:",
-            value: healthProfile?.phone,
+            value: phone,
             highlight: true,
         },
         {
             icon: <FaWhatsapp className="text-blue-600 text-xl" />,
             label: "WhatsApp:",
-            value: whatsapp,
+            value: phone,
             highlight: true,
         },
         {
@@ -79,7 +83,7 @@ const Contact = ({
                     <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Interactive Map</p>
                     <p className="text-gray-600">Google Maps integration will be embedded here.</p>
                     <p className="mt-2 text-gray-500 font-medium">
-                        Location: {healthProfile?.address}
+                        Location: {data?.location}
                     </p>
                 </div>
             </div>

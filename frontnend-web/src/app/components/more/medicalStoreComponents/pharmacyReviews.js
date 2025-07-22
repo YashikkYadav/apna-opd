@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
 import { FaQuoteLeft } from 'react-icons/fa';
 
-const TestimonialsSection = ({ reviews = [] }) => {
+const TestimonialsSection = ({ healthProfile }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -22,7 +22,7 @@ const TestimonialsSection = ({ reviews = [] }) => {
 
             {/* Reviews Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {reviews.map((review, index) => (
+                {healthProfile?.testimonials.map((review, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.03, boxShadow: '0 0 0 3px rgba(37,99,235,0.2)' }}
@@ -41,8 +41,8 @@ const TestimonialsSection = ({ reviews = [] }) => {
                                     <FaStar key={i} className={`w-5 h-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
                                 ))}
                             </div>
-                            <span className="font-bold text-gray-700 ml-2">{review.name}</span>
-                            <span className="text-gray-500 font-medium">• {review.date}</span>
+                            <span className="font-bold text-gray-700 ml-2">{review.author}</span>
+                            {/* <span className="text-gray-500 font-medium">• {review}</span> */}
                         </div>
                     </motion.div>
                 ))}

@@ -20,18 +20,20 @@ const HeroSection = ({
     res_data,
     setShowModal,
     setModalTest,
+    data,
+    healthProfile
 }) => {
-    const name = res_data?.otherData?.name ?? "HealthLab Diagnostics";
-    const location = res_data?.otherData?.location ?? "City";
-    const address = res_data?.otherData?.address ?? "";
-    const rating = res_data?.healthProfile?.reviews ? parseFloat(
+    const name = data?.name ?? "HealthLab Diagnostics";
+    const location = data?.location ?? "City";
+    const address = data?.address ?? "";
+    const rating = healthProfile?.reviews ? parseFloat(
         (
             res_data?.healthProfile?.reviews.reduce((acc, cur) => acc + cur.rating, 0) /
             res_data?.healthProfile?.reviews.length
         ).toFixed(1)
     ) : 0;
     const reviewCount = res_data?.healthProfile?.reviews?.length ?? 0;
-    const phone = res_data?.otherData?.phone;
+    const phone = data?.phone;
 
     return (
         <motion.section
@@ -75,7 +77,7 @@ const HeroSection = ({
                 </div>
 
                 <p className="mt-2 mb-4 text-lg opacity-90">
-                    Advanced diagnostics with cutting-edge technology • Blood Tests • Imaging • At-home Sample Collection
+                    {healthProfile?.introduction}
                 </p>
 
                 <div className="flex flex-wrap gap-3 mt-2">

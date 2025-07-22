@@ -65,47 +65,33 @@ const PharmacyStorePage = () => {
     const fetchData = useCallback(async (showNotification = true) => {
         try {
             console.log('🔄 Fetching pharmacy data...');
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`)
-            const { healthServeProfile, healthServeUser, statusCode } = response?.data?.healthServeProfileData
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            // Destructure from response.data
+            const { healthServeProfile, healthServeUser } = response?.data || {};
             set_res_data({
-                healthProfile: healthServeProfile, otherData: healthServeUser
-            })
-            console.log("response", healthServeProfile, healthServeUser, response?.data, statusCode === 201)
-            // const response = await fetch('http://localhost:3000/api/pharmacy', {
-            //     cache: 'no-store',
-            //     headers: {
-            //         'Cache-Control': 'no-cache',
-            //         'Pragma': 'no-cache'
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("response", healthServeProfile, healthServeUser, response?.data);
+
+            // if (statusCode === 201) {
+            //     setData(healthServeProfile || {});
+            //     setDataVersion(prev => prev + 1);
+            //     setLastUpdate(new Date());
+
+            //     // Show update notification
+            //     if (showNotification) {
+            //         setShowUpdateNotification(true);
+            //         setTimeout(() => setShowUpdateNotification(false), 3000);
             //     }
-            // });
-
-            if (statusCode === 201) {
-
-
-                setData(healthServeProfile);
-                setDataVersion(prev => prev + 1); // Force re-render
-
-
-
-                setLastUpdate(new Date());
-
-                // Show update notification
-                if (showNotification) {
-                    setShowUpdateNotification(true);
-                    setTimeout(() => setShowUpdateNotification(false), 3000);
-                }
-            } else {
-                console.error('❌ Failed to fetch data:', response.status);
-                setError('Failed to load pharmacy data');
-            }
-        } catch (error) {
-            console.error('💥 Error fetching pharmacy data:', error);
-            setError('Failed to load pharmacy data');
+            // } else {
+            //     console.error('❌ Failed to fetch data:', response.status);
+            //     setError('Failed to load pharmacy data');
+            // }
         } finally {
             setLoading(false);
         }
-    }, []);
-
+    }, [id]);
     useEffect(() => {
         fetchData(false);
 
@@ -211,8 +197,8 @@ const PharmacyStorePage = () => {
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <PharmacyHero res_data={res_data} />
-                    <PharmacyAbout res_data={res_data} />
+                    <PharmacyHero data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
+                    <PharmacyAbout data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     <CartModal
                         cart={cart}
                         setCart={setCart}
@@ -240,12 +226,12 @@ const PharmacyStorePage = () => {
                         addToCart={addToCart}
                         cart={cart}
                     />
-                    <FeatureHighlights features={data?.features} />
-                    <PharmacyLocationCard data={res_data} />
-                    <TestimonialsSection reviews={data?.reviews} />
+                    <FeatureHighlights data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
+                    <PharmacyLocationCard data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
+                    <TestimonialsSection data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     {acceptsPrescriptions && <UploadPrescription />}
                     <FAQSection faqs={data?.faqs} />
-                    <SupportOptions res_data={res_data} />
+                    <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                 </div>
             </main>
         </div>

@@ -8,7 +8,8 @@ const About = ({
     license = "{{license_number}}",
     established = "{{established_year}}",
     certification = "{{certification_type}}",
-    healthProfile
+    healthProfile,
+    data
 }) => {
     const items = [
         { label: "📋 License", value: license },
@@ -35,7 +36,7 @@ const About = ({
 
             {/* Description */}
             <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">
-                {description}
+                {healthProfile?.about}
             </p>
 
             {/* Grid Cards */}

@@ -9,10 +9,11 @@ const LeadFertilitySpecialist = ({
     specializations = "{{specializations}}",
     couples_treated = "{{couples_treated}}",
     imageUrl = "/images/max.png",
-    data
+    data,
+    healthProfile 
 }) => {
     const info = [
-        { label: 'EXPERIENCE', value: `${experience_years}+ Years in Fertility & IVF` },
+        { label: 'EXPERIENCE', value: `${healthProfile?.experience}+ Years in Fertility & IVF` },
         { label: 'DEGREES', value: degrees },
         { label: 'SPECIALIZATION', value: specializations },
         { label: 'COUPLES TREATED', value: `${couples_treated}+ successful cases` },
@@ -31,7 +32,7 @@ const LeadFertilitySpecialist = ({
                 <div className="flex-shrink-0">
                     <img
                         src={imageUrl}
-                        alt={`Dr. ${doctor_name}`}
+                        alt={`Dr. ${data?.name}`}
                         className="rounded-full border-4 border-blue-200 shadow-xl w-40 h-40 object-cover"
                     />
                 </div>
