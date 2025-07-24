@@ -7,6 +7,7 @@ import classNames from 'classnames';
 const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage, setOpenPackage, setShowModal, setModalTest }) => {
     return (
         <motion.div
+            id="labPackagesSection"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

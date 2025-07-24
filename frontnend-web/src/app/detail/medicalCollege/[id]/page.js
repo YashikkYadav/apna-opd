@@ -47,11 +47,11 @@ export default function VeterinaryPage() {
                     <WhyChooseCollege  data={data?.otherData} healthProfile={data?.healthProfile} />
                     <CampusFacilities  data={data?.otherData} healthProfile={data?.healthProfile}/>
                     <PlacementAndInternship  data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <Faculty  data={data?.otherData} healthProfile={data?.healthProfile} />
+                    {/* <Faculty  data={data?.otherData} healthProfile={data?.healthProfile} /> */}
                     <AdmissionProcess  data={data?.otherData} healthProfile={data?.healthProfile} />
                     <StudentTestimonials  data={data?.otherData} healthProfile={data?.healthProfile} />
                     <ContactAndLocation  data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <RelatedColleges  data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    {/* <RelatedColleges  data={data?.otherData} healthProfile={data?.healthProfile}/> */}
                     <CollegeFooter  data={data?.otherData} healthProfile={data?.healthProfile}/>
                 </div>
             </main>

@@ -160,214 +160,195 @@
             </v-col>
           </v-row>
         </v-card>
-        <!-- Hospital Overview Section -->
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Hospital Overview</v-toolbar-title>
-          </v-toolbar>
-          <v-row>
-            <v-col cols="12">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.keyStats"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.keyStats"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('keyStats', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('keyStats')"
-                >+ Add Key Statistic
-                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
-                  >(max. 5)</span
-                ></v-btn
-              >
-            </v-col>
-            <v-col cols="12">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.accreditations"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.accreditations"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('accreditations', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('accreditations')"
-                >+ Add Accreditation
-                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
-                  >(max. 5)</span
-                ></v-btn
-              >
-            </v-col>
-            <v-col cols="12">
-              <v-chip-group column multiple v-model="form.awards" class="mb-2">
-                <v-chip
-                  v-for="(item, index) in form.awards"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('awards', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('awards')"
-                >+ Add Award
-                <span style="font-size: 8px; margin-top: 5px; margin-left: 5px"
-                  >(max. 5)</span
-                ></v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card>
 
-        <!-- Departments -->
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Departments</v-toolbar-title>
-          </v-toolbar>
-          <div class="p-10" style="padding: 20px">
-            <v-select
-              v-model="form.departments"
-              :items="departmentsList"
-              label="Select Departments"
-              multiple
-              chips
-              clearable
-              variant="outlined"
-              dense
-            ></v-select>
-          </div>
-        </v-card>
+        <!-- tags -->
+         <v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+  </v-toolbar>
 
-        <!-- Facilities -->
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
-          </v-toolbar>
-          <div style="padding: 20px">
-            <v-select
-              v-model="form.facilities"
-              :items="facilitiesList"
-              label="Select Facilities"
-              multiple
-              chips
-              clearable
-              variant="outlined"
-              dense
-            ></v-select>
-          </div>
-        </v-card>
+  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-        <!-- Insurance & Payment -->
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Insurance & Payment</v-toolbar-title>
-          </v-toolbar>
-          <v-row>
-            <v-col cols="12" sm="6">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.insurance"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.insurance"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('insurance', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('insurance')"
-                >+ Add Insurance</v-btn
-              >
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.payments"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.payments"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('payments', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('payments')"
-                >+ Add Payment Method</v-btn
-              >
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.healthPackages"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.healthPackages"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('healthPackages', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('healthPackages')"
-                >+ Add Health Package</v-btn
-              >
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-chip-group
-                column
-                multiple
-                v-model="form.specialServices"
-                class="mb-2"
-              >
-                <v-chip
-                  v-for="(item, index) in form.specialServices"
-                  :key="index"
-                  closable
-                  @click:close="removeItem('specialServices', index)"
-                  >{{ item }}</v-chip
-                >
-              </v-chip-group>
-              <v-btn @click="openItemDialog('specialServices')"
-                >+ Add Special Service</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-card>
+  <div
+    v-for="(tag, index) in form.tags"
+    :key="index"
+    class="mb-4"
+    style="padding: 20px"
+  >
+    <div
+      class="pa-4"
+      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
+    >
+      <v-text-field
+        v-model="form.tags[index]"
+        label="Tag"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeTag(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+  
+    <v-card class="section-card mb-4">
+  <v-toolbar flat class="mb-4">
+    <v-toolbar-title>College Details</v-toolbar-title>
+  </v-toolbar>
+
+  <v-text-field
+    v-model="form.established"
+    label="Established"
+    dense
+    outlined
+    hide-details
+    class="m-2 pa-2"
+  />
+  <v-text-field
+    v-model="form.affiliatedTo"
+    label="Affiliated To"
+    dense
+    outlined
+    hide-details
+    class="m-2 pa-2"
+  />
+  <v-text-field
+    v-model="form.approvedBy"
+    label="Approved By"
+    dense
+    outlined
+    hide-details
+    class="m-2 pa-2"
+  />
+  <v-text-field
+    v-model="form.recognition"
+    label="Recognition"
+    dense
+    outlined
+    hide-details
+    class="m-2 pa-2"
+  />
+</v-card>
+
+    <!-- Why Choose Us -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Why Choose Us</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addWhyChoose">+ Add Reason</v-btn>
+  <div v-for="(item, index) in form.whyChoose" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-textarea v-model="item.text" label="Reason" dense outlined auto-grow hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeWhyChoose(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Repeat for other sections -->
+
+<!-- Facilities -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
+  <div v-for="(facility, index) in form.facilities" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-text-field v-model="facility.name" label="Facility Name" dense outlined hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeFacility(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Hospital Tie-Ups -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Hospital Tie-Ups</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addTieUp">+ Add Tie-Up</v-btn>
+  <div v-for="(tieup, index) in form.hospitalTieUps" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-text-field v-model="tieup.name" label="Hospital Name" dense outlined hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeTieUp(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Career Services -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Career Services</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addCareerService">+ Add Service</v-btn>
+  <div v-for="(service, index) in form.careerServices" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-textarea v-model="service.description" label="Service Description" dense outlined auto-grow hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeCareerService(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Faculty -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Faculty</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addFaculty">+ Add Faculty</v-btn>
+  <div v-for="(member, index) in form.faculty" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-text-field v-model="member.name" label="Name" dense outlined hide-details class="mb-3" />
+      <v-text-field v-model="member.designation" label="Designation" dense outlined hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeFaculty(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Related Colleges -->
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Related Colleges</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2" @click="addRelatedCollege">+ Add College</v-btn>
+  <div v-for="(college, index) in form.relatedColleges" :key="index" class="mb-4" style="padding: 20px">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
+      <v-text-field v-model="college.name" label="College Name" dense outlined hide-details class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeRelatedCollege(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+    
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -518,15 +499,18 @@ export default {
         city: "",
         pincode: "",
         state: "",
-        keyStats: [],
-        accreditations: [],
-        awards: [],
-        departments: [],
-        facilities: [],
-        insurance: [],
-        payments: [],
-        healthPackages: [],
-        specialServices: [],
+        established: '',
+        tags: [''],
+      affiliatedTo: '',
+      approvedBy: '',
+      recognition: '',
+      coursesOffered: [],
+      whyChoose: [],
+      facilities: [],
+      hospitalTieUps: [],
+      careerServices: [],
+      faculty: [],
+      relatedColleges: [],
         testimonials: [],
         googleMapLink: "",
       },
@@ -537,50 +521,6 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
       },
-      departmentsList: [
-        "Cardiology",
-        "Gynecology",
-        "Dentistry",
-        "Ophthalmology",
-        "Neurology",
-        "Orthopedics",
-        "Pediatrics",
-        "Oncology",
-        "ENT",
-        "Dermatology",
-        "Psychiatry",
-        "Urology",
-        "Gastroenterology",
-        "Endocrinology",
-        "Rheumatology",
-        "Pulmonology",
-        "Nephrology",
-        "Hematology",
-        "Infectious Disease",
-        "Emergency Medicine",
-      ],
-      facilitiesList: [
-        "24/7 Emergency",
-        "Dialysis",
-        "ICU/CCU",
-        "NICU",
-        "Operation Theater",
-        "Diagnostic Lab",
-        "Pharmacy",
-        "Radiology",
-        "Blood Bank",
-        "Cafeteria",
-        "Parking",
-        "Wheelchair Access",
-        "ATM",
-        "Free WiFi",
-        "Air Conditioning",
-        "Security",
-        "Housekeeping",
-        "Laundry",
-        "Medical Store",
-        "Waiting Area",
-      ],
       itemDialog: false,
       itemType: "",
       newItemText: "",
@@ -675,6 +615,53 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
+     addWhyChoose() {
+  this.form.whyChoose.push({ text: '' });
+},
+removeWhyChoose(index) {
+  this.form.whyChoose.splice(index, 1);
+},
+addTag() {
+  this.form.tags.push('');
+},
+removeTag(index) {
+  this.form.tags.splice(index, 1);
+},
+
+addFacility() {
+  this.form.facilities.push({ name: '' });
+},
+removeFacility(index) {
+  this.form.facilities.splice(index, 1);
+},
+
+addTieUp() {
+  this.form.hospitalTieUps.push({ name: '' });
+},
+removeTieUp(index) {
+  this.form.hospitalTieUps.splice(index, 1);
+},
+
+addCareerService() {
+  this.form.careerServices.push({ description: '' });
+},
+removeCareerService(index) {
+  this.form.careerServices.splice(index, 1);
+},
+
+addFaculty() {
+  this.form.faculty.push({ name: '', designation: '' });
+},
+removeFaculty(index) {
+  this.form.faculty.splice(index, 1);
+},
+
+addRelatedCollege() {
+  this.form.relatedColleges.push({ name: '' });
+},
+removeRelatedCollege(index) {
+  this.form.relatedColleges.splice(index, 1);
+},
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -745,16 +732,21 @@ export default {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-        this.form.accreditations = profile.accreditations || [];
-        this.form.awards = profile.awards || [];
-        this.form.departments = profile.departments || [];
-        this.form.facilities = profile.facilities || [];
-        this.form.healthPackages = profile.healthPackages || [];
-        this.form.insurance = profile.insurance || [];
-        this.form.payments = profile.payments || [];
-        this.form.specialServices = profile.specialServices || [];
+         this.form.established = profile.established || '';
+  this.form.affiliatedTo = profile.affiliatedTo || '';
+  this.form.approvedBy = profile.approvedBy || '';
+  this.form.recognition = profile.recognition || '';
+
+  this.form.coursesOffered = (profile.coursesOffered || []).map(c => ({ value: c }));
+  this.form.whyChoose = (profile.whyChoose || []).map(w => ({ value: w }));
+  this.form.facilities = (profile.facilities || []).map(f => ({ value: f }));
+  this.form.hospitalTieUps = (profile.hospitalTieUps || []).map(h => ({ value: h }));
+  this.form.careerServices = (profile.careerServices || []).map(c => ({ value: c }));
+  this.form.relatedColleges = (profile.relatedColleges || []).map(r => ({ value: r }));
+
+  this.form.faculty = profile.faculty || [];
         this.form.testimonials = profile.testimonials || [];
-        this.form.keyStats = profile.keyStats || [];
+        this.form.tags = profile.tags || [];
       }
     },
     async onSubmit() {
@@ -770,24 +762,19 @@ export default {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append("keyStats", JSON.stringify(this.form.keyStats));
-        formData.append(
-          "accreditations",
-          JSON.stringify(this.form.accreditations)
-        );
-        formData.append("awards", JSON.stringify(this.form.awards));
-        formData.append("departments", JSON.stringify(this.form.departments));
-        formData.append("facilities", JSON.stringify(this.form.facilities));
-        formData.append("insurance", JSON.stringify(this.form.insurance));
-        formData.append("payments", JSON.stringify(this.form.payments));
-        formData.append(
-          "healthPackages",
-          JSON.stringify(this.form.healthPackages)
-        );
-        formData.append(
-          "specialServices",
-          JSON.stringify(this.form.specialServices)
-        );
+        formData.append('established', this.form.established);
+  formData.append('affiliatedTo', this.form.affiliatedTo);
+  formData.append('approvedBy', this.form.approvedBy);
+  formData.append('recognition', this.form.recognition);
+
+  formData.append('coursesOffered', JSON.stringify(this.form.coursesOffered.map(c => c.value)));
+  formData.append('whyChoose', JSON.stringify(this.form.whyChoose.map(w => w.value)));
+  formData.append('facilities', JSON.stringify(this.form.facilities.map(f => f.value)));
+  formData.append('hospitalTieUps', JSON.stringify(this.form.hospitalTieUps.map(h => h.value)));
+  formData.append('careerServices', JSON.stringify(this.form.careerServices.map(c => c.value)));
+  formData.append('relatedColleges', JSON.stringify(this.form.relatedColleges.map(r => r.value)));
+formData.append("tags", JSON.stringify(this.form.tags));
+  formData.append('faculty', JSON.stringify(this.form.faculty));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {

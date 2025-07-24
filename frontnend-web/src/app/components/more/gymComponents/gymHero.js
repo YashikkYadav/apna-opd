@@ -1,7 +1,9 @@
 'use client';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import FreeTrialModal from './FreeTrialModel';
 
 function getStarIcons(rating) {
     const stars = [];
@@ -34,6 +36,7 @@ const HeroSection = ({
     healthProfile,
     data
 }) => {
+    const [modalOpen, setModalOpen] = useState(false);
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -59,7 +62,7 @@ const HeroSection = ({
             {/* Right Content */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Train at {data?.name}
+                    {data?.name}
                 </h1>
 
                 <p className="text-white/90 text-lg max-w-xl">
@@ -75,23 +78,48 @@ const HeroSection = ({
 
                 {/* Tags */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">✔ Verified</span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">🕒 24x7 Access</span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">🧑‍🏫 Personal Trainers</span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">👥 Group Classes</span>
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
                 </div>
 
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-                    <button className="bg-white text-blue-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
-                        Book a Free Trial
-                    </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
-                        📋 Plans
-                    </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
-                        📍 Directions
-                    </button>
+                    <div>
+                        <button
+                            onClick={() => setModalOpen(true)}
+                            className="bg-white text-blue-700 px-6 py-4 rounded-full font-bold"
+                        >
+                            Book a Free Trial
+                        </button>
+
+                        <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                    </div>
+
+                    <div>
+                        <button
+                        onClick={() => {
+                                const section = document.getElementById("plansSection");
+                                section?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                         className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                            📋 Plans
+                        </button>
+                    </div>
+
+                    <div>
+                        <button
+                            onClick={() => {
+                                const section = document.getElementById("locationSection");
+                                section?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
+                        >
+                            📍 Directions
+                        </button>
+                    </div>
                 </div>
             </div>
         </motion.section>

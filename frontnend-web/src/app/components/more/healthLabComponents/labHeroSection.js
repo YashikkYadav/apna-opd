@@ -63,7 +63,7 @@ const HeroSection = ({
             {/* Info */}
             <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
                 <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">{name}</h1>
-                <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2>
+                {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
                     <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
@@ -80,6 +80,15 @@ const HeroSection = ({
                     {healthProfile?.introduction}
                 </p>
 
+                {/*tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
                 <div className="flex flex-wrap gap-3 mt-2">
                     <button
                         className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 flex items-center gap-2 shadow-lg transition text-base"
@@ -90,9 +99,14 @@ const HeroSection = ({
                     >
                         <ClipboardList className="w-4 h-4" /> Book Test
                     </button>
-                    <a href="#packages" className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                    <button 
+                    onClick={() => {
+                                const section = document.getElementById("labPackagesSection");
+                                section?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                    className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                         <PackageIcon className="w-4 h-4" /> Browse Packages
-                    </a>
+                    </button>
                     <a href={`tel:${phone}`}>
                         <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                             <Phone className="w-4 h-4" /> Call Now

@@ -3,9 +3,7 @@ import { motion } from 'framer-motion';
 
 const timings = [
     { label: 'Monday - Friday', value: '{{weekday_timings}}' },
-    { label: 'Saturday', value: '{{saturday_timings}}' },
     { label: 'Sunday', value: '{{sunday_timings}}' },
-    { label: 'Women-Only Batch', value: '{{women_timings}}' },
 ];
 
 const GymTimings = () => {

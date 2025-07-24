@@ -32,7 +32,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
             {/* Pharmacy Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Welcome to {data?.name}
+                    {data?.name}
                 </h2>
                 <p className="text-white/90 text-lg max-w-xl">
                     {healthProfile?.introduction}
@@ -53,6 +53,15 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                     )}
                 </div>
 
+                {/* Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                     <button className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
@@ -68,23 +77,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                     </button>
                 </div>
 
-                {/* Feature Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">
-                        ✔ Verified Pharmacy
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        ⚡ Express Delivery
-                    </span>
-                    {features.map((feature, index) => (
-                        <span
-                            key={`${feature.label}-${index}-${dataVersion}`}
-                            className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium"
-                        >
-                            {feature.label}
-                        </span>
-                    ))}
-                </div>
+
             </div>
         </motion.section>
     );

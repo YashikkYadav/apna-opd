@@ -8,21 +8,18 @@ const AppointmentOptions = ({ clinicName = "Happy Tails Clinic" }) => {
 
     const options = [
         {
-            emoji: "🏥",
             title: "Clinic Visit",
             desc: `In-person consultation at ${clinicName}`,
             button: "Book Clinic Visit",
             link: "/book-clinic",
         },
         {
-            emoji: "💻",
             title: "Online Consultation",
             desc: "Video call consultation from home",
             button: "Book Online",
             link: "/book-online",
         },
         {
-            emoji: "📞",
             title: "Request Callback",
             desc: "We'll call you to schedule",
             button: "Request Callback",

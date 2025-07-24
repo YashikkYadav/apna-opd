@@ -5,38 +5,27 @@ const services = [
     {
         name: "Pet Vaccination",
         description: "Complete vaccination schedule for dogs, cats, and other pets",
-        icon: "💉",
-        tags: ["In-Clinic"],
+        
     },
     {
         name: "Deworming",
         description: "Regular deworming treatments for optimal pet health",
-        icon: "🐛",
-        tags: ["In-Clinic"],
     },
     {
         name: "Animal Surgery",
         description: "Minor and major surgical procedures with modern equipment",
-        icon: "🏥",
-        tags: ["In-Clinic"],
     },
     {
         name: "Emergency Treatment",
         description: "24/7 emergency care for critical situations",
-        icon: "❗",
-        tags: ["Emergency"],
     },
     {
         name: "Health Checkups",
         description: "Comprehensive health examinations and diagnostics",
-        icon: "🔍",
-        tags: ["In-Clinic", "Online"],
     },
     {
         name: "Nutrition Advice",
         description: "Personalized diet plans for your pet's specific needs",
-        icon: "🥗",
-        tags: ["Online"],
     },
 ];
 
@@ -62,7 +51,7 @@ const ServiceCard = ({ name, description, icon, tags }) => (
     </motion.div>
 );
 
-export default function AvailableServices() {
+export default function AvailableServices({data,healthProfile}) {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -76,7 +65,7 @@ export default function AvailableServices() {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {services.map((s, idx) => (
+                {healthProfile?.services?.map((s, idx) => (
                     <ServiceCard key={idx} {...s} />
                 ))}
             </div>

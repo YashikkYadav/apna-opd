@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { FaStar, FaStarHalfAlt,FaRegStar } from 'react-icons/fa';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 
 function getStarIcons(rating) {
     const stars = [];
@@ -37,7 +37,7 @@ const HeroSection = ({
     reviewCount,
     availabilityStatus,
     imageUrl = '/images/blood-bank.jpg',
-    healthProfile,data
+    healthProfile, data
 }) => {
     console.log(healthProfile?.name)
 
@@ -71,7 +71,7 @@ const HeroSection = ({
             {/* Right: Text Content */}
             <div className="z-10 flex-1 space-y-5 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {data?.name ?? "Dummy Name"} – Verified Blood Bank in {data?.locality ?? "Dummy City"}
+                    {data?.name ?? "Dummy Name"} {data?.locality ?? "Dummy City"}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">
@@ -88,6 +88,13 @@ const HeroSection = ({
                         ({reviewCount} reviews)
                     </span>
                 </div>
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
 
                 {/* Enlarged Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
@@ -97,9 +104,16 @@ const HeroSection = ({
                     <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
                         📞 Call Now
                     </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
-                        📍 Get Directions
-                    </button>
+                    <div>
+                        <button
+                            onClick={() => {
+                                const section = document.getElementById("contactSection");
+                                section?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+                            📍 Get Directions
+                        </button>
+                    </div>
                 </div>
             </div>
         </motion.section>

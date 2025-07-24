@@ -66,7 +66,7 @@ const CollegeHeroSection = ({
             {/* Right: College Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {data?.name} – Leading {type} Institute in {data?.location}
+                    {data?.name} , {data?.location}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">
@@ -84,6 +84,15 @@ const CollegeHeroSection = ({
                     </span>
                 </div>
 
+                {/* Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
                     <button className="bg-white text-blue-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-blue-100 transition hover:scale-105">
@@ -97,18 +106,8 @@ const CollegeHeroSection = ({
                     </button>
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">
-                        ✔ Verified Institute
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        🏆 {healthProfile?.experience}+ Years of Excellence
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        📚 Industry-Focused Curriculum
-                    </span>
-                </div>
+               
+                
             </div>
         </motion.section>
     );

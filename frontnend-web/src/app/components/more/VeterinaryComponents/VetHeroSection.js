@@ -2,7 +2,8 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-
+import BookSession from './BookSession';
+import { useState } from 'react';
 const getStarIcons = (rating) => {
     const stars = [];
     const safeRating = rating ?? 0;
@@ -29,6 +30,7 @@ const VetHeroSection = ({
     data,
     healthProfile
 }) => {
+    const [modalOpen, setModalOpen] = useState(false);
     const rating = healthProfile?.rating;
     const reviewCount = healthProfile?.reviews?.length;
     const features = healthProfile?.doctorInfo?.features;
@@ -62,7 +64,7 @@ const VetHeroSection = ({
             {/* Right: Text Content */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Meet {data?.name ?? "Dummy Name"} – Trusted Vet in {data?.locality ?? "Dummy City"}
+                    {data?.name ?? "Dummy Name"} , {data?.locality ?? "Dummy City"}
                 </h2>
                 <p className="text-white/90 text-lg max-w-xl">
                     {healthProfile?.introduction}
@@ -75,31 +77,37 @@ const VetHeroSection = ({
                     <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                 </div>
 
+                {/*Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
                 {/* Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-                    <button className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+                    <button 
+                    onClick={() => setModalOpen(true)}
+                    className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         📅 Book Appointment
                     </button>
+                    <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                     <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📞 Call Clinic
                     </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button
+                    onClick={() => {
+                        const section = document.getElementById("vetLocationSection");
+                        section?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📍 View Location
                     </button>
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">
-                        ✔ Verified Profile
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        🏆 {healthProfile?.experience}+ Years Experience
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        ❤️ Pet-Friendly Clinic
-                    </span>
-                </div>
+
             </div>
         </motion.section>
     );
