@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const FacilitiesSection = () => {
+const FacilitiesSection = (healthProfile) => {
     const facilities = [
         {
             icon: "💪",
@@ -52,7 +52,7 @@ const FacilitiesSection = () => {
 
             {/* Facility Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {facilities.map((facility, idx) => (
+                {healthProfile?.facilities?.map((facility, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{
@@ -62,7 +62,7 @@ const FacilitiesSection = () => {
                         className="bg-[#F7F9FB] rounded-2xl p-6 text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
                         <div className="text-4xl mb-4">{facility.icon}</div>
-                        <h3 className="text-blue-700 text-lg font-bold mb-1">{facility.title}</h3>
+                        <h3 className="text-blue-700 text-lg font-bold mb-1">{facility}</h3>
                         <p className="text-gray-600 text-sm">{facility.desc}</p>
                     </motion.div>
                 ))}

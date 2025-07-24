@@ -32,7 +32,8 @@ const ClinicHeroSection = ({
   imageUrl = "/images/clinic-hero.jpg",
   rating = 4.6,
   reviewCount = 78,
-  data
+  data,
+  healthProfile
 }) => {
   return (
     <motion.section
@@ -49,7 +50,7 @@ const ClinicHeroSection = ({
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
           src={imageUrl}
-          alt={clinic_name}
+          alt={data?.name}
           width={340}
           height={340}
           className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -59,18 +60,27 @@ const ClinicHeroSection = ({
       {/* Right: Content */}
       <div className="z-10 flex-1 space-y-5 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-          {data?.name} – Trusted IVF Center in {data?.location}
+          {data?.name},{data?.location}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">
-          Begin your family journey with expert care. Trusted by <strong>{success_rate}+</strong> couples for advanced fertility treatments.
+          {healthProfile?.introduction}
         </p>
 
         {/* Stars & Reviews */}
         <div className="flex items-center gap-2 justify-center md:justify-start">
           {getStarIcons(rating)}
-          <span className="text-white font-semibold ml-2">{rating}/5</span>
-          <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
+          <span className="text-white font-semibold ml-2">{healthProfile?.rating}/5</span>
+          <span className="text-white/70 text-sm">({healthProfile?.reviewCount} reviews)</span>
+        </div>
+
+        {/*Tags */}
+        <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+          {healthProfile?.tags?.map((tag, index) => (
+            <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+              {tag}
+            </span>
+          ))}
         </div>
 
         {/* CTA Buttons */}

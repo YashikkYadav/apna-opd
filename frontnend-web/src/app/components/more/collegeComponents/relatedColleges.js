@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { FaUniversity } from 'react-icons/fa';
 
 const RelatedColleges = ({
-    city = '{{city}}',
-    healthProfile,
+    data,
     colleges = [
         {
             name: '{{related_college_1}}',
@@ -45,7 +44,7 @@ const RelatedColleges = ({
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                 <FaUniversity className="text-blue-700 text-3xl" />
                 
-                    Related Colleges Near {healthProfile?.location}
+                    Related Colleges Near {data?.location}
                 </h2>
             </div>
 

@@ -22,48 +22,38 @@ export default function BloodBankPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`);
-                const profileData = res?.data?.healthServeProfileData;
-
-                if (!profileData) {
-                    console.warn("Backend error:", res?.data?.error);
-                    return;
-                }
-
-                const { healthServeProfile, healthServeUser } = profileData;
-                setData({
-                    healthProfile: healthServeProfile,
-                    otherData: healthServeUser
-                });
-                console.log(healthServeUser, data?.otherData);
-            } catch (err) {
-                console.error("Request failed:", err);
-            }
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            const { healthServeProfile } = response_data.data;
+            setData({
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeId:", healthServeProfile?.healthServeId);
         };
-
         fetchData();
     }, [id]);
+
     return (
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 {/* Hero section with full width */}
                 <div className="w-full">
                     <HeroSection
-                        healthProfile={data?.otherData}
+                        data={data?.otherData} healthProfile={data?.healthProfile}
                     />
                 </div>
 
                 {/* Other components in 90% width with rounded sections */}
                 <div className="max-w-[90vw] mx-auto space-y-10">
-                    <Availability healthProfile={data?.otherData} />
-                    <About healthProfile={data?.otherData} />
-                    <Contact healthProfile={data?.otherData} />
-                    <WhyChoose healthProfile={data?.otherData} />
-                    <RequestSteps healthProfile={data?.otherData} />
-                    <Reviews healthProfile={data?.otherData} />
-                    <NearbyBanks healthProfile={data?.otherData} />
-                    <UrgentBanner healthProfile={data?.otherData} />
+                    <Availability data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <About data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <Contact data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <WhyChoose data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <RequestSteps data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <Reviews data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <NearbyBanks data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <UrgentBanner data={data?.otherData} healthProfile={data?.healthProfile} />
                 </div>
             </main>
         </div>

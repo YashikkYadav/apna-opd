@@ -60,6 +60,7 @@ const MembershipPlans = ({
 
     return (
         <motion.section
+            id="plansSection"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

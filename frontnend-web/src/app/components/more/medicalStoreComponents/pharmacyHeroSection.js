@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Phone, MapPin, Clock } from 'lucide-react';
 
-const PharmacyHero = ({ res_data, data, dataVersion, lastUpdate }) => {
+const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
     const features = data?.features?.filter(f => f.enabled) || [];
 
     return (
@@ -22,7 +22,7 @@ const PharmacyHero = ({ res_data, data, dataVersion, lastUpdate }) => {
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
                     src="/pharmacy-image.jpg"
-                    alt={res_data?.otherData?.name}
+                    alt={data?.name}
                     width={320}
                     height={320}
                     className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -32,16 +32,16 @@ const PharmacyHero = ({ res_data, data, dataVersion, lastUpdate }) => {
             {/* Pharmacy Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Welcome to {res_data?.otherData?.name}
+                    {data?.name}
                 </h2>
                 <p className="text-white/90 text-lg max-w-xl">
-                    Your trusted neighborhood pharmacy for fast, verified, and affordable medicines. Available online and offline.
+                    {healthProfile?.introduction}
                 </p>
 
                 {/* Meta */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 text-white/80 pt-2">
                     <span className="flex items-center gap-2">
-                        <MapPin className="w-5 h-5" /> {res_data?.otherData?.location || "Your City"}
+                        <MapPin className="w-5 h-5" /> {data?.location || "Your City"}
                     </span>
                     <span className="flex items-center gap-2">
                         <Clock className="w-5 h-5" /> Open: 8 AM – 11 PM
@@ -53,12 +53,21 @@ const PharmacyHero = ({ res_data, data, dataVersion, lastUpdate }) => {
                     )}
                 </div>
 
+                {/* Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                     <button className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🛒 Order Medicines
                     </button>
-                    <a href={`tel:${res_data?.otherData?.phone}`}>
+                    <a href={`tel:${data?.phone}`}>
                         <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                             📞 Call Pharmacy
                         </button>
@@ -68,23 +77,7 @@ const PharmacyHero = ({ res_data, data, dataVersion, lastUpdate }) => {
                     </button>
                 </div>
 
-                {/* Feature Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">
-                        ✔ Verified Pharmacy
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        ⚡ Express Delivery
-                    </span>
-                    {features.map((feature, index) => (
-                        <span
-                            key={`${feature.label}-${index}-${dataVersion}`}
-                            className="bg-white/10 px-4 py-2 rounded-full text-sm font-medium"
-                        >
-                            {feature.label}
-                        </span>
-                    ))}
-                </div>
+
             </div>
         </motion.section>
     );

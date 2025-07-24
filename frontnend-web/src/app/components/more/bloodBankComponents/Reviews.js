@@ -29,7 +29,7 @@ const renderStars = (count) =>
         )
     );
 
-const Reviews = () => {
+const Reviews = (healthProfile) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -49,7 +49,7 @@ const Reviews = () => {
 
             {/* Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {reviews.map((review, idx) => (
+                {healthProfile?.testimonials?.map((review, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.03, boxShadow: '0 0 0 2px rgba(59,130,246,0.3)' }}

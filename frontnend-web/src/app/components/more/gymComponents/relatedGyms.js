@@ -25,6 +25,8 @@ const RelatedGyms = ({
             price: '{{related_gym_3_price}}',
         },
     ],
+    data,
+    healthProfile
 }) => {
     const router = useRouter();
 
@@ -40,7 +42,7 @@ const RelatedGyms = ({
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <span className="text-yellow-400 text-3xl"><FaBolt /></span>
-                    Other Gyms in {city}
+                    Other Gyms in {data?.locality}
                 </h2>
             </div>
 

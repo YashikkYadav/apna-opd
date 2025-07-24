@@ -25,10 +25,10 @@ function getStarIcons(rating) {
     return stars;
 }
 
-const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
-    const rating = healthProfile?.rating || 4.8;
-    const reviewCount = healthProfile?.reviews?.length || 45;
-    const features = healthProfile?.doctorInfo?.features || [];
+const PhysiotherapyHero = ({ data, healthProfile }) => {
+    const rating = healthProfile?.rating;
+    const reviewCount = healthProfile?.reviews?.length;
+    const features = healthProfile?.doctorInfo?.features;
 
     return (
         <motion.section
@@ -49,21 +49,21 @@ const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-T3ZfSx2hyuNb-IcIVQCcjZnSR_hPI2V6dg&s'
                     }
                     alt={`Dr.${data?.name}`}
-                width={340}
-                height={340}
-                className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
-                priority
+                    width={340}
+                    height={340}
+                    className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
+                    priority
                 />
             </div>
 
             {/* Right: Text Content */}
             <div className="z-10 flex-1 space-y-5 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    Dr. {data?.name} – Certified Physiotherapist
+                    {data?.name}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">
-                    Female • 8 Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
+                    Female • {healthProfile?.experience} Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
                 </p>
 
                 {/* Star Ratings */}
@@ -71,6 +71,15 @@ const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
                     {getStarIcons(rating)}
                     <span className="text-white text-xl font-semibold ml-2">{rating}/5</span>
                     <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
+                </div>
+
+                {/*Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
                 </div>
 
                 {/* Features */}
@@ -89,7 +98,12 @@ const PhysiotherapyHero = ({ data, healthProfile = {} }) => {
                     <button className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2">
                         <CalendarPlus className="w-5 h-5" /> Book Session
                     </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105 flex items-center gap-2">
+                    <button 
+                    onClick={() => {
+                        const section = document.getElementById("therapyPackagesSection");
+                        section?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105 flex items-center gap-2">
                         <Package className="w-5 h-5" /> Explore Packages
                     </button>
                 </div>

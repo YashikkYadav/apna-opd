@@ -401,7 +401,7 @@ const getHealthServeProfileData = async (healthServeId) => {
     }
 
     const doc = await Model.findOne({ healthServeId });
-
+    console.log('doc')
     return {
       statusCode: 201,
       healthServeProfile: doc, // return saved document,

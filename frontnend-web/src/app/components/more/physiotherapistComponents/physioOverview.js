@@ -9,7 +9,10 @@ const OverviewSection = ({
     certifications = '',
     interests = '',
     languages = [],
+    data,
+    healthProfile 
 }) => {
+    console.log("healthProfile:", healthProfile);
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -34,10 +37,7 @@ const OverviewSection = ({
                     <h3 className="text-xl font-bold text-blue-600 mb-3 flex items-center gap-2">
                         <HeartPulse className="w-6 h-6" /> About
                     </h3>
-                    <p className="text-gray-700 text-base leading-relaxed">Dr. {} is a highly experienced physiotherapist with {} years of dedicated practice in rehabilitation and pain management. 
-                        She specializes in post-operative care, 
-                        elderly rehabilitation, and sports recovery. Her patient-centered approach combines evidence-based treatments with compassionate care, 
-                        helping patients achieve optimal recovery and improved quality of life.</p>
+                    <p className="text-gray-700 text-base leading-relaxed">{healthProfile?.about}</p>
                 </motion.div>
 
                 {/* Education & Certifications */}

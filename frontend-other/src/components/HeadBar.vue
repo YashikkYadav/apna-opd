@@ -36,8 +36,7 @@ export default {
   },
   computed: {
     profileLink() {
-      console.log("User Type:", this.userType); // 🔴 console log for debugging
-
+      console.log("User Type:", this.userType);
       switch (this.userType) {
         case "physiotherapist":
           return "/profile/physiotherapist";
@@ -45,6 +44,16 @@ export default {
           return "/profile/healthlab";
         case "medical_store":
           return "/profile/pharmacy";
+        case "blood_bank":
+          return "/profile/blood_bank";
+        case "vatenary":
+          return "/profile/vetenary";
+        case "gym":
+          return "/profile/gym";
+         case "nursing_medical_college":
+          return "/profile/nursing_medical_college";
+        case "ivf_clinic":
+          return "/profile/ivf_clinic";
         default:
           return "/profile";
       }

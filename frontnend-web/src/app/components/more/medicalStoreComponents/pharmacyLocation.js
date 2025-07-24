@@ -1,156 +1,99 @@
-"use client";
-import { motion } from "framer-motion";
-import {
-    FaMapMarkerAlt,
-    FaPhoneAlt,
-    FaEnvelope,
-    FaGlobe,
-    FaClock,
-} from "react-icons/fa";
+'use client';
 
-const PharmacyLocationCard = ({ data }) => {
-    const {
-        name,
-        address,
-        location,
-        phone,
-        emergencyPhone,
-        email,
-        website,
-        hours = { "Mon–Sun": "8:00 AM – 11:00 PM" },
-    } = data?.otherData || {};
+import { motion } from 'framer-motion';
+import { FaPhoneAlt, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import { GoLocation } from 'react-icons/go';
 
-    const fullAddress = [address, location].filter(Boolean).join(", ");
+const PharmacyLocationCard = ({ website_url = '{{website_url}}',
+
+    healthProfile,
+    data
+}) => {
+    const contactItems = [
+        {
+            icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
+            label: 'Phone',
+            value: data?.phone,
+        },
+        {
+            icon: <FaWhatsapp className="text-blue-600 text-xl" />,
+            label: 'WhatsApp',
+            value: data?.phone,
+        },
+        {
+            icon: <FaGlobe className="text-blue-600 text-xl" />,
+            label: 'Website',
+            value: website_url,
+            isLink: true,
+        },
+        {
+            icon: <FaEnvelope className="text-blue-600 text-xl" />,
+            label: 'Email',
+            value: data?.email,
+        },
+    ];
 
     return (
-        <motion.div
+        <motion.section
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, type: "spring" }}
-            className="bg-white rounded-3xl shadow-lg p-6 md:p-16 max-w-7xl mx-auto mt-12 mb-8"
+            transition={{ duration: 0.7, type: 'spring' }}
+            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
         >
-            {/* Section Header */}
-            <div className=" mb-12">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-4">
-                    <span className="text-4xl text-pink-500">
-                        <FaMapMarkerAlt />
-                    </span>
-
-                    Location & Contact
-                </h2>
+            {/* Header */}
+            <div className="text-left mb-12">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Visit Us Today</h2>
+                <p className="text-gray-600 text-lg mt-2">
+                    Conveniently located in the heart of {data?.address}
+                </p>
             </div>
 
-            {/* Content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {/* Map Card */}
-                <div className="bg-blue-50 rounded-2xl flex items-center p-8 min-h-[320px] md:min-h-[250px]">
-                    <div className="flex flex-col space-y-3">
-                        <div className="text-4xl">🗺️</div>
-                        <div className="text-xl font-bold text-gray-800">
-                            Interactive Map View
-                        </div>
-                        <div className="text-gray-500 font-medium text-base">{name}</div>
-                        <div className="text-gray-600 font-semibold text-base">
-                            {fullAddress}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="bg-[#F7F9FB] rounded-2xl p-8 flex flex-col gap-8 min-h-[320px] md:min-h-[400px] justify-center">
-                    <div>
-                        <div className="font-bold text-2xl mb-4">Contact Information</div>
-
-                        {(
-                            <div className="flex items-start gap-4 mb-4 text-lg">
-                                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                                    <FaMapMarkerAlt />
-                                </span>
-                                <div>
-                                    <span className="font-bold">Address:</span>
-                                    <br />
-                                    {fullAddress}
-                                </div>
-                            </div>
-                        )}
-
-                        {(
-                            <div className="flex items-start gap-4 mb-4 text-lg">
-                                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                                    <FaPhoneAlt />
-                                </span>
-                                <div>
-                                    <span className="font-bold">Phone:</span>
-                                    <br />
-                                    {phone}
-                                    {emergencyPhone && (
-                                        <>
-                                            <br />
-                                            <span className="font-semibold">Emergency:</span>{" "}
-                                            {emergencyPhone}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {(
-                            <div className="flex items-start gap-4 mb-4 text-lg">
-                                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                                    <FaEnvelope />
-                                </span>
-                                <div>
-                                    <span className="font-bold">Email:</span>
-                                    <br />
-                                    {Array.isArray(email)
-                                        ? email.map((e, i) => <div key={i}>{e}</div>)
-                                        : email}
-                                </div>
-                            </div>
-                        )}
-
-                        {(
-                            <div className="flex items-start gap-4 mb-4 text-lg">
-                                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                                    <FaGlobe />
-                                </span>
-                                <div>
-                                    <span className="font-bold">Website:</span>
-                                    <br />
-                                    <a
-                                        href={website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-700 underline"
-                                    >
-                                        {website}
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
-                        {(
-                            <div className="flex items-start gap-4 text-lg">
-                                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                                    <FaClock />
-                                </span>
-                                <div>
-                                    <span className="font-bold">Working Hours:</span>
-                                    <br />
-                                    {Object.entries(hours).map(([day, time], idx) => (
-                                        <div key={idx}>
-                                            {day}: {time}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+            {/* Address Card */}
+            <div className="bg-[#F7F9FB] p-6 rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] mb-6 flex items-start gap-4">
+                <GoLocation className="text-blue-500 text-xl mt-[2px]" />
+                <div>
+                    <p className="font-semibold text-gray-800">Address:</p>
+                    <p className="text-gray-600 text-base mt-1">{data?.address}</p>
                 </div>
             </div>
-        </motion.div>
+
+            {/* Contact Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                {contactItems.map((item, idx) => (
+                    <div
+                        key={idx}
+                        className="bg-white p-5 rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
+                    >
+                        <div className="mt-1">{item.icon}</div>
+                        <div>
+                            <p className="font-semibold text-gray-800">{item.label}:</p>
+                            {item.isLink ? (
+                                <a
+                                    href={item.value}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 mt-1 underline block break-words"
+                                >
+                                    {item.value}
+                                </a>
+                            ) : (
+                                <p className="text-base mt-1 text-blue-700 font-medium">{item.value}</p>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Google Map Placeholder */}
+            <div className="bg-blue-50 mt-10 p-6 rounded-xl text-center hover:shadow-md hover:scale-[1.02] transition-all duration-300">
+                <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Google Map</p>
+                <p className="text-gray-600">{data?.location}</p>
+                <div className="bg-blue-200 w-full h-48 mt-4 rounded-md flex items-center justify-center">
+                    <span className="text-blue-700 font-semibold">Map Placeholder</span>
+                </div>
+            </div>
+        </motion.section>
     );
-}
-
+};
 export default PharmacyLocationCard;

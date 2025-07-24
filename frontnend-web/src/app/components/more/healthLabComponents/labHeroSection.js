@@ -20,18 +20,20 @@ const HeroSection = ({
     res_data,
     setShowModal,
     setModalTest,
+    data,
+    healthProfile
 }) => {
-    const name = res_data?.otherData?.name ?? "HealthLab Diagnostics";
-    const location = res_data?.otherData?.location ?? "City";
-    const address = res_data?.otherData?.address ?? "";
-    const rating = res_data?.healthProfile?.reviews ? parseFloat(
+    const name = data?.name ?? "HealthLab Diagnostics";
+    const location = data?.location ?? "City";
+    const address = data?.address ?? "";
+    const rating = healthProfile?.reviews ? parseFloat(
         (
             res_data?.healthProfile?.reviews.reduce((acc, cur) => acc + cur.rating, 0) /
             res_data?.healthProfile?.reviews.length
         ).toFixed(1)
     ) : 0;
     const reviewCount = res_data?.healthProfile?.reviews?.length ?? 0;
-    const phone = res_data?.otherData?.phone;
+    const phone = data?.phone;
 
     return (
         <motion.section
@@ -61,7 +63,7 @@ const HeroSection = ({
             {/* Info */}
             <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
                 <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">{name}</h1>
-                <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2>
+                {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
                     <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
@@ -75,8 +77,17 @@ const HeroSection = ({
                 </div>
 
                 <p className="mt-2 mb-4 text-lg opacity-90">
-                    Advanced diagnostics with cutting-edge technology • Blood Tests • Imaging • At-home Sample Collection
+                    {healthProfile?.introduction}
                 </p>
+
+                {/*tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
 
                 <div className="flex flex-wrap gap-3 mt-2">
                     <button
@@ -88,9 +99,14 @@ const HeroSection = ({
                     >
                         <ClipboardList className="w-4 h-4" /> Book Test
                     </button>
-                    <a href="#packages" className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                    <button 
+                    onClick={() => {
+                                const section = document.getElementById("labPackagesSection");
+                                section?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                    className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                         <PackageIcon className="w-4 h-4" /> Browse Packages
-                    </a>
+                    </button>
                     <a href={`tel:${phone}`}>
                         <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                             <Phone className="w-4 h-4" /> Call Now

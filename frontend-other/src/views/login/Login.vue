@@ -123,6 +123,7 @@ export default {
         { value: "nurse", label: "Nursing Staff" },
         { value: "vatenary", label: "Vaterinary" },
         { value: "laboratory", label: "Laboratory" },
+        {value:"ivf_clinic",label:"IVF Clinic"}
 
       ],
       password: "",

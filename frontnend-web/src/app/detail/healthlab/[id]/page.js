@@ -47,7 +47,7 @@ export default function HealthLabPage() {
     const [openPackage, setOpenPackage] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalTest, setModalTest] = useState(null);
-    const [res_data, set_res_data] = useState({
+    const [data, set_res_data] = useState({
         healthProfile: null, otherData: null
     })
     // Fetch data from API and set all state
@@ -56,26 +56,17 @@ export default function HealthLabPage() {
             setLoading(true);
             setError('');
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`)
-                const { healthServeProfile, healthServeUser, statusCode } = response?.data?.healthServeProfileData
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+                const { healthServeProfile, healthServeUser } = response?.data || {};
                 set_res_data({
-                    healthProfile: healthServeProfile, otherData: healthServeUser
-                })
-                console.log("response", healthServeProfile, healthServeUser, response?.data, statusCode === 201)
+                    healthProfile: healthServeProfile || null,
+                    otherData: healthServeProfile?.healthServeId || null
+                });
+                console.log("response", healthServeProfile, healthServeUser, response?.data,);
 
-                setLabInfo(healthServeUser)
-                const data = healthServeProfile
-                if (statusCode === 201) {
-                    setTestsData(data?.tests || []);
-                    setPackagesData(data?.packages || []);
-                    setReviewsData(data?.reviews || []);
-                    setFaqData(data?.faqs || []);
-                    setLabInfo(data?.labInfo || {});
-                    setCertifications(data?.certifications || []);
-                    setHighlights(data?.highlights || []);
-                } else {
-                    setError('Failed to load healthlab data');
-                }
+                setLabInfo(healthServeUser || {});
+                const data = healthServeProfile || {};
+
             } catch (err) {
                 setError('Failed to load healthlab data: ' + err.message);
             } finally {
@@ -129,12 +120,12 @@ export default function HealthLabPage() {
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <HeroSection healthProfile={res_data?.healthProfile} />
-                    <AboutSection data={res_data} certifications={certifications} highlights={highlights} />
+                    <HeroSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <AboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
                     <LabFilterBar search={search} setSearch={setSearch} testType={testType} setTestType={setTestType} price={price} setPrice={setPrice} location={location} setLocation={setLocation} />
                     <DiagnosticTabs tab={tab} setTab={setTab} filteredTests={filteredTests} packagesData={packagesData} setShowModal={setShowModal} setModalTest={setModalTest} openPackage={openPackage} setOpenPackage={setOpenPackage} />
-                    <ReviewSection reviewsData={reviewsData} />
-                    <LocationAndContact data={res_data} />
+                    <ReviewSection data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    <LocationAndContact data={data?.otherData} healthProfile={data?.healthProfile} />
                     <FAQSection faqs={faqData} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} />
                 </div>
             </main>

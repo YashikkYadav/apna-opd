@@ -38,7 +38,7 @@ const renderStars = (count) =>
     )
   );
 
-const StudentTestimonials = () => {
+const StudentTestimonials = (healthProfile) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -60,7 +60,7 @@ const StudentTestimonials = () => {
 
       {/* Testimonials Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {testimonials.map((t, idx) => (
+        {healthProfile?.testimonials?.map((t, idx) => (
           <motion.div
             key={idx}
             whileHover={{ scale: 1.03, boxShadow: '0 0 0 2px rgba(59,130,246,0.3)' }}

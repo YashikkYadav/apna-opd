@@ -8,7 +8,8 @@ const AboutSection = ({
     year_established = "{{year_established}}",
     members = "500+",
     trainers = "10+",
-    healthProfile
+    healthProfile,
+    data
 }) => {
     return (
         <motion.section
@@ -23,24 +24,14 @@ const AboutSection = ({
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <FaDumbbell className="text-3xl text-blue-700" />
 
-                    About {healthProfile?.name}
+                    About {data?.name}
                 </h2>
             </div>
 
             {/* Description */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <p className="text-gray-700 text-lg leading-relaxed">
-                    Established in <strong>{year_established}</strong>, {healthProfile?.name} has been serving{" "}
-                    <strong>{healthProfile?.location}</strong> and nearby areas with dedication to fitness excellence. Our
-                    state-of-the-art facility combines modern equipment with personalized training programs
-                    to help you achieve your fitness goals.
-                    <br /><br />
-                    We believe fitness is not just about working out—it’s about creating a sustainable
-                    lifestyle. Our certified trainers and supportive community will guide you every step of
-                    the way, whether you're a beginner or an experienced athlete.
-                    <br /><br />
-                    {gymName} is more than just a gym; we're your fitness family, committed to helping you
-                    transform your health and unlock your potential.
+                    {healthProfile?.about}
                 </p>
 
                 {/* Stat Cards */}

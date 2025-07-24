@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { FaHeart } from 'react-icons/fa';
 
-const SuccessStories = ({ data, doctor_name = "{{doctor_name}}" }) => {
+const SuccessStories = ({ data, healthProfile}) => {
     const testimonials = [
         {
             quote: `After 5 years of trying, we had almost given up hope. Dr. ${data?.name} and the team at ${data?.name} gave us the miracle we had been praying for. Our little angel is now 6 months old!`,
@@ -36,13 +36,13 @@ const SuccessStories = ({ data, doctor_name = "{{doctor_name}}" }) => {
 
             {/* Testimonials Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {testimonials.map((item, idx) => (
+                {healthProfile?.testimonials.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.2)' }}
                         className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
-                        <p className="italic text-gray-700 text-base mb-4">"{item.quote}"</p>
+                        <p className="italic text-gray-700 text-base mb-4">"{item.text}"</p>
                         <p className="font-bold text-blue-700 text-sm">– {item.author}</p>
                     </motion.div>
                 ))}

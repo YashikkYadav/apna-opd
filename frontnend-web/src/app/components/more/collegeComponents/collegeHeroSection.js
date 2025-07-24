@@ -38,7 +38,8 @@ const CollegeHeroSection = ({
     rating = 0,
     reviewCount = 198,
     imageUrl = '/images/college-hero.jpg',
-    healthProfile
+    healthProfile,
+    data
 }) => {
     return (
         <motion.section
@@ -65,11 +66,11 @@ const CollegeHeroSection = ({
             {/* Right: College Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {healthProfile?.name} – Leading {type} Institute in {healthProfile?.location}
+                    {data?.name} , {data?.location}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">
-                    Recognized by AICTE, UGC and other top bodies. Offering high-quality programs in Engineering, Management, and Computer Applications.
+                    {healthProfile?.about}
                 </p>
 
                 {/* Ratings */}
@@ -81,6 +82,15 @@ const CollegeHeroSection = ({
                     <span className="text-white/70 text-lg ml-2">
                         ({reviewCount} reviews)
                     </span>
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+                    {healthProfile?.tags?.map((tag, index) => (
+                        <span key={index} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+                            {tag}
+                        </span>
+                    ))}
                 </div>
 
                 {/* Action Buttons */}
@@ -96,18 +106,8 @@ const CollegeHeroSection = ({
                     </button>
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
-                    <span className="bg-white/30 px-4 py-2 rounded-full text-sm font-medium">
-                        ✔ Verified Institute
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        🏆 {experience_years}+ Years of Excellence
-                    </span>
-                    <span className="bg-white/20 px-4 py-2 rounded-full text-sm font-medium">
-                        📚 Industry-Focused Curriculum
-                    </span>
-                </div>
+               
+                
             </div>
         </motion.section>
     );

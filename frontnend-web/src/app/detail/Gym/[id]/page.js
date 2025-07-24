@@ -25,44 +25,33 @@ export default function GymPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`);
-                const profileData = res?.data?.healthServeProfileData;
-
-                if (!profileData) {
-                    console.warn("Backend error:", res?.data?.error);
-                    return;
-                }
-
-                const { healthServeProfile, healthServeUser } = profileData;
-                setData({
-                    healthProfile: healthServeProfile,
-                    otherData: healthServeUser
-                });
-                console.log("1:", healthServeUser, data?.otherData);
-            } catch (err) {
-                console.error("Request failed:", err);
-            }
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+            const { healthServeProfile } = response_data.data;
+            setData({
+                healthProfile: healthServeProfile || null,
+                otherData: healthServeProfile?.healthServeId || null
+            });
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeId:", healthServeProfile?.healthServeId);
         };
-
         fetchData();
     }, [id]);
     return (
         <div className="relative bg-white min-h-screen flex flex-col items-center">
             <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
                 <div className="w-full">
-                    <HeroSection healthProfile={data?.otherData}/>
-                    <AboutSection healthProfile={data?.otherData}/>
-                    <FacilitiesSection healthProfile={data?.otherData}/>
-                    <ProgramsAndServices healthProfile={data?.otherData}/>
-                    <CertifiedTrainers healthProfile={data?.otherData}/>
-                    <GymTimings healthProfile={data?.otherData}/>
-                    <MembershipPlans healthProfile={data?.otherData}/>
-                    <VisitUsToday healthProfile={data?.otherData}/>
-                    <SuccessStories healthProfile={data?.otherData}/>
-                    <FAQSection healthProfile={data?.otherData} />
-                    <RelatedGyms healthProfile={data?.otherData}/>
-                    <GymFooter healthProfile={data?.otherData}/>
+                    <HeroSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <AboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <FacilitiesSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <ProgramsAndServices data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <CertifiedTrainers data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <GymTimings data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <MembershipPlans data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <VisitUsToday data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <SuccessStories data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <FAQSection data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <RelatedGyms data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <GymFooter data={data?.otherData} healthProfile={data?.healthProfile} />
                 </div>
             </main>
         </div>

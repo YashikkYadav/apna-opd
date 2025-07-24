@@ -12,7 +12,8 @@ const PharmacyAbout = ({
         'Home Delivery',
     ],
     partners = ['SMS Hospital', 'Fortis Healthcare', 'Local Clinics Network'],
-    res_data
+    data,
+    healthProfile
 }) => {
     return (
         <motion.div
@@ -26,13 +27,13 @@ const PharmacyAbout = ({
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
                     <FaHospitalAlt className="text-3xl text-blue-700" />
-                    About {res_data?.otherData?.name}
+                    About {data?.name}
                 </h2>
             </div>
 
             {/* Description */}
             <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">
-                {description}
+                {healthProfile?.about}
             </p>
 
             {/* Services & Partnerships Grid */}
@@ -44,7 +45,7 @@ const PharmacyAbout = ({
                 >
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Services Offered</h3>
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
-                        {services.map((service, index) => (
+                        {healthProfile?.specialServices.map((service, index) => (
                             <li key={`service-${index}`}>• {service}</li>
                         ))}
                     </ul>
