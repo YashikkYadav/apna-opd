@@ -43,7 +43,7 @@ const PharmacyAbout = ({
                     whileHover={{ scale: 1.03 }}
                     className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[160px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
                 >
-                    <h3 className="text-xl font-bold text-blue-600 mb-3">Services Offered</h3>
+                    <h3 className="text-xl font-bold text-blue-600 mb-3">Services</h3>
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
                         {healthProfile?.specialServices.map((service, index) => (
                             <li key={`service-${index}`}>• {service}</li>

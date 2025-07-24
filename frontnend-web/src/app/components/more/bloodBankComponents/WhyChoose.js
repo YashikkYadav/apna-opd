@@ -7,28 +7,7 @@ const WhyChoose = ({
     data,
     affiliatedHospitalsCount = "{{affiliated_hospitals_count}}",
 }) => {
-    const features = [
-        {
-            icon: "✅",
-            title: "Verified Inventory",
-            desc: "Real-time updated blood stock information",
-        },
-        {
-            icon: "🚨",
-            title: "Emergency Support",
-            desc: "24/7 emergency assistance via Apna OPD",
-        },
-        {
-            icon: "🏥",
-            title: "Hospital Trusted",
-            desc: `Preferred by ${affiliatedHospitalsCount}+ hospitals`,
-        },
-        {
-            icon: "🔒",
-            title: "Secure Requests",
-            desc: "Safe and secure blood request system",
-        },
-    ];
+    
 
     return (
         <motion.div
@@ -55,7 +34,6 @@ const WhyChoose = ({
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.4)' }}
                         className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col items-center text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
-                        <div className="text-4xl mb-3">{item.icon}</div>
                         <h3 className="text-lg font-bold text-blue-700 mb-1">{item.title}</h3>
                         <p className="text-base text-gray-600">{item.desc}</p>
                     </motion.div>

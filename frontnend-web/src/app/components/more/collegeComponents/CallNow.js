@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from "react";
 
-export default function FreeTrialModal({ isOpen, onClose }) {
+export default function CallNow({ isOpen, onClose }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [message, setMessage] = useState("");
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState("");
     const [generatedOtp, setGeneratedOtp] = useState("");
@@ -31,6 +32,11 @@ export default function FreeTrialModal({ isOpen, onClose }) {
     const handleSubmit = () => {
         if (!verified) return alert("Please verify your phone number first.");
         setSubmitted(true);
+
+        // Redirect to call after short delay
+        setTimeout(() => {
+            window.location.href = "tel:+919799971952"; // Change to your call target
+        }, 1000);
     };
 
     if (!isOpen) return null;
@@ -40,7 +46,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-blue-200">
                 {!submitted ? (
                     <>
-                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Book a Session</h2>
+                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Make a Call</h2>
 
                         <input
                             type="text"
@@ -57,6 +63,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             className="w-full mb-3 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                             onChange={(e) => setEmail(e.target.value)}
                         />
+
                         <textarea
                             placeholder="Message (Optional)"
                             value={message}
@@ -118,17 +125,12 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                     <div className="text-center space-y-4">
                         <h2 className="text-2xl font-bold text-blue-700">Thank you!</h2>
                         <p className="text-gray-600">
-                            Thanks for booking the Session. We’ll update you further.
+                            Redirecting to your call...
                         </p>
-                        <button
-                            onClick={onClose}
-                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                        >
-                            Close
-                        </button>
                     </div>
                 )}
             </div>
         </div>
     );
 }
+ 

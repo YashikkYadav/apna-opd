@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import BookSession from './BookSession';
 import { useState } from 'react';
+import CallNow from './CallNow';
 const getStarIcons = (rating) => {
     const stars = [];
     const safeRating = rating ?? 0;
@@ -30,6 +31,7 @@ const VetHeroSection = ({
     data,
     healthProfile
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const rating = healthProfile?.rating;
     const reviewCount = healthProfile?.reviews?.length;
@@ -94,9 +96,12 @@ const VetHeroSection = ({
                         📅 Book Appointment
                     </button>
                     <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button 
+                    onClick={() => setCallModalOpen(true)}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📞 Call Clinic
                     </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
                     <button
                     onClick={() => {
                         const section = document.getElementById("vetLocationSection");

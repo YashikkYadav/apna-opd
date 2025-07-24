@@ -1,40 +1,9 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const reasons = [
-    {
-        icon: '🏆',
-        title: 'NAAC/NABH Recognition',
-        desc: 'Accredited by top regulatory bodies ensuring quality education standards',
-    },
-    {
-        icon: '👨‍🏫',
-        title: 'Experienced Faculty',
-        desc: 'Learn from industry experts with years of practical experience',
-    },
-    {
-        icon: '🔬',
-        title: 'Modern Labs & Equipment',
-        desc: 'State-of-the-art laboratories and medical equipment for hands-on learning',
-    },
-    {
-        icon: '💼',
-        title: 'Placement Assistance',
-        desc: 'Dedicated placement cell with tie-ups with leading hospitals',
-    },
-    {
-        icon: '🏠',
-        title: 'Hostel & Transportation',
-        desc: 'Comfortable accommodation and reliable transport facilities',
-    },
-    {
-        icon: '🎯',
-        title: 'Practical Training Focus',
-        desc: 'Emphasis on clinical rotations and real-world medical experience',
-    },
-];
 
-const WhyChooseCollege = ({ healthProfile}) => {
+
+const WhyChooseCollege = ({data, healthProfile}) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -55,13 +24,12 @@ const WhyChooseCollege = ({ healthProfile}) => {
 
             {/* Feature Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {reasons.map((item, idx) => (
+                {healthProfile?.reasons?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04 }}
                         className="bg-white rounded-2xl px-6 py-8 text-center shadow-sm border-l-4 border-blue-500 hover:border-blue-700 transition-all"
                     >
-                        <div className="text-4xl mb-4">{item.icon}</div>
                         <h3 className="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
                         <p className="text-gray-600 text-sm">{item.desc}</p>
                     </motion.div>

@@ -231,7 +231,7 @@ const PharmacyStorePage = () => {
                     <TestimonialsSection data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     {acceptsPrescriptions && <UploadPrescription />}
                     <FAQSection faqs={data?.faqs} />
-                    <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
+                    {/* <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} /> */}
                 </div>
             </main>
         </div>

@@ -51,6 +51,45 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col>
+              <v-text-field
+    v-model="form.established"
+    label="Established"
+    dense
+    variant="outlined"
+    hide-details
+    class="m-2 pa-2"
+  />
+  <v-text-field
+    v-model="form.affiliatedTo"
+    label="Affiliated To"
+    dense
+    variant="outlined"
+    hide-details
+    class="m-2 pa-2"
+  />
+            </v-col>
+  <v-col>
+    <v-text-field
+    v-model="form.approvedBy"
+    label="Approved By"
+    dense
+    variant="outlined"
+    hide-details
+    class="m-2 pa-2"
+  />
+  <v-text-field
+    v-model="form.recognition"
+    label="Recognition"
+    dense
+variant="outlined"
+    hide-details
+    class="m-2 pa-2"
+  />
+  </v-col>
+          </v-row>
+
+          <v-row>
             <v-col cols="12" sm="6">
               <v-file-upload
                 clearable
@@ -197,45 +236,6 @@
   </div>
 </v-card>
 
-  
-    <v-card class="section-card mb-4">
-  <v-toolbar flat class="mb-4">
-    <v-toolbar-title>College Details</v-toolbar-title>
-  </v-toolbar>
-
-  <v-text-field
-    v-model="form.established"
-    label="Established"
-    dense
-    outlined
-    hide-details
-    class="m-2 pa-2"
-  />
-  <v-text-field
-    v-model="form.affiliatedTo"
-    label="Affiliated To"
-    dense
-    outlined
-    hide-details
-    class="m-2 pa-2"
-  />
-  <v-text-field
-    v-model="form.approvedBy"
-    label="Approved By"
-    dense
-    outlined
-    hide-details
-    class="m-2 pa-2"
-  />
-  <v-text-field
-    v-model="form.recognition"
-    label="Recognition"
-    dense
-    outlined
-    hide-details
-    class="m-2 pa-2"
-  />
-</v-card>
 
     <!-- Why Choose Us -->
 <v-card class="section-card">
@@ -255,7 +255,7 @@
   </div>
 </v-card>
 
-<!-- Repeat for other sections -->
+
 
 <!-- Facilities -->
 <v-card class="section-card">
@@ -274,6 +274,39 @@
     </div>
   </div>
 </v-card>
+
+<v-card class="section-card pa-4 mb-4">
+      <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+        <v-toolbar-title>Eligibility, Scholarships & Dates</v-toolbar-title>
+      </v-toolbar>
+
+      <v-textarea v-model="form.eligibility" label="Eligibility" outlined dense auto-grow class="mb-3" />
+      <v-textarea v-model="form.scholarships" label="Scholarships" outlined dense auto-grow class="mb-3" />
+      <v-textarea v-model="form.importantDates" label="Important Dates" outlined dense auto-grow class="mb-3" />
+    </v-card>
+
+    <!-- COURSES SECTION -->
+    <v-card class="section-card pa-4">
+      <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+        <v-toolbar-title>Courses Offered</v-toolbar-title>
+      </v-toolbar>
+
+      <v-btn class="mb-2" @click="addCourse">+ Add Course</v-btn>
+
+      <div v-for="(course, index) in form.courses" :key="index" class="mb-4">
+        <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+          <v-text-field v-model="course.name" label="Course Name" outlined dense class="mb-3" />
+          <v-text-field v-model="course.duration" label="Duration" outlined dense class="mb-3" />
+          <v-text-field v-model="course.eligibility" label="Eligibility" outlined dense class="mb-3" />
+          <v-text-field v-model="course.seats" label="Seats" type="number" outlined dense class="mb-3" />
+          <div class="d-flex justify-end">
+            <v-btn icon color="error" @click="removeCourse(index)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </div>
+    </v-card>
 
 <!-- Hospital Tie-Ups -->
 <v-card class="section-card">
@@ -310,45 +343,6 @@
     </div>
   </div>
 </v-card>
-
-<!-- Faculty -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Faculty</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addFaculty">+ Add Faculty</v-btn>
-  <div v-for="(member, index) in form.faculty" :key="index" class="mb-4" style="padding: 20px">
-    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-text-field v-model="member.name" label="Name" dense outlined hide-details class="mb-3" />
-      <v-text-field v-model="member.designation" label="Designation" dense outlined hide-details class="mb-3" />
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeFaculty(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-<!-- Related Colleges -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Related Colleges</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addRelatedCollege">+ Add College</v-btn>
-  <div v-for="(college, index) in form.relatedColleges" :key="index" class="mb-4" style="padding: 20px">
-    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-text-field v-model="college.name" label="College Name" dense outlined hide-details class="mb-3" />
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeRelatedCollege(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-    
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -507,10 +501,14 @@ export default {
       coursesOffered: [],
       whyChoose: [],
       facilities: [],
+      eligibility: '',
+      scholarships: '',
+      importantDates: '',
+      courses: [
+        { name: '', duration: '', eligibility: '', seats: '' }
+      ],
       hospitalTieUps: [],
       careerServices: [],
-      faculty: [],
-      relatedColleges: [],
         testimonials: [],
         googleMapLink: "",
       },
@@ -615,6 +613,12 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
+    addCourse() {
+    this.form.courses.push({ name: '', duration: '', eligibility: '', seats: '' });
+  },
+  removeCourse(index) {
+    this.form.courses.splice(index, 1);
+  },
      addWhyChoose() {
   this.form.whyChoose.push({ text: '' });
 },
@@ -649,19 +653,6 @@ removeCareerService(index) {
   this.form.careerServices.splice(index, 1);
 },
 
-addFaculty() {
-  this.form.faculty.push({ name: '', designation: '' });
-},
-removeFaculty(index) {
-  this.form.faculty.splice(index, 1);
-},
-
-addRelatedCollege() {
-  this.form.relatedColleges.push({ name: '' });
-},
-removeRelatedCollege(index) {
-  this.form.relatedColleges.splice(index, 1);
-},
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -736,15 +727,20 @@ removeRelatedCollege(index) {
   this.form.affiliatedTo = profile.affiliatedTo || '';
   this.form.approvedBy = profile.approvedBy || '';
   this.form.recognition = profile.recognition || '';
+this.form.eligibility = profile.eligibility || '';
+  this.form.scholarships = profile.scholarships || '';
+  this.form.importantDates = profile.importantDates || '';
+
+  this.form.courses = Array.isArray(profile.courses) && profile.courses.length
+    ? profile.courses
+    : [{ name: '', duration: '', eligibility: '', seats: '' }];
 
   this.form.coursesOffered = (profile.coursesOffered || []).map(c => ({ value: c }));
   this.form.whyChoose = (profile.whyChoose || []).map(w => ({ value: w }));
-  this.form.facilities = (profile.facilities || []).map(f => ({ value: f }));
+  this.form.facilities = (profile.facilities || []).map(f => ({ name: f }));
   this.form.hospitalTieUps = (profile.hospitalTieUps || []).map(h => ({ value: h }));
   this.form.careerServices = (profile.careerServices || []).map(c => ({ value: c }));
-  this.form.relatedColleges = (profile.relatedColleges || []).map(r => ({ value: r }));
 
-  this.form.faculty = profile.faculty || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -766,15 +762,17 @@ removeRelatedCollege(index) {
   formData.append('affiliatedTo', this.form.affiliatedTo);
   formData.append('approvedBy', this.form.approvedBy);
   formData.append('recognition', this.form.recognition);
+ formData.append("eligibility", this.form.eligibility);
+  formData.append("scholarships", this.form.scholarships);
+  formData.append("importantDates", this.form.importantDates);
 
+  formData.append("courses", JSON.stringify(this.form.courses));
   formData.append('coursesOffered', JSON.stringify(this.form.coursesOffered.map(c => c.value)));
   formData.append('whyChoose', JSON.stringify(this.form.whyChoose.map(w => w.value)));
-  formData.append('facilities', JSON.stringify(this.form.facilities.map(f => f.value)));
+  formData.append('facilities', JSON.stringify(this.form.facilities.map(f => f.name)));
   formData.append('hospitalTieUps', JSON.stringify(this.form.hospitalTieUps.map(h => h.value)));
   formData.append('careerServices', JSON.stringify(this.form.careerServices.map(c => c.value)));
-  formData.append('relatedColleges', JSON.stringify(this.form.relatedColleges.map(r => r.value)));
 formData.append("tags", JSON.stringify(this.form.tags));
-  formData.append('faculty', JSON.stringify(this.form.faculty));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {

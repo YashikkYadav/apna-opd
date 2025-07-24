@@ -35,6 +35,7 @@ const PharmacyLocationCard = ({ website_url = '{{website_url}}',
 
     return (
         <motion.section
+            id="pharmacyLocationSection"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

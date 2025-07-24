@@ -37,10 +37,10 @@ const AboutSection = ({
                 {/* Stat Cards */}
                 <div className="grid grid-cols-2 gap-4">
                     {[
-                        { label: "Since", value: year_established },
-                        { label: "Happy Members", value: members },
-                        { label: "Expert Trainers", value: trainers },
-                        { label: "Open Hours", value: "24/7" },
+                        { label: "Since", value: healthProfile?.established  },
+                        { label: "Happy Members", value: healthProfile?.totalMembers  },
+                        { label: "Expert Trainers", value: healthProfile?.noOfTrainers },
+                        { label: "Open Hours", value: healthProfile?.operatingHours },
                     ].map((item, idx) => (
                         <motion.div
                             key={idx}

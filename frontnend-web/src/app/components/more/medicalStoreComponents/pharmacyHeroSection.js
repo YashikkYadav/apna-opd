@@ -3,12 +3,17 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Phone, MapPin, Clock } from 'lucide-react';
+import { useState } from 'react';
+import CallSection from './CallSection';
+import { useRouter } from 'next/navigation'; 
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
     const features = data?.features?.filter(f => f.enabled) || [];
-
+    const [modalOpen, setModalOpen] = useState(false);
+    const router = useRouter();
     return (
         <motion.section
+
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, type: 'spring' }}
@@ -44,7 +49,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                         <MapPin className="w-5 h-5" /> {data?.location || "Your City"}
                     </span>
                     <span className="flex items-center gap-2">
-                        <Clock className="w-5 h-5" /> Open: 8 AM – 11 PM
+                        <Clock className="w-5 h-5" /> Open: {healthProfile?.openTime || "9:00 AM"} - {healthProfile?.closeTime || "9:00 PM" }
                     </span>
                     {lastUpdate && (
                         <span className="flex items-center gap-2">
@@ -64,15 +69,23 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-                    <button className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+                    <button 
+                    onClick={() => router.push(`/detail/pharmacy/${data?.name}/MedicineOrder`)}
+                    className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🛒 Order Medicines
                     </button>
-                    <a href={`tel:${data?.phone}`}>
-                        <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
-                            📞 Call Pharmacy
-                        </button>
-                    </a>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button 
+                    onClick={() => setModalOpen(true)}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📞 Call Pharmacy
+                    </button>
+                    <CallSection isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("pharmacyLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📍 View Location
                     </button>
                 </div>

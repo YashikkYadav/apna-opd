@@ -1,7 +1,10 @@
 'use client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { FaStar,FaStarHalfAlt,FaRegStar } from 'react-icons/fa';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { useState } from 'react';
+import ApplyNow from './ApplyNow';
+import CallNow from "../VeterinaryComponents/CallNow";
 function getStarIcons(rating) {
     const stars = [];
     const safeRating = rating ?? 0;
@@ -41,6 +44,8 @@ const CollegeHeroSection = ({
     healthProfile,
     data
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -80,7 +85,7 @@ const CollegeHeroSection = ({
                         {rating}/5
                     </span>
                     <span className="text-white/70 text-lg ml-2">
-                        ({reviewCount} reviews)
+                        ({healthProfile?.reviewCount} reviews)
                     </span>
                 </div>
 
@@ -95,19 +100,28 @@ const CollegeHeroSection = ({
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-                    <button className="bg-white text-blue-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-blue-100 transition hover:scale-105">
+                    <button
+                        onClick={() => setModalOpen(true)}
+                        className="bg-white text-blue-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-blue-100 transition hover:scale-105">
                         🎓 Apply Now
                     </button>
+                    <ApplyNow isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                     <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-700 transition hover:scale-105">
                         📄 Download Brochure
                     </button>
                     <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-blue-700 transition hover:scale-105">
                         🌐 Visit Website
                     </button>
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+                        📞 Call Now
+                    </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
                 </div>
 
-               
-                
+
+
             </div>
         </motion.section>
     );

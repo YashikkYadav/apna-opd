@@ -8,40 +8,9 @@ import {
 } from 'react-icons/fa';
 import { GiTestTubes, GiSyringe } from 'react-icons/gi';
 
-const services = [
-  {
-    icon: <GiTestTubes size={36} />,
-    title: 'IVF (In Vitro Fertilization)',
-    desc: 'Advanced IVF treatments with the latest technology and highest success rates',
-  },
-  {
-    icon: <GiSyringe size={36} />,
-    title: 'IUI (Intrauterine Insemination)',
-    desc: 'Less invasive fertility treatment option with excellent outcomes',
-  },
-  {
-    icon: <FaMicroscope size={36} />,
-    title: 'ICSI',
-    desc: 'Specialized technique for male factor infertility with high success rates',
-  },
-  {
-    icon: <FaGift size={36} />,
-    title: 'Donor Programs',
-    desc: 'Comprehensive egg and sperm donation programs with rigorous screening',
-  },
-  {
-    icon: <FaSnowflake size={36} />,
-    title: 'Egg/Sperm Freezing',
-    desc: 'Preserve your fertility for the future with advanced cryopreservation',
-  },
-  {
-    icon: <FaHeartbeat size={36} />,
-    title: 'Embryo Transfer',
-    desc: 'Precision embryo transfer procedures for optimal pregnancy outcomes',
-  },
-];
 
-const FertilityServices = ({ data }) => {
+
+const FertilityServices = ({ data,healthProfile }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -59,7 +28,7 @@ const FertilityServices = ({ data }) => {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {services.map((service, idx) => (
+        {healthProfile?.services?.map((service, idx) => (
           <motion.div
             key={idx}
             whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.4)' }}

@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from "react";
 
-export default function FreeTrialModal({ isOpen, onClose }) {
+export default function BookConsultation({ isOpen, onClose }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [message, setMessage] = useState("");
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState("");
     const [generatedOtp, setGeneratedOtp] = useState("");
@@ -40,7 +41,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-blue-200">
                 {!submitted ? (
                     <>
-                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Book a Session</h2>
+                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Book a Consultation</h2>
 
                         <input
                             type="text"
@@ -57,7 +58,8 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             className="w-full mb-3 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <textarea
+
+                         <textarea
                             placeholder="Message (Optional)"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -103,8 +105,8 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             disabled={!verified}
                             onClick={handleSubmit}
                             className={`w-full py-2 rounded-lg text-white font-semibold ${verified
-                                ? "bg-blue-600 hover:bg-blue-700 transition"
-                                : "bg-blue-300 cursor-not-allowed"
+                                    ? "bg-blue-600 hover:bg-blue-700 transition"
+                                    : "bg-blue-300 cursor-not-allowed"
                                 }`}
                         >
                             Submit

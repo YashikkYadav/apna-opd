@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const FooterCTA = ({healthProfile }) => {
+import { useState } from 'react';
+import BookSession from './BookSession';
+const FooterCTA = ({healthProfile,data }) => {
+    const [modelOpen, setModalOpen] = useState(false);
     return (
         <motion.footer
             initial={{ opacity: 0, y: 40 }}
@@ -22,12 +24,14 @@ const FooterCTA = ({healthProfile }) => {
             <div className="flex justify-center flex-wrap gap-4 mb-10">
                 <motion.a
                     whileHover={{ scale: 1.05 }}
-                    href="/book"
+                    // href="/book"
                     className="bg-white text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-6 rounded-full shadow-md transition-all"
-
+                    onClick ={() => setModalOpen(true)}
                 >
-                    Book with {healthProfile?.name}
+                    Book with {data?.name}
+
                 </motion.a>
+                <BookSession isOpen={modelOpen} onClose={() => setModalOpen(false)} />
                 <motion.a
                     whileHover={{ scale: 1.05 }}
                     href="/download-app"

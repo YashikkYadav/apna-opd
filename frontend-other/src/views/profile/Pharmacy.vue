@@ -161,6 +161,34 @@
           </v-row>
         </v-card>
 
+        <v-card class="section-card mb-6">
+  <v-toolbar flat class="mb-4" style="padding: 0 20px;">
+    <v-toolbar-title>Open and close Timing</v-toolbar-title>
+  </v-toolbar>
+
+  <v-row>
+    <v-col cols="12" sm="6">
+      <v-text-field
+        v-model="form.openTime"
+        label="Opening Time"
+        type="time"
+        outlined
+        dense
+      />
+    </v-col>
+
+    <v-col cols="12" sm="6">
+      <v-text-field
+        v-model="form.closeTime"
+        label="Closing Time"
+        type="time"
+        outlined
+        dense
+      />
+    </v-col>
+  </v-row>
+</v-card>
+
 <!-- tags -->
          <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -288,7 +316,7 @@
   <div v-for="(feature, index) in form.features" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
       <v-text-field v-model="feature.title" label="Title" dense outlined class="mb-3" hide-details></v-text-field>
-      <v-textarea v-model="feature.detail" label="Detail" dense outlined auto-grow hide-details class="mb-3"></v-textarea>
+      <!-- <v-textarea v-model="feature.detail" label="Detail" dense outlined auto-grow hide-details class="mb-3"></v-textarea> -->
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeFeature(index)">
           <v-icon>mdi-delete</v-icon>
@@ -467,6 +495,8 @@ export default {
       city: "",
       pincode: "",
       state: "",
+      openTime: '',
+      closeTime: '',
       tags: [''],
       features: [],
       servicesOffered: [],
@@ -608,7 +638,7 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
       addServiceOffered() {
-    this.form.servicesOffered.push({ name: '', description: '' });
+    this.form.servicesOffered.push({ name: '' });
   },
   removeServiceOffered(index) {
     this.form.servicesOffered.splice(index, 1);
@@ -657,7 +687,7 @@ export default {
 
   // FEATURES
   addFeature() {
-    this.form.features.push({ title: '', detail: '' });
+    this.form.features.push({ title: '' });
   },
   removeFeature(index) {
     this.form.features.splice(index, 1);
@@ -751,6 +781,8 @@ removeTag(index) {
     this.form.availableMedicines = profile.availableMedicines || [];
     this.form.features = profile.features || [];
     this.form.faqs = profile.faqs || [];
+    this.form.openTime = profile.openTime || '';
+  this.form.closeTime = profile.closeTime || '';
         this.form.testimonials = profile.testimonials || [];
        this.form.tags = profile.tags || [];
       }
@@ -773,6 +805,8 @@ removeTag(index) {
   formData.append("availableMedicines", JSON.stringify(this.form.availableMedicines));
   formData.append("features", JSON.stringify(this.form.features));
   formData.append("faqs", JSON.stringify(this.form.faqs));
+  formData.append('openTime', this.form.openTime);
+  formData.append('closeTime', this.form.closeTime);
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 

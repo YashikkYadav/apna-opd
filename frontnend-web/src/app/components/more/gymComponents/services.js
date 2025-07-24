@@ -28,7 +28,7 @@ const programs = [
     },
 ];
 
-const ProgramsAndServices = () => {
+const ProgramsAndServices = ({healthProfile}) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -49,7 +49,7 @@ const ProgramsAndServices = () => {
 
             {/* Program Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {programs.map((item, idx) => (
+                {healthProfile?.programs?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.03 }}

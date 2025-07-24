@@ -1,12 +1,17 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const timings = [
-    { label: 'Monday - Friday', value: '{{weekday_timings}}' },
-    { label: 'Sunday', value: '{{sunday_timings}}' },
-];
 
-const GymTimings = () => {
+
+const GymTimings = ({ healthProfile }) => {
+    const timings = [
+        {
+            label: 'Monday - Friday',
+            value: `${healthProfile?.regularOpening} : ${healthProfile?.regularClosing}`
+        },
+
+    { label: 'Sunday', value: `${healthProfile?.sundayOpening} : ${healthProfile?.sundayClosing}` },
+    ];
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}

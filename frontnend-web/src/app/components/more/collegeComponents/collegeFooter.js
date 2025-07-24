@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-
+import ApplyNow from './ApplyNow';
 const CollegeFooter = ({ healthProfile, applyLink = "#", campusVisitLink = "#" }) => {
+    const [modelOpen, setModalOpen] = React.useState(false);
     return (
         <motion.footer
             initial={{ opacity: 0, y: 40 }}
@@ -28,11 +29,12 @@ const CollegeFooter = ({ healthProfile, applyLink = "#", campusVisitLink = "#" }
             <div className="flex justify-center flex-wrap gap-4 mb-10">
                 <motion.a
                     whileHover={{ scale: 1.05 }}
-                    href={applyLink}
                     className="bg-white text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-8 rounded-full shadow-md transition-all"
+                    onClick={() => setModalOpen(true)}
                 >
                     Apply Now
                 </motion.a>
+                <ApplyNow isOpen={modelOpen} onClose={() => setModalOpen(false)} />
 
                 <motion.a
                     whileHover={{ scale: 1.05 }}

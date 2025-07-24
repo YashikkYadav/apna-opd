@@ -1,7 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FaGraduationCap } from 'react-icons/fa';
-
+import { useState } from 'react';
+import ApplyNow from './ApplyNow';
 const AdmissionProcess = ({
     application_start = '{{application_start}}',
     application_deadline = '{{application_deadline}}',
@@ -35,6 +36,7 @@ const AdmissionProcess = ({
             desc: 'Receive admission confirmation and complete enrollment',
         },
     ];
+    const [modelOpen, setModalOpen] = useState(false);
 
     return (
         <motion.section
@@ -117,9 +119,12 @@ const AdmissionProcess = ({
 
             {/* CTA */}
             <div className="text-center">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full transition hover:scale-105">
+                <button 
+                onClick={() => setModalOpen(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full transition hover:scale-105">
                     🎓 Apply Now
                 </button>
+                <ApplyNow isOpen={modelOpen} onClose={() => setModalOpen(false)} />
             </div>
         </motion.section>
     );

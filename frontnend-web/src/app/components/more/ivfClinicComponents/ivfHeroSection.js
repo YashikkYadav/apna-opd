@@ -2,7 +2,9 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-
+import { useState } from 'react';
+import BookConsultation from './BookConsultation';
+import CallNow from './CallNow';
 function getStarIcons(rating) {
   const stars = [];
   const safeRating = rating ?? 0;
@@ -35,6 +37,8 @@ const ClinicHeroSection = ({
   data,
   healthProfile
 }) => {
+  const [callModalOpen, setCallModalOpen] = useState(false);
+  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -69,7 +73,7 @@ const ClinicHeroSection = ({
 
         {/* Stars & Reviews */}
         <div className="flex items-center gap-2 justify-center md:justify-start">
-          {getStarIcons(rating)}
+          {getStarIcons(healthProfile?.rating)}
           <span className="text-white font-semibold ml-2">{healthProfile?.rating}/5</span>
           <span className="text-white/70 text-sm">({healthProfile?.reviewCount} reviews)</span>
         </div>
@@ -85,11 +89,25 @@ const ClinicHeroSection = ({
 
         {/* CTA Buttons */}
         <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-          <button className="bg-white text-[#0C65A0] text-lg px-6 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+          <button
+            onClick={() => setConsultationModalOpen(true)}
+            className="bg-white text-[#0C65A0] text-lg px-6 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
             📅 Book Consultation
           </button>
-          <button className="border-2 border-white text-white text-lg px-6 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+          <BookConsultation isOpen={consultationModalOpen} onClose={() => setConsultationModalOpen(false)} />
+          <button
+            onClick={() => setCallModalOpen(true)}
+            className="border-2 border-white text-white text-lg px-6 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
             📞 Call Now
+          </button>
+          <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+          <button
+            onClick={() => {
+              const section = document.getElementById("ivfLocationSection");
+              section?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+            📍 View Location
           </button>
         </div>
       </div>

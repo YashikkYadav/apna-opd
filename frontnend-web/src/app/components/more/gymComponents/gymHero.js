@@ -71,7 +71,7 @@ const HeroSection = ({
 
                 {/* Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                    {getStarIcons(rating)}
+                    {getStarIcons(healthProfile?.rating)}
                     <span className="text-white text-xl font-semibold ml-2">{healthProfile?.rating}/5</span>
                     <span className="text-white/70 text-lg ml-2">({healthProfile?.reviewCount} reviews)</span>
                 </div>

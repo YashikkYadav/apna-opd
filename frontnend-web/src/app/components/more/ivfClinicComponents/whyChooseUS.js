@@ -3,39 +3,7 @@ import { motion } from 'framer-motion';
 import { FaStar, FaHeartbeat, FaUsers, FaRupeeSign, FaFlask } from 'react-icons/fa';
 import { MdSupport, MdTrendingUp } from 'react-icons/md';
 
-const WhyChoose = ({ data }) => {
-    const features = [
-        {
-            icon: <MdTrendingUp className="text-blue-600 text-2xl" />,
-            title: "High Success Rates",
-            desc: "Consistently high success rates across all age groups with transparent reporting",
-        },
-        {
-            icon: <FaFlask className="text-blue-600 text-2xl" />,
-            title: "Advanced Laboratory",
-            desc: "State-of-the-art embryology lab with the latest technology and equipment",
-        },
-        {
-            icon: <FaUsers className="text-blue-600 text-2xl" />,
-            title: "Personalized Care",
-            desc: "Customized treatment plans designed specifically for your unique needs",
-        },
-        {
-            icon: <FaRupeeSign className="text-blue-600 text-2xl" />,
-            title: "Transparent Pricing",
-            desc: "Clear, upfront pricing with no hidden costs and flexible payment options",
-        },
-        {
-            icon: <MdSupport className="text-blue-600 text-2xl" />,
-            title: "Emotional Support",
-            desc: "Dedicated counseling and emotional support throughout your journey",
-        },
-        {
-            icon: <FaHeartbeat className="text-blue-600 text-2xl" />,
-            title: "Second Opinions",
-            desc: "Expert second opinions to ensure you receive the best possible care",
-        },
-    ];
+const WhyChoose = ({ data,healthProfile }) => {
 
     return (
         <motion.div
@@ -54,7 +22,7 @@ const WhyChoose = ({ data }) => {
 
             {/* Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {features.map((item, idx) => (
+                {healthProfile?.features?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 2px rgba(59,130,246,0.3)' }}

@@ -1,22 +1,12 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const FeatureTag = ({ enabled }) => (
-    <span
-        className={`text-xs font-semibold px-3 py-1 rounded-full ${
-            enabled
-                ? 'bg-blue-700 text-blue-800'
-                : 'bg-gray-100 text-gray-600'
-        }`}
-    >
-        {enabled ? 'Enabled' : 'Unavailable'}
-    </span>
-);
+
 
 const FeatureCard = ({ label, enabled }) => (
     <motion.div
         whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(9, 137, 234, 0.2)' }}
-        className={`rounded-2xl p-6 min-h-[160px] border-l-4 transition-all ${
+        className={`rounded-2xl p-6 min-h-[80px] border-l-4 transition-all ${
             enabled
                 ? 'bg-blue-50 border-blue-500'
                 : 'bg-gray-50 border-gray-300'
@@ -29,9 +19,6 @@ const FeatureCard = ({ label, enabled }) => (
         >
             {label}
         </h4>
-        <div className="mt-3">
-            <FeatureTag enabled={enabled} />
-        </div>
     </motion.div>
 );
 

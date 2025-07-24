@@ -50,7 +50,7 @@ export default function Home() {
                     <PhysioLocation data={data?.otherData} healthProfile={data?.healthProfile} />
                     <PhysioReviews data={data?.otherData} healthProfile={data?.healthProfile} />
                     <PhysioFAQS data={data} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} />
-                    <SupportOptions />
+                    {/* <SupportOptions /> */}
                 </div>
             </main>
         </div>

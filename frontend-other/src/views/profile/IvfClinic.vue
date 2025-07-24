@@ -50,6 +50,28 @@
               </v-textarea>
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-col>
+            <!-- Licensed By -->
+
+  <v-text-field v-model="form.licensedBy" label="Licensed By" dense variant="outlined" hide-details class="m-2 pa-2" />
+
+
+<!-- Success Rate -->
+  <v-text-field v-model="form.successRate" label="Success Rate" dense variant="outlined" hide-details class="m-2 pa-2" />
+
+          </v-col>
+            <v-col>
+  <!-- Couples Treated -->
+  <v-text-field v-model="form.couplesTreated" label="Couples Treated" dense variant="outlined" hide-details class="m-2 pa-2 rounded-2" />
+<!-- Specialization -->
+  <v-text-field v-model="form.specialization" label="Specialization" dense variant="outlined" hide-details class="m-2 pa-2" />
+
+</v-col>
+          </v-row>
+
+
           <v-row>
             <v-col cols="12" sm="6">
               <v-file-upload
@@ -198,38 +220,7 @@
 </v-card>
 
 
-        <!-- Licensed By -->
-<v-card class="section-card mb-4">
-  <v-toolbar flat class="mb-4">
-    <v-toolbar-title>Licensed By</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field v-model="form.licensedBy" label="Licensed By" dense outlined hide-details class="m-2 pa-2" />
-</v-card>
-
-<!-- Success Rate -->
-<v-card class="section-card mb-4 ">
-  <v-toolbar flat class="mb-4">
-    <v-toolbar-title>Success Rate</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field v-model="form.successRate" label="Success Rate" dense outlined hide-details class="m-2 pa-2" />
-</v-card>
-
-<!-- Specialization -->
-<v-card class="section-card mb-4">
-  <v-toolbar flat class="mb-4">
-    <v-toolbar-title>Specialization</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field v-model="form.specialization" label="Specialization" dense outlined hide-details class="m-2 pa-2" />
-</v-card>
-
-<!-- Couples Treated -->
-<v-card class="section-card mb-4 ">
-  <v-toolbar flat class="mb-4">
-    <v-toolbar-title>Couples Treated</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field v-model="form.couplesTreated" label="Couples Treated" dense outlined hide-details class="m-2 pa-2 rounded-2" />
-</v-card>
-
+      
 <!-- Degrees -->
 <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -286,7 +277,6 @@
   <v-btn class="mb-4" @click="addService">+ Add Service</v-btn>
   <div v-for="(service, index) in form.services" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
     <v-text-field v-model="service.name" label="Service Name" dense outlined class="mb-3" />
-    <v-textarea v-model="service.details" label="Details" dense outlined auto-grow class="mb-3" />
     <div class="d-flex justify-end">
       <v-btn icon color="error" @click="removeService(index)">
         <v-icon>mdi-delete</v-icon>
@@ -584,7 +574,7 @@ removeTag(index) {
   },
 
   addService() {
-    this.form.services.push({ name: '', details: '' });
+    this.form.services.push({ name: '' });
   },
   removeService(index) {
     this.form.services.splice(index, 1);

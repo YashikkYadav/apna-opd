@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { ClipboardList, MessageCircle, Package as PackageIcon, Phone, MapPin, Star } from 'lucide-react';
-
+import { useState } from 'react';
+import BookTest from './BookTests';
+import CallNow from './CallNow';
 const getStarIcons = (rating = 0) => {
     const fullStars = Math.floor(rating);
     const halfStar = rating - fullStars > 0.5;
@@ -18,11 +20,11 @@ const getStarIcons = (rating = 0) => {
 
 const HeroSection = ({
     res_data,
-    setShowModal,
-    setModalTest,
     data,
     healthProfile
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const name = data?.name ?? "HealthLab Diagnostics";
     const location = data?.location ?? "City";
     const address = data?.address ?? "";
@@ -66,7 +68,12 @@ const HeroSection = ({
                 {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
-                    <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
+                    <div
+                        onClick={() => {
+                            const section = document.getElementById("labLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
                         <MapPin className="w-5 h-5" />
                         <span>{location} {address}</span>
                     </div>
@@ -92,31 +99,33 @@ const HeroSection = ({
                 <div className="flex flex-wrap gap-3 mt-2">
                     <button
                         className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 flex items-center gap-2 shadow-lg transition text-base"
-                        onClick={() => {
-                            setShowModal(true);
-                            setModalTest(null);
-                        }}
+                        onClick={() => setModalOpen(true)}
                     >
                         <ClipboardList className="w-4 h-4" /> Book Test
                     </button>
-                    <button 
-                    onClick={() => {
-                                const section = document.getElementById("labPackagesSection");
-                                section?.scrollIntoView({ behavior: "smooth" });
-                            }}
-                    className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                    <BookTest isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("labPackagesSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                         <PackageIcon className="w-4 h-4" /> Browse Packages
                     </button>
-                    <a href={`tel:${phone}`}>
-                        <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                            <Phone className="w-4 h-4" /> Call Now
-                        </button>
-                    </a>
-                    <a href={`https://wa.me/91${phone}`} target="_blank" rel="noopener noreferrer">
-                        <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                            <MessageCircle className="w-4 h-4" /> WhatsApp
-                        </button>
-                    </a>
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📞 Call Now
+                    </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("labLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="border-2 border-white text-white text-lg px-8 py-2 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📍 View Location
+                    </button>
                 </div>
             </div>
 
