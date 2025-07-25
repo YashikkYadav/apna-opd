@@ -35,9 +35,6 @@ function getStarIcons(avgRating) {
 
 const HeroSection = ({
     profileData,
-    rating,
-    reviewCount,
-    availabilityStatus,
     imageUrl = '/images/blood-bank.jpg',
     healthProfile, data
 }) => {
