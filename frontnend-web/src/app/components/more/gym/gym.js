@@ -39,8 +39,8 @@ const Gym = ({ serviceData }) => {
                 <Image
                   src={
                     gym.profiles &&
-                    gym.profiles.length > 0 &&
-                    gym.profiles[0].images.length > 0
+                      gym.profiles.length > 0 &&
+                      gym.profiles[0].images.length > 0
                       ? gym.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
@@ -70,7 +70,7 @@ const Gym = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/more/gym/${gym._id}/details`)
+                  navigate.push(`/detail/Gym/${gym._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

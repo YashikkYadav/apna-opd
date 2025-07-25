@@ -62,6 +62,7 @@ const Register = () => {
     { value: "nursing_staff", label: "Nursing Staff" },
     { value: "radiologist", label: "Radiologist" },
     { value: "laboratory", label: "Laboratory" },
+    {value:"ivf_clinic",label:"IVF Clinic"}
   ];
 
   const subscriptionTypes = [
@@ -198,7 +199,9 @@ const Register = () => {
         if (response.paymentUrl) {
           setTimeout(() => {
             window.location.href = response.paymentUrl.paymentLink;
+            
           }, 2000);
+          
         } else {
           router.push('/');
         }
@@ -359,11 +362,15 @@ const Register = () => {
           if (
             formData.registrationFor !== "blood_donor" &&
             response.paymentUrl
+            
           ) {
+            console.log("Payment URL: ", response.paymentUrl);
             window.location.href = response.paymentUrl;
           } else {
+            console.log("No payment URL, redirecting to home");
             router.push("/");
           }
+
         }, 2000);
       }
     } catch (error) {

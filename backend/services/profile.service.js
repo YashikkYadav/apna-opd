@@ -322,6 +322,21 @@ const addHealthServeProfileData = async (data) => {
       case 'laboratory':
         Model = healthlabProfile;
         break;
+      case 'vatenary':
+        Model = healthlabProfile;
+        break
+      case 'blood_bank':
+        Model = healthlabProfile
+        break
+      case 'nursing_medical_college':
+        Model = healthlabProfile
+        break
+      case 'gym':
+        Model = healthlabProfile
+        break
+      case 'ivf_clinic':
+        Model = healthlabProfile
+        break
       default:
         throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
     }
@@ -333,7 +348,7 @@ const addHealthServeProfileData = async (data) => {
     const doc = await Model.findOneAndUpdate(filter, update, options);
     return {
       statusCode: 201,
-      ok:true,
+      ok: true,
       healthServeProfile: doc, // return saved document
     };
 
@@ -341,7 +356,7 @@ const addHealthServeProfileData = async (data) => {
     return {
       statusCode: 500,
       error: error.message,
-      ok:false
+      ok: false
     };
   }
 }
@@ -350,11 +365,11 @@ const getHealthServeProfileData = async (healthServeId) => {
   try {
 
 
- let healthServeProfile = await HealthServe.findById(healthServeId);
+    let healthServeProfile = await HealthServe.findById(healthServeId);
 
     let Model;
 
-    console.log('healthServeProfile.type',healthServeProfile.type)
+    console.log('healthServeProfile.type', healthServeProfile.type)
     // Determine model based on type
     switch (healthServeProfile.type) {
       case 'physiotherapist':
@@ -366,23 +381,38 @@ const getHealthServeProfileData = async (healthServeId) => {
       case 'laboratory':
         Model = healthlabProfile;
         break;
+      case 'vatenary':
+        Model = healthlabProfile;
+        break
+      case 'blood_bank':
+        Model = healthlabProfile
+        break
+      case 'nursing_medical_college':
+        Model = healthlabProfile
+        break
+      case 'gym':
+        Model = healthlabProfile
+        break
+      case 'ivf_clinic':
+        Model = healthlabProfile
+        break
       default:
         throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
     }
 
     const doc = await Model.findOne({ healthServeId });
-    
+    console.log('doc')
     return {
       statusCode: 201,
       healthServeProfile: doc, // return saved document,
-      healthServeUser:healthServeProfile,
-      ok:true
+      healthServeUser: healthServeProfile,
+      ok: true
     };
 
   } catch (error) {
     return {
       statusCode: 500,
-      ok:true,
+      ok: true,
       error: error.message,
     };
   }

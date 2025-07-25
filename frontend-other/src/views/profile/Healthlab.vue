@@ -1,855 +1,982 @@
 <template>
-    <form class="healthlab-admin" @submit.prevent="saveData">
-        <v-container fluid class="full-screen-container">
-            <!-- Manual Save Button -->
-            <v-row>
-                <v-col cols="12">
-                    <v-btn color="primary" large @click="saveData" class="mb-6">
-                        <v-icon left>mdi-content-save</v-icon>
-                        Save All Changes
-                    </v-btn>
-                    <v-btn color="red" large @click="testClick" class="mb-6 ml-4">
-                        <v-icon left>mdi-alert</v-icon>
-                        Test Button
-                    </v-btn>
-                </v-col>
-            </v-row>
-            <!-- Status Messages -->
-            <v-alert v-if="message" :type="messageType" class="mb-4" closable @click:close="message = ''">
-                {{ message }}
-            </v-alert>
-            <!-- Remove all v-card-title (section headings) and main dashboard heading -->
-            <!-- Keep only v-card-text and forms/tables -->
-            <!-- Header -->
-            <v-card class="mb-6" elevation="2">
-                <v-card-title class=" text-white">
-                    <v-icon left>mdi-flask</v-icon>
-                    HealthLab Admin Dashboard
-                </v-card-title>
-            </v-card>
+  <v-form @submit.prevent ref="form">
+    <v-container class="prescription-page" style="max-width: 100%">
+      <div class="profile">
+        <v-card class="section-card pb-4">
+          <v-toolbar
+            class="mb-4"
+            flat
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Basic Details</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <v-textarea
+                v-model="form.introduction"
+                ref="introductionRef"
+                label="Introduction"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.experience"
+                ref="experienceRef"
+                type="number"
+                label="Experience"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <v-textarea
+                v-model="form.about"
+                ref="aboutRef"
+                label="About"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-file-upload
+                clearable
+                density="compact"
+                variant="compact"
+                title="Drag and drop profile image"
+                show-size
+                :model-value="profileImage"
+                @update:modelValue="handleProfileChange"
+              ></v-file-upload>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-file-upload
+                clearable
+                multiple
+                :max="6"
+                density="compact"
+                variant="compact"
+                title="Drag and drop gallery image (max: 6)"
+                show-size
+                :model-value="galleryImages"
+                @update:modelValue="handleGalleryChange"
+              ></v-file-upload>
+            </v-col>
+          </v-row>
+          <v-row>
+            <div class="image-gallery">
+              <div
+                v-for="(img, index) in sortedImages"
+                :key="index"
+                class="image-card"
+              >
+                <div class="image-container">
+                  <img :src="img.url" :alt="img.filename" class="image" />
+                  <button class="delete-button" @click="confirmDelete(img)">
+                    ✖
+                  </button>
+                </div>
+                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                  {{ "Profile" }}
+                </div>
+                <div v-if="img.type === 'galleryImages'" class="image-type">
+                  {{ "Gallery" }}
+                </div>
+              </div>
+            </div>
+          </v-row>
+        </v-card>
+        <v-card class="section-card">
+          <v-toolbar
+            class="mb-4"
+            flatdiv
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Address</v-toolbar-title>
+          </v-toolbar>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.address"
+                label="Address"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.locality"
+                label="Locality"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.city"
+                label="City"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.state"
+                label="State"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.pincode"
+                label="Pincode"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" class="text-end">
+              <v-btn color="primary" @click="openMapDialog">
+                Select Location on Map
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
 
-            <!-- Basic Lab Information -->
-            <v-card class="mb-6 w-100 full-width-card" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">Basic Lab Information</v-card-title>
-                <v-card-text>
-                    <v-row>
-                        <v-col cols="12" md="6">
-                            <v-text-field v-model="labInfo.name" label="Lab Name" variant="outlined" class="mb-4" />
-                        </v-col>
-                        <v-col cols="12" md="6">
-                            <v-text-field v-model="labInfo.location" label="Location" variant="outlined" class="mb-4" />
-                        </v-col>
-                        <v-col cols="12" md="6">
-                            <v-text-field v-model="labInfo.phone" label="Phone" variant="outlined" class="mb-4" />
-                        </v-col>
-                        <v-col cols="12" md="6">
-                            <v-text-field v-model="labInfo.email" label="Email" variant="outlined" class="mb-4" />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-textarea v-model="labInfo.description" label="Description" rows="3" variant="outlined"
-                                class="mb-4" />
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
+        <!-- tags -->
+         <v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+  </v-toolbar>
 
-            <!-- Certifications Management -->
-            <v-card class="mb-6 w-100 full-width-card" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">Certifications Management</v-card-title>
-                <v-card-text>
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(cert, index) in certifications" :key="index">
-                            <v-text-field v-model="certifications[index]" :label="`Certification ${index + 1}`"
-                                variant="outlined" class="mb-2" />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-btn color="primary" @click="addCertification">
-                                <v-icon left>mdi-plus</v-icon>
-                                Add Certification
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
+  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-            <!-- Tests Management -->
-            <v-card class="mb-6" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">Tests Management</v-card-title>
-                <v-card-text>
-                    <!-- Add New Test Form -->
-                    <v-card variant="outlined" class="mb-6 pa-4">
-                        <h3 class="text-h6 mb-4">Add New Test</h3>
-                        <v-row>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.name" label="Test Name" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.icon" label="Icon (emoji)" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.sampleType" label="Sample Type" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.reportTime" label="Report Time" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.originalPrice" label="Original Price (₹)"
-                                    variant="outlined" type="number" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.discountedPrice" label="Discounted Price (₹)"
-                                    variant="outlined" type="number" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newTest.category" label="Category" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-switch v-model="newTest.homeCollection" label="Home Collection" color="success" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-switch v-model="newTest.popular" label="Popular Test" color="success" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-btn color="primary" @click="addNewTest" :disabled="!isTestFormValid">
-                                    <v-icon left>mdi-plus</v-icon>
-                                    Add Test
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card>
+  <div
+    v-for="(tag, index) in form.tags"
+    :key="index"
+    class="mb-4"
+    style="padding: 20px"
+  >
+    <div
+      class="pa-4"
+      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
+    >
+      <v-text-field
+        v-model="form.tags[index]"
+        label="Tag"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
 
-                    <v-data-table :headers="testHeaders" :items="testsData" class="elevation-1">
-                        <template v-slot:top>
-                            <v-btn color="primary" @click="addTest" class="mb-4">
-                                <v-icon left>mdi-plus</v-icon>
-                                Add Test (Legacy)
-                            </v-btn>
-                        </template>
-                        <template v-slot:item.actions="{ item }">
-                            <v-btn color="error" size="small" @click="removeTest(item.index)">
-                                Remove
-                            </v-btn>
-                        </template>
-                        <template v-slot:item.homeCollection="{ item }">
-                            <v-switch v-model="item.homeCollection" color="success" />
-                        </template>
-                        <template v-slot:item.popular="{ item }">
-                            <v-switch v-model="item.popular" color="success" />
-                        </template>
-                    </v-data-table>
-                </v-card-text>
-            </v-card>
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeTag(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
 
-            <!-- Packages Management -->
-            <v-card class="mb-6" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">Packages Management</v-card-title>
-                <v-card-text>
-                    <!-- Add New Package Form -->
-                    <v-card variant="outlined" class="mb-6 pa-4">
-                        <h3 class="text-h6 mb-4">Add New Package</h3>
-                        <v-row>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.name" label="Package Name" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.testsCount" label="Number of Tests" variant="outlined"
-                                    type="number" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea v-model="newPackage.tests" label="Tests (comma separated)" rows="2"
-                                    variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.recommendedFor" label="Recommended For"
-                                    variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.originalPrice" label="Original Price (₹)"
-                                    variant="outlined" type="number" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.discountedPrice" label="Discounted Price (₹)"
-                                    variant="outlined" type="number" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newPackage.reportTime" label="Report Time" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-switch v-model="newPackage.homeCollection" label="Home Collection" color="success" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-switch v-model="newPackage.popular" label="Popular Package" color="success" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-btn color="primary" @click="addNewPackage" :disabled="!isPackageFormValid">
-                                    <v-icon left>mdi-plus</v-icon>
-                                    Add Package
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card>
+        
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Key Features</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2 ml-4" @click="addKeyFeature">+ Add Feature</v-btn>
+  <div v-for="(feature, index) in form.keyFeatures" :key="index" class="px-4 pb-2">
+    <v-text-field
+      v-model="form.keyFeatures[index]"
+      label="Feature"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-btn icon color="error" @click="removeKeyFeature(index)">
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
+  </div>
+</v-card>
 
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(pkg, index) in packagesData" :key="index">
-                            <v-card variant="outlined" class="pa-4">
-                                <v-text-field v-model="pkg.name" label="Package Name" variant="outlined" class="mb-2" />
-                                <v-text-field v-model.number="pkg.testsCount" label="Number of Tests" type="number"
-                                    variant="outlined" class="mb-2" />
-                                <v-textarea :value="Array.isArray(pkg.tests) ? pkg.tests.join(', ') : pkg.tests"
-                                    label="Tests (comma separated)" rows="2" variant="outlined" class="mb-2"
-                                    @input="updatePackageTests(index, $event.target.value)" />
-                                <v-text-field v-model="pkg.recommendedFor" label="Recommended For" variant="outlined"
-                                    class="mb-2" />
-                                <v-text-field v-model.number="pkg.originalPrice" label="Original Price" type="number"
-                                    variant="outlined" class="mb-2" />
-                                <v-text-field v-model.number="pkg.discountedPrice" label="Discounted Price"
-                                    type="number" variant="outlined" class="mb-2" />
-                                <v-text-field v-model="pkg.reportTime" label="Report Time" variant="outlined"
-                                    class="mb-2" />
-                                <v-switch v-model="pkg.homeCollection" label="Home Collection Available" color="success"
-                                    class="mb-2" />
-                                <v-switch v-model="pkg.popular" label="Popular Package" color="success" class="mb-2" />
-                                <v-btn color="error" size="small" @click="removePackage(index)">
-                                    Remove
-                                </v-btn>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-btn color="primary" @click="addPackage">
-                                <v-icon left>mdi-plus</v-icon>
-                                Add Package (Legacy)
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
 
-            <!-- Reviews Management -->
-            <v-card class="mb-6" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">Reviews Management</v-card-title>
-                <v-card-text>
-                    <!-- Add New Review Form -->
-                    <v-card variant="outlined" class="mb-6 pa-4">
-                        <h3 class="text-h6 mb-4">Add New Review</h3>
-                        <v-row>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newReview.name" label="Customer Name" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newReview.test" label="Test/Package" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-rating v-model="newReview.rating" label="Rating" class="mb-2" />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field v-model="newReview.date" label="Date" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea v-model="newReview.comment" label="Review Comment" rows="3"
-                                    variant="outlined" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-btn color="primary" @click="addNewReview" :disabled="!isReviewFormValid">
-                                    <v-icon left>mdi-plus</v-icon>
-                                    Add Review
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card>
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2 ml-4" @click="addCertification">+ Add Certification</v-btn>
+  <div v-for="(cert, index) in form.certifications" :key="index" class="px-4 pb-2">
+    <v-text-field
+      v-model="form.certifications[index]"
+      label="Certification"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-btn icon color="error" @click="removeCertification(index)">
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
+  </div>
+</v-card>
 
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(review, index) in reviewsData" :key="index">
-                            <v-card variant="outlined" class="pa-4">
-                                <v-text-field v-model="review.name" label="Customer Name" variant="outlined"
-                                    class="mb-2" />
-                                <v-text-field v-model="review.test" label="Test/Package" variant="outlined"
-                                    class="mb-2" />
-                                <v-rating v-model="review.rating" label="Rating" class="mb-2" />
-                                <v-textarea v-model="review.comment" label="Comment" rows="3" variant="outlined"
-                                    class="mb-2" />
-                                <v-text-field v-model="review.date" label="Date" variant="outlined" class="mb-2" />
-                                <v-btn color="error" size="small" @click="removeReview(index)">
-                                    Remove
-                                </v-btn>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-btn color="primary" @click="addReview">
-                                <v-icon left>mdi-plus</v-icon>
-                                Add Review (Legacy)
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
 
-            <!-- FAQs Management -->
-            <v-card class="mb-6" elevation="2">
-                <v-card-title class="bg-blue-lighten-5 section-heading">FAQs Management</v-card-title>
-                <v-card-text>
-                    <!-- Add New FAQ Form -->
-                    <v-card variant="outlined" class="mb-6 pa-4">
-                        <h3 class="text-h6 mb-4">Add New FAQ</h3>
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field v-model="newFAQ.question" label="Question" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea v-model="newFAQ.answer" label="Answer" rows="3" variant="outlined" />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-btn color="primary" @click="addNewFAQ" :disabled="!isFAQFormValid">
-                                    <v-icon left>mdi-plus</v-icon>
-                                    Add FAQ
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-card>
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2 ml-4" @click="addPackage">+ Add Package</v-btn>
+  <div v-for="(pkg, index) in form.packages" :key="index" class="px-4 pb-4">
+    <v-text-field
+      v-model="pkg.name"
+      label="Package Name"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-text-field
+      v-model="pkg.details"
+      label="Details"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-text-field
+      v-model="pkg.price"
+      label="Price"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-btn icon color="error" @click="removePackage(index)">
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
+  </div>
+</v-card>
 
-                    <v-row>
-                        <v-col cols="12" md="6" v-for="(faq, index) in faqData" :key="index">
-                            <v-card variant="outlined" class="pa-4">
-                                <v-text-field v-model="faq.question" label="Question" variant="outlined" class="mb-2" />
-                                <v-textarea v-model="faq.answer" label="Answer" rows="3" variant="outlined"
-                                    class="mb-2" />
-                                <v-btn color="error" size="small" @click="removeFAQ(index)">
-                                    Remove
-                                </v-btn>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-btn color="primary" @click="addFAQ">
-                                <v-icon left>mdi-plus</v-icon>
-                                Add FAQ (Legacy)
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-            </v-card>
-        </v-container>
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Tests</v-toolbar-title>
+  </v-toolbar>
 
-        <!-- Snackbar for notifications -->
-        <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="3000">
-            {{ snackbar.message }}
-        </v-snackbar>
+  <v-btn class="mb-2" @click="addTest">+ Add Test</v-btn>
 
-        <v-btn color="primary" type="submit" :loading="saving" size="large" class="submit-btn-bottom-right text-white">
-            <v-icon left>mdi-content-save</v-icon>
+  <div
+    v-for="(test, index) in form.tests"
+    :key="index"
+    class="mb-4"
+    style="padding: 20px"
+  >
+    <div
+      class="pa-4"
+      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;"
+    >
+      <v-text-field
+        v-model="test.name"
+        label="Test Name"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="test.description"
+        label="Description"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="test.fee"
+        label="Fee"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeTest(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+
+
+<v-card class="section-card">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-2 ml-4" @click="addFaq">+ Add FAQ</v-btn>
+  <div v-for="(faq, index) in form.faqs" :key="index" class="px-4 pb-4">
+    <v-text-field
+      v-model="faq.question"
+      label="Question"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <v-textarea
+      v-model="faq.answer"
+      label="Answer"
+      dense
+      outlined
+      hide-details
+      auto-grow
+    ></v-textarea>
+    <v-btn icon color="error" @click="removeFaq(index)">
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
+  </div>
+</v-card>
+
+
+        <!-- Testimonials -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Testimonials</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addTestimonial">+ Add Testimonial</v-btn>
+          <div
+            v-for="(testimonial, index) in form.testimonials"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-rating
+                v-model="testimonial.rating"
+                label="Rating"
+                dense
+                background-color="grey lighten-2"
+                color="primary"
+                class="mb-3"
+              ></v-rating>
+
+              <v-text-field
+                v-model="testimonial.title"
+                label="Title"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-textarea
+                v-model="testimonial.text"
+                label="Text"
+                dense
+                outlined
+                auto-grow
+                hide-details
+                class="mb-3"
+              ></v-textarea>
+
+              <v-text-field
+                v-model="testimonial.author"
+                label="Author"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTestimonial(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+      </div>
+    </v-container>
+    <v-container style="max-width: 100%">
+      <v-row>
+        <v-col cols="12" class="text-end">
+          <v-btn
+            className="saaro-btn"
+            type="submit"
+            color="#8f6cb4"
+            @click="onSubmit"
+            large
+          >
             Submit
-        </v-btn>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
 
-        <v-btn color="primary" @click="loadData" :loading="loading" class="mb-4">
-            <v-icon left>mdi-refresh</v-icon>
-            Reload
-        </v-btn>
-    </form>
+  <v-dialog v-model="itemDialog" max-width="500">
+    <v-card style="padding: 20px">
+      <v-card-title class="text-h6">Add New {{ itemType }}</v-card-title>
+      <v-card-text>
+        <v-text-field
+          v-model="newItemText"
+          label="Enter value"
+          variant="outlined"
+          dense
+        />
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn text @click="itemDialog = false">Cancel</v-btn>
+        <v-btn color="primary" @click="addItemFromDialog">Add</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Delete Confirmation Modal -->
+  <div v-if="showModal" class="modal-overlay">
+    <div class="modal">
+      <p>Are you sure you want to delete this image?</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" @click="deleteImage">Yes, Delete</button>
+        <button class="btn btn-cancel" @click="cancelDelete">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <v-dialog v-model="mapDialog" max-width="800">
+    <v-card>
+      <v-card-title>Select Location</v-card-title>
+      <v-card-text>
+        <div id="map" style="height: 400px; width: 100%"></div>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn text @click="mapDialog = false">Cancel</v-btn>
+        <v-btn color="primary" @click="confirmLocation">Confirm</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
-
 <script>
+import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
-
+import { useUiStore } from "@/store/UiStore";
+import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
-    name: 'HealthlabAdmin',
-    data() {
-        return {
-            saving: false,
-            loading: false,
-            snackbar: {
-                show: false,
-                message: '',
-                color: 'success'
-            },
-            labInfo: {
-                name: 'HealthLab Diagnostics',
-                location: 'Sector 15, Gurugram, Haryana',
-                phone: '+91 98765 43210',
-                email: 'info@healthlab.com',
-                description: 'Advanced diagnostics with cutting-edge technology • Blood Tests • Imaging • At-home Sample Collection'
-            },
-            certifications: ['NABL Certified', 'ISO 15189', 'CAP Accredited', 'ICMR Approved'],
-            testsData: [
-                { id: 1, name: 'Complete Blood Count (CBC)', icon: '🧸', sampleType: 'Blood', reportTime: 'Same Day', originalPrice: 800, discountedPrice: 399, homeCollection: true, category: 'blood', popular: true },
-                { id: 2, name: 'Liver Function Test (LFT)', icon: '🫀', sampleType: 'Blood', reportTime: '24 Hours', originalPrice: 1200, discountedPrice: 699, homeCollection: true, category: 'blood' },
-                { id: 3, name: 'Thyroid Function Test (TSH, T3, T4)', icon: '🦋', sampleType: 'Blood', reportTime: 'Same Day', originalPrice: 1500, discountedPrice: 899, homeCollection: true, category: 'hormonal' }
-            ],
-            testHeaders: [
-                { text: 'Name', value: 'name' },
-                { text: 'Icon', value: 'icon' },
-                { text: 'Sample Type', value: 'sampleType' },
-                { text: 'Report Time', value: 'reportTime' },
-                { text: 'Original Price', value: 'originalPrice' },
-                { text: 'Discounted Price', value: 'discountedPrice' },
-                { text: 'Home Collection', value: 'homeCollection' },
-                { text: 'Category', value: 'category' },
-                { text: 'Popular', value: 'popular' },
-                { text: 'Actions', value: 'actions', sortable: false }
-            ],
-            packagesData: [
-                { id: 1, name: 'Full Body Checkup Basic', testsCount: 58, tests: ['CBC', 'LFT', 'KFT', 'Lipid Profile', 'TSH', 'Blood Sugar', 'Urine R/M', 'ECG'], recommendedFor: 'Adults above 25', originalPrice: 4500, discountedPrice: 1999, reportTime: '24 Hours', homeCollection: true, popular: true },
-                { id: 2, name: 'Diabetes Care Package', testsCount: 12, tests: ['HbA1c', 'Fasting Glucose', 'Post Meal Glucose', 'Insulin', 'Microalbumin', 'Creatinine'], recommendedFor: 'Diabetic Patients', originalPrice: 2800, discountedPrice: 1499, reportTime: 'Same Day', homeCollection: true },
-                { id: 3, name: 'Heart Health Package', testsCount: 25, tests: ['Lipid Profile', 'CRP', 'Homocysteine', 'Troponin I', 'ECG', 'Echo', 'TMT'], recommendedFor: 'Adults above 40', originalPrice: 5500, discountedPrice: 2999, reportTime: '24 Hours', homeCollection: true }
-            ],
-            reviewsData: [
-                { id: 1, name: 'Priya Sharma', test: 'Full Body Checkup', rating: 5, comment: 'Excellent service! Home collection was punctual and reports were delivered on time. Very professional staff.', date: '2 days ago' },
-                { id: 2, name: 'Rajesh Kumar', test: 'Diabetes Package', rating: 5, comment: 'Great experience. The phlebotomist was skilled and the digital reports were very detailed. Highly recommended!', date: '1 week ago' },
-                { id: 3, name: 'Anita Gupta', test: 'Thyroid Test', rating: 4, comment: 'Good service overall. Report came within the promised time. Will use again for future tests.', date: '2 weeks ago' }
-            ],
-            faqData: [
-                { question: 'Can I reschedule my sample pickup?', answer: 'Yes, you can reschedule your sample pickup up to 2 hours before the scheduled time by calling our customer service or through WhatsApp.' },
-                { question: 'When will I get my report?', answer: 'Report delivery times vary by test type. Most routine tests are delivered same day or within 24 hours. Specialized tests may take 24-48 hours. You\'ll receive reports via WhatsApp and email.' },
-                { question: 'How do I pay for the tests?', answer: 'We accept multiple payment methods including cash on delivery, UPI, credit/debit cards, and online banking. Payment can be made during sample collection or online while booking.' },
-                { question: 'Are reports shared via WhatsApp/email?', answer: 'Yes, we provide digital reports through both WhatsApp and email. You\'ll receive a secure link to download your reports. Physical copies are available on request.' }
-            ],
-            newTest: {
-                name: '',
-                icon: '',
-                sampleType: '',
-                reportTime: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                category: '',
-                homeCollection: false,
-                popular: false
-            },
-            newPackage: {
-                name: '',
-                testsCount: 0,
-                tests: [],
-                recommendedFor: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                reportTime: '',
-                homeCollection: false,
-                popular: false
-            },
-            newReview: {
-                name: '',
-                test: '',
-                rating: 5,
-                date: '',
-                comment: ''
-            },
-            newFAQ: {
-                question: '',
-                answer: ''
-            },
-            message: '',
-            messageType: 'success'
-        }
-    },
-    computed: {
-        isTestFormValid() {
-            return this.newTest.name.trim() && this.newTest.discountedPrice > 0
-        },
-        isPackageFormValid() {
-            return this.newPackage.name.trim() && this.newPackage.discountedPrice > 0
-        },
-        isReviewFormValid() {
-            return this.newReview.name.trim() && this.newReview.comment.trim() && this.newReview.rating > 0
-        },
-        isFAQFormValid() {
-            return this.newFAQ.question.trim() && this.newFAQ.answer.trim()
-        }
-    },
-    mounted() {
-        this.loadData()
-    },
-    methods: {
-        async loadData() {
-            this.loading = true
-            try {
-                const response = await useProfileStore().getProfileData();
-                console.log("response", response)
-
-                // if (!response.ok) throw new Error('Failed to load data')
-                const data = response?.healthServeProfileData?.healthServeProfile;
-
-                if (data) {
-                    if (data.labInfo) {
-                        this.labInfo = { ...data.labInfo };
-                    }
-                    if (data.certifications) {
-                        this.certifications = [...data.certifications];
-                    }
-                    if (data.tests) {
-                        this.testsData = data.tests.map(t => ({ ...t }));
-                    }
-                    if (data.packages) {
-                        this.packagesData = data.packages.map(pkg => ({
-                            ...pkg,
-                            tests: Array.isArray(pkg.tests)
-                                ? pkg.tests
-                                : typeof pkg.tests === 'string'
-                                    ? pkg.tests.split(',').map(t => t.trim()).filter(Boolean)
-                                    : []
-                        }));
-                    }
-                    if (data.reviews) {
-                        this.reviewsData = [...data.reviews];
-                    }
-                    if (data.faqs) {
-                        this.faqData = [...data.faqs];
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading data:', error)
-                this.message = 'Error loading data: ' + error.message
-                this.messageType = 'error'
-            } finally {
-                this.loading = false
-            }
-        },
-        async saveData() {
-            console.log('saveData called', {
-                labInfo: this.labInfo,
-                certifications: this.certifications,
-                testsData: this.testsData,
-                packagesData: this.packagesData,
-                reviewsData: this.reviewsData,
-                faqData: this.faqData
-            });
-            this.saving = true
-            try {
-                const data = {
-                    labInfo: this.labInfo,
-                    certifications: this.certifications,
-                    tests: this.testsData,
-                    packages: this.packagesData,
-                    reviews: this.reviewsData,
-                    faqs: this.faqData
-                }
-                const response = await useProfileStore().addProfileData(data);
-                console.log("response", response)
-
-                if (!response?.healthServeProfileData?.ok) {
-                    // const err = await response.json()
-                    this.message = 'Error saving data: ' + (response?.healthServeProfileData.error)
-                    this.messageType = 'error'
-                    this.saving = false
-                    return
-                }
-                this.message = 'Data saved successfully!'
-                this.messageType = 'success'
-                await this.loadData() // Reload to confirm persistence
-            } catch (error) {
-                console.error('Error saving data:', error)
-                this.message = 'Error saving data: ' + error.message
-                this.messageType = 'error'
-            } finally {
-                this.saving = false
-            }
-        },
-        testClick() {
-            alert('Test button works!');
-        },
-        addTest() {
-            const newId = Math.max(...this.testsData.map(t => t.id), 0) + 1
-            this.testsData.push({
-                id: newId,
-                name: '',
-                icon: '',
-                sampleType: '',
-                reportTime: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                homeCollection: false,
-                category: '',
-                popular: false
-            })
-        },
-        removeTest(index) {
-            this.testsData.splice(index, 1)
-            this.showSnackbar('Test removed successfully!', 'success')
-        },
-        addCertification() {
-            this.certifications.push('')
-        },
-        addPackage() {
-            const newId = Math.max(...this.packagesData.map(p => p.id), 0) + 1
-            this.packagesData.push({
-                id: newId,
-                name: '',
-                testsCount: 0,
-                tests: [],
-                recommendedFor: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                reportTime: '',
-                homeCollection: false,
-                popular: false
-            })
-        },
-        removePackage(index) {
-            this.packagesData.splice(index, 1)
-            this.showSnackbar('Package removed successfully!', 'success')
-        },
-        updatePackageTests(index, event) {
-            this.packagesData[index].tests = event.split(',').map(t => t.trim()).filter(Boolean)
-        },
-        addReview() {
-            const newId = Math.max(...this.reviewsData.map(r => r.id), 0) + 1
-            this.reviewsData.push({
-                id: newId,
-                name: '',
-                test: '',
-                rating: 5,
-                comment: '',
-                date: ''
-            })
-        },
-        removeReview(index) {
-            this.reviewsData.splice(index, 1)
-            this.showSnackbar('Review removed successfully!', 'success')
-        },
-        addFAQ() {
-            this.faqData.push({ question: '', answer: '' })
-        },
-        removeFAQ(index) {
-            this.faqData.splice(index, 1)
-            this.showSnackbar('FAQ removed successfully!', 'success')
-        },
-        showSnackbar(message, color = 'success') {
-            this.snackbar.message = message
-            this.snackbar.color = color
-            this.snackbar.show = true
-        },
-        async testAPI() {
-            try {
-                const response = await fetch('http://localhost:3000/api/healthlab')
-                if (!response.ok) throw new Error('Test API request failed')
-                const data = await response.json()
-                this.showSnackbar(`API test successful! Received ${Object.keys(data).length} data fields`, 'success')
-            } catch (error) {
-                console.error('Error testing API:', error)
-                this.showSnackbar('Error testing API: ' + error.message, 'error')
-            }
-        },
-        async testConnectivity() {
-            try {
-                const response = await fetch('http://localhost:3000/api/healthlab')
-                if (!response.ok) throw new Error('Test connectivity failed')
-                this.showSnackbar('Connectivity test successful!', 'success')
-            } catch (error) {
-                console.error('Error testing connectivity:', error)
-                this.showSnackbar('Error testing connectivity: ' + error.message, 'error')
-            }
-        },
-        addNewTest() {
-            const newId = Math.max(...this.testsData.map(t => t.id), 0) + 1
-            this.testsData.push({
-                id: newId,
-                name: this.newTest.name,
-                icon: this.newTest.icon,
-                sampleType: this.newTest.sampleType,
-                reportTime: this.newTest.reportTime,
-                originalPrice: this.newTest.originalPrice,
-                discountedPrice: this.newTest.discountedPrice,
-                homeCollection: this.newTest.homeCollection,
-                category: this.newTest.category,
-                popular: this.newTest.popular
-            })
-            this.newTest = {
-                name: '',
-                icon: '',
-                sampleType: '',
-                reportTime: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                category: '',
-                homeCollection: false,
-                popular: false
-            }
-            this.showSnackbar('Test added successfully!', 'success')
-        },
-        addNewPackage() {
-            const newId = Math.max(...this.packagesData.map(p => p.id), 0) + 1
-            this.packagesData.push({
-                id: newId,
-                name: this.newPackage.name,
-                testsCount: this.newPackage.testsCount,
-                tests: this.newPackage.tests,
-                recommendedFor: this.newPackage.recommendedFor,
-                originalPrice: this.newPackage.originalPrice,
-                discountedPrice: this.newPackage.discountedPrice,
-                reportTime: this.newPackage.reportTime,
-                homeCollection: this.newPackage.homeCollection,
-                popular: this.newPackage.popular
-            })
-            this.newPackage = {
-                name: '',
-                testsCount: 0,
-                tests: [],
-                recommendedFor: '',
-                originalPrice: 0,
-                discountedPrice: 0,
-                reportTime: '',
-                homeCollection: false,
-                popular: false
-            }
-            this.showSnackbar('Package added successfully!', 'success')
-        },
-        addNewReview() {
-            const newId = Math.max(...this.reviewsData.map(r => r.id), 0) + 1
-            this.reviewsData.push({
-                id: newId,
-                name: this.newReview.name,
-                test: this.newReview.test,
-                rating: this.newReview.rating,
-                date: this.newReview.date,
-                comment: this.newReview.comment
-            })
-            this.newReview = {
-                name: '',
-                test: '',
-                rating: 5,
-                date: '',
-                comment: ''
-            }
-            this.showSnackbar('Review added successfully!', 'success')
-        },
-        addNewFAQ() {
-            const newId = Math.max(...this.faqData.map(f => f.id), 0) + 1
-            this.faqData.push({
-                id: newId,
-                question: this.newFAQ.question,
-                answer: this.newFAQ.answer
-            })
-            this.newFAQ = {
-                question: '',
-                answer: ''
-            }
-            this.showSnackbar('FAQ added successfully!', 'success')
-        }
+  data() {
+    return {
+      showModal: false,
+      imageToDelete: null,
+      form: {
+        introduction: "",
+        experience: null,
+        about: "",
+        address: "",
+        locality: "",
+        city: "",
+        pincode: "",
+        state: "",
+        tags: [''],
+        keyFeatures: [],
+      certifications: [],
+      packages: [],
+      faqs: [],
+        tests: [],
+        testimonials: [],
+        googleMapLink: "",
+      },
+      mapDialog: false,
+      map: null,
+      marker: null,
+      selectedLatLng: null,
+      rules: {
+        required: (value) => !!value || "This field is required.",
+      },
+      itemDialog: false,
+      itemType: "",
+      newItemText: "",
+      signIn: true,
+      isShowMessage: false,
+      galleryImages: [],
+      profileImage: null,
+      images: [],
+    };
+  },
+  mounted() {
+    const auth = checkAuth(this.$router);
+    if (auth) {
+      this.fetchProfileData();
     }
-}
+  },
+  computed: {
+    sortedImages() {
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
+  },
+  methods: {
+    openMapDialog() {
+      this.mapDialog = true;
+      this.$nextTick(() => {
+        if (!this.map) {
+          const mapEl = document.getElementById("map");
+          this.map = new google.maps.Map(mapEl, {
+            center: { lat: 28.6139, lng: 77.209 }, // default: Delhi
+            zoom: 12,
+          });
+
+          this.map.addListener("click", (e) => {
+            if (this.marker) this.marker.setMap(null);
+            this.selectedLatLng = e.latLng;
+            this.marker = new google.maps.Marker({
+              position: e.latLng,
+              map: this.map,
+            });
+          });
+        }
+      });
+    },
+    async confirmLocation() {
+      if (!this.selectedLatLng) return;
+
+      const geocoder = new google.maps.Geocoder();
+      const { lat, lng } = this.selectedLatLng.toJSON();
+
+      try {
+        const response = await geocoder.geocode({ location: { lat, lng } });
+        const result = response.results[0];
+        this.form.address = result.formatted_address;
+
+        for (const comp of result.address_components) {
+          if (comp.types.includes("locality")) this.form.city = comp.long_name;
+          if (comp.types.includes("administrative_area_level_1"))
+            this.form.state = comp.long_name;
+          if (comp.types.includes("postal_code"))
+            this.form.pincode = comp.long_name;
+        }
+
+        this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
+      } catch (err) {
+        console.error("Geocoding failed", err);
+      }
+
+      this.mapDialog = false;
+    },
+    addItem(field) {
+      if (this.form[field].length >= 5) return;
+      const newItem = prompt(`Add new item to ${field}`);
+      if (newItem) this.form[field].push(newItem);
+    },
+    removeItem(field, index) {
+      this.form[field].splice(index, 1);
+    },
+    addTestimonial() {
+      if (this.form.testimonials.length >= 5) return;
+      this.form.testimonials.push({
+        rating: 0,
+        title: "",
+        text: "",
+        author: "",
+        context: "",
+      });
+    },
+    removeTestimonial(index) {
+      this.form.testimonials.splice(index, 1);
+    },
+    addKeyFeature() {
+    this.form.keyFeatures.push('');
+  },
+  removeKeyFeature(index) {
+    this.form.keyFeatures.splice(index, 1);
+  },
+  addCertification() {
+    this.form.certifications.push('');
+  },
+  removeCertification(index) {
+    this.form.certifications.splice(index, 1);
+  },
+  addPackage() {
+    this.form.packages.push({ name: '', details: '', price: '' });
+  },
+  removePackage(index) {
+    this.form.packages.splice(index, 1);
+  },
+  addFaq() {
+    this.form.faqs.push({ question: '', answer: '' });
+  },
+  removeFaq(index) {
+    this.form.faqs.splice(index, 1);
+  },
+  addTest() {
+  this.form.tests.push({ name: '', description: '', fee: '' });
+},
+removeTest(index) {
+  this.form.tests.splice(index, 1);
+},
+addTag() {
+  this.form.tags.push('');
+},
+removeTag(index) {
+  this.form.tags.splice(index, 1);
+},
+    isNotFive(type) {
+      return (
+        type != "insurance" &&
+        type != "payments" &&
+        type != "healthPackages" &&
+        type != "specialServices"
+      );
+    },
+    openItemDialog(type) {
+      if (
+        (this.form[type].length >= 5 && this.isNotFive(type)) ||
+        this.form[type].length >= 7
+      )
+        return;
+      this.itemType = type;
+      this.newItemText = "";
+      this.itemDialog = true;
+    },
+    addItemFromDialog() {
+      if (this.newItemText.trim()) {
+        this.form[this.itemType].push(this.newItemText.trim());
+      }
+      this.itemDialog = false;
+    },
+    confirmDelete(img) {
+      this.imageToDelete = img;
+      this.showModal = true;
+    },
+    cancelDelete() {
+      this.showModal = false;
+      this.imageToDelete = null;
+    },
+    async deleteImage() {
+      if (this.imageToDelete) {
+        const res = await useProfileStore().deleteImage(this.imageToDelete);
+        this.images = res.images;
+        this.cancelDelete();
+      }
+    },
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
+
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
+
+      this.galleryImages = uniqueFiles || [];
+    },
+    handleProfileChange(newFile) {
+      this.profileImage = newFile;
+    },
+    async fetchProfileData() {
+      const res = await useProfileStore().getHealthServeApiCall();
+      const profile = res.healthServeProfile;
+
+      if (profile) {
+        console.log(res);
+        this.images = profile.images;
+
+        const hs = profile.healthServeId;
+
+        this.form.introduction = profile.introduction || "";
+        this.form.about = profile.about || "";
+        this.form.experience = profile.experience || "";
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+
+       this.form.keyFeatures = (profile.keyFeatures || []).map(k => ({ value: k }));
+  this.form.certifications = (profile.certifications || []).map(c => ({ value: c }));
+  this.form.packages = (profile.packages || []).map(p => ({ value: p }));
+  this.form.faqs = (profile.faqs || []).map(f => ({ value: f }));
+  this.form.tests = (profile.tests || []).map(t => ({ value: t }));
+        this.form.testimonials = profile.testimonials || [];
+        this.form.tags = profile.tags || [];
+      }
+    },
+    async onSubmit() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        const formData = new FormData();
+
+        formData.append("about", this.form.about);
+        formData.append("experience", this.form.experience);
+        formData.append("introduction", this.form.introduction);
+        formData.append("address", this.form.address);
+        formData.append("locality", this.form.locality);
+        formData.append("city", this.form.city);
+        formData.append("pincode", this.form.pincode);
+        formData.append("state", this.form.state);
+         formData.append('keyFeatures', JSON.stringify(this.form.keyFeatures.map(k => k.value)));
+  formData.append('certifications', JSON.stringify(this.form.certifications.map(c => c.value)));
+  formData.append('packages', JSON.stringify(this.form.packages.map(p => p.value)));
+  formData.append('faqs', JSON.stringify(this.form.faqs.map(f => f.value)));
+  formData.append('tests', JSON.stringify(this.form.tests.map(t => t.value)));
+        formData.append("testimonials", JSON.stringify(this.form.testimonials));
+        formData.append("tags", JSON.stringify(this.form.tags));
+
+        if (this.profileImage) {
+          formData.append("profilePhoto", this.profileImage);
+        }
+
+        this.galleryImages.forEach((file, index) => {
+          formData.append("galleryImages", file);
+        });
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ":", pair[1]);
+        }
+        const res = await useProfileStore().addHealthServeProfileApiCall(
+          formData
+        );
+
+        if (res) {
+          this.fetchProfileData();
+          this.profileImage = null;
+          this.galleryImages = [];
+          useUiStore().openNotificationMessage(
+            "Profile data updated sucessfully!"
+          );
+        }
+      } else {
+        useUiStore().openNotificationMessage(
+          "Please fill all required fields.",
+          "",
+          "error"
+        );
+      }
+    },
+    handleInputDrugHistory() {
+      if (this.isAllRowsFilled() && !this.hasEmptyRow()) {
+        this.form.about.push("");
+      }
+      this.removeEmptyRows();
+    },
+    isAllRowsFilled() {
+      return this.form.about.every((item) => item.trim() !== "");
+    },
+    hasEmptyRow() {
+      return this.form.about.some((item) => item.trim() === "");
+    },
+    removeEmptyRows() {
+      this.form.about = this.form.about.filter(
+        (item, index) =>
+          item.trim() !== "" || index === this.form.about.length - 1
+      );
+    },
+    handleLocationHistory(item, index) {
+      if (this.isLocationRowFilled(item) && !this.hasEmptyLocationRow()) {
+        this.form.locations.push({
+          name: "",
+          address: "",
+          days: [],
+          from: null,
+          to: null,
+          timeslot: null,
+        });
+      }
+      this.removeEmptyLocationRows();
+    },
+    isLocationRowFilled(item) {
+      return item.name.trim() || (item.address && item.address.trim());
+    },
+    hasEmptyLocationRow() {
+      return this.form.locations.some(
+        (drug) => !(drug.name.trim() || (drug.address && drug.address.trim()))
+      );
+    },
+    removeEmptyLocationRows() {
+      this.form.locations = this.form.locations.filter(
+        (drug, index) =>
+          this.isLocationRowFilled(drug) ||
+          index === this.form.locations.length - 1
+      );
+    },
+
+    validateDays(value) {
+      if (!value || value.length === 0) {
+        return "";
+      }
+      return true;
+    },
+  },
+};
 </script>
-
 <style scoped>
-.full-screen-container {
-    width: 100vw !important;
-    min-height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
+.image-gallery {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-inline: 1em;
+  margin-top: 2em;
+  width: 100%;
+  margin-bottom: 2em;
 }
 
-.full-width-card {
-    width: 100vw !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+.image-card {
+  position: relative;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: center;
+  box-shadow: 5px 5px 10px #eee;
+  border-radius: 10px 10px;
+  padding-bottom: 10px;
+  transition-duration: 200ms;
 }
 
-.submit-btn-bottom-right {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 1000;
-    margin-bottom: 32px;
-    margin-right: 32px;
+:hover.image-card {
+  box-shadow: 5px 5px 10px #ddd;
 }
 
-.bg-blue-50,
-.bg-green-50,
-.bg-orange-50,
-.bg-purple-50 {
-    border-radius: 14px 14px 0 0 !important;
-    padding: 18px 28px !important;
-    font-size: 1.35rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    box-shadow: none;
+.image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  background-color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  border-radius: 10px 10px 0px 0px;
 }
 
-.v-card {
-    border-radius: 16px !important;
-    box-shadow: 0 2px 12px 0 rgba(60, 60, 60, 0.07) !important;
-    background: #f9fbfd !important;
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
-.v-card-text {
-    padding: 28px !important;
+.delete-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
 }
 
-.v-text-field,
-.v-textarea,
-.v-select,
-.v-switch {
-    border-radius: 10px !important;
-    font-size: 1.08rem !important;
-    background: #fff !important;
-    margin-bottom: 18px !important;
+.image-container:hover .delete-button {
+  opacity: 1;
+}
+.image-type {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: bold;
 }
 
-.v-label,
-label {
-    font-size: 1.08rem !important;
-    color: #4a4a4a !important;
-    font-weight: 500 !important;
-    margin-bottom: 6px !important;
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
-
-.v-btn {
-    border-radius: 8px !important;
-    font-size: 1.08rem !important;
-    padding: 10px 22px !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.2px;
+.modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-width: 300px;
 }
-
-.v-alert {
-    border-radius: 10px !important;
-    font-size: 1.05rem !important;
-    margin-bottom: 18px !important;
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
 }
-
-.v-data-table {
-    border-radius: 12px !important;
-    background: #fff !important;
+.modal-actions button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
-
-.v-expansion-panel {
-    border-radius: 10px !important;
-    margin-bottom: 10px !important;
+.btn {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-weight: 500;
 }
-
-.v-row {
-    margin-bottom: 0 !important;
+.btn-danger {
+  background-color: #e53935;
+  color: white;
 }
-
-.v-col {
-    margin-bottom: 0 !important;
+.btn-danger:hover {
+  background-color: #d32f2f;
+  transform: scale(1.03);
 }
-
-.healthlab-admin {
-    background: #f2f6fa;
-    min-height: 100vh;
-    padding: 32px 0;
+.btn-danger:active {
+  transform: scale(0.98);
+  background-color: #b71c1c;
 }
-
-h3.text-h6 {
-    font-size: 1.18rem !important;
-    font-weight: 600 !important;
-    color: #1976d2 !important;
-    margin-bottom: 18px !important;
+.btn-cancel {
+  background-color: #f1f1f1;
+  color: #333;
 }
-
-h4 {
-    font-size: 1.08rem !important;
-    font-weight: 600 !important;
-    color: #222 !important;
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.03);
 }
-
-.text-grey {
-    color: #888 !important;
-}
-
-.section-heading {
-    border-radius: 14px 14px 0 0 !important;
-    padding: 18px 28px !important;
-    font-size: 1.35rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    background-color: #e3f2fd !important;
-    /* matches bg-blue-lighten-5 */
-    color: #1976d2 !important;
+.btn-cancel:active {
+  transform: scale(0.98);
+  background-color: #ccc;
 }
 </style>
