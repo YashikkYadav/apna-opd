@@ -54,7 +54,7 @@ const VetHeroSection = ({
                             ? profileData.images[0].url
                             : "/images/max.png"
                     }
-                    alt={vet_name}
+                    alt={data?.name}
                     width={320}
                     height={320}
                     className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -72,7 +72,7 @@ const VetHeroSection = ({
 
                 {/* Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                    {getStarIcons(rating)}
+                    {getStarIcons(parseFloat(avgRating))}
                     <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
                     <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                 </div>
