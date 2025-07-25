@@ -5,9 +5,21 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useState } from 'react';
 import BookConsultation from './BookConsultation';
 import CallNow from './CallNow';
-function getStarIcons(rating) {
+
+
+const ClinicHeroSection = ({
+  imageUrl = "/images/clinic-hero.jpg",
+  data,
+  healthProfile
+}) => {
+  const [callModalOpen, setCallModalOpen] = useState(false);
+  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
+  const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+  const reviewCount = healthProfile?.testimonials?.length || 0;
+
+  function getStarIcons(avgRating) {
   const stars = [];
-  const safeRating = rating ?? 0;
+  const safeRating = avgRating ?? 0;
   const fullStars = Math.floor(safeRating);
   const hasHalfStar = safeRating - fullStars > 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -27,18 +39,6 @@ function getStarIcons(rating) {
   return stars;
 }
 
-const ClinicHeroSection = ({
-  clinic_name = "{{clinic_name}}",
-  city = "{{city}}",
-  success_rate = "{{success_rate}}",
-  imageUrl = "/images/clinic-hero.jpg",
-  rating = 4.6,
-  reviewCount = 78,
-  data,
-  healthProfile
-}) => {
-  const [callModalOpen, setCallModalOpen] = useState(false);
-  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -73,9 +73,9 @@ const ClinicHeroSection = ({
 
         {/* Stars & Reviews */}
         <div className="flex items-center gap-2 justify-center md:justify-start">
-          {getStarIcons(healthProfile?.rating)}
-          <span className="text-white font-semibold ml-2">{healthProfile?.rating}/5</span>
-          <span className="text-white/70 text-sm">({healthProfile?.reviewCount} reviews)</span>
+          {getStarIcons(parseFloat(avgRating))}
+          <span className="text-white font-semibold ml-2">{avgRating}/5</span>
+          <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
         </div>
 
         {/*Tags */}

@@ -5,9 +5,9 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useState } from 'react';
 import ApplyNow from './ApplyNow';
 import CallNow from "../VeterinaryComponents/CallNow";
-function getStarIcons(rating) {
+function getStarIcons(avgRating) {
     const stars = [];
-    const safeRating = rating ?? 0;
+    const safeRating = avgRating ?? 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating - fullStars > 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -35,17 +35,15 @@ function getStarIcons(rating) {
 
 const CollegeHeroSection = ({
     college_name = 'EduVista Institute',
-    type = 'Engineering',
-    city = 'Bangalore',
-    experience_years = '25',
-    rating = 0,
-    reviewCount = 198,
     imageUrl = '/images/college-hero.jpg',
     healthProfile,
     data
 }) => {
     const [callModalOpen, setCallModalOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
+
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -80,12 +78,12 @@ const CollegeHeroSection = ({
 
                 {/* Ratings */}
                 <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
-                    {getStarIcons(rating)}
+                    {getStarIcons(parseFloat(avgRating))}
                     <span className="text-white text-xl font-semibold ml-2">
-                        {rating}/5
+                        {avgRating}/5
                     </span>
                     <span className="text-white/70 text-lg ml-2">
-                        ({healthProfile?.reviewCount} reviews)
+                        ({reviewCount} reviews)
                     </span>
                 </div>
 

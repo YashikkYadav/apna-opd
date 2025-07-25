@@ -5,8 +5,8 @@ const healthServeSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      default: null,
-      unique: true,
+      // default: null,
+      // unique: true,
     },
     type: {
       index: true,

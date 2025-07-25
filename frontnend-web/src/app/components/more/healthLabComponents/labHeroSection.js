@@ -6,17 +6,29 @@ import { ClipboardList, MessageCircle, Package as PackageIcon, Phone, MapPin, St
 import { useState } from 'react';
 import BookTest from './BookTests';
 import CallNow from './CallNow';
-const getStarIcons = (rating = 0) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars > 0.5;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
-    return [
-        ...Array(fullStars).fill(<FaStar className="text-yellow-300 text-xl" />),
-        ...(halfStar ? [<FaStarHalfAlt className="text-yellow-300 text-xl" />] : []),
-        ...Array(emptyStars).fill(<FaRegStar className="text-yellow-300 text-xl" />),
-    ];
-};
+function getStarIcons(avgRating) {
+    const stars = [];
+    const safeRating = avgRating ?? 0;
+    const fullStars = Math.floor(safeRating);
+    const hasHalfStar = safeRating - fullStars > 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    for (let i = 0; i < fullStars; i++) {
+        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-2xl" />);
+    }
+
+    if (hasHalfStar) {
+        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-2xl" />);
+    }
+
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-white text-2xl" />);
+    }
+
+    return stars;
+}
+
 
 const HeroSection = ({
     res_data,
@@ -28,13 +40,8 @@ const HeroSection = ({
     const name = data?.name ?? "HealthLab Diagnostics";
     const location = data?.location ?? "City";
     const address = data?.address ?? "";
-    const rating = healthProfile?.reviews ? parseFloat(
-        (
-            res_data?.healthProfile?.reviews.reduce((acc, cur) => acc + cur.rating, 0) /
-            res_data?.healthProfile?.reviews.length
-        ).toFixed(1)
-    ) : 0;
-    const reviewCount = res_data?.healthProfile?.reviews?.length ?? 0;
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     const phone = data?.phone;
 
     return (
@@ -77,9 +84,10 @@ const HeroSection = ({
                         <MapPin className="w-5 h-5" />
                         <span>{location} {address}</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
-                        <Star className="w-5 h-5 text-yellow-300" />
-                        <span>{rating}/5 • {reviewCount} Reviews</span>
+                    <div className="flex items-center gap-2 justify-center md:justify-start">
+                        {getStarIcons(parseFloat(avgRating))}
+                        <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
+                        <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                     </div>
                 </div>
 

@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import FreeTrialModal from './FreeTrialModel';
 
-function getStarIcons(rating) {
+function getStarIcons(avgRating) {
     const stars = [];
-    const safeRating = rating ?? 0;
+    const safeRating = avgRating ?? 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating - fullStars > 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -28,15 +28,14 @@ function getStarIcons(rating) {
 }
 
 const HeroSection = ({
-    gymName = "PowerFit",
-    city = "Bangalore",
-    rating = 4.6,
-    reviewCount = 312,
+    
     imageUrl = "/images/gym-default.jpg",
     healthProfile,
     data
 }) => {
     const [modalOpen, setModalOpen] = useState(false);
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -71,9 +70,9 @@ const HeroSection = ({
 
                 {/* Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                    {getStarIcons(healthProfile?.rating)}
-                    <span className="text-white text-xl font-semibold ml-2">{healthProfile?.rating}/5</span>
-                    <span className="text-white/70 text-lg ml-2">({healthProfile?.reviewCount} reviews)</span>
+                    {getStarIcons(parseFloat(avgRating))}
+                    <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
+                    <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                 </div>
 
                 {/* Tags */}
@@ -95,7 +94,7 @@ const HeroSection = ({
                             Book a Free Trial
                         </button>
 
-                        <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                        <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id}/>
                     </div>
 
                     <div>

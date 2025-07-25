@@ -5,12 +5,36 @@ import Image from 'next/image';
 import { Phone, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
 import CallSection from './CallSection';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+  function getStarIcons(avgRating) {
+  const stars = [];
+  const safeRating = avgRating ?? 0;
+  const fullStars = Math.floor(safeRating);
+  const hasHalfStar = safeRating - fullStars > 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-xl" />);
+  }
+
+  if (hasHalfStar) {
+    stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-xl" />);
+  }
+
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(<FaRegStar key={`empty-${i}`} className="text-gray-300 text-xl" />);
+  }
+
+  return stars;
+}
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
     const features = data?.features?.filter(f => f.enabled) || [];
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     return (
         <motion.section
 
@@ -49,13 +73,18 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                         <MapPin className="w-5 h-5" /> {data?.location || "Your City"}
                     </span>
                     <span className="flex items-center gap-2">
-                        <Clock className="w-5 h-5" /> Open: {healthProfile?.openTime || "9:00 AM"} - {healthProfile?.closeTime || "9:00 PM" }
+                        <Clock className="w-5 h-5" /> Open: {healthProfile?.openTime || "9:00 AM"} - {healthProfile?.closeTime || "9:00 PM"}
                     </span>
                     {lastUpdate && (
                         <span className="flex items-center gap-2">
                             ⏱ Last updated: {lastUpdate.toLocaleTimeString()}
                         </span>
                     )}
+                </div>
+                <div className="flex items-center gap-2 justify-center md:justify-start">
+                    {getStarIcons(parseFloat(avgRating))}
+                    <span className="text-white font-semibold ml-2">{avgRating}/5</span>
+                    <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
                 </div>
 
                 {/* Tags */}
@@ -69,14 +98,14 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-                    <button 
-                    onClick={() => router.push(`/detail/pharmacy/${data?.name}/MedicineOrder`)}
-                    className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+                    <button
+                        onClick={() => router.push(`/detail/pharmacy/${data?.name}/MedicineOrder`)}
+                        className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🛒 Order Medicines
                     </button>
-                    <button 
-                    onClick={() => setModalOpen(true)}
-                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button
+                        onClick={() => setModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📞 Call Pharmacy
                     </button>
                     <CallSection isOpen={modalOpen} onClose={() => setModalOpen(false)} />
