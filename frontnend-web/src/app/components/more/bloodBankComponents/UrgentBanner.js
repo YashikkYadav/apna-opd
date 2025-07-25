@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { BsDropletHalf } from 'react-icons/bs';
 import { MdDownload } from 'react-icons/md';
-
+import CallNow from './CallNow';
+import { useState } from 'react';
 const UrgentBanner = ({ healthProfile}) => {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <motion.section
       initial={{ opacity: 0, y: 30 }}
@@ -26,12 +28,13 @@ const UrgentBanner = ({ healthProfile}) => {
             <BsDropletHalf className="text-xl" />
             Check Availability
           </button>
-          <a href={`tel:${healthProfile?.phone}`}>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-md flex items-center gap-2 transition">
+            <button 
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-md flex items-center gap-2 transition">
             <FaPhoneAlt className="text-xl" />
             Call Now
           </button>
-          </a>
+          <CallNow isOpen={modalOpen} onClose={() => setModalOpen(false)} />
           
 
           <button className="bg-white border-2 border-blue-600 text-blue-700 font-semibold px-6 py-3 rounded-full shadow-md flex items-center gap-2 hover:bg-blue-50 transition">

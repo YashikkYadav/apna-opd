@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import BookSession from './BookSession';
 import { useState } from 'react';
-const getStarIcons = (rating) => {
+import CallNow from './CallNow';
+const getStarIcons = (avgRating) => {
     const stars = [];
-    const safeRating = rating ?? 0;
+    const safeRating = avgRating ?? 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating - fullStars > 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -24,15 +25,14 @@ const getStarIcons = (rating) => {
 };
 
 const VetHeroSection = ({
-    vet_name = 'Dr. Max Pawkins',
-    city = 'Bangalore',
     profileData,
     data,
     healthProfile
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const rating = healthProfile?.rating;
-    const reviewCount = healthProfile?.reviews?.length;
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     const features = healthProfile?.doctorInfo?.features;
     console.log(healthProfile?.experience)
     return (
@@ -73,7 +73,7 @@ const VetHeroSection = ({
                 {/* Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
                     {getStarIcons(rating)}
-                    <span className="text-white text-xl font-semibold ml-2">{rating}/5</span>
+                    <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
                     <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                 </div>
 
@@ -94,9 +94,12 @@ const VetHeroSection = ({
                         📅 Book Appointment
                     </button>
                     <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button 
+                    onClick={() => setCallModalOpen(true)}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📞 Call Clinic
                     </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
                     <button
                     onClick={() => {
                         const section = document.getElementById("vetLocationSection");

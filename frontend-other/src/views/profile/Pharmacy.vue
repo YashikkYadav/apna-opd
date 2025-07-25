@@ -161,6 +161,34 @@
           </v-row>
         </v-card>
 
+        <v-card class="section-card mb-6">
+  <v-toolbar flat class="mb-4" style="padding: 0 20px;">
+    <v-toolbar-title>Open and close Timing</v-toolbar-title>
+  </v-toolbar>
+
+  <v-row>
+    <v-col cols="12" sm="6">
+      <v-text-field
+        v-model="form.openTime"
+        label="Opening Time"
+        type="time"
+        outlined
+        dense
+      />
+    </v-col>
+
+    <v-col cols="12" sm="6">
+      <v-text-field
+        v-model="form.closeTime"
+        label="Closing Time"
+        type="time"
+        outlined
+        dense
+      />
+    </v-col>
+  </v-row>
+</v-card>
+
 <!-- tags -->
          <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -197,6 +225,29 @@
   </div>
 </v-card>
 
+<v-card>
+      <v-card-title>
+        Medicines
+        <v-spacer />
+        <v-btn color="primary" @click="addMedicine">+ Add Medicine</v-btn>
+      </v-card-title>
+
+      <v-data-table :headers="headers" :items="form.medicines" class="elevation-1">
+        <template v-slot:body>
+          <tr v-for="(medicine, index) in form.medicines" :key="index">
+            <td><v-text-field v-model="medicine.name" placeholder="Name" dense /></td>
+            <td><v-text-field v-model="medicine.dosage" placeholder="Dosage" dense /></td>
+            <td><v-text-field v-model="medicine.stock" type="number" placeholder="Stock" dense /></td>
+            <td><v-text-field v-model="medicine.price" type="number" placeholder="Price" dense /></td>
+            <td>
+              <v-btn icon @click="removeMedicine(index)">
+                <v-icon >mdi-delete</v-icon>
+              </v-btn>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-card>
 
         <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -235,51 +286,6 @@
   </div>
 </v-card>
 
-
-   <v-card class="section-card">
-      <v-toolbar flat class="mb-4 px-4">
-        <v-toolbar-title>Available Medicines</v-toolbar-title>
-        <v-spacer />
-        <v-btn color="primary" @click="openMedicineDialog()">+ Add Medicine</v-btn>
-      </v-toolbar>
-
-      <v-data-table
-        :headers="medicineHeaders"
-        :items="form.availableMedicines"
-        class="elevation-1"
-        dense
-      >
-        <template v-slot:item.actions="{ item, index }">
-          <v-btn icon color="primary" @click="openMedicineDialog(item, index)">
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn icon color="error" @click="removeAvailableMedicine(index)">
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-        </template>
-      </v-data-table>
-
-      <!-- Medicine Dialog -->
-      <v-dialog v-model="medicineDialog.visible" max-width="600px">
-        <v-card>
-          <v-card-title class="text-h6">
-            {{ medicineDialog.editIndex === -1 ? 'Add Medicine' : 'Edit Medicine' }}
-          </v-card-title>
-          <v-card-text>
-            <v-text-field v-model="medicineDialog.form.name" label="Medicine Name" outlined dense />
-            <v-text-field v-model="medicineDialog.form.brand" label="Brand" outlined dense />
-            <v-text-field v-model="medicineDialog.form.dosage" label="Dosage" outlined dense />
-            <v-text-field v-model="medicineDialog.form.price" label="Price" type="number" outlined dense />
-            <v-text-field v-model="medicineDialog.form.stock" label="Stock" type="number" outlined dense />
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text @click="medicineDialog.visible = false">Cancel</v-btn>
-            <v-btn color="primary" @click="saveMedicine">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card>
 <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
     <v-toolbar-title>Features</v-toolbar-title>
@@ -288,7 +294,7 @@
   <div v-for="(feature, index) in form.features" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
       <v-text-field v-model="feature.title" label="Title" dense outlined class="mb-3" hide-details></v-text-field>
-      <v-textarea v-model="feature.detail" label="Detail" dense outlined auto-grow hide-details class="mb-3"></v-textarea>
+      <!-- <v-textarea v-model="feature.detail" label="Detail" dense outlined auto-grow hide-details class="mb-3"></v-textarea> -->
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeFeature(index)">
           <v-icon>mdi-delete</v-icon>
@@ -467,34 +473,20 @@ export default {
       city: "",
       pincode: "",
       state: "",
+      openTime: '',
+      closeTime: '',
       tags: [''],
       features: [],
+      medicines: [
+        { name: '', dosage: '', stock: '', price: '' }
+      ],
+
       servicesOffered: [],
       testimonials: [],
       partnerships: [],
       faqs: [],
-      availableMedicines: [], // ← Added field
       googleMapLink: "",
     },
-    medicineHeaders: [
-        { text: 'Name', value: 'name' },
-        { text: 'Brand', value: 'brand' },
-        { text: 'Dosage', value: 'dosage' },
-        { text: 'Price', value: 'price' },
-        { text: 'Stock', value: 'stock' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      medicineDialog: {
-        visible: false,
-        form: {
-          name: '',
-          brand: '',
-          dosage: '',
-          price: null,
-          stock: null,
-        },
-        editIndex: -1,
-      },
     mapDialog: false,
     map: null,
     marker: null,
@@ -511,15 +503,7 @@ export default {
     profileImage: null,
     images: [],
 
-    // New medicine-related fields
-    newMedicine: {
-      name: '',
-      brand: '',
-      dosage: '',
-      price: '',
-      stock: '',
-    },
-    medicineDialog: false,
+    
   };
 },
 
@@ -594,6 +578,12 @@ export default {
     removeItem(field, index) {
       this.form[field].splice(index, 1);
     },
+    addMedicine() {
+    this.form.medicines.push({ name: '', dosage: '', stock: '', price: '' });
+  },
+  removeMedicine(index) {
+    this.form.medicines.splice(index, 1);
+  },
     addTestimonial() {
       if (this.form.testimonials.length >= 5) return;
       this.form.testimonials.push({
@@ -608,7 +598,7 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
       addServiceOffered() {
-    this.form.servicesOffered.push({ name: '', description: '' });
+    this.form.servicesOffered.push({ name: '' });
   },
   removeServiceOffered(index) {
     this.form.servicesOffered.splice(index, 1);
@@ -622,42 +612,10 @@ export default {
     this.form.partnerships.splice(index, 1);
   },
 
-  // MEDICINES
-   openMedicineDialog(item = null, index = -1) {
-      if (item) {
-        this.medicineDialog.form = { ...item };
-        this.medicineDialog.editIndex = index;
-      } else {
-        this.medicineDialog.form = {
-          name: '',
-          brand: '',
-          dosage: '',
-          price: null,
-          stock: null,
-        };
-        this.medicineDialog.editIndex = -1;
-      }
-      this.medicineDialog.visible = true;
-    },
-    saveMedicine() {
-      const form = { ...this.medicineDialog.form };
-      if (!form.name || !form.brand || !form.dosage) return;
-
-      if (this.medicineDialog.editIndex === -1) {
-        this.form.availableMedicines.push(form);
-      } else {
-        this.$set(this.form.availableMedicines, this.medicineDialog.editIndex, form);
-      }
-
-      this.medicineDialog.visible = false;
-    },
-    removeAvailableMedicine(index) {
-      this.form.availableMedicines.splice(index, 1);
-    },
-
+  
   // FEATURES
   addFeature() {
-    this.form.features.push({ title: '', detail: '' });
+    this.form.features.push({ title: '' });
   },
   removeFeature(index) {
     this.form.features.splice(index, 1);
@@ -745,12 +703,15 @@ removeTag(index) {
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
-
+this.form.medicines = profile.medicines?.length
+      ? profile.medicines
+      : [{ name: '', dosage: '', stock: '', price: '' }];
        this.form.servicesOffered = profile.servicesOffered || [];
     this.form.partnerships = profile.partnerships || [];
-    this.form.availableMedicines = profile.availableMedicines || [];
     this.form.features = profile.features || [];
     this.form.faqs = profile.faqs || [];
+    this.form.openTime = profile.openTime || '';
+  this.form.closeTime = profile.closeTime || '';
         this.form.testimonials = profile.testimonials || [];
        this.form.tags = profile.tags || [];
       }
@@ -769,10 +730,12 @@ removeTag(index) {
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
         formData.append("servicesOffered", JSON.stringify(this.form.servicesOffered));
+        formData.append('medicines', JSON.stringify(this.form.medicines));
   formData.append("partnerships", JSON.stringify(this.form.partnerships));
-  formData.append("availableMedicines", JSON.stringify(this.form.availableMedicines));
   formData.append("features", JSON.stringify(this.form.features));
   formData.append("faqs", JSON.stringify(this.form.faqs));
+  formData.append('openTime', this.form.openTime);
+  formData.append('closeTime', this.form.closeTime);
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 

@@ -3,60 +3,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaDumbbell } from 'react-icons/fa';
 
-const MembershipPlans = ({
-    monthly_price = "{{monthly_price}}",
-    quarterly_price = "{{quarterly_price}}",
-    half_yearly_price = "{{half_yearly_price}}",
-    annual_price = "{{annual_price}}",
+const MembershipPlans = ({healthProfile, data
 }) => {
-    const plans = [
-        {
-            title: "1 Month Plan",
-            price: monthly_price,
-            features: [
-                "Gym Access",
-                "Basic Equipment",
-                "Locker Facility",
-                "1 Personal Training Session",
-            ],
-            popular: false,
-        },
-        {
-            title: "3 Month Plan",
-            price: quarterly_price,
-            features: [
-                "All 1-Month Features",
-                "Group Classes",
-                "3 Personal Training Sessions",
-                "Nutrition Consultation",
-            ],
-            popular: false,
-        },
-        {
-            title: "6 Month Plan",
-            price: half_yearly_price,
-            features: [
-                "All 3-Month Features",
-                "6 Personal Training Sessions",
-                "Steam Room Access",
-                "Guest Pass (2 per month)",
-                "Body Composition Analysis",
-            ],
-            popular: true,
-        },
-        {
-            title: "Annual Plan",
-            price: annual_price,
-            features: [
-                "All 6-Month Features",
-                "12 Personal Training Sessions",
-                "Premium Group Classes",
-                "Unlimited Guest Passes",
-                "Free Membership Extension",
-            ],
-            popular: false,
-        },
-    ];
+    
+
 
     return (
         <motion.section
@@ -78,7 +28,7 @@ const MembershipPlans = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {plans.map((plan, idx) => (
+                {healthProfile?.plans?.map((plan, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04 }}
@@ -94,7 +44,7 @@ const MembershipPlans = ({
                             </span>
                         )}
 
-                        <h3 className="text-xl font-bold mb-3 text-center">{plan.title}</h3>
+                        <h3 className="text-xl font-bold mb-3 text-center">{plan.name}</h3>
 
                         <p className="text-3xl font-extrabold text-center mb-4">
                             ₹ {plan.price}

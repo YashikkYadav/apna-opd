@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 
-export default function FreeTrialModal({ isOpen, onClose }) {
+export default function FreeTrialModal({ isOpen, onClose,healthServeId }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -29,9 +29,29 @@ export default function FreeTrialModal({ isOpen, onClose }) {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit =async () => {
         if (!verified) return alert("Please verify your phone number first.");
-        setSubmitted(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HEALTHSERVE_ID}/enquiry/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone,
+                    plan: selectedPlan,
+                    source: "Free Trial Modal",
+                }),
+            });
+
+            if (!res.ok) throw new Error("Failed to submit enquiry");
+            setSubmitted(true);
+        } catch (err) {
+            console.error("Enquiry submit failed", err);
+            alert("Something went wrong. Please try again later.");
+        }
     };
 
     if (!isOpen) return null;
@@ -108,8 +128,8 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             disabled={!verified}
                             onClick={handleSubmit}
                             className={`w-full py-2 rounded-lg text-white font-semibold ${verified
-                                    ? "bg-blue-600 hover:bg-blue-700 transition"
-                                    : "bg-blue-300 cursor-not-allowed"
+                                ? "bg-blue-600 hover:bg-blue-700 transition"
+                                : "bg-blue-300 cursor-not-allowed"
                                 }`}
                         >
                             Submit

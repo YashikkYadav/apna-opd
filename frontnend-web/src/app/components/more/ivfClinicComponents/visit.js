@@ -35,6 +35,7 @@ const VisitClinic = ({ website_url = '{{website_url}}',
 
     return (
         <motion.section
+            id="ivfLocationSection"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

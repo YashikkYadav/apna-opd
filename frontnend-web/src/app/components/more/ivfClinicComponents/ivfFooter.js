@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const IvfFooter = ({ data}) => {
+import BookConsultation from './BookConsultation';
+import { useState } from 'react';
+const IvfFooter = ({ data }) => {
+  const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   return (
     <motion.footer
       initial={{ opacity: 0, y: 40 }}
@@ -23,11 +25,12 @@ const IvfFooter = ({ data}) => {
       <div className="flex justify-center flex-wrap gap-4 mb-10">
         <motion.a
           whileHover={{ scale: 1.05 }}
-          href="/book-consultation"
+          onClick={() => setConsultationModalOpen(true)}
           className="bg-white text-blue-700 hover:bg-blue-600 hover:text-white font-bold py-3 px-6 rounded-full shadow-md transition-all"
         >
           Book Fertility Consultation
         </motion.a>
+        <BookConsultation isOpen={consultationModalOpen} onClose={() => setConsultationModalOpen(false)} />
         <motion.a
           whileHover={{ scale: 1.05 }}
           href="/download-brochure"

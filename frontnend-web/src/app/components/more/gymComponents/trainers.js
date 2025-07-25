@@ -3,29 +3,7 @@ import { motion } from 'framer-motion';
 import { FaUserCheck } from 'react-icons/fa';
 
 const CertifiedTrainers = ({
-    trainers = [
-        {
-            emoji: '👨‍💼',
-            name: '{{trainer_1_name}}',
-            experience: '{{trainer_1_experience}}',
-            specialization: '{{trainer_1_specialization}}',
-            certification: 'ACE, ISSA',
-        },
-        {
-            emoji: '👩‍💼',
-            name: '{{trainer_2_name}}',
-            experience: '{{trainer_2_experience}}',
-            specialization: '{{trainer_2_specialization}}',
-            certification: 'NASM, ACSM',
-        },
-        {
-            emoji: '👨‍💼',
-            name: '{{trainer_3_name}}',
-            experience: '{{trainer_3_experience}}',
-            specialization: '{{trainer_3_specialization}}',
-            certification: 'ISSA, FMS',
-        },
-    ],
+   healthProfile,data
 }) => {
     return (
         <motion.section
@@ -45,7 +23,7 @@ const CertifiedTrainers = ({
 
             {/* Trainer Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {trainers.map((trainer, idx) => (
+                {healthProfile?.trainers?.map((trainer, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{
@@ -56,12 +34,9 @@ const CertifiedTrainers = ({
                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                         className="bg-white rounded-2xl p-6 flex flex-col items-center text-center border border-blue-100 hover:border-blue-500 transition-all"
                     >
-                        <div className="text-4xl mb-3">{trainer.emoji}</div>
+                        
                         <h3 className="text-lg font-bold mb-1 text-blue-700">{trainer.name}</h3>
                         <p className="text-sm text-blue-600 mb-2">{trainer.experience} Years Experience</p>
-                        <p className="text-sm text-gray-600">
-                            <strong>Specialization:</strong> {trainer.specialization}
-                        </p>
                         <p className="text-sm text-gray-600">
                             <strong>Certification:</strong> {trainer.certification}
                         </p>

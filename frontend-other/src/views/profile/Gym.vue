@@ -533,6 +533,70 @@
   </div>
 </v-card>
 
+<v-card class="section-card">
+  <v-toolbar
+    flat
+    class="mb-4"
+    style="column-gap: 20px; padding: 0px 20px"
+  >
+    <v-toolbar-title class="ml-3">Related Gyms</v-toolbar-title>
+  </v-toolbar>
+
+  <v-btn class="mb-2" @click="addGym">+ Add Gym</v-btn>
+
+  <div
+    v-for="(gym, index) in form.relatedGyms"
+    :key="index"
+    class="mb-4"
+    style="padding: 20px"
+  >
+    <div
+      class="pa-4"
+      style="
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 16px;
+      "
+    >
+      <v-text-field
+        v-model="gym.name"
+        label="Gym Name"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="gym.location"
+        label="Location"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="gym.price"
+        label="Price"
+        prefix="₹"
+        dense
+        outlined
+        hide-details
+        class="mb-3"
+        type="number"
+      ></v-text-field>
+
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeGym(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+
 
 
 
@@ -706,6 +770,9 @@ export default {
           certifications: ''
         }
       ],
+      relatedGyms: [
+        { name: '', location: '', price: '' }
+      ],
           tags: [''],
         regularOpening: '',
       regularClosing: '',
@@ -816,6 +883,12 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
+    addGym() {
+    this.form.relatedGyms.push({ name: '', location: '', price: '' });
+  },
+  removeGym(index) {
+    this.form.relatedGyms.splice(index, 1);
+  },
     addFacility() {
       if (this.form.worldFacilities.length >= 6) return;
   this.form.worldFacilities.push({
@@ -944,6 +1017,9 @@ this.form.regularOpening = profile.regularOpening || '';
 this.form.regularClosing = profile.regularClosing || '';
 this.form.sundayOpening = profile.sundayOpening || '';
 this.form.sundayClosing = profile.sundayClosing || '';
+this.form.relatedGyms = profile.relatedGyms?.length
+      ? profile.relatedGyms
+      : [{ name: '', location: '', price: '' }];
         this.form.testimonials = profile.testimonials || [];
       this.form.tags = profile.tags || [];
       }
@@ -974,6 +1050,7 @@ formData.append("sundayOpening", this.form.sundayOpening);
 formData.append("sundayClosing", this.form.sundayClosing);
 formData.append("tags", JSON.stringify(this.form.tags));
 formData.append('plans', JSON.stringify(this.form.plans));
+formData.append('relatedGyms', JSON.stringify(this.form.relatedGyms));
 
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 

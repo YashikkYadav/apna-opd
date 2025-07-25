@@ -22,7 +22,7 @@ const testimonials = [
     },
 ];
 
-const SuccessStories = () => {
+const SuccessStories = ({healthProfile}) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -43,22 +43,19 @@ const SuccessStories = () => {
 
             {/* Testimonials */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {testimonials.map((t, idx) => (
+                {healthProfile?.testimonials.map((t, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.3)' }}
                         className="bg-[#F7F9FB] rounded-2xl p-6 text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
                         <p className="text-gray-700 italic text-base mb-6">
-                            "{t.quote}"
+                            "{t.text}"
                         </p>
                         <div className="flex items-center justify-center gap-3">
-                            <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow">
-                                {t.avatar}
-                            </div>
+                            
                             <div className="text-left">
-                                <p className="text-blue-700 font-bold text-sm">{t.name}</p>
-                                <p className="text-gray-600 text-sm">{t.title}</p>
+                                <p className="text-blue-700 font-bold text-sm">- {t.author}</p>
                             </div>
                         </div>
                     </motion.div>

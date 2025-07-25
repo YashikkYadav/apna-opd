@@ -220,14 +220,22 @@
 
 <!-- SPECIAL INTERESTS -->
 <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Special Interests</v-toolbar-title>
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Special Interests</v-toolbar-title>
   </v-toolbar>
+
   <v-btn class="mb-2" @click="addSpecialInterest">+ Add Interest</v-btn>
-  <div v-for="(interest, index) in form.specialInterests" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
-    <v-text-field v-model="interest.title" label="Interest" dense outlined class="mb-3"></v-text-field>
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeSpecialInterest(index)">
+
+  <div v-for="(interest, index) in form.specialInterests" :key="index" class="mb-4 px-4">
+    <v-text-field
+      v-model="form.specialInterests[index]"
+      label="Interest"
+      dense
+      outlined
+      hide-details
+    ></v-text-field>
+    <div class="d-flex justify-end pa-2">
+      <v-btn icon color="error"  @click="removeSpecialInterest(index)">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </div>
@@ -236,15 +244,21 @@
 
 <!-- CERTIFICATIONS -->
 <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Certifications</v-toolbar-title>
   </v-toolbar>
-  <v-btn class="mb-2" @click="addCertification">+ Add Certification</v-btn>
-  <div v-for="(cert, index) in form.certifications" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
-    <v-text-field v-model="cert.title" label="Title" dense outlined class="mb-3"></v-text-field>
-    <v-text-field v-model="cert.authority" label="Authority" dense outlined class="mb-3"></v-text-field>
-    <v-text-field v-model="cert.year" label="Year" dense outlined class="mb-3"></v-text-field>
-    <div class="d-flex justify-end">
+
+  <v-btn class="mb-2" @click="addCertification">+ Add Certificate</v-btn>
+
+  <div v-for="(cert, index) in form.certifications" :key="index" class="mb-4 px-4">
+    <v-text-field
+      v-model="form.certifications[index]"
+      label="Certification"
+      dense
+      outlined
+      hide-details
+    ></v-text-field>
+    <div class="d-flex justify-end pa-2">
       <v-btn icon color="error" @click="removeCertification(index)">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
@@ -252,15 +266,24 @@
   </div>
 </v-card>
 
+
 <!-- LANGUAGES -->
 <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Languages</v-toolbar-title>
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Languages Spoken</v-toolbar-title>
   </v-toolbar>
-  <v-btn class="mb-2" @click="addLanguage">+ Add Language</v-btn>
-  <div v-for="(lang, index) in form.languages" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
-    <v-text-field v-model="lang.title" label="Language" dense outlined class="mb-3"></v-text-field>
-    <div class="d-flex justify-end">
+
+  <v-btn class="mb-2" @click="addLanguage">+ Add Lang</v-btn>
+
+  <div v-for="(lang, index) in form.languages" :key="index" class="mb-4 px-4">
+    <v-text-field
+      v-model="form.languages[index]"
+      label="Language"
+      dense
+      outlined
+      hide-details
+    ></v-text-field>
+    <div class="d-flex justify-end pa-2">
       <v-btn icon color="error" @click="removeLanguage(index)">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
@@ -270,13 +293,21 @@
 
 <!-- CONDITIONS TREATED -->
 <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Conditions Treated</v-toolbar-title>
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Conditions Treated</v-toolbar-title>
   </v-toolbar>
-  <v-btn class="mb-2" @click="addCondition">+ Add Condition</v-btn>
-  <div v-for="(cond, index) in form.conditionsTreated" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
-    <v-text-field v-model="cond.title" label="Condition" dense outlined class="mb-3"></v-text-field>
-    <div class="d-flex justify-end">
+
+  <v-btn class="mb-2" @click="addCondition">+ Add</v-btn>
+
+  <div v-for="(cond, index) in form.conditionsTreated" :key="index" class="mb-4 px-4">
+    <v-text-field
+      v-model="form.conditionsTreated[index]"
+      label="Condition"
+      dense
+      outlined
+      hide-details
+    ></v-text-field>
+    <div class="d-flex justify-end pa-2">
       <v-btn icon color="error" @click="removeCondition(index)">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
@@ -286,16 +317,23 @@
 
 <!-- THERAPY PACKAGES -->
 <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Therapy Packages</v-toolbar-title>
   </v-toolbar>
-  <v-btn class="mb-2" @click="addPackage">+ Add Package</v-btn>
-  <div v-for="(pkg, index) in form.therapyPackages" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px;">
-    <v-text-field v-model="pkg.name" label="Package Name" dense outlined class="mb-3"></v-text-field>
-    <v-textarea v-model="pkg.details" label="Details" dense outlined auto-grow class="mb-3"></v-textarea>
-    <v-text-field v-model="pkg.price" label="Price" type="number" dense outlined class="mb-3"></v-text-field>
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removePackage(index)">
+
+  <v-btn class="mb-2" @click="addTherapyPackage">+ Add</v-btn>
+
+  <div v-for="(pkg, index) in form.therapyPackages" :key="index" class="mb-4 px-4">
+    <v-text-field
+      v-model="pkg.name"
+      label="Package Name"
+      dense
+      outlined
+      hide-details
+      class="mb-2"
+    ></v-text-field>
+    <div class="d-flex justify-end pa-2">
+      <v-btn icon color="error"@click="removeTherapyPackage(index)">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </div>
@@ -571,37 +609,46 @@ export default {
     this.form.education.splice(index, 1);
   },
 
-  // SPECIAL INTERESTS
+// Special Interests
   addSpecialInterest() {
     this.form.specialInterests.push('');
   },
-  removeSpecialInterest(index) {
-    this.form.specialInterests.splice(index, 1);
+  removeSpecialInterest(i) {
+    this.form.specialInterests.splice(i, 1);
   },
 
-  // LANGUAGES
+  // Certifications
+  addCertification() {
+    this.form.certifications.push('');
+  },
+  removeCertification(i) {
+    this.form.certifications.splice(i, 1);
+  },
+
+  // Languages
   addLanguage() {
     this.form.languages.push('');
   },
-  removeLanguage(index) {
-    this.form.languages.splice(index, 1);
+  removeLanguage(i) {
+    this.form.languages.splice(i, 1);
   },
 
-  // CONDITIONS
+  // Conditions
   addCondition() {
     this.form.conditionsTreated.push('');
   },
-  removeCondition(index) {
-    this.form.conditionsTreated.splice(index, 1);
+  removeCondition(i) {
+    this.form.conditionsTreated.splice(i, 1);
   },
 
-  // PACKAGES
-  addPackage() {
-    this.form.therapyPackages.push({ name: '', details: '', price: '' });
+  // Therapy Packages
+  addTherapyPackage() {
+    this.form.therapyPackages.push({ name: '', price: '' });
   },
-  removePackage(index) {
-    this.form.therapyPackages.splice(index, 1);
+  removeTherapyPackage(i) {
+    this.form.therapyPackages.splice(i, 1);
   },
+
   addTag() {
   this.form.tags.push('');
 },
@@ -680,11 +727,11 @@ removeTag(index) {
         this.form.pincode = hs?.pincode || "";
 
        this.form.education = (profile.education || []).map(e => ({ value: e }));
-  this.form.specialInterests = (profile.specialInterests || []).map(i => ({ value: i }));
-  this.form.certifications = (profile.certifications || []).map(c => ({ value: c }));
-  this.form.languages = (profile.languages || []).map(l => ({ value: l }));
-  this.form.conditionsTreated = (profile.conditionsTreated || []).map(c => ({ value: c }));
-  this.form.therapyPackages = (profile.therapyPackages || []).map(p => ({ value: p }));
+  this.form.specialInterests = profile.specialInterests || [];
+      this.form.certifications = profile.certifications || [];
+      this.form.languages = profile.languages || [];
+      this.form.conditionsTreated = profile.conditionsTreated || [];
+      this.form.therapyPackages = profile.therapyPackages || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -703,11 +750,11 @@ removeTag(index) {
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
         formData.append('education', JSON.stringify(this.form.education.map(e => e.value)));
-  formData.append('specialInterests', JSON.stringify(this.form.specialInterests.map(i => i.value)));
-  formData.append('certifications', JSON.stringify(this.form.certifications.map(c => c.value)));
-  formData.append('languages', JSON.stringify(this.form.languages.map(l => l.value)));
-  formData.append('conditionsTreated', JSON.stringify(this.form.conditionsTreated.map(c => c.value)));
-  formData.append('therapyPackages', JSON.stringify(this.form.therapyPackages.map(p => p.value)));
+  formData.append("specialInterests", JSON.stringify(this.form.specialInterests));
+      formData.append("certifications", JSON.stringify(this.form.certifications));
+      formData.append("languages", JSON.stringify(this.form.languages));
+      formData.append("conditionsTreated", JSON.stringify(this.form.conditionsTreated));
+      formData.append("therapyPackages", JSON.stringify(this.form.therapyPackages));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 

@@ -3,29 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const FAQSection = ({ data }) => {
-    const faqs = [
-        {
-            question: `What is the success rate of IVF at ${data?.name}?`,
-            answer: `Our IVF success rates vary by age group, but we maintain consistently high success rates of ${6}% across all age categories. We provide detailed success rate breakdowns during your consultation to set realistic expectations.`,
-        },
-        {
-            question: 'Is IVF painful or risky?',
-            answer: 'IVF is generally well-tolerated with minimal discomfort. Our experienced team uses the latest techniques to minimize any discomfort. We provide comprehensive pre-treatment counseling to address all your concerns about the procedure.',
-        },
-        {
-            question: 'What’s the ideal age to start fertility treatment?',
-            answer: 'While fertility naturally declines with age, we successfully treat patients across all age groups. Early intervention generally leads to better outcomes, but it’s never too late to explore your options with our fertility specialists.',
-        },
-        {
-            question: 'Do you offer EMI or financial counseling?',
-            answer: 'Yes, we offer flexible payment options including EMI facilities and financial counseling to make fertility treatments more accessible. Our team will work with you to find a payment plan that suits your budget.',
-        },
-        {
-            question: 'Can I consult online first?',
-            answer: 'Absolutely! We offer online consultations through Apna OPD platform. This allows you to discuss your concerns with our specialists from the comfort of your home before deciding on an in-person visit.',
-        },
-    ];
+const FAQSection = ({ data,healthProfile }) => {
+    
 
     const [openIndex, setOpenIndex] = useState(null);
 
@@ -47,7 +26,7 @@ const FAQSection = ({ data }) => {
             </h2>
 
             <div className="max-w-4xl mx-auto space-y-4">
-                {faqs.map((faq, index) => (
+                {healthProfile?.faqs?.map((faq, index) => (
                     <div
                         key={index}
                         className="rounded-xl border border-blue-100 bg-blue-50 transition-all duration-300 hover:border-blue-500 hover:shadow-md"

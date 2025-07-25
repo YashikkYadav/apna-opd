@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-
-const GymFooter = ({ healthProfile }) => {
+import FreeTrialModal from './FreeTrialModel';
+import { useState } from 'react';
+const GymFooter = ({ healthProfile,data }) => {
+    const [modalOpen, setModalOpen] = useState(false);
     return (
         <motion.footer
             initial={{ opacity: 0, y: 40 }}
@@ -22,18 +24,20 @@ const GymFooter = ({ healthProfile }) => {
             <div className="flex justify-center flex-wrap gap-4 mb-10">
                 <motion.a
                     whileHover={{ scale: 1.05 }}
-                    href="/join-now"
+                    onClick={() => setModalOpen(true)}
                     className="bg-white text-blue-700 hover:bg-blue-600 hover:text-white font-bold py-3 px-6 rounded-full shadow-md transition-all"
                 >
-                    Join {healthProfile?.name} Today
+                    Join {data?.name} Today
                 </motion.a>
+                <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                 <motion.a
                     whileHover={{ scale: 1.05 }}
-                    href="/free-trial"
+                    onClick={() => setModalOpen(true)}
                     className="border-2 border-white text-white hover:bg-white hover:text-blue-800 font-bold py-3 px-6 rounded-full transition-all shadow"
                 >
                     Claim Your Free Trial
                 </motion.a>
+                <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
             </div>
 
             <p className="text-sm text-blue-300">© 2024 {healthProfile?.name}. All rights reserved.</p>

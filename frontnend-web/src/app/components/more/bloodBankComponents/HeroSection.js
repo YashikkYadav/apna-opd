@@ -2,10 +2,12 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import CallNow from './CallNow';
+import { useState } from 'react';
 
-function getStarIcons(rating) {
+function getStarIcons(avgRating) {
     const stars = [];
-    const safeRating = rating ?? 0;
+    const safeRating = avgRating ?? 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating - fullStars > 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -39,9 +41,12 @@ const HeroSection = ({
     imageUrl = '/images/blood-bank.jpg',
     healthProfile, data
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
     console.log(healthProfile?.name)
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
 
-
+    
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -80,9 +85,9 @@ const HeroSection = ({
 
                 {/* Badges */}
                 <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
-                    {getStarIcons(rating)}
+                    {getStarIcons(parseFloat(avgRating))}
                     <span className="text-white text-xl font-semibold ml-2">
-                        {rating}/5
+                        {avgRating}/5
                     </span>
                     <span className="text-white/70 text-lg ml-2">
                         ({reviewCount} reviews)
@@ -101,9 +106,12 @@ const HeroSection = ({
                     <button className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🔍 Check Availability
                     </button>
-                    <button className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+                    <button 
+                    onClick ={() => setCallModalOpen(true)}
+                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
                         📞 Call Now
                     </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
                     <div>
                         <button
                             onClick={() => {

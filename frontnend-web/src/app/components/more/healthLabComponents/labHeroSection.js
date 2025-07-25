@@ -3,36 +3,45 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { ClipboardList, MessageCircle, Package as PackageIcon, Phone, MapPin, Star } from 'lucide-react';
+import { useState } from 'react';
+import BookTest from './BookTests';
+import CallNow from './CallNow';
 
-const getStarIcons = (rating = 0) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars > 0.5;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+function getStarIcons(avgRating) {
+    const stars = [];
+    const safeRating = avgRating ?? 0;
+    const fullStars = Math.floor(safeRating);
+    const hasHalfStar = safeRating - fullStars > 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    return [
-        ...Array(fullStars).fill(<FaStar className="text-yellow-300 text-xl" />),
-        ...(halfStar ? [<FaStarHalfAlt className="text-yellow-300 text-xl" />] : []),
-        ...Array(emptyStars).fill(<FaRegStar className="text-yellow-300 text-xl" />),
-    ];
-};
+    for (let i = 0; i < fullStars; i++) {
+        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-2xl" />);
+    }
+
+    if (hasHalfStar) {
+        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-2xl" />);
+    }
+
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-white text-2xl" />);
+    }
+
+    return stars;
+}
+
 
 const HeroSection = ({
     res_data,
-    setShowModal,
-    setModalTest,
     data,
     healthProfile
 }) => {
+    const [callModalOpen, setCallModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const name = data?.name ?? "HealthLab Diagnostics";
     const location = data?.location ?? "City";
     const address = data?.address ?? "";
-    const rating = healthProfile?.reviews ? parseFloat(
-        (
-            res_data?.healthProfile?.reviews.reduce((acc, cur) => acc + cur.rating, 0) /
-            res_data?.healthProfile?.reviews.length
-        ).toFixed(1)
-    ) : 0;
-    const reviewCount = res_data?.healthProfile?.reviews?.length ?? 0;
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     const phone = data?.phone;
 
     return (
@@ -66,13 +75,19 @@ const HeroSection = ({
                 {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
-                    <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
+                    <div
+                        onClick={() => {
+                            const section = document.getElementById("labLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
                         <MapPin className="w-5 h-5" />
                         <span>{location} {address}</span>
                     </div>
-                    <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full backdrop-blur">
-                        <Star className="w-5 h-5 text-yellow-300" />
-                        <span>{rating}/5 • {reviewCount} Reviews</span>
+                    <div className="flex items-center gap-2 justify-center md:justify-start">
+                        {getStarIcons(parseFloat(avgRating))}
+                        <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
+                        <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                     </div>
                 </div>
 
@@ -92,31 +107,33 @@ const HeroSection = ({
                 <div className="flex flex-wrap gap-3 mt-2">
                     <button
                         className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 flex items-center gap-2 shadow-lg transition text-base"
-                        onClick={() => {
-                            setShowModal(true);
-                            setModalTest(null);
-                        }}
+                        onClick={() => setModalOpen(true)}
                     >
                         <ClipboardList className="w-4 h-4" /> Book Test
                     </button>
-                    <button 
-                    onClick={() => {
-                                const section = document.getElementById("labPackagesSection");
-                                section?.scrollIntoView({ behavior: "smooth" });
-                            }}
-                    className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
+                    <BookTest isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("labPackagesSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
                         <PackageIcon className="w-4 h-4" /> Browse Packages
                     </button>
-                    <a href={`tel:${phone}`}>
-                        <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                            <Phone className="w-4 h-4" /> Call Now
-                        </button>
-                    </a>
-                    <a href={`https://wa.me/91${phone}`} target="_blank" rel="noopener noreferrer">
-                        <button className="bg-white/20 text-white border-2 border-white/30 font-semibold rounded-full px-6 py-3 flex items-center gap-2 backdrop-blur transition text-base">
-                            <MessageCircle className="w-4 h-4" /> WhatsApp
-                        </button>
-                    </a>
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📞 Call Now
+                    </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("labLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="border-2 border-white text-white text-lg px-8 py-2 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📍 View Location
+                    </button>
                 </div>
             </div>
 

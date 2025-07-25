@@ -27,7 +27,7 @@ const FacilityCard = ({ name }) => (
   </motion.div>
 );
 
-const CampusFacilities = () => {
+const CampusFacilities = ({healthProfile,data}) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -49,7 +49,7 @@ const CampusFacilities = () => {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {facilities.map((name, idx) => (
+        {healthProfile?.facilities?.map((name, idx) => (
           <FacilityCard key={idx} name={name} />
         ))}
       </div>

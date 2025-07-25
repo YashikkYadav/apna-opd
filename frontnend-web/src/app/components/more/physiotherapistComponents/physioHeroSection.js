@@ -4,10 +4,13 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { CalendarPlus, Package } from 'lucide-react';
+import BookSession from './BookSession';
+import { useState } from 'react';
+import CallNow from './CallNow';
 
-function getStarIcons(rating) {
+function getStarIcons(avgRating) {
     const stars = [];
-    const safeRating = rating ?? 0;
+    const safeRating = avgRating ?? 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating - fullStars > 0.5;
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
@@ -26,10 +29,12 @@ function getStarIcons(rating) {
 }
 
 const PhysiotherapyHero = ({ data, healthProfile }) => {
-    const rating = healthProfile?.rating;
-    const reviewCount = healthProfile?.reviews?.length;
+    
     const features = healthProfile?.doctorInfo?.features;
-
+    const [modalOpen, setModalOpen] = useState(false);
+    const [callModalOpen, setCallModalOpen] = useState(false);
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const reviewCount = healthProfile?.testimonials?.length || 0;
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -61,6 +66,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
                     {data?.name}
                 </h2>
+                <p>{healthProfile?.introduction}</p>
 
                 <p className="text-white/90 text-lg max-w-xl">
                     Female • {healthProfile?.experience} Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
@@ -68,8 +74,8 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
 
                 {/* Star Ratings */}
                 <div className="flex items-center gap-2 justify-center md:justify-start">
-                    {getStarIcons(rating)}
-                    <span className="text-white text-xl font-semibold ml-2">{rating}/5</span>
+                    {getStarIcons(parseFloat(avgRating))}
+                    <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
                     <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
                 </div>
 
@@ -95,16 +101,34 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
-                    <button className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2">
+                    <button
+                        onClick={() => setModalOpen(true)}
+                        className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2">
                         <CalendarPlus className="w-5 h-5" /> Book Session
                     </button>
-                    <button 
-                    onClick={() => {
-                        const section = document.getElementById("therapyPackagesSection");
-                        section?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105 flex items-center gap-2">
+                    <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("therapyPackagesSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105 flex items-center gap-2">
                         <Package className="w-5 h-5" /> Explore Packages
+                    </button>
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        📞 Call Now
+                    </button>
+                    <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+                    <button
+                        onClick={() => {
+                            const section = document.getElementById("PhysioLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
+                    >
+                        📍 Directions
                     </button>
                 </div>
             </div>

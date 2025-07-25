@@ -2,23 +2,7 @@
 import { motion } from 'framer-motion';
 import { FaStar, FaRegStar, FaCommentDots } from 'react-icons/fa';
 
-const reviews = [
-    {
-        name: "Alice",
-        rating: 5,
-        text: "Amazing service, very satisfied!",
-    },
-    {
-        name: "Bob",
-        rating: 4,
-        text: "Great experience overall!",
-    },
-    {
-        name: "Charlie",
-        rating: 5,
-        text: "Highly recommend to everyone.",
-    },
-];
+
 
 const renderStars = (count) =>
     [...Array(5)].map((_, i) =>
