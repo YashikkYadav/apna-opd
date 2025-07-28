@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
-
+const testimonialSchema = new mongoose.Schema({
+    rating: Number,
+    title: String,
+    text: String,
+    author: String,
+    context: String
+});
 const profileSchema = new mongoose.Schema(
     {
         healthServeId: {
@@ -8,49 +14,20 @@ const profileSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "HealthServe",
         },
-        doctorInfo: {
-            name: String,
-            specialty: String,
-            location: String,
-            phone: String,
-            email: String,
-            description: String,
-            features: [
-                { label: String, enabled: Boolean }
-            ],
-            conditions: [
-                { label: String, icon: String }
-            ]
-        },
-        highlights: [
-            { icon: String, title: String, desc: String }
-        ],
-        services: [
-            { id: Number, name: String }
-        ],
-        packages: [
-            {
-                id: Number,
-                name: String,
-                sessions: Number,
-                price: Number,
-                discount: Number,
-                description: String
-            }
-        ],
-        reviews: [
-            {
-                id: Number,
-                name: String,
-                service: String,
-                rating: Number,
-                comment: String,
-                date: String
-            }
-        ],
-        faqs: [
-            { question: String, answer: String }
-        ],
+        about: String,
+        experience: String,
+        introduction: String,
+        specialInterests: [{ type: String }],
+        education: [{ type: String }],
+        therapyPackages: [{ name: String, price: String }],
+        testimonials: [testimonialSchema],
+
+        languages: [{ type: String }],
+        conditionsTreated: [{ type: String }],
+        certifications: [{ type: String }],
+        tags: [{ type: String }],
+        profilePhoto: { type: String },
+        galleryImages: [{ type: String }]
     }
     ,
     {

@@ -634,12 +634,13 @@ removeTag(index) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
+      const res = await useProfileStore().getProfileData();
+      const profile = await res.healthServeProfileData.healthServeProfile;
+      console.log('healthServeProfileData',profile)
 
       if (profile) {
-        console.log(res);
-        this.images = profile.images;
+        console.log("profile.images",profile.bloodTypes);
+        this.images = profile.galleryImages;
 
         const hs = profile.healthServeId;
 
@@ -652,14 +653,14 @@ removeTag(index) {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-        this.form.bloodTypes = profile.bloodTypes || [];
-  this.form.nearbyBloodBanks = profile.nearbyBloodBanks || [];
-  this.form.facilities = profile.facilities || [];
-  this.form.certifications = profile.certifications || [];
+        this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
+  this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];
+  this.form.facilities = profile.facilities.map((item)=>({name:item})) || [];
+  this.form.certifications = profile.certifications.map((item)=>({name:item})) || [];
   this.form.establishedYear = profile.establishedYear || '';
   this.form.license = profile.license || '';
         this.form.testimonials = profile.testimonials || [];
-        this.form.tags = profile.tags || [];
+        this.form.tags = profile.tags.map((item)=>({name:item})) || [];
       }
     },
     async onSubmit() {

@@ -11,7 +11,7 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-const { handleBloodBank, gethandleBloodBank } = require("../utils/profileStoreData/handleBloodBank");
+const { handleBloodBank, gethandleBloodBank, handlePhysiotherapist, gethandlePhysiotherapist, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory } = require("../utils/profileStoreData/handleBloodBank");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -314,15 +314,20 @@ const addHealthServeProfileData = async (req, healthServeId) => {
     let result;
     switch (healthServeProfile.type) {
       case 'blood_bank':
-        result = await handleBloodBank(req);
+        result = await handleBloodBank(req, healthServeId);
         break;
       case 'physiotherapist':
-        result = await handlePhysiotherapist(req);
+        result = await handlePhysiotherapist(req, healthServeId);
         break;
+      case 'medical_store':
+        result = await handleMedicalStore(req, healthServeId);
+        break;
+      case 'laboratory':
+        result=await handleLaboratory(req, healthServeId)
     }
 
 
-    return
+    return result
     // Determine model based on type
     switch (healthServeProfile.type) {
       case 'physiotherapist':
@@ -384,12 +389,20 @@ const getHealthServeProfileData = async (healthServeId) => {
       case 'blood_bank':
         result = await gethandleBloodBank(healthServeId);
         break;
+      case 'physiotherapist':
+        result = await gethandlePhysiotherapist(healthServeId)
+      case 'medical_store':
+        result = await gethandleMedicalStore(healthServeId)
+        break
+      case 'laboratory':
+        result = await gethandleLaboratory(healthServeId)
+        break;
+
     }
 
     return {
       statusCode: 201,
       healthServeProfile: result, // return saved document,
-      healthServeUser: healthServeProfile,
       ok: true
     };
     console.log('healthServeProfile.type', healthServeProfile.type)

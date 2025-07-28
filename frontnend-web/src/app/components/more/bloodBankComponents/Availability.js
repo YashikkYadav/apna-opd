@@ -33,7 +33,7 @@ const ComponentsCard = ({ label, status, highlight }) => {
     );
 };
 
-const Availability = () => {
+const Availability = ({data,healthProfile}) => {
     const bloodTypes = [
         { label: "A+", status: "available", highlight: "Available" },
         { label: "A-", status: "limited", highlight: "Limited" },

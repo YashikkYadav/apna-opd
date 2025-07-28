@@ -22,11 +22,11 @@ export default function BloodBankPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
-            const { healthServeProfile } = response_data.data;
+            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`);
+            const { healthServeProfile,healthServeUser } = response_data.data.healthServeProfileData;
             setData({
                 healthProfile: healthServeProfile || null,
-                otherData: healthServeProfile?.healthServeId || null
+                otherData:healthServeUser || null
             });
             console.log("healthServeProfile:", healthServeProfile);
             console.log("healthServeId:", healthServeProfile?.healthServeId);
