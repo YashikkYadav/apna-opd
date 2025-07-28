@@ -11,6 +11,7 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
+const { handleBloodBank, gethandleBloodBank } = require("../utils/profileStoreData/handleBloodBank");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -304,13 +305,24 @@ function deleteImageFile(filename) {
   });
 }
 
-const addHealthServeProfileData = async (data) => {
+const addHealthServeProfileData = async (req, healthServeId) => {
   try {
 
-    let healthServeProfile = await HealthServe.findById(data.healthServeId);
+    let healthServeProfile = await HealthServe.findById(healthServeId);
 
-    let Model;
+    console.log('healthServeProfile', healthServeProfile.type)
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await handleBloodBank(req);
+        break;
+      case 'physiotherapist':
+        result = await handlePhysiotherapist(req);
+        break;
+    }
 
+
+    return
     // Determine model based on type
     switch (healthServeProfile.type) {
       case 'physiotherapist':
@@ -367,8 +379,19 @@ const getHealthServeProfileData = async (healthServeId) => {
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
 
-    let Model;
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await gethandleBloodBank(healthServeId);
+        break;
+    }
 
+    return {
+      statusCode: 201,
+      healthServeProfile: result, // return saved document,
+      healthServeUser: healthServeProfile,
+      ok: true
+    };
     console.log('healthServeProfile.type', healthServeProfile.type)
     // Determine model based on type
     switch (healthServeProfile.type) {
