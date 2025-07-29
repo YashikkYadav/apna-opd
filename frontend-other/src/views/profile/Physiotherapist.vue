@@ -475,6 +475,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
@@ -714,7 +715,7 @@ removeTag(index) {
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
 
@@ -727,7 +728,7 @@ removeTag(index) {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-       this.form.education = (profile.education || []).map(e => ({ value: e }));
+       this.form.education = (profile.education || [])
   this.form.specialInterests = profile.specialInterests || [];
       this.form.certifications = profile.certifications || [];
       this.form.languages = profile.languages || [];
@@ -750,7 +751,7 @@ removeTag(index) {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append('education', JSON.stringify(this.form.education.map(e => e.value)));
+        formData.append('education', JSON.stringify(this.form.education));
   formData.append("specialInterests", JSON.stringify(this.form.specialInterests));
       formData.append("certifications", JSON.stringify(this.form.certifications));
       formData.append("languages", JSON.stringify(this.form.languages));
@@ -844,6 +845,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

@@ -52,4 +52,5 @@ const HealthLabProfileSchema = new Schema({
   timestamps: true,
 });
 
-module.exports = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
+const healthLabProfile = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
+module.exports=healthLabProfile

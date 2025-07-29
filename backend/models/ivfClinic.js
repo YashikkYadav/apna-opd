@@ -54,4 +54,5 @@ const ivfClinicSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("IvfClinic", ivfClinicSchema);
+const  ivfClinic= mongoose.model("IvfClinic", ivfClinicSchema);
+module.exports=ivfClinic

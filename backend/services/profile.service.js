@@ -389,7 +389,7 @@ const getHealthServeProfileData = async (healthServeId) => {
 
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
-
+console.log('asasd',healthServeProfile.type)
     let result;
     switch (healthServeProfile.type) {
       case 'blood_bank':
@@ -397,6 +397,7 @@ const getHealthServeProfileData = async (healthServeId) => {
         break;
       case 'physiotherapist':
         result = await gethandlePhysiotherapist(healthServeId)
+        break;
       case 'medical_store':
         result = await gethandleMedicalStore(healthServeId)
         break

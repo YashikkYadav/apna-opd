@@ -203,10 +203,10 @@ exports.handleMedicalStore = async (req, healthServeId) => {
             context: t.context
         }));
 
-        let servicesOffered = JSON.parse(req.body.servicesOffered).map(item => item.name);
+        let servicesOffered = JSON.parse(req.body.servicesOffered)
         let medicines = JSON.parse(req.body.medicines);
         let partnerships = JSON.parse(req.body.partnerships);
-        let features = JSON.parse(req.body.features).map(item => item.title);
+        let features = JSON.parse(req.body.features);
         let faqs = JSON.parse(req.body.faqs);
         let tags = JSON.parse(req.body.tags)
 
@@ -386,6 +386,7 @@ exports.gethandleBloodBank = async (healthServeId) => {
 
 exports.gethandlePhysiotherapist = async (healthServeId) => {
     const doc = await physiotherapistsProfileModel.findOne({ healthServeId }).populate('healthServeId')
+    console.log('daasaa',doc)
     return doc
 
 }

@@ -458,6 +458,8 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
+
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
@@ -692,7 +694,7 @@ removeTag(index) {
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
 
@@ -825,6 +827,9 @@ this.form.medicines = profile.medicines?.length
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {
