@@ -13,7 +13,7 @@ const renderStars = (count) =>
         )
     );
 
-const Reviews = (healthProfile) => {
+const Reviews = ({healthProfile}) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -40,7 +40,7 @@ const Reviews = (healthProfile) => {
                         className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[180px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
                     >
                         <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-lg font-bold text-blue-700">{review.name}</h3>
+                            <h3 className="text-lg font-bold text-blue-700">{review.title}</h3>
                             <div className="flex gap-1">{renderStars(review.rating)}</div>
                         </div>
                         <p className="text-gray-700 text-base font-medium">{review.text}</p>

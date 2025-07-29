@@ -34,6 +34,27 @@ const ComponentsCard = ({ label, status, highlight }) => {
 };
 
 const Availability = ({data,healthProfile}) => {
+
+    const { updatedAt } = healthProfile || {};
+
+    let formattedDate = "";
+    let formattedTime = "";
+
+    if (updatedAt) {
+      const dateObj = new Date(updatedAt); // Make sure it's a Date object
+
+      formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(
+        dateObj.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${dateObj.getFullYear()}`;
+
+      formattedTime = `${dateObj
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
+    }
+
     const bloodTypes = [
         { label: "A+", status: "available", highlight: "Available" },
         { label: "A-", status: "limited", highlight: "Limited" },
@@ -88,7 +109,7 @@ const Availability = ({data,healthProfile}) => {
 
             {/* Last Updated */}
             <div className="text-center pt-6 text-sm text-gray-500">
-                📅 Last updated on <span className="font-medium">{`{{last_updated_time}}`}</span>
+                📅 Last updated on <span className="font-medium">{`${formattedDate} | ${formattedTime}`}</span>
             </div>
         </motion.div>
     );
