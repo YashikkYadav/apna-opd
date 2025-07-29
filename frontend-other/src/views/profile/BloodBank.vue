@@ -426,6 +426,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
@@ -641,6 +642,8 @@ removeTag(index) {
       if (profile) {
         console.log("profile.images",profile.bloodTypes);
         this.images = profile.galleryImages;
+        const hs = profile.healthServeId;
+
 
         
 
@@ -660,7 +663,7 @@ removeTag(index) {
   this.form.establishedYear = profile.establishedYear || '';
   this.form.license = profile.license || '';
         this.form.testimonials = profile.testimonials || [];
-        this.form.tags = profile.tags.map((item)=>({name:item})) || [];
+        this.form.tags = profile.tags || [];
       }
     },
     async onSubmit() {
@@ -678,6 +681,7 @@ removeTag(index) {
         formData.append("state", this.form.state);
         formData.append("bloodTypes", JSON.stringify(this.form.bloodTypes));
   formData.append("nearbyBloodBanks", JSON.stringify(this.form.nearbyBloodBanks));
+  formData.append("license", JSON.stringify(this.form.license));
   formData.append("facilities", JSON.stringify(this.form.facilities));
   formData.append("certifications", JSON.stringify(this.form.certifications));
   formData.append("establishedYear", this.form.establishedYear);
@@ -769,6 +773,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

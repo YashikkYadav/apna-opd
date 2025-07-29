@@ -162,203 +162,243 @@
         </v-card>
 
         <!-- tags -->
-         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
+          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-  <div
-    v-for="(tag, index) in form.tags"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-text-field
-        v-model="form.tags[index]"
-        label="Tag"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+          <div
+            v-for="(tag, index) in form.tags"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="form.tags[index]"
+                label="Tag"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTag(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTag(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-        
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Key Features</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2 ml-4" @click="addKeyFeature">+ Add Feature</v-btn>
-  <div v-for="(feature, index) in form.keyFeatures" :key="index" class="px-4 pb-2">
-    <v-text-field
-      v-model="form.keyFeatures[index]"
-      label="Feature"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-btn icon color="error" @click="removeKeyFeature(index)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Key Features</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2 ml-4" @click="addKeyFeature">+ Add Feature</v-btn>
+          <div
+            v-for="(feature, index) in form.keyFeatures"
+            :key="index"
+            class="px-4 pb-2"
+          >
+            <v-text-field
+              v-model="form.keyFeatures[index]"
+              label="Feature"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-btn icon color="error" @click="removeKeyFeature(index)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2 ml-4" @click="addCertification"
+            >+ Add Certification</v-btn
+          >
+          <div
+            v-for="(cert, index) in form.certifications"
+            :key="index"
+            class="px-4 pb-2"
+          >
+            <v-text-field
+              v-model="form.certifications[index]"
+              label="Certification"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-btn icon color="error" @click="removeCertification(index)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2 ml-4" @click="addCertification">+ Add Certification</v-btn>
-  <div v-for="(cert, index) in form.certifications" :key="index" class="px-4 pb-2">
-    <v-text-field
-      v-model="form.certifications[index]"
-      label="Certification"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-btn icon color="error" @click="removeCertification(index)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2 ml-4" @click="addPackage">+ Add Package</v-btn>
+          <div
+            v-for="(pkg, index) in form.packages"
+            :key="index"
+            class="px-4 pb-4"
+          >
+            <v-text-field
+              v-model="pkg.name"
+              label="Package Name"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-text-field
+              v-model="pkg.details"
+              label="Details"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-text-field
+              v-model="pkg.price"
+              label="Price"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-btn icon color="error" @click="removePackage(index)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tests</v-toolbar-title>
+          </v-toolbar>
 
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2 ml-4" @click="addPackage">+ Add Package</v-btn>
-  <div v-for="(pkg, index) in form.packages" :key="index" class="px-4 pb-4">
-    <v-text-field
-      v-model="pkg.name"
-      label="Package Name"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-text-field
-      v-model="pkg.details"
-      label="Details"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-text-field
-      v-model="pkg.price"
-      label="Price"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-btn icon color="error" @click="removePackage(index)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+          <v-btn class="mb-2" @click="addTest">+ Add Test</v-btn>
 
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tests</v-toolbar-title>
-  </v-toolbar>
+          <div
+            v-for="(test, index) in form.tests"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="test.name"
+                label="Test Name"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-  <v-btn class="mb-2" @click="addTest">+ Add Test</v-btn>
+              <v-text-field
+                v-model="test.description"
+                label="Description"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-  <div
-    v-for="(test, index) in form.tests"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;"
-    >
-      <v-text-field
-        v-model="test.name"
-        label="Test Name"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+              <v-text-field
+                v-model="test.fee"
+                label="Fee"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <v-text-field
-        v-model="test.description"
-        label="Description"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTest(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-      <v-text-field
-        v-model="test.fee"
-        label="Fee"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
-
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTest(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-
-
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2 ml-4" @click="addFaq">+ Add FAQ</v-btn>
-  <div v-for="(faq, index) in form.faqs" :key="index" class="px-4 pb-4">
-    <v-text-field
-      v-model="faq.question"
-      label="Question"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <v-textarea
-      v-model="faq.answer"
-      label="Answer"
-      dense
-      outlined
-      hide-details
-      auto-grow
-    ></v-textarea>
-    <v-btn icon color="error" @click="removeFaq(index)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
-
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2 ml-4" @click="addFaq">+ Add FAQ</v-btn>
+          <div v-for="(faq, index) in form.faqs" :key="index" class="px-4 pb-4">
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              hide-details
+              auto-grow
+            ></v-textarea>
+            <v-btn icon color="error" @click="removeFaq(index)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -494,6 +534,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
@@ -509,11 +550,11 @@ export default {
         city: "",
         pincode: "",
         state: "",
-        tags: [''],
+        tags: [""],
         keyFeatures: [],
-      certifications: [],
-      packages: [],
-      faqs: [],
+        certifications: [],
+        packages: [],
+        faqs: [],
         tests: [],
         testimonials: [],
         googleMapLink: "",
@@ -620,41 +661,41 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addKeyFeature() {
-    this.form.keyFeatures.push('');
-  },
-  removeKeyFeature(index) {
-    this.form.keyFeatures.splice(index, 1);
-  },
-  addCertification() {
-    this.form.certifications.push('');
-  },
-  removeCertification(index) {
-    this.form.certifications.splice(index, 1);
-  },
-  addPackage() {
-    this.form.packages.push({ name: '', details: '', price: '' });
-  },
-  removePackage(index) {
-    this.form.packages.splice(index, 1);
-  },
-  addFaq() {
-    this.form.faqs.push({ question: '', answer: '' });
-  },
-  removeFaq(index) {
-    this.form.faqs.splice(index, 1);
-  },
-  addTest() {
-  this.form.tests.push({ name: '', description: '', fee: '' });
-},
-removeTest(index) {
-  this.form.tests.splice(index, 1);
-},
-addTag() {
-  this.form.tags.push('');
-},
-removeTag(index) {
-  this.form.tags.splice(index, 1);
-},
+      this.form.keyFeatures.push("");
+    },
+    removeKeyFeature(index) {
+      this.form.keyFeatures.splice(index, 1);
+    },
+    addCertification() {
+      this.form.certifications.push("");
+    },
+    removeCertification(index) {
+      this.form.certifications.splice(index, 1);
+    },
+    addPackage() {
+      this.form.packages.push({ name: "", details: "", price: "" });
+    },
+    removePackage(index) {
+      this.form.packages.splice(index, 1);
+    },
+    addFaq() {
+      this.form.faqs.push({ question: "", answer: "" });
+    },
+    removeFaq(index) {
+      this.form.faqs.splice(index, 1);
+    },
+    addTest() {
+      this.form.tests.push({ name: "", description: "", fee: "" });
+    },
+    removeTest(index) {
+      this.form.tests.splice(index, 1);
+    },
+    addTag() {
+      this.form.tags.push("");
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -708,11 +749,12 @@ removeTag(index) {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      const profile = res.healthServeProfile;
+      const profile = await res.healthServeProfileData.healthServeProfile;
+
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
 
@@ -725,11 +767,11 @@ removeTag(index) {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-       this.form.keyFeatures = (profile.keyFeatures || []).map(k => ({ value: k }));
-  this.form.certifications = (profile.certifications || []).map(c => ({ value: c }));
-  this.form.packages = (profile.packages || []).map(p => ({ value: p }));
-  this.form.faqs = (profile.faqs || []).map(f => ({ value: f }));
-  this.form.tests = (profile.tests || []).map(t => ({ value: t }));
+        this.form.keyFeatures = (profile.keyFeatures || [])
+        this.form.certifications = (profile.certifications || [])
+        this.form.packages = (profile.packages || [])
+        this.form.faqs = (profile.faqs || [])
+        this.form.tests = (profile.tests || [])
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -747,11 +789,26 @@ removeTag(index) {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-         formData.append('keyFeatures', JSON.stringify(this.form.keyFeatures.map(k => k.value)));
-  formData.append('certifications', JSON.stringify(this.form.certifications.map(c => c.value)));
-  formData.append('packages', JSON.stringify(this.form.packages.map(p => p.value)));
-  formData.append('faqs', JSON.stringify(this.form.faqs.map(f => f.value)));
-  formData.append('tests', JSON.stringify(this.form.tests.map(t => t.value)));
+        formData.append(
+          "keyFeatures",
+          JSON.stringify(this.form.keyFeatures)
+        );
+        formData.append(
+          "certifications",
+          JSON.stringify(this.form.certifications)
+        );
+        formData.append(
+          "packages",
+          JSON.stringify(this.form.packages)
+        );
+        formData.append(
+          "faqs",
+          JSON.stringify(this.form.faqs)
+        );
+        formData.append(
+          "tests",
+          JSON.stringify(this.form.tests)
+        );
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
@@ -765,9 +822,7 @@ removeTag(index) {
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();
@@ -840,6 +895,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+  this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {
