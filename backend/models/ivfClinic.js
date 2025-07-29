@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const testimonialSchema = new mongoose.Schema({
-    rating: Number,
-    title: String,
-    text: String,
-    author: String,
+  rating: Number,
+  title: String,
+  text: String,
+  author: String,
 });
 
 const ivfClinicSchema = new mongoose.Schema(
@@ -45,7 +45,7 @@ const ivfClinicSchema = new mongoose.Schema(
         answer: String,
       }
     ],
-    services: [{name: String}],
+    services: [{ type: String }],
     testimonials: [testimonialSchema],
     tags: [{ type: String }],
     profilePhoto: { type: String },

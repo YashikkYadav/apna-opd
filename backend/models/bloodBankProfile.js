@@ -24,6 +24,7 @@ const bloodBankSchema = new mongoose.Schema({
     establishedYear: String,
     testimonials: [testimonialSchema],
     tags: [{ type: String }],
+    license:{type:String},
     profilePhoto: { type: String },
     galleryImages: [{ type: String }]
 }, { timestamps: true });

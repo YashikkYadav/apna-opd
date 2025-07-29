@@ -418,6 +418,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 export default {
   data() {
@@ -636,9 +637,17 @@ removeTag(index) {
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages;
 
         const hs = profile.healthServeId;
+        console.log('asdasdsd',
+
+        hs?.address,
+hs?.city,
+hs?.locality,
+hs?.state,
+hs?.pincode,
+        )
 
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
@@ -657,7 +666,7 @@ removeTag(index) {
   this.form.whyChoose = profile.whyChoose || [];
   this.form.degrees = profile.degrees || [];
   this.form.faqs = profile.faqs || [];
-  this.form.services = profile.services || [];
+  this.form.services = profile.services.map((item)=>({name:item})) || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -772,6 +781,10 @@ removeTag(index) {
     },
   },
 };
+
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

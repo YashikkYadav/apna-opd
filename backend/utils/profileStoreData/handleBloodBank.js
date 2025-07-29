@@ -2,7 +2,8 @@ const bloodBankProfileModel = require('../../models/bloodBankProfile')
 const physiotherapistsProfileModel = require('../../models/physiotherapistsProfile')
 const pharmacyProfileModel = require('../../models/pharmacyProfile')
 const healthServeModel = require('../../models/healthServe')
-const healthlabProfileModel =require('../../models/healthlabProfile')
+const healthlabProfileModel = require('../../models/healthlabProfile')
+const ivfClinicModel = require('../../models/ivfClinic')
 const UpdateHealthServeData = async (req, healthServeId) => {
     const {
         address,
@@ -13,7 +14,7 @@ const UpdateHealthServeData = async (req, healthServeId) => {
 
     } = req.body
 
-    console.log('req.body',{
+    console.log('req.body', {
         address,
         locality,
         city,
@@ -33,7 +34,8 @@ const UpdateHealthServeData = async (req, healthServeId) => {
 }
 
 
-exports.handleLaboratory = async (req, healthServeId) => {
+
+exports.handleIvfClinic = async (req, healthServeId) => {
     try {
 
         const files = req.files;
@@ -41,8 +43,10 @@ exports.handleLaboratory = async (req, healthServeId) => {
             about,
             experience,
             introduction,
-            openTime,
-            closeTime
+            licensedBy,
+            successRate,
+            specialization,
+            couplesTreated
         } = req.body
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
         const profilePhoto =
@@ -61,10 +65,79 @@ exports.handleLaboratory = async (req, healthServeId) => {
             context: t.context
         }));
 
-        let tests = JSON.parse(req.body.tests).map(item => item.name);
+        let whyChoose = JSON.parse(req.body.whyChoose)
+        let degrees = JSON.parse(req.body.degrees);
+        let faqs = JSON.parse(req.body.faqs);
+        let services = JSON.parse(req.body.services).map(item => item.name);
+        let tags = JSON.parse(req.body.tags)
+
+        const finalData = {
+            healthServeId: healthServeId,
+            about,
+            experience,
+            introduction,
+            licensedBy,
+            successRate,
+            specialization,
+            couplesTreated,
+            faqs,
+            whyChoose,
+            testimonials: parsedTestimonials,
+            tags,
+            degrees,
+            services,
+
+
+            profilePhoto,
+            galleryImages,
+        }
+
+        console.log('asdaasadad', finalData)
+        const storeData = await ivfClinicModel.updateOne(
+            { healthServeId: finalData.healthServeId }, // query condition
+            { $set: finalData },                        // fields to update
+            { upsert: true }                            // insert if not exists
+        );
+
+        await UpdateHealthServeData(req, healthServeId)
+        return storeData
+    } catch (error) {
+        console.log('error', error)
+        throw error
+    }
+}
+
+exports.handleLaboratory = async (req, healthServeId) => {
+    try {
+
+        const files = req.files;
+        const {
+            about,
+            experience,
+            introduction,
+          
+        } = req.body
+        const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
+        const profilePhoto =
+            `${profileImage?.destination?.split('public/')[1]}/${profileImage?.filename}`
+
+
+        const galleryImages = files
+            .filter(file => file.fieldname === 'galleryImages_image')
+            .map(file => `${file?.destination?.split('public/')[1]}/${file?.filename}`);
+
+        let parsedTestimonials = JSON.parse(req.body.testimonials).map(t => ({
+            rating: t.rating,
+            title: t.title,
+            text: t.text,
+            author: t.author,
+            context: t.context
+        }));
+
+        let tests = JSON.parse(req.body.tests)
         let packages = JSON.parse(req.body.packages);
         let certifications = JSON.parse(req.body.certifications);
-        let features = JSON.parse(req.body.features).map(item => item.title);
+        let keyFeatures = JSON.parse(req.body.keyFeatures)
         let faqs = JSON.parse(req.body.faqs);
         let tags = JSON.parse(req.body.tags)
 
@@ -73,20 +146,22 @@ exports.handleLaboratory = async (req, healthServeId) => {
             about,
             experience,
             introduction,
-            keyFeatures: features,
+            keyFeatures,
             certifications,
             packages,
             faqs,
             testimonials: parsedTestimonials,
             tags,
             tests,
-            
+
 
             profilePhoto,
             galleryImages,
         }
 
-        const storeData = await pharmacyProfileModel.updateOne(
+        console.log("assdsad",finalData)
+
+        const storeData = await healthlabProfileModel.updateOne(
             { healthServeId: finalData.healthServeId }, // query condition
             { $set: finalData },                        // fields to update
             { upsert: true }                            // insert if not exists
@@ -246,7 +321,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
             about,
             experience,
             introduction,
-
+            license,
             establishedYear
         } = req.body
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
@@ -269,7 +344,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
         let nearbyBloodBanks = JSON.parse(req.body.nearbyBloodBanks).map(item => item.name);
         let facilities = JSON.parse(req.body.facilities).map(item => item.name);
         let certifications = JSON.parse(req.body.certifications).map(item => item.name);
-        let tags = JSON.parse(req.body.tags).map(item => item.name);
+        let tags = JSON.parse(req.body.tags)
 
 
         const finalData = {
@@ -279,7 +354,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
             introduction,
             bloodTypes,
             nearbyBloodBanks,
-            facilities,
+            facilities, license:JSON.parse(license),
             certifications,
             establishedYear,
             testimonials: parsedTestimonials,
@@ -322,6 +397,11 @@ exports.gethandleMedicalStore = async (healthServeId) => {
 }
 
 exports.gethandleLaboratory = async (healthServeId) => {
-      const doc = await healthlabProfileModel.findOne({ healthServeId }).populate('healthServeId')
+    const doc = await healthlabProfileModel.findOne({ healthServeId }).populate('healthServeId')
+    return doc
+}
+
+exports.gethandleIvf = async (healthServeId) => {
+    const doc = await ivfClinicModel.findOne({ healthServeId }).populate('healthServeId')
     return doc
 }
