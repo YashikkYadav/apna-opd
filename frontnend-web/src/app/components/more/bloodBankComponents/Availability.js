@@ -34,6 +34,27 @@ const ComponentsCard = ({ label, status, highlight }) => {
 };
 
 const Availability = ({data,healthProfile}) => {
+    const { updatedAt } = healthProfile || {};
+
+    let formattedDate = "";
+    let formattedTime = "";
+
+    if (updatedAt) {
+      const dateObj = new Date(updatedAt); // Make sure it's a Date object
+
+      formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(
+        dateObj.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${dateObj.getFullYear()}`;
+
+      formattedTime = `${dateObj
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
+    }
+
+
     const bloodTypes = [
         { label: "A+", status: "available", highlight: "Available" },
         { label: "A-", status: "limited", highlight: "Limited" },
@@ -53,44 +74,45 @@ const Availability = ({data,healthProfile}) => {
     ];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, type: "spring" }}
-            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
-        >
-            {/* Title */}
-            <div className=" mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C65A0] flex items-center gap-3">
-                <FaTint className="text-3xl text-red-600" />
-                    Blood Types & Components Availability
-                </h2>
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, type: "spring" }}
+        className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
+      >
+        {/* Title */}
+        <div className=" mb-8">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C65A0] flex items-center gap-3">
+            <FaTint className="text-3xl text-red-600" />
+            Blood Types & Components Availability
+          </h2>
+        </div>
 
-            {/* Blood Types */}
-            <div className="mb-6">
-                <div className="flex flex-wrap justify-center md:justify-around gap-2">
-                    {bloodTypes.map((item) => (
-                        <BloodCard key={item.label} {...item} />
-                    ))}
-                </div>
-            </div>
+        {/* Blood Types */}
+        <div className="mb-6">
+          <div className="flex flex-wrap justify-center md:justify-around gap-2">
+            {bloodTypes.map((item) => (
+              <BloodCard key={item.label} {...item} />
+            ))}
+          </div>
+        </div>
 
-            {/* Components */}
-            <div>
-                <div className="flex flex-wrap justify-center md:justify-around gap-2">
-                    {components.map((item) => (
-                        <ComponentsCard key={item.label} {...item} />
-                    ))}
-                </div>
-            </div>
+        {/* Components */}
+        <div>
+          <div className="flex flex-wrap justify-center md:justify-around gap-2">
+            {components.map((item) => (
+              <ComponentsCard key={item.label} {...item} />
+            ))}
+          </div>
+        </div>
 
-            {/* Last Updated */}
-            <div className="text-center pt-6 text-sm text-gray-500">
-                📅 Last updated on <span className="font-medium">{`{{last_updated_time}}`}</span>
-            </div>
-        </motion.div>
+        {/* Last Updated */}
+        <div className="text-center pt-6 text-sm text-gray-500">
+          📅 Last updated on{" "}
+          <span className="font-medium">{`${formattedDate} | ${formattedTime}`}</span>
+        </div>
+      </motion.div>
     );
 };
 
