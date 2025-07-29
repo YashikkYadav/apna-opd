@@ -134,7 +134,7 @@ variant="outlined"
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
                 <div v-if="img.type === 'galleryImages'" class="image-type">
@@ -242,6 +242,19 @@ variant="outlined"
   </div>
 </v-card>
 
+<v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
+
 
     <!-- Why Choose Us -->
 <v-card class="section-card">
@@ -251,7 +264,7 @@ variant="outlined"
   <v-btn class="mb-2" @click="addWhyChoose">+ Add Reason</v-btn>
   <div v-for="(item, index) in form.whyChoose" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-textarea v-model="item.text" label="Reason" dense outlined auto-grow hide-details class="mb-3" />
+      <v-textarea v-model="form.whyChoose[index]" label="Reason" dense outlined auto-grow hide-details class="mb-3" />
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeWhyChoose(index)">
           <v-icon>mdi-delete</v-icon>
@@ -271,7 +284,7 @@ variant="outlined"
   <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
   <div v-for="(facility, index) in form.facilities" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-text-field v-model="facility.name" label="Facility Name" dense outlined hide-details class="mb-3" />
+      <v-text-field v-model="form.facilities[index]" label="Facility Name" dense outlined hide-details class="mb-3" />
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeFacility(index)">
           <v-icon>mdi-delete</v-icon>
@@ -281,15 +294,68 @@ variant="outlined"
   </div>
 </v-card>
 
-<v-card class="section-card pa-4 mb-4">
-      <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-        <v-toolbar-title>Eligibility, Scholarships & Dates</v-toolbar-title>
-      </v-toolbar>
+<!-- Eligibility Criteria -->
+<v-card class="section-card pa-4">
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Eligibility Criteria</v-toolbar-title>
+  </v-toolbar>
 
-      <v-textarea v-model="form.eligibility" label="Eligibility" outlined dense auto-grow class="mb-3" />
-      <v-textarea v-model="form.scholarships" label="Scholarships" outlined dense auto-grow class="mb-3" />
-      <v-textarea v-model="form.importantDates" label="Important Dates" outlined dense auto-grow class="mb-3" />
-    </v-card>
+  <v-btn class="mb-2" @click="addEligibility">+ Add Eligibility</v-btn>
+
+  <div v-for="(item, index) in form.eligibilityCriteria" :key="index" class="mb-4">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+      <v-text-field v-model="item.course" label="Course" outlined dense class="mb-3" />
+      <v-text-field v-model="item.criteria" label="Eligibility Criteria" outlined dense class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeEligibility(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Important Dates -->
+<v-card class="section-card pa-4">
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Important Dates</v-toolbar-title>
+  </v-toolbar>
+
+  <v-btn class="mb-2" @click="addImportantDate">+ Add Date</v-btn>
+
+  <div v-for="(date, index) in form.importantDates" :key="index" class="mb-4">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+      <v-text-field v-model="date.label" label="Label (e.g. Application Start)" outlined dense class="mb-3" />
+      <v-text-field v-model="date.value" label="Date" type="date" outlined dense class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeImportantDate(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
+<!-- Scholarship Options -->
+<v-card class="section-card pa-4">
+  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+    <v-toolbar-title>Scholarship Options</v-toolbar-title>
+  </v-toolbar>
+
+  <v-btn class="mb-2" @click="addScholarship">+ Add Option</v-btn>
+
+  <div v-for="(option, index) in form.scholarships" :key="index" class="mb-4">
+    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+      <v-text-field v-model="option.name" label="Scholarship Option" outlined dense class="mb-3" />
+      <div class="d-flex justify-end">
+        <v-btn icon color="error" @click="removeScholarship(index)">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+    </div>
+  </div>
+</v-card>
+
 
     <!-- COURSES SECTION -->
     <v-card class="section-card pa-4">
@@ -322,7 +388,7 @@ variant="outlined"
   <v-btn class="mb-2" @click="addTieUp">+ Add Tie-Up</v-btn>
   <div v-for="(tieup, index) in form.hospitalTieUps" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-text-field v-model="tieup.name" label="Hospital Name" dense outlined hide-details class="mb-3" />
+      <v-text-field v-model="form.hospitalTieUps[index]" label="Hospital Name" dense outlined hide-details class="mb-3" />
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeTieUp(index)">
           <v-icon>mdi-delete</v-icon>
@@ -340,7 +406,7 @@ variant="outlined"
   <v-btn class="mb-2" @click="addCareerService">+ Add Service</v-btn>
   <div v-for="(service, index) in form.careerServices" :key="index" class="mb-4" style="padding: 20px">
     <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px">
-      <v-textarea v-model="service.description" label="Service Description" dense outlined auto-grow hide-details class="mb-3" />
+      <v-text-field v-model="form.careerServices[index]" label="Service" dense outlined auto-grow hide-details class="mb-3" />
       <div class="d-flex justify-end">
         <v-btn icon color="error" @click="removeCareerService(index)">
           <v-icon>mdi-delete</v-icon>
@@ -504,6 +570,10 @@ export default {
       timeout: 4000,
     },
       form: {
+       eligibilityCriteria: [{ course: "", criteria: "" }],
+      importantDates: [{ label: "", value: "" }],
+      scholarships: [{ name: "" }],
+        website:'',
         introduction: "",
         experience: null,
         about: "",
@@ -517,17 +587,13 @@ export default {
       affiliatedTo: '',
       approvedBy: '',
       recognition: '',
-      coursesOffered: [],
-      whyChoose: [],
-      facilities: [],
-      eligibility: '',
-      scholarships: '',
-      importantDates: '',
+      whyChoose: [''],
+      facilities: [''],
       courses: [
         { name: '', duration: '', eligibility: '', seats: '' }
       ],
-      hospitalTieUps: [],
-      careerServices: [],
+      hospitalTieUps: [''],
+      careerServices: [''],
         testimonials: [],
         googleMapLink: "",
       },
@@ -639,7 +705,7 @@ export default {
     this.form.courses.splice(index, 1);
   },
      addWhyChoose() {
-  this.form.whyChoose.push({ text: '' });
+  this.form.whyChoose.push('');
 },
 removeWhyChoose(index) {
   this.form.whyChoose.splice(index, 1);
@@ -652,26 +718,45 @@ removeTag(index) {
 },
 
 addFacility() {
-  this.form.facilities.push({ name: '' });
+  this.form.facilities.push('');
 },
 removeFacility(index) {
   this.form.facilities.splice(index, 1);
 },
 
 addTieUp() {
-  this.form.hospitalTieUps.push({ name: '' });
+  this.form.hospitalTieUps.push('');
 },
 removeTieUp(index) {
   this.form.hospitalTieUps.splice(index, 1);
 },
 
 addCareerService() {
-  this.form.careerServices.push({ description: '' });
+  this.form.careerServices.push('');
 },
 removeCareerService(index) {
   this.form.careerServices.splice(index, 1);
 },
+addEligibility() {
+    this.form.eligibilityCriteria.push({ course: "", criteria: "" });
+  },
+  removeEligibility(index) {
+    this.form.eligibilityCriteria.splice(index, 1);
+  },
 
+  addImportantDate() {
+    this.form.importantDates.push({ label: "", value: "" });
+  },
+  removeImportantDate(index) {
+    this.form.importantDates.splice(index, 1);
+  },
+
+  addScholarship() {
+    this.form.scholarships.push({ name: "" });
+  },
+  removeScholarship(index) {
+    this.form.scholarships.splice(index, 1);
+  },
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -737,41 +822,51 @@ removeCareerService(index) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
-
+      const res = await useProfileStore().getProfileData();
+      const profile = res.healthServeProfileData.healthServeProfile.data;
+      const add=res.healthServeProfileData.healthServeUser
+      console.log('jgjg',profile)
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        
+        this.images = profile.galleryImages ;
 
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+        this.form.address = add?.address || "";
+        this.form.city = add?.city || "";
+        this.form.locality = add?.locality || "";
+        this.form.state = add?.state || "";
+        this.form.pincode = add?.pincode || "";
 
          this.form.established = profile.established || '';
   this.form.affiliatedTo = profile.affiliatedTo || '';
   this.form.approvedBy = profile.approvedBy || '';
   this.form.recognition = profile.recognition || '';
-this.form.eligibility = profile.eligibility || '';
-  this.form.scholarships = profile.scholarships || '';
-  this.form.importantDates = profile.importantDates || '';
+this.form.eligibilityCriteria = Array.isArray(profile.eligibilityCriteria)
+  ? profile.eligibilityCriteria
+  : [{ course: "", criteria: "" }];
+
+this.form.importantDates = Array.isArray(profile.importantDates)
+  ? profile.importantDates
+  : [{ label: "", value: "" }];
+
+this.form.scholarships = Array.isArray(profile.scholarships)
+  ? profile.scholarships
+  : [{ name: "" }];
 
   this.form.courses = Array.isArray(profile.courses) && profile.courses.length
     ? profile.courses
     : [{ name: '', duration: '', eligibility: '', seats: '' }];
 
-  this.form.coursesOffered = (profile.coursesOffered || []).map(c => ({ value: c }));
-  this.form.whyChoose = (profile.whyChoose || []).map(w => ({ value: w }));
-  this.form.facilities = (profile.facilities || []).map(f => ({ name: f }));
-  this.form.hospitalTieUps = (profile.hospitalTieUps || []).map(h => ({ value: h }));
-  this.form.careerServices = (profile.careerServices || []).map(c => ({ value: c }));
+  // this.form.coursesOffered = (profile.coursesOffered || []).map(c => ({ value: c }));
+  this.form.whyChoose = (profile.whyChoose || []);
+  this.form.facilities = (profile.facilities || []);
+  this.form.hospitalTieUps = (profile.hospitalTieUps || []);
+  this.form.careerServices = (profile.careerServices || []);
 
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
@@ -781,7 +876,7 @@ this.form.eligibility = profile.eligibility || '';
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -794,30 +889,30 @@ this.form.eligibility = profile.eligibility || '';
   formData.append('affiliatedTo', this.form.affiliatedTo);
   formData.append('approvedBy', this.form.approvedBy);
   formData.append('recognition', this.form.recognition);
- formData.append("eligibility", this.form.eligibility);
-  formData.append("scholarships", this.form.scholarships);
-  formData.append("importantDates", this.form.importantDates);
+
+formData.append("eligibilityCriteria", JSON.stringify(this.form.eligibilityCriteria));
+formData.append("importantDates", JSON.stringify(this.form.importantDates));
+formData.append("scholarships", JSON.stringify(this.form.scholarships));
 
   formData.append("courses", JSON.stringify(this.form.courses));
-  formData.append('coursesOffered', JSON.stringify(this.form.coursesOffered.map(c => c.value)));
-  formData.append('whyChoose', JSON.stringify(this.form.whyChoose.map(w => w.value)));
-  formData.append('facilities', JSON.stringify(this.form.facilities.map(f => f.name)));
-  formData.append('hospitalTieUps', JSON.stringify(this.form.hospitalTieUps.map(h => h.value)));
-  formData.append('careerServices', JSON.stringify(this.form.careerServices.map(c => c.value)));
+  formData.append('whyChoose', JSON.stringify(this.form.whyChoose));
+  formData.append('facilities', JSON.stringify(this.form.facilities));
+  formData.append('hospitalTieUps', JSON.stringify(this.form.hospitalTieUps));
+  formData.append('careerServices', JSON.stringify(this.form.careerServices));
 formData.append("tags", JSON.stringify(this.form.tags));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 

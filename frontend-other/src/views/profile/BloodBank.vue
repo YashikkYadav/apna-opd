@@ -95,10 +95,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div v-if="img.type === 'galleryImages_image'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -201,6 +201,19 @@
       </div>
     </div>
   </div>
+</v-card>
+
+<v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
 </v-card>
 
 
@@ -452,6 +465,7 @@ export default {
       timeout: 4000,
     },
       form: {
+         website: '',
         introduction: "",
         experience: null,
         about: "",
@@ -666,23 +680,25 @@ removeTag(index) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
+      const res = await useProfileStore().getProfileData();
+      const profile = res.healthServeProfileData.healthServeProfile.data
+      const add=res.healthServeProfileData.healthServeUser
+      console.log("ddd",res)
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        // this.images = profile.images;
 
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+        this.form.address = add?.address || "";
+        this.form.city = add?.city || "";
+        this.form.locality = add?.locality || "";
+        this.form.state = add?.state || "";
+        this.form.pincode = add?.pincode || "";
 
         this.form.bloodTypes = profile.bloodTypes || [];
   this.form.nearbyBloodBanks = profile.nearbyBloodBanks || [];
@@ -698,7 +714,7 @@ removeTag(index) {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -712,20 +728,21 @@ removeTag(index) {
   formData.append("facilities", JSON.stringify(this.form.facilities));
   formData.append("certifications", JSON.stringify(this.form.certifications));
   formData.append("establishedYear", this.form.establishedYear);
+  formData.append("license", this.form.license);
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 

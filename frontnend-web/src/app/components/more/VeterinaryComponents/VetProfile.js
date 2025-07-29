@@ -15,9 +15,9 @@ const VetProfileSection = ({
     } = profileData || {}
     const info = [
         { label: 'EXPERIENCE', value: `${healthProfile?.experience}+ Years` },
-        { label: 'SPECIALIZATION', value: specialization },
-        { label: 'LANGUAGES', value: languages },
-        { label: 'CONSULTATION FEE', value: `₹${fee}` },
+        { label: 'SPECIALIZATION', value: healthProfile?.specialization },
+        { label: 'LANGUAGES', value: healthProfile?.languages?.map(lang=>(lang)) },
+        { label: 'CONSULTATION FEE', value: healthProfile?.consultationFee },
     ];
 
     return (

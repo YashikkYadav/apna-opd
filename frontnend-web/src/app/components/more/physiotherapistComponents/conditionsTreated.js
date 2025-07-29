@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Stethoscope } from 'lucide-react';
 
-const ConditionsTreated = ({ data }) => {
+const ConditionsTreated = ({ data,healthProfile }) => {
     const conditions = data?.doctorInfo?.conditions || [];
 
     return (
@@ -24,13 +24,13 @@ const ConditionsTreated = ({ data }) => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {conditions.map((c, idx) => (
+                {healthProfile?.conditionsTreated?.map((c, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.3)' }}
                         className="bg-[#F7F9FB] rounded-2xl p-5 text-center border border-transparent hover:border-blue-500 transition-all"
                     >
-                        <div className="text-lg font-semibold text-blue-800">{c.label}</div>
+                        <div className="text-lg font-semibold text-blue-800">{c}</div>
                     </motion.div>
                 ))}
             </div>

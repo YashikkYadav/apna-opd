@@ -28,13 +28,13 @@ const WhyChoose = ({
 
             {/* Features Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                {healthProfile?.ketStats?.map((item, idx) => (
+                {healthProfile?.facilities?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.4)' }}
                         className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col items-center text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
-                        <h3 className="text-lg font-bold text-blue-700 mb-1">{item.title}</h3>
+                        <h3 className="text-lg font-bold text-blue-700 mb-1">{item.name}</h3>
                         <p className="text-base text-gray-600">{item.desc}</p>
                     </motion.div>
                 ))}

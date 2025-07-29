@@ -18,7 +18,7 @@ const careerServices = [
     'Alumni network support',
 ];
 
-const PlacementAndInternship = () => {
+const PlacementAndInternship = ({healthProfile}) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -49,10 +49,10 @@ const PlacementAndInternship = () => {
                         <FaHospitalAlt /> Hospital Tie-ups
                     </h3>
                     <ul className="space-y-3">
-                        {hospitals.map((name, idx) => (
+                        {healthProfile?.hospitalTieUps?.map((name, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-gray-700">
                                 <FaArrowRight className="text-blue-500 mt-1" />
-                                <span>{name} – {`city`}</span>
+                                <span>{name}</span>
                             </li>
                         ))}
                     </ul>
@@ -67,7 +67,7 @@ const PlacementAndInternship = () => {
                         <FaUserGraduate /> Career Services
                     </h3>
                     <ul className="space-y-3">
-                        {careerServices.map((service, idx) => (
+                        {healthProfile?.careerServices?.map((service, idx) => (
                             <li key={idx} className="flex items-start gap-2 text-gray-700">
                                 <FaArrowRight className="text-blue-500 mt-1" />
                                 <span>{service}</span>

@@ -43,7 +43,7 @@ const HeroSection = ({
     const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
     const reviewCount = healthProfile?.testimonials?.length || 0;
 
-    
+
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -58,11 +58,7 @@ const HeroSection = ({
             {/* Left: Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={
-                        profileData && profileData.images && profileData.images[0]
-                            ? profileData.images[0].url
-                            : "/images/max.png"
-                    }
+                    src={`http://localhost:3001/public/${healthProfile?.profileImage}`}
                     alt={healthProfile?.name}
                     width={340}
                     height={340}
@@ -103,9 +99,9 @@ const HeroSection = ({
                     <button className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🔍 Check Availability
                     </button>
-                    <button 
-                    onClick ={() => setCallModalOpen(true)}
-                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
                         📞 Call Now
                     </button>
                     <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />

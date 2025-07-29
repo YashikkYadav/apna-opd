@@ -13,8 +13,6 @@ const renderStars = (count) =>
     );
 
 const PatientReviews = ({ healthProfile }) => {
-
-    console.log(healthProfile);
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}

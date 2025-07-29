@@ -52,7 +52,7 @@ const courses = [
     },
 ];
 
-const CoursesOffered = () => {
+const CoursesOffered = ({ healthProfile }) => {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -69,22 +69,21 @@ const CoursesOffered = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses.map((course, idx) => (
+                {healthProfile?.courses.map((course, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.03 }}
                         className="bg-white border-l-4 border-blue-500 hover:border-blue-700 rounded-2xl p-6 shadow-md transition-all"
                     >
-                        <h3 className="text-lg font-bold text-gray-800 mb-4">{course.title}</h3>
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">{course.name}</h3>
                         <ul className="space-y-1 text-gray-700">
-                            {course.details.map((item, i) => (
-                                <li key={i}>
-                                    <span className="font-semibold">{item.label}:</span> {item.value}
-                                </li>
-                            ))}
+                            <li><span className="font-semibold">Duration:</span> {course.duration}</li>
+                            <li><span className="font-semibold">Seats:</span> {course.seats}</li>
+                            <li><span className="font-semibold">Eligibility:</span> {course.eligibility}</li>
                         </ul>
                     </motion.div>
                 ))}
+
             </div>
         </motion.section>
     );

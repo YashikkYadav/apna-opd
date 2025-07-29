@@ -791,11 +791,11 @@ export default {
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);

@@ -3,18 +3,13 @@ import { motion } from 'framer-motion';
 import { FaHospitalAlt } from 'react-icons/fa';
 
 const About = ({
-    name = "{{blood_bank_name}}",
-    description = "{{blood_bank_description}}",
-    license = "{{license_number}}",
-    established = "{{established_year}}",
-    certification = "{{certification_type}}",
     healthProfile,
     data
 }) => {
     const items = [
-        { label: "📋 License", value: license },
-        { label: "📅 Established", value: established },
-        { label: "🏆 Certification", value: certification },
+        { label: "📋 License", value: healthProfile?.license },
+        { label: "📅 Established", value: healthProfile?.establishedYear },
+        { label: "🏆 Certification", value: healthProfile?.certifications?.map(c => c.name) },
     ];
 
     return (

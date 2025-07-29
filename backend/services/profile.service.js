@@ -11,7 +11,11 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-
+const { handleBloodBankData, gethandleBloodBankData } = require("../utils/profileStoreData/handleBloodBank");
+const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/profileStoreData/handlePhysio')
+const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
+const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
+const {handleMedicalCollege,gethandleMedicalCollege}=require('../utils/profileStoreData/handleCollege')
 const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
@@ -304,13 +308,45 @@ function deleteImageFile(filename) {
   });
 }
 
-const addHealthServeProfileData = async (data) => {
+const addHealthServeProfileDataRoute = async (req, healthServeId) => {
   try {
 
-    let healthServeProfile = await HealthServe.findById(data.healthServeId);
+    if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
+      console.log("Invalid healthServeId");
+    }
 
-    let Model;
+    const healthServeProfile = await HealthServe.findById(healthServeId);
 
+    if (!healthServeProfile) {
+      return {
+        statusCode: 404,
+        error: "Health Serve not found",
+      }
+    }
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await handleBloodBankData(req, healthServeId);
+        break;
+      case 'physiotherapist':
+        result = await handlePhysiotherapist(req, healthServeId);
+        break;
+      case 'hospital':
+        result = await handleHospital(req, healthServeId);
+        break;
+      case 'vatenary':
+        result = await handleVeterinary(req, healthServeId);
+        break
+      case 'nursing_medical_college':
+        result=await handleMedicalCollege(req,healthServeId)
+    }
+
+
+    return {
+      statusCode: 201,
+      ok: true,
+      healthServeProfile: result, // return saved document
+    };
     // Determine model based on type
     switch (healthServeProfile.type) {
       case 'physiotherapist':
@@ -345,7 +381,7 @@ const addHealthServeProfileData = async (data) => {
     const update = { $set: data };
     const options = { new: true, upsert: true };
 
-    const doc = await Model.findOneAndUpdate(filter, update, options);
+    // const doc = await Model.findOneAndUpdate(filter, update, options);
     return {
       statusCode: 201,
       ok: true,
@@ -361,14 +397,37 @@ const addHealthServeProfileData = async (data) => {
   }
 }
 
-const getHealthServeProfileData = async (healthServeId) => {
+const getHealthServeProfileDataRoute = async (healthServeId) => {
   try {
 
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
 
-    let Model;
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await gethandleBloodBankData(healthServeId);
+        break;
+      case 'hospital':
+        result = await gethandleHospital(healthServeId);
+        break;
+      case 'physiotherapist':
+        result = await gethandlePhysiotherapist(healthServeId);
+        break;
+      case 'vatenary':
+        result = await gethandleVeterinary(healthServeId);
+        break;
+      case 'nursing_medical_college':
+        result =await gethandleMedicalCollege(healthServeId)
+        break;
+    }
 
+    return {
+      statusCode: 201,
+      healthServeProfile: result, // return saved document,
+      healthServeUser: healthServeProfile,
+      ok: true
+    };
     console.log('healthServeProfile.type', healthServeProfile.type)
     // Determine model based on type
     switch (healthServeProfile.type) {
@@ -400,7 +459,7 @@ const getHealthServeProfileData = async (healthServeId) => {
         throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
     }
 
-    const doc = await Model.findOne({ healthServeId });
+    // const doc = await Model.findOne({ healthServeId });
     console.log('doc')
     return {
       statusCode: 201,
@@ -422,6 +481,6 @@ module.exports = {
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
-  addHealthServeProfileData,
-  getHealthServeProfileData
+  addHealthServeProfileDataRoute,
+  getHealthServeProfileDataRoute
 };

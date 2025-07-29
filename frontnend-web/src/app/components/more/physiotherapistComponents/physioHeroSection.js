@@ -49,10 +49,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
             {/* Left: Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={
-                        data?.photo ||
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-T3ZfSx2hyuNb-IcIVQCcjZnSR_hPI2V6dg&s'
-                    }
+                    src={`http://localhost:3001/public/${healthProfile?.profileImage}`}
                     alt={`Dr.${data?.name}`}
                     width={340}
                     height={340}

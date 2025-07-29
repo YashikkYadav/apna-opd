@@ -2,25 +2,9 @@
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 
-const nearbyBanks = [
-    {
-        name: "LifeLine Blood Bank",
-        distance: "2.3 km",
-        rating: 4.7,
-    },
-    {
-        name: "RedCross Center",
-        distance: "3.8 km",
-        rating: 4.5,
-    },
-    {
-        name: "Apollo Blood Center",
-        distance: "5.1 km",
-        rating: 4.3,
-    },
-];
 
-const NearbyBloodBanks = ({data}) => {
+
+const NearbyBloodBanks = ({data,healthProfile}) => {
     
 
     return (
@@ -42,7 +26,7 @@ const NearbyBloodBanks = ({data}) => {
 
             {/* Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {nearbyBanks.map((bank, idx) => (
+                {healthProfile?.nearbyBloodBanks?.map((bank, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 2px rgba(37, 99, 235, 0.3)' }}

@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion';
 import { Calendar, Package } from 'lucide-react';
 
-const TherapyPackages = ({ data }) => {
-    const packages = data?.packages?.slice(0, 3) || [];
+const TherapyPackages = ({ data,healthProfile }) => {
+    console.log("healthProfile:", healthProfile?.therapyPackages)
 
     return (
         <motion.div
@@ -25,7 +25,7 @@ const TherapyPackages = ({ data }) => {
 
             {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {packages.map((pkg, idx) => (
+                {healthProfile?.therapyPackages?.map((pkg, idx) => (
                     <motion.div
                         key={pkg?.name || idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(59,130,246,0.3)' }}
@@ -33,7 +33,7 @@ const TherapyPackages = ({ data }) => {
                     >
                         <div>
                             <div className="flex justify-between items-center mb-3">
-                                <h3 className="text-lg font-bold text-blue-800 uppercase">{pkg?.name}</h3>
+                                <h3 className="text-lg font-bold text-blue-800 uppercase">{pkg.name}</h3>
                                 {pkg?.discount && (
                                     <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                                         {pkg?.discount}
@@ -41,36 +41,11 @@ const TherapyPackages = ({ data }) => {
                                 )}
                             </div>
 
-                            <div className="grid gap-2 mb-3">
-                                {pkg?.details?.map((d, i) => (
-                                    <div key={i} className="flex items-center gap-2 text-gray-700">
-                                        <Calendar className="w-4 h-4 text-blue-400" />
-                                        <span className="font-semibold">{d.value}</span>
-                                        <span className="text-xs text-gray-500">{d.label}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="text-2xl font-bold text-blue-500 mb-2">
-                                {pkg?.price}
-                                {pkg?.oldPrice && (
-                                    <span className="ml-2 text-base text-gray-400 line-through font-normal">
-                                        {pkg?.oldPrice}
-                                    </span>
-                                )}
-                            </div>
-
-                            <ul className="list-disc pl-5 mb-4 text-gray-700 text-sm">
-                                {pkg?.benefits?.map((b, i) => (
-                                    <li key={i}>{b}</li>
-                                ))}
-                            </ul>
+                            
+                            
                         </div>
 
                         <div className="flex flex-wrap gap-3 pt-3">
-                            <button className="bg-green-100 text-green-700 font-semibold rounded-full px-4 py-2 text-sm">
-                                ₹ Consultation Fee
-                            </button>
                             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-5 py-2 text-sm">
                                 Book Now
                             </button>
