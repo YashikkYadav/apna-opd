@@ -642,7 +642,7 @@ removeTag(index) {
         console.log("profile.images",profile.bloodTypes);
         this.images = profile.galleryImages;
 
-        const hs = profile.healthServeId;
+        
 
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";

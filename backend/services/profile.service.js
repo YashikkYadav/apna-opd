@@ -11,7 +11,7 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-const { handleBloodBank, gethandleBloodBank, handlePhysiotherapist, gethandlePhysiotherapist, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory } = require("../utils/profileStoreData/handleBloodBank");
+const { handleBloodBank, gethandleBloodBank, handlePhysiotherapist, handleIvf, gethandlePhysiotherapist, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory } = require("../utils/profileStoreData/handleBloodBank");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -310,6 +310,8 @@ const addHealthServeProfileData = async (req, healthServeId) => {
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
 
+    console.log(req.body);
+
     console.log('healthServeProfile', healthServeProfile.type)
     let result;
     switch (healthServeProfile.type) {
@@ -324,6 +326,10 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         break;
       case 'laboratory':
         result=await handleLaboratory(req, healthServeId)
+        break;
+      case 'ivf_clinic':
+        result = await handleIvf(req, healthServeId)
+        break;
     }
 
 
@@ -397,7 +403,9 @@ const getHealthServeProfileData = async (healthServeId) => {
       case 'laboratory':
         result = await gethandleLaboratory(healthServeId)
         break;
-
+      case 'ivf_clinic':
+        result = await gethandleIvf(req, healthServeId)
+        break;
     }
 
     return {
