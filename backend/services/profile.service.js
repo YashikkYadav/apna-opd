@@ -11,6 +11,7 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
+const { handleBloodBank, gethandleBloodBank, handlePhysiotherapist, handleIvf, gethandlePhysiotherapist, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory, handleIvfClinic, gethandleIvf } = require("../utils/profileStoreData/handleBloodBank");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -304,13 +305,35 @@ function deleteImageFile(filename) {
   });
 }
 
-const addHealthServeProfileData = async (data) => {
+const addHealthServeProfileData = async (req, healthServeId) => {
   try {
 
-    let healthServeProfile = await HealthServe.findById(data.healthServeId);
+    let healthServeProfile = await HealthServe.findById(healthServeId);
 
-    let Model;
+    console.log(req.body);
 
+    console.log('healthServeProfile', healthServeProfile.type)
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await handleBloodBank(req, healthServeId);
+        break;
+      case 'physiotherapist':
+        result = await handlePhysiotherapist(req, healthServeId);
+        break;
+      case 'medical_store':
+        result = await handleMedicalStore(req, healthServeId);
+        break;
+      case 'laboratory':
+        result=await handleLaboratory(req, healthServeId)
+        break;
+      case 'ivf_clinic':
+        result = await handleIvfClinic(req, healthServeId)
+        break;
+    }
+
+
+    return result
     // Determine model based on type
     switch (healthServeProfile.type) {
       case 'physiotherapist':
@@ -367,8 +390,29 @@ const getHealthServeProfileData = async (healthServeId) => {
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
 
-    let Model;
+    let result;
+    switch (healthServeProfile.type) {
+      case 'blood_bank':
+        result = await gethandleBloodBank(healthServeId);
+        break;
+      case 'physiotherapist':
+        result = await gethandlePhysiotherapist(healthServeId)
+      case 'medical_store':
+        result = await gethandleMedicalStore(healthServeId)
+        break
+      case 'laboratory':
+        result = await gethandleLaboratory(healthServeId)
+        break;
+      case 'ivf_clinic':
+        result = await gethandleIvf( healthServeId)
+        break;
+    }
 
+    return {
+      statusCode: 201,
+      healthServeProfile: result, // return saved document,
+      ok: true
+    };
     console.log('healthServeProfile.type', healthServeProfile.type)
     // Determine model based on type
     switch (healthServeProfile.type) {

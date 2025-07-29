@@ -63,7 +63,7 @@ const HeroSection = ({
                             ? profileData.images[0].url
                             : "/images/max.png"
                     }
-                    alt={healthProfile?.name}
+                    alt={healthProfile?.name || "profile"}
                     width={340}
                     height={340}
                     className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"

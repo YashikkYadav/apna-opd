@@ -1,75 +1,55 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const testSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    icon: String,
-    sampleType: String,
-    reportTime: String,
-    originalPrice: Number,
-    discountedPrice: Number,
-    homeCollection: Boolean,
-    category: String,
-    popular: Boolean
+// Subdocuments
+const FAQSchema = new Schema({
+  question: { type: String, },
+  answer: { type: String, }
 });
 
-const packageSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    testsCount: Number,
-    tests: [String],
-    recommendedFor: String,
-    originalPrice: Number,
-    discountedPrice: Number,
-    reportTime: String,
-    homeCollection: Boolean,
-    popular: Boolean
+const PackageSchema = new Schema({
+  name: { type: String, },
+  details: { type: String, },
+  price: { type: String, } // or Number if prices are numeric
 });
 
-const reviewSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    test: String,
-    rating: Number,
-    comment: String,
-    date: String
+const TestSchema = new Schema({
+  name: { type: String },
+  description: { type: String },
+  fee: { type: String } // or Number
 });
 
-const faqSchema = new mongoose.Schema({
-    question: String,
-    answer: String
+const TestimonialSchema = new Schema({
+  rating: { type: Number, min: 1, max: 5, },
+  title: { type: String },
+  text: { type: String },
+  author: { type: String },
+  context: { type: String, default: '' }
 });
 
-const HealthLabProfileSchema = new mongoose.Schema({
-    healthServeId: {
-        index: true,
-        required: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "HealthServe",
-    },
-    labInfo: {
-        name: String,
-        location: String,
-        phone: String,
-        email: String,
-        description: String
-    },
-    certifications: [String],
-    tests: [testSchema],
-    packages: [packageSchema],
-    reviews: [reviewSchema],
-    faqs: [faqSchema],
-    healthServeId: String
-},
-    {
-        timestamps: true,
-    },
-);
+// Main schema
+const HealthLabProfileSchema = new Schema({
+     healthServeId: {
+          index: true,
+          required: true,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "HealthServe",
+        },
+  about: { type: String },
+  experience: { type: String },
+  introduction: { type: String },
+ 
 
+  keyFeatures: [{ type: String }],
+  certifications: [{ type: String }],
+  tags: [{ type: String }],
 
+  packages: [PackageSchema],
+  faqs: [FAQSchema],
+  tests: [TestSchema],
+  testimonials: [TestimonialSchema]
+}, {
+  timestamps: true,
+});
 
-
-
-
-const HealthLabProfile = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
-module.exports = HealthLabProfile;
+module.exports = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
