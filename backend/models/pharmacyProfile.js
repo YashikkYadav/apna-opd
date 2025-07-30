@@ -13,12 +13,13 @@ const pharmacyProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "HealthServe",
   },
+  website:String,
   about: { type: String },
   experience: { type: String },
   introduction: { type: String },
   openTime: { type: String },
   closeTime: { type: String },
-  servicesOffered: [{ type: String }],
+  servicesOffered: [{ name: String }],
   testimonials: [testimonialSchema],
 
   medicines: [
@@ -37,7 +38,7 @@ const pharmacyProfileSchema = new mongoose.Schema({
     }
   ],
   features: [
-    { type: String }
+    { title: String }
   ],
   faqs: [
     {

@@ -36,8 +36,8 @@ const FeatureHighlights=({healthProfile })=> {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {healthProfile?.facilities.map((feature, idx) => (
-                    <FeatureCard key={idx} label={feature} />
+                {healthProfile?.features.map((feature, idx) => (
+                    <FeatureCard key={idx} label={feature.title} />
                 ))}
             </div>
         </motion.section>

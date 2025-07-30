@@ -49,9 +49,9 @@ const OverviewSection = ({
                         <GraduationCap className="w-6 h-6" /> Education & Expertise
                     </h3>
                     <ul className="list-disc pl-5 space-y-2 text-gray-700 text-base">
-                        <li><strong>Education:</strong> {education}</li>
-                        <li><strong>Certifications:</strong> {certifications}</li>
-                        <li><strong>Special Interests:</strong> {interests}</li>
+                        <li><strong>Education:</strong> {healthProfile?.education?.map(i=>i.degree)}</li>
+                        <li><strong>Certifications:</strong> {healthProfile?.certifications?.join(', ')}</li>
+                        <li><strong>Special Interests:</strong> {healthProfile?.specialInterests?.join(', ')}</li>
                     </ul>
                 </motion.div>
 
@@ -64,7 +64,7 @@ const OverviewSection = ({
                         <Languages className="w-6 h-6" /> Languages
                     </h3>
                     <ul className="list-disc pl-5 space-y-2 text-gray-700 text-base">
-                        {languages.map((lang, idx) => (
+                        {healthProfile?.languages?.map((lang, idx) => (
                             <li key={idx}>{lang}</li>
                         ))}
                     </ul>

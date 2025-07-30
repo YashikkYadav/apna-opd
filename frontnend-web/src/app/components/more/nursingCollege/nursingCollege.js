@@ -41,11 +41,8 @@ const NursingCollege = ({ serviceData }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    college.profiles &&
-                    college.profiles.length > 0 &&
-                    college.profiles[0].images.length > 0
-                      ? college.profiles[0].images[0].url
-                      : "/images/image_placeholder.svg"
+                   
+                      ""
                   }
                   width={180}
                   height={180}

@@ -76,6 +76,12 @@
               ></v-file-upload>
             </v-col>
           </v-row>
+          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -160,6 +166,20 @@
             </v-col>
           </v-row>
         </v-card>
+
+
+        <v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
 
         <!-- tags -->
         <v-card class="section-card">
@@ -269,7 +289,7 @@
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
+            <v-toolbar-title class="ml-3">Test Packages</v-toolbar-title>
           </v-toolbar>
           <v-btn class="mb-2 ml-4" @click="addPackage">+ Add Package</v-btn>
           <div
@@ -536,12 +556,26 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
       showModal: false,
       imageToDelete: null,
+      snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
+        website : '',
         introduction: "",
         experience: null,
         about: "",
@@ -735,15 +769,28 @@ export default {
         this.cancelDelete();
       }
     },
-    handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+     handleGalleryChange(newFiles) {
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 10MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
+
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
@@ -766,7 +813,7 @@ export default {
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
-
+        this.form.website = profile.website || '';
         this.form.keyFeatures = (profile.keyFeatures || [])
         this.form.certifications = (profile.certifications || [])
         this.form.packages = (profile.packages || [])
@@ -780,7 +827,7 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);

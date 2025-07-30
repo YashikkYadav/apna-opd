@@ -43,6 +43,9 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
+  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r.rating, 0) / profileData?.testimonials.length).toFixed(1) : "0.0";
+  const reviewCount = profileData?.testimonials?.length || 0;
+
   function getFeatureIconByText(text) {
     switch (text) {
       case "24/7 Emergency":
@@ -97,11 +100,7 @@ export default function HospitalFeatureCard({ profileData }) {
       {/* Left: Hospital Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
-          src={
-            profileData && profileData.images && profileData.images[0]
-              ? profileData.images[0].url
-              : "/images/max.png"
-          }
+          src={`http://localhost:3001/public/${profileData?.profileImage}`}
           alt="Max Super Speciality Hospital"
           width={340}
           height={340}
@@ -118,12 +117,12 @@ export default function HospitalFeatureCard({ profileData }) {
         </p>
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
-          {getStarIcons(profileData.rating ?? 0)}
+          {getStarIcons(avgRating)}
           <span className="text-white text-xl font-semibold ml-2">
             {profileData.rating + "/5" ?? "0/5"}
           </span>
           <span className="text-white/70 text-lg ml-2">
-            {profileData.ratingCount ?? "0 reviews"}
+            {reviewCount + " reviews" ?? "0 reviews"}
           </span>
         </div>
         {/* Features */}

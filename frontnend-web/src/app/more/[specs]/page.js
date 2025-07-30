@@ -12,7 +12,7 @@ import Yoga from "../../components/more/yoga/yoga";
 import CommercialMeditation from "../../components/more/commercialMeditation/commercialMeditation";
 import NashamuktiKendra from "../../components/more/nasha-mukti/nashaMukti";
 import MedicalStore from "../../components/more/medicalstore/medicalstore";
-import NursingCollege from "../../components/more/nursingCollege/nursingCollege";
+import NursingCollege from "@/app/components/more/nursingCollege/nursingCollege";
 import BloodBank from "../../components/more/bloodBank/bloodBank";
 import Physiotherapist from "../../components/more/physiotherapist/physiotherapist";
 import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
@@ -68,7 +68,9 @@ const ServicePage = () => {
   }, [params.specs, searchParams]);
 
   if (loading) return <Loader />;
-
+  console.log(serviceTypes.NURSING_MEDICAL_COLLEGE)
+  console.log(specs)
+  console.log(serviceTypes.NURSING_MEDICAL_COLLEGE===specs)
   const getServiceTitle = () => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
@@ -90,6 +92,7 @@ const ServicePage = () => {
       case serviceTypes.MEDICAL_STORE:
         return "Find Medical Stores";
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
+        console.log("lkk")
         return "Find Nursing Colleges";
       case serviceTypes.BLOOD_BANK:
         return "Find Blood Banks";

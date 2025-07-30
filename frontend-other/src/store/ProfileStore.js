@@ -10,6 +10,7 @@ export const useProfileStore = defineStore("profileStore", {
     async getHealthServeApiCall() {
       const ProfileService = new AxiosProfile();
       this.healthServeId = localStorage.getItem("doctor_id") || null;
+
       const data = await ProfileService.HealthServeProfileData(
         this.healthServeId
       );
@@ -39,7 +40,7 @@ export const useProfileStore = defineStore("profileStore", {
       return deleteResponse;
     },
     // getProfileData
-     async getProfileData() {
+    async getProfileData() {
       const ProfileService = new AxiosProfile();
       this.healthServeId = localStorage.getItem("doctor_id") || null;
 

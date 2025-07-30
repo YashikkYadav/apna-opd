@@ -5,6 +5,7 @@ import { ClipboardList, Clock, FileText, FlaskConical, Home, Star, User, Chevron
 import classNames from 'classnames';
 
 const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage, setOpenPackage, setShowModal, setModalTest }) => {
+    // console.log("qq",filteredTests,packagesData)
     return (
         <motion.div
             id="labPackagesSection"
@@ -68,9 +69,9 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                                 </div>
                                 <div className="mt-auto pt-4 border-t flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <span className="text-emerald-600 font-bold text-lg">₹{test.discountedPrice}</span>
-                                        <span className="line-through text-slate-400 text-base">₹{test.originalPrice}</span>
-                                        <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">{discount}% OFF</span>
+                                        <span className="text-emerald-600 font-bold text-lg">₹{test.fee}</span>
+                                        {/* <span className="line-through text-slate-400 text-base">₹{test.originalPrice}</span>
+                                        <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">{discount}% OFF</span> */}
                                     </div>
                                     <button
                                         onClick={() => {
@@ -111,9 +112,9 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                                     </div>
                                 </div>
                                 <div className="mt-auto text-right">
-                                    <div className="text-emerald-600 font-bold text-xl">₹{pkg.discountedPrice}</div>
-                                    <div className="text-slate-400 line-through text-sm">₹{pkg.originalPrice}</div>
-                                    <div className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold inline-block mt-1">{discount}% OFF</div>
+                                    <div className="text-emerald-600 font-bold text-xl">₹{pkg.price}</div>
+                                    {/* <div className="text-slate-400 line-through text-sm">₹{pkg.originalPrice}</div>
+                                    <div className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold inline-block mt-1">{discount}% OFF</div> */}
                                     <button
                                         onClick={() => {
                                             setShowModal(true);

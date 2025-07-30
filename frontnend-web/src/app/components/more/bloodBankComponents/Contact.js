@@ -9,27 +9,28 @@ const Contact = ({ website_url = '{{website_url}}',
     healthProfile,
     data
 }) => {
+    const user=healthProfile?.healthServeId
     const contactItems = [
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: 'Phone',
-            value: data?.phone,
+            value: user?.phone,
         },
         {
             icon: <FaWhatsapp className="text-blue-600 text-xl" />,
             label: 'WhatsApp',
-            value: data?.phone,
+            value: user?.phone,
         },
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
             label: 'Website',
-            value: website_url,
+            value: healthProfile?.website,
             isLink: true,
         },
         {
             icon: <FaEnvelope className="text-blue-600 text-xl" />,
             label: 'Email',
-            value: data?.email,
+            value: user?.email,
         },
     ];
 
@@ -46,7 +47,7 @@ const Contact = ({ website_url = '{{website_url}}',
             <div className="text-left mb-12">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Visit Us Today</h2>
                 <p className="text-gray-600 text-lg mt-2">
-                    Conveniently located in the heart of {data?.address}
+                    Conveniently located in the heart of {user?.address}
                 </p>
             </div>
 
@@ -55,7 +56,7 @@ const Contact = ({ website_url = '{{website_url}}',
                 <GoLocation className="text-blue-500 text-xl mt-[2px]" />
                 <div>
                     <p className="font-semibold text-gray-800">Address:</p>
-                    <p className="text-gray-600 text-base mt-1">{data?.address}</p>
+                    <p className="text-gray-600 text-base mt-1">{user?.address}</p>
                 </div>
             </div>
 

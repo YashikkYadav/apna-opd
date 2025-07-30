@@ -60,18 +60,18 @@ const StudentTestimonials = (healthProfile) => {
 
       {/* Testimonials Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {healthProfile?.testimonials?.map((t, idx) => (
+        {healthProfile?.healthProfile?.testimonials?.map((t, idx) => (
           <motion.div
             key={idx}
             whileHover={{ scale: 1.03, boxShadow: '0 0 0 2px rgba(59,130,246,0.3)' }}
             className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-500 hover:border-blue-600 transition-all"
           >
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-bold text-blue-700">{t.name}</h3>
+              <h3 className="text-lg font-bold text-blue-700">{t.title}</h3>
               <div className="flex gap-1">{renderStars(t.rating)}</div>
             </div>
             <p className="text-gray-700 text-base font-medium italic mb-4">"{t.text}"</p>
-            <p className="text-sm font-semibold text-gray-600">– {t.course}</p>
+            <p className="text-sm font-semibold text-gray-600">– {t.author}</p>
           </motion.div>
         ))}
       </div>

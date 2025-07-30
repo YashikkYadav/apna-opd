@@ -27,8 +27,8 @@ const CollegeOverview = ({
             value: (
                 <>
                     <p><strong>Name:</strong> {data?.name}</p>
-                    <p><strong>Type:</strong> {type}</p>
-                    <p><strong>Established:</strong> {established_year}</p>
+                    <p><strong>Type:</strong> {data?.type}</p>
+                    <p><strong>Established:</strong> {healthProfile?.established}</p>
                     <p><strong>Location:</strong> {data?.location}</p>
                 </>
             )
@@ -37,9 +37,9 @@ const CollegeOverview = ({
             label: 'Accreditation & Approval',
             value: (
                 <>
-                    <p><strong>Affiliated To:</strong> {affiliated_to}</p>
-                    <p><strong>Approved By:</strong> {approving_bodies}</p>
-                    <p><strong>Recognition:</strong> {recognition_bodies}</p>
+                    <p><strong>Affiliated To:</strong> {healthProfile?.affiliatedTo}</p>
+                    <p><strong>Approved By:</strong> {healthProfile?.approvedBy}</p>
+                    <p><strong>Recognition:</strong> {healthProfile?.recognition}</p>
                 </>
             )
         },

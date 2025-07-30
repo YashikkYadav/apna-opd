@@ -31,7 +31,7 @@ const TestimonialsSection = ({ healthProfile }) => {
                         <FaQuoteLeft className="absolute top-4 left-4 text-blue-100 text-4xl" />
 
                         <blockquote className="italic text-gray-800 mb-6 mt-4 relative text-lg">
-                            "{review.review}"
+                            "{review.text}"
                         </blockquote>
 
                         {/* Reviewer Meta */}

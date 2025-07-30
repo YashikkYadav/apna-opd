@@ -38,7 +38,7 @@ const HealthLabProfileSchema = new Schema({
   about: { type: String },
   experience: { type: String },
   introduction: { type: String },
- 
+        website:String,
 
   keyFeatures: [{ type: String }],
   certifications: [{ type: String }],
@@ -52,4 +52,5 @@ const HealthLabProfileSchema = new Schema({
   timestamps: true,
 });
 
-module.exports = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
+const healthLabProfile = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
+module.exports=healthLabProfile
