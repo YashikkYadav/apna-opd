@@ -22,7 +22,7 @@ const WhyChoose = ({ data,healthProfile }) => {
 
             {/* Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {healthProfile?.features?.map((item, idx) => (
+                {healthProfile?.whyChoose?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 2px rgba(59,130,246,0.3)' }}
@@ -30,7 +30,7 @@ const WhyChoose = ({ data,healthProfile }) => {
                     >
                         <div className="mb-3">{item.icon}</div>
                         <h3 className="text-lg font-bold text-blue-700 mb-1">{item.title}</h3>
-                        <p className="text-gray-600 text-sm">{item.desc}</p>
+                        <p className="text-gray-600 text-sm">{item.description}</p>
                     </motion.div>
                 ))}
             </div>

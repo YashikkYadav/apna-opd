@@ -43,7 +43,7 @@ const SuccessStories = ({ data, healthProfile}) => {
                         className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
                         <p className="italic text-gray-700 text-base mb-4">"{item.text}"</p>
-                        <p className="font-bold text-blue-700 text-sm">– {item.author}</p>
+                        <p className="font-bold text-blue-700 text-sm">- {item.author}</p>
                     </motion.div>
                 ))}
             </div>

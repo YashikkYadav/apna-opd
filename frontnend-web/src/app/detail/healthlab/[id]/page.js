@@ -56,7 +56,9 @@ export default function HealthLabPage() {
             setLoading(true);
             setError('');
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
+                const response = await axios.get(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`
+                );
                 const { healthServeProfile, healthServeUser } = response?.data || {};
                 set_res_data({
                     healthProfile: healthServeProfile || null,
@@ -75,7 +77,7 @@ export default function HealthLabPage() {
         };
 
         fetchData();
-    }, [reloadFlag]);
+    }, [id]);
 
     // Filtering logic
     const filteredTests = testsData.filter((test) => {
