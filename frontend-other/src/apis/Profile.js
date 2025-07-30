@@ -23,15 +23,19 @@ export class AxiosProfile {
       { data: image }
     );
   }
-  AddProfileData(healthServeId, payload){
+  AddProfileData(healthServeId, payload) {
+    if (!healthServeId) {
+      throw new Error("Missing healthServeId in AddProfileData");
+    }
+
     return this.apiClient.post(
-      `/${healthServeId}/health-serve-profile/profile-data/`,
+      `/${healthServeId}/health-serve-profile/profile-data`,
       payload
     );
   }
-  GetProfileData(healthServeId){
+  GetProfileData(healthServeId) {
     return this.apiClient.get(
-      `/${healthServeId}/health-serve-profile/profile-data/`,
+      `/${healthServeId}/health-serve-profile/profile-data`,
     );
   }
 }

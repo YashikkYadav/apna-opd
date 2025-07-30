@@ -29,7 +29,7 @@ const ReviewSection = ({ healthProfile }) => {
                     >
                         <FaQuoteLeft className="absolute top-4 left-4 text-blue-100 text-4xl" />
                         <blockquote className="italic text-gray-800 mb-6 mt-6 text-lg">
-                            “{review?.comment}”
+                            “{review?.text}”
                         </blockquote>
 
                         {/* Reviewer Info */}
@@ -42,8 +42,7 @@ const ReviewSection = ({ healthProfile }) => {
                                     />
                                 ))}
                             </div>
-                            <span className="font-bold text-gray-700 ml-2">{review?.name}</span>
-                            <span className="text-gray-500 font-medium">• {review?.date}</span>
+                            <span className="text-gray-500 font-medium">• {review?.author}</span>
                         </div>
                     </motion.div>
                 ))}

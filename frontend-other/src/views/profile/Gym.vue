@@ -113,6 +113,12 @@
                 :model-value="galleryImages"
                 @update:modelValue="handleGalleryChange"
               ></v-file-upload>
+              <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
             </v-col>
           </v-row>
           <v-row>
@@ -735,13 +741,28 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
-      showModal: false,
       imageToDelete: null,
+      showModal: false,
+      
+       snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
         introduction: "",
+       
         experience: null,
         about: "",
         address: "",
@@ -976,14 +997,27 @@ addPlan() {
       }
     },
     handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 10MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
+
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
@@ -1028,7 +1062,7 @@ this.form.relatedGyms = profile.relatedGyms?.length
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);

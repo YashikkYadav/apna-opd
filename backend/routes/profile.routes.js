@@ -1,6 +1,7 @@
 const express = require("express");
 const profileController = require("../controllers/profile.controller");
 const doctorProfileController = require("../controllers/doctorProfile.controller");
+const smartUploader=require("../middlewares/uploadMiddleware")
 
 const healthServeProfileRoute = express.Router({ mergeParams: true });
 
@@ -15,8 +16,9 @@ healthServeProfileRoute.get(
   doctorProfileController.getAppointmentDetails
 );
 
-
-healthServeProfileRoute.post("/profile-data/",profileController.profileData)
+// healthServeProfileRoute.post("/profile-data/",profileController.profileData)
+// healthServeProfileRoute.get("/profile-data/",profileController.getProfileData)
+healthServeProfileRoute.post("/profile-data/",smartUploader(),profileController.profileData)
 healthServeProfileRoute.get("/profile-data/",profileController.getProfileData)
 
 module.exports = healthServeProfileRoute;

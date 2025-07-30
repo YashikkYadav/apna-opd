@@ -24,14 +24,13 @@ const WhyChooseCollege = ({data, healthProfile}) => {
 
             {/* Feature Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {healthProfile?.reasons?.map((item, idx) => (
+                {healthProfile?.whyChoose?.map((item, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{ scale: 1.04 }}
                         className="bg-white rounded-2xl px-6 py-8 text-center shadow-sm border-l-4 border-blue-500 hover:border-blue-700 transition-all"
                     >
-                        <h3 className="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
-                        <p className="text-gray-600 text-sm">{item.desc}</p>
+                        <h3 className="text-lg font-bold text-slate-800 mb-2">{item}</h3>
                     </motion.div>
                 ))}
             </div>

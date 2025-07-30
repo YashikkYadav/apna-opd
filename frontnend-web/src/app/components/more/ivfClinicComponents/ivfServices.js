@@ -35,7 +35,7 @@ const FertilityServices = ({ data,healthProfile }) => {
             className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col items-center text-center hover:border-2 hover:border-blue-500 transition-all"
           >
             <div className="text-blue-600 mb-3">{service.icon}</div>
-            <h3 className="text-lg font-bold text-blue-700 mb-1">{service.title}</h3>
+            <h3 className="text-lg font-bold text-blue-700 mb-1">{service}</h3>
             <p className="text-base text-gray-600">{service.desc}</p>
           </motion.div>
         ))}

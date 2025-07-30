@@ -28,7 +28,7 @@ function getStarIcons(avgRating) {
 }
 
 const HeroSection = ({
-    
+
     imageUrl = "/images/gym-default.jpg",
     healthProfile,
     data
@@ -50,7 +50,8 @@ const HeroSection = ({
             {/* Left Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={imageUrl}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
                     alt={data?.name}
                     width={320}
                     height={320}
@@ -94,16 +95,16 @@ const HeroSection = ({
                             Book a Free Trial
                         </button>
 
-                        <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id}/>
+                        <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id} />
                     </div>
 
                     <div>
                         <button
-                        onClick={() => {
+                            onClick={() => {
                                 const section = document.getElementById("plansSection");
                                 section?.scrollIntoView({ behavior: "smooth" });
                             }}
-                         className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                            className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                             📋 Plans
                         </button>
                     </div>

@@ -76,6 +76,12 @@
               ></v-file-upload>
             </v-col>
           </v-row>
+          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,10 +95,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div v-if="img.type === 'galleryImages_image'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -195,6 +201,19 @@
       </div>
     </div>
   </div>
+</v-card>
+
+<v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
 </v-card>
 
 
@@ -340,6 +359,22 @@
   </div>
 </v-card>
 
+<v-card class="section-card mt-6">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
+    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
+    <div class="d-flex justify-end">
+      <v-btn icon color="error" @click="removeFAQ(i)">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </div>
+  </div>
+</v-card>
+
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -475,15 +510,31 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
       showModal: false,
       imageToDelete: null,
+      snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
+        website:'',
         introduction: "",
         experience: null,
+        faqs: [],
         about: "",
         address: "",
         locality: "",
@@ -491,7 +542,7 @@ export default {
         pincode: "",
         tags: [''],
         state: "",
-        education: [],
+        education: [{ degree: '', institution: '', year: '' }],
       specialInterests: [],
       certifications: [],
       languages: [],
@@ -526,7 +577,7 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
+      return [...this.galleryImages].sort((a, b) => {
         if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
         if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
         return 0;
@@ -607,6 +658,12 @@ export default {
   },
   removeEducation(index) {
     this.form.education.splice(index, 1);
+  },
+  addFAQ() {
+    this.form.faqs.push({ question: '', answer: '' });
+  },
+  removeFAQ(i) {
+    this.form.faqs.splice(i, 1);
   },
 
 // Special Interests
@@ -695,28 +752,43 @@ removeTag(index) {
         this.cancelDelete();
       }
     },
-    handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+     handleGalleryChange(newFiles) {
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 10MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
+
+
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
+      const res = await useProfileStore().getProfileData();
+      const profile = res?.healthServeProfileData?.healthServeProfile;
+      console.log('asdaddaadaddsadadas',profile)
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
@@ -726,7 +798,7 @@ removeTag(index) {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-       this.form.education = (profile.education || []).map(e => ({ value: e }));
+       this.form.education = (profile.education || [])
   this.form.specialInterests = profile.specialInterests || [];
       this.form.certifications = profile.certifications || [];
       this.form.languages = profile.languages || [];
@@ -740,7 +812,7 @@ removeTag(index) {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -749,7 +821,7 @@ removeTag(index) {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append('education', JSON.stringify(this.form.education.map(e => e.value)));
+        formData.append('education', JSON.stringify(this.form.education));
   formData.append("specialInterests", JSON.stringify(this.form.specialInterests));
       formData.append("certifications", JSON.stringify(this.form.certifications));
       formData.append("languages", JSON.stringify(this.form.languages));
@@ -757,18 +829,18 @@ removeTag(index) {
       formData.append("therapyPackages", JSON.stringify(this.form.therapyPackages));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
-
+        formData.append('faqs', JSON.stringify(this.form.faqs));
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 
@@ -843,6 +915,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

@@ -4,17 +4,26 @@ const multer = require("multer");
 const fs = require("fs");
 
 
+
+
+
+
 const profileData = async (req, res) => {
   const healthServeId = req.params.healthServeId;
   const data = req.body
   data.healthServeId = healthServeId
 
 
-  // console.log('asdaaad',JSON.stringify(req.body))
+  console.log( JSON.stringify(req.body))
+  // console.log('asdaaad',req.files)
+  
+  // console.log('asdaaad',req.files)
+  
   // return 
+  console.log(healthServeId)
 
   const healthServeProfileData =
-    await healthServerProfileService.addHealthServeProfileData(data);
+    await healthServerProfileService.addHealthServeProfileData(req,healthServeId);
   res.status(200).json({ message: "data save", healthServeProfileData });
 }
 

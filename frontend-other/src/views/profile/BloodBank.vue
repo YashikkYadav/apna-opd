@@ -76,6 +76,12 @@
               ></v-file-upload>
             </v-col>
           </v-row>
+          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,10 +95,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div v-if="img.type === 'galleryImages_image'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -195,6 +201,19 @@
       </div>
     </div>
   </div>
+</v-card>
+
+<v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
 </v-card>
 
 
@@ -426,13 +445,28 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
       showModal: false,
       imageToDelete: null,
+      snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
+        website : '',
         introduction: "",
         experience: null,
         about: "",
@@ -621,28 +655,42 @@ removeTag(index) {
         this.cancelDelete();
       }
     },
-    handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+     handleGalleryChange(newFiles) {
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 10MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
+
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
+      const res = await useProfileStore().getProfileData();
+      const profile = await res.healthServeProfileData.healthServeProfile;
+      
+      console.log('healthServeProfileData',profile)
 
       if (profile) {
-        console.log(res);
-        this.images = profile.images;
-
+        console.log("profile.images",profile.bloodTypes);
+        this.images = profile.galleryImages;
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
@@ -652,10 +700,10 @@ removeTag(index) {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
 
-        this.form.bloodTypes = profile.bloodTypes || [];
-  this.form.nearbyBloodBanks = profile.nearbyBloodBanks || [];
-  this.form.facilities = profile.facilities || [];
-  this.form.certifications = profile.certifications || [];
+        this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
+  this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];
+  this.form.facilities = profile.facilities.map((item)=>({name:item})) || [];
+  this.form.certifications = profile.certifications.map((item)=>({name:item})) || [];
   this.form.establishedYear = profile.establishedYear || '';
   this.form.license = profile.license || '';
         this.form.testimonials = profile.testimonials || [];
@@ -666,7 +714,7 @@ removeTag(index) {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -677,23 +725,25 @@ removeTag(index) {
         formData.append("state", this.form.state);
         formData.append("bloodTypes", JSON.stringify(this.form.bloodTypes));
   formData.append("nearbyBloodBanks", JSON.stringify(this.form.nearbyBloodBanks));
+  // formData.append("license", JSON.stringify(this.form.license));
   formData.append("facilities", JSON.stringify(this.form.facilities));
   formData.append("certifications", JSON.stringify(this.form.certifications));
   formData.append("establishedYear", this.form.establishedYear);
+  formData.append("license", this.form.license);
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 
@@ -768,6 +818,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

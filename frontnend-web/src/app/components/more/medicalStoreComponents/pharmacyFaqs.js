@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const FAQSection = ({ faqs = [] }) => {
+const FAQSection = ({ faqs = [],healthProfile }) => {
     const [openIndex, setOpenIndex] = useState(null);
 
     const toggle = (index) => {
         setOpenIndex(openIndex === index ? null : index);
+        
     };
 
     return (
@@ -25,7 +26,7 @@ const FAQSection = ({ faqs = [] }) => {
                 </h2>
 
                 <div className="space-y-6">
-                    {faqs.map((faq, index) => (
+                    {healthProfile?.faqs.map((faq, index) => (
                         <div
                             key={index}
                             className={`bg-white border-2 rounded-2xl shadow-sm px-6 py-4 transition-all duration-200 cursor-pointer ${openIndex === index
@@ -37,7 +38,7 @@ const FAQSection = ({ faqs = [] }) => {
                                 className="w-full flex justify-between items-center text-blue-800 font-semibold text-lg focus:outline-none"
                                 onClick={() => toggle(index)}
                             >
-                                <span>{faq.q}</span>
+                                <span>{faq.question}</span>
                                 <span className="ml-2 text-blue-600 text-xl transition-transform transform group-hover:rotate-180">
                                     {openIndex === index ? '−' : '+'}
                                 </span>
@@ -53,7 +54,7 @@ const FAQSection = ({ faqs = [] }) => {
                                         transition={{ duration: 0.3 }}
                                         className="mt-4 text-gray-700 text-base leading-relaxed"
                                     >
-                                        {faq.a}
+                                        {faq.answer}
                                     </motion.div>
                                 )}
                             </AnimatePresence>

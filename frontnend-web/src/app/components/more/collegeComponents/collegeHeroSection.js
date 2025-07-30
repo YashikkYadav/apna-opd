@@ -58,7 +58,8 @@ const CollegeHeroSection = ({
             {/* Left: College Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={imageUrl}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
                     alt={college_name}
                     width={320}
                     height={320}

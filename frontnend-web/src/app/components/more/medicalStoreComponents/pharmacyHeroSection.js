@@ -7,29 +7,30 @@ import { useState } from 'react';
 import CallSection from './CallSection';
 import { useRouter } from 'next/navigation';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-  function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+function getStarIcons(avgRating) {
+    const stars = [];
+    const safeRating = avgRating ?? 0;
+    const fullStars = Math.floor(safeRating);
+    const hasHalfStar = safeRating - fullStars > 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-xl" />);
-  }
+    for (let i = 0; i < fullStars; i++) {
+        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-xl" />);
+    }
 
-  if (hasHalfStar) {
-    stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-xl" />);
-  }
+    if (hasHalfStar) {
+        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-xl" />);
+    }
 
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(<FaRegStar key={`empty-${i}`} className="text-gray-300 text-xl" />);
-  }
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-gray-300 text-xl" />);
+    }
 
-  return stars;
+    return stars;
 }
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
+    console.log("healthProfile", healthProfile?.profilePhoto)
     const features = data?.features?.filter(f => f.enabled) || [];
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
@@ -50,7 +51,8 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
             {/* Pharmacy Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src="/pharmacy-image.jpg"
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
                     alt={data?.name}
                     width={320}
                     height={320}

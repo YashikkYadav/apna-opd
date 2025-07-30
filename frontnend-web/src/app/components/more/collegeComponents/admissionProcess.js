@@ -3,11 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGraduationCap } from 'react-icons/fa';
 import { useState } from 'react';
 import ApplyNow from './ApplyNow';
-const AdmissionProcess = ({
-    application_start = '{{application_start}}',
-    application_deadline = '{{application_deadline}}',
-    entrance_exam_date = '{{entrance_exam_date}}',
-    classes_start = '{{classes_start}}',
+const AdmissionProcess = ({healthProfile
 }) => {
     const steps = [
         {
@@ -74,17 +70,16 @@ const AdmissionProcess = ({
 
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                {/* Eligibility */}
+                {/* Eligibility Criteria */}
                 <motion.div
                     whileHover={{ scale: 1.04, boxShadow: '0 0 0 4px rgba(59,130,246,0.3)' }}
                     className="bg-[#F7F9FB] p-6 rounded-2xl hover:border-2 hover:border-blue-500 transition-all"
                 >
                     <h3 className="text-blue-700 font-bold text-lg mb-2">Eligibility Criteria</h3>
                     <ul className="text-sm text-gray-700 space-y-1">
-                        <li><strong>B.Sc Nursing:</strong> 12th Science (PCB) with 50% marks</li>
-                        <li><strong>GNM:</strong> 12th Any Stream with 45% marks</li>
-                        <li><strong>ANM:</strong> 10th Pass with 45% marks</li>
-                        <li><strong>MBBS:</strong> NEET Qualified with valid score</li>
+                        {healthProfile?.eligibilityCriteria.map(({ course, criteria, _id }) => (
+                            <li key={_id}><strong>{course}:</strong> {criteria}</li>
+                        ))}
                     </ul>
                 </motion.div>
 
@@ -95,10 +90,9 @@ const AdmissionProcess = ({
                 >
                     <h3 className="text-blue-700 font-bold text-lg mb-2">Scholarship Options</h3>
                     <ul className="text-sm text-gray-700 list-disc list-inside space-y-1">
-                        <li>Merit-based scholarships available</li>
-                        <li>Government scholarship programs</li>
-                        <li>Financial assistance for deserving students</li>
-                        <li>Educational loan guidance</li>
+                        {healthProfile?.scholarships.map(({ name, _id }) => (
+                            <li key={_id}>{name}</li>
+                        ))}
                     </ul>
                 </motion.div>
 
@@ -109,19 +103,18 @@ const AdmissionProcess = ({
                 >
                     <h3 className="text-blue-700 font-bold text-lg mb-2">Important Dates</h3>
                     <ul className="text-sm text-gray-700 space-y-1">
-                        <li><strong>Application Start:</strong> {application_start}</li>
-                        <li><strong>Application Deadline:</strong> {application_deadline}</li>
-                        <li><strong>Entrance Exam:</strong> {entrance_exam_date}</li>
-                        <li><strong>Classes Begin:</strong> {classes_start}</li>
+                        {healthProfile?.importantDates?.map(({ label, value, _id }) => (
+                            <li key={_id}><strong>{label}:</strong> {new Date(value).toLocaleDateString()}</li>
+                        ))}
                     </ul>
                 </motion.div>
             </div>
 
             {/* CTA */}
             <div className="text-center">
-                <button 
-                onClick={() => setModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full transition hover:scale-105">
+                <button
+                    onClick={() => setModalOpen(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full transition hover:scale-105">
                     🎓 Apply Now
                 </button>
                 <ApplyNow isOpen={modelOpen} onClose={() => setModalOpen(false)} />

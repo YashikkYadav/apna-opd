@@ -35,18 +35,14 @@ const Tag = ({ label }) => (
     </span>
 );
 
-const ServiceCard = ({ name, description, icon, tags }) => (
+const ServiceCard = ({ name }) => (
     <motion.div
         whileHover={{ scale: 1.04, boxShadow: "0 0 0 3px rgba(37,99,235,0.3)" }}
         className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] text-center border-l-4 border-blue-500 hover:border-blue-600 transition-all"
     >
-        <div className="text-4xl mb-4">{icon}</div>
+        <div className="text-4xl mb-4">{}</div>
         <h4 className="text-xl font-bold text-blue-700">{name}</h4>
-        <p className="text-sm text-gray-600 mt-2">{description}</p>
         <div className="flex justify-center gap-2 mt-4 flex-wrap">
-            {tags.map((tag, idx) => (
-                <Tag key={idx} label={tag} />
-            ))}
         </div>
     </motion.div>
 );
@@ -65,8 +61,8 @@ export default function AvailableServices({data,healthProfile}) {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {healthProfile?.services?.map((s, idx) => (
-                    <ServiceCard key={idx} {...s} />
+                {healthProfile?.availableServices?.map((s, idx) => (
+                    <ServiceCard key={idx} name={s} />
                 ))}
             </div>
         </motion.section>

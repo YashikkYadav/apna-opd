@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FaPhoneAlt, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { GoLocation } from 'react-icons/go';
 
-const LocationAndContact = ({ website_url = '{{website_url}}',
+const LocationAndContact = ({ 
 
     healthProfile,
     data
@@ -23,7 +23,7 @@ const LocationAndContact = ({ website_url = '{{website_url}}',
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
             label: 'Website',
-            value: website_url,
+            value: healthProfile?.website,
             isLink: true,
         },
         {

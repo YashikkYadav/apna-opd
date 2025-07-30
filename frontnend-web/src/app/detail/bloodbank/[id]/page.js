@@ -1,7 +1,7 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 import Head from "next/head";
 import UrgentBanner from "@/app/components/more/bloodBankComponents/UrgentBanner";
 import About from "@/app/components/more/bloodBankComponents/About";
@@ -17,19 +17,24 @@ export default function BloodBankPage() {
     const params = useParams();
     const id = params.id;
     const [data, setData] = useState({
-        healthProfile: null, otherData: null
+        healthProfile: null, userData: null
     })
 
     useEffect(() => {
         const fetchData = async () => {
-            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
-            const { healthServeProfile } = response_data.data;
+            const response_data = await axios.get(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
+            );
+            console.log("Response Data:", response_data.data);
+
+            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+
             setData({
                 healthProfile: healthServeProfile || null,
-                otherData: healthServeProfile?.healthServeId || null
+                otherData: healthServeUser || null,
             });
             console.log("healthServeProfile:", healthServeProfile);
-            console.log("healthServeId:", healthServeProfile?.healthServeId);
+            console.log("healthServeUser:", healthServeUser);
         };
         fetchData();
     }, [id]);
@@ -40,20 +45,20 @@ export default function BloodBankPage() {
                 {/* Hero section with full width */}
                 <div className="w-full">
                     <HeroSection
-                        data={data?.otherData} healthProfile={data?.healthProfile}
+                        data={data?.userData} healthProfile={data?.healthProfile}
                     />
                 </div>
 
                 {/* Other components in 90% width with rounded sections */}
                 <div className="max-w-[90vw] mx-auto space-y-10">
-                    <Availability data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <About data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <Contact data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <WhyChoose data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <RequestSteps data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <Reviews data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <NearbyBanks data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <UrgentBanner data={data?.otherData} healthProfile={data?.healthProfile} />
+                    <Availability data={data?.userData} healthProfile={data?.healthProfile} />
+                    <About data={data?.userData} healthProfile={data?.healthProfile} />
+                    <Contact data={data?.userData} healthProfile={data?.healthProfile} />
+                    <WhyChoose data={data?.userData} healthProfile={data?.healthProfile} />
+                    <RequestSteps data={data?.userData} healthProfile={data?.healthProfile} />
+                    <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
+                    <NearbyBanks data={data?.userData} healthProfile={data?.healthProfile} />
+                    <UrgentBanner data={data?.userData} healthProfile={data?.healthProfile} />
                 </div>
             </main>
         </div>

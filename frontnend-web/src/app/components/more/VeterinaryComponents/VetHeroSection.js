@@ -35,6 +35,7 @@ const VetHeroSection = ({
     const reviewCount = healthProfile?.testimonials?.length || 0;
     const features = healthProfile?.doctorInfo?.features;
     console.log(healthProfile?.experience)
+    console.log(healthProfile)
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -49,11 +50,8 @@ const VetHeroSection = ({
             {/* Left: Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={
-                        profileData && profileData.images && profileData.images[0]
-                            ? profileData.images[0].url
-                            : "/images/max.png"
-                    }
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
                     alt={data?.name}
                     width={320}
                     height={320}
@@ -88,24 +86,24 @@ const VetHeroSection = ({
 
                 {/* Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-                    <button 
-                    onClick={() => setModalOpen(true)}
-                    className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+                    <button
+                        onClick={() => setModalOpen(true)}
+                        className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         📅 Book Appointment
                     </button>
                     <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-                    <button 
-                    onClick={() => setCallModalOpen(true)}
-                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                    <button
+                        onClick={() => setCallModalOpen(true)}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📞 Call Clinic
                     </button>
                     <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
                     <button
-                    onClick={() => {
-                        const section = document.getElementById("vetLocationSection");
-                        section?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
+                        onClick={() => {
+                            const section = document.getElementById("vetLocationSection");
+                            section?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105">
                         📍 View Location
                     </button>
                 </div>
