@@ -6,7 +6,7 @@ const fs = require("fs");
 
 
 
-const profileDataRoute = async (req, res) => {
+const profileData = async (req, res) => {
   const healthServeId = req.params.healthServeId;
   const data = req.body
   data.healthServeId = healthServeId
@@ -19,15 +19,15 @@ const profileDataRoute = async (req, res) => {
   console.log(healthServeId)
 
   const healthServeProfileData =
-    await healthServerProfileService.addHealthServeProfileDataRoute(req,healthServeId);
+    await healthServerProfileService.addHealthServeProfileData(req,healthServeId);
   res.status(200).json({ message: "data save", healthServeProfileData });
 }
 
-const getProfileDataRoute = async (req, res) => {
+const getProfileData = async (req, res) => {
   const healthServeId = req.params.healthServeId;
 
   const healthServeProfileData =
-    await healthServerProfileService.getHealthServeProfileDataRoute(healthServeId);
+    await healthServerProfileService.getHealthServeProfileData(healthServeId);
   res.status(200).json({ message: "data save", healthServeProfileData });
 }
 
@@ -172,6 +172,6 @@ module.exports = {
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
-  profileDataRoute,
-  getProfileDataRoute
+  profileData,
+  getProfileData
 };

@@ -307,7 +307,7 @@ function deleteImageFile(filename) {
   });
 }
 
-const addHealthServeProfileDataRoute = async (req, healthServeId) => {
+const addHealthServeProfileData = async (req, healthServeId) => {
   try {
 
     if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
@@ -397,7 +397,7 @@ const addHealthServeProfileDataRoute = async (req, healthServeId) => {
   }
 }
 
-const getHealthServeProfileDataRoute = async (healthServeId) => {
+const getHealthServeProfileData = async (healthServeId) => {
   try {
 
 
@@ -479,6 +479,6 @@ module.exports = {
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
-  addHealthServeProfileDataRoute,
-  getHealthServeProfileDataRoute
+  addHealthServeProfileData,
+  getHealthServeProfileData
 };

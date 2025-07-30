@@ -42,7 +42,7 @@ const DetailsPage = () => {
       }
 
       const detailResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${specsId}/health-serve-profile/profile-data/route`
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${specsId}/health-serve-profile/profile-data`
       );
       console.log("m", detailResponse);
 

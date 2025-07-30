@@ -22,7 +22,7 @@ export default function VeterinaryPage() {
     useEffect(() => {
         const fetchData = async () => {
             const response_data = await axios.get(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/route`
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
             );
             console.log("Response Data:", response_data.data);
 

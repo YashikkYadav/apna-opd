@@ -18,7 +18,7 @@ healthServeProfileRoute.get(
 
 // healthServeProfileRoute.post("/profile-data/",profileController.profileData)
 // healthServeProfileRoute.get("/profile-data/",profileController.getProfileData)
-healthServeProfileRoute.post("/profile-data/route", smartUploader(), profileController.profileDataRoute)
-healthServeProfileRoute.get("/profile-data/route", profileController.getProfileDataRoute)
+healthServeProfileRoute.post("/profile-data", smartUploader(), profileController.profileData)
+healthServeProfileRoute.get("/profile-data", profileController.getProfileData)
 
 module.exports = healthServeProfileRoute;
