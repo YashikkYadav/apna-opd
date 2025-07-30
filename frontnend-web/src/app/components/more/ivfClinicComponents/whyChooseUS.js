@@ -16,7 +16,7 @@ const WhyChoose = ({ data,healthProfile }) => {
             {/* Title */}
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 text-left">
-                    Why Choose {data?.name}?
+                    Why Choose {healthProfile?.healthServeId?.name}?
                 </h2>
             </div>
 

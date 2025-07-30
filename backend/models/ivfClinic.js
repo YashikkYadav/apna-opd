@@ -27,6 +27,7 @@ const ivfClinicSchema = new mongoose.Schema(
     successRate: String,
     couplesTreated: String,
     specialization: String,
+    website:String,
     whyChoose: [
       {
         title: String,

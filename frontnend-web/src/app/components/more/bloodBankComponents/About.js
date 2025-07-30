@@ -9,7 +9,7 @@ const About = ({
     const items = [
         { label: "📋 License", value: healthProfile?.license },
         { label: "📅 Established", value: healthProfile?.establishedYear },
-        { label: "🏆 Certification", value: healthProfile?.certifications?.map(c => c.name) },
+        { label: "🏆 Certification", value: healthProfile?.certifications},
     ];
 
   return (

@@ -195,6 +195,20 @@
   </v-row>
 </v-card>
 
+
+<v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
+
 <!-- tags -->
          <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -486,6 +500,7 @@ export default {
       timeout: 4000,
     },
     form: {
+      website : '',
       introduction: "",
       experience: null,
       about: "",
@@ -729,7 +744,7 @@ removeTag(index) {
         this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
-
+this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
@@ -755,7 +770,7 @@ this.form.medicines = profile.medicines?.length
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);

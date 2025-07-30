@@ -8,7 +8,7 @@ const ClinicAboutSection = ({
     healthProfile
 }) => {
     const description = `${data?.name} has been a beacon of hope for couples seeking fertility treatments in ${data?.location} for over 2 years. Our state-of-the-art facility combines cutting-edge technology with compassionate care to help you achieve your dream of parenthood.`;
-
+    const user=healthProfile?.healthServeId
     const items = [
       { label: "🏥 Licensed By", value: healthProfile?.licensedBy },
       { label: "📅 Years in Service", value: healthProfile?.experience },
@@ -27,7 +27,7 @@ const ClinicAboutSection = ({
             <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <FaHospitalAlt className="text-3xl text-blue-700" />
-                    About {data?.name}
+                    About {user?.name}
                 </h2>
             </div>
 

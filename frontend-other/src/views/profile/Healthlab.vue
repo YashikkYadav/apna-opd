@@ -167,6 +167,20 @@
           </v-row>
         </v-card>
 
+
+        <v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
+
         <!-- tags -->
         <v-card class="section-card">
           <v-toolbar
@@ -275,7 +289,7 @@
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title class="ml-3">Therapy Packages</v-toolbar-title>
+            <v-toolbar-title class="ml-3">Test Packages</v-toolbar-title>
           </v-toolbar>
           <v-btn class="mb-2 ml-4" @click="addPackage">+ Add Package</v-btn>
           <div
@@ -561,6 +575,7 @@ export default {
       timeout: 4000,
     },
       form: {
+        website : '',
         introduction: "",
         experience: null,
         about: "",
@@ -798,7 +813,7 @@ export default {
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
-
+        this.form.website = profile.website || '';
         this.form.keyFeatures = (profile.keyFeatures || [])
         this.form.certifications = (profile.certifications || [])
         this.form.packages = (profile.packages || [])
@@ -812,7 +827,7 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);

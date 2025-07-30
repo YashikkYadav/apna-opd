@@ -466,7 +466,7 @@ export default {
       timeout: 4000,
     },
       form: {
-         website: '',
+        website : '',
         introduction: "",
         experience: null,
         about: "",
@@ -683,6 +683,7 @@ removeTag(index) {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
+      
       console.log('healthServeProfileData',profile)
 
       if (profile) {
@@ -693,11 +694,11 @@ removeTag(index) {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = add?.address || "";
-        this.form.city = add?.city || "";
-        this.form.locality = add?.locality || "";
-        this.form.state = add?.state || "";
-        this.form.pincode = add?.pincode || "";
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
 
         this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
   this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];
@@ -724,7 +725,7 @@ removeTag(index) {
         formData.append("state", this.form.state);
         formData.append("bloodTypes", JSON.stringify(this.form.bloodTypes));
   formData.append("nearbyBloodBanks", JSON.stringify(this.form.nearbyBloodBanks));
-  formData.append("license", JSON.stringify(this.form.license));
+  // formData.append("license", JSON.stringify(this.form.license));
   formData.append("facilities", JSON.stringify(this.form.facilities));
   formData.append("certifications", JSON.stringify(this.form.certifications));
   formData.append("establishedYear", this.form.establishedYear);

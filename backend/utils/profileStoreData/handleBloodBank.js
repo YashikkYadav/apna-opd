@@ -46,7 +46,8 @@ exports.handleIvfClinic = async (req, healthServeId) => {
             licensedBy,
             successRate,
             specialization,
-            couplesTreated
+            couplesTreated,
+            website
         } = req.body
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
         const profilePhoto =
@@ -81,13 +82,12 @@ exports.handleIvfClinic = async (req, healthServeId) => {
             specialization,
             couplesTreated,
             faqs,
+            website,
             whyChoose,
             testimonials: parsedTestimonials,
             tags,
             degrees,
             services,
-
-
             profilePhoto,
             galleryImages,
         }
@@ -115,6 +115,7 @@ exports.handleLaboratory = async (req, healthServeId) => {
             about,
             experience,
             introduction,
+            website
           
         } = req.body
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
@@ -153,7 +154,7 @@ exports.handleLaboratory = async (req, healthServeId) => {
             testimonials: parsedTestimonials,
             tags,
             tests,
-
+            website,
 
             profilePhoto,
             galleryImages,
@@ -184,7 +185,8 @@ exports.handleMedicalStore = async (req, healthServeId) => {
             experience,
             introduction,
             openTime,
-            closeTime
+            closeTime,
+            website
         } = req.body
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
         const profilePhoto =
@@ -222,6 +224,7 @@ exports.handleMedicalStore = async (req, healthServeId) => {
             partnerships,
             features,
             faqs,
+            website,
             testimonials: parsedTestimonials,
             tags,
 
@@ -354,7 +357,8 @@ exports.handleBloodBank = async (req, healthServeId) => {
             introduction,
             bloodTypes,
             nearbyBloodBanks,
-            facilities, license:JSON.parse(license),
+            facilities, 
+            license:license,
             certifications,
             establishedYear,
             testimonials: parsedTestimonials,

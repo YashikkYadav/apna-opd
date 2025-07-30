@@ -24,15 +24,18 @@ export default function IvfPage() {
   useEffect(() => {
     const fetchData = async () => {
       const response_data = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
       );
-      const { healthServeProfile } = response_data.data.healthServeProfileData;
+      console.log("Response Data:", response_data.data);
+
+      const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+
       setData({
         healthProfile: healthServeProfile || null,
-        userData: healthServeProfile?.healthServeId || null,
+        otherData: healthServeUser || null,
       });
       console.log("healthServeProfile:", healthServeProfile);
-      console.log("healthServeId:", healthServeProfile?.healthServeId);
+      console.log("healthServeUser:", healthServeUser);
     };
     fetchData();
   }, [id]);

@@ -30,10 +30,10 @@ export default function BloodBankPage() {
             const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
 
             setData({
-                healthProfile: healthServeProfile?.data || null,
+                healthProfile: healthServeProfile || null,
                 otherData: healthServeUser || null,
             });
-            console.log("healthServeProfile:", healthServeProfile?.data);
+            console.log("healthServeProfile:", healthServeProfile);
             console.log("healthServeUser:", healthServeUser);
         };
         fetchData();

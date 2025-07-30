@@ -50,21 +50,28 @@ export default function HealthLabPage() {
     const [data, set_res_data] = useState({
         healthProfile: null, otherData: null
     })
+  
     // Fetch data from API and set all state
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError('');
             try {
-                const response = await axios.get(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`
+                console.log('🔄 Fetching pharmacy data...');
+                const response_data = await axios.get(
+                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
                 );
-                const { healthServeProfile, healthServeUser } = response?.data || {};
+                console.log("Response Data:", response_data.data);
+
+                const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
                 set_res_data({
                     healthProfile: healthServeProfile || null,
-                    otherData: healthServeProfile?.healthServeId || null
+                    otherData: healthServeUser || null,
                 });
-                console.log("response", healthServeProfile, healthServeUser, response?.data,);
+
+                setTestsData(healthServeProfile?.tests)
+                setPackagesData(healthServeProfile?.packages)
+                console.log("response", healthServeProfile, healthServeUser);
 
                 setLabInfo(healthServeUser || {});
                 const data = healthServeProfile || {};
@@ -126,9 +133,9 @@ export default function HealthLabPage() {
                     <AboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
                     <LabFilterBar search={search} setSearch={setSearch} testType={testType} setTestType={setTestType} price={price} setPrice={setPrice} location={location} setLocation={setLocation} />
                     <DiagnosticTabs tab={tab} setTab={setTab} filteredTests={filteredTests} packagesData={packagesData} setShowModal={setShowModal} setModalTest={setModalTest} openPackage={openPackage} setOpenPackage={setOpenPackage} />
-                    <ReviewSection data={data?.otherData} healthProfile={data?.healthProfile}/>
+                    <ReviewSection data={data?.otherData} healthProfile={data?.healthProfile} />
                     <LocationAndContact data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <FAQSection faqs={faqData} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} />
+                    <FAQSection faqs={faqData} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} healthProfile={data?.healthProfile}/>
                 </div>
             </main>
         </div>

@@ -44,7 +44,7 @@ const LeadFertilitySpecialist = ({
           <div>
             <h2 className="text-3xl font-extrabold text-blue-700 flex items-center gap-2">
               <FaUserMd className="text-2xl text-blue-500" />
-              Dr. {data?.name}
+              Dr. {healthProfile?.healthServeId?.name}
             </h2>
             <p className="text-gray-700 pt-3 text-base font-medium leading-relaxed">
               Compassionate fertility expert with a strong track record of

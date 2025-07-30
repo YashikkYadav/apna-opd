@@ -11,6 +11,7 @@ const ClinicHeroSection = ({
   data,
   healthProfile,
 }) => {
+  const user=healthProfile?.healthServeId
   const [callModalOpen, setCallModalOpen] = useState(false);
   const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   const avgRating = healthProfile?.testimonials?.length
@@ -74,7 +75,7 @@ const ClinicHeroSection = ({
       {/* Right: Content */}
       <div className="z-10 flex-1 space-y-5 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-          {data?.name},{data?.location}
+          {user?.name},{user?.location}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">

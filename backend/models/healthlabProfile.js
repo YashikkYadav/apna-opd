@@ -38,7 +38,7 @@ const HealthLabProfileSchema = new Schema({
   about: { type: String },
   experience: { type: String },
   introduction: { type: String },
- 
+        website:String,
 
   keyFeatures: [{ type: String }],
   certifications: [{ type: String }],

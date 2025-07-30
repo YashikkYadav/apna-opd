@@ -33,7 +33,7 @@ export default function Home() {
             const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
 
             setData({
-                healthProfile: healthServeProfile.data || null,
+                healthProfile: healthServeProfile || null,
                 otherData: healthServeUser || null,
             });
 

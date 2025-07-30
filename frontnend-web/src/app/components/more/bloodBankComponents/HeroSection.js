@@ -37,8 +37,9 @@ const HeroSection = ({
     data,
     healthProfile,
 }) => {
+    
+    const user=healthProfile?.healthServeId
     const [callModalOpen, setCallModalOpen] = useState(false);
-    console.log(healthProfile?.name)
     const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
     const reviewCount = healthProfile?.testimonials?.length || 0;
 
@@ -58,7 +59,7 @@ const HeroSection = ({
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
                     src={`http://localhost:3001/public/${healthProfile?.profileImage}`}
-                    alt={healthProfile?.name}
+                    alt={healthProfile?.healthServeId?.name}
                     width={340}
                     height={340}
                     className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -68,7 +69,7 @@ const HeroSection = ({
         {/* Right: Text Content */}
         <div className="z-10 flex-1 space-y-5 text-center md:text-left">
           <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-            {data?.name ?? "Dummy Name"} {data?.locality ?? "Dummy City"}
+            {user?.name ?? "Dummy Name"} {user?.locality ?? "Dummy City"}
           </h2>
 
           <p className="text-white/90 text-lg max-w-xl">
