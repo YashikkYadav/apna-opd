@@ -45,9 +45,12 @@ const PharmacyAbout = ({
                 >
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Services</h3>
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
-                        {healthProfile?.specialServices.map((service, index) => (
-                            <li key={`service-${index}`}>• {service}</li>
-                        ))}
+                        {Array.isArray(healthProfile?.servicesOffered) &&
+                            healthProfile.servicesOffered.map((service) => (
+                                <li key={service._id || service.name || JSON.stringify(service)}>
+                                    • {service.name || service}
+                                </li>
+                            ))}
                     </ul>
                 </motion.div>
 
@@ -58,9 +61,10 @@ const PharmacyAbout = ({
                 >
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Partnerships</h3>
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
-                        {partners.map((partner, index) => (
-                            <li key={`partner-${index}`}>• {partner}</li>
-                        ))}
+                        {Array.isArray(healthProfile?.partnerships) &&
+                            healthProfile.partnerships.map((partner) => (
+                                <li key={partner._id || partner.name}>• {partner.name}</li>
+                            ))}
                     </ul>
                 </motion.div>
             </div>

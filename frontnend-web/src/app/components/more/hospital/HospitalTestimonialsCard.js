@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 
 export default function HospitalTestimonialsCard({ profileData }) {
   const testimonials = profileData?.testimonials ?? [];
+  
 
   return (
     <motion.div

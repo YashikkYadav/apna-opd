@@ -76,6 +76,12 @@
               ></v-file-upload>
             </v-col>
           </v-row>
+          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,10 +95,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div v-if="img.type === 'galleryImages_image'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -161,6 +167,19 @@
           </v-row>
         </v-card>
 
+    <v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
+
         <!-- tags -->
          <v-card class="section-card">
   <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
@@ -220,7 +239,7 @@
   </v-toolbar>
   <v-btn class="mb-6" @click="addLanguage">+ Add Language</v-btn>
   <div v-for="(lang, i) in form.languages" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.languages[i]" label="Language" dense outlined hide-details class="flex-grow-1 mr-2" />
+    <v-text-field v-model="form.languages[i]" label="Language" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
     <v-btn icon color="error" @click="removeLanguage(i)">
       <v-icon>mdi-delete</v-icon>
     </v-btn>
@@ -246,7 +265,7 @@
   </v-toolbar>
   <v-btn class="mb-6" @click="addService">+ Add Service</v-btn>
   <div v-for="(service, i) in form.availableServices" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.availableServices[i]" label="Service" dense outlined hide-details class="flex-grow-1 mr-2" />
+    <v-text-field v-model="form.availableServices[i]" label="Service" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
     <v-btn icon color="error" @click="removeService(i)">
       <v-icon>mdi-delete</v-icon>
     </v-btn>
@@ -259,7 +278,7 @@
   </v-toolbar>
   <v-btn class="mb-6" @click="addFacility">+ Add Facility</v-btn>
   <div v-for="(facility, i) in form.facilities" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.facilities[i]" label="Facility" dense outlined hide-details class="flex-grow-1 mr-2" />
+    <v-text-field v-model="form.facilities[i]" label="Facility" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
     <v-btn icon color="error" @click="removeFacility(i)">
       <v-icon>mdi-delete</v-icon>
     </v-btn>
@@ -417,12 +436,26 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
       showModal: false,
       imageToDelete: null,
+      snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
+        website:'',
         introduction: "",
         experience: null,
         about: "",
@@ -612,44 +645,58 @@ removeTag(index) {
         this.cancelDelete();
       }
     },
-    handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+     handleGalleryChange(newFiles) {
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 10MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
+
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
-
+      const res = await useProfileStore().getProfileData();
+      const profile = res.healthServeProfileData.healthServeProfile.data
+      const add=res.healthServeProfileData.healthServeUser
+      console.log("r",res)
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        // this.images = profile.images;
 
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+        this.form.address = add?.address || "";
+        this.form.city = add?.city || "";
+        this.form.locality = add?.locality || "";
+        this.form.state = add?.state || "";
+        this.form.pincode = add?.pincode || "";
 
         this.form.specialization = profile.specialization || '';
   this.form.consultationFee = profile.consultationFee || '';
 
-  this.form.languages = (profile.languages || []).map(l => ({ value: l }));
-  this.form.availableServices = (profile.availableServices || []).map(s => ({ value: s }));
-  this.form.facilities = (profile.facilities || []).map(f => ({ value: f }));
-  this.form.faqs = (profile.faqs || []).map(f => ({ value: f }));
+  this.form.languages = profile.languages || [];
+  this.form.availableServices = profile.availableServices || [];
+  this.form.facilities = (profile.facilities || []);
+  this.form.faqs = profile.faqs || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -658,7 +705,7 @@ removeTag(index) {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -670,24 +717,24 @@ removeTag(index) {
         formData.append('specialization', this.form.specialization);
   formData.append('consultationFee', this.form.consultationFee);
 
-  formData.append('languages', JSON.stringify(this.form.languages.map(l => l.value)));
-  formData.append('availableServices', JSON.stringify(this.form.availableServices.map(s => s.value)));
-  formData.append('facilities', JSON.stringify(this.form.facilities.map(f => f.value)));
-  formData.append('faqs', JSON.stringify(this.form.faqs.map(f => f.value)));
+  formData.append('languages', JSON.stringify(this.form.languages));
+  formData.append('availableServices', JSON.stringify(this.form.availableServices));
+  formData.append('facilities', JSON.stringify(this.form.facilities));
+  formData.append('faqs', JSON.stringify(this.form.faqs));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 

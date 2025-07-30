@@ -72,7 +72,7 @@ const Header = () => {
     { label: "Physiotherapist", route: "/more/physiotherapist" },
     { label: "Radiologist", route: "/more/radiologist" },
     { label: "Hospital", route: "/more/hospital" },
-    { label: "Home Service", type: "heading" }, 
+    { label: "Home Service", type: "heading" },
     { label: "divider", type: "divider" },
     { label: "Veterinary", route: "/more/vatenary" },
     { label: "Nurse", route: "/more/nurse" },
@@ -104,9 +104,8 @@ const Header = () => {
           </div>
           <div
             ref={menuRef}
-            className={`${
-              isMobileNavOpen ? "block" : "hidden"
-            } lg:block absolute lg:relative top-[80px] lg:top-auto right-4 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[250px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
+            className={`${isMobileNavOpen ? "block" : "hidden"
+              } lg:block absolute lg:relative top-[80px] lg:top-auto right-4 lg:right-auto bg-white lg:bg-transparent shadow-md lg:shadow-none rounded-md lg:rounded-none p-4 lg:p-0 w-[250px] lg:w-auto transition-all duration-300 menu-container z-[9999]`}
           >
             <ul className="flex flex-col lg:flex-row gap-[15px] lg:gap-[40px] mb-0">
               <li className="text-[#094B89] text-base font-bold">
@@ -121,9 +120,8 @@ const Header = () => {
                 >
                   Find{" "}
                   <CaretDownOutlined
-                    className={`pl-1 transition-transform duration-200 ${
-                      isFindDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    className={`pl-1 transition-transform duration-200 ${isFindDropdownOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </a>
                 {isFindDropdownOpen && (
@@ -156,11 +154,11 @@ const Header = () => {
                           {item.type !== "divider" &&
                             item.type !== "heading" &&
                             index <
-                              menuItems.filter(
-                                (i) =>
-                                  i.type !== "divider" && i.type !== "heading"
-                              ).length -
-                                1 && <hr className="my-1" />}
+                            menuItems.filter(
+                              (i) =>
+                                i.type !== "divider" && i.type !== "heading"
+                            ).length -
+                            1 && <hr className="my-1" />}
                         </div>
                       ))}
                     </ul>

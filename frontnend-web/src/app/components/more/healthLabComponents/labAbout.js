@@ -58,7 +58,7 @@ const AboutSection = ({
                 >
                     <h3 className="text-xl font-bold text-blue-700 mb-4">Certifications & Accreditations</h3>
                     <div className="flex flex-wrap gap-4">
-                        {healthProfile?.awards?.map((cert, idx) => (
+                        {healthProfile?.certifications?.map((cert, idx) => (
                             <div
                                 key={idx}
                                 className="bg-white border border-blue-200 rounded-xl px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm hover:bg-blue-50 transition"
@@ -76,7 +76,7 @@ const AboutSection = ({
                 >
                     <h3 className="text-xl font-bold text-blue-700 mb-4">Key Features</h3>
                     <div className="grid grid-cols-1 gap-4">
-                        {healthProfile?.facilities?.map((title, idx) => (
+                        {healthProfile?.keyFeatures?.map((title, idx) => (
                             <div
                                 key={idx}
                                 className="flex items-start gap-4 bg-white border border-blue-100 rounded-xl p-4 shadow-sm hover:bg-blue-50 transition"

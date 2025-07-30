@@ -3,30 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const FAQ = ({ vetName = 'Dr. Mehra' }) => {
-    const faqs = [
-        {
-            question: `What animals does ${vetName} treat?`,
-            answer: `${vetName} treats a variety of animals including dogs, cats, rabbits, and some exotic pets.`,
-        },
-        {
-            question: 'How do I book a consultation?',
-            answer: 'You can book a consultation online through our website or by calling our support team.',
-        },
-        {
-            question: 'Can I get a prescription online?',
-            answer: 'Yes, our veterinarians can provide digital prescriptions after an online consultation.',
-        },
-        {
-            question: 'Is emergency care available?',
-            answer: 'Yes, emergency care is available 24/7 at select locations. Please call ahead if possible.',
-        },
-        {
-            question: 'Are follow-ups free?',
-            answer: 'Yes, follow-ups within 7 days of your original consultation are free of charge.',
-        },
-    ];
-
+const FAQ = ({ healthProfile,data }) => {
+   
     const [openIndex, setOpenIndex] = useState(null);
 
     const toggle = (index) => {
@@ -47,7 +25,7 @@ const FAQ = ({ vetName = 'Dr. Mehra' }) => {
             </h2>
 
             <div className="max-w-4xl mx-auto space-y-4">
-                {faqs.map((faq, index) => (
+                {healthProfile?.faqs?.map((faq, index) => (
                     <div
                         key={index}
                         className={`bg-blue-50 rounded-xl border transition-all duration-300 ${openIndex === index ? 'border-blue-500 shadow-md' : 'border-blue-100 hover:border-blue-400'

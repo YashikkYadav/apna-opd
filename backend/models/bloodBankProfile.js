@@ -29,4 +29,5 @@ const bloodBankSchema = new mongoose.Schema({
     galleryImages: [{ type: String }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('BloodBank', bloodBankSchema);
+const bloodBank = mongoose.model('BloodBank', bloodBankSchema);
+module.exports=bloodBank

@@ -611,12 +611,12 @@ function DepartmentSection({ dept }) {
 function getDepartmentWiseDoctors(doctors) {
   const map = {};
 
-  for (const doc of doctors) {
-    if (!doc.doctorProfile) continue;
-    const dept = doc.speciality;
-    if (!map[dept]) map[dept] = [];
-    map[dept].push(doc);
-  }
+  // for (const doc of doctors) {
+  //   if (!doc.doctorProfile) continue;
+  //   const dept = doc.speciality;
+  //   if (!map[dept]) map[dept] = [];
+  //   map[dept].push(doc);
+  // }
 
   return Object.entries(map).map(([name, doctors]) => {
     const meta = departments.find((d) => d.name === name) || {};

@@ -6,16 +6,21 @@ const fs = require("fs");
 
 
 
+
+
 const profileData = async (req, res) => {
   const healthServeId = req.params.healthServeId;
-  // const data = req.body
-  // data.healthServeId = healthServeId
+  const data = req.body
+  data.healthServeId = healthServeId
 
 
-  // console.log('asdaaad', JSON.stringify(req.body))
+  console.log( JSON.stringify(req.body))
+  // console.log('asdaaad',req.files)
+  
   // console.log('asdaaad',req.files)
   
   // return 
+  console.log(healthServeId)
 
   const healthServeProfileData =
     await healthServerProfileService.addHealthServeProfileData(req,healthServeId);

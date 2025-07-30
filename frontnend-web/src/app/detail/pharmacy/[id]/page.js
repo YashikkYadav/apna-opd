@@ -61,18 +61,25 @@ const PharmacyStorePage = () => {
         "3:00 PM - 6:00 PM",
         "6:00 PM - 9:00 PM",
     ];
-
+    const [medicines,setMed]=useState(null);
     const fetchData = useCallback(async (showNotification = true) => {
         try {
             console.log('🔄 Fetching pharmacy data...');
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
-            // Destructure from response.data
-            const { healthServeProfile, healthServeUser } = response?.data || {};
+            const response_data = await axios.get(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
+            );
+            console.log("Response Data:", response_data.data);
+
+            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+            setMed(healthServeProfile.medicines)
+            console.log("med",medicines)
             set_res_data({
                 healthProfile: healthServeProfile || null,
-                otherData: healthServeProfile?.healthServeId || null
+                otherData: healthServeUser || null,
             });
-            console.log("response", healthServeProfile, healthServeUser, response?.data);
+            console.log("healthServeProfile:", healthServeProfile);
+            console.log("healthServeUser:", healthServeUser);
+            console.log("response", healthServeProfile, healthServeUser);
 
             // if (statusCode === 201) {
             //     setData(healthServeProfile || {});
@@ -100,9 +107,9 @@ const PharmacyStorePage = () => {
 
         return () => clearInterval(interval);
     }, [fetchData]);
-
+    console.log("aaaa",data)
     const filteredMedicines = useMemo(() => {
-        let filtered = data?.medicines.filter((medicine) => {
+        let filtered = medicines?.filter((medicine) => {
             const matchesSearch =
                 medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 medicine.salt.toLowerCase().includes(searchTerm.toLowerCase());
@@ -225,12 +232,13 @@ const PharmacyStorePage = () => {
                         medicines={filteredMedicines}
                         addToCart={addToCart}
                         cart={cart}
+                        healthProfile={res_data?.healthProfile}
                     />
                     <FeatureHighlights data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     <PharmacyLocationCard data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     <TestimonialsSection data={res_data?.otherData} healthProfile={res_data?.healthProfile} />
                     {acceptsPrescriptions && <UploadPrescription />}
-                    <FAQSection faqs={data?.faqs} />
+                    <FAQSection faqs={data?.faqs} healthProfile={res_data?.healthProfile} />
                     {/* <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} /> */}
                 </div>
             </main>
