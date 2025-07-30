@@ -1,7 +1,7 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 import Head from "next/head";
 import UrgentBanner from "@/app/components/more/bloodBankComponents/UrgentBanner";
 import About from "@/app/components/more/bloodBankComponents/About";

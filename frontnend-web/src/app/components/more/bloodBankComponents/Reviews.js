@@ -17,21 +17,20 @@ const Reviews = (healthProfile) => {
     console.log("healthProfile", healthProfile);
     console.log("test",healthProfile?.testimonials)
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, type: "spring" }}
-            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
-        >
-            {/* Title */}
-            <div className=" mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
-                    <FaCommentDots className="text-3xl text-blue-700" />
-
-                    Reviews & Ratings
-                </h2>
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, type: "spring" }}
+        className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
+      >
+        {/* Title */}
+        <div className=" mb-8">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
+            <FaCommentDots className="text-3xl text-blue-700" />
+            Reviews & Ratings
+          </h2>
+        </div>
 
             {/* Grid Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -50,13 +49,13 @@ const Reviews = (healthProfile) => {
                 ))}
             </div>
 
-            {/* CTA */}
-            <div className="flex justify-center pt-8">
-                <button className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white font-semibold transition-all duration-300">
-                    Leave a Review
-                </button>
-            </div>
-        </motion.div>
+        {/* CTA */}
+        <div className="flex justify-center pt-8">
+          <button className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white font-semibold transition-all duration-300">
+            Leave a Review
+          </button>
+        </div>
+      </motion.div>
     );
 };
 
