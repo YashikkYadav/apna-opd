@@ -3,13 +3,11 @@ import { motion } from 'framer-motion';
 import { FaHospitalAlt } from 'react-icons/fa';
 
 const About = ({ data, healthProfile }) => {
+  const { certifications, establishedYear, license } = healthProfile || {};
 
-    const { certifications, establishedYear, license } = healthProfile || "";
-
-    
   const items = [
     { label: "📋 License", value: license },
-    { label: "📅 Established", value: establishedYear},
+    { label: "📅 Established", value: establishedYear },
     { label: "🏆 Certification", value: certifications?.join(", ") || "" },
   ];
 
@@ -21,7 +19,6 @@ const About = ({ data, healthProfile }) => {
       transition={{ duration: 0.7, type: "spring" }}
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
-      {/* Title */}
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
           <FaHospitalAlt className="text-3xl text-blue-700" />
@@ -29,12 +26,10 @@ const About = ({ data, healthProfile }) => {
         </h2>
       </div>
 
-      {/* Description */}
       <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">
         {healthProfile?.about}
       </p>
 
-      {/* Grid Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {items.map((item, idx) => (
           <motion.div
