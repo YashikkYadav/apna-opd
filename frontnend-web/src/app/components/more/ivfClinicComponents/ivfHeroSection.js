@@ -11,14 +11,14 @@ const ClinicHeroSection = ({
   data,
   healthProfile,
 }) => {
-  const user=healthProfile?.healthServeId
+  const user = healthProfile?.healthServeId
   const [callModalOpen, setCallModalOpen] = useState(false);
   const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   const avgRating = healthProfile?.testimonials?.length
     ? (
-        healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
-        healthProfile?.testimonials.length
-      ).toFixed(1)
+      healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+      healthProfile?.testimonials.length
+    ).toFixed(1)
     : "0.0";
   const reviewCount = healthProfile?.testimonials?.length || 0;
 
@@ -64,7 +64,8 @@ const ClinicHeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
-          src={imageUrl}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
           alt={data?.name || "image"}
           width={340}
           height={340}

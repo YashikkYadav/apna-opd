@@ -29,7 +29,7 @@ function getStarIcons(avgRating) {
 }
 
 const PhysiotherapyHero = ({ data, healthProfile }) => {
-    
+
     const features = healthProfile?.doctorInfo?.features;
     const [modalOpen, setModalOpen] = useState(false);
     const [callModalOpen, setCallModalOpen] = useState(false);
@@ -49,7 +49,8 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
             {/* Left: Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={`http://localhost:3001/public/${healthProfile?.profileImage}`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+
                     alt={`Dr.${data?.name}`}
                     width={340}
                     height={340}
