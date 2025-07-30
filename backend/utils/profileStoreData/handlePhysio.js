@@ -29,6 +29,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
             therapyPackages = [],
             testimonials = [],
             tags = [],
+            faqs = [],
         } = req.body;
 
         const parseArray = (val) => {
@@ -54,6 +55,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
             });
 
         const update = {
+            healthServeId,
             about,
             experience,
             introduction,
@@ -70,22 +72,26 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
             conditionsTreated: parseArray(conditionsTreated),
             therapyPackages: parseArray(therapyPackages),
             testimonials: parseArray(testimonials),
+            faqs: parseArray(faqs),
             tags: parseArray(tags),
         };
 
         if (profilePhoto) update.profileImage = profilePhoto;
         if (galleryImages.length > 0) update.galleryImages = galleryImages;
 
-        const doc = await Physiotherapist.findOneAndUpdate(
-            { healthServeId },
-            update,
-            { new: true, upsert: true, setDefaultsOnInsert: true }
-        );
+        const existing = await Physiotherapist.findOne({ healthServeId });
+
+        let result;
+        if (existing) {
+            result = await Physiotherapist.findOneAndUpdate({ healthServeId }, update, { new: true });
+        } else {
+            result = await Physiotherapist.create(update);
+        }
 
         return {
             statusCode: 200,
-            message: "Physiotherapist saved successfully",
-            data: doc,
+            message: `Physiotherapist profile ${existing ? "updated" : "created"} successfully`,
+            data: result,
         };
     } catch (error) {
         console.error("handlePhysiotherapist error:", error);
@@ -96,6 +102,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
         };
     }
 };
+
 exports.gethandlePhysiotherapist = async (healthServeId) => {
     try {
         if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {

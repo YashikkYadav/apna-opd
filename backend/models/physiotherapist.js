@@ -22,13 +22,24 @@ const PhysiotherapistSchema = new mongoose.Schema(
         state: { type: String },
 
         // Arrays
-        education: [{ type: String }],
+        education: [
+            {
+                degree: { type: String },
+                institution: { type: String },
+                year: { type: String },
+            }
+        ],
         specialInterests: [{ type: String }],
         certifications: [{ type: String }],
         languages: [{ type: String }],
         conditionsTreated: [{ type: String }],
         tags: [{ type: String }],
-        
+        faqs: [
+            {
+                question: { type: String },
+                answer: { type: String },
+            },
+        ],
 
 
 

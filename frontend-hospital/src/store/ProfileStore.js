@@ -27,6 +27,24 @@ export const useProfileStore = defineStore("profileStore", {
       );
       return deleteResponse;
     },
+    async addProfileData(payload) {
+      const ProfileService = new AxiosProfile();
+      console.log(this.healthServeId)
+      const deleteResponse = await ProfileService.AddProfileData(
+        this.healthServeId,
+        payload
+      );
+      return deleteResponse;
+    },
+    // getProfileData
+    async getProfileData() {
+      const ProfileService = new AxiosProfile();
+
+      const deleteResponse = await ProfileService.GetProfileData(
+        this.healthServeId,
+      );
+      return deleteResponse;
+    },
     reset() {
       this.$reset(); // Built-in Pinia function to reset to initial state
     },

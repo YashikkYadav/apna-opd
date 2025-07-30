@@ -8,7 +8,7 @@ import SuggestedService from "../../../../components/more/common/SuggestedServic
 import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
 import FullDetailsPage from "@/app/components/more/hospital/hospitalDetail";
-
+import axios from "axios";
 const DetailsPage = () => {
   const params = useParams();
   const [loading, setLoading] = useState(true);
@@ -41,14 +41,22 @@ const DetailsPage = () => {
         return;
       }
 
-      const detailResponse = await axiosInstance.get(
-        `/${specsId}/health-serve-profile`
+      const detailResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${specsId}/health-serve-profile/profile-data/route`
       );
+      console.log("m", detailResponse);
 
-      if (detailResponse?.healthServeProfile) {
+      const healthServeProfile =
+        detailResponse?.data?.healthServeProfileData?.healthServeProfile.data;
+
+      const healthServeId = detailResponse?.data?.healthServeProfileData?.healthServeUser;
+
+      console.log("f", healthServeId,
+        healthServeProfile,);
+      if (healthServeProfile) {
         setProfileData({
-          ...basicProfile,
-          ...detailResponse.healthServeProfile,
+          ...healthServeId,
+          ...healthServeProfile,
         });
       } else {
         setProfileData(basicProfile);
@@ -57,7 +65,7 @@ const DetailsPage = () => {
       console.log("Error fetching service details:", error);
       setError(
         error?.response?.data?.error?.message ||
-          "Failed to load details. Please try again later."
+        "Failed to load details. Please try again later."
       );
     } finally {
       setLoading(false);

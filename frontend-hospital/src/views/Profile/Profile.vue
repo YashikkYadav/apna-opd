@@ -727,23 +727,23 @@ export default {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
-
+      const res = await useProfileStore().getProfileData();
+      console.log(res)
+      const profile = res.healthServeProfileData?.healthServeProfile?.data;
+      const add=res.healthServeProfileData?.healthServeUser
       if (profile) {
-        console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages;
 
         const hs = profile.healthServeId;
 
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+        this.form.address = add?.address || "";
+        this.form.city = add?.city || "";
+        this.form.locality = add?.locality || "";
+        this.form.state = add?.state || "";
+        this.form.pincode = add?.pincode || "";
 
         this.form.accreditations = profile.accreditations || [];
         this.form.awards = profile.awards || [];
@@ -800,7 +800,7 @@ export default {
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 

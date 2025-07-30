@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const MedicalCollege = require("../../models/medicalCollege");
 
+
 exports.handleMedicalCollege = async (req, healthServeId) => {
     try {
         if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
@@ -9,14 +10,6 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
                 message: "Invalid or missing healthServeId",
             };
         }
-
-        const parseArray = (val) => {
-            try {
-                return typeof val === "string" ? JSON.parse(val) : val;
-            } catch {
-                return [];
-            }
-        };
 
         const {
             about,
@@ -32,7 +25,6 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             affiliatedTo,
             approvedBy,
             recognition,
-
             courses = [],
             eligibilityCriteria = [],
             importantDates = [],
@@ -44,6 +36,14 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             careerServices = [],
             tags = [],
         } = req.body;
+
+        const parseArray = (val) => {
+            try {
+                return typeof val === "string" ? JSON.parse(val) : val;
+            } catch {
+                return [];
+            }
+        };
 
         const files = req.files || [];
 
@@ -60,6 +60,7 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             });
 
         const update = {
+            healthServeId,
             about,
             experience,
             introduction,
@@ -88,19 +89,22 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
         if (profilePhoto) update.profileImage = profilePhoto;
         if (galleryImages.length > 0) update.galleryImages = galleryImages;
 
-        const doc = await MedicalCollege.findOneAndUpdate(
-            { healthServeId },
-            update,
-            { new: true, upsert: true, setDefaultsOnInsert: true }
-        );
+        const existing = await MedicalCollege.findOne({ healthServeId });
+
+        let result;
+        if (existing) {
+            result = await MedicalCollege.findOneAndUpdate({ healthServeId }, update, { new: true });
+        } else {
+            result = await MedicalCollege.create(update);
+        }
 
         return {
             statusCode: 200,
-            message: "MedicalCollege saved successfully",
-            data: doc,
+            message: `MedicalCollege profile ${existing ? "updated" : "created"} successfully`,
+            data: result,
         };
     } catch (error) {
-        console.error("handleCollege error:", error);
+        console.error("handleMedicalCollege error:", error);
         return {
             statusCode: 500,
             message: "Internal Server Error",

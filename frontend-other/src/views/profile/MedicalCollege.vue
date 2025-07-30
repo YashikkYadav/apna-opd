@@ -622,7 +622,7 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
+      return [...this.galleryImages].sort((a, b) => {
         if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
         if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
         return 0;
@@ -825,7 +825,7 @@ addEligibility() {
       const res = await useProfileStore().getProfileData();
       const profile = res.healthServeProfileData.healthServeProfile.data;
       const add=res.healthServeProfileData.healthServeUser
-      console.log('jgjg',profile)
+      console.log('jgjg',res)
       if (profile) {
         console.log(res);
         
@@ -840,7 +840,7 @@ addEligibility() {
         this.form.city = add?.city || "";
         this.form.locality = add?.locality || "";
         this.form.state = add?.state || "";
-        this.form.pincode = add?.pincode || "";
+        this.form.pincode = profile?.pincode || "";
 
          this.form.established = profile.established || '';
   this.form.affiliatedTo = profile.affiliatedTo || '';

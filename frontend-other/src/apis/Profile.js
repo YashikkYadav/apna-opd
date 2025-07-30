@@ -29,13 +29,13 @@ export class AxiosProfile {
     }
 
     return this.apiClient.post(
-      `/${healthServeId}/health-serve-profile/profile-data/`,
+      `/${healthServeId}/health-serve-profile/profile-data/route`,
       payload
     );
   }
   GetProfileData(healthServeId) {
     return this.apiClient.get(
-      `/${healthServeId}/health-serve-profile/profile-data/`,
+      `/${healthServeId}/health-serve-profile/profile-data/route`,
     );
   }
 }

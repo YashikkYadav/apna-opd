@@ -11,7 +11,6 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-const { handleBloodBankData, gethandleBloodBankData } = require("../utils/profileStoreData/handleBloodBank");
 const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/profileStoreData/handlePhysio')
 const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
@@ -325,9 +324,6 @@ const addHealthServeProfileDataRoute = async (req, healthServeId) => {
     }
     let result;
     switch (healthServeProfile.type) {
-      case 'blood_bank':
-        result = await handleBloodBankData(req, healthServeId);
-        break;
       case 'physiotherapist':
         result = await handlePhysiotherapist(req, healthServeId);
         break;
@@ -335,10 +331,14 @@ const addHealthServeProfileDataRoute = async (req, healthServeId) => {
         result = await handleHospital(req, healthServeId);
         break;
       case 'vatenary':
+        console.log("vet")
         result = await handleVeterinary(req, healthServeId);
         break
       case 'nursing_medical_college':
         result=await handleMedicalCollege(req,healthServeId)
+        break;
+      
+
     }
 
 
@@ -403,11 +403,9 @@ const getHealthServeProfileDataRoute = async (healthServeId) => {
 
     let healthServeProfile = await HealthServe.findById(healthServeId);
 
+
     let result;
     switch (healthServeProfile.type) {
-      case 'blood_bank':
-        result = await gethandleBloodBankData(healthServeId);
-        break;
       case 'hospital':
         result = await gethandleHospital(healthServeId);
         break;

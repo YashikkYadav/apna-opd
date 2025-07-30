@@ -18,7 +18,7 @@ export default function VeterinaryPage() {
     const [data, setData] = useState({
         healthProfile: null, otherData: null
     })
-
+    console.log(id)
     useEffect(() => {
         const fetchData = async () => {
             const response_data = await axios.get(

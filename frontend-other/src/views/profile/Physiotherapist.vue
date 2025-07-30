@@ -359,6 +359,22 @@
   </div>
 </v-card>
 
+<v-card class="section-card mt-6">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
+    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
+    <div class="d-flex justify-end">
+      <v-btn icon color="error" @click="removeFAQ(i)">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </div>
+  </div>
+</v-card>
+
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -517,6 +533,7 @@ export default {
         website:'',
         introduction: "",
         experience: null,
+        faqs: [],
         about: "",
         address: "",
         locality: "",
@@ -524,7 +541,7 @@ export default {
         pincode: "",
         tags: [''],
         state: "",
-        education: [],
+        education: [{ degree: '', institution: '', year: '' }],
       specialInterests: [],
       certifications: [],
       languages: [],
@@ -559,7 +576,7 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
+      return [...this.galleryImages].sort((a, b) => {
         if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
         if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
         return 0;
@@ -640,6 +657,12 @@ export default {
   },
   removeEducation(index) {
     this.form.education.splice(index, 1);
+  },
+  addFAQ() {
+    this.form.faqs.push({ question: '', answer: '' });
+  },
+  removeFAQ(i) {
+    this.form.faqs.splice(i, 1);
   },
 
 // Special Interests
@@ -756,12 +779,13 @@ removeTag(index) {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
+       console.log("poi",res);
       const profile = res.healthServeProfileData.healthServeProfile.data
       const add=res.healthServeProfileData.healthServeUser
-      console.log("poi",res);
+     
       if (profile) {
         console.log(res);
-        this.images = profile.galleryImages;
+        // this.images = profile.galleryImages;
 
         const hs = profile.healthServeId;
         this.form.website = profile.website || "";
@@ -772,8 +796,8 @@ removeTag(index) {
         this.form.city = add?.city || "";
         this.form.locality = add?.locality || "";
         this.form.state = add?.state || "";
-        this.form.pincode = add?.pincode || "";
-
+        this.form.pincode = profile?.pincode || "";
+         this.form.faqs = profile.faqs || [];
        this.form.education = (profile.education || []);
   this.form.specialInterests = profile.specialInterests || [];
       this.form.certifications = profile.certifications || [];
@@ -805,7 +829,7 @@ removeTag(index) {
       formData.append("therapyPackages", JSON.stringify(this.form.therapyPackages));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
-
+        formData.append('faqs', JSON.stringify(this.form.faqs));
         if (this.profileImage) {
           formData.append("profilePhoto_image", this.profileImage);
         }

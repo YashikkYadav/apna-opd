@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const HealthServeProfileSchema = new mongoose.Schema(
+const HospitlaSchema = new mongoose.Schema(
   {
     healthServeId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -48,4 +48,4 @@ const HealthServeProfileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Hospital", HealthServeProfileSchema);
+module.exports = mongoose.model("Hospital", HospitlaSchema);

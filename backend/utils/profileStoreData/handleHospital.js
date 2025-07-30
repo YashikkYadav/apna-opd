@@ -4,6 +4,7 @@ const Hospital = require('../../models/hospital')
 const mongoose = require("mongoose");
 
 exports.handleHospital = async (req, healthServeId) => {
+
     try {
         const {
             about,
@@ -84,6 +85,7 @@ exports.handleHospital = async (req, healthServeId) => {
             update,
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
+        
 
         return {
             statusCode: 200,
@@ -101,7 +103,7 @@ exports.handleHospital = async (req, healthServeId) => {
 };
 
 exports.gethandleHospital = async (healthServeId) => {
-    console.log("kjh",healthServeId)
+    
     try {
         if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
             return {
@@ -111,7 +113,7 @@ exports.gethandleHospital = async (healthServeId) => {
         }
 
         const doc = await Hospital.findOne({ healthServeId });
-
+       
         if (!doc) {
             return {
                 statusCode: 404,

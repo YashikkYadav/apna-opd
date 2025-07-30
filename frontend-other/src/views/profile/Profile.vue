@@ -292,7 +292,7 @@ export default {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
+      const res = await useProfileStore().getProfileData();
       this.images = res.healthServeProfile.images;
       if (res.healthServeProfile !== null) {
         console.log(res);
@@ -328,7 +328,7 @@ export default {
           formData.append("galleryImages", file);
         });
 
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 

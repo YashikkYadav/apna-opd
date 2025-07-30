@@ -24,7 +24,7 @@ const LocationAndContact = ({
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
             label: 'Website',
-            value: healthProfile?.data?.website,
+            value: healthProfile?.website,
             isLink: true,
         },
         {
