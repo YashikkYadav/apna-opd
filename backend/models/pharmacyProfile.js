@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
-
+const testimonialSchema = new mongoose.Schema({
+  rating: Number,
+  title: String,
+  text: String,
+  author: String,
+  context: String
+});
 const pharmacyProfileSchema = new mongoose.Schema({
   healthServeId: {
     index: true,
@@ -7,45 +13,47 @@ const pharmacyProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "HealthServe",
   },
-  features: [
-    {
-      label: String,
-      enabled: Boolean
-    }
-  ],
+  about: { type: String },
+  experience: { type: String },
+  introduction: { type: String },
+  openTime: { type: String },
+  closeTime: { type: String },
+  servicesOffered: [{ name: String }],
+  testimonials: [testimonialSchema],
+
   medicines: [
     {
-      id: Number,
       name: String,
-      salt: String,
-      manufacturer: String,
-      mrp: Number,
-      price: Number,
-      packSize: String,
-      category: String,
-      inStock: Boolean,
-      discount: Number
+      dosage: String,
+      stock: String,
+      price: String
     }
   ],
-  reviews: [
+  partnerships: [
     {
       name: String,
-      rating: Number,
-      review: String,
-      date: String
+      description: String,
+      link: String
     }
+  ],
+  features: [
+    { title: String }
   ],
   faqs: [
     {
-      q: String,
-      a: String
+      question: String,
+      answer: String
     }
   ],
-}, 
+  tags: [{ type: String }],
+  profilePhoto: { type: String },
+  galleryImages: [{ type: String }]
 
-   {
-        timestamps: true,
-    },
+},
+
+  {
+    timestamps: true,
+  },
 );
 
 const PharmacyProfile = mongoose.model('PharmacyProfile', pharmacyProfileSchema);

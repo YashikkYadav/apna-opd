@@ -20,7 +20,7 @@ const UrgentBanner = ({ healthProfile}) => {
           🚨 Need Blood Urgently?
         </h2>
         <p className="text-lg text-blue-100 font-medium">
-          Don’t wait – contact <strong>{healthProfile?.name}</strong> now or explore more options on Apna OPD.
+          Don’t wait - contact <strong>{healthProfile?.name}</strong> now or explore more options on Apna OPD.
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 pt-6">

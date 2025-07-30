@@ -510,6 +510,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 import { reactive } from 'vue';
 const snackbar = reactive({
@@ -779,26 +780,25 @@ removeTag(index) {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-       console.log("poi",res);
-      const profile = res.healthServeProfileData.healthServeProfile.data
-      const add=res.healthServeProfileData.healthServeUser
-     
+      const profile = res?.healthServeProfileData?.healthServeProfile;
+      console.log('asdaddaadaddsadadas',profile)
+
       if (profile) {
         console.log(res);
-        // this.images = profile.galleryImages;
+        this.images = profile.galleryImages || [];
 
         const hs = profile.healthServeId;
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = add?.address || "";
-        this.form.city = add?.city || "";
-        this.form.locality = add?.locality || "";
-        this.form.state = add?.state || "";
-        this.form.pincode = profile?.pincode || "";
-         this.form.faqs = profile.faqs || [];
-       this.form.education = (profile.education || []);
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+
+       this.form.education = (profile.education || [])
   this.form.specialInterests = profile.specialInterests || [];
       this.form.certifications = profile.certifications || [];
       this.form.languages = profile.languages || [];
@@ -915,6 +915,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

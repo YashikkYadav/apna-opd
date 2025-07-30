@@ -445,6 +445,7 @@
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
+import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 import { reactive } from 'vue';
 const snackbar = reactive({
@@ -681,14 +682,12 @@ removeTag(index) {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      const profile = res.healthServeProfileData.healthServeProfile.data
-      const add=res.healthServeProfileData.healthServeUser
-      console.log("ddd",res)
+      const profile = await res.healthServeProfileData.healthServeProfile;
+      console.log('healthServeProfileData',profile)
 
       if (profile) {
-        console.log(res);
-        // this.images = profile.images;
-
+        console.log("profile.images",profile.bloodTypes);
+        this.images = profile.galleryImages;
         const hs = profile.healthServeId;
         this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
@@ -700,10 +699,10 @@ removeTag(index) {
         this.form.state = add?.state || "";
         this.form.pincode = add?.pincode || "";
 
-        this.form.bloodTypes = profile.bloodTypes || [];
-  this.form.nearbyBloodBanks = profile.nearbyBloodBanks || [];
-  this.form.facilities = profile.facilities || [];
-  this.form.certifications = profile.certifications || [];
+        this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
+  this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];
+  this.form.facilities = profile.facilities.map((item)=>({name:item})) || [];
+  this.form.certifications = profile.certifications.map((item)=>({name:item})) || [];
   this.form.establishedYear = profile.establishedYear || '';
   this.form.license = profile.license || '';
         this.form.testimonials = profile.testimonials || [];
@@ -725,6 +724,7 @@ removeTag(index) {
         formData.append("state", this.form.state);
         formData.append("bloodTypes", JSON.stringify(this.form.bloodTypes));
   formData.append("nearbyBloodBanks", JSON.stringify(this.form.nearbyBloodBanks));
+  formData.append("license", JSON.stringify(this.form.license));
   formData.append("facilities", JSON.stringify(this.form.facilities));
   formData.append("certifications", JSON.stringify(this.form.certifications));
   formData.append("establishedYear", this.form.establishedYear);
@@ -817,6 +817,9 @@ removeTag(index) {
     },
   },
 };
+onMounted(() => {
+   this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {

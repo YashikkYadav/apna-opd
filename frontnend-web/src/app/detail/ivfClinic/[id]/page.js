@@ -1,53 +1,84 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 
-import ClinicHeroSection from '@/app/components/more/ivfClinicComponents/ivfHeroSection';
+import ClinicHeroSection from "@/app/components/more/ivfClinicComponents/ivfHeroSection";
 import ClinicAboutSection from "@/app/components/more/ivfClinicComponents/ivfAbout";
-import FertilityServices from '@/app/components/more/ivfClinicComponents/ivfServices';
-import LeadFertilitySpecialist from '@/app/components/more/ivfClinicComponents/specialist';
-import SuccessStories from '@/app/components/more/ivfClinicComponents/successStories';
-import VisitClinic from '@/app/components/more/ivfClinicComponents/visit';
-import WhyChoose from '@/app/components/more/ivfClinicComponents/whyChooseUS';
-import FAQSection from '@/app/components/more/ivfClinicComponents/faqs';
-import IvfFooter from '@/app/components/more/ivfClinicComponents/ivfFooter';
+import FertilityServices from "@/app/components/more/ivfClinicComponents/ivfServices";
+import LeadFertilitySpecialist from "@/app/components/more/ivfClinicComponents/specialist";
+import SuccessStories from "@/app/components/more/ivfClinicComponents/successStories";
+import VisitClinic from "@/app/components/more/ivfClinicComponents/visit";
+import WhyChoose from "@/app/components/more/ivfClinicComponents/whyChooseUS";
+import FAQSection from "@/app/components/more/ivfClinicComponents/faqs";
+import IvfFooter from "@/app/components/more/ivfClinicComponents/ivfFooter";
 
 export default function IvfPage() {
-    const params = useParams();
-    const id = params.id;
-    const [data, setData] = useState({
-        healthProfile: null, otherData: null
-    })
+  const params = useParams();
+  const id = params.id;
+  const [data, setData] = useState({
+    healthProfile: null,
+    userData: null,
+  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response_data = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/`);
-            const { healthServeProfile } = response_data.data;
-            setData({
-                healthProfile: healthServeProfile || null,
-                otherData: healthServeProfile?.healthServeId || null
-            });
-            console.log("healthServeProfile:", healthServeProfile);
-            console.log("healthServeId:", healthServeProfile?.healthServeId);
-        };
-        fetchData();
-    }, [id]);
-    return (
-        <div className="relative bg-white min-h-screen flex flex-col items-center">
-            <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
-                <div className="w-full">
-                    <ClinicHeroSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <ClinicAboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <FertilityServices data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <LeadFertilitySpecialist data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <SuccessStories data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <VisitClinic data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <WhyChoose data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <FAQSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <IvfFooter data={data?.otherData} healthProfile={data?.healthProfile} />
-                </div>
-            </main>
+  useEffect(() => {
+    const fetchData = async () => {
+      const response_data = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data/`
+      );
+      const { healthServeProfile } = response_data.data.healthServeProfileData;
+      setData({
+        healthProfile: healthServeProfile || null,
+        userData: healthServeProfile?.healthServeId || null,
+      });
+      console.log("healthServeProfile:", healthServeProfile);
+      console.log("healthServeId:", healthServeProfile?.healthServeId);
+    };
+    fetchData();
+  }, [id]);
+
+  return (
+    <div className="relative bg-white min-h-screen flex flex-col items-center">
+      <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
+        <div className="w-full">
+          <ClinicHeroSection
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <ClinicAboutSection
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <FertilityServices
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <LeadFertilitySpecialist
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <SuccessStories
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <VisitClinic
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <WhyChoose
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <FAQSection
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <IvfFooter
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
         </div>
-    )
+      </main>
+    </div>
+  );
 }

@@ -1,62 +1,44 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const profileSchema = new mongoose.Schema(
-    {
-        healthServeId: {
-            index: true,
-            required: true,
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "HealthServe",
-        },
-        doctorInfo: {
-            name: String,
-            specialty: String,
-            location: String,
-            phone: String,
-            email: String,
-            description: String,
-            features: [
-                { label: String, enabled: Boolean }
-            ],
-            conditions: [
-                { label: String, icon: String }
-            ]
-        },
-        highlights: [
-            { icon: String, title: String, desc: String }
-        ],
-        services: [
-            { id: Number, name: String }
-        ],
-        packages: [
-            {
-                id: Number,
-                name: String,
-                sessions: Number,
-                price: Number,
-                discount: Number,
-                description: String
-            }
-        ],
-        reviews: [
-            {
-                id: Number,
-                name: String,
-                service: String,
-                rating: Number,
-                comment: String,
-                date: String
-            }
-        ],
-        faqs: [
-            { question: String, answer: String }
-        ],
-    }
-    ,
-    {
-        timestamps: true,
+// Subdocuments
+const TherapyPackageSchema = new Schema({
+    name: { type: String, required: true },
+    price: { type: String } // change to Number if numeric
+});
+
+const TestimonialSchema = new Schema({
+    rating: { type: Number, min: 1, max: 5, required: true },
+    title: { type: String },
+    text: { type: String },
+    author: { type: String },
+    context: { type: String, default: '' }
+});
+
+// Main Schema
+const PhysiotherapistProfileSchema = new Schema({
+    healthServeId: {
+        index: true,
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "HealthServe",
     },
-);
+    about: { type: String },
+    experience: { type: String },
+    introduction: { type: String },
 
-const Profile = mongoose.model('Profile', profileSchema);
-module.exports = Profile;
+    education: [{ degree: String,institution: String,year: String }], // nulls will be ignored
+    specialInterests: [{ type: String }],
+    certifications: [{ type: String }],
+    languages: [{ type: String }],
+    conditionsTreated: [{ type: String }],
+    tags: [{ type: String }],
+
+    therapyPackages: [TherapyPackageSchema],
+    testimonials: [TestimonialSchema]
+}, {
+    timestamps: true,
+});
+
+const physiotherapistProfile = mongoose.model('PhysiotherapistProfile', PhysiotherapistProfileSchema);
+module.exports =physiotherapistProfile

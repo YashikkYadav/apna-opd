@@ -31,7 +31,8 @@ export const useProfileStore = defineStore("profileStore", {
     },
     async addProfileData(payload) {
       const ProfileService = new AxiosProfile();
-      console.log(this.healthServeId)
+      this.healthServeId = localStorage.getItem("doctor_id") || null;
+
       const deleteResponse = await ProfileService.AddProfileData(
         this.healthServeId,
         payload
@@ -41,7 +42,8 @@ export const useProfileStore = defineStore("profileStore", {
     // getProfileData
     async getProfileData() {
       const ProfileService = new AxiosProfile();
-     
+      this.healthServeId = localStorage.getItem("doctor_id") || null;
+
       const deleteResponse = await ProfileService.GetProfileData(
         this.healthServeId,
       );

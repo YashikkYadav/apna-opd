@@ -31,8 +31,45 @@ const ComponentsCard = ({ label, status, highlight }) => {
     );
 };
 
-const Availability = ({ healthProfile }) => {
+const Availability = ({data,healthProfile}) => {
 
+    const { updatedAt } = healthProfile || {};
+
+    let formattedDate = "";
+    let formattedTime = "";
+
+    if (updatedAt) {
+      const dateObj = new Date(updatedAt); // Make sure it's a Date object
+
+      formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}/${(
+        dateObj.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${dateObj.getFullYear()}`;
+
+      formattedTime = `${dateObj
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`;
+    }
+
+    const bloodTypes = [
+        { label: "A+", status: "available", highlight: "Available" },
+        { label: "A-", status: "limited", highlight: "Limited" },
+        { label: "B+", status: "available", highlight: "Available" },
+        { label: "B-", status: "out", highlight: "Out of Stock" },
+        { label: "AB+", status: "available", highlight: "Available" },
+        { label: "AB-", status: "limited", highlight: "Limited" },
+        { label: "O+", status: "available", highlight: "Available" },
+        { label: "O-", status: "limited", highlight: "Limited" },
+    ];
+
+    const components = [
+        { label: "Whole Blood", status: "available", highlight: "Available" },
+        { label: "Platelets", status: "available", highlight: "Available" },
+        { label: "Plasma", status: "limited", highlight: "Limited" },
+        { label: "Red Cells", status: "available", highlight: "Available" },
+    ];
 
     return (
         <motion.div
@@ -69,7 +106,7 @@ const Availability = ({ healthProfile }) => {
 
             {/* Last Updated */}
             <div className="text-center pt-6 text-sm text-gray-500">
-                📅 Last updated on <span className="font-medium">{`{{last_updated_time}}`}</span>
+                📅 Last updated on <span className="font-medium">{`${formattedDate} | ${formattedTime}`}</span>
             </div>
         </motion.div>
     );

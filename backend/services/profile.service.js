@@ -11,6 +11,7 @@ const Doctor = require("../models/doctor");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
+const { handleBloodBank, gethandleBloodBank,handleIvf, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory, handleIvfClinic, gethandleIvf } = require("../utils/profileStoreData/handleBloodBank");
 const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/profileStoreData/handlePhysio')
 const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
@@ -337,6 +338,21 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       case 'nursing_medical_college':
         result=await handleMedicalCollege(req,healthServeId)
         break;
+      case 'blood_bank':
+        result = await handleBloodBank(req, healthServeId);
+        break;
+      // case 'physiotherapist':
+      //   result = await handlePhysiotherapist(req, healthServeId);
+      //   break;
+      case 'medical_store':
+        result = await handleMedicalStore(req, healthServeId);
+        break;
+      case 'laboratory':
+        result=await handleLaboratory(req, healthServeId)
+        break;
+      case 'ivf_clinic':
+        result = await handleIvfClinic(req, healthServeId)
+        break;
       
 
     }
@@ -417,6 +433,21 @@ const getHealthServeProfileData = async (healthServeId) => {
         break;
       case 'nursing_medical_college':
         result =await gethandleMedicalCollege(healthServeId)
+        break;
+      case 'blood_bank':
+        result = await gethandleBloodBank(healthServeId);
+        break;
+      // case 'physiotherapist':
+      //   result = await gethandlePhysiotherapist(healthServeId)
+      //   break;
+      case 'medical_store':
+        result = await gethandleMedicalStore(healthServeId)
+        break
+      case 'laboratory':
+        result = await gethandleLaboratory(healthServeId)
+        break;
+      case 'ivf_clinic':
+        result = await gethandleIvf( healthServeId)
         break;
     }
 
