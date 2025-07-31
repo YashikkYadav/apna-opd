@@ -8,14 +8,15 @@ const config = require("../config/config");
 const HospitalDoctor = require("../models/hospitalDoctor");
 const DoctorProfile = require("../models/doctorProfile");
 const Doctor = require("../models/doctor");
+const Veterinary = require('../models/veterinary')
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-const { handleBloodBank, gethandleBloodBank,handleIvf, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory, handleIvfClinic, gethandleIvf } = require("../utils/profileStoreData/handleBloodBank");
+const { handleBloodBank, gethandleBloodBank, handleIvf, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory, handleIvfClinic, gethandleIvf } = require("../utils/profileStoreData/handleBloodBank");
 const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/profileStoreData/handlePhysio')
 const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
-const {handleMedicalCollege,gethandleMedicalCollege}=require('../utils/profileStoreData/handleCollege')
+const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/profileStoreData/handleCollege')
 const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
@@ -269,20 +270,69 @@ const getAppointmentDetails = async (healthServeId) => {
 };
 
 const deleteImage = async (healthServeId, image) => {
+  console.log("🔍 Deleting image for:", healthServeId, image);
+
+  const healthServeProfile = await HealthServe.findById(healthServeId);
+
   try {
-    deleteImageFile(image.filename);
-    const imageUrl = image.url;
-    const updatedProfile = await HealthServeProfile.findOneAndUpdate(
+    if (!mongoose.Types.ObjectId.isValid(healthServeId)) {
+      throw new Error("Invalid healthServeId");
+    }
+
+    if (!image) {
+      throw new Error("Image URL missing");
+    }
+
+    // Resolve model dynamically
+    let Model;
+    switch (healthServeProfile.type) {
+      case 'vatenary':
+        Model = require("../models/veterinary");
+        break;
+      case 'physiotherapist':
+        Model = require("../models/physiotherapistsProfile");
+        break;
+      case 'hospital':
+        Model = require("../models/hospital");
+        break;
+      case 'nursing_medical_college':
+        Model = require("../models/medicalCollege");
+        break;
+      case 'blood_bank':
+        Model = require("../models/bloodBankProfile");
+        break;
+      case 'medical_store':
+        Model = require("../models/pharmacyProfile");
+        break;
+      case 'laboratory':
+        Model = require("../models/healthlabProfile");
+        break;
+      case 'ivf_clinic':
+        Model = require("../models/ivfClinic");
+        break;
+      default:
+        throw new Error("Unsupported healthServeProfile type");
+    }
+
+    const updatedProfile = await Model.findOneAndUpdate(
       { healthServeId },
-      { $pull: { images: { url: imageUrl } } },
+      { $pull: { galleryImages: image } },
       { new: true }
     );
+
+    if (!updatedProfile) {
+      throw new Error("Profile not found");
+    }
+
+    const filename = image.split("/").pop();
+    deleteImageFile(filename);
+
     return {
       statusCode: 200,
-      images: updatedProfile.images,
+      images: updatedProfile.galleryImages,
     };
   } catch (error) {
-    console.log("Error while deleting image from Db : ", error);
+    console.error("🔥 Error deleting image:", error);
     return {
       statusCode: 500,
       error: error.message,
@@ -290,24 +340,22 @@ const deleteImage = async (healthServeId, image) => {
   }
 };
 
-function deleteImageFile(filename) {
-  const filePath = path.join(
-    __dirname,
-    "..",
-    "public",
-    "health-serve-profile",
-    filename
-  );
+function deleteImageFile(imagePath) {
+  if (!imagePath) return;
+
+  const filename = path.basename(imagePath);
+  const filePath = path.join(__dirname, "..", "public", "galleryImages", filename);
+
+  console.log("🧭 Deleting file:", filePath);
 
   fs.unlink(filePath, (err) => {
     if (err) {
-      console.error("Error deleting file:", err.message);
+      console.error("❌ Failed to delete:", err.message);
     } else {
-      console.log("File deleted successfully:", filename);
+      console.log("✅ File deleted:", filename);
     }
   });
 }
-
 const addHealthServeProfileData = async (req, healthServeId) => {
   try {
 
@@ -336,7 +384,7 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         result = await handleVeterinary(req, healthServeId);
         break
       case 'nursing_medical_college':
-        result=await handleMedicalCollege(req,healthServeId)
+        result = await handleMedicalCollege(req, healthServeId)
         break;
       case 'blood_bank':
         result = await handleBloodBank(req, healthServeId);
@@ -348,12 +396,12 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         result = await handleMedicalStore(req, healthServeId);
         break;
       case 'laboratory':
-        result=await handleLaboratory(req, healthServeId)
+        result = await handleLaboratory(req, healthServeId)
         break;
       case 'ivf_clinic':
         result = await handleIvfClinic(req, healthServeId)
         break;
-      
+
 
     }
 
@@ -432,7 +480,7 @@ const getHealthServeProfileData = async (healthServeId) => {
         result = await gethandleVeterinary(healthServeId);
         break;
       case 'nursing_medical_college':
-        result =await gethandleMedicalCollege(healthServeId)
+        result = await gethandleMedicalCollege(healthServeId)
         break;
       case 'blood_bank':
         result = await gethandleBloodBank(healthServeId);
@@ -447,7 +495,7 @@ const getHealthServeProfileData = async (healthServeId) => {
         result = await gethandleLaboratory(healthServeId)
         break;
       case 'ivf_clinic':
-        result = await gethandleIvf( healthServeId)
+        result = await gethandleIvf(healthServeId)
         break;
     }
 

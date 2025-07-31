@@ -155,7 +155,8 @@ const getAppointmentDetails = async (req, res) => {
 const deleteImage = async (req, res) => {
   try {
     const { healthServeId } = req.params;
-    const image = req.body;
+
+    const {image} = req.body;
     const deleteResponse = await healthServerProfileService.deleteImage(
       healthServeId,
       image

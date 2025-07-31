@@ -59,7 +59,7 @@ const HeroSection = ({
             {/* Image */}
             <div className="z-10 flex-shrink-0 w-56 h-56 md:w-72 md:h-72 rounded-2xl overflow-hidden bg-gradient-to-tr from-pink-500 to-yellow-300 shadow-lg relative">
                 <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+                    src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || ""}
 
                     alt={name}
                     width={288}

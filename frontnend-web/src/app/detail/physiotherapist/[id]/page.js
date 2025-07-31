@@ -33,7 +33,7 @@ export default function Home() {
             const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
 
             setData({
-                healthProfile: healthServeProfile || null,
+                healthProfile: healthServeProfile?.data || null,
                 otherData: healthServeUser || null,
             });
 
@@ -55,7 +55,7 @@ export default function Home() {
                     <TherapyPackages data={data?.otherData} healthProfile={data?.healthProfile} />
                     <PhysioLocation data={data?.otherData} healthProfile={data?.healthProfile} />
                     <PhysioReviews data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <PhysioFAQS data={data} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} />
+                    <PhysioFAQS data={data} openFAQ={openFAQ} setOpenFAQ={setOpenFAQ} healthProfile={data?.healthProfile}/>
                     {/* <SupportOptions /> */}
                 </div>
             </main>
