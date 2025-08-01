@@ -49,23 +49,22 @@ const HeroSection = ({
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, type: 'spring' }}
-            className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 "
+            className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-10"
         >
 
             {/* Background Circles */}
-            <div className="absolute -top-16 -left-16 w-72 h-72 bg-blue-300/30 rounded-full z-0" />
-            <div className="absolute -top-20 -right-20 w-80 h-80 bg-blue-300/30 rounded-full z-0" />
+            <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
+            <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
 
-            {/* Image */}
-            <div className="z-10 flex-shrink-0 w-56 h-56 md:w-72 md:h-72 rounded-2xl overflow-hidden bg-gradient-to-tr from-pink-500 to-yellow-300 shadow-lg relative">
+            {/* Left Image */}
+            <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || ""}
+                    src={`http://localhost:3001/public/${healthProfile?.profilePhoto}`}
 
                     alt={name}
                     width={288}
                     height={288}
-                    className="object-cover w-full h-full rounded-2xl"
-                    priority
+                    className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
                 />
                 <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">✓</span>
             </div>

@@ -45,6 +45,7 @@ const features = [
 export default function HospitalFeatureCard({ profileData }) {
   const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r.rating, 0) / profileData?.testimonials.length).toFixed(1) : "0.0";
   const reviewCount = profileData?.testimonials?.length || 0;
+  
 
   function getFeatureIconByText(text) {
     switch (text) {
@@ -119,7 +120,7 @@ export default function HospitalFeatureCard({ profileData }) {
         <div className="flex items-center gap-2 mb-4">
           {getStarIcons(avgRating)}
           <span className="text-white text-xl font-semibold ml-2">
-            {profileData.rating + "/5" ?? "0/5"}
+            {avgRating + "/5" ?? "0/5"}
           </span>
           <span className="text-white/70 text-lg ml-2">
             {reviewCount + " reviews" ?? "0 reviews"}

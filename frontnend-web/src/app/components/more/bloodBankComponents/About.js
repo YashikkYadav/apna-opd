@@ -27,14 +27,7 @@ const About = ({
           About {healthProfile?.name}
         </h2>
       </div>
- 
-      {/* Title */}
-      <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
-          <FaHospitalAlt className="text-3xl text-blue-700" />
-          About {healthProfile?.name}
-        </h2>
-      </div>
+
 
       {/* Description */}
       <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">

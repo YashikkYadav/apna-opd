@@ -23,7 +23,7 @@ const VisitUsToday = ({
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
             label: 'Website',
-            value: website_url,
+            value: healthProfile?.website,
             isLink: true,
         },
         {

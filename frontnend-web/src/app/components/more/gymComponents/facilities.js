@@ -2,39 +2,8 @@
 import { motion } from 'framer-motion';
 
 const FacilitiesSection = (healthProfile) => {
-    const facilities = [
-        {
-            icon: "💪",
-            title: "Strength & Cardio Equipment",
-            desc: "Latest machines from top brands including treadmills, ellipticals, and strength training equipment",
-        },
-        {
-            icon: "🏋️‍♂️",
-            title: "Functional Training Zone",
-            desc: "Dedicated area for functional movements, CrossFit, and athletic training",
-        },
-        {
-            icon: "🧑‍🏫",
-            title: "Personal Training",
-            desc: "One-on-one sessions with certified trainers for personalized fitness programs",
-        },
-        {
-            icon: "🧘‍♂️",
-            title: "Yoga & Group Classes",
-            desc: "Yoga, Zumba, Pilates, and other group fitness classes for all levels",
-        },
-        {
-            icon: "🛁",
-            title: "Steam & Shower",
-            desc: "Clean changing rooms with steam room, showers, and secure lockers",
-        },
-        {
-            icon: "❄️",
-            title: "Climate Controlled",
-            desc: "Fully air-conditioned facility with music system and Wi-Fi connectivity",
-        },
-    ];
-
+    
+    console.log()
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -52,7 +21,7 @@ const FacilitiesSection = (healthProfile) => {
 
             {/* Facility Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {healthProfile?.facilities?.map((facility, idx) => (
+                {healthProfile?.healthProfile?.worldFacilities?.map((facility, idx) => (
                     <motion.div
                         key={idx}
                         whileHover={{
@@ -61,9 +30,7 @@ const FacilitiesSection = (healthProfile) => {
                         }}
                         className="bg-[#F7F9FB] rounded-2xl p-6 text-center hover:border-2 hover:border-blue-500 transition-all"
                     >
-                        <div className="text-4xl mb-4">{facility.icon}</div>
-                        <h3 className="text-blue-700 text-lg font-bold mb-1">{facility}</h3>
-                        <p className="text-gray-600 text-sm">{facility.desc}</p>
+                        <h3 className="text-blue-700 text-lg font-bold mb-1">{facility.name}</h3>
                     </motion.div>
                 ))}
             </div>

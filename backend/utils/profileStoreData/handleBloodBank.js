@@ -4,6 +4,7 @@ const pharmacyProfileModel = require('../../models/pharmacyProfile');
 const healthServeModel = require('../../models/healthServe');
 const healthlabProfileModel = require('../../models/healthlabProfile');
 const ivfClinicModel = require('../../models/ivfClinic');
+const gymProfileModel=require('../../models/gym')
 
 const appendImages = (existing = [], fresh = []) => {
     return Array.isArray(existing) ? [...existing, ...fresh] : fresh;
@@ -248,6 +249,71 @@ exports.handleBloodBank = async (req, healthServeId) => {
         throw error;
     }
 };
+exports.handleGym = async (req, healthServeId) => {
+    try {
+        const files = req.files || [];
+        const existing = await gymProfileModel.findOne({ healthServeId });
+
+        const profileImage = files.find(f => f.fieldname === 'profilePhoto_image');
+        const profilePhoto = profileImage
+            ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`
+            : existing?.profilePhoto;
+
+        const newGalleryImages = files
+            .filter(f => f.fieldname === 'galleryImages_image')
+            .map(f => `${f.destination.split('public/')[1]}/${f.filename}`);
+
+        const finalData = {
+            healthServeId,
+            about: req.body.about,
+            experience: req.body.experience,
+            introduction: req.body.introduction,
+            address: req.body.address,
+            locality: req.body.locality,
+            city: req.body.city,
+            pincode: req.body.pincode,
+            state: req.body.state,
+            worldFacilities: JSON.parse(req.body.worldFacilities),
+            established: req.body.established,
+            totalMembers: req.body.totalMembers,
+            operatingHours: req.body.operatingHours,
+            noOfTrainers: req.body.noOfTrainers,
+            trainers: typeof req.body.trainers === 'string' ? JSON.parse(req.body.trainers) : req.body.trainers,
+            hours: req.body.hours,
+            programs: JSON.parse(req.body.programs),
+            regularOpening: req.body.regularOpening,
+            regularClosing: req.body.regularClosing,
+            sundayOpening: req.body.sundayOpening,
+            sundayClosing: req.body.sundayClosing,
+            website: req.body.website,
+            faqs: JSON.parse(req.body.faqs),
+            tags: JSON.parse(req.body.tags),
+            plans: JSON.parse(req.body.plans),
+            relatedGyms: JSON.parse(req.body.relatedGyms),
+            testimonials: JSON.parse(req.body.testimonials),
+            profilePhoto,
+            galleryImages: appendImages(existing?.galleryImages, newGalleryImages),
+        };
+
+        const storeData = await gymProfileModel.updateOne(
+            { healthServeId },
+            { $set: finalData },
+            { upsert: true }
+        );
+
+        await UpdateHealthServeData(req, healthServeId);
+        return storeData._id;
+    } catch (error) {
+        console.error('Gym Error:', error);
+        throw error;
+    }
+};
+
+exports.getHandleGym = async (healthServeId) => {
+    const doc = await gymProfileModel.findOne({ healthServeId }).populate('healthServeId');
+    return doc;
+};
+
 
 
 

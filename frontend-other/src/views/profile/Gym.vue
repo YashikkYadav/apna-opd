@@ -217,6 +217,19 @@
     <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
   </v-toolbar>
 
+  <v-card>
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+  </v-toolbar>
+  <v-text-field
+  class="pa-4"
+  v-model="form.website"
+  label="Website URL"
+  type="url"
+  placeholder="https://example.com"
+/>
+</v-card>
+
   <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
   <div
@@ -607,7 +620,21 @@
   </div>
 </v-card>
 
-
+<v-card class="section-card mt-6">
+  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
+    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+  </v-toolbar>
+  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
+    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
+    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
+    <div class="d-flex justify-end">
+      <v-btn icon color="error" @click="removeFAQ(i)">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </div>
+  </div>
+</v-card>
 
 
 
@@ -767,7 +794,7 @@ export default {
     },
       form: {
         introduction: "",
-       
+        website:'',
         experience: null,
         about: "",
         address: "",
@@ -776,6 +803,7 @@ export default {
         pincode: "",
         state: "",
         worldFacilities: [],
+        faqs: [],
         established: '',
       totalMembers: '',
       noOfTrainers: '',
@@ -804,7 +832,6 @@ export default {
       regularClosing: '',
       sundayOpening: '',
       sundayClosing: '',
-        membershipPlan: '',
         testimonials: [],
         googleMapLink: "",
       },
@@ -916,6 +943,12 @@ export default {
   },
   removeGym(index) {
     this.form.relatedGyms.splice(index, 1);
+  },
+   addFAQ() {
+    this.form.faqs.push({ question: '', answer: '' });
+  },
+  removeFAQ(i) {
+    this.form.faqs.splice(i, 1);
   },
     addFacility() {
       if (this.form.worldFacilities.length >= 6) return;
@@ -1033,15 +1066,16 @@ addPlan() {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
-      const res = await useProfileStore().getHealthServeApiCall();
-      const profile = res.healthServeProfile;
+      const res = await useProfileStore().getProfileData();
+      const profile = res.healthServeProfileData.healthServeProfile;
+      console.log(profile)
 
       if (profile) {
         console.log(res);
-        this.images = profile.images;
+        this.images = profile.galleryImages;
 
         const hs = profile.healthServeId;
-
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
@@ -1050,9 +1084,11 @@ addPlan() {
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
-        this.form.yearOfEstablishment = profile.yearOfEstablishment || '';
+        this.form.established = profile.established || '';
+         this.form.faqs = profile.faqs || [];
+        this.form.operatingHours=profile.operatingHours || '';
   this.form.totalMembers = profile.totalMembers || '';
-  this.form.trainers = profile.trainers || '';
+  this.form.noOfTrainers = profile.noOfTrainers || '';
   this.form.hours = profile.hours || '';
         this.form.worldFacilities = profile.worldFacilities || [];
 this.form.programs = profile.programs || [];
@@ -1073,7 +1109,7 @@ this.form.relatedGyms = profile.relatedGyms?.length
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
-        
+        formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
@@ -1083,10 +1119,12 @@ this.form.relatedGyms = profile.relatedGyms?.length
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
         formData.append("worldFacilities", JSON.stringify(this.form.worldFacilities));
-         formData.append("yearOfEstablishment", this.form.yearOfEstablishment);
+         formData.append("established", this.form.established);
+         formData.append('operatingHours',this.form.operatingHours);
   formData.append("totalMembers", this.form.totalMembers);
-  formData.append("trainers", this.form.trainers);
   formData.append("hours", this.form.hours);
+   formData.append('faqs', JSON.stringify(this.form.faqs));
+  formData.append("noOfTrainers", this.form.noOfTrainers);
 formData.append("programs", JSON.stringify(this.form.programs));
 formData.append("trainers", JSON.stringify(this.form.trainers));
 formData.append("regularOpening", this.form.regularOpening);
@@ -1100,16 +1138,16 @@ formData.append('relatedGyms', JSON.stringify(this.form.relatedGyms));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages", file);
+          formData.append("galleryImages_image", file);
         });
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addHealthServeProfileApiCall(
+        const res = await useProfileStore().addProfileData(
           formData
         );
 
