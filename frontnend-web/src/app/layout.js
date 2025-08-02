@@ -40,6 +40,7 @@ export default function RootLayout({ children }) {
           src="https://www.googletagmanager.com/gtag/js?id=G-97FLWC33JD"
           strategy="afterInteractive"
         />
+
         <Script id="ga4-init" strategy="afterInteractive">
           {`
       window.dataLayer = window.dataLayer || [];
