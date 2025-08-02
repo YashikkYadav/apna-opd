@@ -44,8 +44,9 @@ export default function RootLayout({ children }) {
         <Script id="ga4-init" strategy="afterInteractive">
           {`
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
       gtag('config', 'G-97FLWC33JD',{ debug_mode: true });
     `}
         </Script>
