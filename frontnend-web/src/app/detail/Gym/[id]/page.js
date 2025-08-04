@@ -30,7 +30,7 @@ export default function GymPage() {
             );
             console.log("Response Data:", response_data);
 
-            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
 
             setData({
                 healthProfile: healthServeProfile || null,

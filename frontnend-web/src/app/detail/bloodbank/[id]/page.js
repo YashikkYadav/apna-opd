@@ -25,9 +25,9 @@ export default function BloodBankPage() {
             const response_data = await axios.get(
                 `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
             );
-            console.log("Response Data:", response_data.data);
+            console.log("Response Data:", response_data?.data);
 
-            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
 
             setData({
                 healthProfile: healthServeProfile || null,

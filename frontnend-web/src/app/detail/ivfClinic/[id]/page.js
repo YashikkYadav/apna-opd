@@ -28,7 +28,7 @@ export default function IvfPage() {
       );
       console.log("Response Data:", response_data.data);
 
-      const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+      const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
 
       setData({
         healthProfile: healthServeProfile || null,

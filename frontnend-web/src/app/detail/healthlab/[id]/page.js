@@ -63,7 +63,7 @@ export default function HealthLabPage() {
                 );
                 console.log("Response Data:", response_data.data);
 
-                const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+                const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
                 set_res_data({
                     healthProfile: healthServeProfile || null,
                     otherData: healthServeUser || null,
@@ -88,16 +88,16 @@ export default function HealthLabPage() {
 
     // Filtering logic
     const filteredTests = testsData?.filter((test) => {
-        const matchesSearch = test.name.toLowerCase().includes(search.toLowerCase());
-        const matchesType = !testType || test.category === testType;
-        const matchesLocation = !location || (location === 'home' ? test.homeCollection : !test.homeCollection);
+        const matchesSearch = test?.name.toLowerCase().includes(search.toLowerCase());
+        const matchesType = !testType || test?.category === testType;
+        const matchesLocation = !location || (location === 'home' ? test?.homeCollection : !test?.homeCollection);
         let matchesPrice = true;
         if (price) {
             const [min, max] = price.split('-');
             if (max) {
-                matchesPrice = test.discountedPrice >= parseInt(min) && test.discountedPrice <= parseInt(max);
+                matchesPrice = test?.discountedPrice >= parseInt(min) && test?.discountedPrice <= parseInt(max);
             } else {
-                matchesPrice = test.discountedPrice >= parseInt(min);
+                matchesPrice = test?.discountedPrice >= parseInt(min);
             }
         }
         return matchesSearch && matchesType && matchesLocation && matchesPrice;
