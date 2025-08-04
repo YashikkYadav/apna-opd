@@ -20,7 +20,7 @@ const NearbyBloodBanks = ({data,healthProfile}) => {
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                 <FaMapMarkerAlt className="text-3xl text-blue-700" />
                 
-                    Nearby Blood Banks in <span className="text-blue-600">{healthProfile?.healthServeId?.locality ??"Dummy City"}</span>
+                    Nearby Blood Banks in <span className="text-blue-600">{data?.locality ??"Dummy City"}</span>
                 </h2>
             </div>
 

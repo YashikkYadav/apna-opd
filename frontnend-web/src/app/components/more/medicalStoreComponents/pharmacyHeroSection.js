@@ -30,7 +30,7 @@ function getStarIcons(avgRating) {
 }
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
-    console.log("healthProfile", healthProfile?.profilePhoto)
+    // console.log("healthProfile", data)
     const features = data?.features?.filter(f => f.enabled) || [];
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();

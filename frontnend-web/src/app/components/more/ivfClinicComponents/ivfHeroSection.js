@@ -11,7 +11,8 @@ const ClinicHeroSection = ({
   data,
   healthProfile,
 }) => {
-  const user = healthProfile?.healthServeId
+  const user = data
+  console.log("h",user)
   const [callModalOpen, setCallModalOpen] = useState(false);
   const [consultationModalOpen, setConsultationModalOpen] = useState(false);
   const avgRating = healthProfile?.testimonials?.length

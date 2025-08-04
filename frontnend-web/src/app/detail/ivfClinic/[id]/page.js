@@ -18,7 +18,7 @@ export default function IvfPage() {
   const id = params.id;
   const [data, setData] = useState({
     healthProfile: null,
-    userData: null,
+     otherData: null,
   });
 
   useEffect(() => {
@@ -45,39 +45,39 @@ export default function IvfPage() {
       <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
         <div className="w-full">
           <ClinicHeroSection
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <ClinicAboutSection
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <FertilityServices
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <LeadFertilitySpecialist
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <SuccessStories
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <VisitClinic
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <WhyChoose
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <FAQSection
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
           <IvfFooter
-            data={data?.userData}
+            data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
         </div>

@@ -44,7 +44,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
             {/* Individual Tests */}
             {tab === 'tests' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-                    {filteredTests.map((test) => {
+                    {filteredTests?.map((test) => {
                         const discount = Math.round((1 - test.discountedPrice / test.originalPrice) * 100);
                         return (
                             <motion.div

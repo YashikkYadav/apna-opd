@@ -68,7 +68,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
                 <p>{healthProfile?.introduction}</p>
 
                 <p className="text-white/90 text-lg max-w-xl">
-                    Female • {healthProfile?.experience} Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
+                    {healthProfile?.experience} Years Experience • {data?.locality ?? 'Your Area'} • 5km Home Visit Radius
                 </p>
 
                 {/* Star Ratings */}
