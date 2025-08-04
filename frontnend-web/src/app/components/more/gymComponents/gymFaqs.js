@@ -3,30 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const faqs = [
-    {
-        question: 'Do you offer trial classes?',
-        answer: 'Yes, we offer one free trial class so you can experience our facility and trainers.',
-    },
-    {
-        question: 'Is personal training included in membership?',
-        answer: 'No, personal training is a separate service. However, you can opt-in anytime.',
-    },
-    {
-        question: 'What safety and hygiene measures do you follow?',
-        answer: 'We follow strict sanitization routines, equipment cleaning, and social distancing protocols.',
-    },
-    {
-        question: 'Can I pause my membership?',
-        answer: 'Yes, we allow freezing of membership for up to 30 days with prior notice.',
-    },
-    {
-        question: "Is there a separate ladies' batch?",
-        answer: 'Yes, we have exclusive women-only batches in the mornings and evenings.',
-    },
-];
 
-const FAQSection = ({ gymName = "{{gym_name}}" }) => {
+const FAQSection = ({ healthProfile }) => {
     const [openIndex, setOpenIndex] = useState(null);
 
     const toggle = (index) => {
@@ -47,7 +25,7 @@ const FAQSection = ({ gymName = "{{gym_name}}" }) => {
             </h2>
 
             <div className="max-w-4xl mx-auto space-y-4">
-                {faqs.map((faq, index) => (
+                {healthProfile?.faqs.map((faq, index) => (
                     <div
                         key={index}
                         className="bg-[#F7F9FB] rounded-xl border border-blue-100 hover:border-blue-500 hover:shadow-md transition-all duration-300"

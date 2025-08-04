@@ -34,7 +34,7 @@ const VetHeroSection = ({
     const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
     const reviewCount = healthProfile?.testimonials?.length || 0;
     const features = healthProfile?.doctorInfo?.features;
-    console.log(healthProfile?.experience)
+    console.log("dd",healthProfile?.profileImage)
     console.log(healthProfile)
     return (
         <motion.section
@@ -50,7 +50,7 @@ const VetHeroSection = ({
             {/* Left: Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+                    src={`http://localhost:3001/public/${healthProfile?.profileImage}` || ""}
 
                     alt={data?.name}
                     width={320}

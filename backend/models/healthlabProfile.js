@@ -29,16 +29,16 @@ const TestimonialSchema = new Schema({
 
 // Main schema
 const HealthLabProfileSchema = new Schema({
-     healthServeId: {
-          index: true,
-          required: true,
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "HealthServe",
-        },
+  healthServeId: {
+    index: true,
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "HealthServe",
+  },
   about: { type: String },
   experience: { type: String },
   introduction: { type: String },
-        website:String,
+  website: String,
 
   keyFeatures: [{ type: String }],
   certifications: [{ type: String }],
@@ -47,10 +47,12 @@ const HealthLabProfileSchema = new Schema({
   packages: [PackageSchema],
   faqs: [FAQSchema],
   tests: [TestSchema],
-  testimonials: [TestimonialSchema]
+  testimonials: [TestimonialSchema],
+  profilePhoto: String,
+  galleryImages: [String],
 }, {
   timestamps: true,
 });
 
 const healthLabProfile = mongoose.model('HealthLabProfile', HealthLabProfileSchema);
-module.exports=healthLabProfile
+module.exports = healthLabProfile

@@ -31,7 +31,7 @@ export default function BloodBankPage() {
 
             setData({
                 healthProfile: healthServeProfile || null,
-                otherData: healthServeUser || null,
+                userData: healthServeUser || null,
             });
             console.log("healthServeProfile:", healthServeProfile);
             console.log("healthServeUser:", healthServeUser);

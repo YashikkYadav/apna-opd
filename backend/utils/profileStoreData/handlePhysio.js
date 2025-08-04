@@ -2,6 +2,7 @@ const Physiotherapist = require('../../models/physiotherapist')
 
 const mongoose = require("mongoose");
 
+
 exports.handlePhysiotherapist = async (req, healthServeId) => {
     try {
         if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
@@ -54,6 +55,8 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
                 return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
             });
 
+        const existing = await Physiotherapist.findOne({ healthServeId });
+
         const update = {
             healthServeId,
             about,
@@ -77,9 +80,13 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
         };
 
         if (profilePhoto) update.profileImage = profilePhoto;
-        if (galleryImages.length > 0) update.galleryImages = galleryImages;
 
-        const existing = await Physiotherapist.findOne({ healthServeId });
+        if (galleryImages.length > 0) {
+            update.galleryImages = [
+                ...(existing?.galleryImages || []),
+                ...galleryImages,
+            ];
+        }
 
         let result;
         if (existing) {
@@ -102,6 +109,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
         };
     }
 };
+
 
 exports.gethandlePhysiotherapist = async (healthServeId) => {
     try {

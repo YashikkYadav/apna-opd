@@ -4,7 +4,6 @@ const Hospital = require('../../models/hospital')
 const mongoose = require("mongoose");
 
 exports.handleHospital = async (req, healthServeId) => {
-
     try {
         const {
             about,
@@ -42,6 +41,7 @@ exports.handleHospital = async (req, healthServeId) => {
                 return [];
             }
         };
+
         const files = req.files || [];
 
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
@@ -49,7 +49,7 @@ exports.handleHospital = async (req, healthServeId) => {
             ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
             : undefined;
 
-        const galleryImages = files
+        const newGalleryImages = files
             .filter(file => file.fieldname === 'galleryImages_image')
             .map(file => {
                 const relativePath = file?.destination?.split('public/')[1] || '';
@@ -77,15 +77,25 @@ exports.handleHospital = async (req, healthServeId) => {
             testimonials: parseArray(testimonials),
             establishedYear,
         };
-         if (profilePhoto) update.profileImage = profilePhoto;
-        if (galleryImages.length > 0) update.galleryImages = galleryImages;
+
+        if (profilePhoto) update.profileImage = profilePhoto;
+
+        const existing = await Hospital.findOne({ healthServeId });
+
+        if (existing) {
+            update.galleryImages = [
+                ...(existing.galleryImages || []),
+                ...newGalleryImages
+            ];
+        } else {
+            update.galleryImages = newGalleryImages;
+        }
 
         const doc = await Hospital.findOneAndUpdate(
             { healthServeId },
             update,
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
-        
 
         return {
             statusCode: 200,
@@ -97,13 +107,14 @@ exports.handleHospital = async (req, healthServeId) => {
         return {
             statusCode: 500,
             message: "Internal Server Error",
-            error: `${error.message} uuuu`,
+            error: `${error.message}`,
         };
     }
 };
 
+
 exports.gethandleHospital = async (healthServeId) => {
-    
+
     try {
         if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
             return {
@@ -113,7 +124,7 @@ exports.gethandleHospital = async (healthServeId) => {
         }
 
         const doc = await Hospital.findOne({ healthServeId });
-       
+
         if (!doc) {
             return {
                 statusCode: 404,

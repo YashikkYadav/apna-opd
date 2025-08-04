@@ -105,14 +105,19 @@
     </template>
   </v-snackbar>
           <v-row>
-            <div class="image-gallery">
+           <div class="image-gallery">
               <div
                 v-for="(img, index) in sortedImages"
                 :key="index"
                 class="image-card"
               >
-                <div class="image-container">
-                  <img :src="img.url" :alt="img.filename" class="image" />
+                <div  class="image-container">
+                  <img
+    :key="index"
+    :src="getImageUrl(img)"
+    alt="Gallery Image"
+    class="image"
+  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -505,12 +510,14 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-        return 0;
-      });
-    },
+  if (!Array.isArray(this.images)) return [];
+
+  return [...this.images].sort((a, b) => {
+    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+    return 0;
+  });
+},
   },
   methods: {
     openMapDialog() {
@@ -613,6 +620,10 @@ removeTag(index) {
   removeService(index) {
     this.form.services.splice(index, 1);
   },
+  getImageUrl(path) {
+  if (!path) return "";
+  return `http://localhost:3001/public/${path}`;
+},
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -638,6 +649,7 @@ removeTag(index) {
       this.itemDialog = false;
     },
     confirmDelete(img) {
+      
       this.imageToDelete = img;
       this.showModal = true;
     },
@@ -647,7 +659,9 @@ removeTag(index) {
     },
     async deleteImage() {
       if (this.imageToDelete) {
+        
         const res = await useProfileStore().deleteImage(this.imageToDelete);
+        
         this.images = res.images;
         this.cancelDelete();
       }

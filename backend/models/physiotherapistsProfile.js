@@ -27,7 +27,13 @@ const PhysiotherapistProfileSchema = new Schema({
     experience: { type: String },
     introduction: { type: String },
 
-    education: [{ degree: String,institution: String,year: String }], // nulls will be ignored
+    education: [
+            {
+                degree: { type: String },
+                institution: { type: String },
+                year: { type: String },
+            }
+        ], // nulls will be ignored
     specialInterests: [{ type: String }],
     certifications: [{ type: String }],
     languages: [{ type: String }],
