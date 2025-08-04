@@ -9,7 +9,7 @@ const Contact = ({ website_url = '{{website_url}}',
     healthProfile,
     data
 }) => {
-    const user=healthProfile?.healthServeId
+    const user=data
     const contactItems = [
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,

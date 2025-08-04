@@ -89,8 +89,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div class="image-container">
-                  <img :src="img.url" :alt="img.filename" class="image" />
+                <div  class="image-container">
+                  <img
+    :key="index"
+    :src="getImageUrl(img)"
+    alt="Gallery Image"
+    class="image"
+  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -500,12 +505,14 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-        return 0;
-      });
-    },
+  if (!Array.isArray(this.images)) return [];
+
+  return [...this.images].sort((a, b) => {
+    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+    return 0;
+  });
+}
   },
   methods: {
     openMapDialog() {
@@ -606,6 +613,10 @@ export default {
 removeTag(index) {
   this.form.tags.splice(index, 1);
 },
+getImageUrl(path) {
+  if (!path) return "";
+  return `http://localhost:3001/public/${path}`;
+},
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -639,8 +650,11 @@ removeTag(index) {
       this.imageToDelete = null;
     },
     async deleteImage() {
+      
       if (this.imageToDelete) {
+        console.log(this.imageToDelete)
         const res = await useProfileStore().deleteImage(this.imageToDelete);
+        console.log(res)
         this.images = res.images;
         this.cancelDelete();
       }
@@ -674,10 +688,10 @@ removeTag(index) {
       const res = await useProfileStore().getProfileData();
       const profile = res.healthServeProfileData.healthServeProfile.data
       const add=res.healthServeProfileData.healthServeUser
-      console.log("r",res)
+      console.log("r",profile)
       if (profile) {
         console.log(res);
-        // this.images = profile.images;
+        this.images = profile.galleryImages||[];
 
         const hs = profile.healthServeId;
         this.form.website = profile.website || "";
@@ -688,7 +702,7 @@ removeTag(index) {
         this.form.city = add?.city || "";
         this.form.locality = add?.locality || "";
         this.form.state = add?.state || "";
-        this.form.pincode = add?.pincode || "";
+        this.form.pincode = profile?.pincode || "";
 
         this.form.specialization = profile.specialization || '';
   this.form.consultationFee = profile.consultationFee || '';

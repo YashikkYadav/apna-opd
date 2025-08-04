@@ -89,8 +89,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div class="image-container">
-                  <img :src="img.url" :alt="img.filename" class="image" />
+                <div  class="image-container">
+                  <img
+    :key="index"
+    :src="getImageUrl(img)"
+    alt="Gallery Image"
+    class="image"
+  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -243,12 +248,14 @@ export default {
   },
   computed: {
     sortedImages() {
-      return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-        return 0;
-      });
-    },
+  if (!Array.isArray(this.images)) return [];
+
+  return [...this.images].sort((a, b) => {
+    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+    return 0;
+  });
+},
   },
   methods: {
     confirmDelete(img) {
@@ -394,6 +401,10 @@ export default {
           index === this.form.locations.length - 1
       );
     },
+    getImageUrl(path) {
+  if (!path) return "";
+  return `http://localhost:3001/public/${path}`;
+},
 
     validateDays(value) {
       if (!value || value.length === 0) {

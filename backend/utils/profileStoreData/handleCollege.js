@@ -52,7 +52,7 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
             : undefined;
 
-        const galleryImages = files
+        const newGalleryImages = files
             .filter(file => file.fieldname === 'galleryImages_image')
             .map(file => {
                 const relativePath = file?.destination?.split('public/')[1] || '';
@@ -60,7 +60,6 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             });
 
         const update = {
-            healthServeId,
             about,
             experience,
             introduction,
@@ -87,14 +86,26 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
         };
 
         if (profilePhoto) update.profileImage = profilePhoto;
-        if (galleryImages.length > 0) update.galleryImages = galleryImages;
 
         const existing = await MedicalCollege.findOne({ healthServeId });
 
         let result;
         if (existing) {
-            result = await MedicalCollege.findOneAndUpdate({ healthServeId }, update, { new: true });
+            // Merge old and new galleryImages
+            if (newGalleryImages.length > 0) {
+                update.galleryImages = [...(existing.galleryImages || []), ...newGalleryImages];
+            } else {
+                update.galleryImages = existing.galleryImages || [];
+            }
+
+            result = await MedicalCollege.findOneAndUpdate(
+                { healthServeId },
+                update,
+                { new: true }
+            );
         } else {
+            update.healthServeId = healthServeId;
+            update.galleryImages = newGalleryImages;
             result = await MedicalCollege.create(update);
         }
 

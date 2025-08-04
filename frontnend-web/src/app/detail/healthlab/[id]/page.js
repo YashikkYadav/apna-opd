@@ -87,7 +87,7 @@ export default function HealthLabPage() {
     }, [id]);
 
     // Filtering logic
-    const filteredTests = testsData.filter((test) => {
+    const filteredTests = testsData?.filter((test) => {
         const matchesSearch = test.name.toLowerCase().includes(search.toLowerCase());
         const matchesType = !testType || test.category === testType;
         const matchesLocation = !location || (location === 'home' ? test.homeCollection : !test.homeCollection);

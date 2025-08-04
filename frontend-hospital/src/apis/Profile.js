@@ -17,10 +17,10 @@ export class AxiosProfile {
     );
   }
 
-  DeleteImage(healthServeId, image) {
+  DeleteImage(healthServeId, img) {
     return this.apiClient.delete(
       `/${healthServeId}/health-serve-profile/delete-image`,
-      { data: image }
+      { data: { image: img } }
     );
   }
   AddProfileData(healthServeId, payload) {

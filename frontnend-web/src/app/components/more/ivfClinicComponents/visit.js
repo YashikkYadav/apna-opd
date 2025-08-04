@@ -13,12 +13,12 @@ const VisitClinic = ({ website_url = '{{website_url}}',
         {
             icon: <FaPhoneAlt className="text-blue-600 text-xl" />,
             label: 'Phone',
-            value: healthProfile?.healthServeId?.phone,
+            value: data?.phone,
         },
         {
             icon: <FaWhatsapp className="text-blue-600 text-xl" />,
             label: 'WhatsApp',
-            value: healthProfile?.healthServeId?.phone,
+            value: data?.phone,
         },
         {
             icon: <FaGlobe className="text-blue-600 text-xl" />,
@@ -29,7 +29,7 @@ const VisitClinic = ({ website_url = '{{website_url}}',
         {
             icon: <FaEnvelope className="text-blue-600 text-xl" />,
             label: 'Email',
-            value: healthProfile?.healthServeId?.email,
+            value: data?.email,
         },
     ];
 

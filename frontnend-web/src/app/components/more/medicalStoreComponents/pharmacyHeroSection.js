@@ -30,7 +30,7 @@ function getStarIcons(avgRating) {
 }
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
-    console.log("healthProfile", healthProfile?.profilePhoto)
+    // console.log("healthProfile", data)
     const features = data?.features?.filter(f => f.enabled) || [];
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
@@ -51,7 +51,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
             {/* Pharmacy Image */}
             <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
                 <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
+                    src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || ""}
 
                     alt={data?.name}
                     width={320}

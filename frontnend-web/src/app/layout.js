@@ -4,6 +4,7 @@ import Header from "./components/common-components/header";
 import Footer from "./components/common-components/footer";
 import { LoaderProvider } from "./components/common-components/loaderProvider";
 import "antd/dist/reset.css"; // required Antd v5+
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,22 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* Google Analytics Script Loader */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-97FLWC33JD"
+          strategy="afterInteractive"
+        />
+
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+      window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+      gtag('config', 'G-97FLWC33JD',{ debug_mode: true });
+    `}
+        </Script>
+
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

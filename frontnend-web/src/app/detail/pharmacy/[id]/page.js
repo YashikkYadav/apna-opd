@@ -71,7 +71,7 @@ const PharmacyStorePage = () => {
             console.log("Response Data:", response_data.data);
 
             const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
-            setMed(healthServeProfile.medicines)
+            setMed(healthServeProfile?.medicines)
             console.log("med",medicines)
             set_res_data({
                 healthProfile: healthServeProfile || null,
@@ -107,7 +107,7 @@ const PharmacyStorePage = () => {
 
         return () => clearInterval(interval);
     }, [fetchData]);
-    console.log("aaaa",data)
+    // console.log("aaaa",data)
     const filteredMedicines = useMemo(() => {
         let filtered = medicines?.filter((medicine) => {
             const matchesSearch =

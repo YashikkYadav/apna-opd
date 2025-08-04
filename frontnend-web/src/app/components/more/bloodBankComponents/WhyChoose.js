@@ -22,7 +22,7 @@ const WhyChoose = ({
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                     <FaStar className="text-3xl text-blue-700" />
 
-                    Why Choose <span className="text-blue-500">{healthProfile?.healthServeId?.name??"Dummy Name"}</span> on Apna OPD?
+                    Why Choose <span className="text-blue-500">{data?.name??"Dummy Name"}</span> on Apna OPD?
                 </h2>
             </div>
 

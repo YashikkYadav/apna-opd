@@ -53,4 +53,5 @@ const VeterinarySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Veterinary", VeterinarySchema);
+const Veterinary = mongoose.model("Veterinary", VeterinarySchema);
+module.exports = Veterinary;
