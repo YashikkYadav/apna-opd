@@ -26,7 +26,8 @@ const bloodBankSchema = new mongoose.Schema({
     tags: [{ type: String }],
     license:{type:String},
     profilePhoto: { type: String },
-    galleryImages: [{ type: String }]
+    galleryImages: [{ type: String }],
+    website: { type: String },
 }, { timestamps: true });
 
 const bloodBank = mongoose.model('BloodBank', bloodBankSchema);

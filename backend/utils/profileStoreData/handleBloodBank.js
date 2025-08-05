@@ -215,7 +215,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
 
         const profileImage = files.find(f => f.fieldname === 'profilePhoto_image');
         const profilePhoto = profileImage
-            ? getRelativePath(`${profileImage.destination}/${profileImage.filename}`)
+            ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`
             : existing?.profilePhoto;
 
         const newGalleryImages = files
@@ -237,6 +237,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
             testimonials: JSON.parse(req.body.testimonials).map(t => t),
             profilePhoto,
             galleryImages: appendImages(existing?.galleryImages, newGalleryImages),
+            website: req.body.website
         };
 
         const storeData = await bloodBankProfileModel.updateOne(

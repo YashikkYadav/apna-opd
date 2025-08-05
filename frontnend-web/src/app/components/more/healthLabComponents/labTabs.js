@@ -1,10 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { ClipboardList, Clock, FileText, FlaskConical, Home, Star, User, ChevronDown } from 'lucide-react';
 import classNames from 'classnames';
-
+import BookTest from './BookTests';
 const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage, setOpenPackage, setShowModal, setModalTest }) => {
+    const [modalOpenTest, setModalOpenTest] = useState(false);
+    const [modalOpenPkg, setModalOpenPkg] = useState(false);
     // console.log("qq",filteredTests,packagesData)
     return (
         <motion.div
@@ -74,10 +77,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                                         <span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">{discount}% OFF</span> */}
                                     </div>
                                     <button
-                                        onClick={() => {
-                                            setShowModal(true);
-                                            setModalTest(test.name);
-                                        }}
+                                        onClick={() => setModalOpenTest(true)}
                                         className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-4 py-2 flex items-center gap-2 shadow transition"
                                     >
                                         <ClipboardList className="w-4 h-4" /> Book Test
@@ -86,6 +86,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                             </motion.div>
                         );
                     })}
+                    <BookTest isOpen={modalOpenTest} onClose={() => setModalOpenTest(false)} />
                 </div>
             )}
 
@@ -116,10 +117,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                                     {/* <div className="text-slate-400 line-through text-sm">₹{pkg.originalPrice}</div>
                                     <div className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold inline-block mt-1">{discount}% OFF</div> */}
                                     <button
-                                        onClick={() => {
-                                            setShowModal(true);
-                                            setModalTest(pkg.name);
-                                        }}
+                                        onClick={() => setModalOpenPkg(true)}
                                         className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-4 py-2 flex items-center gap-2 shadow transition mt-3 w-full"
                                     >
                                         <ClipboardList className="w-4 h-4" /> Book Package
@@ -147,6 +145,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                             </motion.div>
                         );
                     })}
+                    <BookTest isOpen={modalOpenPkg} onClose={() => setModalOpenPkg(false)} />
                 </div>
             )}
         </motion.div>

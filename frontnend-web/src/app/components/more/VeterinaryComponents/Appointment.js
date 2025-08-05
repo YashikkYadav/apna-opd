@@ -2,8 +2,12 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaBolt } from "react-icons/fa";
-
+import { useState } from "react";
+import BookSession from "./BookSession";
 const AppointmentOptions = ({ clinicName = "Happy Tails Clinic" }) => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const router = useRouter();
 
     const options = [
@@ -11,19 +15,16 @@ const AppointmentOptions = ({ clinicName = "Happy Tails Clinic" }) => {
             title: "Clinic Visit",
             desc: `In-person consultation at ${clinicName}`,
             button: "Book Clinic Visit",
-            link: "/book-clinic",
         },
         {
             title: "Online Consultation",
             desc: "Video call consultation from home",
             button: "Book Online",
-            link: "/book-online",
         },
         {
             title: "Request Callback",
             desc: "We'll call you to schedule",
             button: "Request Callback",
-            link: "/request-callback",
         },
     ];
 
@@ -64,13 +65,14 @@ const AppointmentOptions = ({ clinicName = "Happy Tails Clinic" }) => {
                             </p>
                         </div>
                         <button
-                            onClick={() => router.push(opt.link)}
+                            onClick={() => setIsModalOpen(true)}
                             className="mt-auto rounded-full px-6 py-3 text-lg font-bold hover:border-white hover:text-white bg-white text-blue-700 shadow transition w-full max-w-[200px]"
                         >
                             {opt.button}
                         </button>
                     </motion.div>
                 ))}
+                <BookSession isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
             </div>
         </motion.div>
     );
