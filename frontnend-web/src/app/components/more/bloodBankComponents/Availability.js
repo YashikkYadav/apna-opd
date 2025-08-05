@@ -91,7 +91,7 @@ const Availability = ({data,healthProfile}) => {
             <div className="mb-6">
                 <div className="flex flex-wrap justify-center md:justify-around gap-2">
                     {healthProfile?.bloodTypes?.map((item) => (
-                        <BloodCard key={item._id} name={item} />
+                        <BloodCard key={item} name={item} />
                     ))}
                 </div>
             </div>

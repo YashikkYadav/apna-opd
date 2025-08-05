@@ -2,8 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { Calendar, Package } from 'lucide-react';
+import { useState } from 'react';
+import BookSession from './BookSession';
 
-const TherapyPackages = ({ data,healthProfile }) => {
+const TherapyPackages = ({ data, healthProfile }) => {
+    const [modalOpen, setModalOpen] = useState(false);
     console.log("healthProfile:", healthProfile?.therapyPackages)
 
     return (
@@ -41,12 +44,12 @@ const TherapyPackages = ({ data,healthProfile }) => {
                                 )}
                             </div>
 
-                            
-                            
                         </div>
 
                         <div className="flex flex-wrap gap-3 pt-3">
-                            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-5 py-2 text-sm">
+                            <button
+                                onClick={() => setModalOpen(true)}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full px-5 py-2 text-sm">
                                 Book Now
                             </button>
                             <button className="border-2 border-blue-600 text-blue-600 font-semibold rounded-full px-5 py-2 text-sm bg-white hover:bg-blue-50">
@@ -55,6 +58,7 @@ const TherapyPackages = ({ data,healthProfile }) => {
                         </div>
                     </motion.div>
                 ))}
+                <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
             </div>
 
             {/* View All CTA */}

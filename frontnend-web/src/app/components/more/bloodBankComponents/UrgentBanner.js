@@ -24,7 +24,9 @@ const UrgentBanner = ({ healthProfile}) => {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 pt-6">
-          <button className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-full shadow-md flex items-center gap-2 hover:bg-blue-50 transition">
+          <button 
+          onClick={() => setModalOpen(true)}
+          className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-full shadow-md flex items-center gap-2 hover:bg-blue-50 transition">
             <BsDropletHalf className="text-xl" />
             Check Availability
           </button>
