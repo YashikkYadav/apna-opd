@@ -104,6 +104,14 @@
             </div>
           </v-row>
         </v-card>
+
+        <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+    {{ snackbar.message }}
+    <template #actions>
+      <v-btn text @click="snackbar.show = false">Close</v-btn>
+    </template>
+  </v-snackbar>
+
         <v-card class="section-card">
           <v-toolbar
             class="mb-4"
@@ -509,11 +517,24 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
+import { reactive } from 'vue';
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'warning',
+  timeout: 4000,
+});
 export default {
   data() {
     return {
       showModal: false,
       imageToDelete: null,
+      snackbar: {
+      show: false,
+      message: '',
+      color: 'warning',
+      timeout: 4000,
+    },
       form: {
         introduction: "",
         experience: null,
@@ -726,14 +747,26 @@ export default {
       }
     },
     handleGalleryChange(newFiles) {
-      const combined = [...this.galleryImages, ...newFiles];
+  const combined = [...this.galleryImages, ...newFiles];
 
-      const uniqueFiles = Array.from(
-        new Map(combined.map((file) => [file.name, file])).values()
-      ).slice(0, 6);
+  const uniqueFiles = Array.from(
+    new Map(combined.map((file) => [file.name, file])).values()
+  ).slice(0, 6);
 
-      this.galleryImages = uniqueFiles || [];
-    },
+  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+
+  this.galleryImages = uniqueFiles;
+  if (oversized) {
+  this.snackbar = {
+    message: `"${oversized.name}" exceeds 20MB limit`,
+    color: 'warning',
+    show: true,
+    timeout: 4000, 
+  };
+  this.galleryImages = [];
+  return;
+}
+},
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },

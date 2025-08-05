@@ -100,10 +100,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
+                <div v-if="img.type === 'profilePhoto'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages_image'" class="image-type">
+                <div v-if="img.type === 'galleryImages'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -673,12 +673,12 @@ getImageUrl(path) {
     new Map(combined.map((file) => [file.name, file])).values()
   ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 10 * 1024 * 1024);
+  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
 
   this.galleryImages = uniqueFiles;
   if (oversized) {
   this.snackbar = {
-    message: `"${oversized.name}" exceeds 10MB limit`,
+    message: `"${oversized.name}" exceeds 20MB limit`,
     color: 'warning',
     show: true,
     timeout: 4000, 
