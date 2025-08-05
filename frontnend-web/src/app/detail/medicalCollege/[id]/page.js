@@ -30,10 +30,10 @@ export default function VeterinaryPage() {
             );
             console.log("Response Data:", response_data.data);
 
-            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
 
             setData({
-                healthProfile: healthServeProfile.data || null,
+                healthProfile: healthServeProfile?.data || null,
                 otherData: healthServeUser || null,
             });
 

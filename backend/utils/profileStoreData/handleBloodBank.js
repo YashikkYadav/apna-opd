@@ -4,7 +4,7 @@ const pharmacyProfileModel = require('../../models/pharmacyProfile');
 const healthServeModel = require('../../models/healthServe');
 const healthlabProfileModel = require('../../models/healthlabProfile');
 const ivfClinicModel = require('../../models/ivfClinic');
-const gymProfileModel=require('../../models/gym')
+const gymProfileModel = require('../../models/gym')
 
 const appendImages = (existing = [], fresh = []) => {
     return Array.isArray(existing) ? [...existing, ...fresh] : fresh;
@@ -210,14 +210,17 @@ exports.handleBloodBank = async (req, healthServeId) => {
         const files = req.files || [];
         const existing = await bloodBankProfileModel.findOne({ healthServeId });
 
+        // Clean public path
+        const getRelativePath = (filePath) => filePath.split('public/')[1];
+
         const profileImage = files.find(f => f.fieldname === 'profilePhoto_image');
         const profilePhoto = profileImage
-            ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`
+            ? getRelativePath(`${profileImage.destination}/${profileImage.filename}`)
             : existing?.profilePhoto;
 
         const newGalleryImages = files
             .filter(f => f.fieldname === 'galleryImages_image')
-            .map(f => `${f.destination.split('public/')[1]}/${f.filename}`);
+            .map(f => getRelativePath(`${f.destination}/${f.filename}`));
 
         const finalData = {
             healthServeId,
@@ -238,7 +241,10 @@ exports.handleBloodBank = async (req, healthServeId) => {
 
         const storeData = await bloodBankProfileModel.updateOne(
             { healthServeId },
-            { $set: finalData },
+            {
+                $set: finalData,
+                $unset: { profileImage: "" } // Remove ghost field if it exists
+            },
             { upsert: true }
         );
 
@@ -249,6 +255,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
         throw error;
     }
 };
+
 exports.handleGym = async (req, healthServeId) => {
     try {
         const files = req.files || [];

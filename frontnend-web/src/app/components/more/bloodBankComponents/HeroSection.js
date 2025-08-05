@@ -60,7 +60,7 @@ const HeroSection = ({
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
           src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || ""}
-          alt={healthProfile?.healthServeId?.name}
+          alt={data?.name}
           width={340}
           height={340}
           unoptimized

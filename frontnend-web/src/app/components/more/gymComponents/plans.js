@@ -1,11 +1,14 @@
 'use client';
 import React from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaDumbbell } from 'react-icons/fa';
+import FreeTrialModal from './FreeTrialModel';
 
-const MembershipPlans = ({healthProfile, data
+const MembershipPlans = ({ healthProfile, data
 }) => {
-    
+    const [modalOpen, setModalOpen] = useState(false);
+
 
 
     return (
@@ -57,6 +60,7 @@ const MembershipPlans = ({healthProfile, data
                         </ul>
 
                         <button
+                            onClick={() => setModalOpen(true)}
                             className={`mt-auto rounded-full py-2.5 px-6 text-lg font-bold w-full transition
                                 ${plan.popular
                                     ? "bg-white text-blue-700 hover:bg-blue-100"
@@ -65,8 +69,11 @@ const MembershipPlans = ({healthProfile, data
                         >
                             Choose Plan
                         </button>
+                       
+
                     </motion.div>
                 ))}
+                 <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id} />
             </div>
         </motion.section>
     );
