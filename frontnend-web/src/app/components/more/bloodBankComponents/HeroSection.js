@@ -38,8 +38,10 @@ const HeroSection = ({
   data,
   healthProfile,
 }) => {
+  console.log(healthProfile?.profilePhoto)
 
   const user = data
+
   const [callModalOpen, setCallModalOpen] = useState(false);
   const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
   const reviewCount = healthProfile?.testimonials?.length || 0;
@@ -59,8 +61,9 @@ const HeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
-          src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || ""}
-          alt={healthProfile?.healthServeId?.name}
+          src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || " "}
+
+          alt={data?.name}
           width={340}
           height={340}
           unoptimized
@@ -101,7 +104,9 @@ const HeroSection = ({
 
         {/* Enlarged Action Buttons */}
         <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
-          <button className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+          <button
+            onClick={() => setCallModalOpen(true)}
+            className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
             🔍 Check Availability
           </button>
           <button

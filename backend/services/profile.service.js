@@ -17,7 +17,7 @@ const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/pr
 const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
 const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/profileStoreData/handleCollege')
-const {handleGym,getHandleGym}=require('../utils/profileStoreData/handleBloodBank')
+const { handleGym, getHandleGym } = require('../utils/profileStoreData/handleBloodBank')
 const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
@@ -313,7 +313,7 @@ const deleteImage = async (healthServeId, image) => {
         break;
       case 'gym':
         console.log("gym")
-        Model=require('../models/gym')
+        Model = require('../models/gym')
         break;
       default:
         throw new Error("Unsupported healthServeProfile type");
@@ -406,8 +406,8 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       case 'ivf_clinic':
         result = await handleIvfClinic(req, healthServeId)
       case 'gym':
-        
-        result =await handleGym(req,healthServeId)
+
+        result = await handleGym(req, healthServeId)
         break;
 
 
@@ -506,7 +506,7 @@ const getHealthServeProfileData = async (healthServeId) => {
         result = await gethandleIvf(healthServeId)
         break;
       case 'gym':
-        result=await getHandleGym(healthServeId)
+        result = await getHandleGym(healthServeId)
         break
     }
 

@@ -40,7 +40,11 @@ const ServicePage = () => {
   const router = useRouter();
 
   const fetchData = async (locationQuery = "", page = 1) => {
-    const sanitizedSpecs = params.specs.replace(/-/g, "_");
+    let sanitizedSpecs = params.specs.replace(/-/g, "_");
+    if(sanitizedSpecs==="nurse"){
+      sanitizedSpecs="nursing_staff"
+    }
+    
     try {
       setLoading(true);
       const response = await axiosInstance.get(
@@ -68,9 +72,7 @@ const ServicePage = () => {
   }, [params.specs, searchParams]);
 
   if (loading) return <Loader />;
-  console.log(serviceTypes.NURSING_MEDICAL_COLLEGE)
   console.log(specs)
-  console.log(serviceTypes.NURSING_MEDICAL_COLLEGE===specs)
   const getServiceTitle = () => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
@@ -92,7 +94,6 @@ const ServicePage = () => {
       case serviceTypes.MEDICAL_STORE:
         return "Find Medical Stores";
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
-        console.log("lkk")
         return "Find Nursing Colleges";
       case serviceTypes.BLOOD_BANK:
         return "Find Blood Banks";
@@ -101,6 +102,7 @@ const ServicePage = () => {
       case serviceTypes.BLOOD_DONOR:
         return "Find Blood Donors";
       case serviceTypes.NURSE:
+        console.log(serviceTypes.NURSE)
         return "Find Nursing Services";
       case serviceTypes.RADIOLOGIST:
         return "Find Radiologists";

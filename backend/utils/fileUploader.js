@@ -35,7 +35,7 @@ const fileUploader = (req, res) => {
       storage: storage,
       fileFilter: fileFilter,
       limits: {
-        fileSize: 10 * 1024 * 1024,
+        fileSize: 20 * 1024 * 1024,
       },
     }).single('file');
 
@@ -100,7 +100,7 @@ const uploadPatientRecords = (req, res) => {
       storage: storage,
       fileFilter: fileFilter,
       limits: {
-        fileSize: 10 * 1024 * 1024,
+        fileSize: 20 * 1024 * 1024,
       },
     }).single('file');
 

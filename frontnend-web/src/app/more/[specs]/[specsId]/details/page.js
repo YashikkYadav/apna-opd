@@ -32,7 +32,7 @@ const DetailsPage = () => {
         return;
       }
 
-      const basicProfile = listResponse.list.healthServeProfileList.find(
+      const basicProfile = listResponse?.list?.healthServeProfileList?.find(
         (item) => item._id === specsId
       );
 
@@ -47,7 +47,7 @@ const DetailsPage = () => {
       console.log("m", detailResponse);
 
       const healthServeProfile =
-        detailResponse?.data?.healthServeProfileData?.healthServeProfile.data;
+        detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data;
 
       const healthServeId = detailResponse?.data?.healthServeProfileData?.healthServeUser;
 

@@ -81,7 +81,7 @@ const createProfile = async (req, res) => {
     const upload = multer({
       storage,
       fileFilter,
-      limits: { fileSize: 10 * 1024 * 1024 },
+      limits: { fileSize: 20 * 1024 * 1024 },
     }).fields([
       { name: "profilePhoto", maxCount: 1 },
       { name: "galleryImages", maxCount: 6 },

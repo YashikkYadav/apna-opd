@@ -70,7 +70,7 @@ const PharmacyStorePage = () => {
             );
             console.log("Response Data:", response_data.data);
 
-            const { healthServeProfile, healthServeUser } = response_data.data.healthServeProfileData;
+            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
             setMed(healthServeProfile?.medicines)
             console.log("med",medicines)
             set_res_data({
@@ -111,12 +111,12 @@ const PharmacyStorePage = () => {
     const filteredMedicines = useMemo(() => {
         let filtered = medicines?.filter((medicine) => {
             const matchesSearch =
-                medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                medicine.salt.toLowerCase().includes(searchTerm.toLowerCase());
+                medicine?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                medicine?.salt.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesCategory =
-                selectedCategory === "All" || medicine.category === selectedCategory;
-            const matchesStock = !showInStockOnly || medicine.inStock;
-            const matchesDiscount = !showDiscountedOnly || medicine.discount > 0;
+                selectedCategory === "All" || medicine?.category === selectedCategory;
+            const matchesStock = !showInStockOnly || medicine?.inStock;
+            const matchesDiscount = !showDiscountedOnly || medicine?.discount > 0;
 
             return (
                 matchesSearch &&
@@ -128,23 +128,23 @@ const PharmacyStorePage = () => {
 
         // Sort medicines
         if (sortBy === "name") {
-            filtered?.sort((a, b) => a.name.localeCompare(b.name));
+            filtered?.sort((a, b) => a?.name.localeCompare(b?.name));
         } else if (sortBy === "price") {
-            filtered?.sort((a, b) => a.price - b.price);
+            filtered?.sort((a, b) => a?.price - b?.price);
         } else if (sortBy === "discount") {
-            filtered?.sort((a, b) => b.discount - a.discount);
+            filtered?.sort((a, b) => b?.discount - a?.discount);
         }
 
         return filtered;
     }, [data?.medicines, searchTerm, selectedCategory, showInStockOnly, showDiscountedOnly, sortBy, dataVersion]);
 
     const addToCart = (medicine) => {
-        const existingItem = cart.find((item) => item.id === medicine.id);
+        const existingItem = cart.find((item) => item?.id === medicine?.id);
         if (existingItem) {
             setCart(
                 cart.map((item) =>
-                    item.id === medicine.id
-                        ? { ...item, quantity: item.quantity + 1 }
+                    item.id === medicine?.id
+                        ? { ...item, quantity: item?.quantity + 1 }
                         : item
                 )
             );
@@ -155,21 +155,21 @@ const PharmacyStorePage = () => {
 
     const updateQuantity = (id, newQuantity) => {
         if (newQuantity === 0) {
-            setCart(cart.filter((item) => item.id !== id));
+            setCart(cart.filter((item) => item?.id !== id));
         } else {
             setCart(
                 cart.map((item) =>
-                    item.id === id ? { ...item, quantity: newQuantity } : item
+                    item?.id === id ? { ...item, quantity: newQuantity } : item
                 )
             );
         }
     };
 
-    const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-    const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartTotal = cart.reduce((total, item) => total + item?.price * item?.quantity, 0);
+    const cartCount = cart.reduce((total, item) => total + item?.quantity, 0);
 
     const acceptsPrescriptions = data?.features.some(
-        f => f.label && f.label.trim().toLowerCase() === 'accepts prescriptions' && f.enabled
+        f => f?.label && f?.label.trim().toLowerCase() === 'accepts prescriptions' && f?.enabled
     );
     console.log('Features:', data?.features, 'Accepts Prescriptions:', acceptsPrescriptions);
 
