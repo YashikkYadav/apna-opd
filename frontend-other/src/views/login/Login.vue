@@ -120,7 +120,7 @@ export default {
         { value: "blood_bank", label: "Blood Bank" },
         { value: "physiotherapist", label: "Physiotherapist" },
         { value: "blood_donor", label: "Blood Donor" },
-        { value: "nurse", label: "Nursing Staff" },
+        { value: "nursing_staff", label: "Nursing Staff" },
         { value: "vatenary", label: "Vaterinary" },
         { value: "laboratory", label: "Laboratory" },
         {value:"ivf_clinic",label:"IVF Clinic"}
