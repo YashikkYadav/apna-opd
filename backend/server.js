@@ -18,13 +18,14 @@ const io = new Server(server, {
 
 app.use(cors({
   origin: '*',
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(bodyParser.json({ extended: true, limit: "20mb" }));
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
-
+app.options('*', cors()); // Handles FormData preflight requests
 const { PORT } = require("./config/config");
 
 const dbConnection = require("./config/db.js");
