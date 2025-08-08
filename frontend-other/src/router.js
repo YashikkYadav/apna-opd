@@ -11,9 +11,10 @@ import Veterinary from './views/profile/Veterinary.vue';
 import MedicalCollege from './views/profile/MedicalCollege.vue';
 import IvfClinic from './views/profile/IvfClinic.vue';
 import Gym from './views/profile/Gym.vue';
-
+import NursingStaff from './views/profile/NursingStaff.vue';
 import Healthlab from './views/profile/Healthlab.vue'
 import Pharmacy from './views/profile/Pharmacy.vue'
+
 
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
     name: 'Physiotherapist',
     component: Physiotherapist
 
+  },
+  {
+    path: '/profile/nursing_staff',
+    name: 'NusrsingStaff',
+    component: NursingStaff
   },
   {
     path: '/profile/pharmacy',
