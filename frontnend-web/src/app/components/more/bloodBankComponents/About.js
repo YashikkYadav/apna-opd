@@ -29,12 +29,10 @@ const About = ({
       </div>
 
 
-      {/* Description */}
       <p className="text-gray-700 text-lg font-medium mb-8 max-w-4xl">
         {healthProfile?.about}
       </p>
 
-      {/* Grid Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {items.map((item, idx) => (
           <motion.div

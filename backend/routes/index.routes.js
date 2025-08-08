@@ -27,6 +27,7 @@ const userRoutes = require("./user.routes");
 const HealthServe = require("../models/healthServe");
 const careerLeadRoutes = require("./careerLead.routes")
 const Doctor = require("../models/doctor");
+const importExcelRouter = require("./importExcel.routes")
 
 const router = express.Router();
 
@@ -36,6 +37,9 @@ router.use("/hospital", hospitalRoutes);
 
 router.get("/oauth2callback", async(req,res) => {
 })
+router.get("/hello-server", async(req,res)=>{
+res.status(200).send({message:'server working fine'})
+});
 
 router.use("/user", userRoutes);
 // Centralizing all the routes in one file
@@ -90,5 +94,8 @@ router.use(
 router.use("/contact-lead", contactLeadRoutes);
 
 router.use("/career-lead", careerLeadRoutes);
+
+router.use("/import-excel", importExcelRouter)
+
 
 module.exports = router;

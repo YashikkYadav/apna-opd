@@ -18,13 +18,14 @@ const io = new Server(server, {
 
 app.use(cors({
   origin: '*',
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(bodyParser.json({ extended: true, limit: "50mb" }));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
-
+app.options('*', cors()); // Handles FormData preflight requests
 const { PORT } = require("./config/config");
 
 const dbConnection = require("./config/db.js");
@@ -36,6 +37,8 @@ app.use("/public", express.static(publicPath));
 const indexRoutes = require("./routes/index.routes");
 const Chat = require("./models/chat.js");
 app.use("/api", indexRoutes);
+
+
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
