@@ -15,15 +15,15 @@ function getStarIcons(avgRating) {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-2xl" />);
+        stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />);
     }
 
     if (hasHalfStar) {
-        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-2xl" />);
+        stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />);
     }
 
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<FaRegStar key={`empty-${i}`} className="text-white text-2xl" />);
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />);
     }
 
     return stars;

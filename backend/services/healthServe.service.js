@@ -92,7 +92,7 @@ const register = async (data) => {
     }
 
     const newHealthServe = new HealthServe(healthServeData);
-    
+
     await newHealthServe.save();
 
     const newHealthServeProfile = new HealthServeProfile({
@@ -125,26 +125,26 @@ const register = async (data) => {
 
 const login = async (data) => {
   try {
-    const { phone, password, type } = data;
+    const { phone, email, password, type } = data;
 
+    // Validate presence of either phone or email, plus password and type
     if (
-      !phone ||
-      phone === null ||
-      phone === undefined ||
+      (!phone && !email) ||
       !password ||
-      password === null ||
-      password === undefined ||
-      !type ||
-      type === null ||
-      type === undefined
+      !type
     ) {
       return {
         statusCode: 422,
-        error: "Missing field: Phone Number and Password or Type",
+        error: "Missing field: Phone/Email, Password, or Type",
       };
     }
 
-    const healthServe = await HealthServe.findOne({ phone, type });
+    // Build query dynamically based on input
+    const query = { type };
+    if (phone) query.phone = phone;
+    else query.email = email;
+
+    const healthServe = await HealthServe.findOne(query);
     if (!healthServe) {
       return {
         statusCode: 404,
@@ -152,14 +152,25 @@ const login = async (data) => {
       };
     }
 
-    // if (!healthServe.paymentStatus) {
-    //     const paymentUrl = await createPaymentLinkForEntity(healthServe.type, {name: healthServe.name, phone: healthServe.phoneNumber, email: healthServe.email}, healthServe.subscriptionType);
+    // Uncomment this block if payment check is required
+    /*
+    if (!healthServe.paymentStatus) {
+      const paymentUrl = await createPaymentLinkForEntity(
+        healthServe.type,
+        {
+          name: healthServe.name,
+          phone: healthServe.phoneNumber,
+          email: healthServe.email
+        },
+        healthServe.subscriptionType
+      );
 
-    //     return {
-    //       statusCode: 400,
-    //       error: `Please complete your payment, You won't be able to login before completing payment. Link ${paymentUrl?.paymentData?.short_url}`,
-    //     };
-    // }
+      return {
+        statusCode: 400,
+        error: `Please complete your payment. Login is restricted. Payment Link: ${paymentUrl?.paymentData?.short_url}`,
+      };
+    }
+    */
 
     const passwordCheck = await comparePassword(password, healthServe.password);
     if (!passwordCheck) {
@@ -170,23 +181,25 @@ const login = async (data) => {
     }
 
     const accessToken = getAccessToken(healthServe);
-    
+
     return {
       statusCode: 200,
       healthServe: {
         id: healthServe._id,
-        phone,
+        phone: healthServe.phone,
+        email: healthServe.email,
         accessToken,
-        type:healthServe.type
+        type: healthServe.type,
       },
     };
   } catch (error) {
     return {
       statusCode: 500,
-      error: error,
+      error: error.message || error,
     };
   }
 };
+
 
 const getHealthServeById = async (healthServeId) => {
   try {

@@ -71,7 +71,7 @@ const MedicalStore = ({ serviceData }) => {
               <button
                 onClick={() =>
                   navigate.push(
-                    `/detail/pharmacy/${medicalStore._id}`
+                    `/detail/medical_store/${medicalStore._id}`
                   )
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

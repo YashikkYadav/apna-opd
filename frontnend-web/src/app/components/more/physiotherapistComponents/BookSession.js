@@ -1,7 +1,11 @@
 'use client';
 import React, { useState } from "react";
+import { useParams } from 'next/navigation';
+import axios from "axios";
 
 export default function FreeTrialModal({ isOpen, onClose }) {
+    const params = useParams();
+    const id = params.id;
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -29,9 +33,37 @@ export default function FreeTrialModal({ isOpen, onClose }) {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!verified) return alert("Please verify your phone number first.");
+
         setSubmitted(true);
+
+        const payload = {
+            name,
+            phone,
+            date: new Date().toISOString(),
+            enquiry:"991"
+        };
+
+        try {
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/enquiry/`,
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (!res.ok) throw new Error("Failed to submit enquiry");
+            const responseData = await res.json();
+            console.log("Submitted:", responseData);
+            // Optionally route: router.push(responseData.redirectUrl)
+        } catch (err) {
+            console.error("Submission error:", err);
+            alert("Something went wrong. Try again.");
+        }
     };
 
     if (!isOpen) return null;
@@ -59,7 +91,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             onChange={(e) => setEmail(e.target.value)}
                         />
 
-                         <textarea
+                        <textarea
                             placeholder="Message (Optional)"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
@@ -105,8 +137,8 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             disabled={!verified}
                             onClick={handleSubmit}
                             className={`w-full py-2 rounded-lg text-white font-semibold ${verified
-                                    ? "bg-blue-600 hover:bg-blue-700 transition"
-                                    : "bg-blue-300 cursor-not-allowed"
+                                ? "bg-blue-600 hover:bg-blue-700 transition"
+                                : "bg-blue-300 cursor-not-allowed"
                                 }`}
                         >
                             Submit

@@ -67,7 +67,7 @@ const NursingCollege = ({ serviceData }) => {
               <button
                 onClick={() =>
                   navigate.push(
-                    `/detail/medicalCollege/${college._id}`
+                    `/detail/nursing_medical_college/${college._id}`
                   )
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"

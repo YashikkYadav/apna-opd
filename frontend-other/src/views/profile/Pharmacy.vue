@@ -747,9 +747,16 @@ removeTag(index) {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      console.log('asdassdasd',res.healthServeProfileData.healthServeProfile)
       const profile = res.healthServeProfileData.healthServeProfile;
-
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+      }
       if (profile) {
         console.log(res);
         this.images = profile.galleryImages || [];
@@ -759,10 +766,7 @@ this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
+        
         this.form.pincode = hs?.pincode || "";
 this.form.medicines = profile.medicines?.length
       ? profile.medicines

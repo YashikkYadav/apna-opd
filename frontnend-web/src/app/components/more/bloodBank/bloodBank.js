@@ -70,7 +70,7 @@ const BloodBank = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/bloodbank/${bloodBank._id}`)
+                  navigate.push(`/detail/blood_bank/${bloodBank._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

@@ -20,8 +20,9 @@ const PhysioFAQS = ({ healthProfile }) => {
         >
             <div className="max-w-5xl mx-auto px-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 flex items-center justify-start gap-3">
-                    <MdOutlineQuestionMark className="text-4xl text-white" />
+                    
                     Frequently Asked Questions
+                     <MdOutlineQuestionMark className="text-4xl text-white" />
                 </h2>
 
                 <div className="space-y-6">

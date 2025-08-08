@@ -22,6 +22,8 @@ const IvfClinic = ({ serviceData }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
+  console.log("Navigate to detail page with ID:", currentItems[0]?._id)
+
   return (
     <>
       <h2 className="title-48 mb-[24px]">IVF Clinic Near You</h2>
@@ -70,7 +72,8 @@ const IvfClinic = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/ivfClinic/${clinic._id}`)
+                  
+                  navigate.push(`/detail/ivf_clinic/${clinic?._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

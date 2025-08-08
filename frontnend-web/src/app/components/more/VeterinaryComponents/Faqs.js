@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MdOutlineQuestionMark } from 'react-icons/md';
 
-const FAQ = ({ healthProfile,data }) => {
-   
+const FAQ = ({ healthProfile, data }) => {
+
     const [openIndex, setOpenIndex] = useState(null);
 
     const toggle = (index) => {
@@ -20,8 +20,9 @@ const FAQ = ({ healthProfile,data }) => {
             className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
         >
             <h2 className="flex items-center gap-3 text-3xl md:text-4xl font-extrabold text-blue-700 mb-10">
-                <MdOutlineQuestionMark className="text-blue-600 text-4xl" />
+
                 Frequently Asked Questions
+                <MdOutlineQuestionMark className="text-4xl text-white" />
             </h2>
 
             <div className="max-w-4xl mx-auto space-y-4">

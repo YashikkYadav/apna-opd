@@ -10,26 +10,37 @@
 
           <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
-              <v-select v-model="healthServeType" :items="dropdownItems" label="Select Option" variant="outlined" dense
-                :rules="[rules.required]" item-value="value" item-title="label"></v-select>
-              <v-text-field v-model="phone" label="Phone" :rules="[rules.required]" variant="outlined" dense
-                class="email-input">
-              </v-text-field>
+              <v-select
+                v-model="healthServeType"
+                :items="dropdownItems"
+                label="Select Option"
+                variant="outlined"
+                dense
+                :rules="[rules.required]"
+                item-value="value"
+                item-title="label"
+              ></v-select>
 
-              <v-text-field v-model="password" label="Password" :rules="[rules.required]" variant="outlined" dense
-                type="password">
-              </v-text-field>
+              <v-text-field
+                v-model="identifier"
+                label="Phone or Email"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              ></v-text-field>
+
+              <v-text-field
+                v-model="password"
+                label="Password"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+                type="password"
+              ></v-text-field>
             </div>
 
             <input type="submit" value="Login" class="action" />
           </v-form>
-          <!-- <div class="subtitle">
-            Don't have an account?
-            <span class="subtitle-action" @click="signIn = !signIn">
-            <span class="subtitle-action">
-              Create Account
-            </span>
-          </div> -->
         </div>
 
         <div class="register" v-else>
@@ -42,43 +53,70 @@
             <div class="form ragister-form">
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.name" label="Name" :rules="[rules.required]" variant="outlined" dense>
-                  </v-text-field>
+                  <v-text-field v-model="form.name" label="Name" :rules="[rules.required]" variant="outlined" dense />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.email" label="Email" :rules="[rules.required]" variant="outlined" dense>
-                  </v-text-field>
+                  <v-text-field
+                    v-model="form.email"
+                    label="Email"
+                    :rules="[rules.required, rules.email]"
+                    variant="outlined"
+                    dense
+                  />
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.phoneNumber" label="Phone Number" :rules="[rules.required]"
-                    variant="outlined" dense>
-                  </v-text-field>
+                  <v-text-field
+                    v-model="form.phoneNumber"
+                    label="Phone Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.password" label="Password" :rules="[rules.required]" variant="outlined"
-                    dense>
-                  </v-text-field>
+                  <v-text-field
+                    v-model="form.password"
+                    label="Password"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                    type="password"
+                  />
                 </v-col>
               </v-row>
+
               <v-row>
-                <v-col cols="12" sm="12">
-                  <v-text-field v-model="form.address" label="address" :rules="[rules.required]" variant="outlined"
-                    dense>
-                  </v-text-field>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="form.address"
+                    label="Address"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  />
                 </v-col>
               </v-row>
+
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.clinicName" label="Clinic Name" variant="outlined" dense>
-                  </v-text-field>
+                  <v-text-field
+                    v-model="form.clinicName"
+                    label="Clinic Name"
+                    variant="outlined"
+                    dense
+                  />
                 </v-col>
                 <v-col cols="12" sm="6">
-                  <v-text-field v-model="form.rmcNumber" label="RMC Number" :rules="[rules.required]" variant="outlined"
-                    dense>
-                  </v-text-field>
+                  <v-text-field
+                    v-model="form.rmcNumber"
+                    label="RMC Number"
+                    :rules="[rules.required]"
+                    variant="outlined"
+                    dense
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -87,7 +125,7 @@
           <button class="action" @click="onRegister">Create Account</button>
           <div class="subtitle">
             Already have an account?
-            <span class="subtitle-action" @click="signIn = !signIn">
+            <span class="subtitle-action" @click="signIn = true">
               Sign In
             </span>
           </div>
@@ -105,6 +143,17 @@ export default {
   data() {
     return {
       healthServeType: null,
+      identifier: "",
+      password: "",
+      form: {
+        name: "",
+        email: "",
+        phoneNumber: "",
+        password: "",
+        rmcNumber: "",
+        address: "",
+        clinicName: "",
+      },
       dropdownItems: [
         { value: "doctor", label: "Doctor" },
         { value: "ambulance", label: "Ambulance" },
@@ -113,45 +162,32 @@ export default {
         { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
         { value: "commercial_meditation", label: "Commercial Meditation" },
         { value: "medical_store", label: "Medical Store" },
-        {
-          value: "nursing_medical_college",
-          label: "Nursing & Medical College",
-        },
+        { value: "nursing_medical_college", label: "Nursing & Medical College" },
         { value: "blood_bank", label: "Blood Bank" },
         { value: "physiotherapist", label: "Physiotherapist" },
         { value: "blood_donor", label: "Blood Donor" },
         { value: "nursing_staff", label: "Nursing Staff" },
         { value: "vatenary", label: "Vaterinary" },
         { value: "laboratory", label: "Laboratory" },
-        {value:"ivf_clinic",label:"IVF Clinic"}
-
+        { value: "ivf_clinic", label: "IVF Clinic" },
       ],
-      password: "",
-      email: "",
-      phone: "",
-      form: {
-        name: "",
-        password: "",
-        phoneNumber: "",
-        email: "",
-        rmcNumber: "",
-        address: "",
-        clinicName: "",
-      },
       rules: {
         required: (value) => !!value || "This field is required.",
         email: (value) =>
-          !value.trim() ||
-          /^[\w\.-]+@[\w\.-]+\.\w+$/.test(value.trim()) ||
-          "Enter a valid email.",
+          !value || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) || "Enter a valid email.",
       },
       signIn: true,
     };
   },
   methods: {
+    isEmail(input) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+    },
+    isPhone(input) {
+      return /^\d{10}$/.test(input); // adjust as needed
+    },
     async handleSubmit() {
       const isValid = await this.$refs.loginForm.validate();
-
       if (!isValid.valid) {
         useUiStore().openNotificationMessage(
           "Please fill in all required fields correctly!",
@@ -161,11 +197,23 @@ export default {
         return;
       }
 
-      const requestData = {
-        phone: this.phone,
+      let requestData = {
         password: this.password,
         type: this.healthServeType,
       };
+
+      if (this.isEmail(this.identifier)) {
+        requestData.email = this.identifier;
+      } else if (this.isPhone(this.identifier)) {
+        requestData.phone = this.identifier;
+      } else {
+        useUiStore().openNotificationMessage(
+          "Enter a valid phone number or email!",
+          "",
+          "error"
+        );
+        return;
+      }
 
       const res = await useAuthStore().LoginApiCall(requestData);
 
@@ -174,9 +222,6 @@ export default {
         localStorage.setItem("access_token", res?.healthServe?.accessToken);
         localStorage.setItem("user_type", res?.healthServe?.type);
 
-        // localStorage.setItem("access_token", res?.healthServe?.accessToken);
-
-
         this.$router.push("/dashboard");
         useUiStore().openNotificationMessage("You Are Successfully Logged In!");
       }
@@ -184,7 +229,6 @@ export default {
 
     async onRegister() {
       const isValid = await this.$refs.form.validate();
-
       if (!isValid.valid) {
         useUiStore().openNotificationMessage(
           "Please fill in all required fields correctly!",
@@ -193,6 +237,7 @@ export default {
         );
         return;
       }
+
       const res = await useAuthStore().RegisterApiCall(this.form);
 
       if (res) {
