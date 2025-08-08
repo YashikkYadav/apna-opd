@@ -17,7 +17,7 @@ import { useState } from "react";
 import AppointmentModal from "../common-components/AppointmentModal";
 
 export default function DoctorFeatureCard({ doctorData, specs }) {
-  const { name, images, type, rating, reviews, appointmentFee, phone } =
+  const { name, image, type, rating, reviews, appointmentFee, phone } =
     doctorData || {};
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
 
@@ -25,24 +25,24 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
     {
       icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />,
       text: "+Years Experience",
-      dynamicValue: doctorData.experience,
+      dynamicValue: doctorData.yearsOfService,
     },
     {
       icon: <FaUserMd className="text-purple-400 text-2xl" />,
       text: "+ Happy Clients",
-      dynamicValue: doctorData.happyClients,
+      dynamicValue: doctorData.reviews,
     },
     {
       icon: <FaRegHospital className="text-pink-400 text-2xl" />,
       text: "",
-      dynamicValue: doctorData.doctorId.clinicName,
+      dynamicValue: doctorData.feature2,
     },
     ...(specs !== "nurse"
       ? [
           {
             icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
             text: "",
-            dynamicValue: doctorData.doctorId.location,
+            dynamicValue: doctorData.address.city,
           },
         ]
       : []),
@@ -65,8 +65,8 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
         <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
           <Image
             src={
-              images && images.length
-                ? getProfileImage(images).url
+              image && image.length
+                ? {image}
                 : "/images/d1.png"
             }
             alt={name}
