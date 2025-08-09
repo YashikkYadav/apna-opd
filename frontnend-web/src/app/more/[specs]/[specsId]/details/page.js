@@ -21,30 +21,34 @@ const DetailsPage = () => {
     try {
       setLoading(true);
       console.log(`/health-serve/list?&location=&type=${specs}`);
-      const listResponse = await axiosInstance.get(
-        `/health-serve/list?&location=&type=${specs}`
-      );
+      // const listResponse = await axiosInstance.get(
+      //   `/health-serve/list?&location=&type=${specs}`
+      // );
 
-      console.log(listResponse);
+      // console.log(listResponse);
 
-      if (!listResponse?.list?.healthServeProfileList) {
-        setError(`No data found for ${specs}`);
-        return;
-      }
+      // if (!listResponse?.list?.healthServeProfileList) {
+      //   setError(`No data found for ${specs}`);
+      //   return;
+      // }
 
-      const basicProfile = listResponse?.list?.healthServeProfileList?.find(
-        (item) => item._id === specsId
-      );
+      // const basicProfile = listResponse?.list?.healthServeProfileList?.find(
+      //   (item) => item._id === specsId
+      // );
 
-      if (!basicProfile) {
-        setError(`No data found for ${specs} with ID ${specsId}`);
-        return;
-      }
+      // if (!basicProfile) {
+      //   setError(`No data found for ${specs} with ID ${specsId}`);
+      //   return;
+      // }
 
       const detailResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${specsId}/health-serve-profile/profile-data`
       );
       console.log("m", detailResponse);
+      if (!detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data) {
+         setError("Failed to load details. Please try again later."
+      );
+      }
 
       const healthServeProfile =
         detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data;
@@ -59,7 +63,7 @@ const DetailsPage = () => {
           ...healthServeProfile,
         });
       } else {
-        setProfileData(basicProfile);
+        // setProfileData(basicProfile);
       }
     } catch (error) {
       console.log("Error fetching service details:", error);
