@@ -763,7 +763,7 @@ getImageUrl(path) {
         this.cancelDelete();
       }
     },
-     handleGalleryChange(newFiles) {
+    handleGalleryChange(newFiles) {
   const combined = [...this.galleryImages, ...newFiles];
 
   const uniqueFiles = Array.from(

@@ -12,15 +12,15 @@
           </v-toolbar>
           <v-row>
             <v-col cols="12" sm="12">
-              <v-text-field
-                v-model="form.name"
+              <v-textarea
+                v-model="form.introduction"
                 ref="introductionRef"
-                label="Name"
+                label="Introduction"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
               >
-              </v-text-field>
+              </v-textarea>
             </v-col>
           </v-row>
           <v-row>
@@ -201,11 +201,7 @@
             class="mb-3 mx-4"
           ></v-text-field>
 
-          <div class="d-flex justify-end">
-            <v-btn icon color="error" @click="removeTag(index)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </div>
+          <!-- No delete button needed for clients, as it's not an array -->
         </v-card>
 
         <v-card>
@@ -644,7 +640,7 @@ export default {
         timeout: 4000,
       },
       form: {
-        name: "",
+        introduction: "",
         experience: null,
         faqs: [],
         about: "",
@@ -792,7 +788,7 @@ export default {
       this.form.services.push("");
     },
     removeSpecialInterest(i) {
-      this.form.specialInterests.splice(i, 1);
+      this.form.services.splice(i, 1);
     },
 
     // Certifications
@@ -901,7 +897,7 @@ export default {
           })),
         ];
         const hs = res?.healthServeProfileData?.healthServeUser;
-        this.form.name = profile.name || "";
+        this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         this.form.address = hs?.address || "";
@@ -910,13 +906,12 @@ export default {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
         this.form.education = profile.education || [];
-        this.form.specialInterests = profile.specialInterests || [];
+        this.form.services = profile.services || [];
         this.form.certifications = profile.certifications || [];
         this.form.languages = profile.languages || [];
-        this.form.conditionsTreated = profile.conditionsTreated || [];
-        this.form.therapyPackages = profile.therapyPackages || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.faqs = profile.faqs || [];
+        this.form.workingDays = profile.workingDays || [];
         this.form.clients = profile.clients || "";
         this.form.workingAt = profile.workingAt || "";
         this.form.perVisitCharges = profile.perVisitCharges || "";
@@ -925,6 +920,8 @@ export default {
         this.form.bookingType = profile.bookingType || "";
         this.form.workingHours = profile.workingHours || "";
       }
+      console.log(res);
+      console.log(profile);
     },
     async onSubmit() {
       const { valid } = await this.$refs.form.validate();
@@ -974,52 +971,7 @@ export default {
         );
       }
     },
-    handleInputDrugHistory() {
-      if (this.isAllRowsFilled() && !this.hasEmptyRow()) {
-        this.form.about.push("");
-      }
-      this.removeEmptyRows();
-    },
-    isAllRowsFilled() {
-      return this.form.about.every((item) => item.trim() !== "");
-    },
-    hasEmptyRow() {
-      return this.form.about.some((item) => item.trim() === "");
-    },
-    removeEmptyRows() {
-      this.form.about = this.form.about.filter(
-        (item, index) =>
-          item.trim() !== "" || index === this.form.about.length - 1
-      );
-    },
-    handleLocationHistory(item, index) {
-      if (this.isLocationRowFilled(item) && !this.hasEmptyLocationRow()) {
-        this.form.locations.push({
-          name: "",
-          address: "",
-          days: [],
-          from: null,
-          to: null,
-          timeslot: null,
-        });
-      }
-      this.removeEmptyLocationRows();
-    },
-    isLocationRowFilled(item) {
-      return item.name.trim() || (item.address && item.address.trim());
-    },
-    hasEmptyLocationRow() {
-      return this.form.locations.some(
-        (drug) => !(drug.name.trim() || (drug.address && drug.address.trim()))
-      );
-    },
-    removeEmptyLocationRows() {
-      this.form.locations = this.form.locations.filter(
-        (drug, index) =>
-          this.isLocationRowFilled(drug) ||
-          index === this.form.locations.length - 1
-      );
-    },
+    // ...existing code...
 
     validateDays(value) {
       if (!value || value.length === 0) {
