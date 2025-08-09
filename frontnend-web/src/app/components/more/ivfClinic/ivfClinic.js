@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const IvfClinic = ({ serviceData }) => {
+const IvfClinic = ({ serviceData, totalItems }) => {
   const [clinicList, setClinicBankList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,11 +22,13 @@ const IvfClinic = ({ serviceData }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
+  console.log("Navigate to detail page with ID:", currentItems[0]?._id)
+
   return (
     <>
       <h2 className="title-48 mb-[24px]">IVF Clinic Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {clinicList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((clinic) => (
@@ -39,8 +41,8 @@ const IvfClinic = ({ serviceData }) => {
                 <Image
                   src={
                     clinic.profiles &&
-                    clinic.profiles.length > 0 &&
-                    clinic.profiles[0].images.length > 0
+                      clinic.profiles.length > 0 &&
+                      clinic.profiles[0].images.length > 0
                       ? clinic.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
@@ -70,7 +72,8 @@ const IvfClinic = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/ivfClinic/${clinic._id}`)
+
+                  navigate.push(`/detail/ivf_clinic/${clinic?._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

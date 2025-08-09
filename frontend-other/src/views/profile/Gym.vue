@@ -1068,7 +1068,14 @@ addPlan() {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res.healthServeProfileData.healthServeProfile;
-      console.log(profile)
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+      }
 
       if (profile) {
         console.log(res);
@@ -1079,10 +1086,7 @@ addPlan() {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
+        
         this.form.pincode = hs?.pincode || "";
         this.form.established = profile.established || '';
          this.form.faqs = profile.faqs || [];

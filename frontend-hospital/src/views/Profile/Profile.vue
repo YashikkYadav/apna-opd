@@ -774,7 +774,14 @@ export default {
       const res = await useProfileStore().getProfileData();
       console.log(res)
       const profile = res.healthServeProfileData?.healthServeProfile?.data;
-      const add=res.healthServeProfileData?.healthServeUser
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+      }
       if (profile) {
         this.images = profile.galleryImages||[];
 
@@ -783,10 +790,6 @@ export default {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = add?.address || "";
-        this.form.city = add?.city || "";
-        this.form.locality = add?.locality || "";
-        this.form.state = add?.state || "";
         this.form.pincode = add?.pincode || "";
 
         this.form.accreditations = profile.accreditations || [];

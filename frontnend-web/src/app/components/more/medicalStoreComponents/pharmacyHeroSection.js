@@ -15,15 +15,15 @@ function getStarIcons(avgRating) {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-xl" />);
+        stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-xl" />);
     }
 
     if (hasHalfStar) {
-        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-xl" />);
+        stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-xl" />);
     }
 
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<FaRegStar key={`empty-${i}`} className="text-gray-300 text-xl" />);
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-xl" />);
     }
 
     return stars;
@@ -101,7 +101,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                     <button
-                        onClick={() => router.push(`/detail/pharmacy/${data?.name}/MedicineOrder`)}
+                        onClick={() => router.push(`/detail/medical_store/${data?.name}/MedicineOrder`)}
                         className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🛒 Order Medicines
                     </button>

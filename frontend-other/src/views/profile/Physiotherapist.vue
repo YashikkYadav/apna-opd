@@ -792,7 +792,15 @@ getImageUrl(path) {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res?.healthServeProfileData?.healthServeProfile?.data;
-      console.log('hh',profile)
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+      }
 
       if (profile) {
         console.log(res);
@@ -803,18 +811,15 @@ getImageUrl(path) {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
+        
         this.form.pincode = hs?.pincode || "";
 
-       this.form.education = (profile.education || [])
-  this.form.specialInterests = profile.specialInterests || [];
-      this.form.certifications = profile.certifications || [];
-      this.form.languages = profile.languages || [];
-      this.form.conditionsTreated = profile.conditionsTreated || [];
-      this.form.therapyPackages = profile.therapyPackages || [];
+        this.form.education = (profile.education || [])
+        this.form.specialInterests = profile.specialInterests || [];
+        this.form.certifications = profile.certifications || [];
+        this.form.languages = profile.languages || [];
+        this.form.conditionsTreated = profile.conditionsTreated || [];
+        this.form.therapyPackages = profile.therapyPackages || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }

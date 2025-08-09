@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Vatenary = ({ serviceData }) => {
+const Vatenary = ({ serviceData,totalItems }) => {
   const [vatenaryList, setVatenaryList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,12 +21,13 @@ const Vatenary = ({ serviceData }) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
+  console.log(currentItems);
 
   return (
     <>
       <h2 className="title-48 mb-[24px]">Result for Vatenary Services</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {vatenaryList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((vatenary) => (
@@ -37,13 +38,7 @@ const Vatenary = ({ serviceData }) => {
             <div className="flex flex-col sm:flex-row">
               <div className="sm:mr-[32px]">
                 <Image
-                  src={
-                    vatenary.profiles &&
-                      vatenary.profiles.length > 0 &&
-                      vatenary.profiles[0].images.length > 0
-                      ? vatenary.profiles[0].images[0].url
-                      : "/images/image_placeholder.svg"
-                  }
+                  src={`http://localhost:3001/public/${vatenary?.profileImage}` || ""}
                   width={180}
                   height={180}
                   alt="Vatenary Service"
@@ -69,7 +64,7 @@ const Vatenary = ({ serviceData }) => {
               </h2>
               <button
                 onClick={() =>
-                  navigate.push(`/detail/Veterinary/${vatenary._id}`)
+                  navigate.push(`/detail/vatenary/${vatenary._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

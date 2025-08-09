@@ -108,8 +108,8 @@ export default {
         const items = document.querySelector(".sidebar-drawer .v-list-group__items");
         const moreItem = document.querySelector(".more-btn-sidebar")
 
-        items.style.display = "none";
-        moreItem.style.display = "none";
+        if(items) items.style.display = "none";
+        if(moreItem) moreItem.style.display = "none";
       } else {
         const items = document.querySelector(".sidebar-drawer .v-list-group__items");
         const moreItem = document.querySelector(".more-btn-sidebar")
@@ -117,7 +117,7 @@ export default {
           items.style.display = "block";
         }
 
-        moreItem.style.display = "block";
+        if(moreItem) moreItem.style.display = "block";
       }
     }
   }

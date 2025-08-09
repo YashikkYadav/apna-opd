@@ -32,19 +32,19 @@ const ClinicHeroSection = ({
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        <FaStar key={`full-${i}`} className="text-gray-300 text-xl" />
+        <FaStar key={`full-${i}`} className="text-[#FFD700] text-xl" />
       );
     }
 
     if (hasHalfStar) {
       stars.push(
-        <FaStarHalfAlt key="half" className="text-gray-300 text-xl" />
+        <FaStarHalfAlt key="half" className="text-[#FFD700] text-xl" />
       );
     }
 
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <FaRegStar key={`empty-${i}`} className="text-gray-300 text-xl" />
+        <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-xl" />
       );
     }
 
@@ -79,7 +79,7 @@ const ClinicHeroSection = ({
       {/* Right: Content */}
       <div className="z-10 flex-1 space-y-5 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-          {user?.name},{user?.location}
+          {user?.name}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">

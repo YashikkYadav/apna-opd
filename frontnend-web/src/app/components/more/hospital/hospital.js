@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Hospital = ({ serviceData }) => {
+const Hospital = ({ serviceData,totalItems }) => {
   const [hospitalList, setHospitalList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +26,7 @@ const Hospital = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Hospitals Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {hospitalList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((hospital) => (

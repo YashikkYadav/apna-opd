@@ -11,13 +11,13 @@
           <v-form ref="loginForm" @submit.prevent="handleSubmit">
             <div class="form">
               <v-text-field
-                v-model="phone"
-                label="Phone"
-                :rules="[rules.required]"
-                variant="outlined"
-                dense
-                class="email-input"
-              >
+  v-model="identifier"
+  label="Phone or Email"
+  :rules="[rules.required]"
+  variant="outlined"
+  dense
+  class="email-input"
+>
               </v-text-field>
 
               <v-text-field
@@ -153,7 +153,7 @@ export default {
     return {
       healthServeType: 'hospital',
       password: "",
-      phone: "",
+      identifier: "",
       form: {
         name: "",
         password: "",
@@ -175,33 +175,39 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      const isValid = await this.$refs.loginForm.validate();
+  const isValid = await this.$refs.loginForm.validate();
 
-      if (!isValid.valid) {
-        useUiStore().openNotificationMessage(
-          "Please fill in all required fields correctly!",
-          "",
-          "error"
-        );
-        return;
-      }
+  if (!isValid.valid) {
+    useUiStore().openNotificationMessage(
+      "Please fill in all required fields correctly!",
+      "",
+      "error"
+    );
+    return;
+  }
 
-      const requestData = {
-        phone: this.phone,
-        password: this.password,
-        type: this.healthServeType,
-      };
+  const identifier = this.identifier.trim();
 
-      const res = await useAuthStore().LoginApiCall(requestData);
-      console.log(res);
-      if (res) {
-        localStorage.setItem("hospital_id", res?.healthServe?.id);
-        localStorage.setItem("access_token", res?.healthServe?.accessToken);
+  const requestData = {
+    password: this.password,
+    type: this.healthServeType,
+  };
 
-        this.$router.push("/doctors");
-        useUiStore().openNotificationMessage("You Are Successfully Logged In!");
-      }
-    },
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) {
+    requestData.email = identifier;
+  } else {
+    requestData.phone = identifier;
+  }
+
+  const res = await useAuthStore().LoginApiCall(requestData);
+  if (res) {
+    localStorage.setItem("hospital_id", res?.healthServe?.id);
+    localStorage.setItem("access_token", res?.healthServe?.accessToken);
+
+    this.$router.push("/doctors");
+    useUiStore().openNotificationMessage("You Are Successfully Logged In!");
+  }
+},
 
     async onRegister() {
       const isValid = await this.$refs.form.validate();

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Gym = ({ serviceData }) => {
+const Gym = ({ serviceData,totalItems }) => {
   const [gymList, setGymList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +26,7 @@ const Gym = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Gyms Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {gymList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((gym) => (
@@ -70,7 +70,7 @@ const Gym = ({ serviceData }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/Gym/${gym._id}`)
+                  navigate.push(`/detail/gym/${gym._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >

@@ -115,42 +115,42 @@ const ServicePage = () => {
     }
   };
 
-  const renderServiceComponent = () => {
+  const renderServiceComponent = (totalItems) => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
-        return <Ambulance serviceData={serviceData} />;
+        return <Ambulance serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.HOSPITAL:
-        return <Hospital serviceData={serviceData} />;
+        return <Hospital serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.VATENARY:
-        return <Vatenary serviceData={serviceData} />;
+        return <Vatenary serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.EMERGENCY:
-        return <Emergency serviceData={serviceData} />;
+        return <Emergency serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.GYM:
-        return <Gym serviceData={serviceData} />;
+        return <Gym serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.YOGA:
-        return <Yoga serviceData={serviceData} />;
+        return <Yoga serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.MEDITATION:
-        return <CommercialMeditation serviceData={serviceData} />;
+        return <CommercialMeditation serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.NASHA_MUKTI:
-        return <NashamuktiKendra serviceData={serviceData} />;
+        return <NashamuktiKendra serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.MEDICAL_STORE:
-        return <MedicalStore serviceData={serviceData} />;
+        return <MedicalStore serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
-        return <NursingCollege serviceData={serviceData} />;
+        return <NursingCollege serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.BLOOD_BANK:
-        return <BloodBank serviceData={serviceData} />;
+        return <BloodBank serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.PHYSIOTHERAPIST:
-        return <Physiotherapist serviceData={serviceData} />;
+        return <Physiotherapist serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.BLOOD_DONOR:
-        return <BloodDonor serviceData={serviceData} />;
+        return <BloodDonor serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.NURSE:
-        return <Nurse serviceData={serviceData} />;
+        return <Nurse serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.RADIOLOGIST:
-        return <Radiologist serviceData={serviceData} />;
+        return <Radiologist serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.LABORATORY:
-        return <Laboratory serviceData={serviceData} />;
+        return <Laboratory serviceData={serviceData} totalItems={totalItems}/>;
       case serviceTypes.IVFCLINIC:
-        return <IvfClinic serviceData={serviceData} />
+        return <IvfClinic serviceData={serviceData} totalItems={totalItems}/>
       default:
         return <div>Service not found</div>;
     }
@@ -226,7 +226,7 @@ const ServicePage = () => {
           </div>
           
           <div className="lg:w-[66%]">
-            {renderServiceComponent()}
+            {renderServiceComponent(totalItems)}
             {totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}

@@ -13,13 +13,13 @@ const getStarIcons = (avgRating) => {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-2xl" />);
+        stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />);
     }
     if (hasHalfStar) {
-        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-2xl" />);
+        stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />);
     }
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<FaRegStar key={`empty-${i}`} className="text-white text-2xl" />);
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />);
     }
     return stars;
 };
@@ -62,7 +62,7 @@ const VetHeroSection = ({
             {/* Right: Text Content */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {data?.name ?? "Dummy Name"} , {data?.locality ?? "Dummy City"}
+                    {data?.name ?? "Dummy Name"}
                 </h2>
                 <p className="text-white/90 text-lg max-w-xl">
                     {healthProfile?.introduction}

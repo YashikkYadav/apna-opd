@@ -808,7 +808,15 @@ export default {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
-
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+      }
 
       if (profile) {
         console.log(res);
@@ -819,10 +827,7 @@ export default {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = hs?.address || "";
-        this.form.city = hs?.city || "";
-        this.form.locality = hs?.locality || "";
-        this.form.state = hs?.state || "";
+      
         this.form.pincode = hs?.pincode || "";
         this.form.website = profile.website || '';
         this.form.keyFeatures = (profile.keyFeatures || [])
