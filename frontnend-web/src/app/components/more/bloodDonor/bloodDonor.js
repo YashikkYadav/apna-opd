@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const BloodDonar = ({ serviceData }) => {
+const BloodDonar = ({ serviceData,totalItems }) => {
   const [bloodBankList, setBloodBankList] = useState([]);
   const navigate = useRouter();
 

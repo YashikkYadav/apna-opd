@@ -26,7 +26,7 @@ const BloodBank = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Blood Banks Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {bloodBankList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((bloodBank) => (

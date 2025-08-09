@@ -7,7 +7,8 @@ export class AxiosInvoice {
     }
 
     InvoicesList(doctorId) {
-        return this.apiClient.get(`/${doctorId}/enquiry`)
+        console.log("m",doctorId)
+        return this.apiClient.get(`/${doctorId}/enquiry/`)
     }
 
     InvoicesAdd(doctorId, payload) {

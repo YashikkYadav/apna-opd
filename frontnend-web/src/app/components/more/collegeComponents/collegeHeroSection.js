@@ -70,7 +70,7 @@ const CollegeHeroSection = ({
             {/* Right: College Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {data?.name} , {data?.location}
+                    {data?.name}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">

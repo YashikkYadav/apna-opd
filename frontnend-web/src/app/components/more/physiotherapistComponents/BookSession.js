@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useParams } from 'next/navigation';
 import axios from "axios";
 
@@ -15,6 +15,22 @@ export default function FreeTrialModal({ isOpen, onClose }) {
     const [generatedOtp, setGeneratedOtp] = useState("");
     const [verified, setVerified] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [msg, setMsg] = useState("")
+
+    useEffect(() => {
+        if (isOpen) {
+            setName("");
+            setEmail("");
+            setPhone("");
+            setMessage("");
+            setOtpSent(false);
+            setOtp("");
+            setGeneratedOtp("");
+            setVerified(false);
+            setSubmitted(false);
+            setMsg("");
+        }
+    }, [isOpen]);
 
     const sendOtp = () => {
         if (!phone) return alert("Please enter your phone number.");
@@ -27,9 +43,9 @@ export default function FreeTrialModal({ isOpen, onClose }) {
     const verifyOtp = () => {
         if (otp === generatedOtp) {
             setVerified(true);
-            alert("Phone Verified!");
+            setMsg("Phone Verified!");
         } else {
-            alert("Invalid OTP. Please try again.");
+            setMsg("Invalid OTP. Please try again.");
         }
     };
 
@@ -42,7 +58,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             name,
             phone,
             date: new Date().toISOString(),
-            enquiry:"991"
+            enquiry: "991"
         };
 
         try {
@@ -56,12 +72,10 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                 }
             );
 
-            if (!res.ok) throw new Error("Failed to submit enquiry");
-            const responseData = await res.json();
-            console.log("Submitted:", responseData);
-            // Optionally route: router.push(responseData.redirectUrl)
+            console.log("Submitted:", res.data);
+            // Optional: router.push(res.data.redirectUrl)
         } catch (err) {
-            console.error("Submission error:", err);
+            console.error("Submission error:", err?.response?.data || err.message);
             alert("Something went wrong. Try again.");
         }
     };
@@ -116,22 +130,30 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                         </div>
 
                         {otpSent && (
-                            <div className="flex gap-2 mb-3">
-                                <input
-                                    type="text"
-                                    placeholder="Enter OTP"
-                                    value={otp}
-                                    className="flex-1 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-                                    onChange={(e) => setOtp(e.target.value)}
-                                />
-                                <button
-                                    onClick={verifyOtp}
-                                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-                                >
-                                    Verify
-                                </button>
+                            <div className="mb-3">
+                                <div className="flex gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter OTP"
+                                        value={otp}
+                                        className="flex-1 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                                        onChange={(e) => setOtp(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={verifyOtp}
+                                        className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+                                    >
+                                        Verify
+                                    </button>
+                                </div>
+                                {msg && (
+                                    <p className={`text-sm font-medium ${msg === "Phone Verified!" ? "text-green-600" : "text-red-600"}`}>
+                                        {msg}
+                                    </p>
+                                )}
                             </div>
                         )}
+
 
                         <button
                             disabled={!verified}

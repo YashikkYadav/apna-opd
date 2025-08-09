@@ -72,7 +72,6 @@ const HeroSection = ({
             {/* Info */}
             <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
                 <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">{name}</h1>
-                {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
                     <div

@@ -101,7 +101,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
                 {/* Action Buttons */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                     <button
-                        onClick={() => router.push(`/detail/pharmacy/${data?.name}/MedicineOrder`)}
+                        onClick={() => router.push(`/detail/medical_store/${data?.name}/MedicineOrder`)}
                         className="bg-white text-green-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
                         🛒 Order Medicines
                     </button>

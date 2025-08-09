@@ -333,74 +333,68 @@ const deleteHealthServe = async (healthServeId) => {
   }
 };
 
-const getHealthServeList = async (page, location, type) => {
+const getHealthServeList = async (page = 1, location, type) => {
   try {
     const limit = 5;
     const skip = (page - 1) * limit;
 
+    // Build filter
     const filter = {};
 
     const extractCity = (rawLocation) => {
       if (!rawLocation) return "";
-
-      return rawLocation
-        .toLowerCase()
-        .replace(/^the\s+/i, "")
-        .split(",")[0]
-        .trim();
+      return rawLocation.toLowerCase().replace(/^the\s+/i, "").split(",")[0].trim();
     };
 
-    location = extractCity(location);
-    if (location) {
-      filter.location = { $regex: new RegExp(location, "i") };
+    const city = extractCity(location);
+    if (city) {
+      filter.location = { $regex: new RegExp(city, "i") };
     }
 
     if (type) {
       filter.type = type;
     }
-    let healthServeProfileList;
-    let total;
 
-    if (type === "hospital" || type === "blood_donor") {
-      console.log(page);
-      if (!page) {
-        healthServeProfileList = await HealthServe.find(filter);
-      } else {
-        healthServeProfileList = await HealthServe.find(filter)
-          .skip(skip)
-          .limit(limit);
-      }
-      total = await HealthServe.countDocuments(filter);
+    // Determine aggregation or direct query
+    const useAggregation = type !== "hospital" && type !== "blood_donor";
+
+    let healthServeProfileList = [];
+    let total = 0;
+
+    if (useAggregation) {
+      const aggregationPipeline = [
+        { $match: filter },
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: "healthserveprofiles",
+            localField: "_id",
+            foreignField: "healthServeId",
+            as: "profiles",
+          },
+        },
+      ];
+
+      // Correct total count: needs separate pipeline without skip/limit
+      const totalCountPipeline = [{ $match: filter }, { $count: "count" }];
+
+      const [data, countResult] = await Promise.all([
+        HealthServe.aggregate(aggregationPipeline),
+        HealthServe.aggregate(totalCountPipeline),
+      ]);
+
+      healthServeProfileList = data;
+      total = countResult[0]?.count || 0;
     } else {
-      if (!page) {
-        healthServeProfileList = await HealthServe.aggregate([
-          { $match: filter },
-          {
-            $lookup: {
-              from: "healthserveprofiles",
-              localField: "_id",
-              foreignField: "healthServeId",
-              as: "profiles",
-            },
-          },
-        ]);
-        total = healthServeProfileList.length;
-      } else {
-        healthServeProfileList = await HealthServe.aggregate([
-          { $match: filter },
-          { $skip: skip },
-          { $limit: limit },
-          {
-            $lookup: {
-              from: "healthserveprofiles",
-              localField: "_id",
-              foreignField: "healthServeId",
-              as: "profiles",
-            },
-          },
-        ]);
-        total = healthServeProfileList.length;
-      }
+      const [data, count] = await Promise.all([
+        HealthServe.find(filter).skip(skip).limit(limit),
+        HealthServe.countDocuments(filter),
+      ]);
+
+      healthServeProfileList = data;
+      total = count;
+      
     }
 
     return {
@@ -413,10 +407,12 @@ const getHealthServeList = async (page, location, type) => {
   } catch (error) {
     return {
       statusCode: 500,
-      error: error,
+      error: error.message || error,
     };
   }
 };
+
+
 
 const getDoctors = async (hospitalId) => {
   try {

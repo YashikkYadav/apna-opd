@@ -75,17 +75,17 @@ const getAllEnquiries = async (
         error: "HealthServeId is required",
       };
     }
-
+    
     const healthServe = await HealthServeProfile.findOne({healthServeId});
-
+    
     if (!healthServe) {
       return {
         statusCode: 404,
         error: "Health Serve not found",
       };
     }
-
-    let searchFilter = { healthServeId: healthServe._id };
+    
+    let searchFilter = { healthServeId };
 
     if (searchQuery) {
       searchFilter.$or = [
@@ -102,7 +102,7 @@ const getAllEnquiries = async (
     //   .limit(limitNumber);
 
     const enquiries = await Enquiry.find(searchFilter);
-
+    console.log("k",enquiries)
     return {
       statusCode: 200,
       enquiries,

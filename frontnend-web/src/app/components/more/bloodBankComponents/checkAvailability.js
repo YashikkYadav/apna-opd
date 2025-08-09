@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 
-export default function BookTest({ isOpen, onClose }) {
+export default function CheckAvailability({ isOpen, onClose }) {
     const params = useParams();
     const id = params.id;
     const [name, setName] = useState("");
@@ -32,7 +32,6 @@ export default function BookTest({ isOpen, onClose }) {
             setMsg("");
         }
     }, [isOpen]);
-
 
     const sendOtp = () => {
         if (!phone) return alert("Please enter your phone number.");
@@ -82,7 +81,6 @@ export default function BookTest({ isOpen, onClose }) {
         }
     };
 
-
     if (!isOpen) return null;
 
     return (
@@ -90,7 +88,7 @@ export default function BookTest({ isOpen, onClose }) {
             <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-blue-200">
                 {!submitted ? (
                     <>
-                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Book a Test</h2>
+                        <h2 className="text-2xl font-bold text-blue-700 mb-4">Check Availability</h2>
 
                         <input
                             type="text"
@@ -175,7 +173,7 @@ export default function BookTest({ isOpen, onClose }) {
                     <div className="text-center space-y-4">
                         <h2 className="text-2xl font-bold text-blue-700">Thank you!</h2>
                         <p className="text-gray-600">
-                            Thanks for booking the Test. We’ll update you further.
+                            Thanks for booking the Session. We’ll update you further.
                         </p>
                         <button
                             onClick={onClose}
