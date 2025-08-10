@@ -14,12 +14,14 @@ import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 import { useState } from "react";
-import AppointmentModal from "../../common-components/AppointmentModal";
+import FreeTrialModal from "./BookSession";
+import { CalendarPlus } from "lucide-react";
 
 export default function NurseFeatureCard({ NurseData, userData, specs }) {
-  const { rating, nurseType, profileImage } = NurseData || {};
+
+  const { rating, nurseType} = NurseData || {};
   const { name, phone } = userData || {};
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const features = [
     {
@@ -115,40 +117,40 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
               </div>
             ))}
           </div>
-          {specs === "doctorId" && (
+          {specs === "nursing_staff" && (
             <div className="mt-2 bg-green-500 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
-              ₹{appointmentFee} consultationFee
+              ₹{NurseData?.perVisitCharges} consultationFee
             </div>
           )}
           {/* Call Now Button */}
-          <button
-            className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            onClick={() => {
-              if (window.confirm(`Do you want to call ${name}?`)) {
-                window.location.href = `tel:${phone}`;
-              }
-            }}
-          >
-            <FaPhoneAlt className="text-2xl" />
-            Call Now
-          </button>
-          <button
-            className="mt-4 flex items-center gap-3 bg-[#34D399] hover:bg-[#059669] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            onClick={() => setShowAppointmentModal(true)}
-          >
-            <FaRegCalendarCheck className="text-2xl" />
-            Appointment
-          </button>
+          <div className="flex flex-wrap gap-7">
+            <button
+              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+              onClick={() => {
+                if (window.confirm(`Do you want to call ${name}?`)) {
+                  window.location.href = `tel:${phone}`;
+                }
+              }}
+            >
+              <FaPhoneAlt className="text-2xl" />
+              Call Now
+            </button>
+            <button
+              onClick={() => setModalOpen(true)}
+              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+            >
+              <CalendarPlus className="w-5 h-5" /> Book Session
+            </button>
+          </div>
+          <FreeTrialModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+          />
         </div>
         {/* Background circles for effect */}
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
         <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
       </motion.div>
-      <AppointmentModal
-        doctorDetails={NurseData}
-        visible={showAppointmentModal}
-        onClose={() => setShowAppointmentModal(false)}
-      />
     </>
   );
 }
