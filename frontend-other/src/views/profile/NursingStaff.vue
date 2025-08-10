@@ -12,15 +12,15 @@
           </v-toolbar>
           <v-row>
             <v-col cols="12" sm="12">
-              <v-textarea
-                v-model="form.introduction"
-                ref="introductionRef"
-                label="Introduction"
+              <v-text-field
+                v-model="form.nurseType"
+                ref="nurseTypeRef"
+                label="Nurse Type"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
               >
-              </v-textarea>
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -31,6 +31,23 @@
                 type="number"
                 label="Experience"
                 :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.rating"
+                ref="ratingRef"
+                type="number"
+                label="Nurse Rating"
+                :rules="[rules.required]"
+                :min="1"
+                :max="5"
+                step="0.1"
                 variant="outlined"
                 dense
               >
@@ -640,7 +657,8 @@ export default {
         timeout: 4000,
       },
       form: {
-        introduction: "",
+        nurseType: "",
+        rating: null,
         experience: null,
         faqs: [],
         about: "",
@@ -657,7 +675,7 @@ export default {
         languages: [],
         testimonials: [],
         googleMapLink: "",
-        perVisitCharges: "",
+        perVisitCharges: null,
         areaCovered: "",
         shiftFlexibility: "",
         bookingType: "",
@@ -897,7 +915,8 @@ export default {
           })),
         ];
         const hs = res?.healthServeProfileData?.healthServeUser;
-        this.form.introduction = profile.introduction || "";
+        this.form.nurseType = profile.nurseType || "";
+        this.form.rating = profile.rating || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         this.form.address = hs?.address || "";

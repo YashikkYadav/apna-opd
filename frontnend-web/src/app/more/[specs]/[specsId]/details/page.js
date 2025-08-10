@@ -9,13 +9,17 @@ import Loader from "../../../../components/common-components/Loader";
 import axiosInstance from "@/app/config/axios";
 import FullDetailsPage from "@/app/components/more/hospital/hospitalDetail";
 import axios from "axios";
+
 const DetailsPage = () => {
   const params = useParams();
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
-  const specs = params.specs;
+  let specs = params.specs;
   const specsId = params.specsId;
+  if(specs === 'nurse'){
+    specs = 'nursing_staff';
+  }
 
   const fetchData = async () => {
     try {

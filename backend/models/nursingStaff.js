@@ -12,7 +12,8 @@ const NursingStaffSchema = new mongoose.Schema(
     // Text fields
     about: { type: String },
     experience: { type: String },
-    introduction: { type: String },
+    nurseType: { type: String },
+    rating: {type: String},
     workingAt: { type: String },
     clients: { type: String },
     perVisitCharges: { type: String },
@@ -37,7 +38,7 @@ const NursingStaffSchema = new mongoose.Schema(
       },
     ],
 
-    workingDays: [{type: String}],
+    workingDays: [{ type: String }],
     services: [{ type: String }],
     certifications: [{ type: String }],
     languages: [{ type: String }],
