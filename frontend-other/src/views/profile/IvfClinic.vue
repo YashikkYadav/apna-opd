@@ -824,17 +824,20 @@ export default {
 
       if (profile) {
         this.images = profile.galleryImages;
+        
+        this.form.website = profile.website || '';
 
         const hs = profile.healthServeId;
-        console.log('asdasdsd',
+        console.log(
+          "asdasdsd",
 
-        hs?.address,
-hs?.city,
-hs?.locality,
-hs?.state,
-hs?.pincode,
-        )
-this.form.website = profile.website || '';
+          hs?.address,
+          hs?.city,
+          hs?.locality,
+          hs?.state,
+          hs?.pincode
+        );
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
