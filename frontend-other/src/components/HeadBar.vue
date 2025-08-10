@@ -38,6 +38,8 @@ export default {
     profileLink() {
       console.log("User Type:", this.userType);
       switch (this.userType) {
+        case "nursing_staff":
+          return "/profile/nursing_staff";
         case "physiotherapist":
           return "/profile/physiotherapist";
         case "laboratory":
@@ -50,7 +52,7 @@ export default {
           return "/profile/vetenary";
         case "gym":
           return "/profile/gym";
-         case "nursing_medical_college":
+        case "nursing_medical_college":
           return "/profile/nursing_medical_college";
         case "ivf_clinic":
           return "/profile/ivf_clinic";

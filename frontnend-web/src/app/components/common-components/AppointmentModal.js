@@ -52,13 +52,13 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [visible, doctorDetails.doctorId]);
+  }, [visible, doctorDetails?.healthServeId]);
 
   const fetchLocations = async () => {
     try {
       setIsLoading(true);
       const { locations } = await axiosInstance.get(
-        `/appointment/${doctorDetails.doctorId._id}/locations`
+        `/appointment/${doctorDetails?.healthServeId}/locations`
       );
       if (locations) {
         setLocations(locations);
@@ -75,7 +75,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     try {
       setIsLoading(true);
       const { dates } = await axiosInstance.get(
-        `/appointment/${doctorDetails.doctorId._id}/${locationId}/dates`
+        `/appointment/${doctorDetails?.healthServeId}/${locationId}/dates`
       );
       if (dates) {
         setAvailableDates(dates);
@@ -92,7 +92,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
     try {
       setIsLoading(true);
       const { timeSlots } = await axiosInstance.get(
-        `/appointment/${doctorDetails.doctorId._id}/${locationId}/date/${date}`
+        `/appointment/${doctorDetails?.healthServeId}/${locationId}/date/${date}`
       );
       if (timeSlots) {
         setTimeSlots(timeSlots);
@@ -177,7 +177,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
       let response;
       if (formData.appointmentType === "offline") {
         response = await axiosInstance.post(
-          `/appointment/${doctorDetails.doctorId._id}/book-appointment`,
+          `/appointment/${doctorDetails?.healthServeId._id}/book-appointment`,
           {
             phoneNumber: formData.phoneNumber,
             date: formData.date,
@@ -189,7 +189,7 @@ const AppointmentModal = ({ doctorDetails, visible, onClose }) => {
         );
       } else {
         response = await axiosInstance.post(
-          `/appointment/${doctorDetails.doctorId._id}/book-appointment`,
+          `/appointment/${doctorDetails?.healthServeId._id}/book-appointment`,
           {
             phoneNumber: formData.phoneNumber,
             email: formData.email,

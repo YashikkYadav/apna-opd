@@ -188,7 +188,7 @@ export const doctorDetails = {
 const ProfilePage = () => {
   return (
     <div className="pt-[80px]">
-      <DoctorFeatureCard doctorData={doctorDetails} />
+      <DoctorFeatureCard doctorData={doctorDetails} /> 
       <DoctorOverviewCar doctorData={doctorDetails} />
       <DoctorSpecialistsCard doctorData={doctorDetails} />
       <ImageGallery images={doctorDetails.images} />

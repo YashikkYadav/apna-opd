@@ -14,43 +14,41 @@ import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 import { useState } from "react";
-import AppointmentModal from "../common-components/AppointmentModal";
+import FreeTrialModal from "./BookSession";
+import { CalendarPlus } from "lucide-react";
 
-export default function DoctorFeatureCard({ doctorData, specs }) {
-  const { name, image, type, rating, reviews, appointmentFee, phone } =
-    doctorData || {};
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+export default function NurseFeatureCard({ NurseData, userData, specs }) {
+
+  const { rating, nurseType} = NurseData || {};
+  const { name, phone } = userData || {};
+  const [modalOpen, setModalOpen] = useState(false);
 
   const features = [
     {
       icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />,
-      text: "+Years Experience",
-      dynamicValue: doctorData.yearsOfService,
+      text: "+ Years Experience",
+      dynamicValue: NurseData?.experience,
     },
     {
       icon: <FaUserMd className="text-purple-400 text-2xl" />,
       text: "+ Happy Clients",
-      dynamicValue: doctorData.reviews,
+      dynamicValue: NurseData?.clients,
     },
     {
       icon: <FaRegHospital className="text-pink-400 text-2xl" />,
       text: "",
-      dynamicValue: doctorData.feature2,
+      dynamicValue: NurseData?.workingAt,
     },
     ...(specs !== "nurse"
       ? [
           {
             icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
             text: "",
-            dynamicValue: doctorData.address.city,
+            dynamicValue: NurseData?.city,
           },
         ]
       : []),
   ];
-
-  function getProfileImage(images) {
-    return images.find((image) => image.type === "profilePhoto");
-  }
 
   return (
     <>
@@ -64,12 +62,8 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
         {/* Left: Hospital Image */}
         <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
           <Image
-            src={
-              image && image.length
-                ? {image}
-                : "/images/d1.png"
-            }
-            alt={name}
+            src={`http://localhost:3001/public/${NurseData?.profileImage}`}
+            alt={`${name}` || "image"}
             width={340}
             height={340}
             className="bg-gray-300 rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
@@ -81,23 +75,34 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
             {name}
           </h2>
           <p className="text-white/80 text-xl md:text-2xl font-medium mb-4">
-            {type}
+            {nurseType}
           </p>
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4">
-            {rating &&
-              [...Array(rating)].map((_, i) => (
-                <FaStar key={i} className="text-yellow-400 text-2xl" />
-              ))}
-            {rating &&
-              [...Array(5 - rating)].map((_, i) => (
-                <FaStar key={i} className="text-gray-300 text-2xl" />
-              ))}
+            {typeof rating === "number" && rating > 0 && (
+              <>
+                {[...Array(Math.floor(rating))].map((_, i) => (
+                  <FaStar key={i} className="text-yellow-400 text-2xl" />
+                ))}
+                {rating % 1 !== 0 && (
+                  <FaStar
+                    key="half"
+                    className="text-yellow-400 text-2xl opacity-50"
+                  />
+                )}
+                {[...Array(5 - Math.ceil(rating))].map((_, i) => (
+                  <FaStar
+                    key={i + "empty"}
+                    className="text-gray-300 text-2xl"
+                  />
+                ))}
+              </>
+            )}
             <span className="text-white text-xl font-semibold ml-2">
               {rating}/5
             </span>
             <span className="text-white/70 text-lg ml-2">
-              ({reviews} reviews)
+              ({NurseData?.clients} reviews)
             </span>
           </div>
           {/* Features */}
@@ -112,40 +117,40 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
               </div>
             ))}
           </div>
-          {specs === "doctorId" && (
+          {specs === "nursing_staff" && (
             <div className="mt-2 bg-green-500 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
-              ₹{appointmentFee} consultationFee
+              ₹{NurseData?.perVisitCharges} consultationFee
             </div>
           )}
           {/* Call Now Button */}
-          <button
-            className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            onClick={() => {
-              if (window.confirm(`Do you want to call ${name}?`)) {
-                window.location.href = `tel:${phone}`;
-              }
-            }}
-          >
-            <FaPhoneAlt className="text-2xl" />
-            Call Now
-          </button>
-          <button
-            className="mt-4 flex items-center gap-3 bg-[#34D399] hover:bg-[#059669] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            onClick={() => setShowAppointmentModal(true)}
-          >
-            <FaRegCalendarCheck className="text-2xl" />
-            Appointment
-          </button>
+          <div className="flex flex-wrap gap-7">
+            <button
+              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+              onClick={() => {
+                if (window.confirm(`Do you want to call ${name}?`)) {
+                  window.location.href = `tel:${phone}`;
+                }
+              }}
+            >
+              <FaPhoneAlt className="text-2xl" />
+              Call Now
+            </button>
+            <button
+              onClick={() => setModalOpen(true)}
+              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+            >
+              <CalendarPlus className="w-5 h-5" /> Book Session
+            </button>
+          </div>
+          <FreeTrialModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+          />
         </div>
         {/* Background circles for effect */}
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
         <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
       </motion.div>
-      <AppointmentModal
-        doctorDetails={doctorData}
-        visible={showAppointmentModal}
-        onClose={() => setShowAppointmentModal(false)}
-      />
     </>
   );
 }

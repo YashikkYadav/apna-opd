@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PhysiotherapistSchema = new mongoose.Schema(
+const NursingStaffSchema = new mongoose.Schema(
   {
     healthServeId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,8 +12,16 @@ const PhysiotherapistSchema = new mongoose.Schema(
     // Text fields
     about: { type: String },
     experience: { type: String },
-    introduction: { type: String },
-    website: String,
+    nurseType: { type: String },
+    rating: {type: String},
+    workingAt: { type: String },
+    clients: { type: String },
+    perVisitCharges: { type: String },
+    areaCovered: { type: String },
+    shiftFlexibility: { type: String },
+    bookingType: { type: String },
+    workingHours: { type: String },
+
     // Location
     address: { type: String },
     locality: { type: String },
@@ -29,22 +37,16 @@ const PhysiotherapistSchema = new mongoose.Schema(
         year: { type: String },
       },
     ],
-    specialInterests: [{ type: String }],
+
+    workingDays: [{ type: String }],
+    services: [{ type: String }],
     certifications: [{ type: String }],
     languages: [{ type: String }],
-    conditionsTreated: [{ type: String }],
-    tags: [{ type: String }],
+
     faqs: [
       {
         question: { type: String },
         answer: { type: String },
-      },
-    ],
-
-    // Nested objects
-    therapyPackages: [
-      {
-        name: { type: String },
       },
     ],
 
@@ -63,4 +65,4 @@ const PhysiotherapistSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Physiotherapist", PhysiotherapistSchema);
+module.exports = mongoose.model("NursingStaff", NursingStaffSchema);

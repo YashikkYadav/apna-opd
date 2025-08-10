@@ -12,15 +12,15 @@
           </v-toolbar>
           <v-row>
             <v-col cols="12" sm="12">
-              <v-textarea
-                v-model="form.introduction"
-                ref="introductionRef"
-                label="Introduction"
+              <v-text-field
+                v-model="form.nurseType"
+                ref="nurseTypeRef"
+                label="Nurse Type"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
               >
-              </v-textarea>
+              </v-text-field>
             </v-col>
           </v-row>
           <v-row>
@@ -31,6 +31,23 @@
                 type="number"
                 label="Experience"
                 :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.rating"
+                ref="ratingRef"
+                type="number"
+                label="Nurse Rating"
+                :rules="[rules.required]"
+                :min="1"
+                :max="5"
+                step="0.1"
                 variant="outlined"
                 dense
               >
@@ -50,52 +67,6 @@
               </v-textarea>
             </v-col>
           </v-row>
-
-          <v-row>
-            <v-col>
-              <!-- Licensed By -->
-
-              <v-text-field
-                v-model="form.licensedBy"
-                label="Licensed By"
-                dense
-                variant="outlined"
-                hide-details
-                class="m-2 pa-2"
-              />
-
-              <!-- Success Rate -->
-              <v-text-field
-                v-model="form.successRate"
-                label="Success Rate"
-                dense
-                variant="outlined"
-                hide-details
-                class="m-2 pa-2"
-              />
-            </v-col>
-            <v-col>
-              <!-- Couples Treated -->
-              <v-text-field
-                v-model="form.couplesTreated"
-                label="Couples Treated"
-                dense
-                variant="outlined"
-                hide-details
-                class="m-2 pa-2 rounded-2"
-              />
-              <!-- Specialization -->
-              <v-text-field
-                v-model="form.specialization"
-                label="Specialization"
-                dense
-                variant="outlined"
-                hide-details
-                class="m-2 pa-2"
-              />
-            </v-col>
-          </v-row>
-
           <v-row>
             <v-col cols="12" sm="6">
               <v-file-upload
@@ -150,10 +121,16 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div
+                  v-if="img.type === 'profilePhoto_image'"
+                  class="image-type"
+                >
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div
+                  v-if="img.type === 'galleryImages_image'"
+                  class="image-type"
+                >
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -163,7 +140,7 @@
         <v-card class="section-card">
           <v-toolbar
             class="mb-4"
-            flatdiv
+            flat
             style="column-gap: 20px; padding: 0px 20px"
           >
             <v-toolbar-title class="ml-3">Address</v-toolbar-title>
@@ -222,23 +199,6 @@
           </v-row>
         </v-card>
 
-        <v-card>
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-          </v-toolbar>
-          <v-text-field
-            class="pa-4"
-            v-model="form.website"
-            label="Website URL"
-            type="url"
-            placeholder="https://example.com"
-          />
-        </v-card>
-
         <!-- tags -->
         <v-card class="section-card">
           <v-toolbar
@@ -246,13 +206,50 @@
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+            <v-toolbar-title class="ml-3">Happy Clients</v-toolbar-title>
           </v-toolbar>
 
-          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
+          <v-text-field
+            v-model="form.clients"
+            label="No. of Happy Clients"
+            dense
+            outlined
+            hide-details
+            class="mb-3 mx-4"
+          ></v-text-field>
 
+          <!-- No delete button needed for clients, as it's not an array -->
+        </v-card>
+
+        <v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Working At</v-toolbar-title>
+          </v-toolbar>
+          <v-text-field
+            class="pa-4"
+            v-model="form.workingAt"
+            label="Hospital"
+            type="text"
+            placeholder=""
+          />
+        </v-card>
+
+        <!-- EDUCATION -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Education</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addEducation">+ Add Education</v-btn>
           <div
-            v-for="(tag, index) in form.tags"
+            v-for="(edu, index) in form.education"
             :key="index"
             class="mb-4"
             style="padding: 20px"
@@ -266,16 +263,28 @@
               "
             >
               <v-text-field
-                v-model="form.tags[index]"
-                label="Tag"
+                v-model="edu.degree"
+                label="Degree"
                 dense
                 outlined
-                hide-details
                 class="mb-3"
               ></v-text-field>
-
+              <v-text-field
+                v-model="edu.institution"
+                label="Institution"
+                dense
+                outlined
+                class="mb-3"
+              ></v-text-field>
+              <v-text-field
+                v-model="edu.year"
+                label="Year"
+                dense
+                outlined
+                class="mb-3"
+              ></v-text-field>
               <div class="d-flex justify-end">
-                <v-btn icon color="error" @click="removeTag(index)">
+                <v-btn icon color="error" @click="removeEducation(index)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </div>
@@ -283,83 +292,177 @@
           </div>
         </v-card>
 
-        <!-- Degrees -->
+        <!-- Avalavility & charges -->
         <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Why Choose Us</v-toolbar-title>
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Avalavility & Charges</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-4" @click="addWhyChoose">+ Add Reason</v-btn>
+
           <div
-            v-for="(item, index) in form.whyChoose"
-            :key="index"
-            class="mb-4 pa-4"
-            style="border: 1px solid #ddd; border-radius: 8px"
+            style="
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              margin-bottom: 16px;
+              margin: 16px;
+              padding: 16px;
+            "
           >
             <v-text-field
-              v-model="item.title"
-              label="Title"
+              v-model.number="form.perVisitCharges"
+              label="Per Visit Charges"
+              type="number"
               dense
               outlined
-              class="mb-3"
-            />
-            <v-textarea
-              v-model="item.description"
-              label="Description"
+              hide-details
+              class="mb-7"
+            ></v-text-field>
+            <v-text-field
+              v-model="form.areaCovered"
+              label="Area covered"
               dense
               outlined
-              auto-grow
-              class="mb-3"
-            />
-            <div class="d-flex justify-end">
-              <v-btn icon color="error" @click="removeWhyChoose(index)">
+              hide-details
+              class="mb-7"
+            ></v-text-field>
+            <v-select
+              v-model="form.shiftFlexibility"
+              :items="['Yes', 'No']"
+              label="Shift Flexibility"
+              dense
+              outlined
+              hide-details
+              class="mb-7"
+            ></v-select>
+            <v-select
+              v-model="form.bookingType"
+              :items="['Home Visit', 'Hospital Duty', 'Both']"
+              label="Booking Type"
+              dense
+              outlined
+              hide-details
+              class="mb-7"
+            ></v-select>
+            <v-row class="mb-7">
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="form.workingHours"
+                  label="Working Hours (e.g. 9:00 AM - 6:00 PM)"
+                  dense
+                  outlined
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  v-model="form.workingDays"
+                  :items="[
+                    'Monday',
+                    'Tuesday',
+                    'Wednesday',
+                    'Thursday',
+                    'Friday',
+                    'Saturday',
+                    'Sunday',
+                  ]"
+                  label="Working Days"
+                  multiple
+                  dense
+                  outlined
+                  hide-details
+                ></v-select>
+              </v-col>
+            </v-row>
+            <!-- Remove button not needed for this section -->
+          </div>
+        </v-card>
+
+        <!-- SERVICE PROVIDED -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Service Provided</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addServices">+ Add Service</v-btn>
+
+          <div
+            v-for="(interest, index) in form.services"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.services[index]"
+              label="Service"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeSpecialInterest(index)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </div>
           </div>
         </v-card>
 
+        <!-- CERTIFICATIONS -->
         <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Degrees</v-toolbar-title>
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Certifications</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-4" @click="addDegree">+ Add Degree</v-btn>
+
+          <v-btn class="mb-2" @click="addCertification"
+            >+ Add Certificate</v-btn
+          >
+
           <div
-            v-for="(degree, index) in form.degrees"
+            v-for="(cert, index) in form.certifications"
             :key="index"
-            class="mb-4 pa-4"
-            style="border: 1px solid #ddd; border-radius: 8px"
+            class="mb-4 px-4"
           >
             <v-text-field
-              v-model="degree.title"
-              label="Degree Name"
+              v-model="form.certifications[index]"
+              label="Certification"
               dense
               outlined
-              class="mb-3"
-            />
-            <v-text-field
-              v-model="degree.institution"
-              label="Institution"
-              dense
-              outlined
-              class="mb-3"
-            />
-            <div class="d-flex justify-end">
-              <v-btn icon color="error" @click="removeDegree(index)">
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeCertification(index)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </div>
           </div>
         </v-card>
 
+        <!-- LANGUAGES -->
         <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Languages Spoken</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addLanguage">+ Add Lang</v-btn>
+
+          <div
+            v-for="(lang, index) in form.languages"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.languages[index]"
+              label="Language"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeLanguage(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
+
+        <v-card class="section-card mt-6">
           <v-toolbar
             flat
             class="mb-4"
@@ -367,11 +470,11 @@
           >
             <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-4" @click="addFAQ">+ Add FAQ</v-btn>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
           <div
-            v-for="(faq, index) in form.faqs"
-            :key="index"
-            class="mb-4 pa-4"
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
             style="border: 1px solid #ddd; border-radius: 8px"
           >
             <v-text-field
@@ -379,6 +482,7 @@
               label="Question"
               dense
               outlined
+              hide-details
               class="mb-3"
             />
             <v-textarea
@@ -387,45 +491,17 @@
               dense
               outlined
               auto-grow
+              hide-details
               class="mb-3"
             />
             <div class="d-flex justify-end">
-              <v-btn icon color="error" @click="removeFAQ(index)">
+              <v-btn icon color="error" @click="removeFAQ(i)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </div>
           </div>
         </v-card>
 
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title class="ml-3">Services</v-toolbar-title>
-          </v-toolbar>
-          <v-btn class="mb-4" @click="addService">+ Add Service</v-btn>
-          <div
-            v-for="(service, index) in form.services"
-            :key="index"
-            class="mb-4 pa-4"
-            style="border: 1px solid #ddd; border-radius: 8px"
-          >
-            <v-text-field
-              v-model="service.name"
-              label="Service Name"
-              dense
-              outlined
-              class="mb-3"
-            />
-            <div class="d-flex justify-end">
-              <v-btn icon color="error" @click="removeService(index)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </div>
-          </div>
-        </v-card>
         <!-- Testimonials -->
         <v-card class="section-card">
           <v-toolbar
@@ -581,26 +657,30 @@ export default {
         timeout: 4000,
       },
       form: {
-        website: "",
-        introduction: "",
+        nurseType: "",
+        rating: null,
         experience: null,
+        faqs: [],
         about: "",
+        workingAt: "",
         address: "",
         locality: "",
         city: "",
         pincode: "",
+        clients: "",
         state: "",
-        tags: [""],
-        licensedBy: "",
-        successRate: "",
-        specialization: "",
-        couplesTreated: "",
-        whyChoose: [],
-        degrees: [],
-        faqs: [],
+        education: [{ degree: "", institution: "", year: "" }],
         services: [],
+        certifications: [],
+        languages: [],
         testimonials: [],
         googleMapLink: "",
+        perVisitCharges: null,
+        areaCovered: "",
+        shiftFlexibility: "",
+        bookingType: "",
+        workingHours: "",
+        workingDays: [],
       },
       mapDialog: false,
       map: null,
@@ -629,10 +709,12 @@ export default {
   computed: {
     sortedImages() {
       if (!Array.isArray(this.images)) return [];
-
+      // Sort: profilePhoto_image first, then galleryImages_image
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
+          return -1;
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
+          return 1;
         return 0;
       });
     },
@@ -706,48 +788,64 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
-    addWhyChoose() {
-      this.form.whyChoose.push({ title: "", description: "" });
+    addEducation() {
+      this.form.education.push({ degree: "", institution: "", year: "" });
     },
-    removeWhyChoose(index) {
-      this.form.whyChoose.splice(index, 1);
+    removeEducation(index) {
+      this.form.education.splice(index, 1);
     },
-    addTag() {
-      this.form.tags.push("");
-    },
-    removeTag(index) {
-      this.form.tags.splice(index, 1);
-    },
-    addDegree() {
-      this.form.degrees.push({ title: "", institution: "" });
-    },
-    removeDegree(index) {
-      this.form.degrees.splice(index, 1);
-    },
-
     addFAQ() {
       this.form.faqs.push({ question: "", answer: "" });
     },
-    removeFAQ(index) {
-      this.form.faqs.splice(index, 1);
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
     },
 
-    addService() {
-      this.form.services.push({ name: "" });
+    // Special Interests
+    addServices() {
+      this.form.services.push("");
     },
-    removeService(index) {
-      this.form.services.splice(index, 1);
+    removeSpecialInterest(i) {
+      this.form.services.splice(i, 1);
     },
-    getImageUrl(path) {
-      if (!path) return "";
-      return `http://localhost:3001/public/${path}`;
+
+    // Certifications
+    addCertification() {
+      this.form.certifications.push("");
     },
+    removeCertification(i) {
+      this.form.certifications.splice(i, 1);
+    },
+
+    // Languages
+    addLanguage() {
+      this.form.languages.push("");
+    },
+    removeLanguage(i) {
+      this.form.languages.splice(i, 1);
+    },
+
+    getImageUrl(img) {
+      if (!img) return "";
+      // If img is a string (new upload), return object URL
+      if (typeof img === "string") {
+        return `http://localhost:3001/public/${img}`;
+      }
+      // If img has a url property (from backend), use it
+      if (img.url) return img.url;
+      // If img has a path property, use it
+      if (img.path) return `http://localhost:3001/public/${img.path}`;
+      // If img is a File object (new upload)
+      if (img instanceof File) return URL.createObjectURL(img);
+      return "";
+    },
+
     isNotFive(type) {
       return (
         type != "insurance" &&
         type != "payments" &&
         type != "healthPackages" &&
-        type != "specialServices"
+        type != "services"
       );
     },
     openItemDialog(type) {
@@ -777,30 +875,24 @@ export default {
     async deleteImage() {
       if (this.imageToDelete) {
         const res = await useProfileStore().deleteImage(this.imageToDelete);
-
         this.images = res.images;
         this.cancelDelete();
       }
     },
     handleGalleryChange(newFiles) {
       const combined = [...this.galleryImages, ...newFiles];
-
       const uniqueFiles = Array.from(
         new Map(combined.map((file) => [file.name, file])).values()
       ).slice(0, 6);
-
       const oversized = uniqueFiles.find(
         (file) => file.size > 20 * 1024 * 1024
       );
-
       this.galleryImages = uniqueFiles;
       if (oversized) {
-        this.snackbar = {
-          message: `"${oversized.name}" exceeds 20MB limit`,
-          color: "warning",
-          show: true,
-          timeout: 4000,
-        };
+        this.snackbar.message = `"${oversized.name}" exceeds 20MB limit`;
+        this.snackbar.color = "warning";
+        this.snackbar.show = true;
+        this.snackbar.timeout = 4000;
         this.galleryImages = [];
         return;
       }
@@ -811,89 +903,77 @@ export default {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      const profile = await res.healthServeProfileData.healthServeProfile;
-      const hs=await res?.healthServeProfileData?.healthServeUser
-      console.log(res);
-      if(hs){
+      const profile = res?.healthServeProfileData?.healthServeProfile?.data;
+      if (profile) {
+        this.images = [
+          ...(profile.profilePhoto_image
+            ? [{ ...profile.profilePhoto_image, type: "profilePhoto_image" }]
+            : []),
+          ...(profile.galleryImages || []).map((img) => ({
+            ...img,
+            type: "galleryImages_image",
+          })),
+        ];
+        const hs = res?.healthServeProfileData?.healthServeUser;
+        this.form.nurseType = profile.nurseType || "";
+        this.form.rating = profile.rating || "";
+        this.form.about = profile.about || "";
+        this.form.experience = profile.experience || "";
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
-      }
-
-      if (profile) {
-        this.images = profile.galleryImages;
-        
-        this.form.website = profile.website || '';
-
-        const hs = profile.healthServeId;
-        console.log(
-          "asdasdsd",
-
-          hs?.address,
-          hs?.city,
-          hs?.locality,
-          hs?.state,
-          hs?.pincode
-        );
-        this.form.website = profile.website || "";
-        this.form.introduction = profile.introduction || "";
-        this.form.about = profile.about || "";
-        this.form.experience = profile.experience || "";
-        
-
-        this.form.licensedBy = profile.licensedBy || "";
-        this.form.successRate = profile.successRate || "";
-        this.form.specialization = profile.specialization || "";
-        this.form.couplesTreated = profile.couplesTreated || "";
-
-        this.form.whyChoose = profile.whyChoose || [];
-        this.form.degrees = profile.degrees || [];
-        this.form.faqs = profile.faqs || [];
-        this.form.services =
-          profile.services.map((item) => ({ name: item })) || [];
+        this.form.education = profile.education || [];
+        this.form.services = profile.services || [];
+        this.form.certifications = profile.certifications || [];
+        this.form.languages = profile.languages || [];
         this.form.testimonials = profile.testimonials || [];
-        this.form.tags = profile.tags || [];
+        this.form.faqs = profile.faqs || [];
+        this.form.workingDays = profile.workingDays || [];
+        this.form.clients = profile.clients || "";
+        this.form.workingAt = profile.workingAt || "";
+        this.form.perVisitCharges = profile.perVisitCharges || "";
+        this.form.areaCovered = profile.areaCovered || "";
+        this.form.shiftFlexibility = profile.shiftFlexibility || "";
+        this.form.bookingType = profile.bookingType || "";
+        this.form.workingHours = profile.workingHours || "";
       }
+      console.log(res);
+      console.log(profile);
     },
     async onSubmit() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
+        // Log every detail of the form object
+        console.log("Form details:", this.form);
+
         const formData = new FormData();
-        formData.append("website", this.form.website);
-        formData.append("about", this.form.about);
-        formData.append("experience", this.form.experience);
-        formData.append("introduction", this.form.introduction);
-        formData.append("address", this.form.address);
-        formData.append("locality", this.form.locality);
-        formData.append("city", this.form.city);
-        formData.append("pincode", this.form.pincode);
-        formData.append("state", this.form.state);
-        formData.append("licensedBy", this.form.licensedBy);
-        formData.append("successRate", this.form.successRate);
-        formData.append("specialization", this.form.specialization);
-        formData.append("couplesTreated", this.form.couplesTreated);
-
-        formData.append("whyChoose", JSON.stringify(this.form.whyChoose));
-        formData.append("degrees", JSON.stringify(this.form.degrees));
-        formData.append("faqs", JSON.stringify(this.form.faqs));
-        formData.append("services", JSON.stringify(this.form.services));
-        formData.append("testimonials", JSON.stringify(this.form.testimonials));
-        formData.append("tags", JSON.stringify(this.form.tags));
-
+        // Dynamically append all fields in form
+        Object.keys(this.form).forEach((key) => {
+          let value = this.form[key];
+          // If value is array or object, stringify it
+          if (
+            Array.isArray(value) ||
+            (typeof value === "object" && value !== null)
+          ) {
+            formData.append(key, JSON.stringify(value));
+          } else {
+            formData.append(key, value == null ? "" : value);
+          }
+        });
+        // Handle profile image and gallery images
         if (this.profileImage) {
           formData.append("profilePhoto_image", this.profileImage);
         }
-
-        this.galleryImages.forEach((file, index) => {
+        this.galleryImages.forEach((file) => {
           formData.append("galleryImages_image", file);
         });
+        // Log all FormData entries
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
         const res = await useProfileStore().addProfileData(formData);
-
         if (res) {
           this.fetchProfileData();
           this.profileImage = null;
@@ -910,52 +990,7 @@ export default {
         );
       }
     },
-    handleInputDrugHistory() {
-      if (this.isAllRowsFilled() && !this.hasEmptyRow()) {
-        this.form.about.push("");
-      }
-      this.removeEmptyRows();
-    },
-    isAllRowsFilled() {
-      return this.form.about.every((item) => item.trim() !== "");
-    },
-    hasEmptyRow() {
-      return this.form.about.some((item) => item.trim() === "");
-    },
-    removeEmptyRows() {
-      this.form.about = this.form.about.filter(
-        (item, index) =>
-          item.trim() !== "" || index === this.form.about.length - 1
-      );
-    },
-    handleLocationHistory(item, index) {
-      if (this.isLocationRowFilled(item) && !this.hasEmptyLocationRow()) {
-        this.form.locations.push({
-          name: "",
-          address: "",
-          days: [],
-          from: null,
-          to: null,
-          timeslot: null,
-        });
-      }
-      this.removeEmptyLocationRows();
-    },
-    isLocationRowFilled(item) {
-      return item.name.trim() || (item.address && item.address.trim());
-    },
-    hasEmptyLocationRow() {
-      return this.form.locations.some(
-        (drug) => !(drug.name.trim() || (drug.address && drug.address.trim()))
-      );
-    },
-    removeEmptyLocationRows() {
-      this.form.locations = this.form.locations.filter(
-        (drug, index) =>
-          this.isLocationRowFilled(drug) ||
-          index === this.form.locations.length - 1
-      );
-    },
+    // ...existing code...
 
     validateDays(value) {
       if (!value || value.length === 0) {
@@ -966,9 +1001,7 @@ export default {
   },
 };
 
-onMounted(() => {
-  this.fetchProfileData();
-});
+// Remove invalid onMounted usage (already handled in mounted hook)
 </script>
 <style scoped>
 .image-gallery {

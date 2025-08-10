@@ -18,6 +18,7 @@ const { handleHospital, gethandleHospital } = require('../utils/profileStoreData
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
 const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/profileStoreData/handleCollege')
 const { handleGym, getHandleGym } = require('../utils/profileStoreData/handleBloodBank')
+const {handleNursingStaff, getNursingStaff} = require('../utils/profileStoreData/handleNursingstaff')
 const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
@@ -405,9 +406,12 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         break;
       case 'ivf_clinic':
         result = await handleIvfClinic(req, healthServeId)
+        break;
       case 'gym':
-
         result = await handleGym(req, healthServeId)
+        break;
+      case 'nursing_staff':
+        result = await handleNursingStaff(req, healthServeId)
         break;
 
 
@@ -478,36 +482,39 @@ const getHealthServeProfileData = async (healthServeId) => {
 
     let result;
     switch (healthServeProfile.type) {
-      case 'hospital':
+      case "hospital":
         result = await gethandleHospital(healthServeId);
         break;
-      case 'physiotherapist':
+      case "physiotherapist":
         result = await gethandlePhysiotherapist(healthServeId);
         break;
-      case 'vatenary':
+      case "vatenary":
         result = await gethandleVeterinary(healthServeId);
         break;
-      case 'nursing_medical_college':
-        result = await gethandleMedicalCollege(healthServeId)
+      case "nursing_medical_college":
+        result = await gethandleMedicalCollege(healthServeId);
         break;
-      case 'blood_bank':
+      case "blood_bank":
         result = await gethandleBloodBank(healthServeId);
         break;
       // case 'physiotherapist':
       //   result = await gethandlePhysiotherapist(healthServeId)
       //   break;
-      case 'medical_store':
-        result = await gethandleMedicalStore(healthServeId)
-        break
-      case 'laboratory':
-        result = await gethandleLaboratory(healthServeId)
+      case "medical_store":
+        result = await gethandleMedicalStore(healthServeId);
         break;
-      case 'ivf_clinic':
-        result = await gethandleIvf(healthServeId)
+      case "laboratory":
+        result = await gethandleLaboratory(healthServeId);
         break;
-      case 'gym':
-        result = await getHandleGym(healthServeId)
-        break
+      case "ivf_clinic":
+        result = await gethandleIvf(healthServeId);
+        break;
+      case "gym":
+        result = await getHandleGym(healthServeId);
+        break;
+      case "nursing_staff":
+        result = await getNursingStaff(healthServeId);
+        break;
     }
 
     return {
