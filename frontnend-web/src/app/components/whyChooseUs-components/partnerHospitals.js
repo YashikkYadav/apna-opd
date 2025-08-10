@@ -82,7 +82,7 @@ These hospitals are not just names – they're pillars of trust and care in thei
               <div className="text-base md:text-lg font-bold text-gray-800 text-center mb-1">
                 {hospital.name}
               </div>
-              <div className="text-gray-400 text-sm text-center">{hospital.city}</div>
+              <div className="text-gray-400 text-sm text-center">{hospital?.city}</div>
             </motion.div>
           ))}
         </div>
