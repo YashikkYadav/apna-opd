@@ -121,7 +121,7 @@ export default function RegistrationSuccess() {
           buttonVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/thank-you')}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md transition duration-200"
           >
             Proceed Now

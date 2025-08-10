@@ -14,19 +14,19 @@ function getStarIcons(avgRating) {
 
     for (let i = 0; i < fullStars; i++) {
         stars.push(
-            <FaStar key={`full-${i}`} className="text-gray-200 text-2xl" />
+            <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
         );
     }
 
     if (hasHalfStar) {
         stars.push(
-            <FaStarHalfAlt key="half" className="text-gray-200 text-2xl" />
+            <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
         );
     }
 
     for (let i = 0; i < emptyStars; i++) {
         stars.push(
-            <FaRegStar key={`empty-${i}`} className="text-gray-400 text-2xl" />
+            <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
         );
     }
 
@@ -70,7 +70,7 @@ const CollegeHeroSection = ({
             {/* Right: College Info */}
             <div className="z-10 flex-1 space-y-6 text-center md:text-left">
                 <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-                    {data?.name} , {data?.location}
+                    {data?.name}
                 </h2>
 
                 <p className="text-white/90 text-lg max-w-xl">

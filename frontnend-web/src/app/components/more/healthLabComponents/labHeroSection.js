@@ -15,15 +15,15 @@ function getStarIcons(avgRating) {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<FaStar key={`full-${i}`} className="text-gray-300 text-2xl" />);
+        stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />);
     }
 
     if (hasHalfStar) {
-        stars.push(<FaStarHalfAlt key="half" className="text-gray-300 text-2xl" />);
+        stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />);
     }
 
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<FaRegStar key={`empty-${i}`} className="text-white text-2xl" />);
+        stars.push(<FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />);
     }
 
     return stars;
@@ -72,7 +72,6 @@ const HeroSection = ({
             {/* Info */}
             <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
                 <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">{name}</h1>
-                {/* <h2 className="text-xl md:text-2xl font-semibold mt-2">Advanced Diagnostics & Pathology</h2> */}
 
                 <div className="flex flex-wrap gap-4 my-4">
                     <div

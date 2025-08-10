@@ -368,7 +368,15 @@ const Register = () => {
             window.location.href = response.paymentUrl;
           } else {
             console.log("No payment URL, redirecting to home");
-            router.push("/");
+            console.log("qwerty",response?.healthServe?.type)
+            if(response?.healthServe?.type=="doctor"){
+
+            }
+            else if(response?.healthServe?.type=="hospital"){
+              router.push(`/thank-you?next=more/${response?.healthServe?.type}/${response?.healthServe?._id}/details`)
+            }else{
+            router.push(`/thank-you?next=detail/${response?.healthServe?.type}/${response?.healthServe?._id}`);
+            } 
           }
 
         }, 2000);

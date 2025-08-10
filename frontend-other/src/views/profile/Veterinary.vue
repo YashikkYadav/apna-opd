@@ -687,8 +687,15 @@ getImageUrl(path) {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res.healthServeProfileData.healthServeProfile.data
-      const add=res.healthServeProfileData.healthServeUser
-      console.log("r",profile)
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(hs);
+      if(hs){
+        this.form.address = hs?.address || "";
+        this.form.city = hs?.city || "";
+        this.form.locality = hs?.locality || "";
+        this.form.state = hs?.state || "";
+        this.form.pincode = hs?.pincode || "";
+      }
       if (profile) {
         console.log(res);
         this.images = profile.galleryImages||[];
@@ -698,10 +705,6 @@ getImageUrl(path) {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.address = add?.address || "";
-        this.form.city = add?.city || "";
-        this.form.locality = add?.locality || "";
-        this.form.state = add?.state || "";
         this.form.pincode = profile?.pincode || "";
 
         this.form.specialization = profile.specialization || '';

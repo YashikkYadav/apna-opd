@@ -37,6 +37,9 @@ router.use("/hospital", hospitalRoutes);
 
 router.get("/oauth2callback", async(req,res) => {
 })
+router.get("/hello-server", async(req,res)=>{
+res.status(200).send({message:'server working fine'})
+});
 
 router.use("/user", userRoutes);
 // Centralizing all the routes in one file

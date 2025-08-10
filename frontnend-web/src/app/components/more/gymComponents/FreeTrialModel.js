@@ -1,7 +1,11 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
-export default function FreeTrialModal({ isOpen, onClose,healthServeId }) {
+export default function FreeTrialModal({ isOpen, onClose, healthServeId }) {
+    const params = useParams();
+    const id = params.id;
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -11,6 +15,23 @@ export default function FreeTrialModal({ isOpen, onClose,healthServeId }) {
     const [generatedOtp, setGeneratedOtp] = useState("");
     const [verified, setVerified] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [msg, setMsg] = useState("");
+
+    useEffect(() => {
+        if (isOpen) {
+            setName("");
+            setEmail("");
+            setPhone("");
+            
+            setOtpSent(false);
+            setOtp("");
+            setGeneratedOtp("");
+            setVerified(false);
+            setSubmitted(false);
+            setMsg("");
+        }
+    }, [isOpen]);
+
 
     const sendOtp = () => {
         if (!phone) return alert("Please enter your phone number.");
@@ -29,30 +50,37 @@ export default function FreeTrialModal({ isOpen, onClose,healthServeId }) {
         }
     };
 
-    const handleSubmit =async () => {
+    const handleSubmit = async () => {
         if (!verified) return alert("Please verify your phone number first.");
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HEALTHSERVE_ID}/enquiry/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    phone,
-                    plan: selectedPlan,
-                    source: "Free Trial Modal",
-                }),
-            });
 
-            if (!res.ok) throw new Error("Failed to submit enquiry");
-            setSubmitted(true);
+        setSubmitted(true);
+
+        const payload = {
+            name,
+            phone,
+            date: new Date().toISOString(),
+            enquiry: "991"
+        };
+
+        try {
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/enquiry/`,
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            console.log("Submitted:", res.data);
+            // Optional: router.push(res.data.redirectUrl)
         } catch (err) {
-            console.error("Enquiry submit failed", err);
-            alert("Something went wrong. Please try again later.");
+            console.error("Submission error:", err?.response?.data || err.message);
+            alert("Something went wrong. Try again.");
         }
     };
+
 
     if (!isOpen) return null;
 
@@ -96,20 +124,27 @@ export default function FreeTrialModal({ isOpen, onClose,healthServeId }) {
                         </div>
 
                         {otpSent && (
-                            <div className="flex gap-2 mb-3">
-                                <input
-                                    type="text"
-                                    placeholder="Enter OTP"
-                                    value={otp}
-                                    className="flex-1 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-                                    onChange={(e) => setOtp(e.target.value)}
-                                />
-                                <button
-                                    onClick={verifyOtp}
-                                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-                                >
-                                    Verify
-                                </button>
+                            <div className="mb-3">
+                                <div className="flex gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter OTP"
+                                        value={otp}
+                                        className="flex-1 px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                                        onChange={(e) => setOtp(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={verifyOtp}
+                                        className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+                                    >
+                                        Verify
+                                    </button>
+                                </div>
+                                {msg && (
+                                    <p className={`text-sm font-medium ${msg === "Phone Verified!" ? "text-green-600" : "text-red-600"}`}>
+                                        {msg}
+                                    </p>
+                                )}
                             </div>
                         )}
 

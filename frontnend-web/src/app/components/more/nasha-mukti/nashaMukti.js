@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const NashaMukti = ({ serviceData }) => {
+const NashaMukti = ({ serviceData,totalItems }) => {
   const [nashaMuktiList, setNashaMuktiList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,7 @@ const NashaMukti = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Nasha Mukti Kendras Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {nashaMuktiList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((kendra) => (

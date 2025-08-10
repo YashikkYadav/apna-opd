@@ -93,10 +93,10 @@ export default {
   methods: {
     async fetchInvoices() {
       const res = await useInvoiceStore().getAllInvoicesApiCall()
-      console.log('Res enquiry: ', res.enquiries);
+      console.log('Res enquiry: ', res);
       if (res?.enquiries) {
-        this.allInvoices = res.enquiries;
-        this.invoice = res.enquiries.map((invoice) => ({
+        this.allInvoices = res?.enquiries;
+        this.invoice = res?.enquiries?.map((invoice) => ({
           "InvoiceID": invoice._id,
           // Amount: invoice.totalAmount,
           // Status: invoice.paymentStatus,
@@ -138,7 +138,7 @@ export default {
         additionalDiscount: data[0].additionalDiscountAmount,
         paymentMode: data[0].paymentMode,
         patientNote: data[0].patientNote,
-        services: data[0].items.map((item) => ({
+        services: data[0].items?.map((item) => ({
           service: item.service,
           qty: item.quantity,
           amount: item.amount,

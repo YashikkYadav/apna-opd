@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Laboratory = ({ serviceData }) => {
+const Laboratory = ({ serviceData,totalItems }) => {
   const [laboratoryList, setRadiologistList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,7 +26,7 @@ const Laboratory = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Top Laboratories Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {laboratoryList?.length} results
+        Showing {currentItems?.length} of {totalItems} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((laboratory) => (
@@ -66,7 +66,7 @@ const Laboratory = ({ serviceData }) => {
                 Fees: ${laboratory.price || "N/A"}
               </h4>
               <button
-                onClick={() => navigate.push(`/detail/healthlab/${laboratory._id}`)}
+                onClick={() => navigate.push(`/detail/laboratory/${laboratory._id}`)}
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
                 Details

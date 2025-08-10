@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import CallNow from './CallNow';
+import CheckAvailability from './checkAvailability';
 import { useState } from 'react';
 
 function getStarIcons(avgRating) {
@@ -14,19 +15,19 @@ function getStarIcons(avgRating) {
 
   for (let i = 0; i < fullStars; i++) {
     stars.push(
-      <FaStar key={`full-${i}`} className="text-gray-200 text-2xl" />
+      <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
     );
   }
 
   if (hasHalfStar) {
     stars.push(
-      <FaStarHalfAlt key="half" className="text-gray-200 text-2xl" />
+      <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
     );
   }
 
   for (let i = 0; i < emptyStars; i++) {
     stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-gray-400 text-2xl" />
+      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
     );
   }
 
@@ -41,6 +42,8 @@ const HeroSection = ({
   console.log(healthProfile?.profilePhoto)
 
   const user = data
+
+  const [openModel,setModalOpen]=useState(false)
 
   const [callModalOpen, setCallModalOpen] = useState(false);
   const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
@@ -74,7 +77,7 @@ const HeroSection = ({
       {/* Right: Text Content */}
       <div className="z-10 flex-1 space-y-5 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
-          {user?.name ?? "Dummy Name"}, {user?.locality ?? "Dummy City"}
+          {user?.name ?? "Dummy Name"}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">
@@ -105,10 +108,11 @@ const HeroSection = ({
         {/* Enlarged Action Buttons */}
         <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
           <button
-            onClick={() => setCallModalOpen(true)}
+            onClick={() => setModalOpen(true)}
             className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
             🔍 Check Availability
           </button>
+          <CheckAvailability isOpen={openModel} onClose={() => setModalOpen(false)} />
           <button
             onClick={() => setCallModalOpen(true)}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">

@@ -812,30 +812,33 @@ export default {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
-
-      if (profile) {
-        console.log(res);
-        this.images = profile.galleryImages;
-
-        const hs = profile.healthServeId;
-        console.log(
-          "asdasdsd",
-
-          hs?.address,
-          hs?.city,
-          hs?.locality,
-          hs?.state,
-          hs?.pincode
-        );
-        this.form.website = profile.website || "";
-        this.form.introduction = profile.introduction || "";
-        this.form.about = profile.about || "";
-        this.form.experience = profile.experience || "";
+      const hs=await res?.healthServeProfileData?.healthServeUser
+      console.log(res);
+      if(hs){
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || "";
+      }
+
+      if (profile) {
+        this.images = profile.galleryImages;
+
+        const hs = profile.healthServeId;
+        console.log('asdasdsd',
+
+        hs?.address,
+hs?.city,
+hs?.locality,
+hs?.state,
+hs?.pincode,
+        )
+this.form.website = profile.website || '';
+        this.form.introduction = profile.introduction || "";
+        this.form.about = profile.about || "";
+        this.form.experience = profile.experience || "";
+        
 
         this.form.licensedBy = profile.licensedBy || "";
         this.form.successRate = profile.successRate || "";
