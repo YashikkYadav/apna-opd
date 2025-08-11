@@ -826,6 +826,7 @@ export default {
     },
 
     getImageUrl(img) {
+      console.log('img',img)
       if (!img) return "";
       // If img is a string (new upload), return object URL
       if (typeof img === "string") {
