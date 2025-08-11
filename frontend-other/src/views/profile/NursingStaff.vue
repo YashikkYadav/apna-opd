@@ -911,7 +911,8 @@ export default {
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+                this.form.pincode = hs?.pincode || profile?.pincode || "";
+
       }
       if (profile) {
         this.images = [
@@ -928,7 +929,7 @@ export default {
         this.form.rating = profile.rating || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.pincode = hs?.pincode || "";
+        // this.form.pincode = hs?.pincode || "";
         this.form.education = profile.education || [];
         this.form.services = profile.services || [];
         this.form.certifications = profile.certifications || [];

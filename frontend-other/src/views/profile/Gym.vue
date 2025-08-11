@@ -1075,6 +1075,9 @@ addPlan() {
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
+                this.form.pincode = hs?.pincode || profile?.pincode || "";
+
+
       }
 
       if (profile) {
@@ -1087,7 +1090,7 @@ addPlan() {
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         
-        this.form.pincode = profile?.pincode || "";
+        // this.form.pincode = profile?.pincode || "";
         this.form.established = profile.established || '';
          this.form.faqs = profile.faqs || [];
         this.form.operatingHours=profile.operatingHours || '';
