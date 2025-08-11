@@ -34,7 +34,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
     const features = data?.features?.filter(f => f.enabled) || [];
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
-    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+    const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r?.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
     const reviewCount = healthProfile?.testimonials?.length || 0;
     return (
         <motion.section
