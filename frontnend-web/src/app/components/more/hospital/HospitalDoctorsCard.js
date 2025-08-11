@@ -465,7 +465,7 @@ function DoctorCard({ doctor }) {
       <div className="flex items-center gap-4">
         <div className="relative w-20 h-20">
           <img
-            src={doctor?.doctorProfile.images ? getDoctorProfileImage(doctor?.doctorProfile?.images) : ""}
+            src={doctor?.doctorProfile?.images ? getDoctorProfileImage(doctor?.doctorProfile?.images) : ""}
             alt={doctor?.name}
             className="w-full h-full rounded-full object-cover border-2 border-blue-700"
           />

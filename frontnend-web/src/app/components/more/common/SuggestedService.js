@@ -56,12 +56,12 @@ const SuggestedService = ({ serviceType, currentId }) => {
             <div className="flex flex-col lg:flex-row w-full">
               <div className="lg:mr-[10px] xl:mr-[32px]">
                 <Image
-                  src={service.images?.[0] || "/images/image_placeholder.svg"}
+                  src={service?.images?.[0] || "/images/image_placeholder.svg"}
                   width={200}
                   height={200}
                   alt={service.name}
                   className="rounded-[8px] w-full object-cover lg:max-w-[200px] max-h-[200px]"
-                  unoptimized={service.images?.[0]?.endsWith('.svg')}
+                  unoptimized={service?.images?.[0]?.endsWith('.svg')}
                 />
               </div>
               
