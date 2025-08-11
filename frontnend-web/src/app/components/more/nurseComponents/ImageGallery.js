@@ -217,7 +217,7 @@ const ImageGallery = ({ NurseData }) => {
                       }}
                     >
                       <Image
-                        src={img}
+                        src={`http://localhost:3001/public/${img}`}
                         alt={"Gallery image"}
                         width={CARD_SIZE}
                         height={CARD_SIZE}

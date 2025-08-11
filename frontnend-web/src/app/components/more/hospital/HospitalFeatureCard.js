@@ -142,21 +142,23 @@ export default function HospitalFeatureCard({ profileData }) {
           )}
         </div>
         {/* Call Now Button */}
-        <button
+        <a
           className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-          onClick={() => {
-            if (
-              window.confirm(
-                `Do you want to call ${profileData.name ?? "N/A"} ?`
-              )
-            ) {
-              window.location.href = profileData.phone ?? "tel:+911140555555";
-            }
-          }}
+          // onClick={() => {
+          //   if (
+          //     window.confirm(
+          //       `Do you want to call ${profileData.name ?? "N/A"} ?`
+          //     )
+          //   ) {
+          //     window.location.href = profileData.phone ?? "tel:+911140555555";
+          //   }
+          // }}
+          href={`tel:${profileData.phone}`}
         >
-          <FaPhoneAlt className="text-2xl" />
+          <FaPhoneAlt className="text-2xl"  />
           Call Now
-        </button>
+        </a>
+        
       </div>
       {/* Background circles for effect */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />

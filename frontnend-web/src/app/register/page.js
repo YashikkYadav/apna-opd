@@ -176,7 +176,7 @@ const Register = () => {
       location: formData.location,
       address: formData.address,
       pinCode: formData.pinCode,
-      city: formData.city,
+      city: formData?.city,
       locality: formData.locality,
       state: formData.state,
       speciality: formData.speciality,

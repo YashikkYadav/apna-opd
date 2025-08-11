@@ -42,7 +42,7 @@ export default function DoctorFeatureCard({ doctorData, specs }) {
           {
             icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
             text: "",
-            dynamicValue: doctorData.address.city,
+            dynamicValue: doctorData?.address?.city,
           },
         ]
       : []),
