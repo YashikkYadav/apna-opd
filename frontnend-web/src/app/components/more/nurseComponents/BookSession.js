@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import axios from 'axios'
+import React, { useState,useEffect } from "react";
+import { useParams } from 'next/navigation';
+import axios from "axios";
 
 export default function FreeTrialModal({ isOpen, onClose }) {
     const params = useParams();
@@ -46,14 +46,12 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             setMsg("Phone Verified!");
         } else {
             setMsg("Invalid OTP. Please try again.");
+            setMsg("Invalid OTP. Please try again.");
         }
     };
 
     const handleSubmit = async () => {
-        if (!verified) return setMsg("Please verify your phone number first.");
-        if (!message || message.trim().length < 3) {
-            return setMsg("Message must be at least 3 characters.");
-        }
+        if (!verified) return alert("Please verify your phone number first.");
 
         setSubmitted(true);
 
@@ -61,7 +59,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             name,
             phone,
             date: new Date().toISOString(),
-            enquiry: message.trim(),
+            enquiry: "991"
         };
 
         try {
@@ -76,12 +74,12 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             );
 
             console.log("Submitted:", res.data);
+            // Optional: router.push(res.data.redirectUrl)
         } catch (err) {
             console.error("Submission error:", err?.response?.data || err.message);
-            setMsg("Something went wrong. Try again.");
+            alert("Something went wrong. Try again.");
         }
     };
-
 
     if (!isOpen) return null;
 
@@ -156,6 +154,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                                 )}
                             </div>
                         )}
+
 
                         <button
                             disabled={!verified}

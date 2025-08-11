@@ -124,9 +124,9 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             </div>
           )}
           {/* Call Now Button */}
-          <div className="flex flex-wrap gap-7">
+          <div className="flex flex-wrap gap-7 mt-8">
             <button
-              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+              className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
               onClick={() => {
                 if (window.confirm(`Do you want to call ${name}?`)) {
                   window.location.href = `tel:${phone}`;
@@ -138,9 +138,9 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             </button>
             <button
               onClick={() => setModalOpen(true)}
-              className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+              className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4  rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
             >
-              <CalendarPlus className="w-5 h-5" /> Book Session
+              <CalendarPlus className="" /> Book Session
             </button>
           </div>
           <FreeTrialModal

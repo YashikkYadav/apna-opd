@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { motion } from "framer-motion";
 import {
@@ -430,7 +431,7 @@ function formatDoctorSlots(locations = []) {
 
 function getDoctorProfileImage(images = []) {
   const profile = images.find((img) => img.type === "profilePhoto");
-  return profile?.url || "/default-doctor.png";
+  return profile?.url || "/default-doctor?.png";
 }
 
 function getDoctorInitials(name = "") {
@@ -443,8 +444,17 @@ function getDoctorInitials(name = "") {
 function DoctorCard({ doctor }) {
   const router = useRouter();
 
+  const [doctorDetails, setDoctorDetails] = useState({})
+
+  useEffect(() => {
+    setDoctorDetails(doctor?.doctorId)
+
+  }, [doctor])
+
   const handleBookAppointment = () => {
-    router.push(`/book-appointment?doctor=${encodeURIComponent(doctor.name)}`);
+    router.push(
+      `/book-appointment?doctor=${encodeURIComponent(doctorDetails?.name)}`
+    );
   };
 
   return (
@@ -455,42 +465,42 @@ function DoctorCard({ doctor }) {
       <div className="flex items-center gap-4">
         <div className="relative w-20 h-20">
           <img
-            src={doctor.doctorProfile.images ? getDoctorProfileImage(doctor.doctorProfile?.images) : ""}
-            alt={doctor.name}
+            src={doctor?.doctorProfile.images ? getDoctorProfileImage(doctor?.doctorProfile?.images) : ""}
+            alt={doctor?.name}
             className="w-full h-full rounded-full object-cover border-2 border-blue-700"
           />
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold">
-            {getDoctorInitials(doctor.name)}
+            {getDoctorInitials(doctor?.name)}
           </div>
         </div>
         <div>
-          <div className="text-xl font-bold text-gray-900">{doctor.name}</div>
+          <div className="text-xl font-bold text-gray-900">{doctor?.name}</div>
           <div className="text-blue-600 font-semibold text-base cursor-pointer hover:underline">
-            {doctor.speciality}
+            {doctor?.speciality}
           </div>
         </div>
       </div>
       <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1">
-          {/* <FaGraduationCap /> {doctor.qualification} */}
+          {/* <FaGraduationCap /> {doctor?.qualification} */}
         </span>
         <span className="flex items-center gap-1">
-          <FaStar className="text-yellow-400" /> {doctor.doctorProfile.rating}/5 (
-          {doctor.ratingCount} reviews)
+          <FaStar className="text-yellow-400" /> {doctor?.doctorProfile.rating}/5 (
+          {doctor?.ratingCount} reviews)
         </span>
       </div>
       <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1">
-          <FaCalendarAlt /> {doctor.doctorProfile.experience} Years Experience
+          <FaCalendarAlt /> {doctor?.doctorProfile.experience} Years Experience
         </span>
         <span className="flex items-center gap-1">
-          {/* <FaLanguage /> {doctor.languages?.join(", ")} */}
+          {/* <FaLanguage /> {doctor?.languages?.join(", ")} */}
         </span>
       </div>
       <div className="bg-gray-100 rounded-xl p-4">
         <div className="font-semibold mb-2">Available:</div>
         <div className="flex flex-wrap gap-2">
-          {formatDoctorSlots(doctor.doctorProfile.locations).map((slot, idx) => (
+          {formatDoctorSlots(doctor?.doctorProfile.locations).map((slot, idx) => (
             <span
               key={idx}
               className="bg-blue-700 text-white px-4 py-1 rounded-full text-sm font-semibold"
@@ -502,11 +512,11 @@ function DoctorCard({ doctor }) {
       </div>
       <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-auto">
         <span className="bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-full flex items-center justify-center w-full sm:w-auto text-sm">
-          ₹{doctor.doctorProfile.appointmentFee} Consultation Fee
+          ₹{doctor?.doctorProfile.appointmentFee} Consultation Fee
         </span>
         <button
           onClick={() => {
-            router.push(`/${doctor._id}/profile`);
+            router.push(`/${doctor?._id}/profile`);
           }}
           className="bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition w-full sm:w-auto text-xs"
         >
@@ -514,7 +524,7 @@ function DoctorCard({ doctor }) {
         </button>
         <button
           onClick={() => {
-            router.push(`/${doctor._id}/profile`);
+            router.push(`/${doctor?._id}/profile`);
           }}
           className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs"
         >
@@ -526,6 +536,8 @@ function DoctorCard({ doctor }) {
 }
 
 function DepartmentSection({ dept }) {
+  const dep = dept.doctorId
+  console.log("dept", dept)
   const scrollContainerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -555,12 +567,12 @@ function DepartmentSection({ dept }) {
       <div className="flex items-center gap-3 mb-4">
         <span className="text-2xl">{dept.emoji}</span>
         <span className="font-bold text-lg text-blue-600">
-          {dept.name} Department
+          {dep.speciality} Department
         </span>
       </div>
       <div className="bg-blue-700 rounded-xl p-4 mb-6">
         <span className="text-white font-semibold text-base">
-          {dept.emoji} {dept.name} Department
+          {dep.speciality} Department
         </span>
         <div className="text-white text-base font-medium mt-1">{dept.desc}</div>
       </div>
@@ -584,14 +596,14 @@ function DepartmentSection({ dept }) {
           className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {dept.doctors.map((doctor) => (
+          
             <div
-              key={doctor.name}
-              className="pl-9 snap-start flex-none w-[calc(50%-1rem)]"
+              
+              className="pl-9 snap-start flex-none w-[calc(60%-1rem)]"
             >
-              <DoctorCard doctor={doctor} />
+              <DoctorCard doctor={dept} />
             </div>
-          ))}
+          
         </div>
 
         {/* Right Arrow */}
@@ -608,31 +620,32 @@ function DepartmentSection({ dept }) {
   );
 }
 
-function getDepartmentWiseDoctors(doctors) {
-  const map = {};
+// function getDepartmentWiseDoctors(doctors) {
+//   const map = {};
 
-  // for (const doc of doctors) {
-  //   if (!doc.doctorProfile) continue;
-  //   const dept = doc.speciality;
-  //   if (!map[dept]) map[dept] = [];
-  //   map[dept].push(doc);
-  // }
+//   // for (const doc of doctors) {
+//   //   if (!doc.doctorProfile) continue;
+//   //   const dept = doc.speciality;
+//   //   if (!map[dept]) map[dept] = [];
+//   //   map[dept].push(doc);
+//   // }
 
-  return Object.entries(map).map(([name, doctors]) => {
-    const meta = departments.find((d) => d.name === name) || {};
-    return {
-      name,
-      emoji: meta.emoji || "🏥",
-      desc: meta.desc || "Department",
-      doctors,
-    };
-  });
-}
+//   return Object.entries(map)?.map(([name, doctors]) => {
+//     const meta = departments.find((d) => d.name === name) || {};
+//     return {
+//       name,
+//       emoji: meta.emoji || "🏥",
+//       desc: meta.desc || "Department",
+//       doctors,
+//     };
+//   });
+// }
 
-export default function HospitalDoctorsCard({ profileData }) {
+export default function HospitalDoctorsCard({ profileData, doctorData }) {
   const [showAll, setShowAll] = useState(false);
-  // const visibleDepartments = showAll ? departments : departments.slice(0, 3);
-  const departments = getDepartmentWiseDoctors(profileData?.doctors);
+  //const visibleDepartments = showAll ? departments : departments.slice(0, 3);
+  // const departments = getDepartmentWiseDoctors(doctorData);
+  console.log('doc', doctorData)
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -649,13 +662,12 @@ export default function HospitalDoctorsCard({ profileData }) {
         </h2>
       </div>
 
-      {/* Departments */}
-      {departments.map((dept) => (
-        <DepartmentSection key={dept.name} dept={dept} />
+      {doctorData?.map((dept) => (
+        <DepartmentSection key={dept?.doctorId?._id} dept={dept} />
       ))}
 
       {/* Show More Button */}
-      {departments.length > 3 && (
+      {doctorData?.length > 3 && (
         <motion.button
           onClick={() => setShowAll(!showAll)}
           className="w-full flex items-center rounded-full justify-center gap-2 py-4 text-blue-700 font-semibold hover:text-blue-800 hover:border-blue-700 transition-colors"

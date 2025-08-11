@@ -26,7 +26,7 @@ const BloodBank = ({ serviceData }) => {
     <>
       <h2 className="title-48 mb-[24px]">Blood Banks Near You</h2>
       <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {totalItems} results
+        Showing {currentItems?.length} of {filteredList?.length || 0} results
       </p>
       <div className="flex flex-col gap-[32px]">
         {currentItems?.map((bloodBank) => (
@@ -40,7 +40,9 @@ const BloodBank = ({ serviceData }) => {
                   src={
                     bloodBank.profiles &&
                     bloodBank.profiles.length > 0 &&
-                    bloodBank.profiles[0].images.length > 0
+                    Array.isArray(bloodBank.profiles[0].images) &&
+                    bloodBank.profiles[0].images.length > 0 &&
+                    bloodBank.profiles[0].images[0].url
                       ? bloodBank.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }
@@ -51,9 +53,7 @@ const BloodBank = ({ serviceData }) => {
                 />
               </div>
               <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#5151E1] mb-[8px]">
-                  Blood Bank
-                </p>
+                <p className="text-base text-[#5151E1] mb-[8px]">Blood Bank</p>
                 <h3 className="title-24 mb-[8px]">{bloodBank.title}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
                   Rating: {bloodBank.rating?.toFixed(1) || "N/A"} / 5

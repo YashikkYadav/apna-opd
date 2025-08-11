@@ -128,7 +128,7 @@ export default function NurseLocationCard({ NurseData, userData }) {
                 <div>
                 <p className="font-bold">{`Visiting Hours: ${workingHours}`}</p>
                   
-                  <span className="font-bold">Visiting Hours:</span>
+                  <span className="font-bold">Visiting Days:</span>
                   <br />
                   {Object.entries(NurseData?.workingDays).map(
                     ([key, val], i) => (
