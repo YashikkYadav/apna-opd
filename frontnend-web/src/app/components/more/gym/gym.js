@@ -70,7 +70,7 @@ const Gym = ({ serviceData,totalItems }) => {
               </h2> */}
               <button
                 onClick={() =>
-                  navigate.push(`/detail/gym/${gym._id}`)
+                  navigate.push(`/detail/Gym/${gym._id}`)
                 }
                 className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
