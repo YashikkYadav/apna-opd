@@ -491,7 +491,7 @@ function DoctorCard({ doctor }) {
       </div>
       <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1">
-          <FaCalendarAlt /> {doctor?.doctorProfile.experience} Years Experience
+          <FaCalendarAlt /> {doctor?.doctorProfile?.experience} Years Experience
         </span>
         <span className="flex items-center gap-1">
           {/* <FaLanguage /> {doctor?.languages?.join(", ")} */}
@@ -500,19 +500,19 @@ function DoctorCard({ doctor }) {
       <div className="bg-gray-100 rounded-xl p-4">
         <div className="font-semibold mb-2">Available:</div>
         <div className="flex flex-wrap gap-2">
-          {formatDoctorSlots(doctor?.doctorProfile.locations).map((slot, idx) => (
+          {formatDoctorSlots(doctor?.doctorProfile?.locations).map((slot, idx) => (
             <span
               key={idx}
               className="bg-blue-700 text-white px-4 py-1 rounded-full text-sm font-semibold"
             >
-              {slot.label}
+              {slot?.label}
             </span>
           ))}
         </div>
       </div>
       <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-auto">
         <span className="bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-full flex items-center justify-center w-full sm:w-auto text-sm">
-          ₹{doctor?.doctorProfile.appointmentFee} Consultation Fee
+          ₹{doctor?.doctorProfile?.appointmentFee} Consultation Fee
         </span>
         <button
           onClick={() => {
@@ -565,16 +565,16 @@ function DepartmentSection({ dept }) {
     <div className="mb-10">
       {/* Department Header */}
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-2xl">{dept.emoji}</span>
+        <span className="text-2xl">{dept?.emoji}</span>
         <span className="font-bold text-lg text-blue-600">
-          {dep.speciality} Department
+          {dep?.speciality} Department
         </span>
       </div>
       <div className="bg-blue-700 rounded-xl p-4 mb-6">
         <span className="text-white font-semibold text-base">
-          {dep.speciality} Department
+          {dep?.speciality} Department
         </span>
-        <div className="text-white text-base font-medium mt-1">{dept.desc}</div>
+        <div className="text-white text-base font-medium mt-1">{dept?.desc}</div>
       </div>
 
       {/* Doctors Scroll Container */}
