@@ -43,7 +43,7 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
-  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r.rating, 0) / profileData?.testimonials.length).toFixed(1) : "0.0";
+  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) / profileData?.testimonials.length).toFixed(1) : "0.0";
   const reviewCount = profileData?.testimonials?.length || 0;
   
 

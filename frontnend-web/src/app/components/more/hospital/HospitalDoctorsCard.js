@@ -485,7 +485,7 @@ function DoctorCard({ doctor }) {
           {/* <FaGraduationCap /> {doctor?.qualification} */}
         </span>
         <span className="flex items-center gap-1">
-          <FaStar className="text-yellow-400" /> {doctor?.doctorProfile.rating}/5 (
+          <FaStar className="text-yellow-400" /> {doctor?.doctorProfile?.rating}/5 (
           {doctor?.ratingCount} reviews)
         </span>
       </div>
