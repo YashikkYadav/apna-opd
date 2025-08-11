@@ -22,6 +22,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
   const { rating, nurseType} = NurseData || {};
   const { name, phone } = userData || {};
   const [modalOpen, setModalOpen] = useState(false);
+  console.log("MM",NurseData)
 
   const features = [
     {
@@ -102,7 +103,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
               {rating}/5
             </span>
             <span className="text-white/70 text-lg ml-2">
-              ({NurseData?.clients} reviews)
+              ({NurseData?.testimonials?.length} reviews)
             </span>
           </div>
           {/* Features */}

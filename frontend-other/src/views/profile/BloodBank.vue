@@ -713,7 +713,7 @@ getImageUrl(path) {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        this.form.pincode = hs?.pincode || "";
+        this.form.pincode = profile?.pincode || "";
 
         this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
   this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];

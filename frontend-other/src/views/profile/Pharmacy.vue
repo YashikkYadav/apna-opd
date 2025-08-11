@@ -755,19 +755,18 @@ removeTag(index) {
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
       }
       if (profile) {
         console.log(res);
         this.images = profile.galleryImages || [];
 
-        const hs = profile.healthServeId;
+        
 this.form.website = profile.website || '';
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         
-        this.form.pincode = hs?.pincode || "";
+        this.form.pincode = profile?.pincode || "";
 this.form.medicines = profile.medicines?.length
       ? profile.medicines
       : [{ name: '', dosage: '', stock: '', price: '' }];

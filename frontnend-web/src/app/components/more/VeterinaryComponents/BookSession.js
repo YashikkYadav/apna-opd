@@ -51,7 +51,10 @@ export default function FreeTrialModal({ isOpen, onClose }) {
     };
 
     const handleSubmit = async () => {
-        if (!verified) return alert("Please verify your phone number first.");
+        if (!verified) return setMsg("Please verify your phone number first.");
+        if (!message || message.trim().length < 3) {
+            return setMsg("Message must be at least 3 characters.");
+        }
 
         setSubmitted(true);
 
@@ -59,7 +62,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             name,
             phone,
             date: new Date().toISOString(),
-            enquiry: "991"
+            enquiry: message.trim(),
         };
 
         try {
@@ -74,10 +77,9 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             );
 
             console.log("Submitted:", res.data);
-            // Optional: router.push(res.data.redirectUrl)
         } catch (err) {
             console.error("Submission error:", err?.response?.data || err.message);
-            alert("Something went wrong. Try again.");
+            setMsg("Something went wrong. Try again.");
         }
     };
 
@@ -106,7 +108,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <textarea
-                            placeholder="Message (Optional)"
+                            placeholder="Message (required)"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             rows={3}

@@ -819,7 +819,7 @@ export default {
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
+        // this.form.pincode = hs?.pincode || "";
       }
 
       if (profile) {
@@ -828,20 +828,12 @@ export default {
         this.form.website = profile.website || '';
 
         const hs = profile.healthServeId;
-        console.log(
-          "asdasdsd",
-
-          hs?.address,
-          hs?.city,
-          hs?.locality,
-          hs?.state,
-          hs?.pincode
-        );
+       
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        
+        this.form.pincode=profile.pincode || "";
 
         this.form.licensedBy = profile.licensedBy || "";
         this.form.successRate = profile.successRate || "";

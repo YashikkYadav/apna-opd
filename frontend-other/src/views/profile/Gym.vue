@@ -1087,7 +1087,7 @@ addPlan() {
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         
-        this.form.pincode = hs?.pincode || "";
+        this.form.pincode = profile?.pincode || "";
         this.form.established = profile.established || '';
          this.form.faqs = profile.faqs || [];
         this.form.operatingHours=profile.operatingHours || '';
