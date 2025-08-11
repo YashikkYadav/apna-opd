@@ -1,5 +1,7 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useParams } from 'next/navigation';
+import axios from "axios";
 
 export default function FreeTrialModal({ isOpen, onClose }) {
     const params = useParams();
@@ -44,12 +46,39 @@ export default function FreeTrialModal({ isOpen, onClose }) {
             setMsg("Phone Verified!");
         } else {
             setMsg("Invalid OTP. Please try again.");
+            setMsg("Invalid OTP. Please try again.");
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!verified) return alert("Please verify your phone number first.");
+
         setSubmitted(true);
+
+        const payload = {
+            name,
+            phone,
+            date: new Date().toISOString(),
+            enquiry: "991"
+        };
+
+        try {
+            const res = await axios.post(
+                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/enquiry/`,
+                payload,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            console.log("Submitted:", res.data);
+            // Optional: router.push(res.data.redirectUrl)
+        } catch (err) {
+            console.error("Submission error:", err?.response?.data || err.message);
+            alert("Something went wrong. Try again.");
+        }
     };
 
     if (!isOpen) return null;
