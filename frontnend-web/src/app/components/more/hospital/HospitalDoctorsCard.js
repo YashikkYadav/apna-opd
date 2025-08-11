@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { motion } from "framer-motion";
 import {
@@ -414,14 +415,17 @@ function formatDoctorSlots(locations = []) {
     Thursday: "Thu",
     Friday: "Fri",
     Saturday: "Sat",
-    Sunday: "Sun"
+    Sunday: "Sun",
   };
 
   const result = [];
 
   for (const loc of locations) {
-    const days = loc.days.map(day => dayMap[day] || day);
-    const label = `${days.join(", ")}: ${loc.from.replace(/^0/, "")}-${loc.to.replace(/^0/, "")}`;
+    const days = loc.days.map((day) => dayMap[day] || day);
+    const label = `${days.join(", ")}: ${loc.from.replace(
+      /^0/,
+      ""
+    )}-${loc.to.replace(/^0/, "")}`;
     result.push({ label });
   }
 
@@ -436,15 +440,23 @@ function getDoctorProfileImage(images = []) {
 function getDoctorInitials(name = "") {
   return name
     .split(" ")
-    .map(word => word[0]?.toUpperCase())
+    .map((word) => word[0]?.toUpperCase())
     .join("");
 }
 
 function DoctorCard({ doctor }) {
   const router = useRouter();
 
+  const  [doctorDetail, setDoctorDetail] = useState({})
+  console.log("d", doctor);
+  useEffect(() => {
+    setDoctorDetail(doctor?.doctorId)
+  }, [doctor])
+
   const handleBookAppointment = () => {
-    router.push(`/book-appointment?doctor=${encodeURIComponent(doctor.name)}`);
+    router.push(
+      `/book-appointment?doctor=${encodeURIComponent(doctorDetail?.name)}`
+    );
   };
 
   return (
@@ -455,18 +467,22 @@ function DoctorCard({ doctor }) {
       <div className="flex items-center gap-4">
         <div className="relative w-20 h-20">
           <img
-            src={doctor.doctorProfile.images ? getDoctorProfileImage(doctor.doctorProfile?.images) : ""}
-            alt={doctor.name}
+            src={
+              doctorDetail ? getDoctorProfileImage(doctorDetail?.images) : ""
+            }
+            alt={doctorDetail?.name}
             className="w-full h-full rounded-full object-cover border-2 border-blue-700"
           />
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold">
-            {getDoctorInitials(doctor.name)}
+            {getDoctorInitials(doctorDetail?.name)}
           </div>
         </div>
         <div>
-          <div className="text-xl font-bold text-gray-900">{doctor.name}</div>
+          <div className="text-xl font-bold text-gray-900">
+            {doctorDetail?.name}
+          </div>
           <div className="text-blue-600 font-semibold text-base cursor-pointer hover:underline">
-            {doctor.speciality}
+            {doctorDetail?.speciality}
           </div>
         </div>
       </div>
@@ -475,13 +491,13 @@ function DoctorCard({ doctor }) {
           {/* <FaGraduationCap /> {doctor.qualification} */}
         </span>
         <span className="flex items-center gap-1">
-          <FaStar className="text-yellow-400" /> {doctor.doctorProfile.rating}/5 (
-          {doctor.ratingCount} reviews)
+          <FaStar className="text-yellow-400" /> {doctorDetail?.rating}
+          /5 ({doctorDetail?.name} reviews)
         </span>
       </div>
       <div className="text-gray-700 text-base">
         <span className="flex items-center gap-1">
-          <FaCalendarAlt /> {doctor.doctorProfile.experience} Years Experience
+          <FaCalendarAlt /> {doctorDetail?.name} Years Experience
         </span>
         <span className="flex items-center gap-1">
           {/* <FaLanguage /> {doctor.languages?.join(", ")} */}
@@ -490,23 +506,18 @@ function DoctorCard({ doctor }) {
       <div className="bg-gray-100 rounded-xl p-4">
         <div className="font-semibold mb-2">Available:</div>
         <div className="flex flex-wrap gap-2">
-          {formatDoctorSlots(doctor.doctorProfile.locations).map((slot, idx) => (
-            <span
-              key={idx}
-              className="bg-blue-700 text-white px-4 py-1 rounded-full text-sm font-semibold"
-            >
-              {slot.label}
-            </span>
-          ))}
+          <span className="bg-blue-700 text-white px-4 py-1 rounded-full text-sm font-semibold">
+            {doctorDetail?.location}
+          </span>
         </div>
       </div>
       <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-auto">
         <span className="bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-full flex items-center justify-center w-full sm:w-auto text-sm">
-          ₹{doctor.doctorProfile.appointmentFee} Consultation Fee
+          ₹{doctorDetail?.appointmentFee} Consultation Fee
         </span>
         <button
           onClick={() => {
-            router.push(`/${doctor._id}/profile`);
+            router.push(`/${doctorDetail._id}/profile`);
           }}
           className="bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition w-full sm:w-auto text-xs"
         >
@@ -514,7 +525,7 @@ function DoctorCard({ doctor }) {
         </button>
         <button
           onClick={() => {
-            router.push(`/${doctor._id}/profile`);
+            router.push(`/${doctorDetail._id}/profile`);
           }}
           className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs"
         >
@@ -555,7 +566,7 @@ function DepartmentSection({ dept }) {
       <div className="flex items-center gap-3 mb-4">
         <span className="text-2xl">{dept.emoji}</span>
         <span className="font-bold text-lg text-blue-600">
-          {dept.name} Department
+          {dept.doctorId.name} Department
         </span>
       </div>
       <div className="bg-blue-700 rounded-xl p-4 mb-6">
@@ -608,31 +619,11 @@ function DepartmentSection({ dept }) {
   );
 }
 
-function getDepartmentWiseDoctors(doctors) {
-  const map = {};
-
-  // for (const doc of doctors) {
-  //   if (!doc.doctorProfile) continue;
-  //   const dept = doc.speciality;
-  //   if (!map[dept]) map[dept] = [];
-  //   map[dept].push(doc);
-  // }
-
-  return Object.entries(map).map(([name, doctors]) => {
-    const meta = departments.find((d) => d.name === name) || {};
-    return {
-      name,
-      emoji: meta.emoji || "🏥",
-      desc: meta.desc || "Department",
-      doctors,
-    };
-  });
-}
-
-export default function HospitalDoctorsCard({ profileData }) {
+export default function HospitalDoctorsCard({ profileData, doctorData }) {
   const [showAll, setShowAll] = useState(false);
   // const visibleDepartments = showAll ? departments : departments.slice(0, 3);
-  const departments = getDepartmentWiseDoctors(profileData?.doctors);
+
+  console.log("doc", doctorData);
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -649,13 +640,12 @@ export default function HospitalDoctorsCard({ profileData }) {
         </h2>
       </div>
 
-      {/* Departments */}
-      {departments.map((dept) => (
-        <DepartmentSection key={dept.name} dept={dept} />
+      {doctorData?.map((dept) => (
+        <DoctorCard key={dept.healthserveId} doctor={dept} />
       ))}
 
       {/* Show More Button */}
-      {departments.length > 3 && (
+      {doctorData?.length > 3 && (
         <motion.button
           onClick={() => setShowAll(!showAll)}
           className="w-full flex items-center rounded-full justify-center gap-2 py-4 text-blue-700 font-semibold hover:text-blue-800 hover:border-blue-700 transition-colors"

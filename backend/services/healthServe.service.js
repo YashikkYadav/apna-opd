@@ -416,9 +416,22 @@ const getHealthServeList = async (page = 1, location, type) => {
 
 const getDoctors = async (hospitalId) => {
   try {
+    // const doctors = await HospitalDoctor.find({
+    //   healthServeId: hospitalId.hospitalId,
+    // }).populate("doctorId");
     const doctors = await HospitalDoctor.find({
       healthServeId: hospitalId.hospitalId,
-    }).populate("doctorId");
+    }).populate({
+      path: "doctorId", // Populate doctor data
+      model: "Doctor",
+      populate: {
+        path: "_id", // This will match doctorId in DoctorProfile
+        model: "DoctorProfile",
+        match: {}, // You can put filters here if needed
+        foreignField: "doctorId", // The field in DoctorProfile that references Doctor
+        localField: "_id", // The field in Doctor that matches
+      },
+    });
 
     if (!doctors) {
       return { statusCode: 404, error: "No doctors for this hospital" };
