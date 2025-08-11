@@ -666,7 +666,7 @@ export default {
         address: "",
         locality: "",
         city: "",
-        pincode: "",
+        pincode: null,
         clients: "",
         state: "",
         education: [{ degree: "", institution: "", year: "" }],
