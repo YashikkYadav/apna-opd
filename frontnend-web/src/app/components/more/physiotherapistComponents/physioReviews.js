@@ -3,14 +3,6 @@
 import { motion } from 'framer-motion';
 import { FaStar, FaRegStar, FaCommentDots } from 'react-icons/fa';
 
-const renderStars = (count) =>
-    [...Array(5)].map((_, i) =>
-        i < count ? (
-            <FaStar key={i} className="text-yellow-500" />
-        ) : (
-            <FaRegStar key={i} className="text-yellow-300" />
-        )
-    );
 
 const PatientReviews = ({ healthProfile }) => {
     return (
@@ -42,7 +34,10 @@ const PatientReviews = ({ healthProfile }) => {
                             {Array(5)
                                 .fill()
                                 .map((_, i) => (
-                                    <span key={i} className="text-yellow-400 text-lg">★</span>
+                                    <span
+                                        key={i}
+                                        className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                    >★</span>
                                 ))}
                         </div>
                         <p className="text-gray-700 mb-4">

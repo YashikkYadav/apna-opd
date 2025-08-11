@@ -37,9 +37,14 @@ const TestimonialsSection = ({ healthProfile }) => {
                         {/* Reviewer Meta */}
                         <div className="flex items-center gap-3 mt-auto">
                             <div className="flex text-yellow-400">
-                                {[...Array(5)].map((_, i) => (
-                                    <FaStar key={i} className={`w-5 h-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
-                                ))}
+                                {Array(5)
+                                    .fill()
+                                    .map((_, i) => (
+                                        <span
+                                            key={i}
+                                            className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                        >★</span>
+                                    ))}
                             </div>
                             <span className="font-bold text-gray-700 ml-2">{review.author}</span>
                             {/* <span className="text-gray-500 font-medium">• {review}</span> */}

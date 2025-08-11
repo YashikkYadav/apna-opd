@@ -1,7 +1,5 @@
 'use client';
-import React, { useState,useEffect } from "react";
-import { useParams } from 'next/navigation';
-import axios from "axios";
+import React, { useState } from "react";
 
 export default function FreeTrialModal({ isOpen, onClose }) {
     const params = useParams();
@@ -49,35 +47,9 @@ export default function FreeTrialModal({ isOpen, onClose }) {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         if (!verified) return alert("Please verify your phone number first.");
-
         setSubmitted(true);
-
-        const payload = {
-            name,
-            phone,
-            date: new Date().toISOString(),
-            enquiry: "991"
-        };
-
-        try {
-            const res = await axios.post(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/enquiry/`,
-                payload,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-
-            console.log("Submitted:", res.data);
-            // Optional: router.push(res.data.redirectUrl)
-        } catch (err) {
-            console.error("Submission error:", err?.response?.data || err.message);
-            alert("Something went wrong. Try again.");
-        }
     };
 
     if (!isOpen) return null;
@@ -106,7 +78,7 @@ export default function FreeTrialModal({ isOpen, onClose }) {
                         />
 
                         <textarea
-                            placeholder="Message (Optional)"
+                            placeholder="Message (required)"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             rows={3}

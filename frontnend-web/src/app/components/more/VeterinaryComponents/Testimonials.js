@@ -1,28 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const testimonials = [
-    {
-        vetName: 'Dr. Mehra',
-        text: "was amazing with my dog Bruno. The care and attention given during his vaccination was exceptional. Highly recommend!",
-        name: 'Priya S.',
-        role: 'Dog Parent',
-    },
-    {
-        vetName: 'Dr. Singh',
-        text: "explained everything clearly and made us feel comfortable. Emergency care for my cat Whiskers was handled professionally.",
-        name: 'Rahul M.',
-        role: 'Cat Parent',
-    },
-    {
-        vetName: 'Dr. Kapoor',
-        text: "The online consultation was very convenient. Got expert advice for my pet's nutrition without having to travel. Great service!",
-        name: 'Anjali K.',
-        role: 'Pet Parent',
-    },
-];
-
-export default function Testimonials({healthProfile}) {
+export default function Testimonials({ healthProfile }) {
     return (
         <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -47,7 +26,10 @@ export default function Testimonials({healthProfile}) {
                             {Array(5)
                                 .fill()
                                 .map((_, i) => (
-                                    <span key={i} className="text-yellow-400 text-lg">★</span>
+                                    <span
+                                        key={i}
+                                        className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                    >★</span>
                                 ))}
                         </div>
                         <p className="text-gray-700 mb-4">
