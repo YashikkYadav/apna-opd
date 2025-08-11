@@ -39,7 +39,7 @@ const FAQSection = ({ faqs = [],healthProfile }) => {
                                 className="w-full flex justify-between items-center text-blue-800 font-semibold text-lg focus:outline-none"
                                 onClick={() => toggle(index)}
                             >
-                                <span>{faq.question}</span>
+                                <span>{faq?.question}</span>
                                 <span className="ml-2 text-blue-600 text-xl transition-transform transform group-hover:rotate-180">
                                     {openIndex === index ? '−' : '+'}
                                 </span>
@@ -55,7 +55,7 @@ const FAQSection = ({ faqs = [],healthProfile }) => {
                                         transition={{ duration: 0.3 }}
                                         className="mt-4 text-gray-700 text-base leading-relaxed"
                                     >
-                                        {faq.answer}
+                                        {faq?.answer}
                                     </motion.div>
                                 )}
                             </AnimatePresence>

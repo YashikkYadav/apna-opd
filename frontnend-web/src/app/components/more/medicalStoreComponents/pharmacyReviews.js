@@ -31,7 +31,7 @@ const TestimonialsSection = ({ healthProfile }) => {
                         <FaQuoteLeft className="absolute top-4 left-4 text-blue-100 text-4xl" />
 
                         <blockquote className="italic text-gray-800 mb-6 mt-4 relative text-lg">
-                            "{review.text}"
+                            {review?.text}
                         </blockquote>
 
                         {/* Reviewer Meta */}
@@ -39,14 +39,14 @@ const TestimonialsSection = ({ healthProfile }) => {
                             <div className="flex text-yellow-400">
                                 {Array(5)
                                     .fill()
-                                    .map((_, i) => (
+                                    .map((t, i) => (
                                         <span
                                             key={i}
                                             className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
                                         >★</span>
                                     ))}
                             </div>
-                            <span className="font-bold text-gray-700 ml-2">{review.author}</span>
+                            <span className="font-bold text-gray-700 ml-2">{review?.author}</span>
                             {/* <span className="text-gray-500 font-medium">• {review}</span> */}
                         </div>
                     </motion.div>

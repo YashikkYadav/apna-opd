@@ -66,20 +66,20 @@ const PharmacyLocationCard = ({ website_url = '{{website_url}}',
                         key={idx}
                         className="bg-white p-5 rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
                     >
-                        <div className="mt-1">{item.icon}</div>
+                        <div className="mt-1">{item?.icon}</div>
                         <div>
-                            <p className="font-semibold text-gray-800">{item.label}:</p>
-                            {item.isLink ? (
+                            <p className="font-semibold text-gray-800">{item?.label}:</p>
+                            {item?.isLink ? (
                                 <a
-                                    href={item.value}
+                                    href={item?.value}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-600 mt-1 underline block break-words"
                                 >
-                                    {item.value}
+                                    {item?.value}
                                 </a>
                             ) : (
-                                <p className="text-base mt-1 text-blue-700 font-medium">{item.value}</p>
+                                <p className="text-base mt-1 text-blue-700 font-medium">{item?.value}</p>
                             )}
                         </div>
                     </div>

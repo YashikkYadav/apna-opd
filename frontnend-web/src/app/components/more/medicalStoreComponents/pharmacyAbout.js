@@ -47,8 +47,8 @@ const PharmacyAbout = ({
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
                         {Array.isArray(healthProfile?.servicesOffered) &&
                             healthProfile.servicesOffered.map((service) => (
-                                <li key={service._id || service.name || JSON.stringify(service)}>
-                                    • {service.name || service}
+                                <li key={service?._id || service?.name || JSON.stringify(service)}>
+                                    • {service?.name || service}
                                 </li>
                             ))}
                     </ul>
@@ -63,7 +63,7 @@ const PharmacyAbout = ({
                     <ul className="text-base text-gray-800 space-y-2 font-medium">
                         {Array.isArray(healthProfile?.partnerships) &&
                             healthProfile.partnerships.map((partner) => (
-                                <li key={partner._id || partner.name}>• {partner.name}</li>
+                                <li key={partner?._id || partner?.name}>• {partner?.name}</li>
                             ))}
                     </ul>
                 </motion.div>
