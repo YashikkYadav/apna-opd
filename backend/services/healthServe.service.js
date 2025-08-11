@@ -1,6 +1,8 @@
 const HealthServe = require("../models/healthServe");
 const HealthServeProfile = require("../models/healthServeProfile");
 const HospitalDoctor = require("../models/hospitalDoctor");
+const DoctorProfile = require("../models/doctorProfile");
+
 const {
   getAccessToken,
   getHashedPassword,
@@ -394,7 +396,7 @@ const getHealthServeList = async (page = 1, location, type) => {
 
       healthServeProfileList = data;
       total = count;
-      
+
     }
 
     return {
@@ -416,28 +418,29 @@ const getHealthServeList = async (page = 1, location, type) => {
 
 const getDoctors = async (hospitalId) => {
   try {
-    // const doctors = await HospitalDoctor.find({
-    //   healthServeId: hospitalId.hospitalId,
-    // }).populate("doctorId");
     const doctors = await HospitalDoctor.find({
       healthServeId: hospitalId.hospitalId,
-    }).populate({
-      path: "doctorId", // Populate doctor data
-      model: "Doctor",
-      populate: {
-        path: "_id", // This will match doctorId in DoctorProfile
-        model: "DoctorProfile",
-        match: {}, // You can put filters here if needed
-        foreignField: "doctorId", // The field in DoctorProfile that references Doctor
-        localField: "_id", // The field in Doctor that matches
-      },
-    });
+    }).populate('doctorId');
 
-    if (!doctors) {
+    const doctorsWithProfile = await Promise.all(
+      doctors.map(async (item) => {
+        const data_item = await DoctorProfile.findOne({
+          doctorId: item.doctorId._id,
+        });
+        return {
+          ...item.toObject(), // Use .toObject() to make the Mongoose document a plain JavaScript object
+          doctorProfile: data_item,
+        };
+      })
+    );
+
+    // doctorsWithProfile now contains the final, correctly structured data
+    console.log(doctorsWithProfile);
+    if (!doctorsWithProfile) {
       return { statusCode: 404, error: "No doctors for this hospital" };
     }
 
-    return { statusCode: 200, doctors: doctors };
+    return { statusCode: 200, doctors: doctorsWithProfile };
   } catch (error) {
     return { statusCode: 500, error: error };
   }
