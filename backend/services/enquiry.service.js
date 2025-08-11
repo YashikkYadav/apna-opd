@@ -2,6 +2,7 @@ const { Mongoose, default: mongoose } = require("mongoose");
 const Enquiry = require("../models/enquiry");
 const { validateEnquiry } = require("../validations/enquiry.validation");
 const HealthServeProfile = require("../models/healthServeProfile");
+const moment = require("moment-timezone");
 
 const createEnquiry = async (healthServeId, data) => {
   try {
@@ -75,16 +76,16 @@ const getAllEnquiries = async (
         error: "HealthServeId is required",
       };
     }
-    
-    const healthServe = await HealthServeProfile.findOne({healthServeId});
-    
+
+    const healthServe = await HealthServeProfile.findOne({ healthServeId });
+
     if (!healthServe) {
       return {
         statusCode: 404,
         error: "Health Serve not found",
       };
     }
-    
+
     let searchFilter = { healthServeId };
 
     if (searchQuery) {
@@ -102,7 +103,7 @@ const getAllEnquiries = async (
     //   .limit(limitNumber);
 
     const enquiries = await Enquiry.find(searchFilter);
-    console.log("k",enquiries)
+    console.log("k", enquiries)
     return {
       statusCode: 200,
       enquiries,
@@ -192,8 +193,9 @@ const getLast24HoursDataCount = async (healthServeId) => {
       };
     }
 
-    const now = new Date();
-    const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // Calculate last 24 hours in IST
+    const nowIST = moment().tz("Asia/Kolkata");
+    const last24HoursIST = nowIST.clone().subtract(24, "hours").toDate();
 
     let healthServeIdFilter = healthServeId;
     if (typeof healthServeId === "string") {
@@ -204,7 +206,7 @@ const getLast24HoursDataCount = async (healthServeId) => {
       {
         $match: {
           healthServeId: healthServeIdFilter,
-          createdAt: { $gte: last24Hours },
+          createdAt: { $gte: last24HoursIST },
         },
       },
       {
@@ -252,15 +254,8 @@ const getLast24HoursDataCount = async (healthServeId) => {
 const getPast24HourTimestamps = () => {
   const past24HoursTimestamps = [];
   for (let i = 0; i < 24; i++) {
-    const hourAgo = new Date(Date.now() - i * 60 * 60 * 1000);
-
-    const year = hourAgo.getFullYear();
-    const month = (hourAgo.getMonth() + 1).toString().padStart(2, "0");
-    const day = hourAgo.getDate().toString().padStart(2, "0");
-    const hour = hourAgo.getHours().toString().padStart(2, "0");
-
-    const formattedTimestamp = `${year}-${month}-${day} ${hour}`;
-    past24HoursTimestamps.unshift(formattedTimestamp);
+    const hourAgo = moment().tz("Asia/Kolkata").subtract(i, "hours");
+    past24HoursTimestamps.unshift(hourAgo.format("YYYY-MM-DD HH"));
   }
   return past24HoursTimestamps;
 };

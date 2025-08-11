@@ -18,23 +18,29 @@ export default function NurseTestimonialsCard({ NurseData }) {
       </div>
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {NurseData?.testimonials.map((t, idx) => (
+        {NurseData?.testimonials?.map((t, index) => (
           <motion.div
-            key={idx}
-            whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
-            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[200px] border-l-4 border-blue-500 hover:border-blue-700 transition-all flex flex-col"
+            key={index}
+            whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.2)' }}
+            className="bg-[#F7F9FB] border-l-4 border-blue-500 hover:border-blue-700 rounded-2xl p-6 transition-all duration-300"
           >
-            <div className="flex items-center gap-1 mb-2">
-              {[...Array(t.stars)].map((_, i) => (
-                <FaStar key={i} className="text-yellow-400" />
-              ))}
-              {t.rating < 5 && <FaStar className="text-gray-300" />}
+            <div className="text-3xl text-blue-400 mb-2">“”</div>
+            <div className="flex mb-3">
+              {Array(5)
+                .fill()
+                .map((_, i) => (
+                  <span
+                    key={i}
+                    className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                  >★</span>
+                ))}
             </div>
-            <div className="font-bold text-lg mb-1">{t.title}</div>
-            <div className="text-gray-700 text-base mb-4">"{t.text}"</div>
-            <div className="mt-auto font-bold text-black">
-              - {t.author}
-            </div>
+            <p className="text-gray-700 mb-4">
+              <strong>{t.vetName}</strong> {t.text}
+            </p>
+            <p className="font-semibold text-blue-800">
+              – {t.author}, <span className="text-gray-600">{t.role}</span>
+            </p>
           </motion.div>
         ))}
       </div>

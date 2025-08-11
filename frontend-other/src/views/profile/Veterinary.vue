@@ -694,7 +694,6 @@ getImageUrl(path) {
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-        this.form.pincode = hs?.pincode || "";
       }
       if (profile) {
         console.log(res);
