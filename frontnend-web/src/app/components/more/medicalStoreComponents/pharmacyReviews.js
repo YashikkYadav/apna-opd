@@ -42,7 +42,7 @@ const TestimonialsSection = ({ healthProfile }) => {
                                     .map((t, i) => (
                                         <span
                                             key={i}
-                                            className={`text-lg ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                            className={`text-lg ${i < t?.rating ? 'text-yellow-400' : 'text-gray-300'}`}
                                         >★</span>
                                     ))}
                             </div>
