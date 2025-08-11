@@ -20,7 +20,7 @@ const FullDetailsPage = ({ profileData }) => {
       );
       
       setDoctorData(response.data.doctors);
-      console.log('res',response)
+      console.log('res', response)
     };
     fetchData();
   }, [profileData.healthServeId]);
@@ -30,7 +30,7 @@ const FullDetailsPage = ({ profileData }) => {
       <HospitalFeatureCard profileData={profileData} />
       <HospitalOverviewCard profileData={profileData} />
       <HospitalDepartmentsCard profileData={profileData} />
-      <HospitalDoctorsCard doctorData={doctorData} profileData={profileData} />
+      <HospitalDoctorsCard doctorData={doctorData} profileData={profileData} /> 
       <HospitalFacilitiesCard profileData={profileData} />
       <HospitalInsuranceCard profileData={profileData} />
       <HospitalLocationCard profileData={profileData} />
