@@ -107,7 +107,7 @@ const DetailsPage = () => {
       <BannerCommon profileData={profileData} serviceType={specs} />
       <AboutCommon profileData={profileData} serviceType={specs} />
       {profileData?.images?.length > 0 && (
-        <ImageGalleryCommon images={profileData.images} />
+        <ImageGalleryCommon images={profileData?.images} />
       )}
       <SuggestedService serviceType={specs} currentId={specsId} />
     </div>
