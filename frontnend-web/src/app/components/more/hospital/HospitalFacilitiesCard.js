@@ -46,13 +46,13 @@ export default function HospitalFacilitiesCard({ profileData }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {visibleFacilities.map((facility) => (
           <motion.div
-            key={facility.name ? facility.name : idx}
+            key={facility?.name ? facility?.name : idx}
             whileHover={{ scale: 1.04, boxShadow: "0 0 0 4px blue" }}
             className="bg-[#F7F9FB] rounded-2xl p-6 flex flex-col items-center text-center hover:border-2 hover:border-blue-500 transition-all"
           >
-            <div className="text-4xl mb-3">{facility.emoji}</div>
-            <h3 className="text-lg font-bold mb-1 text-center">{facility.name}</h3>
-            <p className="text-base text-center text-gray-600">{facility.desc}</p>
+            <div className="text-4xl mb-3">{facility?.emoji}</div>
+            <h3 className="text-lg font-bold mb-1 text-center">{facility?.name}</h3>
+            <p className="text-base text-center text-gray-600">{facility?.desc}</p>
           </motion.div>
         ))}
       </div>

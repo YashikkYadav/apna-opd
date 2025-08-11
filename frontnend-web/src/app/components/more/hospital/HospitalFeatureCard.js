@@ -43,7 +43,7 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
-  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) / profileData?.testimonials.length).toFixed(1) : "0.0";
+  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) / profileData?.testimonials?.length).toFixed(1) : "0.0";
   const reviewCount = profileData?.testimonials?.length || 0;
   
 
@@ -111,10 +111,10 @@ export default function HospitalFeatureCard({ profileData }) {
       {/* Right: Content */}
       <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
         <h2 className="text-white text-4xl md:text-5xl font-extrabold drop-shadow mb-2">
-          {profileData.name ?? "Dummy Name"}
+          {profileData?.name ?? "Dummy Name"}
         </h2>
         <p className="text-white/80 text-xl md:text-2xl font-medium mb-4">
-          {profileData.introduction ?? "Dummy Intro"}
+          {profileData?.introduction ?? "Dummy Intro"}
         </p>
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
@@ -128,7 +128,7 @@ export default function HospitalFeatureCard({ profileData }) {
         </div>
         {/* Features */}
         <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-2">
-          {(profileData.facilities ?? features.map((f) => f.text)).map(
+          {(profileData?.facilities ?? features.map((f) => f?.text)).map(
             (f, i) =>
               allowedFeatures.includes(f) && (
                 <div
@@ -147,13 +147,13 @@ export default function HospitalFeatureCard({ profileData }) {
           // onClick={() => {
           //   if (
           //     window.confirm(
-          //       `Do you want to call ${profileData.name ?? "N/A"} ?`
+          //       `Do you want to call ${profileData?.name ?? "N/A"} ?`
           //     )
           //   ) {
-          //     window.location.href = profileData.phone ?? "tel:+911140555555";
+          //     window.location.href = profileData?.phone ?? "tel:+911140555555";
           //   }
           // }}
-          href={`tel:${profileData.phone}`}
+          href={`tel:${profileData?.phone}`}
         >
           <FaPhoneAlt className="text-2xl"  />
           Call Now

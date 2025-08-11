@@ -100,7 +100,7 @@ export default function HospitalLocationCard({ profileData }) {
                   <span className="font-bold">Email:</span>
                   <br />
                   {Array.isArray(email)
-                    ? email.map((e, i) => <div key={i}>{e}</div>)
+                    ? email?.map((e, i) => <div key={i}>{e}</div>)
                     : email}
                 </div>
               </div>

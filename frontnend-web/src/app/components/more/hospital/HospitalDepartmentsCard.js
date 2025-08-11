@@ -76,7 +76,7 @@ const HospitalDepartmentsCard = ({ profileData }) => {
                 className="bg-white rounded-2xl shadow-md flex flex-col items-center justify-center py-10 px-4 min-h-[220px] transition-all duration-200 cursor-pointer outline-none"
               >
                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-400 mb-6">
-                  {match.icon || (
+                  {match?.icon || (
                     <FaHospitalSymbol className="text-white text-3xl" />
                   )}
                 </div>
@@ -84,7 +84,7 @@ const HospitalDepartmentsCard = ({ profileData }) => {
                   {dept}
                 </div>
                 <div className="text-gray-600 text-base text-center">
-                  {match.subtitle || "Specialized care"}
+                  {match?.subtitle || "Specialized care"}
                 </div>
               </motion.div>
             );

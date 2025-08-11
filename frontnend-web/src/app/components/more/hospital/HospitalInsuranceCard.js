@@ -6,19 +6,19 @@ export default function HospitalInsuranceCard({ profileData }) {
   const insuranceData = [
     {
       title: "Insurance Accepted",
-      items: profileData.insurance ?? [],
+      items: profileData?.insurance ?? [],
     },
     {
       title: "Payment Options",
-      items: profileData.payments ?? [],
+      items: profileData?.payments ?? [],
     },
     {
       title: "Health Packages",
-      items: profileData.healthPackages ?? [],
+      items: profileData?.healthPackages ?? [],
     },
     {
       title: "Special Services",
-      items: profileData.specialServices ?? [],
+      items: profileData?.specialServices ?? [],
     },
   ];
 
@@ -44,16 +44,16 @@ export default function HospitalInsuranceCard({ profileData }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {insuranceData.slice(0, 3).map((section) => (
           <motion.div
-            key={section.title}
+            key={section?.title}
             whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
             className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
           >
             <h3 className="text-lg font-bold text-blue-600 mb-2">
-              {section.title}
+              {section?.title}
             </h3>
             <ul className="list-disc pl-5 text-gray-800 text-base font-medium">
-              {section.items.length ? (
-                section.items.map((item, idx) => <li key={idx}>{item}</li>)
+              {section?.items?.length ? (
+                section?.items?.map((item, idx) => <li key={idx}>{item}</li>)
               ) : (
                 <li>No data available</li>
               )}
@@ -69,11 +69,11 @@ export default function HospitalInsuranceCard({ profileData }) {
           className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[180px] border-l-4 border-blue-500 hover:border-blue-700 transition-all md:col-span-1"
         >
           <h3 className="text-lg font-bold text-[#5B6EF6] mb-2">
-            {insuranceData[3].title}
+            {insuranceData[3]?.title}
           </h3>
           <ul className="list-disc pl-5 text-gray-800 text-base font-medium">
-            {insuranceData[3].items.length ? (
-              insuranceData[3].items.map((item, idx) => (
+            {insuranceData[3]?.items?.length ? (
+              insuranceData[3]?.items?.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))
             ) : (

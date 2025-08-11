@@ -40,11 +40,11 @@ export default function HospitalTestimonialsCard({ profileData }) {
                 ))}
             </div>
             <div className="font-bold text-lg mb-1">{t.title}</div>
-            <div className="text-gray-700 text-base mb-4">"{t.text}"</div>
+            <div className="text-gray-700 text-base mb-4">{t?.text}</div>
             <div className="mt-auto font-bold text-black">
-              - {t.author}{" "}
-              {t.context && (
-                <span className="font-normal text-gray-600">({t.context})</span>
+              - {t?.author}{" "}
+              {t?.context && (
+                <span className="font-normal text-gray-600">({t?.context})</span>
               )}
             </div>
           </motion.div>

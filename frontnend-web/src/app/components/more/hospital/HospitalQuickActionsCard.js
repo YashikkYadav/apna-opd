@@ -51,21 +51,21 @@ export default function HospitalQuickActionsCard() {
       </div>
       {/* Actions Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {actions.map((action, idx) => (
+        {actions?.map((action, idx) => (
           <motion.div
-            key={action.title}
+            key={action?.title}
             whileHover={{ scale: 1.04, boxShadow: `0 0 0 3px blue` }}
             className={`flex flex-col items-center justify-between bg-blue-600 rounded-2xl p-8 min-h-[220px] text-white shadow-md transition-all`}
           >
             <div className="flex flex-col items-center gap-2 w-full">
-              <span className="text-4xl mb-2">{action.emoji}</span>
-              <h3 className="text-xl font-extrabold mb-1 text-white text-center">{action.title}</h3>
-              <p className="text-base font-medium text-white/90 text-center mb-6">{action.desc}</p>
+              <span className="text-4xl mb-2">{action?.emoji}</span>
+              <h3 className="text-xl font-extrabold mb-1 text-white text-center">{action?.title}</h3>
+              <p className="text-base font-medium text-white/90 text-center mb-6">{action?.desc}</p>
             </div>
-            <button onClick={() => {router.push(action.link)}}
+            <button onClick={() => {router.push(action?.link)}}
               className={`mt-auto rounded-full px-8 py-3 text-lg font-bold hover:border-white hover:text-white shadow bg-white text-blue-700 transition w-full max-w-[200px]`}
             >
-              {action.button}
+              {action?.button}
             </button>
           </motion.div>
         ))}

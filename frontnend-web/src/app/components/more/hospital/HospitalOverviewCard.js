@@ -5,10 +5,10 @@ import { FaHospitalAlt } from "react-icons/fa";
 export default function HospitalOverviewCard({ profileData }) {
   const overviewData = [
     {
-      title: "About " + (profileData.name || "Hospital"),
+      title: "About " + (profileData?.name || "Hospital"),
       content: (
         <span>
-          {profileData.about || profileData.introduction || "No description available."}
+          {profileData?.about || profileData?.introduction || "No description available."}
         </span>
       ),
     },
@@ -16,10 +16,10 @@ export default function HospitalOverviewCard({ profileData }) {
       title: "Key Statistics",
       content: (
         <ul className="list-disc pl-5">
-          {(profileData.keyStats || []).map((stat, i) => (
+          {(profileData?.keyStats || []).map((stat, i) => (
             <li key={i}>{stat}</li>
           ))}
-          <li>{profileData.departments?.length || 0}+ Departments</li>
+          <li>{profileData?.departments?.length || 0}+ Departments</li>
         </ul>
       ),
     },
@@ -27,7 +27,7 @@ export default function HospitalOverviewCard({ profileData }) {
       title: "Accreditations",
       content: (
         <ul className="list-disc pl-5">
-          {(profileData.accreditations || []).map((acc, i) => (
+          {(profileData?.accreditations || []).map((acc, i) => (
             <li key={i}>{acc}</li>
           ))}
         </ul>
@@ -37,7 +37,7 @@ export default function HospitalOverviewCard({ profileData }) {
       title: "Awards & Recognition",
       content: (
         <ul className="list-disc pl-5">
-          {(profileData.awards || []).map((award, i) => (
+          {(profileData?.awards || []).map((award, i) => (
             <li key={i}>{award}</li>
           ))}
         </ul>
@@ -65,15 +65,15 @@ export default function HospitalOverviewCard({ profileData }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {overviewData.slice(0, 3).map((item, idx) => (
           <motion.div
-            key={item.title}
+            key={item?.title}
             whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
             className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
           >
             <h3 className="text-xl font-bold text-blue-700 mb-2">
-              {item.title}
+              {item?.title}
             </h3>
             <div className="text-gray-700 text-base font-medium">
-              {item.content}
+              {item?.content}
             </div>
           </motion.div>
         ))}
@@ -86,10 +86,10 @@ export default function HospitalOverviewCard({ profileData }) {
           className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[180px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all md:col-span-1"
         >
           <h3 className="text-xl font-bold text-blue-700 mb-2">
-            {overviewData[3].title}
+            {overviewData[3]?.title}
           </h3>
           <div className="text-gray-700 text-base font-medium">
-            {overviewData[3].content}
+            {overviewData[3]?.content}
           </div>
         </motion.div>
         <div className="hidden md:block md:col-span-2" />
