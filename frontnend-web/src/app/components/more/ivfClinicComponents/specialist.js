@@ -34,7 +34,7 @@ const LeadFertilitySpecialist = ({
         <div className="flex-shrink-0">
           <img
             src={imageUrl}
-            alt={`Dr. ${data?.name}`}
+            alt={`${data?.name} Clinic`}
             className="rounded-full border-4 border-blue-200 shadow-xl w-40 h-40 object-cover"
           />
         </div>
@@ -44,7 +44,7 @@ const LeadFertilitySpecialist = ({
           <div>
             <h2 className="text-3xl font-extrabold text-blue-700 flex items-center gap-2">
               <FaUserMd className="text-2xl text-blue-500" />
-              Dr. {healthProfile?.healthServeId?.name}
+              {healthProfile?.healthServeId?.name} Clinic
             </h2>
             <p className="text-gray-700 pt-3 text-base font-medium leading-relaxed">
               Compassionate fertility expert with a strong track record of
