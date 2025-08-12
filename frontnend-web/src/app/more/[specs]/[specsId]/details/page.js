@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import AboutCommon from "../../../../components/more/common/AboutCommon";
 import BannerCommon from "../../../../components/more/common/BannerCommon";
@@ -17,11 +17,11 @@ const DetailsPage = () => {
   const [error, setError] = useState(null);
   let specs = params.specs;
   const specsId = params.specsId;
-  if(specs === 'nurse'){
-    specs = 'nursing_staff';
+  if (specs === "nurse") {
+    specs = "nursing_staff";
   }
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       console.log(`/health-serve/list?&location=&type=${specs}`);
@@ -49,18 +49,19 @@ const DetailsPage = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${specsId}/health-serve-profile/profile-data`
       );
       console.log("m", detailResponse);
-      if (!detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data) {
-         setError("Failed to load details. Please try again later."
-      );
+      if (
+        !detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data
+      ) {
+        setError("Failed to load details. Please try again later.");
       }
 
       const healthServeProfile =
         detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data;
 
-      const healthServeId = detailResponse?.data?.healthServeProfileData?.healthServeUser;
+      const healthServeId =
+        detailResponse?.data?.healthServeProfileData?.healthServeUser;
 
-      console.log("f", healthServeId,
-        healthServeProfile,);
+      console.log("f", healthServeId, healthServeProfile);
       if (healthServeProfile) {
         setProfileData({
           ...healthServeId,
@@ -73,19 +74,19 @@ const DetailsPage = () => {
       console.log("Error fetching service details:", error);
       setError(
         error?.response?.data?.error?.message ||
-        "Failed to load details. Please try again later."
+          "Failed to load details. Please try again later."
       );
     } finally {
       setLoading(false);
     }
-  };
+  }, [specs, specsId]);
 
   useEffect(() => {
     console.log({ specs, specsId });
     if (specs && specsId) {
       fetchData();
     }
-  }, [specs, specsId]);
+  }, [fetchData, specs, specsId]);
 
   if (loading) return <Loader />;
 

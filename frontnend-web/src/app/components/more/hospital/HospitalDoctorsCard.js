@@ -445,6 +445,7 @@ function DoctorCard({ doctor }) {
   const router = useRouter();
 
   const [doctorDetails, setDoctorDetails] = useState({})
+  console.log('doctor', doctor)
 
   useEffect(() => {
     setDoctorDetails(doctor?.doctorId)
@@ -466,17 +467,17 @@ function DoctorCard({ doctor }) {
         <div className="relative w-20 h-20">
           <img
             src={doctor?.doctorProfile?.images ? getDoctorProfileImage(doctor?.doctorProfile?.images) : ""}
-            alt={doctor?.name}
+            alt={doctorDetails?.name}
             className="w-full h-full rounded-full object-cover border-2 border-blue-700"
           />
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center text-white text-xs font-bold">
-            {getDoctorInitials(doctor?.name)}
+            {getDoctorInitials(doctorDetails?.name)}
           </div>
         </div>
         <div>
-          <div className="text-xl font-bold text-gray-900">{doctor?.name}</div>
+          <div className="text-xl font-bold text-gray-900">{doctorDetails?.name}</div>
           <div className="text-blue-600 font-semibold text-base cursor-pointer hover:underline">
-            {doctor?.speciality}
+            {doctorDetails?.speciality}
           </div>
         </div>
       </div>
@@ -486,7 +487,7 @@ function DoctorCard({ doctor }) {
         </span>
         <span className="flex items-center gap-1">
           <FaStar className="text-yellow-400" /> {doctor?.doctorProfile?.rating}/5 (
-          {doctor?.ratingCount} reviews)
+          {doctorDetails?.ratingCount} reviews)
         </span>
       </div>
       <div className="text-gray-700 text-base">
@@ -524,7 +525,7 @@ function DoctorCard({ doctor }) {
         </button>
         <button
           onClick={() => {
-            router.push(`/${doctor?._id}/profile`);
+            router.push(`/${doctorDetails?._id}/profile`);
           }}
           className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs"
         >
@@ -564,12 +565,7 @@ function DepartmentSection({ dept }) {
   return (
     <div className="mb-10">
       {/* Department Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-2xl">{dept?.emoji}</span>
-        <span className="font-bold text-lg text-blue-600">
-          {dep?.speciality} Department
-        </span>
-      </div>
+      
       <div className="bg-blue-700 rounded-xl p-4 mb-6">
         <span className="text-white font-semibold text-base">
           {dep?.speciality} Department
