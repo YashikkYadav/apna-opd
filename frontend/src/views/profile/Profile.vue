@@ -854,11 +854,11 @@ export default {
           return location.name;
         });
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
-          formData.append("galleryImages_image", file);
+          formData.append("galleryImages", file);
         });
         formData.append("introduction", this.form.introduction);
         formData.append("happyClients", parseInt(this.form.happyClients));

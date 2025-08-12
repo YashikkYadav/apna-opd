@@ -29,7 +29,7 @@ export default function DoctorFeatureCard({ doctorData }) {
   const [openModal, setOpenModal] = useState(false);
   const [callModalOpen, setCallModalOpen] = useState(false);
   // console.log("mmm", doctorData)
-
+  console.log(doctorData.images[0].filename)
   const avgRating = doctorData?.testimonials?.length
     ? (doctorData.testimonials.reduce((sum, r) => sum + r.rating, 0) / doctorData.testimonials.length).toFixed(1)
     : '0.0';
@@ -49,7 +49,9 @@ export default function DoctorFeatureCard({ doctorData }) {
       {/* Left: Profile Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[300px] flex justify-center">
         <Image
-          src={doctorData?.profilePhoto || '/images/default-doctor.jpg'}
+          src={
+            `http://localhost:3001/public/doctor-profile/${doctorData.images[0].filename}`}
+
           alt={doctorData?.name || 'Doctor'}
           width={300}
           height={300}
@@ -64,7 +66,7 @@ export default function DoctorFeatureCard({ doctorData }) {
           {doctorData?.doctorId?.name}
         </h2>
         <p className="text-white/90 text-lg max-w-xl">
-        {doctorData?.introduction}
+          {doctorData?.introduction}
 
         </p>
         <div className='flex gap-4'>
