@@ -1,42 +1,71 @@
-"use client";
-import { specialists } from "@/app/data/constants";
-import { motion } from "framer-motion";
-import { FaRegCreditCard } from "react-icons/fa";
+'use client';
 
-export default function DoctorSpecialistsCard({ doctorData }) {
-  const specialists = doctorData?.specialists || [];
+import { motion } from 'framer-motion';
+
+export default function DoctorSpecialistsCard({doctorData}) {
+  const conditions = doctorData?.conditionsTreated;
+
+  const procedures = doctorData?.proceduresOffered;
 
   return (
-    <motion.div
+    <motion.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, type: "spring" }}
+      transition={{ duration: 0.7, type: 'spring' }}
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
       {/* Title */}
-      <div className="flex items-center gap-3 mb-8">
-        <span className="text-3xl text-blue-700"><FaRegCreditCard /></span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">Specialists & Services</h2>
+      <div className="mb-8 flex items-center gap-3">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
+          Specializations & Services
+        </h2>
       </div>
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* First row: 3 cards */}
-        {specialists.map((section) => (
-          <motion.div
-            key={section.title}
-            whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
-            className="bg-[#F7F9FB] rounded-2xl p-5 min-h-[200px] border-l-4 border-blue-500 hover:border-blue-600 transition-all"
-          >
-            <h3 className="text-lg font-bold text-blue-600 mb-2">{section.title}</h3>
-            <ul className="space-y-2 list-disc">
-              {section.items.map((item, idx) => (
-                <li key={idx} className="text-gray-700 ml-4">{item}</li>
-              ))}
-            </ul>
-          </motion.div>
-        ))}
+
+      {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Conditions Treated */}
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all"
+        >
+          <h3 className="text-xl font-bold text-blue-600 mb-4 flex items-center gap-2">
+            Conditions Treated
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {conditions.map((item, idx) => (
+              <motion.span
+                key={idx}
+                whileHover={{ scale: 1.05 }}
+                className="px-4 py-2 bg-gray-100 rounded-full text-gray-800 text-sm font-medium shadow-sm hover:bg-blue-50"
+              >
+                {item}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Procedures Offered */}
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all"
+        >
+          <h3 className="text-xl font-bold text-blue-600 mb-4 flex items-center gap-2">
+             Procedures Offered
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {procedures.map((item, idx) => (
+              <motion.span
+                key={idx}
+                whileHover={{ scale: 1.05 }}
+                className="px-4 py-2 bg-gray-100 rounded-full text-gray-800 text-sm font-medium shadow-sm hover:bg-blue-50"
+              >
+                {item}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </motion.section>
   );
-} 
+};

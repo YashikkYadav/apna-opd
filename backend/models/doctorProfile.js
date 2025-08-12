@@ -71,6 +71,27 @@ const doctorProfileSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    conditionsTreated: [{ type: String }],
+    proceduresOffered: [{ type: String }],
+    membershipAwards: [{ type: String }],
+    faqs: [
+      {
+        question: { type: String },
+        answer: { type: String },
+      },
+    ],
+    testimonials: [
+      {
+        rating: { type: Number },
+        title: { type: String },
+        text: { type: String },
+        author: { type: String },
+        context: { type: String },
+      },
+    ],
+    languages: [{ type: String }],
+    profileImage: { type: String },
+    galleryImages: [{ type: String }],
     images: [
       {
         url: {

@@ -823,6 +823,7 @@ getImageUrl(path) {
         this.form.therapyPackages = profile.therapyPackages || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
+        this.form.faqs = profile.faqs || [];
       }
     },
     async onSubmit() {
