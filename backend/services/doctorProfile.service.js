@@ -24,14 +24,53 @@ const createDoctorProfile = async (doctorId, profileData) => {
       pincode,
       unavailabilityDate,
       availabilityAfter,
+      conditionsTreated,
+      proceduresOffered,
+      membershipAwards,
+      faqs,
+      testimonials,
+      languages
     } = profileData;
 
-    locations = JSON.parse(locations);
-    unavailabilityDate = JSON.parse(unavailabilityDate);
+    // Parse JSON fields if they're sent as strings
+    if (typeof locations === "string") {
+      locations = JSON.parse(locations);
+    }
+    if (typeof unavailabilityDate === "string") {
+      unavailabilityDate = JSON.parse(unavailabilityDate);
+    }
+    if (typeof faqs === "string") {
+      faqs = JSON.parse(faqs);
+    }
+    if (typeof testimonials === "string") {
+      testimonials = JSON.parse(testimonials);
+    }
+    if (typeof conditionsTreated === "string") {
+      conditionsTreated = JSON.parse(conditionsTreated);
+    }
+    if (typeof proceduresOffered === "string") {
+      proceduresOffered = JSON.parse(proceduresOffered);
+    }
+    if (typeof membershipAwards === "string") {
+      membershipAwards = JSON.parse(membershipAwards);
+    }
+    if(typeof languages === "string"){
+      languages = JSON.parse(languages)
+    }
 
     const doctorProfileImages = await getImagesById(doctorId);
 
-    const profileDataValidation = validateDoctorProfile(profileData);
+    const profileDataValidation = validateDoctorProfile({
+      ...profileData,
+      locations,
+      unavailabilityDate,
+      faqs,
+      testimonials,
+      conditionsTreated,
+      proceduresOffered,
+      membershipAwards,
+      languages
+    });
     if (!profileDataValidation.success) {
       return {
         statusCode: 400,
@@ -52,13 +91,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
     const updatedDoc = await Doctor.findOneAndUpdate(
       { _id: doctorId },
       {
-        $set: {
-          address,
-          pincode,
-          city,
-          locality,
-          state,
-        },
+        $set: { address, pincode, city, locality, state },
       },
       { new: true }
     );
@@ -77,7 +110,14 @@ const createDoctorProfile = async (doctorId, profileData) => {
           unavailabilityDate,
           availabilityAfter,
           images: doctorProfileImages,
-        }
+          conditionsTreated,
+          proceduresOffered,
+          membershipAwards,
+          faqs,
+          testimonials,
+          languages
+        },
+        { new: true }
       );
 
       return {
@@ -97,6 +137,12 @@ const createDoctorProfile = async (doctorId, profileData) => {
       unavailabilityDate,
       availabilityAfter,
       images: doctorProfileImages,
+      conditionsTreated,
+      proceduresOffered,
+      membershipAwards,
+      faqs,
+      testimonials,
+      languages
     });
     await newDoctorProfile.save();
 
@@ -106,10 +152,10 @@ const createDoctorProfile = async (doctorId, profileData) => {
       doctor: updatedDoc,
     };
   } catch (error) {
-    console.log("Error while inserting in databaes", error);
+    console.log("Error while inserting in database", error);
     return {
       statusCode: 500,
-      error: error,
+      error: error.message || error,
     };
   }
 };

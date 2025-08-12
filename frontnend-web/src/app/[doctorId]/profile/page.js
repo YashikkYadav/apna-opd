@@ -53,10 +53,10 @@ const ProfilePage = () => {
       <DoctorFeatureCard doctorData={doctorDetail} specs={"doctor"} />
       <DoctorOverviewCar doctorData={doctorDetail} specs={"Doctor Overview"} />
       <DoctorSpecialistsCard doctorData={doctorDetail} />
-      <ImageGallery doctorDetail={doctorDetail} />
+      {/* <ImageGallery doctorDetail={doctorDetail} /> */}
       <HospitalLocationCard profileData={doctorDetail.doctorId} />
-      <DoctorTestimonialsCard testimonials={doctorDetail.testimonials} />
-      <Faqs doctorDetails={doctorDetail} />
+      <DoctorTestimonialsCard testimonials={doctorDetail?.testimonials} />
+      <Faqs doctorData={doctorDetail} />
     </div>
   );
 };

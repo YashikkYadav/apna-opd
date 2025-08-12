@@ -29,6 +29,7 @@ export default function HospitalLocationCard({ profileData }) {
 
   return (
     <motion.div
+      id="location"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
