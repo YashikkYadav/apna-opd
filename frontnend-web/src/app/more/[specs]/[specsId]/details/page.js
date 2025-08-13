@@ -52,7 +52,7 @@ const DetailsPage = () => {
       if (
         !detailResponse?.data?.healthServeProfileData?.healthServeProfile?.data
       ) {
-        setError("Failed to load details. Please try again later.");
+        setError(process.env.NEXT_CLIENT_PROFILE_COMING_SOON_MESSAGE);
       }
 
       const healthServeProfile =
@@ -72,10 +72,7 @@ const DetailsPage = () => {
       }
     } catch (error) {
       console.log("Error fetching service details:", error);
-      setError(
-        error?.response?.data?.error?.message ||
-          "Failed to load details. Please try again later."
-      );
+      setError(process.env.NEXT_CLIENT_PROFILE_COMING_SOON_MESSAGE);
     } finally {
       setLoading(false);
     }

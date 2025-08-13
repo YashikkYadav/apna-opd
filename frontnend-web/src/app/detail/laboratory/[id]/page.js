@@ -77,7 +77,7 @@ export default function HealthLabPage() {
                 const data = healthServeProfile || {};
 
             } catch (err) {
-                setError('Failed to load healthlab data: ' + err.message);
+                setError(process.env.NEXT_CLIENT_PROFILE_COMING_SOON_MESSAGE);
             } finally {
                 setLoading(false);
             }
