@@ -57,10 +57,10 @@ export default function IvfPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <LeadFertilitySpecialist
+          {/* <LeadFertilitySpecialist
             data={data?.otherData}
             healthProfile={data?.healthProfile}
-          />
+          /> */}
           <SuccessStories
             data={data?.otherData}
             healthProfile={data?.healthProfile}

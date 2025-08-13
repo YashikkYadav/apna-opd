@@ -14,9 +14,13 @@ export const useProfileStore = defineStore("profileStore", {
       return data;
     },
     async addDoctoreProfileApiCall(payload) {
-      const ProfileService = new AxiosProfile();
-      const data = await ProfileService.ProfileAdd(this.doctorId, payload);
-      return data;
+      try {
+        const ProfileService = new AxiosProfile();
+        const data = await ProfileService.ProfileAdd(this.doctorId, payload);
+        return { success: true, data };
+      } catch (err) {
+        return { success: false, message: err.message || "Failed to add profile" };
+      }
     },
     async getPatients() {
       const ProfileService = new AxiosProfile();
