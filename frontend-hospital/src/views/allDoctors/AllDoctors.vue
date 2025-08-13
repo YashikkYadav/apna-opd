@@ -195,7 +195,7 @@
         </template>
 
         <template v-slot:item.doctorId.name="{ item }">
-          {{ item.doctorId.name }}
+          {{ item.doctorId?.name || 'N/A' }}
         </template>
 
         <template v-slot:item.phoneNumber="{ item }">

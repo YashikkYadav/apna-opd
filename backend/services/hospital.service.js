@@ -59,7 +59,7 @@ const registerDoctor = async (doctorData, hospitalId) => {
 
     const hospitalDoctor = await HospitalDoctor.create({
       healthServeId: hospitalId.hospitalId,
-      doctorId: doctor.doctor.id,
+      doctorId: doctor.id || doctor._id,
     });
 
     if (!doctor || !hospitalDoctor) {
