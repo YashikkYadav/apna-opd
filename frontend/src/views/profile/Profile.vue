@@ -181,113 +181,128 @@
         </v-card>
 
         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Languages</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addLanguage">+ Add Language</v-btn>
-  <div v-for="(lang, i) in form.languages" :key="i" class="mb-4 px-4">
-    <v-row>
-      <v-text-field v-model="form.languages[i]" label="Language" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
-      <div class="d-flex justify-end pa-2">
-        <v-btn icon color="error" @click="removeLanguage(i)" >
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-      </div>
-    
-    </v-row>
-    
-  </div>
-</v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Languages</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addLanguage">+ Add Language</v-btn>
+          <div v-for="(lang, i) in form.languages" :key="i" class="mb-4 px-4">
+            <v-row>
+              <v-text-field
+                v-model="form.languages[i]"
+                label="Language"
+                dense
+                outlined
+                hide-details
+                class="flex-grow-1 mr-2 pa-4"
+              />
+              <div class="d-flex justify-end pa-2">
+                <v-btn icon color="error" @click="removeLanguage(i)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </v-row>
+          </div>
+        </v-card>
 
         <!-- CONDITIONS TREATED -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Conditions Treated</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Conditions Treated</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addCondition">+ Add</v-btn>
-  
+          <v-btn class="mb-2" @click="addCondition">+ Add</v-btn>
 
-  <div v-for="(cond, index) in form.conditionsTreated" :key="index" class="mb-4 px-4">
-    <v-row>
-    <v-text-field
-      v-model="form.conditionsTreated[index]"
-      label="Condition"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeCondition(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-    </v-row>
-  </div>
-</v-card>
+          <div
+            v-for="(cond, index) in form.conditionsTreated"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-row>
+              <v-text-field
+                v-model="form.conditionsTreated[index]"
+                label="Condition"
+                dense
+                outlined
+                hide-details
+              ></v-text-field>
+              <div class="d-flex justify-end pa-2">
+                <v-btn icon color="error" @click="removeCondition(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </v-row>
+          </div>
+        </v-card>
 
-    <!--Procedures Offered -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Procedures Offered</v-toolbar-title>
-  </v-toolbar>
+        <!--Procedures Offered -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Procedures Offered</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addProcedures">+ Add</v-btn>
-  
+          <v-btn class="mb-2" @click="addProcedures">+ Add</v-btn>
 
-  <div v-for="(cond, index) in form.proceduresOffered" :key="index" class="mb-4 px-4">
-    <v-row>
-    <v-text-field
-      v-model="form.proceduresOffered[index]"
-      label="Procedure"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeProcedures(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-    </v-row>
-  </div>
-</v-card>
-
+          <div
+            v-for="(cond, index) in form.proceduresOffered"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-row>
+              <v-text-field
+                v-model="form.proceduresOffered[index]"
+                label="Procedure"
+                dense
+                outlined
+                hide-details
+              ></v-text-field>
+              <div class="d-flex justify-end pa-2">
+                <v-btn icon color="error" @click="removeProcedures(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </v-row>
+          </div>
+        </v-card>
 
         <!-- Memebership and award -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Memeberships & Awards</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Memeberships & Awards</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addMembership">+ Add</v-btn>
-  
+          <v-btn class="mb-2" @click="addMembership">+ Add</v-btn>
 
-  <div v-for="(cond, index) in form.membershipAwards" :key="index" class="mb-4 px-4">
-    <v-row>
-    <v-text-field
-      v-model="form.membershipAwards[index]"
-      label="Membership"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeMembership(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-    </v-row>
-  </div>
-</v-card>
-
+          <div
+            v-for="(cond, index) in form.membershipAwards"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-row>
+              <v-text-field
+                v-model="form.membershipAwards[index]"
+                label="Membership"
+                dense
+                outlined
+                hide-details
+              ></v-text-field>
+              <div class="d-flex justify-end pa-2">
+                <v-btn icon color="error" @click="removeMembership(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </v-row>
+          </div>
+        </v-card>
 
         <v-card class="section-card">
           <v-toolbar
             class="mb-4"
             flat
             style="column-gap: 20px; padding: 0px 20px"
-
           >
             <v-toolbar-title class="ml-3">Unavailability Date</v-toolbar-title>
           </v-toolbar>
@@ -521,24 +536,47 @@
           </v-row>
         </v-card>
 
-
         <!-- faqs -->
         <v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
-  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
-    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeFAQ(i)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
-         <!-- Testimonials -->
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+          <div
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              auto-grow
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFAQ(i)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
+        <!-- Testimonials -->
         <v-card class="section-card">
           <v-toolbar
             flat
@@ -607,7 +645,6 @@
             </div>
           </div>
         </v-card>
-
       </div>
     </v-container>
     <v-container style="max-width: 100%">
@@ -668,8 +705,8 @@ export default {
         testimonials: [],
         languages: [],
         conditionsTreated: [],
-        proceduresOffered:[],
-        membershipAwards:[],
+        proceduresOffered: [],
+        membershipAwards: [],
         faqs: [],
         locations: [
           {
@@ -760,35 +797,35 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addLanguage() {
-    this.form.languages.push('');
-  },
-  removeLanguage(i) {
-    this.form.languages.splice(i, 1);
-  },
+      this.form.languages.push("");
+    },
+    removeLanguage(i) {
+      this.form.languages.splice(i, 1);
+    },
     addCondition() {
-    this.form.conditionsTreated.push('');
-  },
-  removeCondition(i) {
-    this.form.conditionsTreated.splice(i, 1);
-  },
-  addProcedures() {
-    this.form.proceduresOffered.push('');
-  },
-  removeProcedures(i) {
-    this.form.proceduresOffered.splice(i, 1);
-  },
-  addMembership() {
-    this.form.membershipAwards.push('');
-  },
-  removeMembership(i) {
-    this.form.membershipAwards.splice(i, 1);
-  },
-   addFAQ() {
-    this.form.faqs.push({ question: '', answer: '' });
-  },
-  removeFAQ(i) {
-    this.form.faqs.splice(i, 1);
-  },
+      this.form.conditionsTreated.push("");
+    },
+    removeCondition(i) {
+      this.form.conditionsTreated.splice(i, 1);
+    },
+    addProcedures() {
+      this.form.proceduresOffered.push("");
+    },
+    removeProcedures(i) {
+      this.form.proceduresOffered.splice(i, 1);
+    },
+    addMembership() {
+      this.form.membershipAwards.push("");
+    },
+    removeMembership(i) {
+      this.form.membershipAwards.splice(i, 1);
+    },
+    addFAQ() {
+      this.form.faqs.push({ question: "", answer: "" });
+    },
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
+    },
     handleGalleryChange(newFiles) {
       const combined = [...this.galleryImages, ...newFiles];
 
@@ -803,7 +840,7 @@ export default {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getDoctoreProfileApiCall();
-      console.log(">",res.doctorProfile?.testimonials)
+      console.log(">", res.doctorProfile?.testimonials);
       if (res.doctorProfile !== null) {
         this.images = res.doctorProfile.images;
         this.form = res.doctorProfile;
@@ -819,15 +856,18 @@ export default {
           },
         ];
         this.form.delay = res.doctorProfile?.availabilityAfter;
-        this.form.from =
-        res.doctorProfile.unavailabilityDate?.from.split("T")[0];
-        this.form.to = res.doctorProfile.unavailabilityDate?.to.split("T")[0];
+        this.form.from = res.doctorProfile.unavailabilityDate?.from
+          ? res.doctorProfile.unavailabilityDate.from.split("T")[0]
+          : "";
+        this.form.to = res.doctorProfile.unavailabilityDate?.to
+          ? res.doctorProfile.unavailabilityDate.to.split("T")[0]
+          : "";
         this.form.address = res.doctorProfile.doctorId?.address;
         this.form.locality = res.doctorProfile.doctorId?.locality;
         this.form.state = res.doctorProfile.doctorId?.state;
         this.form.city = res.doctorProfile.doctorId?.city;
         this.form.pincode = res.doctorProfile.doctorId?.pincode;
-        this.form.testimonials=res.doctorProfile?.testimonials || [];
+        this.form.testimonials = res.doctorProfile?.testimonials || [];
         this.form.conditionsTreated = res.doctorProfile.conditionsTreated || [];
         this.form.proceduresOffered = res.doctorProfile.proceduresOffered || [];
         this.form.membershipAwards = res.doctorProfile.membershipAwards || [];
@@ -872,11 +912,20 @@ export default {
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
         formData.append("testimonials", JSON.stringify(data.testimonials));
-        formData.append("conditionsTreated", JSON.stringify(this.form.conditionsTreated));
-        formData.append("proceduresOffered", JSON.stringify(this.form.proceduresOffered));
-        formData.append("membershipAwards", JSON.stringify(this.form.membershipAwards));
-         formData.append('faqs', JSON.stringify(this.form.faqs));
-         formData.append('languages', JSON.stringify(this.form.languages));
+        formData.append(
+          "conditionsTreated",
+          JSON.stringify(this.form.conditionsTreated)
+        );
+        formData.append(
+          "proceduresOffered",
+          JSON.stringify(this.form.proceduresOffered)
+        );
+        formData.append(
+          "membershipAwards",
+          JSON.stringify(this.form.membershipAwards)
+        );
+        formData.append("faqs", JSON.stringify(this.form.faqs));
+        formData.append("languages", JSON.stringify(this.form.languages));
         formData.append(
           "unavailabilityDate",
           JSON.stringify(data.unavailabilityDate)
