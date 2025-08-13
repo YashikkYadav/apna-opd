@@ -19,7 +19,7 @@ const ImageGallery = ({ images = [] }) => {
   // Enhanced preload images with loading status tracking
   useEffect(() => {
     let loadedCount = 0;
-    const totalImages = images.length;
+    const totalImages = images?.length;
 
     const preloadImage = (imageUrl) => {
       return new Promise((resolve) => {
@@ -51,7 +51,7 @@ const ImageGallery = ({ images = [] }) => {
 
     const preloadAllImages = async () => {
       try {
-        const preloadPromises = images.map(img => preloadImage(img.url));
+        const preloadPromises = images?.map(img => preloadImage(img?.url));
         await Promise.all(preloadPromises);
       } catch (error) {
         // If there's an error, still set images as loaded to prevent blocking
@@ -71,7 +71,7 @@ const ImageGallery = ({ images = [] }) => {
   useEffect(() => {
     if (isAutoplay && imagesLoaded) {
       autoplayRef.current = setInterval(() => {
-        setSelectedImage((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+        setSelectedImage((prev) => (prev < images?.length - 1 ? prev + 1 : 0));
       }, 3000); // 4 seconds interval
     }
 
@@ -80,7 +80,7 @@ const ImageGallery = ({ images = [] }) => {
         clearInterval(autoplayRef.current);
       }
     };
-  }, [isAutoplay, imagesLoaded, images.length]);
+  }, [isAutoplay, imagesLoaded, images?.length]);
 
   // Pause autoplay on hover
   const handleMouseEnter = () => setIsAutoplay(false);
@@ -137,7 +137,7 @@ const ImageGallery = ({ images = [] }) => {
           </button>
           {/* Cards */}
           <div className="relative w-full flex items-center justify-center" style={{ height: `${CARD_SIZE}px` }}>
-            {images.map((img, idx) => {
+            {images?.map((img, idx) => {
               const offset = idx - selectedImage;
               if (Math.abs(offset) > 2) return null; // Only show center and 2 sides
 
@@ -187,8 +187,8 @@ const ImageGallery = ({ images = [] }) => {
                   }}
                 >
                   <Image
-                    src={img.url}
-                    alt={img.alt}
+                    src={img?.url}
+                    alt={img?.alt}
                     width={CARD_SIZE}
                     height={CARD_SIZE}
                     className="object-cover"
@@ -216,7 +216,7 @@ const ImageGallery = ({ images = [] }) => {
         </div>
         {/* Pagination Dots */}
         <div className="flex justify-center mt-6 space-x-2">
-          {images.map((_, index) => (
+          {images?.map((_, index) => (
             <button
               key={index}
               className={`w-3 h-3 rounded-full transition ${

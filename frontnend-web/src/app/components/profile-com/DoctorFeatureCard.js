@@ -30,9 +30,9 @@ export default function DoctorFeatureCard({ doctorData }) {
   const [openModal, setOpenModal] = useState(false);
   const [callModalOpen, setCallModalOpen] = useState(false);
   // console.log("mmm", doctorData)
-  console.log(doctorData.images[0].filename)
+  //console.log(doctorData.images[0].filename)
   const avgRating = doctorData?.testimonials?.length
-    ? (doctorData.testimonials.reduce((sum, r) => sum + r.rating, 0) / doctorData.testimonials.length).toFixed(1)
+    ? (doctorData?.testimonials?.reduce((sum, r) => sum + r.rating, 0) / doctorData?.testimonials?.length).toFixed(1)
     : '0.0';
   const reviewCount = doctorData?.testimonials?.length || 0;
 

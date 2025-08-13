@@ -45,17 +45,17 @@ export default function BookAppointment({ isOpen, onClose }) {
                         {/* Dates */}
                         <h3 className="font-semibold text-gray-800 mb-3">Select Date</h3>
                         <div className="flex gap-3 mb-6">
-                            {dates.map((d) => (
+                            {dates?.map((d) => (
                                 <button
-                                    key={d.label}
-                                    onClick={() => setSelectedDate(d.label)}
-                                    className={`px-4 py-3 rounded-lg border text-center min-w-[110px] ${selectedDate === d.label
+                                    key={d?.label}
+                                    onClick={() => setSelectedDate(d?.label)}
+                                    className={`px-4 py-3 rounded-lg border text-center min-w-[110px] ${selectedDate === d?.label
                                             ? "bg-blue-500 text-white border-blue-500"
                                             : "bg-white text-gray-800 border-gray-300 hover:border-blue-400"
                                         }`}
                                 >
-                                    <div className="font-medium">{d.label}</div>
-                                    <div className="text-sm">{d.sub}</div>
+                                    <div className="font-medium">{d?.label}</div>
+                                    <div className="text-sm">{d?.sub}</div>
                                 </button>
                             ))}
                         </div>
@@ -63,7 +63,7 @@ export default function BookAppointment({ isOpen, onClose }) {
                         {/* Time Slots */}
                         <h3 className="font-semibold text-gray-800 mb-3">Available Time Slots</h3>
                         <div className="grid grid-cols-3 gap-3 mb-6">
-                            {timeSlots.map((t) => (
+                            {timeSlots?.map((t) => (
                                 <button
                                     key={t}
                                     onClick={() => setSelectedTime(t)}
@@ -80,7 +80,7 @@ export default function BookAppointment({ isOpen, onClose }) {
                         {/* Consultation Mode */}
                         <h3 className="font-semibold text-gray-800 mb-3">Consultation Mode</h3>
                         <div className="flex gap-3">
-                            {modes.map((m) => (
+                            {modes?.map((m) => (
                                 <button
                                     key={m}
                                     onClick={() => setSelectedMode(m)}
@@ -120,7 +120,7 @@ export default function BookAppointment({ isOpen, onClose }) {
                         <div className="mb-6">
                             <h4 className="font-semibold text-gray-800 mb-2">Payment Options</h4>
                             <div className="flex gap-3">
-                                {paymentMethods.map((p) => (
+                                {paymentMethods?.map((p) => (
                                     <button
                                         key={p}
                                         onClick={() => setPaymentOption(p)}
