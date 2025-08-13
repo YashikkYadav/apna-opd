@@ -49,10 +49,9 @@ export default function DoctorFeatureCard({ doctorData }) {
       {/* Left: Profile Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[300px] flex justify-center">
         <Image
-          src={
-            `http://localhost:3001/public/doctor-profile/${doctorData.images[0].filename}`}
+          src={doctorData?.images[0].url}
 
-          alt={doctorData?.name || 'Doctor'}
+          alt={doctorData?.doctorId?.name || 'Doctor'}
           width={300}
           height={300}
           unoptimized

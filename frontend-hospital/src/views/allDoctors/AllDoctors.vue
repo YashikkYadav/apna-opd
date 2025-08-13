@@ -195,7 +195,7 @@
         </template>
 
         <template v-slot:item.doctorId.name="{ item }">
-          {{ item.doctorId?.name || 'N/A' }}
+          {{ item.doctorId?.name || "N/A" }}
         </template>
 
         <template v-slot:item.phoneNumber="{ item }">
@@ -373,6 +373,7 @@ const submitDoctorForm = async () => {
       closeDoctorDialog();
       if (newDoctorResult.success) {
         useUiStore().openNotificationMessage("Doctor registered successfully!");
+        await fetchDoctors();
       } else {
         useUiStore().openNotificationMessage(
           "Error occured while registration : "
