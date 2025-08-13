@@ -17,14 +17,14 @@ const FullDetailsPage = ({ profileData }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/hospital/${profileData.healthServeId}/doctor`
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/hospital/${profileData?.healthServeId}/doctor`
       );
       
       setDoctorData(response.data.doctors);
       console.log('res', response)
     };
     fetchData();
-  }, [profileData.healthServeId]);
+  }, [profileData?.healthServeId]);
 
   return (
     <div className="pt-24">
