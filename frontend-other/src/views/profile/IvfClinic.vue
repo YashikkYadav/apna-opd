@@ -740,7 +740,7 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return "";
-      return `http://localhost:3001/public/${path}`;
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
     },
     isNotFive(type) {
       return (
@@ -812,24 +812,23 @@ export default {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
-      const hs=await res?.healthServeProfileData?.healthServeUser
+      const hs = await res?.healthServeProfileData?.healthServeUser;
       console.log(res);
-      if(hs){
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-                this.form.pincode = hs?.pincode || profile?.pincode || "";
-
+        this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
 
       if (profile) {
         this.images = profile.galleryImages;
-        
-        this.form.website = profile.website || '';
+
+        this.form.website = profile.website || "";
 
         const hs = profile.healthServeId;
-       
+
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";

@@ -164,75 +164,74 @@ const ImageGallery = ({ NurseData }) => {
             style={{ height: `${CARD_SIZE}px` }}
           >
             {galleryImages.length > 0 &&
-              galleryImages
-                .map((img, idx) => {
-                  const offset = idx - selectedImage;
-                  if (Math.abs(offset) > 2) return null; // Only show center and 2 sides
+              galleryImages.map((img, idx) => {
+                const offset = idx - selectedImage;
+                if (Math.abs(offset) > 2) return null; // Only show center and 2 sides
 
-                  let scale = 1;
-                  let opacity = 1;
-                  let zIndex = 10 - Math.abs(offset);
-                  let translateX = offset * (CARD_SIZE * 0.7 + GAP);
+                let scale = 1;
+                let opacity = 1;
+                let zIndex = 10 - Math.abs(offset);
+                let translateX = offset * (CARD_SIZE * 0.7 + GAP);
 
-                  if (offset === -2 || offset === 2) {
-                    scale = SIDE_SCALE * 0.9;
-                    opacity = SIDE_OPACITY * 0.7;
-                  } else if (offset === -1 || offset === 1) {
-                    scale = SIDE_SCALE;
-                    opacity = SIDE_OPACITY;
-                  }
+                if (offset === -2 || offset === 2) {
+                  scale = SIDE_SCALE * 0.9;
+                  opacity = SIDE_OPACITY * 0.7;
+                } else if (offset === -1 || offset === 1) {
+                  scale = SIDE_SCALE;
+                  opacity = SIDE_OPACITY;
+                }
 
-                  return (
-                    <div
-                      key={idx}
-                      style={{
-                        position: "absolute",
-                        left: "50%",
-                        top: "0",
-                        width: `${CARD_SIZE}px`,
-                        height: `${CARD_SIZE}px`,
-                        transform: `
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: "0",
+                      width: `${CARD_SIZE}px`,
+                      height: `${CARD_SIZE}px`,
+                      transform: `
                       translateX(${translateX - CARD_SIZE / 2}px)
                       scale(${scale})
                     `,
-                        transition:
-                          "transform 0.5s cubic-bezier(.25,.8,.25,1), opacity 0.5s",
-                        zIndex,
-                        opacity,
-                        boxShadow:
-                          offset === 0
-                            ? "0 8px 32px rgba(0,0,0,0.25)"
-                            : "0 2px 8px rgba(0,0,0,0.10)",
-                        cursor: offset === 0 ? "default" : "pointer",
-                        background: "#fff",
+                      transition:
+                        "transform 0.5s cubic-bezier(.25,.8,.25,1), opacity 0.5s",
+                      zIndex,
+                      opacity,
+                      boxShadow:
+                        offset === 0
+                          ? "0 8px 32px rgba(0,0,0,0.25)"
+                          : "0 2px 8px rgba(0,0,0,0.10)",
+                      cursor: offset === 0 ? "default" : "pointer",
+                      background: "#fff",
+                      borderRadius: "1rem",
+                      overflow: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onClick={() => {
+                      setSelectedImage(idx);
+                      setIsAutoplay(false);
+                    }}
+                  >
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${img}`}
+                      alt={"Gallery image"}
+                      width={CARD_SIZE}
+                      height={CARD_SIZE}
+                      className="object-cover"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
                         borderRadius: "1rem",
-                        overflow: "hidden",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
                       }}
-                      onClick={() => {
-                        setSelectedImage(idx);
-                        setIsAutoplay(false);
-                      }}
-                    >
-                      <Image
-                        src={`http://localhost:3001/public/${img}`}
-                        alt={"Gallery image"}
-                        width={CARD_SIZE}
-                        height={CARD_SIZE}
-                        className="object-cover"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "1rem",
-                        }}
-                        priority={offset === 0}
-                      />
-                    </div>
-                  );
-                })}
+                      priority={offset === 0}
+                    />
+                  </div>
+                );
+              })}
           </div>
           {/* Right Arrow */}
           <button

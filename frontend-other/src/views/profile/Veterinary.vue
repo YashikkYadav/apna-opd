@@ -76,12 +76,16 @@
               ></v-file-upload>
             </v-col>
           </v-row>
-          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+          <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+          >
+            {{ snackbar.message }}
+            <template #actions>
+              <v-btn text @click="snackbar.show = false">Close</v-btn>
+            </template>
+          </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,21 +93,27 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
+                <div
+                  v-if="img.type === 'profilePhoto_image'"
+                  class="image-type"
+                >
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages_image'" class="image-type">
+                <div
+                  v-if="img.type === 'galleryImages_image'"
+                  class="image-type"
+                >
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -172,139 +182,230 @@
           </v-row>
         </v-card>
 
-    <v-card>
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field
-  class="pa-4"
-  v-model="form.website"
-  label="Website URL"
-  type="url"
-  placeholder="https://example.com"
-/>
-</v-card>
+        <v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+          </v-toolbar>
+          <v-text-field
+            class="pa-4"
+            v-model="form.website"
+            label="Website URL"
+            type="url"
+            placeholder="https://example.com"
+          />
+        </v-card>
 
         <!-- tags -->
-         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
+          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-  <div
-    v-for="(tag, index) in form.tags"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-text-field
-        v-model="form.tags[index]"
-        label="Tag"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+          <div
+            v-for="(tag, index) in form.tags"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="form.tags[index]"
+                label="Tag"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTag(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTag(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Specialization</v-toolbar-title>
-  </v-toolbar>
-  <div class="px-4 pb-4">
-    <v-text-field
-      v-model="form.specialization"
-      label="Specialization"
-      dense
-      outlined
-      hide-details
-      class="mt-2"
-    />
-  </div>
-</v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Specialization</v-toolbar-title>
+          </v-toolbar>
+          <div class="px-4 pb-4">
+            <v-text-field
+              v-model="form.specialization"
+              label="Specialization"
+              dense
+              outlined
+              hide-details
+              class="mt-2"
+            />
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Languages</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addLanguage">+ Add Language</v-btn>
-  <div v-for="(lang, i) in form.languages" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.languages[i]" label="Language" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
-    <v-btn icon color="error" @click="removeLanguage(i)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Languages</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addLanguage">+ Add Language</v-btn>
+          <div
+            v-for="(lang, i) in form.languages"
+            :key="i"
+            class="d-flex align-center mb-3"
+          >
+            <v-text-field
+              v-model="form.languages[i]"
+              label="Language"
+              dense
+              outlined
+              hide-details
+              class="flex-grow-1 mr-2 pa-4"
+            />
+            <v-btn icon color="error" @click="removeLanguage(i)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Consultation Fee</v-toolbar-title>
-  </v-toolbar>
-  <div class="px-4 pb-4">
-    <v-text-field v-model="form.consultationFee" label="Consultation Fee" dense
-      outlined
-      hide-details
-      class="mt-2"
-    />
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Consultation Fee</v-toolbar-title>
+          </v-toolbar>
+          <div class="px-4 pb-4">
+            <v-text-field
+              v-model="form.consultationFee"
+              label="Consultation Fee"
+              dense
+              outlined
+              hide-details
+              class="mt-2"
+            />
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Available Services</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addService">+ Add Service</v-btn>
-  <div v-for="(service, i) in form.availableServices" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.availableServices[i]" label="Service" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
-    <v-btn icon color="error" @click="removeService(i)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Available Services</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addService">+ Add Service</v-btn>
+          <div
+            v-for="(service, i) in form.availableServices"
+            :key="i"
+            class="d-flex align-center mb-3"
+          >
+            <v-text-field
+              v-model="form.availableServices[i]"
+              label="Service"
+              dense
+              outlined
+              hide-details
+              class="flex-grow-1 mr-2 pa-4"
+            />
+            <v-btn icon color="error" @click="removeService(i)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addFacility">+ Add Facility</v-btn>
-  <div v-for="(facility, i) in form.facilities" :key="i" class="d-flex align-center mb-3">
-    <v-text-field v-model="form.facilities[i]" label="Facility" dense outlined hide-details class="flex-grow-1 mr-2 pa-4" />
-    <v-btn icon color="error" @click="removeFacility(i)">
-      <v-icon>mdi-delete</v-icon>
-    </v-btn>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addFacility">+ Add Facility</v-btn>
+          <div
+            v-for="(facility, i) in form.facilities"
+            :key="i"
+            class="d-flex align-center mb-3"
+          >
+            <v-text-field
+              v-model="form.facilities[i]"
+              label="Facility"
+              dense
+              outlined
+              hide-details
+              class="flex-grow-1 mr-2 pa-4"
+            />
+            <v-btn icon color="error" @click="removeFacility(i)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
-  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
-    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeFAQ(i)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+          <div
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              auto-grow
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFAQ(i)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -441,11 +542,11 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -454,13 +555,13 @@ export default {
       showModal: false,
       imageToDelete: null,
       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
-        website:'',
+        website: "",
         introduction: "",
         experience: null,
         about: "",
@@ -469,13 +570,13 @@ export default {
         city: "",
         pincode: "",
         state: "",
-        tags: [''],
-        specialization: '',
-      languages: [],
-      consultationFee: '',
-      availableServices: [],
-      facilities: [],
-      faqs: [],
+        tags: [""],
+        specialization: "",
+        languages: [],
+        consultationFee: "",
+        availableServices: [],
+        facilities: [],
+        faqs: [],
         testimonials: [],
         googleMapLink: "",
       },
@@ -486,7 +587,7 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
       },
-      
+
       itemDialog: false,
       itemType: "",
       newItemText: "",
@@ -505,14 +606,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-}
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     openMapDialog() {
@@ -584,39 +685,39 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addLanguage() {
-    this.form.languages.push('');
-  },
-  removeLanguage(i) {
-    this.form.languages.splice(i, 1);
-  },
-  addService() {
-    this.form.availableServices.push('');
-  },
-  removeService(i) {
-    this.form.availableServices.splice(i, 1);
-  },
-  addFacility() {
-    this.form.facilities.push('');
-  },
-  removeFacility(i) {
-    this.form.facilities.splice(i, 1);
-  },
-  addFAQ() {
-    this.form.faqs.push({ question: '', answer: '' });
-  },
-  removeFAQ(i) {
-    this.form.faqs.splice(i, 1);
-  },
-  addTag() {
-  this.form.tags.push('');
-},
-removeTag(index) {
-  this.form.tags.splice(index, 1);
-},
-getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+      this.form.languages.push("");
+    },
+    removeLanguage(i) {
+      this.form.languages.splice(i, 1);
+    },
+    addService() {
+      this.form.availableServices.push("");
+    },
+    removeService(i) {
+      this.form.availableServices.splice(i, 1);
+    },
+    addFacility() {
+      this.form.facilities.push("");
+    },
+    removeFacility(i) {
+      this.form.facilities.splice(i, 1);
+    },
+    addFAQ() {
+      this.form.faqs.push({ question: "", answer: "" });
+    },
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
+    },
+    addTag() {
+      this.form.tags.push("");
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
+    getImageUrl(path) {
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -650,56 +751,56 @@ getImageUrl(path) {
       this.imageToDelete = null;
     },
     async deleteImage() {
-      
       if (this.imageToDelete) {
-        console.log(this.imageToDelete)
+        console.log(this.imageToDelete);
         const res = await useProfileStore().deleteImage(this.imageToDelete);
-        console.log(res)
+        console.log(res);
         this.images = res.images;
         this.cancelDelete();
       }
     },
-     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      const profile = res.healthServeProfileData.healthServeProfile.data
-      const hs=await res?.healthServeProfileData?.healthServeUser
+      const profile = res.healthServeProfileData.healthServeProfile.data;
+      const hs = await res?.healthServeProfileData?.healthServeUser;
       console.log(hs);
-      if(hs){
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || profile?.pincode || "";
-
       }
       if (profile) {
         console.log(res);
-        this.images = profile.galleryImages||[];
+        this.images = profile.galleryImages || [];
 
         // const hs = profile.healthServeId;
         this.form.website = profile.website || "";
@@ -708,13 +809,13 @@ getImageUrl(path) {
         this.form.experience = profile.experience || "";
         this.form.pincode = profile?.pincode || "";
 
-        this.form.specialization = profile.specialization || '';
-  this.form.consultationFee = profile.consultationFee || '';
+        this.form.specialization = profile.specialization || "";
+        this.form.consultationFee = profile.consultationFee || "";
 
-  this.form.languages = profile.languages || [];
-  this.form.availableServices = profile.availableServices || [];
-  this.form.facilities = (profile.facilities || []);
-  this.form.faqs = profile.faqs || [];
+        this.form.languages = profile.languages || [];
+        this.form.availableServices = profile.availableServices || [];
+        this.form.facilities = profile.facilities || [];
+        this.form.faqs = profile.faqs || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -732,13 +833,16 @@ getImageUrl(path) {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append('specialization', this.form.specialization);
-  formData.append('consultationFee', this.form.consultationFee);
+        formData.append("specialization", this.form.specialization);
+        formData.append("consultationFee", this.form.consultationFee);
 
-  formData.append('languages', JSON.stringify(this.form.languages));
-  formData.append('availableServices', JSON.stringify(this.form.availableServices));
-  formData.append('facilities', JSON.stringify(this.form.facilities));
-  formData.append('faqs', JSON.stringify(this.form.faqs));
+        formData.append("languages", JSON.stringify(this.form.languages));
+        formData.append(
+          "availableServices",
+          JSON.stringify(this.form.availableServices)
+        );
+        formData.append("facilities", JSON.stringify(this.form.facilities));
+        formData.append("faqs", JSON.stringify(this.form.faqs));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
@@ -752,9 +856,7 @@ getImageUrl(path) {
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();

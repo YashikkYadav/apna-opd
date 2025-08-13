@@ -826,16 +826,16 @@ export default {
     },
 
     getImageUrl(img) {
-      console.log('img',img)
+      console.log("img", img);
       if (!img) return "";
       // If img is a string (new upload), return object URL
       if (typeof img === "string") {
-        return `http://localhost:3001/public/${img}`;
+        return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
       }
       // If img has a url property (from backend), use it
       if (img.url) return img.url;
       // If img has a path property, use it
-      if (img.path) return `http://localhost:3001/public/${img.path}`;
+      if (img.path) return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
       // If img is a File object (new upload)
       if (img instanceof File) return URL.createObjectURL(img);
       return "";
@@ -905,14 +905,13 @@ export default {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res?.healthServeProfileData?.healthServeProfile?.data;
-      const hs=res?.healthServeProfileData?.healthServeUser;
-      if(hs){
+      const hs = res?.healthServeProfileData?.healthServeUser;
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-                this.form.pincode = hs?.pincode || profile?.pincode || "";
-
+        this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
       if (profile) {
         this.images = [

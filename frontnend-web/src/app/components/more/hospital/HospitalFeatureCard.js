@@ -43,9 +43,13 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
-  const avgRating = profileData?.testimonials?.length ? (profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) / profileData?.testimonials?.length).toFixed(1) : "0.0";
+  const avgRating = profileData?.testimonials?.length
+    ? (
+        profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) /
+        profileData?.testimonials?.length
+      ).toFixed(1)
+    : "0.0";
   const reviewCount = profileData?.testimonials?.length || 0;
-  
 
   function getFeatureIconByText(text) {
     switch (text) {
@@ -101,7 +105,7 @@ export default function HospitalFeatureCard({ profileData }) {
       {/* Left: Hospital Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
         <Image
-          src={`http://localhost:3001/public/${profileData?.profileImage}`}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profileData?.profileImage}`}
           alt="Max Super Speciality Hospital"
           width={340}
           height={340}
@@ -155,10 +159,9 @@ export default function HospitalFeatureCard({ profileData }) {
           // }}
           href={`tel:${profileData?.phone}`}
         >
-          <FaPhoneAlt className="text-2xl"  />
+          <FaPhoneAlt className="text-2xl" />
           Call Now
         </a>
-        
       </div>
       {/* Background circles for effect */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />

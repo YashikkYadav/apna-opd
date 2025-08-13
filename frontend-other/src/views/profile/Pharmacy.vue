@@ -787,7 +787,7 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return "";
-      return `http://localhost:3001/public/${path}`;
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
     },
 
     // PARTNERSHIPS

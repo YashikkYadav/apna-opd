@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Vatenary = ({ serviceData,totalItems }) => {
+const Vatenary = ({ serviceData, totalItems }) => {
   const [vatenaryList, setVatenaryList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +38,10 @@ const Vatenary = ({ serviceData,totalItems }) => {
             <div className="flex flex-col sm:flex-row">
               <div className="sm:mr-[32px]">
                 <Image
-                  src={`http://localhost:3001/public/${vatenary?.profileImage}` || ""}
+                  src={
+                    `${process.env.NEXT_PUBLIC_IMAGE_URL}/${vatenary?.profileImage}` ||
+                    ""
+                  }
                   width={180}
                   height={180}
                   alt="Vatenary Service"

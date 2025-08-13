@@ -51,44 +51,43 @@
             </v-col>
           </v-row>
 
-        
-        <v-row dense class="pa-2">
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.established"
-              label="Year of Establishment"
-              variant="outlined"
-              dense
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.totalMembers"
-              label="Total Members"
-              type="number"
-              variant="outlined"
-              dense
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.noOfTrainers"
-              label="No. of Trainers"
-              type="number"
-              variant="outlined"
-               dense
-            />
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="form.operatingHours"
-              label="Operating Hours"
-              variant="outlined"
-               dense
-            />
-          </v-col>
-        </v-row>
-          
+          <v-row dense class="pa-2">
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.established"
+                label="Year of Establishment"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.totalMembers"
+                label="Total Members"
+                type="number"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.noOfTrainers"
+                label="No. of Trainers"
+                type="number"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                v-model="form.operatingHours"
+                label="Operating Hours"
+                variant="outlined"
+                dense
+              />
+            </v-col>
+          </v-row>
+
           <v-row>
             <v-col cols="12" sm="6">
               <v-file-upload
@@ -113,12 +112,16 @@
                 :model-value="galleryImages"
                 @update:modelValue="handleGalleryChange"
               ></v-file-upload>
-              <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+              <v-snackbar
+                v-model="snackbar.show"
+                :color="snackbar.color"
+                :timeout="snackbar.timeout"
+              >
+                {{ snackbar.message }}
+                <template #actions>
+                  <v-btn text @click="snackbar.show = false">Close</v-btn>
+                </template>
+              </v-snackbar>
             </v-col>
           </v-row>
           <v-row>
@@ -128,13 +131,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -210,433 +213,497 @@
             </v-col>
           </v-row>
         </v-card>
-        
+
         <!-- tags -->
-         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+          </v-toolbar>
 
-  <v-card>
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field
-  class="pa-4"
-  v-model="form.website"
-  label="Website URL"
-  type="url"
-  placeholder="https://example.com"
-/>
-</v-card>
-
-  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
-
-  <div
-    v-for="(tag, index) in form.tags"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-text-field
-        v-model="form.tags[index]"
-        label="Tag"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
-
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTag(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-
-
-  <v-card class="section-card">
-  <v-toolbar
-    flat
-    class="mb-4"
-    style="column-gap: 20px; padding: 0px 20px"
-  >
-    <v-toolbar-title class="ml-3">World-Class Facilities</v-toolbar-title>
-  </v-toolbar>
-
-  <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
-
-  <div
-    v-for="(facility, index) in form.worldFacilities"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-bottom: 16px;
-      "
-    >
-      <v-text-field
-        v-model="facility.name"
-        label="Facility Name"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
-
-      
-
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeFacility(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-<!-- Programs and Services Section -->
-<v-card class="section-card">
-  <v-toolbar
-    flat
-    class="mb-4"
-    style="column-gap: 20px; padding: 0px 20px"
-  >
-    <v-toolbar-title class="ml-3">Programs & Services</v-toolbar-title>
-  </v-toolbar>
-
-  <v-btn class="mb-2" @click="addProgram">+ Add Program/Service</v-btn>
-
-  <div
-    v-for="(program, index) in form.programs"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-bottom: 16px;
-      "
-    >
-      <v-text-field
-        v-model="program.title"
-        label="Program/Service Title"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
-
-      <v-textarea
-  v-model="program.description"
-  label="Description (Max 60 words)"
-  :counter="60"
-  dense
-  outlined
-  auto-grow
-  hide-details
-  class="mb-3"
-  @input="limitDescriptionWords"
-/>
-<div v-if="descriptionWordCount > 60" class="text-red-600 text-sm mt-1">
-  Maximum 60 words allowed. Current: {{ descriptionWordCount }}
-</div>
-
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeProgram(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-<!-- Certified Trainers Section -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Our Certified Trainers</v-toolbar-title>
-  </v-toolbar>
-
-  <v-btn class="mb-2" @click="addTrainer">+ Add Trainer</v-btn>
-
-  <div
-    v-for="(trainer, index) in form.trainers"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-      <v-text-field
-        v-model="trainer.name"
-        label="Name"
-        dense
-        outlined
-        class="mb-3"
-      />
-
-      <v-select
-        v-model="trainer.gender"
-        :items="['Male', 'Female']"
-        label="Gender"
-        dense
-        outlined
-        class="mb-3"
-      />
-
-      <v-text-field
-        v-model="trainer.experience"
-        label="Years of Experience"
-        type="number"
-        dense
-        outlined
-        class="mb-3"
-      />
-
-      <v-textarea
-        v-model="trainer.certifications"
-        label="Certifications"
-        dense
-        outlined
-        auto-grow
-        class="mb-3"
-      />
-
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTrainer(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
-
-<!-- Gym Timings Section -->
-<!-- REGULAR TIMINGS -->
-<v-card class="section-card mb-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Regular Timings</v-toolbar-title>
-  </v-toolbar>
-  <v-row class="px-4">
-    <v-col cols="12" sm="6">
-      <v-text-field
-        v-model="form.regularOpening"
-        label="Opening Time"
-        type="time"
-        outlined
-        dense
-      ></v-text-field>
-    </v-col>
-    <v-col cols="12" sm="6">
-      <v-text-field
-        v-model="form.regularClosing"
-        label="Closing Time"
-        type="time"
-        outlined
-        dense
-      ></v-text-field>
-    </v-col>
-  </v-row>
-</v-card>
-
-<!-- SUNDAY TIMINGS -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Sunday Timings</v-toolbar-title>
-  </v-toolbar>
-  <v-row class="px-4">
-    <v-col cols="12" sm="6">
-      <v-text-field
-        v-model="form.sundayOpening"
-        label="Opening Time"
-        type="time"
-        outlined
-        dense
-      ></v-text-field>
-    </v-col>
-    <v-col cols="12" sm="6">
-      <v-text-field
-        v-model="form.sundayClosing"
-        label="Closing Time"
-        type="time"
-        outlined
-        dense
-      ></v-text-field>
-    </v-col>
-  </v-row>
-</v-card>
-
-<!-- Membership Plan Section -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Membership Plans</v-toolbar-title>
-  </v-toolbar>
-
-  <v-btn class="mb-4 ml-4" @click="addPlan" color="primary">+ Add Plan</v-btn>
-
-  <div
-    v-for="(plan, index) in form.plans"
-    :key="index"
-    style="padding: 20px"
-    class="mb-4"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-row>
-        <v-col cols="12" sm="4">
-          <v-text-field
-            v-model="plan.name"
-            label="Plan Name"
-            placeholder="Monthly, Yearly etc"
-            outlined
-            dense
-          />
-        </v-col>
-        <v-col cols="12" sm="4">
-          <v-text-field
-            v-model="plan.price"
-            label="Price"
-            type="number"
-            outlined
-            dense
-          />
-        </v-col>
-        <v-col cols="12" sm="4" class="d-flex align-center">
-          <v-btn color="error" @click="removePlan(index)">Remove Plan</v-btn>
-        </v-col>
-      </v-row>
-
-      <!-- Features -->
-      <div class="mb-3">
-        <v-row
-          v-for="(feature, fIndex) in plan.features"
-          :key="fIndex"
-          class="mb-2"
-        >
-          <v-col cols="10">
+          <v-card>
+            <v-toolbar
+              flat
+              class="mb-4"
+              style="column-gap: 20px; padding: 0px 20px"
+            >
+              <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+            </v-toolbar>
             <v-text-field
-              v-model="plan.features[fIndex]"
-              label="Feature"
-              outlined
-              dense
+              class="pa-4"
+              v-model="form.website"
+              label="Website URL"
+              type="url"
+              placeholder="https://example.com"
             />
-          </v-col>
-          <v-col cols="2" class="d-flex align-center">
-            <v-btn icon @click="removeFeature(index, fIndex)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-btn text color="primary" @click="addFeature(index)">
-          + Add Feature
-        </v-btn>
-      </div>
+          </v-card>
 
-      <div class="d-flex justify-end mt-4">
-        <v-btn color="success" @click="sendEnquiry(plan)">
-          Send Enquiry
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-<v-card class="section-card">
-  <v-toolbar
-    flat
-    class="mb-4"
-    style="column-gap: 20px; padding: 0px 20px"
-  >
-    <v-toolbar-title class="ml-3">Related Gyms</v-toolbar-title>
-  </v-toolbar>
+          <div
+            v-for="(tag, index) in form.tags"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="form.tags[index]"
+                label="Tag"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-  <v-btn class="mb-2" @click="addGym">+ Add Gym</v-btn>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTag(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-  <div
-    v-for="(gym, index) in form.relatedGyms"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-bottom: 16px;
-      "
-    >
-      <v-text-field
-        v-model="gym.name"
-        label="Gym Name"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3"
+              >World-Class Facilities</v-toolbar-title
+            >
+          </v-toolbar>
 
-      <v-text-field
-        v-model="gym.location"
-        label="Location"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+          <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
 
-      <v-text-field
-        v-model="gym.price"
-        label="Price"
-        prefix="₹"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-        type="number"
-      ></v-text-field>
+          <div
+            v-for="(facility, index) in form.worldFacilities"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="facility.name"
+                label="Facility Name"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeGym(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeFacility(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
-  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
-    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeFAQ(i)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <!-- Programs and Services Section -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Programs & Services</v-toolbar-title>
+          </v-toolbar>
 
+          <v-btn class="mb-2" @click="addProgram">+ Add Program/Service</v-btn>
 
+          <div
+            v-for="(program, index) in form.programs"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="program.title"
+                label="Program/Service Title"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-textarea
+                v-model="program.description"
+                label="Description (Max 60 words)"
+                :counter="60"
+                dense
+                outlined
+                auto-grow
+                hide-details
+                class="mb-3"
+                @input="limitDescriptionWords"
+              />
+              <div
+                v-if="descriptionWordCount > 60"
+                class="text-red-600 text-sm mt-1"
+              >
+                Maximum 60 words allowed. Current: {{ descriptionWordCount }}
+              </div>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeProgram(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <!-- Certified Trainers Section -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3"
+              >Our Certified Trainers</v-toolbar-title
+            >
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addTrainer">+ Add Trainer</v-btn>
+
+          <div
+            v-for="(trainer, index) in form.trainers"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="border: 1px solid #ddd; border-radius: 8px"
+            >
+              <v-text-field
+                v-model="trainer.name"
+                label="Name"
+                dense
+                outlined
+                class="mb-3"
+              />
+
+              <v-select
+                v-model="trainer.gender"
+                :items="['Male', 'Female']"
+                label="Gender"
+                dense
+                outlined
+                class="mb-3"
+              />
+
+              <v-text-field
+                v-model="trainer.experience"
+                label="Years of Experience"
+                type="number"
+                dense
+                outlined
+                class="mb-3"
+              />
+
+              <v-textarea
+                v-model="trainer.certifications"
+                label="Certifications"
+                dense
+                outlined
+                auto-grow
+                class="mb-3"
+              />
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTrainer(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <!-- Gym Timings Section -->
+        <!-- REGULAR TIMINGS -->
+        <v-card class="section-card mb-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Regular Timings</v-toolbar-title>
+          </v-toolbar>
+          <v-row class="px-4">
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.regularOpening"
+                label="Opening Time"
+                type="time"
+                outlined
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.regularClosing"
+                label="Closing Time"
+                type="time"
+                outlined
+                dense
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <!-- SUNDAY TIMINGS -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Sunday Timings</v-toolbar-title>
+          </v-toolbar>
+          <v-row class="px-4">
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.sundayOpening"
+                label="Opening Time"
+                type="time"
+                outlined
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.sundayClosing"
+                label="Closing Time"
+                type="time"
+                outlined
+                dense
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-card>
+
+        <!-- Membership Plan Section -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Membership Plans</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-4 ml-4" @click="addPlan" color="primary"
+            >+ Add Plan</v-btn
+          >
+
+          <div
+            v-for="(plan, index) in form.plans"
+            :key="index"
+            style="padding: 20px"
+            class="mb-4"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="plan.name"
+                    label="Plan Name"
+                    placeholder="Monthly, Yearly etc"
+                    outlined
+                    dense
+                  />
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="plan.price"
+                    label="Price"
+                    type="number"
+                    outlined
+                    dense
+                  />
+                </v-col>
+                <v-col cols="12" sm="4" class="d-flex align-center">
+                  <v-btn color="error" @click="removePlan(index)"
+                    >Remove Plan</v-btn
+                  >
+                </v-col>
+              </v-row>
+
+              <!-- Features -->
+              <div class="mb-3">
+                <v-row
+                  v-for="(feature, fIndex) in plan.features"
+                  :key="fIndex"
+                  class="mb-2"
+                >
+                  <v-col cols="10">
+                    <v-text-field
+                      v-model="plan.features[fIndex]"
+                      label="Feature"
+                      outlined
+                      dense
+                    />
+                  </v-col>
+                  <v-col cols="2" class="d-flex align-center">
+                    <v-btn icon @click="removeFeature(index, fIndex)">
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-btn text color="primary" @click="addFeature(index)">
+                  + Add Feature
+                </v-btn>
+              </div>
+
+              <div class="d-flex justify-end mt-4">
+                <v-btn color="success" @click="sendEnquiry(plan)">
+                  Send Enquiry
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Related Gyms</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addGym">+ Add Gym</v-btn>
+
+          <div
+            v-for="(gym, index) in form.relatedGyms"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="gym.name"
+                label="Gym Name"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="gym.location"
+                label="Location"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="gym.price"
+                label="Price"
+                prefix="₹"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+                type="number"
+              ></v-text-field>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeGym(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+          <div
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              auto-grow
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFAQ(i)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -773,11 +840,11 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -785,16 +852,16 @@ export default {
     return {
       imageToDelete: null,
       showModal: false,
-      
-       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+
+      snackbar: {
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
         introduction: "",
-        website:'',
+        website: "",
         experience: null,
         about: "",
         address: "",
@@ -804,34 +871,32 @@ export default {
         state: "",
         worldFacilities: [],
         faqs: [],
-        established: '',
-      totalMembers: '',
-      noOfTrainers: '',
-      operatingHours: '',
-      plans: [
-        {
-          name: '',
-          price: '',
-          features: [''],
-        },
-      ],
+        established: "",
+        totalMembers: "",
+        noOfTrainers: "",
+        operatingHours: "",
+        plans: [
+          {
+            name: "",
+            price: "",
+            features: [""],
+          },
+        ],
         programs: [],
         trainers: [
-        {
-          name: '',
-          gender: '',
-          experience: '',
-          certifications: ''
-        }
-      ],
-      relatedGyms: [
-        { name: '', location: '', price: '' }
-      ],
-          tags: [''],
-        regularOpening: '',
-      regularClosing: '',
-      sundayOpening: '',
-      sundayClosing: '',
+          {
+            name: "",
+            gender: "",
+            experience: "",
+            certifications: "",
+          },
+        ],
+        relatedGyms: [{ name: "", location: "", price: "" }],
+        tags: [""],
+        regularOpening: "",
+        regularClosing: "",
+        sundayOpening: "",
+        sundayClosing: "",
         testimonials: [],
         googleMapLink: "",
       },
@@ -860,14 +925,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-},
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     openMapDialog() {
@@ -939,76 +1004,74 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addGym() {
-    this.form.relatedGyms.push({ name: '', location: '', price: '' });
-  },
-  removeGym(index) {
-    this.form.relatedGyms.splice(index, 1);
-  },
-   addFAQ() {
-    this.form.faqs.push({ question: '', answer: '' });
-  },
-  removeFAQ(i) {
-    this.form.faqs.splice(i, 1);
-  },
+      this.form.relatedGyms.push({ name: "", location: "", price: "" });
+    },
+    removeGym(index) {
+      this.form.relatedGyms.splice(index, 1);
+    },
+    addFAQ() {
+      this.form.faqs.push({ question: "", answer: "" });
+    },
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
+    },
     addFacility() {
       if (this.form.worldFacilities.length >= 6) return;
-  this.form.worldFacilities.push({
-    name: '',
-  });
-},
-removeFacility(index) {
-  this.form.worldFacilities.splice(index, 1);
-},
+      this.form.worldFacilities.push({
+        name: "",
+      });
+    },
+    removeFacility(index) {
+      this.form.worldFacilities.splice(index, 1);
+    },
     addProgram() {
-  this.form.programs.push({
-    title: '',
-    description: ''
-  });
-},
-removeProgram(index) {
-  this.form.programs.splice(index, 1);
-},
-addTrainer() {
-    this.form.trainers.push({
-      name: '',
-      gender: '',
-      experience: '',
-      certifications: ''
-    });
-  },
-  removeTrainer(index) {
-    this.form.trainers.splice(index, 1);
-  },
-addTag() {
-  this.form.tags.push('');
-},
-removeTag(index) {
-  this.form.tags.splice(index, 1);
-},
+      this.form.programs.push({
+        title: "",
+        description: "",
+      });
+    },
+    removeProgram(index) {
+      this.form.programs.splice(index, 1);
+    },
+    addTrainer() {
+      this.form.trainers.push({
+        name: "",
+        gender: "",
+        experience: "",
+        certifications: "",
+      });
+    },
+    removeTrainer(index) {
+      this.form.trainers.splice(index, 1);
+    },
+    addTag() {
+      this.form.tags.push("");
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
 
-addPlan() {
-    this.form.plans.push({ name: '', price: '', features: [''] });
-  },
-  removePlan(index) {
-    this.form.plans.splice(index, 1);
-  },
-  addFeature(planIndex) {
-    this.form.plans[planIndex].features.push('');
-  },
-  removeFeature(planIndex, featureIndex) {
-    this.form.plans[planIndex].features.splice(featureIndex, 1);
-  },
-  sendEnquiry(plan) {
-    // Replace with actual logic (API call, mailto link, modal, etc.)
-    alert(`Enquiry sent for ${plan.name} Plan at ₹${plan.price}`);
-  },
-  getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+    addPlan() {
+      this.form.plans.push({ name: "", price: "", features: [""] });
+    },
+    removePlan(index) {
+      this.form.plans.splice(index, 1);
+    },
+    addFeature(planIndex) {
+      this.form.plans[planIndex].features.push("");
+    },
+    removeFeature(planIndex, featureIndex) {
+      this.form.plans[planIndex].features.splice(featureIndex, 1);
+    },
+    sendEnquiry(plan) {
+      // Replace with actual logic (API call, mailto link, modal, etc.)
+      alert(`Enquiry sent for ${plan.name} Plan at ₹${plan.price}`);
+    },
+    getImageUrl(path) {
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
 
-
-    
     openItemDialog(type) {
       if (
         (this.form[type].length >= 5 && this.isNotFive(type)) ||
@@ -1041,26 +1104,28 @@ addPlan() {
       }
     },
     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
@@ -1068,16 +1133,14 @@ addPlan() {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res.healthServeProfileData.healthServeProfile;
-      const hs=await res?.healthServeProfileData?.healthServeUser
+      const hs = await res?.healthServeProfileData?.healthServeUser;
       console.log(hs);
-      if(hs){
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-                this.form.pincode = hs?.pincode || profile?.pincode || "";
-
-
+        this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
 
       if (profile) {
@@ -1089,27 +1152,29 @@ addPlan() {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        
+
         // this.form.pincode = profile?.pincode || "";
-        this.form.established = profile.established || '';
-         this.form.faqs = profile.faqs || [];
-        this.form.operatingHours=profile.operatingHours || '';
-  this.form.totalMembers = profile.totalMembers || '';
-  this.form.noOfTrainers = profile.noOfTrainers || '';
-  this.form.hours = profile.hours || '';
+        this.form.established = profile.established || "";
+        this.form.faqs = profile.faqs || [];
+        this.form.operatingHours = profile.operatingHours || "";
+        this.form.totalMembers = profile.totalMembers || "";
+        this.form.noOfTrainers = profile.noOfTrainers || "";
+        this.form.hours = profile.hours || "";
         this.form.worldFacilities = profile.worldFacilities || [];
-this.form.programs = profile.programs || [];
-this.form.trainers = profile.trainers || [];
-this.form.plans = profile?.plans?.length ? profile.plans : [{ name: '', price: '', features: [''] }];
-this.form.regularOpening = profile.regularOpening || '';
-this.form.regularClosing = profile.regularClosing || '';
-this.form.sundayOpening = profile.sundayOpening || '';
-this.form.sundayClosing = profile.sundayClosing || '';
-this.form.relatedGyms = profile.relatedGyms?.length
-      ? profile.relatedGyms
-      : [{ name: '', location: '', price: '' }];
+        this.form.programs = profile.programs || [];
+        this.form.trainers = profile.trainers || [];
+        this.form.plans = profile?.plans?.length
+          ? profile.plans
+          : [{ name: "", price: "", features: [""] }];
+        this.form.regularOpening = profile.regularOpening || "";
+        this.form.regularClosing = profile.regularClosing || "";
+        this.form.sundayOpening = profile.sundayOpening || "";
+        this.form.sundayClosing = profile.sundayClosing || "";
+        this.form.relatedGyms = profile.relatedGyms?.length
+          ? profile.relatedGyms
+          : [{ name: "", location: "", price: "" }];
         this.form.testimonials = profile.testimonials || [];
-      this.form.tags = profile.tags || [];
+        this.form.tags = profile.tags || [];
       }
     },
     async onSubmit() {
@@ -1125,22 +1190,25 @@ this.form.relatedGyms = profile.relatedGyms?.length
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append("worldFacilities", JSON.stringify(this.form.worldFacilities));
-         formData.append("established", this.form.established);
-         formData.append('operatingHours',this.form.operatingHours);
-  formData.append("totalMembers", this.form.totalMembers);
-  formData.append("hours", this.form.hours);
-   formData.append('faqs', JSON.stringify(this.form.faqs));
-  formData.append("noOfTrainers", this.form.noOfTrainers);
-formData.append("programs", JSON.stringify(this.form.programs));
-formData.append("trainers", JSON.stringify(this.form.trainers));
-formData.append("regularOpening", this.form.regularOpening);
-formData.append("regularClosing", this.form.regularClosing);
-formData.append("sundayOpening", this.form.sundayOpening);
-formData.append("sundayClosing", this.form.sundayClosing);
-formData.append("tags", JSON.stringify(this.form.tags));
-formData.append('plans', JSON.stringify(this.form.plans));
-formData.append('relatedGyms', JSON.stringify(this.form.relatedGyms));
+        formData.append(
+          "worldFacilities",
+          JSON.stringify(this.form.worldFacilities)
+        );
+        formData.append("established", this.form.established);
+        formData.append("operatingHours", this.form.operatingHours);
+        formData.append("totalMembers", this.form.totalMembers);
+        formData.append("hours", this.form.hours);
+        formData.append("faqs", JSON.stringify(this.form.faqs));
+        formData.append("noOfTrainers", this.form.noOfTrainers);
+        formData.append("programs", JSON.stringify(this.form.programs));
+        formData.append("trainers", JSON.stringify(this.form.trainers));
+        formData.append("regularOpening", this.form.regularOpening);
+        formData.append("regularClosing", this.form.regularClosing);
+        formData.append("sundayOpening", this.form.sundayOpening);
+        formData.append("sundayClosing", this.form.sundayClosing);
+        formData.append("tags", JSON.stringify(this.form.tags));
+        formData.append("plans", JSON.stringify(this.form.plans));
+        formData.append("relatedGyms", JSON.stringify(this.form.relatedGyms));
 
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
@@ -1154,9 +1222,7 @@ formData.append('relatedGyms', JSON.stringify(this.form.relatedGyms));
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();
