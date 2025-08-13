@@ -517,7 +517,7 @@ function DoctorCard({ doctor }) {
         </span>
         <button
           onClick={() => {
-            router.push(`/${doctor?._id}/profile`);
+            router.push(`/${doctor?.doctorId}/profile`);
           }}
           className="bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition w-full sm:w-auto text-xs"
         >
@@ -525,7 +525,7 @@ function DoctorCard({ doctor }) {
         </button>
         <button
           onClick={() => {
-            router.push(`/${doctor?._id}/profile`);
+            router.push(`/${doctor?.doctorId}/profile`);
           }}
           className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs"
         >
