@@ -12,8 +12,8 @@ const Banner = ({ doctorDetail }) => {
   const isDateUnavailable = (date) => {
     if (!doctorDetail?.unavailabilityDate) return false;
     const checkDate = new Date(date);
-    const fromDate = new Date(doctorDetail.unavailabilityDate.from);
-    const toDate = new Date(doctorDetail.unavailabilityDate.to);
+    const fromDate = new Date(doctorDetail?.unavailabilityDate?.from);
+    const toDate = new Date(doctorDetail?.unavailabilityDate?.to);
     return checkDate >= fromDate && checkDate <= toDate;
   };
 
@@ -39,9 +39,9 @@ const Banner = ({ doctorDetail }) => {
       const dayName = currentDate.toLocaleDateString("en-US", {
         weekday: "long",
       });
-      if (location.days.includes(dayName) && !isDateUnavailable(currentDate)) {
+      if (location?.days?.includes(dayName) && !isDateUnavailable(currentDate)) {
         schedule[dayName] = {
-          time: `${location.from} - ${location.to}`,
+          time: `${location?.from} - ${location?.to}`,
           date: new Date(currentDate),
         };
         daysFound++;
@@ -130,7 +130,7 @@ const Banner = ({ doctorDetail }) => {
                     Make an Appointment
                   </h5>
                   <div className="flex flex-col md:flex-row gap-[16px] md:gap-[56px]">
-                    {Object.entries(doctorDetails.schedule)?.map(
+                    {Object.entries(doctorDetails?.schedule)?.map(
                       ([day, time]) => (
                         <div key={day}>
                           <p className="text-base text-white !font-normal">
@@ -148,11 +148,11 @@ const Banner = ({ doctorDetail }) => {
                       <p className="text-sm text-[#FFD700] !font-medium">
                         Not available from{" "}
                         {new Date(
-                          doctorDetail.unavailabilityDate.from
+                          doctorDetail?.unavailabilityDate?.from
                         ).toLocaleDateString()}
                         to{" "}
                         {new Date(
-                          doctorDetail.unavailabilityDate.to
+                          doctorDetail?.unavailabilityDate?.to
                         ).toLocaleDateString()}
                       </p>
                     </div>

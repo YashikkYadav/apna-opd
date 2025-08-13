@@ -28,7 +28,7 @@ function getStarIcons(avgRating) {
 export default function DoctorTestimonialsCard({ testimonials }) {
 
   const avgRating = testimonials?.length
-    ? (testimonials.reduce((sum, r) => sum + r.rating, 0) / testimonials.length).toFixed(1)
+    ? (testimonials?.reduce((sum, r) => sum + r?.rating, 0) / testimonials?.length).toFixed(1)
     : '0.0';
   const reviewCount = testimonials?.length || 0;
 
@@ -96,13 +96,13 @@ export default function DoctorTestimonialsCard({ testimonials }) {
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
               <div className="flex items-center gap-3">
-                <span className="font-bold text-gray-900">{r.author}</span>
+                <span className="font-bold text-gray-900">{r?.author}</span>
                 <div className="flex items-center">
-                  {[...Array(r.rating)].map((_, i) => (
+                  {[...Array(r?.rating)].map((_, i) => (
                     <Star key={i} size={16} className="text-orange-400 fill-orange-400" />
                   ))}
                 </div>
-                {r.verified && (
+                {r?.verified && (
                   <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                     Verified Patient
                   </span>
@@ -110,7 +110,7 @@ export default function DoctorTestimonialsCard({ testimonials }) {
               </div>
 
             </div>
-            <p className="text-gray-700">{r.text}</p>
+            <p className="text-gray-700">{r?.text}</p>
           </motion.div>
         ))}
       </AnimatePresence>

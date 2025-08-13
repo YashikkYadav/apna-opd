@@ -26,12 +26,13 @@ function getStarIcons(avgRating) {
 }
 
 export default function DoctorFeatureCard({ doctorData }) {
+  console.log("d", doctorData)
   const [openModal, setOpenModal] = useState(false);
   const [callModalOpen, setCallModalOpen] = useState(false);
   // console.log("mmm", doctorData)
-  console.log(doctorData.images[0].filename)
+  //console.log(doctorData.images[0].filename)
   const avgRating = doctorData?.testimonials?.length
-    ? (doctorData.testimonials.reduce((sum, r) => sum + r.rating, 0) / doctorData.testimonials.length).toFixed(1)
+    ? (doctorData?.testimonials?.reduce((sum, r) => sum + r.rating, 0) / doctorData?.testimonials?.length).toFixed(1)
     : '0.0';
   const reviewCount = doctorData?.testimonials?.length || 0;
 
@@ -39,7 +40,7 @@ export default function DoctorFeatureCard({ doctorData }) {
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, type: 'spring' }}
+      transition={{ duration: 0.6, type: "spring" }}
       className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 m-6"
     >
       {/* Background Circles */}
@@ -49,9 +50,8 @@ export default function DoctorFeatureCard({ doctorData }) {
       {/* Left: Profile Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[300px] flex justify-center">
         <Image
-          src={doctorData?.images[0].url}
-
-          alt={doctorData?.doctorId?.name || 'Doctor'}
+          src={doctorData?.images[0]?.url}
+          alt={doctorData?.doctorId?.name || "Doctor"}
           width={300}
           height={300}
           unoptimized
@@ -66,9 +66,8 @@ export default function DoctorFeatureCard({ doctorData }) {
         </h2>
         <p className="text-white/90 text-lg max-w-xl">
           {doctorData?.introduction}
-
         </p>
-        <div className='flex gap-4'>
+        <div className="flex gap-4">
           <p className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
             {doctorData?.doctorId?.speciality}
           </p>
@@ -83,14 +82,21 @@ export default function DoctorFeatureCard({ doctorData }) {
         {/* Rating */}
         <div className="flex items-center gap-2 justify-center md:justify-start">
           {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
-          <span className="text-white/70 text-lg ml-2">({reviewCount} reviews)</span>
+          <span className="text-white text-xl font-semibold ml-2">
+            {avgRating}/5
+          </span>
+          <span className="text-white/70 text-lg ml-2">
+            ({reviewCount} reviews)
+          </span>
         </div>
 
         {/* Specialties / Tags */}
         <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
           {doctorData?.specialties?.map((tag, i) => (
-            <span key={i} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
+            <span
+              key={i}
+              className="bg-white/20 text-white px-4 py-2 rounded-full text-sm"
+            >
               {tag}
             </span>
           ))}
@@ -104,18 +110,24 @@ export default function DoctorFeatureCard({ doctorData }) {
           >
             📅 Book Appointment
           </button>
-          <BookAppointment isOpen={openModal} onClose={() => setOpenModal(false)} />
+          <BookAppointment
+            isOpen={openModal}
+            onClose={() => setOpenModal(false)}
+          />
           <button
             onClick={() => setCallModalOpen(true)}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
           >
             📞 Call Now
           </button>
-          <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+          <CallNow
+            isOpen={callModalOpen}
+            onClose={() => setCallModalOpen(false)}
+          />
           <button
             onClick={() => {
-              const section = document.getElementById('location');
-              section?.scrollIntoView({ behavior: 'smooth' });
+              const section = document.getElementById("location");
+              section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
           >

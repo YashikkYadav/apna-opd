@@ -33,7 +33,7 @@ export default function DoctorSpecialistsCard({doctorData}) {
             Conditions Treated
           </h3>
           <div className="flex flex-wrap gap-3">
-            {conditions.map((item, idx) => (
+            {conditions?.map((item, idx) => (
               <motion.span
                 key={idx}
                 whileHover={{ scale: 1.05 }}
@@ -54,7 +54,7 @@ export default function DoctorSpecialistsCard({doctorData}) {
              Procedures Offered
           </h3>
           <div className="flex flex-wrap gap-3">
-            {procedures.map((item, idx) => (
+            {procedures?.map((item, idx) => (
               <motion.span
                 key={idx}
                 whileHover={{ scale: 1.05 }}

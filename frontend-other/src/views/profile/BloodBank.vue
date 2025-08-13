@@ -76,12 +76,16 @@
               ></v-file-upload>
             </v-col>
           </v-row>
-          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+          <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+          >
+            {{ snackbar.message }}
+            <template #actions>
+              <v-btn text @click="snackbar.show = false">Close</v-btn>
+            </template>
+          </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,13 +93,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -173,148 +177,202 @@
         </v-card>
 
         <!-- tags -->
-         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
+          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-  <div
-    v-for="(tag, index) in form.tags"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-text-field
-        v-model="form.tags[index]"
-        label="Tag"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+          <div
+            v-for="(tag, index) in form.tags"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="form.tags[index]"
+                label="Tag"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTag(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTag(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-<v-card>
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field
-  class="pa-4"
-  v-model="form.website"
-  label="Website URL"
-  type="url"
-  placeholder="https://example.com"
-/>
-</v-card>
-
+        <v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+          </v-toolbar>
+          <v-text-field
+            class="pa-4"
+            v-model="form.website"
+            label="Website URL"
+            type="url"
+            placeholder="https://example.com"
+          />
+        </v-card>
 
         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Blood Types Available</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addBloodType">+ Add Blood Type</v-btn>
-  <div v-for="(item, index) in form.bloodTypes" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field
-      v-model="item.type"
-      label="Blood Type"
-      dense
-      outlined
-      hide-details
-      class="mb-3"
-    />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeBloodType(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3"
+              >Blood Types Available</v-toolbar-title
+            >
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addBloodType">+ Add Blood Type</v-btn>
+          <div
+            v-for="(item, index) in form.bloodTypes"
+            :key="index"
+            class="mb-4 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="item.type"
+              label="Blood Type"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeBloodType(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Nearby Blood Banks</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addBloodBank">+ Add Blood Bank</v-btn>
-  <div v-for="(item, index) in form.nearbyBloodBanks" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field
-      v-model="item.name"
-      label="Blood Bank Name"
-      dense
-      outlined
-      hide-details
-      class="mb-3"
-    />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeBloodBank(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Nearby Blood Banks</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addBloodBank">+ Add Blood Bank</v-btn>
+          <div
+            v-for="(item, index) in form.nearbyBloodBanks"
+            :key="index"
+            class="mb-4 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="item.name"
+              label="Blood Bank Name"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeBloodBank(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
-  <div v-for="(item, index) in form.facilities" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field
-      v-model="item.name"
-      label="Facility Name"
-      dense
-      outlined
-      hide-details
-      class="mb-3"
-    />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeFacility(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Facilities</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
+          <div
+            v-for="(item, index) in form.facilities"
+            :key="index"
+            class="mb-4 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="item.name"
+              label="Facility Name"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFacility(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addCertification">+ Add Certification</v-btn>
-  <div v-for="(item, index) in form.certifications" :key="index" class="mb-4 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field
-      v-model="item.name"
-      label="Certification Name"
-      dense
-      outlined
-      hide-details
-      class="mb-3"
-    />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeCertification(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Certifications</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addCertification"
+            >+ Add Certification</v-btn
+          >
+          <div
+            v-for="(item, index) in form.certifications"
+            :key="index"
+            class="mb-4 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="item.name"
+              label="Certification Name"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeCertification(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-      <!-- LICENSE & ESTABLISHED YEAR -->
-      <v-card class="mb-4 pa-4">
-        <v-text-field v-model="form.license" label="License Number" />
-        <v-text-field v-model="form.establishedYear" label="Established Year" />
-      </v-card>
+        <!-- LICENSE & ESTABLISHED YEAR -->
+        <v-card class="mb-4 pa-4">
+          <v-text-field v-model="form.license" label="License Number" />
+          <v-text-field
+            v-model="form.establishedYear"
+            label="Established Year"
+          />
+        </v-card>
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -452,11 +510,11 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -465,13 +523,13 @@ export default {
       showModal: false,
       imageToDelete: null,
       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
-        website : '',
+        website: "",
         introduction: "",
         experience: null,
         about: "",
@@ -481,12 +539,12 @@ export default {
         pincode: "",
         state: "",
         bloodTypes: [],
-      nearbyBloodBanks: [],
-      tags: [''],
-      facilities: [],
-      certifications: [],
-      establishedYear: '',
-        license: '',
+        nearbyBloodBanks: [],
+        tags: [""],
+        facilities: [],
+        certifications: [],
+        establishedYear: "",
+        license: "",
         testimonials: [],
         googleMapLink: "",
       },
@@ -515,14 +573,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-},
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     openMapDialog() {
@@ -594,39 +652,39 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addBloodType() {
-    this.form.bloodTypes.push({ type: '' });
-  },
-  removeBloodType(index) {
-    this.form.bloodTypes.splice(index, 1);
-  },
-  addBloodBank() {
-    this.form.nearbyBloodBanks.push({ name: '' });
-  },
-  removeBloodBank(index) {
-    this.form.nearbyBloodBanks.splice(index, 1);
-  },
-  addFacility() {
-    this.form.facilities.push({ name: '' });
-  },
-  removeFacility(index) {
-    this.form.facilities.splice(index, 1);
-  },
-  addCertification() {
-    this.form.certifications.push({ name: '' });
-  },
-  removeCertification(index) {
-    this.form.certifications.splice(index, 1);
-  },
-addTag() {
-  this.form.tags.push('');
-},
-removeTag(index) {
-  this.form.tags.splice(index, 1);
-},
-getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+      this.form.bloodTypes.push({ type: "" });
+    },
+    removeBloodType(index) {
+      this.form.bloodTypes.splice(index, 1);
+    },
+    addBloodBank() {
+      this.form.nearbyBloodBanks.push({ name: "" });
+    },
+    removeBloodBank(index) {
+      this.form.nearbyBloodBanks.splice(index, 1);
+    },
+    addFacility() {
+      this.form.facilities.push({ name: "" });
+    },
+    removeFacility(index) {
+      this.form.facilities.splice(index, 1);
+    },
+    addCertification() {
+      this.form.certifications.push({ name: "" });
+    },
+    removeCertification(index) {
+      this.form.certifications.splice(index, 1);
+    },
+    addTag() {
+      this.form.tags.push("");
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
+    getImageUrl(path) {
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -666,27 +724,29 @@ getImageUrl(path) {
         this.cancelDelete();
       }
     },
-     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
@@ -694,36 +754,38 @@ getImageUrl(path) {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
-      
-      const hs=await res?.healthServeProfileData?.healthServeUser
+
+      const hs = await res?.healthServeProfileData?.healthServeUser;
       console.log(hs);
-      if(hs){
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-                this.form.pincode = hs?.pincode || profile?.pincode || "";
-
-
+        this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
 
       if (profile) {
         // console.log("profile.images",profile.bloodTypes);
-        this.images =  profile.galleryImages || profile.profileImage;
-        
+        this.images = profile.galleryImages || profile.profileImage;
+
         const hs = profile.healthServeId;
-        this.form.website = profile.website || '';
+        this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         // this.form.pincode = profile?.pincode || "";
 
-        this.form.bloodTypes = profile.bloodTypes.map((item)=>({type:item})) || [];
-  this.form.nearbyBloodBanks = profile.nearbyBloodBanks.map((item)=>({name:item})) || [];
-  this.form.facilities = profile.facilities.map((item)=>({name:item})) || [];
-  this.form.certifications = profile.certifications.map((item)=>({name:item})) || [];
-  this.form.establishedYear = profile.establishedYear || '';
-  this.form.license = profile.license || '';
+        this.form.bloodTypes =
+          profile.bloodTypes.map((item) => ({ type: item })) || [];
+        this.form.nearbyBloodBanks =
+          profile.nearbyBloodBanks.map((item) => ({ name: item })) || [];
+        this.form.facilities =
+          profile.facilities.map((item) => ({ name: item })) || [];
+        this.form.certifications =
+          profile.certifications.map((item) => ({ name: item })) || [];
+        this.form.establishedYear = profile.establishedYear || "";
+        this.form.license = profile.license || "";
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -742,12 +804,18 @@ getImageUrl(path) {
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
         formData.append("bloodTypes", JSON.stringify(this.form.bloodTypes));
-  formData.append("nearbyBloodBanks", JSON.stringify(this.form.nearbyBloodBanks));
-  // formData.append("license", JSON.stringify(this.form.license));
-  formData.append("facilities", JSON.stringify(this.form.facilities));
-  formData.append("certifications", JSON.stringify(this.form.certifications));
-  formData.append("establishedYear", this.form.establishedYear);
-  formData.append("license", this.form.license);
+        formData.append(
+          "nearbyBloodBanks",
+          JSON.stringify(this.form.nearbyBloodBanks)
+        );
+        // formData.append("license", JSON.stringify(this.form.license));
+        formData.append("facilities", JSON.stringify(this.form.facilities));
+        formData.append(
+          "certifications",
+          JSON.stringify(this.form.certifications)
+        );
+        formData.append("establishedYear", this.form.establishedYear);
+        formData.append("license", this.form.license);
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 
@@ -761,9 +829,7 @@ getImageUrl(path) {
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();
@@ -837,7 +903,7 @@ getImageUrl(path) {
   },
 };
 onMounted(() => {
-   this.fetchProfileData();
+  this.fetchProfileData();
 });
 </script>
 <style scoped>

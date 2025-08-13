@@ -76,12 +76,16 @@
               ></v-file-upload>
             </v-col>
           </v-row>
-          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+          <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+          >
+            {{ snackbar.message }}
+            <template #actions>
+              <v-btn text @click="snackbar.show = false">Close</v-btn>
+            </template>
+          </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,13 +93,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -202,11 +206,11 @@ import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -215,11 +219,11 @@ export default {
       showModal: false,
       imageToDelete: null,
       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
         introduction: "",
         experience: null,
@@ -248,14 +252,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-},
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     confirmDelete(img) {
@@ -273,27 +277,29 @@ export default {
         this.cancelDelete();
       }
     },
-     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
@@ -335,9 +341,7 @@ export default {
           formData.append("galleryImages", file);
         });
 
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();
@@ -402,9 +406,9 @@ export default {
       );
     },
     getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
 
     validateDays(value) {
       if (!value || value.length === 0) {

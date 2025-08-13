@@ -76,12 +76,16 @@
               ></v-file-upload>
             </v-col>
           </v-row>
-          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+          <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+          >
+            {{ snackbar.message }}
+            <template #actions>
+              <v-btn text @click="snackbar.show = false">Close</v-btn>
+            </template>
+          </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,21 +93,27 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
+                <div
+                  v-if="img.type === 'profilePhoto_image'"
+                  class="image-type"
+                >
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages_image'" class="image-type">
+                <div
+                  v-if="img.type === 'galleryImages_image'"
+                  class="image-type"
+                >
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -173,213 +183,302 @@
         </v-card>
 
         <!-- tags -->
-         <v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
-  </v-toolbar>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Tags</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
+          <v-btn class="mb-2" @click="addTag">+ Add Tag</v-btn>
 
-  <div
-    v-for="(tag, index) in form.tags"
-    :key="index"
-    class="mb-4"
-    style="padding: 20px"
-  >
-    <div
-      class="pa-4"
-      style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px"
-    >
-      <v-text-field
-        v-model="form.tags[index]"
-        label="Tag"
-        dense
-        outlined
-        hide-details
-        class="mb-3"
-      ></v-text-field>
+          <div
+            v-for="(tag, index) in form.tags"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="form.tags[index]"
+                label="Tag"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
 
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeTag(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeTag(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-<v-card>
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field
-  class="pa-4"
-  v-model="form.website"
-  label="Website URL"
-  type="url"
-  placeholder="https://example.com"
-/>
-</v-card>
-
+        <v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+          </v-toolbar>
+          <v-text-field
+            class="pa-4"
+            v-model="form.website"
+            label="Website URL"
+            type="url"
+            placeholder="https://example.com"
+          />
+        </v-card>
 
         <!-- EDUCATION -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Education</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-2" @click="addEducation">+ Add Education</v-btn>
-  <div v-for="(edu, index) in form.education" :key="index" class="mb-4" style="padding: 20px">
-    <div class="pa-4" style="border: 1px solid #ddd; border-radius: 8px; margin-bottom: 16px;">
-      <v-text-field v-model="edu.degree" label="Degree" dense outlined class="mb-3"></v-text-field>
-      <v-text-field v-model="edu.institution" label="Institution" dense outlined class="mb-3"></v-text-field>
-      <v-text-field v-model="edu.year" label="Year" dense outlined class="mb-3"></v-text-field>
-      <div class="d-flex justify-end">
-        <v-btn icon color="error" @click="removeEducation(index)">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
-</v-card>
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Education</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-2" @click="addEducation">+ Add Education</v-btn>
+          <div
+            v-for="(edu, index) in form.education"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="edu.degree"
+                label="Degree"
+                dense
+                outlined
+                class="mb-3"
+              ></v-text-field>
+              <v-text-field
+                v-model="edu.institution"
+                label="Institution"
+                dense
+                outlined
+                class="mb-3"
+              ></v-text-field>
+              <v-text-field
+                v-model="edu.year"
+                label="Year"
+                dense
+                outlined
+                class="mb-3"
+              ></v-text-field>
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeEducation(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
 
-<!-- SPECIAL INTERESTS -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Special Interests</v-toolbar-title>
-  </v-toolbar>
+        <!-- SPECIAL INTERESTS -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Special Interests</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addSpecialInterest">+ Add Interest</v-btn>
+          <v-btn class="mb-2" @click="addSpecialInterest">+ Add Interest</v-btn>
 
-  <div v-for="(interest, index) in form.specialInterests" :key="index" class="mb-4 px-4">
-    <v-text-field
-      v-model="form.specialInterests[index]"
-      label="Interest"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error"  @click="removeSpecialInterest(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+          <div
+            v-for="(interest, index) in form.specialInterests"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.specialInterests[index]"
+              label="Interest"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeSpecialInterest(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-<!-- CERTIFICATIONS -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Certifications</v-toolbar-title>
-  </v-toolbar>
+        <!-- CERTIFICATIONS -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Certifications</v-toolbar-title>
+          </v-toolbar>
 
-  <v-btn class="mb-2" @click="addCertification">+ Add Certificate</v-btn>
+          <v-btn class="mb-2" @click="addCertification"
+            >+ Add Certificate</v-btn
+          >
 
-  <div v-for="(cert, index) in form.certifications" :key="index" class="mb-4 px-4">
-    <v-text-field
-      v-model="form.certifications[index]"
-      label="Certification"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeCertification(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+          <div
+            v-for="(cert, index) in form.certifications"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.certifications[index]"
+              label="Certification"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeCertification(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
+        <!-- LANGUAGES -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Languages Spoken</v-toolbar-title>
+          </v-toolbar>
 
-<!-- LANGUAGES -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Languages Spoken</v-toolbar-title>
-  </v-toolbar>
+          <v-btn class="mb-2" @click="addLanguage">+ Add Lang</v-btn>
 
-  <v-btn class="mb-2" @click="addLanguage">+ Add Lang</v-btn>
+          <div
+            v-for="(lang, index) in form.languages"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.languages[index]"
+              label="Language"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeLanguage(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-  <div v-for="(lang, index) in form.languages" :key="index" class="mb-4 px-4">
-    <v-text-field
-      v-model="form.languages[index]"
-      label="Language"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeLanguage(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <!-- CONDITIONS TREATED -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Conditions Treated</v-toolbar-title>
+          </v-toolbar>
 
-<!-- CONDITIONS TREATED -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Conditions Treated</v-toolbar-title>
-  </v-toolbar>
+          <v-btn class="mb-2" @click="addCondition">+ Add</v-btn>
 
-  <v-btn class="mb-2" @click="addCondition">+ Add</v-btn>
+          <div
+            v-for="(cond, index) in form.conditionsTreated"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="form.conditionsTreated[index]"
+              label="Condition"
+              dense
+              outlined
+              hide-details
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeCondition(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-  <div v-for="(cond, index) in form.conditionsTreated" :key="index" class="mb-4 px-4">
-    <v-text-field
-      v-model="form.conditionsTreated[index]"
-      label="Condition"
-      dense
-      outlined
-      hide-details
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error" @click="removeCondition(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
+        <!-- THERAPY PACKAGES -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Therapy Packages</v-toolbar-title>
+          </v-toolbar>
 
-<!-- THERAPY PACKAGES -->
-<v-card class="section-card">
-  <v-toolbar flat class="mb-4" style="padding: 0px 20px">
-    <v-toolbar-title>Therapy Packages</v-toolbar-title>
-  </v-toolbar>
+          <v-btn class="mb-2" @click="addTherapyPackage">+ Add</v-btn>
 
-  <v-btn class="mb-2" @click="addTherapyPackage">+ Add</v-btn>
+          <div
+            v-for="(pkg, index) in form.therapyPackages"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-text-field
+              v-model="pkg.name"
+              label="Package Name"
+              dense
+              outlined
+              hide-details
+              class="mb-2"
+            ></v-text-field>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeTherapyPackage(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
-  <div v-for="(pkg, index) in form.therapyPackages" :key="index" class="mb-4 px-4">
-    <v-text-field
-      v-model="pkg.name"
-      label="Package Name"
-      dense
-      outlined
-      hide-details
-      class="mb-2"
-    ></v-text-field>
-    <div class="d-flex justify-end pa-2">
-      <v-btn icon color="error"@click="removeTherapyPackage(index)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
-
-<v-card class="section-card mt-6">
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
-  </v-toolbar>
-  <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
-  <div v-for="(faq, i) in form.faqs" :key="i" class="mb-6 pa-4" style="border: 1px solid #ddd; border-radius: 8px">
-    <v-text-field v-model="faq.question" label="Question" dense outlined hide-details class="mb-3" />
-    <v-textarea v-model="faq.answer" label="Answer" dense outlined auto-grow hide-details class="mb-3" />
-    <div class="d-flex justify-end">
-      <v-btn icon color="error" @click="removeFAQ(i)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </div>
-  </div>
-</v-card>
-
+        <v-card class="section-card mt-6">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
+          </v-toolbar>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
+          <div
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
+          >
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              auto-grow
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFAQ(i)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
 
         <!-- Testimonials -->
         <v-card class="section-card">
@@ -517,11 +616,11 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -530,13 +629,13 @@ export default {
       showModal: false,
       imageToDelete: null,
       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
-        website:'',
+        website: "",
         introduction: "",
         experience: null,
         faqs: [],
@@ -545,14 +644,14 @@ export default {
         locality: "",
         city: "",
         pincode: "",
-        tags: [''],
+        tags: [""],
         state: "",
-        education: [{ degree: '', institution: '', year: '' }],
-      specialInterests: [],
-      certifications: [],
-      languages: [],
-      conditionsTreated: [],
-      therapyPackages: [],
+        education: [{ degree: "", institution: "", year: "" }],
+        specialInterests: [],
+        certifications: [],
+        languages: [],
+        conditionsTreated: [],
+        therapyPackages: [],
         testimonials: [],
         googleMapLink: "",
       },
@@ -563,7 +662,7 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
       },
-      
+
       itemDialog: false,
       itemType: "",
       newItemText: "",
@@ -582,14 +681,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-},
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     openMapDialog() {
@@ -661,68 +760,68 @@ export default {
       this.form.testimonials.splice(index, 1);
     },
     addEducation() {
-    this.form.education.push({ degree: '', institution: '', year: '' });
-  },
-  removeEducation(index) {
-    this.form.education.splice(index, 1);
-  },
-  addFAQ() {
-    this.form.faqs.push({ question: '', answer: '' });
-  },
-  removeFAQ(i) {
-    this.form.faqs.splice(i, 1);
-  },
+      this.form.education.push({ degree: "", institution: "", year: "" });
+    },
+    removeEducation(index) {
+      this.form.education.splice(index, 1);
+    },
+    addFAQ() {
+      this.form.faqs.push({ question: "", answer: "" });
+    },
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
+    },
 
-// Special Interests
-  addSpecialInterest() {
-    this.form.specialInterests.push('');
-  },
-  removeSpecialInterest(i) {
-    this.form.specialInterests.splice(i, 1);
-  },
+    // Special Interests
+    addSpecialInterest() {
+      this.form.specialInterests.push("");
+    },
+    removeSpecialInterest(i) {
+      this.form.specialInterests.splice(i, 1);
+    },
 
-  // Certifications
-  addCertification() {
-    this.form.certifications.push('');
-  },
-  removeCertification(i) {
-    this.form.certifications.splice(i, 1);
-  },
+    // Certifications
+    addCertification() {
+      this.form.certifications.push("");
+    },
+    removeCertification(i) {
+      this.form.certifications.splice(i, 1);
+    },
 
-  // Languages
-  addLanguage() {
-    this.form.languages.push('');
-  },
-  removeLanguage(i) {
-    this.form.languages.splice(i, 1);
-  },
+    // Languages
+    addLanguage() {
+      this.form.languages.push("");
+    },
+    removeLanguage(i) {
+      this.form.languages.splice(i, 1);
+    },
 
-  // Conditions
-  addCondition() {
-    this.form.conditionsTreated.push('');
-  },
-  removeCondition(i) {
-    this.form.conditionsTreated.splice(i, 1);
-  },
+    // Conditions
+    addCondition() {
+      this.form.conditionsTreated.push("");
+    },
+    removeCondition(i) {
+      this.form.conditionsTreated.splice(i, 1);
+    },
 
-  // Therapy Packages
-  addTherapyPackage() {
-    this.form.therapyPackages.push({ name: '', price: '' });
-  },
-  removeTherapyPackage(i) {
-    this.form.therapyPackages.splice(i, 1);
-  },
+    // Therapy Packages
+    addTherapyPackage() {
+      this.form.therapyPackages.push({ name: "", price: "" });
+    },
+    removeTherapyPackage(i) {
+      this.form.therapyPackages.splice(i, 1);
+    },
 
-  addTag() {
-  this.form.tags.push('');
-},
-removeTag(index) {
-  this.form.tags.splice(index, 1);
-},
-getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+    addTag() {
+      this.form.tags.push("");
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
+    getImageUrl(path) {
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
 
     isNotFive(type) {
       return (
@@ -764,27 +863,28 @@ getImageUrl(path) {
       }
     },
     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
-
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
@@ -792,15 +892,14 @@ getImageUrl(path) {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = res?.healthServeProfileData?.healthServeProfile?.data;
-      const hs=await res?.healthServeProfileData?.healthServeUser
-      console.log(">",profile);
-      if(hs){
+      const hs = await res?.healthServeProfileData?.healthServeUser;
+      console.log(">", profile);
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || profile?.pincode || "";
-
       }
 
       if (profile) {
@@ -812,10 +911,10 @@ getImageUrl(path) {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        
+
         // this.form.pincode = profile?.pincode || "";
 
-        this.form.education = (profile.education || [])
+        this.form.education = profile.education || [];
         this.form.specialInterests = profile.specialInterests || [];
         this.form.certifications = profile.certifications || [];
         this.form.languages = profile.languages || [];
@@ -839,15 +938,27 @@ getImageUrl(path) {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append('education', JSON.stringify(this.form.education));
-  formData.append("specialInterests", JSON.stringify(this.form.specialInterests));
-      formData.append("certifications", JSON.stringify(this.form.certifications));
-      formData.append("languages", JSON.stringify(this.form.languages));
-      formData.append("conditionsTreated", JSON.stringify(this.form.conditionsTreated));
-      formData.append("therapyPackages", JSON.stringify(this.form.therapyPackages));
+        formData.append("education", JSON.stringify(this.form.education));
+        formData.append(
+          "specialInterests",
+          JSON.stringify(this.form.specialInterests)
+        );
+        formData.append(
+          "certifications",
+          JSON.stringify(this.form.certifications)
+        );
+        formData.append("languages", JSON.stringify(this.form.languages));
+        formData.append(
+          "conditionsTreated",
+          JSON.stringify(this.form.conditionsTreated)
+        );
+        formData.append(
+          "therapyPackages",
+          JSON.stringify(this.form.therapyPackages)
+        );
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
-        formData.append('faqs', JSON.stringify(this.form.faqs));
+        formData.append("faqs", JSON.stringify(this.form.faqs));
         if (this.profileImage) {
           formData.append("profilePhoto_image", this.profileImage);
         }
@@ -858,9 +969,7 @@ getImageUrl(path) {
         for (let pair of formData.entries()) {
           console.log(pair[0] + ":", pair[1]);
         }
-        const res = await useProfileStore().addProfileData(
-          formData
-        );
+        const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
           this.fetchProfileData();
@@ -934,7 +1043,7 @@ getImageUrl(path) {
   },
 };
 onMounted(() => {
-   this.fetchProfileData();
+  this.fetchProfileData();
 });
 </script>
 <style scoped>

@@ -23,7 +23,7 @@ const OtherSpecialist = () => {
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="pt-[16px] pb-[16px] lg:pt-0">
-                                        <h3 className="title-32 mb-[8px]">{item.title}</h3>
+                                        <h3 className="title-32 mb-[8px]">{item?.title}</h3>
                                         <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">10 Years of Experience</p>
                                         <h4 className="title-24 text-[#808080] !font-medium">California Medical Center</h4>
                                     </div>

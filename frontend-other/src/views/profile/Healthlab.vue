@@ -76,12 +76,16 @@
               ></v-file-upload>
             </v-col>
           </v-row>
-          <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-    {{ snackbar.message }}
-    <template #actions>
-      <v-btn text @click="snackbar.show = false">Close</v-btn>
-    </template>
-  </v-snackbar>
+          <v-snackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="snackbar.timeout"
+          >
+            {{ snackbar.message }}
+            <template #actions>
+              <v-btn text @click="snackbar.show = false">Close</v-btn>
+            </template>
+          </v-snackbar>
           <v-row>
             <div class="image-gallery">
               <div
@@ -89,13 +93,13 @@
                 :key="index"
                 class="image-card"
               >
-                <div  class="image-container">
+                <div class="image-container">
                   <img
-    :key="index"
-    :src="getImageUrl(img)"
-    alt="Gallery Image"
-    class="image"
-  />
+                    :key="index"
+                    :src="getImageUrl(img)"
+                    alt="Gallery Image"
+                    class="image"
+                  />
                   <button class="delete-button" @click="confirmDelete(img)">
                     ✖
                   </button>
@@ -172,19 +176,22 @@
           </v-row>
         </v-card>
 
-
         <v-card>
-  <v-toolbar flat class="mb-4" style="column-gap: 20px; padding: 0px 20px">
-    <v-toolbar-title class="ml-3">Website</v-toolbar-title>
-  </v-toolbar>
-  <v-text-field
-  class="pa-4"
-  v-model="form.website"
-  label="Website URL"
-  type="url"
-  placeholder="https://example.com"
-/>
-</v-card>
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+          </v-toolbar>
+          <v-text-field
+            class="pa-4"
+            v-model="form.website"
+            label="Website URL"
+            type="url"
+            placeholder="https://example.com"
+          />
+        </v-card>
 
         <!-- tags -->
         <v-card class="section-card">
@@ -561,11 +568,11 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { onMounted } from "vue";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-import { reactive } from 'vue';
+import { reactive } from "vue";
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'warning',
+  message: "",
+  color: "warning",
   timeout: 4000,
 });
 export default {
@@ -574,13 +581,13 @@ export default {
       showModal: false,
       imageToDelete: null,
       snackbar: {
-      show: false,
-      message: '',
-      color: 'warning',
-      timeout: 4000,
-    },
+        show: false,
+        message: "",
+        color: "warning",
+        timeout: 4000,
+      },
       form: {
-        website : '',
+        website: "",
         introduction: "",
         experience: null,
         about: "",
@@ -623,14 +630,14 @@ export default {
   },
   computed: {
     sortedImages() {
-  if (!Array.isArray(this.images)) return [];
+      if (!Array.isArray(this.images)) return [];
 
-  return [...this.images].sort((a, b) => {
-    if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-    if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-    return 0;
-  });
-},
+      return [...this.images].sort((a, b) => {
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        return 0;
+      });
+    },
   },
   methods: {
     openMapDialog() {
@@ -738,9 +745,9 @@ export default {
       this.form.tags.splice(index, 1);
     },
     getImageUrl(path) {
-  if (!path) return "";
-  return `http://localhost:3001/public/${path}`;
-},
+      if (!path) return "";
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    },
     isNotFive(type) {
       return (
         type != "insurance" &&
@@ -780,27 +787,29 @@ export default {
         this.cancelDelete();
       }
     },
-     handleGalleryChange(newFiles) {
-  const combined = [...this.galleryImages, ...newFiles];
+    handleGalleryChange(newFiles) {
+      const combined = [...this.galleryImages, ...newFiles];
 
-  const uniqueFiles = Array.from(
-    new Map(combined.map((file) => [file.name, file])).values()
-  ).slice(0, 6);
+      const uniqueFiles = Array.from(
+        new Map(combined.map((file) => [file.name, file])).values()
+      ).slice(0, 6);
 
-  const oversized = uniqueFiles.find((file) => file.size > 20 * 1024 * 1024);
+      const oversized = uniqueFiles.find(
+        (file) => file.size > 20 * 1024 * 1024
+      );
 
-  this.galleryImages = uniqueFiles;
-  if (oversized) {
-  this.snackbar = {
-    message: `"${oversized.name}" exceeds 20MB limit`,
-    color: 'warning',
-    show: true,
-    timeout: 4000, 
-  };
-  this.galleryImages = [];
-  return;
-}
-},
+      this.galleryImages = uniqueFiles;
+      if (oversized) {
+        this.snackbar = {
+          message: `"${oversized.name}" exceeds 20MB limit`,
+          color: "warning",
+          show: true,
+          timeout: 4000,
+        };
+        this.galleryImages = [];
+        return;
+      }
+    },
 
     handleProfileChange(newFile) {
       this.profileImage = newFile;
@@ -808,15 +817,14 @@ export default {
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
       const profile = await res.healthServeProfileData.healthServeProfile;
-      const hs=await res?.healthServeProfileData?.healthServeUser
+      const hs = await res?.healthServeProfileData?.healthServeUser;
       console.log(hs);
-      if(hs){
+      if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
         this.form.locality = hs?.locality || "";
         this.form.state = hs?.state || "";
-                this.form.pincode = hs?.pincode || profile?.pincode || "";
-
+        this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
 
       if (profile) {
@@ -828,14 +836,14 @@ export default {
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-      
+
         // this.form.pincode = profile?.pincode || "";
-        this.form.website = profile.website || '';
-        this.form.keyFeatures = (profile.keyFeatures || [])
-        this.form.certifications = (profile.certifications || [])
-        this.form.packages = (profile.packages || [])
-        this.form.faqs = (profile.faqs || [])
-        this.form.tests = (profile.tests || [])
+        this.form.website = profile.website || "";
+        this.form.keyFeatures = profile.keyFeatures || [];
+        this.form.certifications = profile.certifications || [];
+        this.form.packages = profile.packages || [];
+        this.form.faqs = profile.faqs || [];
+        this.form.tests = profile.tests || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.tags = profile.tags || [];
       }
@@ -853,26 +861,14 @@ export default {
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append(
-          "keyFeatures",
-          JSON.stringify(this.form.keyFeatures)
-        );
+        formData.append("keyFeatures", JSON.stringify(this.form.keyFeatures));
         formData.append(
           "certifications",
           JSON.stringify(this.form.certifications)
         );
-        formData.append(
-          "packages",
-          JSON.stringify(this.form.packages)
-        );
-        formData.append(
-          "faqs",
-          JSON.stringify(this.form.faqs)
-        );
-        formData.append(
-          "tests",
-          JSON.stringify(this.form.tests)
-        );
+        formData.append("packages", JSON.stringify(this.form.packages));
+        formData.append("faqs", JSON.stringify(this.form.faqs));
+        formData.append("tests", JSON.stringify(this.form.tests));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
 

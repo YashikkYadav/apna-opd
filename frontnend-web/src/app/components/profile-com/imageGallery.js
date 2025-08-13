@@ -19,19 +19,19 @@ export default function ImageGallery({ images1 }) {
   useEffect(() => {
     if (autoplay && images.length > 0) {
       autoplayRef.current = setInterval(() => {
-        setSelected((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+        setSelected((prev) => (prev < images?.length - 1 ? prev + 1 : 0));
       }, 3000);
     }
     return () => clearInterval(autoplayRef.current);
-  }, [autoplay, images.length]);
+  }, [autoplay, images?.length]);
 
   const goPrev = () => {
-    setSelected((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+    setSelected((prev) => (prev > 0 ? prev - 1 : images?.length - 1));
     setAutoplay(false);
   };
 
   const goNext = () => {
-    setSelected((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+    setSelected((prev) => (prev < images?.length - 1 ? prev + 1 : 0));
     setAutoplay(false);
   };
 
@@ -64,7 +64,7 @@ export default function ImageGallery({ images1 }) {
 
         {/* Image Cards */}
         <div className="relative flex justify-center items-center w-full">
-          {images.map((src, idx) => {
+          {images?.map((src, idx) => {
             const offset = idx - selected;
             if (Math.abs(offset) > 2) return null;
 
@@ -124,7 +124,7 @@ export default function ImageGallery({ images1 }) {
 
         {/* Dots */}
         <div className="flex mt-6 space-x-2">
-          {images.map((_, idx) => (
+          {images?.map((_, idx) => (
             <button
               key={idx}
               onClick={() => {

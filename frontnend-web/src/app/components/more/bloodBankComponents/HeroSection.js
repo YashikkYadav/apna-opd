@@ -1,10 +1,10 @@
-'use client';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-import CallNow from './CallNow';
-import CheckAvailability from './checkAvailability';
-import { useState } from 'react';
+"use client";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import CallNow from "./CallNow";
+import CheckAvailability from "./checkAvailability";
+import { useState } from "react";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -34,21 +34,21 @@ function getStarIcons(avgRating) {
   return stars;
 }
 
+const HeroSection = ({ data, healthProfile }) => {
+  console.log(healthProfile?.profilePhoto);
 
-const HeroSection = ({
-  data,
-  healthProfile,
-}) => {
-  console.log(healthProfile?.profilePhoto)
+  const user = data;
 
-  const user = data
-
-  const [openModel,setModalOpen]=useState(false)
+  const [openModel, setModalOpen] = useState(false);
 
   const [callModalOpen, setCallModalOpen] = useState(false);
-  const avgRating = healthProfile?.testimonials?.length ? (healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) / healthProfile?.testimonials.length).toFixed(1) : "0.0";
+  const avgRating = healthProfile?.testimonials?.length
+    ? (
+        healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+        healthProfile?.testimonials.length
+      ).toFixed(1)
+    : "0.0";
   const reviewCount = healthProfile?.testimonials?.length || 0;
-
 
   return (
     <motion.section
@@ -64,8 +64,10 @@ const HeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
-          src={`http://localhost:3001/public/${healthProfile?.profilePhoto}` || " "}
-
+          src={
+            `${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` ||
+            " "
+          }
           alt={data?.name}
           width={340}
           height={340}
@@ -109,23 +111,32 @@ const HeroSection = ({
         <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
           <button
             onClick={() => setModalOpen(true)}
-            className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105">
+            className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105"
+          >
             🔍 Check Availability
           </button>
-          <CheckAvailability isOpen={openModel} onClose={() => setModalOpen(false)} />
+          <CheckAvailability
+            isOpen={openModel}
+            onClose={() => setModalOpen(false)}
+          />
           <button
             onClick={() => setCallModalOpen(true)}
-            className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+            className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
+          >
             📞 Call Now
           </button>
-          <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+          <CallNow
+            isOpen={callModalOpen}
+            onClose={() => setCallModalOpen(false)}
+          />
           <div>
             <button
               onClick={() => {
                 const section = document.getElementById("contactSection");
                 section?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105">
+              className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
+            >
               📍 Get Directions
             </button>
           </div>
