@@ -70,6 +70,7 @@ export default {
   methods: {
     handleLogout() {
       localStorage.removeItem("doctor_id");
+      localStorage.removeItem("user_type");
       localStorage.removeItem("access_token");
       useProfileStore().reset();
 
