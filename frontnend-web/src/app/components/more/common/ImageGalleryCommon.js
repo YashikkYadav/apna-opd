@@ -25,7 +25,7 @@ const ImageGalleryCommon = ({ images = [] }) => {
       </div>
       {/* Thumbnail grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
-        {galleryImages.map((image, index) => (
+        {galleryImages?.map((image, index) => (
           <div
             key={index}
             className={`cursor-pointer ${
@@ -34,7 +34,7 @@ const ImageGalleryCommon = ({ images = [] }) => {
             onClick={() => setSelectedImage(index)}
           >
             <Image
-              src={image.url}
+              src={image?.url}
               width={200}
               height={200}
               alt={`thumbnail image ${index + 1}`}

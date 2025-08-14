@@ -7,6 +7,7 @@ import RatingModal from "../../../components/common-components/RatingModal";
 import { toast, ToastContainer } from "react-toastify";
 import axiosInstance from "@/app/config/axios";
 import { message } from "antd";
+
 const BannerCommon = ({ profileData, serviceType }) => {
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -85,20 +86,20 @@ const BannerCommon = ({ profileData, serviceType }) => {
             <div className="flex lg:mr-[20px]">
               <Image
                 src={
-                  profileData?.images && profileData?.images.length
+                  profileData?.images && profileData?.images?.length
                     ? profileData?.images[0]?.url
                     : "/images/image_placeholder.svg"
                 }
                 width={504}
                 height={608}
-                alt={profileData.name}
+                alt={profileData?.name}
                 className="h-[400px] md:h-[604px] object-cover rounded-t-[8px] rounded-b-[8px] lg:rounded-b-none"
               />
             </div>
             <div className="flex flex-col justify-center pb-[20px]">
               <div className="mb-[32px]">
                 <h2 className="title-48 !text-white mb-[8px]">
-                  {profileData.name}
+                  {profileData?.name}
                 </h2>
                 <h5 className="title-24 text-white !font-medium capitalize">
                   {serviceType} Service
@@ -109,14 +110,14 @@ const BannerCommon = ({ profileData, serviceType }) => {
                   {serviceType || "Service Provider"}
                 </h5>
                 <p className="text-base text-white !font-normal">
-                  {profileData.location || "Address not available"}
+                  {profileData?.location || "Address not available"}
                 </p>
               </div>
 
               <div className="mb-[32px]">
                 <h3 className="title-32 text-white">
-                  {profileData.price
-                    ? `Service Cost: ₹${profileData.price}`
+                  {profileData?.price
+                    ? `Service Cost: ₹${profileData?.price}`
                     : "Contact for pricing"}
                 </h3>
               </div>

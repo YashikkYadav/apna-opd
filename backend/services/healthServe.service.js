@@ -130,11 +130,7 @@ const login = async (data) => {
     const { phone, email, password, type } = data;
 
     // Validate presence of either phone or email, plus password and type
-    if (
-      (!phone && !email) ||
-      !password ||
-      !type
-    ) {
+    if ((!phone && !email) || !password || !type) {
       return {
         statusCode: 422,
         error: "Missing field: Phone/Email, Password, or Type",
@@ -201,7 +197,6 @@ const login = async (data) => {
     };
   }
 };
-
 
 const getHealthServeById = async (healthServeId) => {
   try {
@@ -338,14 +333,19 @@ const deleteHealthServe = async (healthServeId) => {
 const getHealthServeList = async (page = 1, location, type) => {
   try {
     const limit = 5;
-    const skip = (page - 1) * limit;
+    const safePage = Math.max(Number(page) || 1, 1);
+    const skip = (safePage - 1) * limit;
 
     // Build filter
     const filter = {};
 
     const extractCity = (rawLocation) => {
       if (!rawLocation) return "";
-      return rawLocation.toLowerCase().replace(/^the\s+/i, "").split(",")[0].trim();
+      return rawLocation
+        .toLowerCase()
+        .replace(/^the\s+/i, "")
+        .split(",")[0]
+        .trim();
     };
 
     const city = extractCity(location);
@@ -396,7 +396,6 @@ const getHealthServeList = async (page = 1, location, type) => {
 
       healthServeProfileList = data;
       total = count;
-
     }
 
     return {
@@ -414,13 +413,11 @@ const getHealthServeList = async (page = 1, location, type) => {
   }
 };
 
-
-
 const getDoctors = async (hospitalId) => {
   try {
     const doctors = await HospitalDoctor.find({
       healthServeId: hospitalId.hospitalId,
-    }).populate('doctorId');
+    }).populate("doctorId");
 
     const doctorsWithProfile = await Promise.all(
       doctors.map(async (item) => {

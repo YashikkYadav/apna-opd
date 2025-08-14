@@ -12,10 +12,10 @@ const SuggestedService = ({ serviceType, currentId }) => {
     const fetch = async () => {
       if (serviceType && typeof window !== "undefined") {
         try {
-          const type = serviceType.replace(/-/g, "_");
+          const type = serviceType?.replace(/-/g, "_");
           const allServices = await getServiceData(type);
           const filteredServices = allServices
-            .filter((service) => service._id !== currentId)
+            ?.filter((service) => service?._id !== currentId)
             ?.slice(0, 2);
 
           setServices(filteredServices);
@@ -43,7 +43,7 @@ const SuggestedService = ({ serviceType, currentId }) => {
       .join(" ");
   };
 
-  if (services.length === 0) return null;
+  if (services?.length === 0) return null;
 
   return (
     <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto pb-[50px]">
@@ -52,14 +52,14 @@ const SuggestedService = ({ serviceType, currentId }) => {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
         {services?.map((service) => (
-          <div key={service._id} className="flex justify-between">
+          <div key={service?._id} className="flex justify-between">
             <div className="flex flex-col lg:flex-row w-full">
               <div className="lg:mr-[10px] xl:mr-[32px]">
                 <Image
                   src={service?.images?.[0] || "/images/image_placeholder.svg"}
                   width={200}
                   height={200}
-                  alt={service.name}
+                  alt={service?.name}
                   className="rounded-[8px] w-full object-cover lg:max-w-[200px] max-h-[200px]"
                   unoptimized={service?.images?.[0]?.endsWith('.svg')}
                 />
@@ -68,16 +68,16 @@ const SuggestedService = ({ serviceType, currentId }) => {
               <div className="pt-[16px] pb-[16px] lg:pt-0">
                 <h3 className="title-32 mb-[8px]">{service.name}</h3>
                 <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  {service.experience || "Experienced Service Provider"}
+                  {service?.experience || "Experienced Service Provider"}
                 </p>
                 <h4 className="title-24 text-[#808080] !font-medium">
-                  {service.location || "Location not specified"}
+                  {service?.location || "Location not specified"}
                 </h4>
               </div>
               <div className="flex justify-between lg:flex-col xl:flex-row">
                 <button
                   className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold hover:bg-[#69b6ff]"
-                  onClick={() => handleDetailsClick(service._id)}
+                  onClick={() => handleDetailsClick(service?._id)}
                 >
                   Details
                 </button>
