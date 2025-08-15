@@ -826,16 +826,14 @@ export default {
     },
 
     getImageUrl(img) {
-      console.log("img", img);
       if (!img) return "";
-      // If img is a string (new upload), return object URL
+      // If img is a string (new upload), use Vite env
       if (typeof img === "string") {
-        return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
       }
-      // If img has a url property (from backend), use it
-      if (img.url) return img.url;
-      // If img has a path property, use it
-      if (img.path) return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
       // If img is a File object (new upload)
       if (img instanceof File) return URL.createObjectURL(img);
       return "";
@@ -914,15 +912,22 @@ export default {
         this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
       if (profile) {
-        this.images = [
-          ...(profile.profilePhoto_image
-            ? [{ ...profile.profilePhoto_image, type: "profilePhoto_image" }]
-            : []),
-          ...(profile.galleryImages || []).map((img) => ({
-            ...img,
-            type: "galleryImages_image",
-          })),
-        ];
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profilePhoto) {
+          this.images.push({
+            path: profile.profilePhoto.path || profile.profilePhoto,
+            type: "profilePhoto_image",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
+              type: "galleryImages_image",
+            }))
+          );
+        }
         const hs = res?.healthServeProfileData?.healthServeUser;
         this.form.nurseType = profile.nurseType || "";
         this.form.rating = profile.rating || "";

@@ -738,9 +738,18 @@ export default {
     removeService(index) {
       this.form.services.splice(index, 1);
     },
-    getImageUrl(path) {
-      if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    getImageUrl(img) {
+      if (!img) return "";
+      // If img is a string (new upload), use Vite env
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+      }
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img is a File object (new upload)
+      if (img instanceof File) return URL.createObjectURL(img);
+      return "";
     },
     isNotFive(type) {
       return (
@@ -823,23 +832,33 @@ export default {
       }
 
       if (profile) {
-        this.images = profile.galleryImages;
-
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profilePhoto) {
+          this.images.push({
+            path: profile.profilePhoto.path || profile.profilePhoto,
+            type: "profilePhoto",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
+              type: "galleryImages",
+            }))
+          );
+        }
         this.form.website = profile.website || "";
-
         const hs = profile.healthServeId;
-
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         // this.form.pincode=profile.pincode || "";
-
         this.form.licensedBy = profile.licensedBy || "";
         this.form.successRate = profile.successRate || "";
         this.form.specialization = profile.specialization || "";
         this.form.couplesTreated = profile.couplesTreated || "";
-
         this.form.whyChoose = profile.whyChoose || [];
         this.form.degrees = profile.degrees || [];
         this.form.faqs = profile.faqs || [];
