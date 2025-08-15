@@ -407,7 +407,7 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}/`;
     },
 
     validateDays(value) {

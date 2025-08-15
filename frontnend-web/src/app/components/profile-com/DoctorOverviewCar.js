@@ -13,7 +13,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
       {/* Title */}
-      <div className='flex'>
+      <div className="flex mb-3">
         <User className="w-8 h-8 text-blue-600" />
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
           About  {doctorData?.doctorId?.name}
