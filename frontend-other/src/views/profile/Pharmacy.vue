@@ -909,9 +909,9 @@ export default {
       if (profile) {
         // Map images for gallery and profile, matching hospital reference
         this.images = [];
-        if (profile.profilePhoto) {
+        if (profile.profileImage) {
           this.images.push({
-            path: profile.profilePhoto.path || profile.profilePhoto,
+            path: profile.profileImage,
             type: "profilePhoto",
           });
         }
@@ -968,7 +968,7 @@ export default {
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

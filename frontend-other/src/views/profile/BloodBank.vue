@@ -779,7 +779,7 @@ export default {
         this.images = [];
         if (profile.profileImage) {
           this.images.push({
-            path: profile.profileImage.path || profile.profileImage,
+            path: profile.profileImage,
             type: "profilePhoto",
           });
         }
@@ -841,7 +841,7 @@ export default {
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

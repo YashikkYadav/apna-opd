@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState, useEffect } from "react";
+import { useCallback } from "react";
+import Link from "next/link";
 import { Select, Spin, message } from "antd";
 import axiosInstance from "../config/axios";
 import { useRouter } from "next/navigation";
@@ -63,7 +65,7 @@ const Register = () => {
     { value: "nursing_staff", label: "Nursing Staff" },
     { value: "radiologist", label: "Radiologist" },
     { value: "laboratory", label: "Laboratory" },
-    {value:"ivf_clinic",label:"IVF Clinic"}
+    { value: "ivf_clinic", label: "IVF Clinic" },
   ];
 
   const subscriptionTypes = [
@@ -166,7 +168,7 @@ const Register = () => {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleDoctorRegistration = async () => {
+  const handleDoctorRegistration = useCallback(async () => {
     const payload = {
       name: formData.name,
       phoneNumber: formData.mobile,
@@ -200,11 +202,9 @@ const Register = () => {
         if (response.paymentUrl) {
           setTimeout(() => {
             window.location.href = response.paymentUrl.paymentLink;
-            
           }, 2000);
-          
         } else {
-          router.push('/');
+          router.push("/");
         }
       }
     } catch (error) {
@@ -213,26 +213,26 @@ const Register = () => {
         typeof error === "string"
           ? error
           : error[0].message ||
-          error?.response?.data?.error ||
-          error?.response?.data[0]?.message ||
-          "Something went wrong. Please try again.";
+            error?.response?.data?.error ||
+            error?.response?.data[0]?.message ||
+            "Something went wrong. Please try again.";
 
       toast.error(errorMessage, {
         position: "top-center",
         autoClose: 2000,
       });
     }
-  };
+  }, [formData, router]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     console.log("handle submit called");
     e?.preventDefault();
-    
+
     // Only check for Vinod if a user is actually selected
     if (formData.user) {
-      const selectedUser = users.find(user => user.value === formData.user);
-      const userName = selectedUser ? selectedUser.label : '';
-      
+      const selectedUser = users.find((user) => user.value === formData.user);
+      const userName = selectedUser ? selectedUser.label : "";
+
       if (userName.trim() === "Vinod" && formData.isCash === "") {
         setShowPaymentTypeModal(true);
         return;
@@ -331,7 +331,7 @@ const Register = () => {
         city: formData.city,
         locality: formData.locality,
         state: formData.state,
-        isCash: formData.isCash
+        isCash: formData.isCash,
       };
 
       if (formData.registrationFor !== "blood_donor") {
@@ -363,23 +363,23 @@ const Register = () => {
           if (
             formData.registrationFor !== "blood_donor" &&
             response.paymentUrl
-            
           ) {
             console.log("Payment URL: ", response.paymentUrl);
             window.location.href = response.paymentUrl;
           } else {
             console.log("No payment URL, redirecting to home");
-            console.log("qwerty",response?.healthServe?.type)
-            if(response?.healthServe?.type=="doctor"){
-
+            console.log("qwerty", response?.healthServe?.type);
+            if (response?.healthServe?.type == "doctor") {
+            } else if (response?.healthServe?.type == "hospital") {
+              router.push(
+                `/thank-you?next=more/${response?.healthServe?.type}/${response?.healthServe?._id}/details`
+              );
+            } else {
+              router.push(
+                `/thank-you?next=detail/${response?.healthServe?.type}/${response?.healthServe?._id}`
+              );
             }
-            else if(response?.healthServe?.type=="hospital"){
-              router.push(`/thank-you?next=more/${response?.healthServe?.type}/${response?.healthServe?._id}/details`)
-            }else{
-            router.push(`/thank-you?next=detail/${response?.healthServe?.type}/${response?.healthServe?._id}`);
-            } 
           }
-
         }, 2000);
       }
     } catch (error) {
@@ -393,8 +393,8 @@ const Register = () => {
           typeof error?.response?.data === "string"
             ? error.response.data
             : error?.response?.data?.error ||
-            error?.response?.data[0]?.message ||
-            "Something went wrong. Please try again.";
+              error?.response?.data[0]?.message ||
+              "Something went wrong. Please try again.";
 
         toast.error(errorMessage, {
           position: "top-center",
@@ -404,7 +404,7 @@ const Register = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, users, router, handleDoctorRegistration]);
 
   // Clean up debounce on unmount
   useEffect(() => {
@@ -412,7 +412,7 @@ const Register = () => {
     return () => {
       debouncedLocationSearch.cancel();
     };
-  }, []);
+  }, [debouncedLocationSearch, fetchUsers]);
 
   function convertUsersToSelectOptions(users) {
     return users?.map((user) => ({
@@ -421,14 +421,14 @@ const Register = () => {
     }));
   }
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     const userData = await axiosInstance.get("/user");
     const temp = convertUsersToSelectOptions(userData.user);
     setUsers([{ value: "", label: "Select User" }, ...temp]);
-  };
+  }, []);
 
   const handlePaymentChoice = (choice) => {
-    setFormData(prev => ({ ...prev, isCash: choice }));
+    setFormData((prev) => ({ ...prev, isCash: choice }));
     onClose();
   };
 
@@ -436,11 +436,11 @@ const Register = () => {
     if (formData.isCash !== "") {
       handleSubmit();
     }
-  }, [formData])
+  }, [formData, handleSubmit]);
 
   const onClose = () => {
     setShowPaymentTypeModal(false);
-  }
+  };
 
   return registerSuccess ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -453,9 +453,9 @@ const Register = () => {
         </p>
         <div className="flex flex-col items-center justify-center">
           <p>Now you need to complete your profile to continue</p>
-          <a href="/#" className="text-blue-600 hover:underline">
+          <Link href="/#" className="text-blue-600 hover:underline">
             Redirecting to Payment Page...
-          </a>
+          </Link>
           <Spin size="large" />
         </div>
       </div>
@@ -565,7 +565,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Address
             </label>
-            <textarea type="textArea" name="address" value={formData.address} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+            <textarea
+              type="textArea"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
           </div>
 
           {/* Pin Code */}
@@ -573,7 +580,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Pin Code
             </label>
-            <input type="text" name="pinCode" value={formData.pinCode} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+            <input
+              type="text"
+              name="pinCode"
+              value={formData.pinCode}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
           </div>
 
           {/* City */}
@@ -581,7 +595,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               City
             </label>
-            <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
           </div>
 
           {/* Locality */}
@@ -589,7 +610,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Locality
             </label>
-            <input type="text" name="locality" value={formData.locality} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+            <input
+              type="text"
+              name="locality"
+              value={formData.locality}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
           </div>
 
           {/* State */}
@@ -597,7 +625,14 @@ const Register = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               State
             </label>
-            <input type="text" name="state" value={formData.state} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-md"
+              required
+            />
           </div>
 
           {/* Location */}
@@ -784,20 +819,20 @@ const Register = () => {
             formData.registrationFor === "vatenary" ||
             formData.registrationFor === "nursing_staff" ||
             formData.registrationFor === "laboratory") && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Home Service / Door Service
-                </label>
-                <Select
-                  value={formData.homeService}
-                  onChange={handleHomeServiceChange}
-                  placeholder="Do you provide home service?"
-                  options={homeServiceOptions}
-                  className="w-full"
-                  required
-                />
-              </div>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Home Service / Door Service
+              </label>
+              <Select
+                value={formData.homeService}
+                onChange={handleHomeServiceChange}
+                placeholder="Do you provide home service?"
+                options={homeServiceOptions}
+                className="w-full"
+                required
+              />
+            </div>
+          )}
 
           {/* Submit Button */}
           <button
@@ -819,7 +854,9 @@ const Register = () => {
       {showPaymentTypeModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md mx-4">
-            <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center">Choose Payment Method</h2>
+            <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center">
+              Choose Payment Method
+            </h2>
 
             <div className="flex flex-col gap-4">
               <button

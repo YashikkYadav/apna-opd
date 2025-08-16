@@ -143,10 +143,7 @@
                     ✖
                   </button>
                 </div>
-                <div
-                  v-if="img.type === 'profilePhoto_image'"
-                  class="image-type"
-                >
+                <div v-if="img.type === 'profilePhoto'" class="image-type">
                   {{ "Profile" }}
                 </div>
                 <div v-if="img.type === 'galleryImages'" class="image-type">
@@ -1056,8 +1053,8 @@ export default {
       if (profile) {
         // Map images to { path, type }
         const images = [];
-        if (profile.profilePhoto) {
-          images.push({ path: profile.profilePhoto, type: "profilePhoto" });
+        if (profile.profileImage) {
+          images.push({ path: profile.profileImage, type: "profilePhoto" });
         }
         if (Array.isArray(profile.galleryImages)) {
           profile.galleryImages.forEach((img) => {
@@ -1146,7 +1143,7 @@ export default {
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
