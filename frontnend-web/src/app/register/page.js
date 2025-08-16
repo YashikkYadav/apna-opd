@@ -224,196 +224,192 @@ const Register = () => {
     }
   }, [formData, router]);
 
-  const handleSubmit = useCallback(async (e) => {
-    console.log("handle submit called");
-    e?.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      console.log("handle submit called");
+      e?.preventDefault();
 
-    // Only check for Vinod if a user is actually selected
-    if (formData.user) {
-      const selectedUser = users.find((user) => user.value === formData.user);
-      const userName = selectedUser ? selectedUser.label : "";
+      // Only check for Vinod if a user is actually selected
+      if (formData.user) {
+        const selectedUser = users.find((user) => user.value === formData.user);
+        const userName = selectedUser ? selectedUser.label : "";
 
-      if (userName.trim() === "Vinod" && formData.isCash === "") {
-        setShowPaymentTypeModal(true);
+        if (userName.trim() === "Vinod" && formData.isCash === "") {
+          setShowPaymentTypeModal(true);
+          return;
+        }
+      }
+
+      console.log("handle submit called 1");
+      // Validation checks
+      if (!validateEmail(formData.email)) {
+        toast.error("Please enter a valid email address!");
         return;
       }
-    }
 
-    console.log("handle submit called 1");
-    // Validation checks
-    if (!validateEmail(formData.email)) {
-      toast.error("Please enter a valid email address!");
-      return;
-    }
-
-    if (formData.mobile?.length < 10) {
-      toast.error("Mobile number must be at least 10 digits!");
-      return;
-    }
-
-    if (
-      formData.password !== formData.confirmPassword &&
-      formData.registrationFor !== "blood_donor"
-    ) {
-      toast.error("Passwords do not match!");
-      return;
-    }
-
-    if (!formData.registrationFor) {
-      toast.error("Please select a registration type!");
-      return;
-    }
-    if (
-      formData.registrationFor !== "blood_donor" &&
-      !formData.subscriptionType
-    ) {
-      toast.error("Please select a subscription type!");
-      return;
-    }
-    if (formData.registrationFor === "doctor" && !formData.rmcNumber) {
-      toast.error("Please enter RMC Number!");
-      return;
-    }
-    if (formData.registrationFor === "doctor" && !formData.clinicName) {
-      toast.error("Please enter Clinic Name!");
-      return;
-    }
-    if (!formData.location) {
-      toast.error("Please select a location!");
-      return;
-    }
-    if (!formData.address) {
-      toast.error("Please enter address!");
-      return;
-    }
-    if (!formData.pinCode) {
-      toast.error("Please enter pincode!");
-      return;
-    }
-    if (!formData.city) {
-      toast.error("Please enter city!");
-      return;
-    }
-    if (!formData.state) {
-      toast.error("Please enter state!");
-      return;
-    }
-    if (formData.registrationFor === "blood_donor" && !formData.bloodGroup) {
-      toast.error("Please select or enter your blood group!");
-      return;
-    }
-    if (
-      (formData.registrationFor === "nursing_staff" ||
-        formData.registrationFor === "vatenary" ||
-        formData.registrationFor === "physiotherapist" ||
-        formData.registrationFor === "laboratory") &&
-      !formData.homeService
-    ) {
-      toast.error("Please specify if you provide home service!");
-      return;
-    }
-    if (formData.registrationFor === "doctor") {
-      handleDoctorRegistration();
-      return;
-    }
-
-    console.log("handle submit called 2");
-    setIsSubmitting(true);
-    try {
-      const payload = {
-        type: formData.registrationFor,
-        name: formData.name,
-        phone: formData.mobile,
-        email: formData.email,
-        location: formData.location,
-        address: formData.address,
-        pinCode: formData.pinCode,
-        city: formData.city,
-        locality: formData.locality,
-        state: formData.state,
-        isCash: formData.isCash,
-      };
-
-      if (formData.registrationFor !== "blood_donor") {
-        payload.password = formData.password;
-        payload.subscriptionType = formData.subscriptionType;
-      }
-
-      if (formData.registrationFor === "blood_donor") {
-        payload.bloodGroup = formData.bloodGroup;
+      if (formData.mobile?.length < 10) {
+        toast.error("Mobile number must be at least 10 digits!");
+        return;
       }
 
       if (
-        formData.registrationFor === "nursing_staff" ||
-        formData.registrationFor === "vatenary"
+        formData.password !== formData.confirmPassword &&
+        formData.registrationFor !== "blood_donor"
       ) {
-        payload.homeService = formData.homeService;
+        toast.error("Passwords do not match!");
+        return;
       }
 
-      const response = await axiosInstance.post("/health-serve/", payload);
-      if (response) {
-        toast.success("Registration successful!", {
-          position: "top-center",
-          autoClose: 1500,
-          closeOnClick: false,
-          transition: Flip,
-        });
-        setRegisterSuccess(true);
-        setTimeout(() => {
-          if (
-            formData.registrationFor !== "blood_donor" &&
-            response.paymentUrl
-          ) {
-            console.log("Payment URL: ", response.paymentUrl);
-            window.location.href = response.paymentUrl;
-          } else {
-            console.log("No payment URL, redirecting to home");
-            console.log("qwerty", response?.healthServe?.type);
-            if (response?.healthServe?.type == "doctor") {
-            } else if (response?.healthServe?.type == "hospital") {
-              router.push(
-                `/thank-you?next=more/${response?.healthServe?.type}/${response?.healthServe?._id}/details`
-              );
+      if (!formData.registrationFor) {
+        toast.error("Please select a registration type!");
+        return;
+      }
+      if (
+        formData.registrationFor !== "blood_donor" &&
+        !formData.subscriptionType
+      ) {
+        toast.error("Please select a subscription type!");
+        return;
+      }
+      if (formData.registrationFor === "doctor" && !formData.rmcNumber) {
+        toast.error("Please enter RMC Number!");
+        return;
+      }
+      if (formData.registrationFor === "doctor" && !formData.clinicName) {
+        toast.error("Please enter Clinic Name!");
+        return;
+      }
+      if (!formData.location) {
+        toast.error("Please select a location!");
+        return;
+      }
+      if (!formData.address) {
+        toast.error("Please enter address!");
+        return;
+      }
+      if (!formData.pinCode) {
+        toast.error("Please enter pincode!");
+        return;
+      }
+      if (!formData.city) {
+        toast.error("Please enter city!");
+        return;
+      }
+      if (!formData.state) {
+        toast.error("Please enter state!");
+        return;
+      }
+      if (formData.registrationFor === "blood_donor" && !formData.bloodGroup) {
+        toast.error("Please select or enter your blood group!");
+        return;
+      }
+      if (
+        (formData.registrationFor === "nursing_staff" ||
+          formData.registrationFor === "vatenary" ||
+          formData.registrationFor === "physiotherapist" ||
+          formData.registrationFor === "laboratory") &&
+        !formData.homeService
+      ) {
+        toast.error("Please specify if you provide home service!");
+        return;
+      }
+      if (formData.registrationFor === "doctor") {
+        handleDoctorRegistration();
+        return;
+      }
+
+      console.log("handle submit called 2");
+      setIsSubmitting(true);
+      try {
+        const payload = {
+          type: formData.registrationFor,
+          name: formData.name,
+          phone: formData.mobile,
+          email: formData.email,
+          location: formData.location,
+          address: formData.address,
+          pinCode: formData.pinCode,
+          city: formData.city,
+          locality: formData.locality,
+          state: formData.state,
+          isCash: formData.isCash,
+        };
+
+        if (formData.registrationFor !== "blood_donor") {
+          payload.password = formData.password;
+          payload.subscriptionType = formData.subscriptionType;
+        }
+
+        if (formData.registrationFor === "blood_donor") {
+          payload.bloodGroup = formData.bloodGroup;
+        }
+
+        if (
+          formData.registrationFor === "nursing_staff" ||
+          formData.registrationFor === "vatenary"
+        ) {
+          payload.homeService = formData.homeService;
+        }
+
+        const response = await axiosInstance.post("/health-serve/", payload);
+        if (response) {
+          toast.success("Registration successful!", {
+            position: "top-center",
+            autoClose: 1500,
+            closeOnClick: false,
+            transition: Flip,
+          });
+          setRegisterSuccess(true);
+          setTimeout(() => {
+            if (
+              formData.registrationFor !== "blood_donor" &&
+              response.paymentUrl
+            ) {
+              console.log("Payment URL: ", response.paymentUrl);
+              window.location.href = response.paymentUrl;
             } else {
-              router.push(
-                `/thank-you?next=detail/${response?.healthServe?.type}/${response?.healthServe?._id}`
-              );
+              console.log("No payment URL, redirecting to home");
+              console.log("qwerty", response?.healthServe?.type);
+              if (response?.healthServe?.type == "doctor") {
+              } else if (response?.healthServe?.type == "hospital") {
+                router.push(
+                  `/thank-you?next=more/${response?.healthServe?.type}/${response?.healthServe?._id}/details`
+                );
+              } else {
+                router.push(
+                  `/thank-you?next=detail/${response?.healthServe?.type}/${response?.healthServe?._id}`
+                );
+              }
             }
-          }
-        }, 2000);
-      }
-    } catch (error) {
-      if (typeof error === "string") {
-        toast.error(error, {
-          position: "top-center",
-          autoClose: 2000,
-        });
-      } else {
-        const errorMessage =
-          typeof error?.response?.data === "string"
-            ? error.response.data
-            : error?.response?.data?.error ||
-              error?.response?.data[0]?.message ||
-              "Something went wrong. Please try again.";
+          }, 2000);
+        }
+      } catch (error) {
+        if (typeof error === "string") {
+          toast.error(error, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        } else {
+          const errorMessage =
+            typeof error?.response?.data === "string"
+              ? error.response.data
+              : error?.response?.data?.error ||
+                error?.response?.data[0]?.message ||
+                "Something went wrong. Please try again.";
 
-        toast.error(errorMessage, {
-          position: "top-center",
-          autoClose: 2000,
-        });
+          toast.error(errorMessage, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      } finally {
+        setIsSubmitting(false);
       }
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [formData, users, router, handleDoctorRegistration]);
+    },
+    [formData, users, router, handleDoctorRegistration]
+  );
 
   // Clean up debounce on unmount
-  useEffect(() => {
-    fetchUsers();
-    return () => {
-      debouncedLocationSearch.cancel();
-    };
-  }, [debouncedLocationSearch, fetchUsers]);
-
   function convertUsersToSelectOptions(users) {
     return users?.map((user) => ({
       value: user._id,
@@ -426,6 +422,14 @@ const Register = () => {
     const temp = convertUsersToSelectOptions(userData.user);
     setUsers([{ value: "", label: "Select User" }, ...temp]);
   }, []);
+
+  // Clean up debounce on unmount
+  useEffect(() => {
+    fetchUsers();
+    return () => {
+      debouncedLocationSearch.cancel();
+    };
+  }, [debouncedLocationSearch, fetchUsers]);
 
   const handlePaymentChoice = (choice) => {
     setFormData((prev) => ({ ...prev, isCash: choice }));
