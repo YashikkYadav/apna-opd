@@ -84,7 +84,7 @@ const NurseListings = ({ nurses = [] }) => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="flex flex-col lg:flex-row bg-gray-50 p-4 sm:p-8 md:p-12"
+      className="flex flex-col lg:flex-row bg-white-50 p-4 sm:p-8 md:p-12"
     >
       {/* Left Panel: Filters */}
       <motion.div

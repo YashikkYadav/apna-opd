@@ -1,50 +1,54 @@
 "use client";
 import { motion } from "framer-motion";
+import { FaStar, FaRegStar, FaCommentDots } from "react-icons/fa";
 import Image from "next/image";
+
 
 const PatientTestimonials = ({ testimonials = [] }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 text-center"
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, type: "spring" }}
+      className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="text-4xl font-extrabold text-gray-900 mb-12"
-      >
-        What Our Patients Say
-      </motion.h2>
+      {/* Title */}
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
+          <FaCommentDots className="text-3xl text-blue-700" />
+          What Our Patients Say
+        </h2>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {testimonials.map((testimonial, index) => (
+      {/* Testimonials Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testimonials.map((review, idx) => (
           <motion.div
-            key={testimonial.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
-            className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-start text-left transform hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-offset-2"
+            key={idx}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 0 0 2px rgba(59,130,246,0.3)",
+            }}
+            className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-500 hover:border-blue-600 transition-all flex flex-col justify-between"
           >
-            <p className="text-gray-700 text-lg italic mb-6 leading-relaxed">
-              "{testimonial.text}"
+            <p className="text-gray-700 text-base font-medium italic mb-4">
+              "{review.text}"
             </p>
-            <div className="flex items-center mt-auto">
+
+            <div className="flex items-center gap-4">
               <Image
-                src={testimonial.image}
-                alt={testimonial.author}
+                src={review.image}
+                alt={review.author}
                 width={48}
                 height={48}
-                className="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-gray-200"
+                className="w-12 h-12 rounded-full object-cover border border-gray-200"
               />
-              <div className="ml-4">
-                <h4 className="text-md font-semibold text-gray-900">{testimonial.author}</h4>
-                <p className="text-gray-600 text-sm">{testimonial.location}</p>
+              <div>
+                <h4 className="text-md font-semibold text-blue-700">
+                  {review.author}
+                </h4>
+                <p className="text-gray-600 text-sm">{review.location}</p>
               </div>
             </div>
           </motion.div>
@@ -54,4 +58,4 @@ const PatientTestimonials = ({ testimonials = [] }) => {
   );
 };
 
-export default PatientTestimonials; 
+export default PatientTestimonials;

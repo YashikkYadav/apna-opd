@@ -1,7 +1,8 @@
-import NurseListings from "../components/more/nurse/NurseListings";
-import NurseSearch from "../components/more/nurse/NurseSearch";
+// import NurseListings from "../components/more/nurse/NurseListings";
+// import NurseSearch from "../components/more/nurse/NurseSearch";
 import PatientTestimonials from "../components/more/nurse/PatientTestimonials";
 import WhyChooseUs from "../components/more/nurse/WhyChooseUs";
+import NurseParent from "../components/more/nurse/NurseParent";
 
 // Consolidated data into a single object
 export const nurseDetails = {
@@ -151,14 +152,19 @@ export const nurseDetails = {
 };
 
 const NurseProfile = () => {
-    return (
-        <div className="pt-[80px]">
-            <NurseSearch searchData={nurseDetails.searchData}/>
-            <NurseListings nurses={nurseDetails.nurses}/>
-            <WhyChooseUs showFeatures={nurseDetails.features}/>
-            <PatientTestimonials testimonials={nurseDetails.testimonials}/>
+  return (
+    <div className="relative bg-white min-h-screen flex flex-col items-center">
+      <main className="pt-[120px] pb-16 w-full">
+        <div className="max-w-[90vw] mx-auto space-y-10">
+          {/* <NurseSearch searchData={nurseDetails.searchData} />
+          <NurseListings nurses={nurseDetails.nurses} /> */}
+          <NurseParent nurses={nurseDetails.nurses} searchData={nurseDetails.searchData} />
+          <WhyChooseUs showFeatures={nurseDetails.features} />
+          <PatientTestimonials testimonials={nurseDetails.testimonials} />
         </div>
-    )
+      </main>
+    </div>
+  )
 };
 
 export default NurseProfile;
