@@ -122,7 +122,7 @@
                   </button>
                 </div>
                 <div
-                  v-if="img.type === 'profilePhoto_image'"
+                  v-if="img.type === 'profilePhoto'"
                   class="image-type"
                 >
                   {{ "Profile" }}
@@ -711,9 +711,9 @@ export default {
       if (!Array.isArray(this.images)) return [];
       // Sort: profilePhoto_image first, then galleryImages_image
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
+        if (a.type === "profilePhoto" && b.type !== "profilePhoto")
           return -1;
-        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
+        if (b.type === "profilePhoto" && a.type !== "profilePhoto")
           return 1;
         return 0;
       });
@@ -826,16 +826,14 @@ export default {
     },
 
     getImageUrl(img) {
-      console.log("img", img);
       if (!img) return "";
-      // If img is a string (new upload), return object URL
+      // If img is a string (new upload), use Vite env
       if (typeof img === "string") {
-        return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
       }
-      // If img has a url property (from backend), use it
-      if (img.url) return img.url;
-      // If img has a path property, use it
-      if (img.path) return `${process.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
       // If img is a File object (new upload)
       if (img instanceof File) return URL.createObjectURL(img);
       return "";
@@ -914,15 +912,22 @@ export default {
         this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
       if (profile) {
-        this.images = [
-          ...(profile.profilePhoto_image
-            ? [{ ...profile.profilePhoto_image, type: "profilePhoto_image" }]
-            : []),
-          ...(profile.galleryImages || []).map((img) => ({
-            ...img,
-            type: "galleryImages_image",
-          })),
-        ];
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profileImage) {
+          this.images.push({
+            path: profile.profileImage,
+            type: "profilePhoto",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
+              type: "galleryImages_image",
+            }))
+          );
+        }
         const hs = res?.healthServeProfileData?.healthServeUser;
         this.form.nurseType = profile.nurseType || "";
         this.form.rating = profile.rating || "";
@@ -969,7 +974,7 @@ export default {
         });
         // Handle profile image and gallery images
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
         this.galleryImages.forEach((file) => {
           formData.append("galleryImages_image", file);

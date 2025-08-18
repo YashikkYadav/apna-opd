@@ -105,7 +105,7 @@
                   </button>
                 </div>
                 <div
-                  v-if="img.type === 'profilePhoto_image'"
+                  v-if="img.type === 'profilePhoto'"
                   class="image-type"
                 >
                   {{ "Profile" }}
@@ -682,7 +682,7 @@ export default {
   computed: {
     sortedImages() {
       if (!Array.isArray(this.images)) return [];
-
+      // Sort profile image first, then gallery images
       return [...this.images].sort((a, b) => {
         if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
         if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
@@ -818,9 +818,21 @@ export default {
     removeTag(index) {
       this.form.tags.splice(index, 1);
     },
-    getImageUrl(path) {
-      if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    getImageUrl(img) {
+      if (!img) return "";
+      // If File object (newly uploaded)
+      if (img instanceof File) {
+        return URL.createObjectURL(img);
+      }
+      // If object with path property
+      if (typeof img === "object" && img.path) {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      }
+      // If string (legacy)
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+      }
+      return "";
     },
 
     isNotFive(type) {
@@ -893,7 +905,6 @@ export default {
       const res = await useProfileStore().getProfileData();
       const profile = res?.healthServeProfileData?.healthServeProfile?.data;
       const hs = await res?.healthServeProfileData?.healthServeUser;
-      console.log(">", profile);
       if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
@@ -903,16 +914,22 @@ export default {
       }
 
       if (profile) {
-        console.log(res);
-        this.images = profile.galleryImages || [];
+        // Map images to { path, type }
+        const images = [];
+        if (profile.profileImage) {
+          images.push({ path: profile.profileImage, type: "profilePhoto" });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          profile.galleryImages.forEach((img) => {
+            images.push({ path: img, type: "galleryImages" });
+          });
+        }
+        this.images = images;
 
-        const hs = res?.healthServeProfileData?.healthServeUser;
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-
-        // this.form.pincode = profile?.pincode || "";
 
         this.form.education = profile.education || [];
         this.form.specialInterests = profile.specialInterests || [];
@@ -960,7 +977,7 @@ export default {
         formData.append("tags", JSON.stringify(this.form.tags));
         formData.append("faqs", JSON.stringify(this.form.faqs));
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

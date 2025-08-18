@@ -709,7 +709,8 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+      return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+      
     },
     isNotFive(type) {
       return (

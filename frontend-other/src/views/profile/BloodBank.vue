@@ -681,9 +681,18 @@ export default {
     removeTag(index) {
       this.form.tags.splice(index, 1);
     },
-    getImageUrl(path) {
-      if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    getImageUrl(img) {
+      if (!img) return "";
+      // If img is a string (new upload), use Vite env
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+      }
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img is a File object (new upload)
+      if (img instanceof File) return URL.createObjectURL(img);
+      return "";
     },
     isNotFive(type) {
       return (
@@ -766,16 +775,28 @@ export default {
       }
 
       if (profile) {
-        // console.log("profile.images",profile.bloodTypes);
-        this.images = profile.galleryImages || profile.profileImage;
-
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profileImage) {
+          this.images.push({
+            path: profile.profileImage,
+            type: "profilePhoto",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
+              type: "galleryImages",
+            }))
+          );
+        }
         const hs = profile.healthServeId;
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         // this.form.pincode = profile?.pincode || "";
-
         this.form.bloodTypes =
           profile.bloodTypes.map((item) => ({ type: item })) || [];
         this.form.nearbyBloodBanks =
@@ -820,7 +841,7 @@ export default {
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

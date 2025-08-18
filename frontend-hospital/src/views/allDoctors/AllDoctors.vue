@@ -360,6 +360,27 @@ const closeDoctorDialog = () => {
 };
 
 const submitDoctorForm = async () => {
+  // Basic validation for required fields
+  const requiredFields = [
+    "name",
+    "phoneNumber",
+    "email",
+    "speciality",
+    "password",
+  ];
+  const missingFields = requiredFields.filter(
+    (field) =>
+      !newDoctorData.value[field] ||
+      newDoctorData.value[field].toString().trim() === ""
+  );
+  if (missingFields.length > 0) {
+    useUiStore().openNotificationMessage(
+      `Please fill all required fields: ${missingFields.join(", ")}`,
+      "",
+      "error"
+    );
+    return;
+  }
   if (doctorFormRef.value) {
     const { valid } = await doctorFormRef.value.validate();
     if (valid) {

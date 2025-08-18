@@ -1067,9 +1067,18 @@ export default {
       // Replace with actual logic (API call, mailto link, modal, etc.)
       alert(`Enquiry sent for ${plan.name} Plan at ₹${plan.price}`);
     },
-    getImageUrl(path) {
-      if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+    getImageUrl(img) {
+      if (!img) return "";
+      // If img is a string (new upload), use Vite env
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+      }
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img is a File object (new upload)
+      if (img instanceof File) return URL.createObjectURL(img);
+      return "";
     },
 
     openItemDialog(type) {
@@ -1144,15 +1153,27 @@ export default {
       }
 
       if (profile) {
-        console.log(res);
-        this.images = profile.galleryImages;
-
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profileImage) {
+          this.images.push({
+            path: profile.profileImage,
+            type: "profilePhoto",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
+              type: "galleryImages",
+            }))
+          );
+        }
         const hs = profile.healthServeId;
         this.form.website = profile.website || "";
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-
         // this.form.pincode = profile?.pincode || "";
         this.form.established = profile.established || "";
         this.form.faqs = profile.faqs || [];
@@ -1213,7 +1234,7 @@ export default {
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
 
         if (this.profileImage) {
-          formData.append("profilePhoto_image", this.profileImage);
+          formData.append("profilePhoto", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

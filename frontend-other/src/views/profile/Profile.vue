@@ -94,21 +94,33 @@
                 class="image-card"
               >
                 <div class="image-container">
-                  <img
-                    :key="index"
-                    :src="getImageUrl(img)"
-                    alt="Gallery Image"
-                    class="image"
-                  />
-                  <button class="delete-button" @click="confirmDelete(img)">
-                    ✖
-                  </button>
+                  <template v-if="getImageUrl(img.path || img)">
+                    <img
+                      :key="index"
+                      :src="getImageUrl(img.path || img)"
+                      alt="Gallery Image"
+                      class="image"
+                    />
+                    <button class="delete-button" @click="confirmDelete(img)">
+                      ✖
+                    </button>
+                  </template>
+                  <template v-else>
+                    <div
+                      style="color: red; font-size: 12px; text-align: center"
+                    >
+                      Image not found
+                    </div>
+                  </template>
                 </div>
                 <div v-if="img.type === 'profilePhoto'" class="image-type">
-                  {{ "Profile" }}
+                  Profile
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
-                  {{ "Gallery" }}
+                <div
+                  v-if="img.type === 'galleryImages' || !img.type"
+                  class="image-type"
+                >
+                  Gallery
                 </div>
               </div>
             </div>
@@ -241,7 +253,6 @@ export default {
       isShowMessage: false,
       galleryImages: [],
       profileImage: null,
-      images: [],
     };
   },
   mounted() {
@@ -252,13 +263,19 @@ export default {
   },
   computed: {
     sortedImages() {
-      if (!Array.isArray(this.images)) return [];
-
-      return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
-        return 0;
-      });
+      // Combine profileImage and galleryImages for display
+      let images = [];
+      if (this.profileImage && typeof this.profileImage === "string") {
+        images.push({ path: this.profileImage, type: "profilePhoto" });
+      }
+      if (Array.isArray(this.galleryImages)) {
+        images = images.concat(
+          this.galleryImages.map((img) =>
+            typeof img === "string" ? { path: img, type: "galleryImages" } : img
+          )
+        );
+      }
+      return images;
     },
   },
   methods: {
@@ -273,7 +290,7 @@ export default {
     async deleteImage() {
       if (this.imageToDelete) {
         const res = await useProfileStore().deleteImage(this.imageToDelete);
-        this.images = res.images;
+        this.galleryImages = res.galleryImages;
         this.cancelDelete();
       }
     },
@@ -306,9 +323,9 @@ export default {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      this.images = res.healthServeProfile.images;
       if (res.healthServeProfile !== null) {
-        console.log(res);
+        this.galleryImages = res.healthServeProfile.galleryImages || [];
+        this.profileImage = res.healthServeProfile.profileImage || null;
         this.form.introduction = res.healthServeProfile.introduction;
         this.form.about = res.healthServeProfile.about;
         this.form.experience = res.healthServeProfile.experience;
@@ -407,7 +424,7 @@ export default {
     },
     getImageUrl(path) {
       if (!path) return "";
-      return `${process.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+      return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
     },
 
     validateDays(value) {
