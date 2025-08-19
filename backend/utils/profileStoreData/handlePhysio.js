@@ -51,6 +51,16 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
         }`.replace(/^\/+/, "")
       : undefined;
 
+      console.log(
+        "Profile Photo Path:",
+        profilePhoto,
+        `${profileImage.destination.split("public\\")[1]}/${
+          profileImage.filename
+        }`,
+        profileImage.destination.split("public\\"),
+        profileImage.destination.split("public/")
+      );
+
     const galleryImages = files
       .filter((file) => file.fieldname === "galleryImages_image")
       .map((file) => {
