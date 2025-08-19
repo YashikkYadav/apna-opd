@@ -94,7 +94,10 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div
+                  v-if="img.type === 'profilePhoto_image'"
+                  class="image-type"
+                >
                   {{ "Profile" }}
                 </div>
                 <div v-if="img.type === 'galleryImages'" class="image-type">
@@ -632,8 +635,10 @@ export default {
       if (!Array.isArray(this.images)) return [];
 
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
+          return -1;
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
+          return 1;
         return 0;
       });
     },
@@ -707,10 +712,19 @@ export default {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
-    getImageUrl(path) {
+    getImageUrl(img) {
+      if (!img) return "";
+      const path = img.url || img.path;
       if (!path) return "";
+      // If already absolute URL, return as is
+      if (typeof path === 'string' && (path.startsWith('http://') || path.startsWith('https://'))) {
+        return path;
+      }
+      // Prevent 'undefined' or empty paths
+      if (typeof path === 'string' && (path === 'undefined' || path.startsWith('undefined'))) {
+        return "";
+      }
       return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
-      
     },
     isNotFive(type) {
       return (
@@ -791,7 +805,23 @@ export default {
         this.form.pincode = hs?.pincode || "";
       }
       if (profile) {
-        this.images = profile.galleryImages || [];
+        // Collect both profile and gallery images
+        const images = [];
+        if (profile.profileImage) {
+          images.push({
+            url: profile.profileImage,
+            type: "profilePhoto_image",
+          });
+        }
+        if (Array.isArray(profile.galleryImages)) {
+          profile.galleryImages.forEach((img) => {
+            images.push({
+              url: img,
+              type: "galleryImages",
+            });
+          });
+        }
+        this.images = images;
 
         const hs = profile.healthServeId;
 
