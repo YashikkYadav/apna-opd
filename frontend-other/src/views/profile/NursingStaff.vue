@@ -122,7 +122,7 @@
                   </button>
                 </div>
                 <div
-                  v-if="img.type === 'profilePhoto'"
+                  v-if="img.type === 'profilePhoto_image'"
                   class="image-type"
                 >
                   {{ "Profile" }}
@@ -711,9 +711,9 @@ export default {
       if (!Array.isArray(this.images)) return [];
       // Sort: profilePhoto_image first, then galleryImages_image
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto")
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
           return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto")
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
           return 1;
         return 0;
       });

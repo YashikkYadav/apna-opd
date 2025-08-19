@@ -104,7 +104,7 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
                 <div v-if="img.type === 'galleryImages'" class="image-type">
@@ -603,8 +603,8 @@ export default {
       if (!Array.isArray(this.images)) return [];
       // Sort profile image first, then gallery images
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto" && b.type !== "profilePhoto") return -1;
-        if (b.type === "profilePhoto" && a.type !== "profilePhoto") return 1;
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image") return -1;
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image") return 1;
         return 0;
       });
     },
@@ -807,7 +807,7 @@ export default {
         // Map images to { path, type }
         const images = [];
         if (profile.profileImage) {
-          images.push({ path: profile.profileImage, type: "profilePhoto" });
+          images.push({ path: profile.profileImage, type: "profilePhoto_image" });
         }
         if (Array.isArray(profile.galleryImages)) {
           profile.galleryImages.forEach((img) => {
@@ -860,7 +860,7 @@ export default {
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {

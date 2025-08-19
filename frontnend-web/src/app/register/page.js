@@ -180,6 +180,7 @@ const Register = () => {
   }, []);
 
   const validateEmail = useCallback((email) => {
+    // Only check for valid email format, not for numbers in email
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   }, []);
@@ -197,8 +198,9 @@ const Register = () => {
     const errors = [];
 
     if (!formData.name.trim()) errors.push("Name is required");
-    if (!validateEmail(formData.email))
+    if (!validateEmail(formData.email)) {
       errors.push("Please enter a valid email address");
+    }
     if (!validateMobile(formData.mobile))
       errors.push("Mobile number must be exactly 10 digits");
     if (!formData.registrationFor)
