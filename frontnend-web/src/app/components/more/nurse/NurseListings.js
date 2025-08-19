@@ -4,15 +4,18 @@ import { useState } from "react";
 import { FaStar } from "react-icons/fa"; // For stars
 import Image from "next/image";
 
-const NurseListings = ({ nurses = [] }) => {
+
+const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }) => {
+  console.log(">", nurses)
   // State for filters (gender, experience, fee range, specializations, rating)
   const [filters, setFilters] = useState({
     gender: [],
-    experience: [0, 20], // Min and Max years
-    feeRange: [500, 5000], // Min and Max fee
+    experience: [0, 50], // Min and Max years
+    feeRange: [0, 50000], // Min and Max fee
     specializations: [],
     rating: [],
   });
+
 
   const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
 
@@ -32,43 +35,45 @@ const NurseListings = ({ nurses = [] }) => {
     });
   };
 
-  const filteredNurses = nurses.filter((nurse) => {
+  const filteredNurses = nurses?.filter((nurse) => {
     // Gender filter
     if (filters.gender.length > 0 && !filters.gender.includes(nurse.gender)) {
       return false;
     }
 
-    // Experience filter
-    const experienceMatch = nurse.experience.match(/(\d+)\+/); // Extract number from "X+ years"
-    const nurseExperienceValue = experienceMatch ? parseInt(experienceMatch[1]) : 0;
+    // Experience filter (your data: "6")
+    const nurseExperienceValue = parseInt(nurse.experience) || 0;
     if (nurseExperienceValue < filters.experience[0] || nurseExperienceValue > filters.experience[1]) {
       return false;
     }
 
-    // Fee Range filter
-    const feeParts = nurse.fee.split('-');
-    const nurseMinFee = parseFloat(feeParts[0].replace(',', ''));
-    const nurseMaxFee = parseFloat(feeParts[1].replace(',', ''));
-
-    if (nurseMinFee < filters.feeRange[0] || nurseMaxFee > filters.feeRange[1]) {
+    // Fee Range filter (your data: "200")
+    const nurseFee = parseFloat((nurse.perVisitCharges || "0"));
+    if (nurseFee > filters.feeRange[1]) {
       return false;
     }
 
-    // Specializations filter
+    // Specializations filter (your data: services[])
     if (filters.specializations.length > 0) {
       const nurseHasSpecialization = filters.specializations.some((filterSpec) =>
-        nurse.specializations.includes(filterSpec)
+        nurse.services?.includes(filterSpec)
       );
       if (!nurseHasSpecialization) {
         return false;
       }
     }
 
-    // Rating filter
+    // Rating filter (your data: rating is string "4")
+    const nurseRating = parseFloat(nurse?.testimonials?.length
+      ? (
+        nurse?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+        nurse?.testimonials.length
+      ).toFixed(1)
+      : "0.0") || 0;
     if (filters.rating.length > 0) {
       const nurseMeetsRating = filters.rating.some((filterRating) => {
-        if (filterRating === "4+ Stars") return nurse.rating >= 4;
-        if (filterRating === "3+ Stars") return nurse.rating >= 3;
+        if (filterRating === "4+ Stars") return nurseRating >= 4;
+        if (filterRating === "3+ Stars") return nurseRating >= 3;
         return false;
       });
       if (!nurseMeetsRating) {
@@ -78,6 +83,7 @@ const NurseListings = ({ nurses = [] }) => {
 
     return true;
   });
+
 
   return (
     <motion.div
@@ -123,12 +129,12 @@ const NurseListings = ({ nurses = [] }) => {
           <h4 className="text-lg font-semibold text-gray-700 mb-3">Experience</h4>
           <div className="flex justify-between text-gray-600 text-sm">
             <span>{filters.experience[0]} years</span>
-            <span>{filters.experience[1]}+ years</span>
+            <span>{filters.experience[1]} years</span>
           </div>
           <input
             type="range"
             min="0"
-            max="20"
+            max="50"
             step="1"
             value={filters.experience[1]}
             onChange={(e) => handleFilterChange("experience", [0, parseInt(e.target.value)])}
@@ -141,15 +147,15 @@ const NurseListings = ({ nurses = [] }) => {
           <h4 className="text-lg font-semibold text-gray-700 mb-3">Fee Range (₹/day)</h4>
           <div className="flex justify-between text-gray-600 text-sm">
             <span>₹{filters.feeRange[0]}</span>
-            <span>₹{filters.feeRange[1]}+</span>
+            <span>₹{filters.feeRange[1]}</span>
           </div>
           <input
             type="range"
-            min="500"
-            max="5000"
+            min="0"
+            max="50000"
             step="100"
             value={filters.feeRange[1]}
-            onChange={(e) => handleFilterChange("feeRange", [500, parseInt(e.target.value)])}
+            onChange={(e) => handleFilterChange("feeRange", [0, parseInt(e.target.value)])}
             className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer mt-2"
           />
         </div>
@@ -192,7 +198,7 @@ const NurseListings = ({ nurses = [] }) => {
       <div className="flex-1 flex flex-col">
         <div className="flex items-center mb-1">
           <h2 className="text-2xl font-bold text-gray-800">
-            {filteredNurses.length} nurses available
+            {filteredNurses?.length} / {total} nurses available
           </h2>
           <div className="flex bg-white rounded-lg shadow-md p-1 m-2">
             <button
@@ -214,37 +220,39 @@ const NurseListings = ({ nurses = [] }) => {
         <div
           className={`flex-1 overflow-y-auto  gap-6 ${viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col"}`}
         >
-          {filteredNurses.map((nurse) => (
+          {filteredNurses?.map((nurse) => (
+
             <motion.div
               key={nurse.id}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: nurse.id * 0.1 }}
-              className={`bg-white border border-gray-200 rounded-2xl shadow p-5 flex flex-col w-full max-w-3xl mb-4`}
+              className={`bg-white border border-gray-200 rounded-2xl shadow p-5 flex flex-col w-full max-w-3xl mb-4 min-h-[300px] max-h-[350px]`}
             >
               {/* Top Row: Avatar, Name, Verified, Location */}
               <div className="flex items-center mb-2">
-                {nurse.image ? (
+                {nurse?.profileImage ? (
                   <Image
-                    src={nurse.image}
-                    alt={nurse.name}
+                    src={`http://localhost:3001/public/${nurse?.profileImage?.replace(/^undefined/, "")
+                      }`}
+                    alt={nurse?.healthServeId?.name[0]}
                     width={56}
                     height={56}
                     className="w-14 h-14 rounded-full object-cover mr-4 border border-gray-200"
                   />
                 ) : (
                   <div className="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold mr-4">
-                    {nurse.initials}
+                    {nurse?.healthServeId?.name[0]}
                   </div>
                 )}
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-lg text-gray-900">{nurse.name}</span>
+                    <span className="font-bold text-lg text-gray-900">{nurse?.healthServeId?.name}</span>
                     {nurse.verified && (
                       <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Verified</span>
                     )}
                   </div>
-                  <div className="text-gray-500 text-sm">{nurse.location}</div>
+                  <div className="text-gray-500 text-sm">{nurse?.healthServeId?.location}</div>
                 </div>
               </div>
 
@@ -255,14 +263,14 @@ const NurseListings = ({ nurses = [] }) => {
                   <span className="text-sm text-gray-700 font-medium">Languages:</span>
                 </div>
                 <div className="flex flex-col gap-1 text-right md:items-end">
-                  <span className="text-sm text-gray-900 font-semibold">{nurse.experience}</span>
+                  <span className="text-sm text-gray-900 font-semibold">{nurse.experience} years</span>
                   <span className="text-sm text-gray-900 font-semibold">{nurse.languages}</span>
                 </div>
               </div>
 
               {/* Specializations */}
               <div className="flex flex-wrap gap-2 mt-2 mb-2">
-                {nurse.specializations.map((spec, i) => (
+                {nurse.services?.map((spec, i) => (
                   <span
                     key={i}
                     className="bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full"
@@ -279,15 +287,25 @@ const NurseListings = ({ nurses = [] }) => {
                     {[...Array(5)].map((_, i) => (
                       <FaStar
                         key={i}
-                        className={`text-base ${i < Math.floor(nurse.rating) ? "text-yellow-400" : "text-gray-300"}`}
+                        className={`text-base ${i < Math.floor(nurse?.testimonials?.length
+                          ? (
+                            nurse?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+                            nurse?.testimonials.length
+                          ).toFixed(1)
+                          : "0.0") ? "text-yellow-400" : "text-gray-300"}`}
                       />
                     ))}
                   </div>
-                  <span className="text-gray-700 text-sm font-medium">{nurse.rating}</span>
-                  <span className="text-gray-500 text-xs">({nurse.reviews} reviews)</span>
+                  <span className="text-gray-700 text-sm font-medium">{nurse?.testimonials?.length
+                    ? (
+                      nurse?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+                      nurse?.testimonials.length
+                    ).toFixed(1)
+                    : "0.0"}</span>
+                  <span className="text-gray-500 text-xs">({nurse?.testimonials?.length} reviews)</span>
                 </div>
               </div>
-              <div className="text-green-700 text-xl font-bold">₹{nurse.fee}/day</div>
+              <div className="text-green-700 text-xl font-bold">₹{nurse?.perVisitCharges}/day</div>
 
 
               {/* Actions: Book Now fills row, View Profile right-aligned */}
@@ -302,9 +320,29 @@ const NurseListings = ({ nurses = [] }) => {
             </motion.div>
           ))}
         </div>
+        {/* 🔹 Pagination Controls */}
+        <div className="flex justify-center items-center gap-3 mt-6">
+          <button
+            onClick={() => onPageChange(page - 1)}
+            disabled={page === 1}
+            className="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="text-gray-700 font-medium">
+            Page {page} of {pages}
+          </span>
+          <button
+            onClick={() => onPageChange(page + 1)}
+            disabled={page === pages}
+            className="px-4 py-2 rounded-lg border bg-white hover:bg-gray-100 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </motion.div>
   );
 };
 
-export default NurseListings; 
+export default NurseListings;

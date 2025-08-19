@@ -28,6 +28,7 @@ const HealthServe = require("../models/healthServe");
 const careerLeadRoutes = require("./careerLead.routes")
 const Doctor = require("../models/doctor");
 const importExcelRouter = require("./importExcel.routes")
+const nurseRoutes=require("./nurse.routes")
 
 const router = express.Router();
 
@@ -96,6 +97,8 @@ router.use("/contact-lead", contactLeadRoutes);
 router.use("/career-lead", careerLeadRoutes);
 
 router.use("/import-excel", importExcelRouter)
+
+router.use('/nurse-listings',nurseRoutes)
 
 
 module.exports = router;

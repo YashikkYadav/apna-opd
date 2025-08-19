@@ -917,7 +917,7 @@ export default {
         if (profile.profileImage) {
           this.images.push({
             path: profile.profileImage,
-            type: "profilePhoto",
+            type: "profilePhoto_image",
           });
         }
         if (Array.isArray(profile.galleryImages)) {
@@ -974,7 +974,7 @@ export default {
         });
         // Handle profile image and gallery images
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
         this.galleryImages.forEach((file) => {
           formData.append("galleryImages_image", file);

@@ -52,7 +52,7 @@ const ImageGallery = ({ NurseData }) => {
         };
 
         // Set src after setting up event handlers
-        img.src = imageUrl;
+        img.src = imageUrl || "";
       });
     };
 
