@@ -46,7 +46,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
       (file) => file.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public\\")[1]}/${
+      ? `${profileImage.destination.split("public/")[1]}/${
           profileImage.filename
         }`.replace(/^\/+/, "")
       : undefined;
@@ -54,17 +54,16 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
       console.log(
         "Profile Photo Path:",
         profilePhoto,
-        `${profileImage.destination.split("public\\")[1]}/${
+        `${profileImage.destination.split("public/")[1]}/${
           profileImage.filename
         }`,
-        profileImage.destination.split("public\\"),
         profileImage.destination.split("public/")
       );
 
     const galleryImages = files
       .filter((file) => file.fieldname === "galleryImages_image")
       .map((file) => {
-        const relativePath = file?.destination?.split("public\\")[1] || "";
+        const relativePath = file?.destination?.split("public/")[1] || "";
         return `${relativePath.replace(/^\/+/, "")}/${file?.filename}`;
       });
 
