@@ -113,7 +113,7 @@
                     </div>
                   </template>
                 </div>
-                <div v-if="img.type === 'profilePhoto'" class="image-type">
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   Profile
                 </div>
                 <div
@@ -266,7 +266,7 @@ export default {
       // Combine profileImage and galleryImages for display
       let images = [];
       if (this.profileImage && typeof this.profileImage === "string") {
-        images.push({ path: this.profileImage, type: "profilePhoto" });
+        images.push({ path: this.profileImage, type: "profilePhoto_image" });
       }
       if (Array.isArray(this.galleryImages)) {
         images = images.concat(
@@ -351,7 +351,7 @@ export default {
         formData.append("state", this.form.state);
 
         if (this.profileImage) {
-          formData.append("profilePhoto", this.profileImage);
+          formData.append("profilePhoto_image", this.profileImage);
         }
 
         this.galleryImages.forEach((file, index) => {
