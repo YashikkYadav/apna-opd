@@ -21,6 +21,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
   const { rating, nurseType } = NurseData || {};
   const { name, phone } = userData || {};
   const [modalOpen, setModalOpen] = useState(false);
+
   console.log("MM", NurseData);
 
   const features = [
@@ -79,18 +80,18 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
           </p>
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4">
-            {typeof rating === "number" && rating > 0 && (
+            {typeof parseInt(rating) === "number" && parseInt(rating) > 0 && (
               <>
-                {[...Array(Math.floor(rating))].map((_, i) => (
+                {[...Array(Math.floor(parseInt(rating)))].map((_, i) => (
                   <FaStar key={i} className="text-yellow-400 text-2xl" />
                 ))}
-                {rating % 1 !== 0 && (
+                {parseInt(rating) % 1 !== 0 && (
                   <FaStar
                     key="half"
                     className="text-yellow-400 text-2xl opacity-50"
                   />
                 )}
-                {[...Array(5 - Math.ceil(rating))].map((_, i) => (
+                {[...Array(5 - Math.ceil(parseInt(rating)))].map((_, i) => (
                   <FaStar
                     key={i + "empty"}
                     className="text-gray-300 text-2xl"
@@ -99,7 +100,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
               </>
             )}
             <span className="text-white text-xl font-semibold ml-2">
-              {rating}/5
+              {parseInt(rating)}/5
             </span>
             <span className="text-white/70 text-lg ml-2">
               ({NurseData?.testimonials?.length} reviews)
