@@ -51,6 +51,7 @@ exports.handleIvfClinic = async (req, healthServeId) => {
       whyChoose: JSON.parse(req.body.whyChoose),
       degrees: JSON.parse(req.body.degrees),
       services: JSON.parse(req.body.services).map((item) => item.name),
+      doctors: JSON.parse(req.body.doctors),
       tags: JSON.parse(req.body.tags),
       testimonials: JSON.parse(req.body.testimonials).map((t) => t),
       profilePhoto,

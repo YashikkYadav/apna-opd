@@ -67,7 +67,8 @@ const ClinicHeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` || ""}
+          // src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` || ""}
+          src=""
           alt={data?.name || "image"}
           width={340}
           height={340}
