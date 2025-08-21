@@ -101,7 +101,7 @@ const Banner = ({ doctorDetail }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-0">
               <div className="flex lg:mr-[20px]">
                 <Image
-                  src={doctorDetail?.images[0]?.url ?? "/images/image_placeholder.svg"}
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/doctor-profile/${doctorData.images[0]?.filename}` ?? "/images/image_placeholder.svg"}
                   width={504}
                   height={608}
                   alt="Doctor Image"

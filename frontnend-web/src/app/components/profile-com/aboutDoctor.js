@@ -42,7 +42,8 @@ const AboutDoctor = ({ doctorDetail }) => {
         </div>
         <div className="flex lg:justify-end lg:ml-[20px]">
           <Image
-            src={doctorDetail?.images[0].url ?? "/images/image_placeholder.svg"}
+            src={
+              `${process.env.NEXT_PUBLIC_IMAGE_URL}/doctor-profile/${doctorData.images[0]?.filename}`}
             width={504}
             height={584}
             alt="Doctor Image"

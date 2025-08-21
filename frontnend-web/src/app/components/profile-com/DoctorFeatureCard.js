@@ -47,9 +47,10 @@ export default function DoctorFeatureCard({ doctorData }) {
       {/* Left: Profile Image */}
       <div className="z-10 flex-shrink-0 w-full md:w-[300px] flex justify-center">
         <Image
-          src={
-            `http://localhost:3001/public/doctor-profile/${doctorData.images[0]?.filename}`}
-
+          src={doctorData.images?.[0]?.filename 
+            ? `${process.env.NEXT_PUBLIC_IMAGE_URL || ''}/doctor-profile/${doctorData.images[0].filename}`
+            : '/images/default-doctor.jpg'
+          }
           alt={doctorData?.name || 'Doctor'}
           width={300}
           height={300}
@@ -103,7 +104,7 @@ export default function DoctorFeatureCard({ doctorData }) {
           >
             📅 Book Appointment
           </button>
-          <BookAppointment isOpen={openModal} onClose={() => setOpenModal(false)} doctorData={doctorData}/>
+          <BookAppointment isOpen={openModal} onClose={() => setOpenModal(false)} doctorData={doctorData} />
           <button
             onClick={() => setCallModalOpen(true)}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"

@@ -180,7 +180,7 @@ const SearchResultsData = () => {
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          item.images[0]?.url ?? "/images/image_placeholder.svg"
+                          `${process.env.NEXT_PUBLIC_IMAGE_URL || ''}/doctor-profile/${item.images[0]?.filename}` ?? "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
