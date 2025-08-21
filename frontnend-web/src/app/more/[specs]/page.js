@@ -62,6 +62,7 @@ const ServicePage = () => {
       setLoading(false);
     }
   };
+  console.log("data",serviceData)
 
   useEffect(() => {
     const locationQuery = searchParams.get("location") || "";
@@ -102,7 +103,6 @@ const ServicePage = () => {
       case serviceTypes.BLOOD_DONOR:
         return "Find Blood Donors";
       case serviceTypes.NURSE:
-        console.log(serviceTypes.NURSE)
         return "Find Nursing Services";
       case serviceTypes.RADIOLOGIST:
         return "Find Radiologists";

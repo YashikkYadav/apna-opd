@@ -12,18 +12,19 @@ import VisitClinic from "@/app/components/more/ivfClinicComponents/visit";
 import WhyChoose from "@/app/components/more/ivfClinicComponents/whyChooseUS";
 import FAQSection from "@/app/components/more/ivfClinicComponents/faqs";
 import IvfFooter from "@/app/components/more/ivfClinicComponents/ivfFooter";
+import ClinicDoctorsSection from "@/app/components/more/ivfClinicComponents/ivfDoctors";
 
 export default function IvfPage() {
   const params = useParams();
   const id = params.id;
   const [data, setData] = useState({
     healthProfile: null,
-     otherData: null,
+    otherData: null,
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      
+
       const response_data = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
       );
@@ -50,6 +51,10 @@ export default function IvfPage() {
             healthProfile={data?.healthProfile}
           />
           <ClinicAboutSection
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <ClinicDoctorsSection
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />

@@ -13,6 +13,7 @@ const NursingStaffSchema = new mongoose.Schema(
     about: { type: String },
     experience: { type: String },
     nurseType: { type: String },
+    gender: { type: String },
     rating: {type: String},
     workingAt: { type: String },
     clients: { type: String },
@@ -21,6 +22,7 @@ const NursingStaffSchema = new mongoose.Schema(
     shiftFlexibility: { type: String },
     bookingType: { type: String },
     workingHours: { type: String },
+    specializations:[{type:String}],
 
     // Location
     address: { type: String },

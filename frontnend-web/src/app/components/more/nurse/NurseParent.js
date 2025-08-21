@@ -5,6 +5,7 @@ import NurseListings from "./NurseListings";
 
 const NursePage = ({ nurses = [], page = 1, pages = 1, onPageChange, total,searchData }) => {
   const [filteredNurses, setFilteredNurses] = useState([]);
+  
 
   useEffect(() => {
     // On first load (or whenever nurses prop changes), show all nurses

@@ -3,9 +3,14 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa"; // For stars
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import FreeTrialModal from "./Book"
 
 
-const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }) => {
+const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total, onFilterChange }) => {
+  const router = useRouter();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedNurseId, setSelectedNurseId] = useState(null);
   console.log(">", nurses)
   // State for filters (gender, experience, fee range, specializations, rating)
   const [filters, setFilters] = useState({
@@ -21,68 +26,25 @@ const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }
 
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => {
+      let updatedFilters;
       if (filterType === "gender" || filterType === "specializations" || filterType === "rating") {
         const currentValues = prevFilters[filterType];
-        if (currentValues.includes(value)) {
-          return { ...prevFilters, [filterType]: currentValues.filter((item) => item !== value) };
-        } else {
-          return { ...prevFilters, [filterType]: [...currentValues, value] };
-        }
+        updatedFilters = currentValues.includes(value)
+          ? { ...prevFilters, [filterType]: currentValues.filter((item) => item !== value) }
+          : { ...prevFilters, [filterType]: [...currentValues, value] };
       } else if (filterType === "experience" || filterType === "feeRange") {
-        return { ...prevFilters, [filterType]: value };
+        updatedFilters = { ...prevFilters, [filterType]: value };
+      } else {
+        updatedFilters = prevFilters;
       }
-      return prevFilters;
+
+      // 🔹 Pass updated filters to parent
+      if (onFilterChange) onFilterChange(updatedFilters);
+      return updatedFilters;
     });
   };
 
-  const filteredNurses = nurses?.filter((nurse) => {
-    // Gender filter
-    if (filters.gender.length > 0 && !filters.gender.includes(nurse.gender)) {
-      return false;
-    }
 
-    // Experience filter (your data: "6")
-    const nurseExperienceValue = parseInt(nurse.experience) || 0;
-    if (nurseExperienceValue < filters.experience[0] || nurseExperienceValue > filters.experience[1]) {
-      return false;
-    }
-
-    // Fee Range filter (your data: "200")
-    const nurseFee = parseFloat((nurse.perVisitCharges || "0"));
-    if (nurseFee > filters.feeRange[1]) {
-      return false;
-    }
-
-    // Specializations filter (your data: services[])
-    if (filters.specializations.length > 0) {
-      const nurseHasSpecialization = filters.specializations.some((filterSpec) =>
-        nurse.services?.includes(filterSpec)
-      );
-      if (!nurseHasSpecialization) {
-        return false;
-      }
-    }
-
-    // Rating filter (your data: rating is string "4")
-    const nurseRating = parseFloat(nurse?.testimonials?.length
-      ? (
-        nurse?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
-        nurse?.testimonials.length
-      ).toFixed(1)
-      : "0.0") || 0;
-    if (filters.rating.length > 0) {
-      const nurseMeetsRating = filters.rating.some((filterRating) => {
-        if (filterRating === "4+ Stars") return nurseRating >= 4;
-        if (filterRating === "3+ Stars") return nurseRating >= 3;
-        return false;
-      });
-      if (!nurseMeetsRating) {
-        return false;
-      }
-    }
-
-    return true;
-  });
 
 
   return (
@@ -198,7 +160,7 @@ const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }
       <div className="flex-1 flex flex-col">
         <div className="flex items-center mb-1">
           <h2 className="text-2xl font-bold text-gray-800">
-            {filteredNurses?.length} / {total} nurses available
+            {nurses?.length || 0} nurses available
           </h2>
           <div className="flex bg-white rounded-lg shadow-md p-1 m-2">
             <button
@@ -220,7 +182,7 @@ const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }
         <div
           className={`flex-1 overflow-y-auto  gap-6 ${viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col"}`}
         >
-          {filteredNurses?.map((nurse) => (
+          {nurses?.map((nurse) => (
 
             <motion.div
               key={nurse.id}
@@ -257,16 +219,27 @@ const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }
               </div>
 
               {/* Experience/Languages Row (List view: right aligned) */}
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-2">
-                <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-2 mb-2">
+                {/* Experience */}
+                <div className="flex justify-between">
                   <span className="text-sm text-gray-700 font-medium">Experience:</span>
-                  <span className="text-sm text-gray-700 font-medium">Languages:</span>
+                  <span className="text-sm text-gray-900 font-semibold">
+                    {nurse.experience} years
+                  </span>
                 </div>
-                <div className="flex flex-col gap-1 text-right md:items-end">
-                  <span className="text-sm text-gray-900 font-semibold">{nurse.experience} years</span>
-                  <span className="text-sm text-gray-900 font-semibold">{nurse.languages}</span>
+
+                {/* Languages */}
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-700 font-medium">Languages:</span>
+                  <span className="text-sm text-gray-900 font-semibold">
+                    {Array.isArray(nurse.languages)
+                      ? nurse.languages.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(", ")
+                      : nurse.languages}
+                  </span>
                 </div>
               </div>
+
+
 
               {/* Specializations */}
               <div className="flex flex-wrap gap-2 mt-2 mb-2">
@@ -310,10 +283,24 @@ const NurseListings = ({ nurses = [], page = 1, pages = 1, onPageChange, total }
 
               {/* Actions: Book Now fills row, View Profile right-aligned */}
               <div className="flex w-full gap-2 mt-2">
-                <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors text-base shadow-sm">
+                <button
+                  onClick={() => setSelectedNurseId(nurse?.healthServeId?._id)}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors text-base shadow-sm"
+                >
                   Book Now
                 </button>
-                <button className="w-40 border border-gray-300 text-gray-700 hover:bg-gray-100 font-semibold py-3 rounded-lg transition-colors text-base shadow-sm">
+
+                {selectedNurseId && (
+                  <FreeTrialModal
+                    isOpen={!!selectedNurseId}
+                    onClose={() => setSelectedNurseId(null)}
+                    healthId={selectedNurseId}
+                  />
+                )}
+                
+                <button
+                  onClick={() => router.push(`/detail/nursingStaff/${nurse?.healthServeId?._id}`)}
+                  className="w-40 border border-gray-300 text-gray-700 hover:bg-gray-100 font-semibold py-3 rounded-lg transition-colors text-base shadow-sm">
                   View Profile
                 </button>
               </div>

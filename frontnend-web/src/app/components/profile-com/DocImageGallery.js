@@ -187,7 +187,7 @@ const ImageGallery = ({ images = [] }) => {
                   }}
                 >
                   <Image
-                    src={img?.url}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/doctor-profile/${img?.filename}`}
                     alt={img?.alt}
                     width={CARD_SIZE}
                     height={CARD_SIZE}

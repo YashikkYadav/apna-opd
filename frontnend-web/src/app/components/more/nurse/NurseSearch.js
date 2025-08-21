@@ -4,13 +4,13 @@ import { useState } from "react";
 
 const NurseSearch = ({ searchData = {}, onSearch }) => {
   const [location, setLocation] = useState("");
-  const [nurseType, setNurseType] = useState("");
-  const [availability, setAvailability] = useState("");
-  const [gender, setGender] = useState("");
+  // const [nurseType, setNurseType] = useState("");
+  // const [availability, setAvailability] = useState("");
+  // const [gender, setGender] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch({ location });
+    onSearch( location );
   };
 
 
