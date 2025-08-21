@@ -775,7 +775,7 @@ export default {
         address: "",
         locality: "",
         city: "",
-        pincode: "",
+        pincode: null,
         state: "",
         established: "",
         tags: [""],

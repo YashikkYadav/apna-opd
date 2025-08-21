@@ -698,7 +698,7 @@ export default {
         to: "",
         delay: "",
         address: "",
-        pincode: "",
+        pincode: null,
         city: "",
         locality: "",
         state: "",
