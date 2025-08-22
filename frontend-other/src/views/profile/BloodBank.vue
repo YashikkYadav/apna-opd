@@ -536,7 +536,7 @@ export default {
         address: "",
         locality: "",
         city: "",
-        pincode: "",
+        pincode: null,
         state: "",
         bloodTypes: [],
         nearbyBloodBanks: [],

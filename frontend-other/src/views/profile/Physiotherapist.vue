@@ -643,7 +643,7 @@ export default {
         address: "",
         locality: "",
         city: "",
-        pincode: "",
+        pincode: null,
         tags: [""],
         state: "",
         education: [{ degree: "", institution: "", year: "" }],

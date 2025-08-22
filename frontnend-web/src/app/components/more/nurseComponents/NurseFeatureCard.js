@@ -63,7 +63,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
         {/* Left: Hospital Image */}
         <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
           <Image
-            src={""}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${NurseData?.profileImage}`}
             alt={`${name}` || "image"}
             width={340}
             height={340}
