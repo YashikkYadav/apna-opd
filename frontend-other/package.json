@@ -12,6 +12,7 @@
     "@mdi/font": "7.4.47",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "path": "^0.12.7",
     "pinia": "^2.3.1",

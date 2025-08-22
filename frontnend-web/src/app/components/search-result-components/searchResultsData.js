@@ -73,6 +73,7 @@ const SearchResultsData = () => {
   };
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
+  console.log("data", data);
 
   return (
     <>
@@ -180,7 +181,7 @@ const SearchResultsData = () => {
                     <div className="sm:mr-[32px]">
                       <Image
                         src={
-                          item.images[0]?.url ?? "/images/image_placeholder.svg"
+                          `${process.env.NEXT_PUBLIC_IMAGE_URL || ''}/doctor-profile/${item.images[0]?.filename}` ?? "/images/image_placeholder.svg"
                         }
                         width={180}
                         height={180}
@@ -207,14 +208,19 @@ const SearchResultsData = () => {
                       $25
                     </h2> */}
                     <div className="mt-[24px]">
-                      {item.rating > 0 || item.ratingCount > 0 ? (
+                      {item?.testimonials?.length > 0 ? (
+                        // ✅ Case 1: Has testimonials → Show stars + average
                         <StarRating
-                          rating={item.rating || 0}
-                          ratingCount={item.ratingCount || 0}
+                          rating={(
+                            item.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+                            item.testimonials.length
+                          )}
+                          ratingCount={item.testimonials.length}
                           size="sm"
-                          showCount={true}
+                          showCount
                         />
                       ) : (
+                        // ✅ Case 2: No testimonials → Show empty stars + text
                         <div className="flex items-center">
                           <StarRating
                             rating={0}
@@ -227,6 +233,7 @@ const SearchResultsData = () => {
                           </span>
                         </div>
                       )}
+
                     </div>
                     <button
                       onClick={() => handleDoctorDetails(item.doctor._id)}

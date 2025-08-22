@@ -54,6 +54,21 @@
               </v-text-field>
             </v-col>
           </v-row>
+          
+          <v-row>
+  <v-col cols="12" sm="4">
+    <v-select
+      v-model="form.gender"
+      ref="genderRef"
+      :items="['Male', 'Female', 'Other']"
+      label="Gender"
+      :rules="[rules.required]"
+      variant="outlined"
+      dense
+    />
+  </v-col>
+</v-row>
+
           <v-row>
             <v-col cols="12" sm="12">
               <v-textarea
@@ -67,6 +82,8 @@
               </v-textarea>
             </v-col>
           </v-row>
+
+
           <v-row>
             <v-col cols="12" sm="6">
               <v-file-upload
@@ -376,6 +393,29 @@
           </div>
         </v-card>
 
+        <v-card class="section-card">
+  <v-toolbar
+    flat
+    class="mb-4"
+    style="column-gap: 20px; padding: 0px 20px"
+  >
+    <v-toolbar-title class="ml-3">Specializations</v-toolbar-title>
+  </v-toolbar>
+
+  <div style="padding: 20px">
+    <v-select
+      v-model="form.specializations"
+      :items="specializationsList"
+      label="Select Specializations"
+      multiple
+      chips
+      clearable
+      variant="outlined"
+      dense
+    ></v-select>
+  </div>
+</v-card>
+
         <!-- SERVICE PROVIDED -->
         <v-card class="section-card">
           <v-toolbar flat class="mb-4" style="padding: 0px 20px">
@@ -670,6 +710,7 @@ export default {
         clients: "",
         state: "",
         education: [{ degree: "", institution: "", year: "" }],
+        specializations: [],
         services: [],
         certifications: [],
         languages: [],
@@ -681,6 +722,7 @@ export default {
         bookingType: "",
         workingHours: "",
         workingDays: [],
+        gender: "",
       },
       mapDialog: false,
       map: null,
@@ -689,6 +731,13 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
       },
+      specializationsList: [
+        "ICU Care",
+        "Elderly Care",
+        "Pediatric",
+        "Post-operative",
+        "COVID Care",
+      ],
 
       itemDialog: false,
       itemType: "",
@@ -929,12 +978,15 @@ export default {
           );
         }
         const hs = res?.healthServeProfileData?.healthServeUser;
+        
         this.form.nurseType = profile.nurseType || "";
+        this.form.gender = profile.gender || "";
         this.form.rating = profile.rating || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
         // this.form.pincode = hs?.pincode || "";
         this.form.education = profile.education || [];
+        this.form.specializations=profile.specializations || [];
         this.form.services = profile.services || [];
         this.form.certifications = profile.certifications || [];
         this.form.languages = profile.languages || [];

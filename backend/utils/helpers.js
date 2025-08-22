@@ -41,17 +41,18 @@ const verifyAccessToken = async (accessToken) => {
 
 const generatePatientUid = async () => {
   try {
-    let uid;
+    // atomically find the patient with the highest UID number
+    const lastPatient = await Patient.findOne()
+      .sort({ uid: -1 })
+      .select("uid -_id");
 
-    const existingPatients = await Patient.find();
-    const existingUids = existingPatients.map((patient) => patient.uid);
-
-    for (let i=1; i<100001; i++) {
-      uid = `UID${i}`;
-      if (!existingUids.includes(uid)) {
-        break;
-      }
+    let lastNumber = 0;
+    if (lastPatient && lastPatient.uid) {
+      lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
     }
+
+    const newNumber = lastNumber + 1;
+    const uid = `UID${newNumber}`;
 
     return uid;
   } catch (error) {
@@ -61,6 +62,7 @@ const generatePatientUid = async () => {
   }
 };
 
+
 const generateInvoiceId = async () => {
   try {
     let invoiceId;
@@ -68,7 +70,7 @@ const generateInvoiceId = async () => {
     const existingInvoices = await Invoice.find();
     const existingInvoiceIds = existingInvoices.map((invoice) => invoice.invoiceId);
 
-    for (let i=1; i<100001; i++) {
+    for (let i = 1; i < 100001; i++) {
       if (i < 10) {
         invoiceId = `UID00000${i}`;
       } else if (i < 100) {

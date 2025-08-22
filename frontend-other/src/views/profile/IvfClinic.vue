@@ -23,6 +23,7 @@
               </v-textarea>
             </v-col>
           </v-row>
+
           <v-row>
             <v-col cols="12" sm="4">
               <v-text-field
@@ -237,6 +238,75 @@
             type="url"
             placeholder="https://example.com"
           />
+        </v-card>
+
+        <!-- Doctors -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Doctors</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addDoctor">+ Add Doctor</v-btn>
+
+          <div
+            v-for="(doctor, index) in form.doctors"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="form.doctors[index].name"
+                    label="Doctor Name"
+                    dense
+                    outlined
+                    hide-details
+                    class="mb-3"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="form.doctors[index].specialization"
+                    label="Specialization"
+                    dense
+                    outlined
+                    hide-details
+                    class="mb-3"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="form.doctors[index].experience"
+                    label="Experience (years)"
+                    type="number"
+                    dense
+                    outlined
+                    hide-details
+                    class="mb-3"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeDoctor(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
         </v-card>
 
         <!-- tags -->
@@ -600,6 +670,7 @@ export default {
         faqs: [],
         services: [],
         testimonials: [],
+        doctors: [],
         googleMapLink: "",
       },
       mapDialog: false,
@@ -738,6 +809,12 @@ export default {
     removeService(index) {
       this.form.services.splice(index, 1);
     },
+    addDoctor() {
+      this.form.doctors.push({ name: "", specialization: "", experience: "" });
+    },
+    removeDoctor(index) {
+      this.form.doctors.splice(index, 1);
+    },
     getImageUrl(img) {
       if (!img) return "";
       // If img is a string (new upload), use Vite env
@@ -865,6 +942,7 @@ export default {
         this.form.services =
           profile.services.map((item) => ({ name: item })) || [];
         this.form.testimonials = profile.testimonials || [];
+        this.form.doctors = profile.doctors || [];
         this.form.tags = profile.tags || [];
       }
     },
@@ -891,6 +969,7 @@ export default {
         formData.append("faqs", JSON.stringify(this.form.faqs));
         formData.append("services", JSON.stringify(this.form.services));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
+        formData.append("doctors", JSON.stringify(this.form.doctors));
         formData.append("tags", JSON.stringify(this.form.tags));
 
         if (this.profileImage) {

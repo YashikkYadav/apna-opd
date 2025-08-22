@@ -7,6 +7,12 @@ const testimonialSchema = new mongoose.Schema({
   author: String,
 });
 
+const doctorSchema = new mongoose.Schema({
+  name: String,
+  specialization: String,
+  experience: String,
+});
+
 const ivfClinicSchema = new mongoose.Schema(
   {
     healthServeId: {
@@ -48,6 +54,13 @@ const ivfClinicSchema = new mongoose.Schema(
     ],
     services: [{ type: String }],
     testimonials: [testimonialSchema],
+    doctors: [
+      {
+        name: String,
+        specialization: String,
+        experience: String,
+      }
+    ],
     tags: [{ type: String }],
     profilePhoto: { type: String },
     galleryImages: [{ type: String }],
