@@ -4,6 +4,7 @@ const Appointment = require("../models/appointment");
 const DoctorProfile = require("../models/doctorProfile");
 const DoctorPatient = require("../models/doctorPatient");
 const paymentService = require("../services/payment.service");
+const { v4: uuidv4 } = require('uuid');
 
 const { generatePatientUid } = require("../utils/helpers");
 const validateAppointment = require("../validations/appointment.validation");
@@ -116,6 +117,7 @@ const validateOTP = async (patientData) => {
 const bookAppointment = async (appointmentData, doctorId) => {
   try {
     const { phoneNumber, email, appointmentType } = appointmentData;
+
     if (!phoneNumber || (appointmentType === "online" && !email)) {
       return {
         statusCode: 400,
@@ -130,7 +132,7 @@ const bookAppointment = async (appointmentData, doctorId) => {
 
     if (!patient) {
       newPatient = await Patient.create({
-        uid: "UID" + (count + 1),
+        uid: "UID-" + uuidv4(),
         phoneNumber,
         fullName: email,
       });
@@ -172,6 +174,7 @@ const createAppointment = async (appointmentData, doctorId) => {
 
     let patient = await Patient.findOne({ phoneNumber });
     const count = await Patient.countDocuments({});
+
 
     if (!patient) {
       patient = await Patient.create({
@@ -227,13 +230,12 @@ const createAppointment = async (appointmentData, doctorId) => {
 
     let emails = [];
     emails.push(email);
-
     const paymentData = await paymentService.createPaymentLinkForEntity(
       "patient",
       {
-        name: patient.fullName ?? "patient",
-        contact: appointmentData.phoneNumber,
-        email: patient.email,
+        name: appointmentData.name ?? "patient",
+        contact: appointmentData.phoneNumber ?? "",
+        email: appointmentData.email ?? "",
       },
       "appointment",
       "appointment",
@@ -695,15 +697,15 @@ const getAppointmentTimeSlots = async (doctorId, locationId, date) => {
       fromMeridian === "PM" && parseInt(fromHour) !== 12
         ? parseInt(fromHour) + 12
         : fromMeridian === "AM" && parseInt(fromHour) === 12
-        ? 0
-        : parseInt(fromHour);
+          ? 0
+          : parseInt(fromHour);
 
     const toHour24 =
       toMeridian === "PM" && parseInt(toHour) !== 12
         ? parseInt(toHour) + 12
         : toMeridian === "AM" && parseInt(toHour) === 12
-        ? 0
-        : parseInt(toHour);
+          ? 0
+          : parseInt(toHour);
 
     const fromTime = new Date(selectedDate);
     fromTime.setHours(parseInt(fromHour24), parseInt(fromMinutes), 0);
