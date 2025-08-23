@@ -963,9 +963,9 @@ export default {
       if (profile) {
         // Map images for gallery and profile, matching hospital reference
         this.images = [];
-        if (profile.profileImage) {
+        if (profile.profilePhoto) {
           this.images.push({
-            path: profile.profileImage,
+            path: profile.profilePhoto,
             type: "profilePhoto_image",
           });
         }

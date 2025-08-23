@@ -38,9 +38,9 @@ const Nurse = ({ serviceData,totalItems }) => {
               <div className="sm:mr-[32px]">
                 <Image
                   src={
-                    nurse.profiles &&
-                    nurse.profiles.length > 0 &&
-                    nurse.profiles[0].images.length > 0
+                    nurse?.profiles &&
+                    nurse?.profiles.length > 0 &&
+                    nurse?.profiles[0]?.images?.length > 0
                       ? nurse.profiles[0].images[0].url
                       : "/images/image_placeholder.svg"
                   }

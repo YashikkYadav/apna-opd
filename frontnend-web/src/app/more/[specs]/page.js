@@ -26,6 +26,7 @@ import Pagination from "../../components/more/common/Pagination";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/config/axios";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 const ServicePage = () => {
   const [loading, setLoading] = useState(true);
@@ -39,7 +40,8 @@ const ServicePage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const router = useRouter();
 
-  const fetchData = async (locationQuery = "", page = 1) => {
+
+  const fetchData = useCallback(async (locationQuery = "", page = 1) => {
     let sanitizedSpecs = params.specs.replace(/-/g, "_");
     if(sanitizedSpecs==="nurse"){
       sanitizedSpecs="nursing_staff"
@@ -61,7 +63,8 @@ const ServicePage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.specs]);
+
   console.log("data",serviceData)
 
   useEffect(() => {
@@ -70,7 +73,8 @@ const ServicePage = () => {
     if (params.specs) {
       fetchData(locationQuery);
     }
-  }, [params.specs, searchParams]);
+  }, [params.specs, searchParams, fetchData]);
+  
 
   if (loading) return <Loader />;
   console.log(specs)
@@ -181,60 +185,32 @@ const ServicePage = () => {
                   {getServiceTitle()}
                 </h1>
                 <p className="text-base text-white mb-[88px] text-center">
-                  Find the best healthcare services near you. Professional and reliable assistance available.
+                  Find the best healthcare services near you. Professional and
+                  reliable assistance available.
                 </p>
               </div>
             </div>
 
             <div>
-              <SearchBarForServices onSearch={handleSearch} location={location} />
+              <SearchBarForServices
+                onSearch={handleSearch}
+                location={location}
+              />
             </div>
           </div>
         </div>
       </div>
-      
-      <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[60px] md:my-[120px]">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-0">
-          <div className="lg:w-[34%] flex lg:flex-col gap-2 md:gap-0">
-            <div className="mb-[20px] md:mb-[80px] w-full">
-              <h2 className="title-48 mb-[24px]">Location</h2>
-              <Select
-                className="!h-[50px] w-full max-w-[296px]"
-                placeholder="Location"
-                size="large"
-                prefix={
-                  <Image
-                    className="mr-3"
-                    src={"/images/blue_location.svg"}
-                    width={24}
-                    height={24}
-                    alt="Location Icon"
-                  />
-                }
-                value={location || undefined}
-                onChange={(value) => {
-                  handleSearch(value);
-                }}
-              >
-                {location && (
-                  <Select.Option key={location} value={location}>
-                    {location}
-                  </Select.Option>
-                )}
-              </Select>
-            </div>
-          </div>
-          
-          <div className="lg:w-[66%]">
-            {renderServiceComponent(totalItems)}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
-          </div>
+
+      <div className="bg-sky-50 px-[15px] sm:px-[30px] mx-auto py-[60px] ">
+        <div className="">
+          {renderServiceComponent(totalItems)}
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </div>

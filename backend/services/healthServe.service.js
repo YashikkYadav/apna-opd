@@ -332,7 +332,7 @@ const deleteHealthServe = async (healthServeId) => {
 
 const getHealthServeList = async (page = 1, location, type) => {
   try {
-    const limit = 5;
+    const limit = 6;
     const safePage = Math.max(Number(page) || 1, 1);
     const skip = (safePage - 1) * limit;
 
@@ -358,10 +358,48 @@ const getHealthServeList = async (page = 1, location, type) => {
     }
 
     // Determine aggregation or direct query
-    const useAggregation = type !== "hospital" && type !== "blood_donor";
+    const useAggregation = type !== "blood_donor";
 
     let healthServeProfileList = [];
     let total = 0;
+
+    let lookup;
+    console.log(type);
+
+    switch (type) {
+      case "hospital":
+        lookup = "hospitals";
+        break;
+      case "gym":
+        lookup = "gyms";
+        break;
+      case "ivf_clinic":
+        lookup = "ivfclinics";
+        break;
+      case "nursing_staff":
+        lookup = "nursingstaffs";
+        break;
+      case "physiotherapist":
+        lookup = "physiotherapists";
+        break;
+      case "laboratory":
+        lookup = "healthlapprofiles";
+        break;
+      case "vatenary":
+        lookup = "veterinaries";
+        break;
+      case "blood_bank":
+        lookup = "bloodbanks";
+        break;
+      case "nursing_medical_college":
+        lookup = "medicalcolleges";
+        break;
+      case "medical_store":
+        lookup = "pharmacyprofiles";
+        break;
+      default:
+        lookup = "healthserveprofiles";
+    }
 
     if (useAggregation) {
       const aggregationPipeline = [
@@ -370,7 +408,7 @@ const getHealthServeList = async (page = 1, location, type) => {
         { $limit: limit },
         {
           $lookup: {
-            from: "healthserveprofiles",
+            from: lookup,
             localField: "_id",
             foreignField: "healthServeId",
             as: "profiles",
