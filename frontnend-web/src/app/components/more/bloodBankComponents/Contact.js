@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { FaPhoneAlt, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { GoLocation } from 'react-icons/go';
-
+import MapComponent from '../../common-components/mapComponent';
 const Contact = ({ website_url = '{{website_url}}',
 
     healthProfile,
@@ -90,9 +90,8 @@ const Contact = ({ website_url = '{{website_url}}',
             {/* Google Map Placeholder */}
             <div className="bg-blue-50 mt-10 p-6 rounded-xl text-center hover:shadow-md hover:scale-[1.02] transition-all duration-300">
                 <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Google Map</p>
-                <p className="text-gray-600">{data?.location}</p>
-                <div className="bg-blue-200 w-full h-48 mt-4 rounded-md flex items-center justify-center">
-                    <span className="text-blue-700 font-semibold">Map Placeholder</span>
+                <div className="bg-blue-200 w-full h-48 mt-4 rounded-md overflow-hidden">
+                    <MapComponent address={data?.address} />
                 </div>
             </div>
         </motion.section>

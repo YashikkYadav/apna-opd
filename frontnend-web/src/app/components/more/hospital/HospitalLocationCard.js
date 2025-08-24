@@ -7,7 +7,7 @@ import {
   FaGlobe,
   FaClock,
 } from "react-icons/fa";
-
+import MapComponent from "../../common-components/mapComponent";
 export default function HospitalLocationCard({ profileData }) {
   const {
     name,
@@ -46,14 +46,13 @@ export default function HospitalLocationCard({ profileData }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gray-100 rounded-2xl flex items-center p-8 min-h-[320px] md:min-h-[250px]">
-          <span className="text-2xl flex items-center gap-3 text-gray-700">
-            <span className="text-3xl">🗺️</span>
-            <span className="font-semibold">Interactive Map View</span>
-            <span className="font-medium text-gray-500 ml-2 text-lg">
-              {name || "Hospital Location"}
-            </span>
-          </span>
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-center p-6 md:p-8 min-h-[320px] md:min-h-[250px]">
+          <div className="bg-white p-6 rounded-xl text-center shadow hover:shadow-lg hover:scale-[1.02] transition-all duration-300 w-full max-w-lg">
+            <p className="font-bold text-lg text-blue-700 mb-3">🗺️ Google Map</p>
+            <div className="w-full h-56 rounded-lg overflow-hidden border border-blue-100">
+              <MapComponent address={profileData?.address} />
+            </div>
+          </div>
         </div>
 
         <div className="bg-[#F7F9FB] rounded-2xl p-8 flex flex-col gap-8 min-h-[320px] md:min-h-[400px] justify-center">
