@@ -2,39 +2,20 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
-const Hospital = ({ serviceData,totalItems }) => {
+const Hospital = ({ serviceData, totalItems }) => {
   const [hospitalList, setHospitalList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [hospitalProfiles, setHospitalProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const navigate = useRouter();
 
   useEffect(() => {
     if (serviceData) {
+      setHospitalList(serviceData || []);
       setFilteredList(serviceData || []);
     }
   }, [serviceData]);
-
-  // fetch profile data for given hospital id
-  const fetchHospitalProfile = async (id) => {
-    try {
-      console.log("Fetching profile for hospital:", id);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
-      );
-      const data = res.data;
-      console.log("Fetched profile data:", data);
-      setHospitalProfiles((prev) => ({
-        ...prev,
-        [id]: data,
-      }));
-    } catch (err) {
-      console.error("Error fetching profile:", id, err?.response?.data || err);
-    }
-  };
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -53,56 +34,125 @@ const Hospital = ({ serviceData,totalItems }) => {
   };
 
   return (
-    <>
-      <h2 className="title-48 mb-[24px]">Hospitals Near You</h2>
-      <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {totalItems} results
-      </p>
-      <div className="flex flex-col gap-[32px]">
+    <main>
+      <div className="mb-8 text-lg text-gray-600">
+        {totalItems} Hospitals Available
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentItems?.map((hospital) => (
           <div
-            key={hospital._id}
-            className="flex flex-col sm:flex-row justify-between mb-[32px]"
+            key={hospital?._id}
+            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
-            <div className="flex flex-col sm:flex-row">
-              <div className="sm:mr-[32px]">
+            {/* Avatar + Name */}
+            <div className="flex items-center gap-4 mb-4">
+              {hospital?.profiles?.[0]?.profileImage ? (
                 <Image
-                  src={
-                    hospital.profiles &&
-                    hospital.profiles.length > 0 &&
-                    hospital.profiles[0].images.length > 0
-                      ? hospital.profiles[0].images[0].url
-                      : "/images/image_placeholder.svg"
-                  }
-                  width={180}
-                  height={180}
-                  alt="Hospital"
-                  className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${hospital?.profiles?.[0]?.profileImage}`}
+                  alt={hospital?.name || "Hospital Logo"}
+                  width={55}
+                  height={55}
+                  className="rounded-full object-cover w-[55px] h-[55px]"
                 />
-              </div>
-              <div className="py-[18px] sm:py-0 md:py-[18px]">
-                <p className="text-base text-[#5151E1] mb-[8px]">Hospital</p>
-                <h3 className="title-24 mb-[8px]">{hospital.title}</h3>
-                <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                  Rating: {hospital.rating?.toFixed(1) || "N/A"} / 5
-                </p>
-                <h4 className="title-24 text-[#808080] !font-medium">
-                  {hospital.name}
-                </h4>
+              ) : (
+                <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
+                  {hospital?.name?.charAt(0) || "H"}
+                </div>
+              )}
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                  {hospital?.name || "Unnamed Hospital"}
+                  <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                    Verified
+                  </span>
+                </h3>
+                <div className="text-gray-600 text-sm">
+                  {hospital?.location || hospital?.city || "No Location"}
+                </div>
               </div>
             </div>
-            <div className="flex flex-row sm:flex-col justify-end">
-              {/* Optional price display */}
-              {/* <h2 className="title-24 !text-[#5151E1] md:mt-[19px] text-end">
-                ₹{hospital.price || "N/A"}
-              </h2> */}
+
+            {/* Experience + Accreditations */}
+            <div className="mb-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Experience:</span>
+                <span className="font-medium">
+                  {hospital?.profiles?.[0]?.experience || "N/A"}+ Years
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Accreditations:</span>
+                <span className="font-medium">
+                  {hospital?.profiles?.[0]?.accreditations?.length > 0
+                    ? hospital.profiles[0].accreditations.slice(0, 3).join(", ")
+                    : "N/A"}
+                </span>
+              </div>
+            </div>
+
+            {/* Departments */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {hospital?.profiles?.[0]?.departments?.length > 0 ? (
+                hospital.profiles[0].departments
+                  .slice(0, 5)
+                  .map((dept, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {dept}
+                    </span>
+                  ))
+              ) : (
+                <span className="text-gray-500 text-sm">No Departments</span>
+              )}
+            </div>
+
+            {/* Facilities */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {hospital?.profiles?.[0]?.facilities?.length > 0 ? (
+                hospital.profiles[0].facilities
+                  .slice(0, 5)
+                  .map((facility, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {facility}
+                    </span>
+                  ))
+              ) : (
+                <span className="text-gray-500 text-sm">
+                  No Facilities Listed
+                </span>
+              )}
+            </div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="text-yellow-500 text-sm">
+                {Array.from({ length: Math.round(getRating(hospital)) }).map(
+                  (_, i) => (
+                    <span key={i}>★</span>
+                  )
+                )}
+              </div>
+              <span className="text-gray-600 text-sm">
+                {getRating(hospital) || "N/A"} (
+                {hospital?.profiles?.[0]?.testimonials?.length || 0} reviews)
+              </span>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2">
               <button
+                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
                 onClick={() =>
-                  navigate.push(`/more/hospital/${hospital._id}/details`)
+                  navigate.push(`/more/hospital/${hospital?._id}/details`)
                 }
-                className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
               >
-                Details
+                View Details
               </button>
             </div>
           </div>
