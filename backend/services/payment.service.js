@@ -101,7 +101,7 @@ const createPaymentLinkForEntity = async (
         description: `Payment for ${paymentType} fee of ${entityType}`,
         customer: {
           name: entityData.name,
-          contact: entityData.phone,
+          contact: entityData.contact,
           email: entityData.email,
         },
         notify: {
@@ -132,7 +132,7 @@ const createPaymentLinkForEntity = async (
         description: `Payment for ${paymentType} fee of ${entityType}`,
         customer: {
           name: entityData.name,
-          contact: entityData.phone,
+          contact: entityData.contact,
           email: entityData.email,
         },
         notify: {
@@ -156,6 +156,7 @@ const createPaymentLinkForEntity = async (
         },
       };
     }
+
 
     const response = await axios.post(
       "https://api.razorpay.com/v1/payment_links/",

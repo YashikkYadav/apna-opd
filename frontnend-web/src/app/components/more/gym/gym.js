@@ -5,6 +5,7 @@ import Image from "next/image";
 
 const Gym = ({ serviceData, totalItems }) => {
   const [filteredList, setFilteredList] = useState([]);
+  const [gymProfiles, setGymProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6); // showing 6 gyms per page
   const navigate = useRouter();
@@ -15,7 +16,27 @@ const Gym = ({ serviceData, totalItems }) => {
     }
   }, [serviceData]);
 
-  // Pagination logic
+  // fetch profile for given gym id
+  const fetchGymProfile = async (id) => {
+    try {
+      console.log("Fetching profile for gym:", id);
+
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
+      );
+
+      const data = res.data;
+
+      setGymProfiles((prev) => ({
+        ...prev,
+        [id]: data,
+      }));
+    } catch (err) {
+      console.error("Error fetching profile:", id, err?.response?.data || err);
+    }
+  };
+
+  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);

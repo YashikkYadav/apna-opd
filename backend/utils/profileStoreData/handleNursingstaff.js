@@ -3,6 +3,7 @@ const healthServeModel = require("../../models/healthServe");
 
 const mongoose = require("mongoose");
 
+
 const UpdateHealthServeData = async (req, healthServeId) => {
   const { address, locality, city, pincode, state } = req.body;
   return await healthServeModel.updateOne(
@@ -120,6 +121,7 @@ exports.handleNursingStaff = async (req, healthServeId) => {
         update,
         { new: true }
       );
+      await UpdateHealthServeData(req, healthServeId);
     } else {
       result = await NursingStaff.create(update);
     }

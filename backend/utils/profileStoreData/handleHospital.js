@@ -3,6 +3,17 @@ const Hospital = require('../../models/hospital')
 
 const mongoose = require("mongoose");
 
+const MedicalCollege = require("../../models/medicalCollege");
+
+const UpdateHealthServeData = async (req, healthServeId) => {
+    const { address, locality, city, pincode, state } = req.body;
+    return await healthServeModel.updateOne(
+        { _id: healthServeId },
+        { address, locality, city, pincode, state },
+        { upsert: true }
+    );
+};
+
 exports.handleHospital = async (req, healthServeId) => {
     try {
         const {
@@ -96,6 +107,7 @@ exports.handleHospital = async (req, healthServeId) => {
             update,
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
+        await UpdateHealthServeData(req, healthServeId);
 
         return {
             statusCode: 200,

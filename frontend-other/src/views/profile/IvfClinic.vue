@@ -612,19 +612,31 @@
       </div>
     </div>
   </div>
-  <v-dialog v-model="mapDialog" max-width="800">
-    <v-card>
-      <v-card-title>Select Location</v-card-title>
-      <v-card-text>
-        <div id="map" style="height: 400px; width: 100%"></div>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text @click="mapDialog = false">Cancel</v-btn>
-        <v-btn color="primary" @click="confirmLocation">Confirm</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <v-dialog v-model="mapDialog" max-width="900">
+  <v-card>
+    <v-card-title>Select Location</v-card-title>
+    <v-card-text>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Search Box -->
+        <input
+          id="pac-input"
+          type="text"
+          placeholder="Search for a place"
+          style="width:100%; padding:10px; border:1px solid #ccc; border-radius:8px;"
+        />
+        <!-- Map -->
+        <div id="map" style="height: 400px; width: 100%; border-radius:8px;"></div>
+      </div>
+    </v-card-text>
+
+    <v-card-actions>
+      <v-spacer />
+      <v-btn text @click="mapDialog = false">Cancel</v-btn>
+      <v-btn color="primary" @click="confirmLocation">Confirm</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
 </template>
 <script>
 import { checkAuth } from "@/lib/utils/utils";
@@ -710,52 +722,115 @@ export default {
   },
   methods: {
     openMapDialog() {
-      this.mapDialog = true;
-      this.$nextTick(() => {
-        if (!this.map) {
-          const mapEl = document.getElementById("map");
-          this.map = new google.maps.Map(mapEl, {
-            center: { lat: 28.6139, lng: 77.209 }, // default: Delhi
-            zoom: 12,
-          });
+  this.mapDialog = true;
+  this.selectedLatLng = null;
+  this.marker = null;
 
-          this.map.addListener("click", (e) => {
-            if (this.marker) this.marker.setMap(null);
-            this.selectedLatLng = e.latLng;
-            this.marker = new google.maps.Marker({
-              position: e.latLng,
-              map: this.map,
-            });
-          });
+  this.$nextTick(() => {
+    setTimeout(async () => {
+      const mapEl = document.getElementById("map");
+      this.map = new google.maps.Map(mapEl, {
+        center: { lat: 28.6139, lng: 77.209 }, // Default center (Delhi, India)
+        zoom: 12,
+      });
+
+      // Load Places API (New) Autocomplete
+      const input = document.getElementById("pac-input");
+      const { Autocomplete, AutocompleteSessionToken } = await google.maps.places;
+      const sessionToken = new AutocompleteSessionToken(); // Optional for billing optimization
+      const autocomplete = new Autocomplete(input, {
+        fields: ["geometry", "formatted_address", "address_components"],
+        types: ["geocode"], // Only addresses/places
+        sessionToken: sessionToken, // Recommended for Places API (New)
+      });
+      autocomplete.bindTo("bounds", this.map);
+
+      // On selecting a suggestion
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        console.log(place);
+        if (!place.geometry) return;
+
+        // Remove old marker
+        if (this.marker) this.marker.setMap(null);
+
+        // Set new marker
+        this.selectedLatLng = place.geometry.location;
+        this.marker = new google.maps.Marker({
+          map: this.map,
+          position: place.geometry.location,
+        });
+
+        // Recenter map
+        this.map.panTo(place.geometry.location);
+        this.map.setZoom(15);
+
+        // Auto-fill address fields
+        this.form.address = place.formatted_address || "";
+        this.form.locality = "";
+        this.form.city = "";
+        this.form.state = "";
+        this.form.pincode = "";
+
+        if (place.address_components) {
+          for (const comp of place.address_components) {
+            if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood"))
+              this.form.locality = comp.long_name;
+            if (comp.types.includes("locality")) this.form.city = comp.long_name;
+            if (!this.form.city && comp.types.includes("administrative_area_level_2"))
+              this.form.city = comp.long_name;
+            if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
+            if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
+          }
         }
       });
-    },
+
+      // Allow manual click on map
+      this.map.addListener("click", (e) => {
+        if (this.marker) this.marker.setMap(null);
+        this.selectedLatLng = e.latLng;
+        this.marker = new google.maps.Marker({
+          position: e.latLng,
+          map: this.map,
+        });
+      });
+    }, 100);
+  });
+},
     async confirmLocation() {
-      if (!this.selectedLatLng) return;
+  if (!this.selectedLatLng) return;
 
-      const geocoder = new google.maps.Geocoder();
-      const { lat, lng } = this.selectedLatLng.toJSON();
+  const geocoder = new google.maps.Geocoder();
+  const { lat, lng } = this.selectedLatLng.toJSON();
 
-      try {
-        const response = await geocoder.geocode({ location: { lat, lng } });
-        const result = response.results[0];
-        this.form.address = result.formatted_address;
+  try {
+    const results = await geocoder.geocode({ location: { lat, lng } });
+    const result = results.results[0];
+    console.log(result);
 
-        for (const comp of result.address_components) {
-          if (comp.types.includes("locality")) this.form.city = comp.long_name;
-          if (comp.types.includes("administrative_area_level_1"))
-            this.form.state = comp.long_name;
-          if (comp.types.includes("postal_code"))
-            this.form.pincode = comp.long_name;
-        }
+    this.form.address = result.formatted_address || "";
+    this.form.city = "";
+    this.form.state = "";
+    this.form.pincode = "";
+    this.form.locality = "";
 
-        this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
-      } catch (err) {
-        console.error("Geocoding failed", err);
-      }
+    for (const comp of result.address_components) {
+      if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood"))
+        this.form.locality = comp.long_name;
+      if (comp.types.includes("locality")) this.form.city = comp.long_name;
+      if (!this.form.city && comp.types.includes("administrative_area_level_2"))
+        this.form.city = comp.long_name;
+      if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
+      if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
+    }
 
-      this.mapDialog = false;
-    },
+    this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
+  } catch (err) {
+    console.error("Geocoding failed", err);
+  }
+
+  this.mapDialog = false;
+},
     addItem(field) {
       if (this.form[field].length >= 5) return;
       const newItem = prompt(`Add new item to ${field}`);
@@ -963,6 +1038,7 @@ export default {
         formData.append("successRate", this.form.successRate);
         formData.append("specialization", this.form.specialization);
         formData.append("couplesTreated", this.form.couplesTreated);
+        formData.append("googleMapLink", this.form.googleMapLink);
 
         formData.append("whyChoose", JSON.stringify(this.form.whyChoose));
         formData.append("degrees", JSON.stringify(this.form.degrees));
