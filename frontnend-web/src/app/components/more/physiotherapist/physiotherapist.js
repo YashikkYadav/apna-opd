@@ -21,15 +21,15 @@ const Physiotherapist = ({ serviceData, totalItems }) => {
     navigate.push(`/detail/physiotherapist/${id}`);
   };
 
-  const getRating = (gym) => {
-      const averageRating = gym?.profiles[0]?.testimonials?.length
-        ? gym?.profiles[0]?.testimonials?.reduce(
-            (sum, t) => sum + t.rating,
-            0
-          ) / gym?.profiles[0]?.testimonials?.length
-        : 0;
-      return averageRating;
-    }
+  const getRating = (physio) => {
+    const averageRating = physio?.profiles[0]?.testimonials?.length
+      ? physio?.profiles[0]?.testimonials?.reduce(
+          (sum, t) => sum + t.rating,
+          0
+        ) / physio?.profiles[0]?.testimonials?.length
+      : 0;
+    return averageRating;
+  };
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -126,10 +126,16 @@ const Physiotherapist = ({ serviceData, totalItems }) => {
 
             {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="text-yellow-500 text-sm">★★★★★</div>
+              <div className="text-yellow-500 text-sm">
+                {Array.from({ length: Math.round(getRating(physio)) }).map(
+                  (_, i) => (
+                    <span key={i}>★</span>
+                  )
+                )}
+              </div>
               <span className="text-gray-600 text-sm">
-                {getRating(physio) || "N/A"} ({physio?.reviews?.length || 0}{" "}
-                reviews)
+                {getRating(physio) || "N/A"} (
+                {physio?.profiles[0]?.testimonials?.length || 0} reviews)
               </span>
             </div>
 

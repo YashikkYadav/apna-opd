@@ -11,7 +11,6 @@ const Gym = ({ serviceData, totalItems }) => {
 
   useEffect(() => {
     if (serviceData) {
-      
       setFilteredList(serviceData || []);
     }
   }, [serviceData]);
@@ -29,14 +28,12 @@ const Gym = ({ serviceData, totalItems }) => {
 
   const getRating = (gym) => {
     const averageRating = gym?.profiles[0]?.testimonials?.length
-      ? gym?.profiles[0]?.testimonials?.reduce(
-          (sum, t) => sum + t.rating,
-          0
-        ) / gym?.profiles[0]?.testimonials?.length
+      ? gym?.profiles[0]?.testimonials?.reduce((sum, t) => sum + t.rating, 0) /
+        gym?.profiles[0]?.testimonials?.length
       : 0;
     return averageRating;
-  }
-  
+  };
+
   return (
     <main>
       <div className="mb-8 text-lg text-gray-600">
@@ -132,7 +129,13 @@ const Gym = ({ serviceData, totalItems }) => {
 
             {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="text-yellow-500 text-sm">★★★★★</div>
+              <div className="text-yellow-500 text-sm">
+                {Array.from({ length: Math.round(getRating(gym)) }).map(
+                  (_, i) => (
+                    <span key={i}>★</span>
+                  )
+                )}
+              </div>
               <span className="text-gray-600 text-sm">
                 {getRating(gym) || "N/A"} (
                 {gym?.profiles?.[0]?.testimonials?.length || 0} reviews)
