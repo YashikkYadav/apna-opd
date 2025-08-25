@@ -40,23 +40,23 @@ const Nurse = ({ serviceData, totalItems }) => {
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <>
-      <h2 className="title-48 mb-[24px]">Nursing Services Near You</h2>
-      <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {totalItems} results
-      </p>
-      <div className="flex flex-col gap-[32px]">
+    <main className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[50px]">
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="title-48 mb-[8px]">Nursing Services Near You</h2>
+        <p className="text-lg text-gray-600">
+          Showing {currentItems?.length} of {totalItems} results
+        </p>
+      </div>
+
+      {/* Nurse Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentItems?.map((nurse) => {
-          if (!nurseProfiles[nurse._id]) {
-            fetchNurseProfile(nurse._id);
-          }
+          if (!nurseProfiles[nurse._id]) fetchNurseProfile(nurse._id);
 
           const profileData =
             nurseProfiles[nurse._id]?.healthServeProfileData?.healthServeProfile?.data;
-          console.log("profileData", profileData);  
-          const imageUrl =
-            profileData?.profileImage || "/images/image_placeholder.svg";
-
+          const imageUrl = profileData?.profileImage || "/images/image_placeholder.svg";
           const rating = profileData?.testimonials?.length
             ? (
               profileData?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
@@ -67,46 +67,71 @@ const Nurse = ({ serviceData, totalItems }) => {
           return (
             <div
               key={nurse._id}
-              className="flex flex-col sm:flex-row justify-between mb-[32px]"
+              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="flex flex-col sm:flex-row">
-                <div className="sm:mr-[32px]">
+              {/* Avatar + Name */}
+              <div className="flex items-center gap-4 mb-4">
+                {imageUrl ? (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${imageUrl}`}
-                    width={180}
-                    height={180}
-                    alt="Nurse"
-                    className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
+                    alt={nurse.name || "Nurse"}
+                    width={55}
+                    height={55}
+                    className="rounded-full object-cover w-[55px] h-[55px]"
                   />
-                </div>
-                <div className="py-[18px] sm:py-0 md:py-[18px]">
-                  <p className="text-base text-[#5151E1] mb-[8px]">
-                    Nursing Services
-                  </p>
-                  <h3 className="title-24 mb-[8px]">{nurse.title}</h3>
-                  <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                    Rating: {rating} / 5
-                  </p>
-                  <h4 className="title-24 text-[#808080] !font-medium">
-                    {nurse.name}
-                  </h4>
+                ) : (
+                  <div className="w-[55px] h-[55px] rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-xl font-bold">
+                    {nurse.name?.charAt(0) || "N"}
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-1">{nurse.title || "Nursing Service"}</h3>
+                  <p className="text-gray-600 text-sm">{nurse.name}</p>
                 </div>
               </div>
-              <div className="flex flex-row sm:flex-col justify-end">
+
+              {/* Details */}
+              <div className="mb-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Specialization:</span>
+                  <span className="font-medium">{nurse.title || "Nursing Services"}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Rating:</span>
+                  <span className="font-medium">{rating} / 5</span>
+                </div>
+              </div>
+
+              {/* Tags / Services */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {profileData?.services?.length > 0 ? (
+                  profileData.services.map((service, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {service}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-500 text-sm">No services listed</span>
+                )}
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    navigate.push(`/detail/nursingStaff/${nurse._id}`)
-                  }
-                  className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                  onClick={() => navigate.push(`/detail/nursingStaff/${nurse._id}`)}
                 >
-                  Details
+                  View Details
                 </button>
               </div>
             </div>
           );
         })}
       </div>
-    </>
+    </main>
   );
 };
 
