@@ -608,19 +608,52 @@
       </div>
     </div>
   </div>
-  <v-dialog v-model="mapDialog" max-width="800">
+  <v-dialog v-model="mapDialog" max-width="900">
     <v-card>
       <v-card-title>Select Location</v-card-title>
       <v-card-text>
-        <div id="map" style="height: 400px; width: 100%"></div>
-      </v-card-text>
+  <!-- Search + Suggestions Wrapper -->
+  <div style="position: relative; width: 100%; margin-bottom: 10px;">
+  <!-- Search Box -->
+  <input
+    v-model="query"
+    id="pac-input"
+    type="text"
+    placeholder="Search for a place"
+    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;"
+    @input="debounceAutocomplete($event.target.value)"
+  />
+
+  <!-- Suggestions -->
+  <div
+    id="suggestions"
+    v-show="suggestions.length > 0"
+    style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background-color: white; border: 1px solid #ccc; border-radius: 8px; max-height: 200px; overflow-y: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+  >
+    <div
+      v-for="suggestion in suggestions"
+      :key="suggestion.placePrediction.placeId"
+      @click="handleSuggestionClick(suggestion)"
+      style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;"
+    >
+      {{ suggestion.placePrediction.text.text }}
+    </div>
+  </div>
+</div>
+
+<!-- Map -->
+<div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+</v-card-text>
+
+
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="mapDialog = false">Cancel</v-btn>
-        <v-btn color="primary" @click="confirmLocation">Confirm</v-btn>
+        <v-btn color="primary" @click="confirmLocation" :disabled="!selectedLatLng">Confirm</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+
 </template>
 <script>
 import { checkAuth } from "@/lib/utils/utils";
@@ -673,6 +706,8 @@ export default {
       map: null,
       marker: null,
       selectedLatLng: null,
+      query: '',
+      userLocation: { latitude: 28.6139, longitude: 77.2090 },
       rules: {
         required: (value) => !!value || "This field is required.",
       },
@@ -684,6 +719,7 @@ export default {
       galleryImages: [],
       profileImage: null,
       images: [],
+      debounceTimeout: null,
     };
   },
 
@@ -706,19 +742,81 @@ export default {
   },
   methods: {
     openMapDialog() {
-      this.mapDialog = true;
-      this.selectedLatLng = null;
-      this.marker = null;
-      
+  this.mapDialog = true;
+  this.selectedLatLng = null;
+  this.marker = null;
+  this.query = '';
+  this.suggestions = [];
+
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          this.initMap();
+        },
+        (err) => {
+          console.warn("Geolocation failed, using fallback:", err);
+          this.userLocation = { latitude: 28.6139, longitude: 77.2090 }; // fallback
+          this.initMap();
+        }
+      );
+    } else {
+      console.warn("Geolocation not supported, using fallback");
+      this.userLocation = { latitude: 28.6139, longitude: 77.2090 };
+      this.initMap();
+    }
+},
+
+initMap() {
       this.$nextTick(() => {
         setTimeout(() => {
-          const mapEl = document.getElementById("map");
+          const mapEl = document.getElementById('map');
+          if (!mapEl) {
+            console.error('Map element not found');
+            return;
+          }
           this.map = new google.maps.Map(mapEl, {
-            center: { lat: 28.6139, lng: 77.209 },
+            center: { lat: this.userLocation.latitude, lng: this.userLocation.longitude },
             zoom: 12,
           });
-          
-          this.map.addListener("click", (e) => {
+
+          const userMarker = new google.maps.Marker({
+          position: { lat: this.userLocation.latitude, lng: this.userLocation.longitude },
+          map: this.map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#4285F4",
+            fillOpacity: 1,
+            strokeColor: "white",
+            strokeWeight: 2,
+          },
+        });
+
+        // Optional accuracy circle
+        new google.maps.Circle({
+          map: this.map,
+          center: userMarker.getPosition(),
+          radius: 50, // meters
+          fillColor: '#4285F4',
+          fillOpacity: 0.2,
+          strokeColor: '#4285F4',
+          strokeOpacity: 0.4,
+        });
+
+
+          this.map.addListener('bounds_changed', () => {
+            const bounds = this.map.getBounds();
+            if (bounds) {
+              const center = bounds.getCenter();
+              this.userLocation = { latitude: center.lat(), longitude: center.lng() };
+            }
+          });
+
+          this.map.addListener('click', (e) => {
             if (this.marker) this.marker.setMap(null);
             this.selectedLatLng = e.latLng;
             this.marker = new google.maps.Marker({
@@ -729,11 +827,136 @@ export default {
         }, 100);
       });
     },
+    debounceAutocomplete() {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(() => this.performAutocomplete(), 300);
+    },
+    async performAutocomplete() {
+      const currentQuery = this.query.trim();
+      this.suggestions = []; 
+      const suggestionsDiv = document.getElementById('suggestions');
+      if (suggestionsDiv) suggestionsDiv.style.display = 'none';
+
+      if (!currentQuery) {
+        return;
+      }
+
+      console.log('Performing autocomplete for query:', currentQuery, 'Location:', this.userLocation);
+      try {
+        const response = await fetch('https://places.googleapis.com/v1/places:autocomplete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': 'AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8',
+          },
+          body: JSON.stringify({
+            input: currentQuery,
+            locationBias: {
+              circle: {
+                center: {
+                  latitude: this.userLocation.latitude,
+                  longitude: this.userLocation.longitude,
+                },
+                radius: 50000, // 50km radius
+              },
+            },
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Autocomplete error:', errorText, 'Status:', response.status);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('Autocomplete response:', data);
+        this.suggestions = data.suggestions || [];
+        if (suggestionsDiv) suggestionsDiv.style.display = this.suggestions.length ? 'block' : 'none';
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    },
+    handleSuggestionClick(suggestion) {
+  if (!suggestion || !suggestion.placePrediction?.placeId) return;
+
+  const placeId = suggestion.placePrediction.placeId;
+
+  // Fill search box with the selected suggestion text
+  this.query = suggestion.placePrediction.text.text;
+
+  // Fetch details for the selected place
+  this.fetchPlaceDetails(placeId);
+
+  // Clear only suggestions dropdown (keep the input)
+  this.suggestions = [];
+  const suggestionsDiv = document.getElementById('suggestions');
+  if (suggestionsDiv) suggestionsDiv.style.display = 'none';
+},
+    async fetchPlaceDetails(placeId) {
+      try {
+        const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': 'AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8', // Replace with your key
+            'X-Goog-FieldMask': 'id,displayName,formattedAddress,location,rating,userRatingCount,primaryType',
+          },
+        });
+
+        if (!response.ok) {
+          console.error('Place Details error:', await response.text());
+          return;
+        }
+
+        const place = await response.json();
+        if (this.marker) this.marker.setMap(null);
+        this.selectedLatLng = { lat: place.location.latitude, lng: place.location.longitude };
+        this.marker = new google.maps.Marker({
+          map: this.map,
+          position: this.selectedLatLng,
+        });
+
+        this.map.panTo(this.selectedLatLng);
+        this.map.setZoom(15);
+
+        this.map.addListener("click", (e) => {
+            if (this.marker) this.marker.setMap(null);
+            this.selectedLatLng = e.latLng;
+            this.marker = new google.maps.Marker({
+              position: e.latLng,
+              map: this.map,
+            });
+          });
+      } catch (error) {
+        console.error('Place Details fetch error:', error);
+      }
+    },
     async confirmLocation() {
   if (!this.selectedLatLng) return;
 
+  let lat, lng;
+
+  // Google Maps LatLng object
+  if (typeof this.selectedLatLng.toJSON === "function") {
+    const coords = this.selectedLatLng.toJSON();
+    lat = coords.lat;
+    lng = coords.lng;
+  } 
+  // Plain object (from suggestions)
+  else if (
+    this.selectedLatLng.lat !== undefined &&
+    this.selectedLatLng.lng !== undefined
+  ) {
+    lat = this.selectedLatLng.lat;
+    lng = this.selectedLatLng.lng;
+  } 
+  else {
+    console.error("Invalid selectedLatLng:", this.selectedLatLng);
+    return;
+  }
+
   const geocoder = new google.maps.Geocoder();
-  const { lat, lng } = this.selectedLatLng.toJSON();
 
   try {
     const results = await new Promise((resolve, reject) => {
@@ -747,37 +970,23 @@ export default {
     });
 
     const result = results[0];
-    console.log(result)
-    this.form.address = result.formatted_address || "";
+    console.log(result);
 
-    // Reset values
+    this.form.address = result.formatted_address || "";
     this.form.city = "";
     this.form.state = "";
     this.form.pincode = "";
-    this.form.locality="";
+    this.form.locality = "";
 
-    // Extract components
-    for (const comp of result.address_components) {
-  // Locality (neighborhood/area)
-  if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood")) {
-    this.form.locality = comp.long_name;
-  }
-
-  // City - First try locality
-  if (comp.types.includes("locality")) this.form.city = comp.long_name;
-
-  // Fallback to sublocality
-  if (!this.form.city && comp.types.includes("sublocality_level_1")) this.form.city = comp.long_name;
-
-  // Fallback to administrative_area_level_2
-  if (!this.form.city && comp.types.includes("administrative_area_level_2")) this.form.city = comp.long_name;
-
-  // State
-  if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
-
-  // Postal code
-  if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
-}
+    for (const comp of result.address_components || []) {
+      if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood"))
+        this.form.locality = comp.long_name;
+      if (comp.types.includes("locality")) this.form.city = comp.long_name;
+      if (!this.form.city && comp.types.includes("administrative_area_level_2"))
+        this.form.city = comp.long_name;
+      if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
+      if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
+    }
 
     this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
   } catch (err) {
