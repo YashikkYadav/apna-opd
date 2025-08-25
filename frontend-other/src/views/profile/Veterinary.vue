@@ -1049,8 +1049,8 @@ initMap() {
       if (profile) {
         // Map images to { path, type }
         const images = [];
-        if (profile.profileImage) {
-          images.push({ path: profile.profileImage, type: "profilePhoto_image" });
+        if (profile.profilePhoto) {
+          images.push({ path: profile.profilePhoto, type: "profilePhoto_image" });
         }
         if (Array.isArray(profile.galleryImages)) {
           profile.galleryImages.forEach((img) => {
