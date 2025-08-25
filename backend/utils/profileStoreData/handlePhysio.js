@@ -2,6 +2,17 @@ const Physiotherapist = require("../../models/physiotherapist");
 
 const mongoose = require("mongoose");
 
+const healthServeModel = require("../../models/healthServe");
+
+const UpdateHealthServeData = async (req, healthServeId) => {
+  const { address, locality, city, pincode, state } = req.body;
+  return await healthServeModel.updateOne(
+    { _id: healthServeId },
+    { address, locality, city, pincode, state },
+    { upsert: true }
+  );
+};
+
 exports.handlePhysiotherapist = async (req, healthServeId) => {
   try {
     if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
@@ -42,29 +53,16 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
 
     const files = req.files || [];
 
-    const profileImage = files.find(
-      (file) => file.fieldname === "profilePhoto_image"
-    );
+    const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`.replace(/^\/+/, "")
+      ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
       : undefined;
 
-      console.log(
-        "Profile Photo Path:",
-        profilePhoto,
-        `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`,
-        profileImage.destination.split("public/")
-      );
-
-    const galleryImages = files
-      .filter((file) => file.fieldname === "galleryImages_image")
-      .map((file) => {
-        const relativePath = file?.destination?.split("public/")[1] || "";
-        return `${relativePath.replace(/^\/+/, "")}/${file?.filename}`;
+    const newGalleryImages = files
+      .filter(file => file.fieldname === 'galleryImages_image')
+      .map(file => {
+        const relativePath = file?.destination?.split('public/')[1] || '';
+        return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
       });
 
     const existing = await Physiotherapist.findOne({ healthServeId });
@@ -93,11 +91,10 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
 
     if (profilePhoto) update.profileImage = profilePhoto;
 
-    if (galleryImages.length > 0) {
-      update.galleryImages = [
-        ...(existing?.galleryImages || []),
-        ...galleryImages,
-      ];
+    if (newGalleryImages.length > 0) {
+      update.galleryImages = [...(existing.galleryImages || []), ...newGalleryImages];
+    } else {
+      update.galleryImages = existing.galleryImages || [];
     }
 
     let result;
@@ -107,15 +104,15 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
         update,
         { new: true }
       );
+      await UpdateHealthServeData(req, healthServeId);
     } else {
       result = await Physiotherapist.create(update);
     }
 
     return {
       statusCode: 200,
-      message: `Physiotherapist profile ${
-        existing ? "updated" : "created"
-      } successfully`,
+      message: `Physiotherapist profile ${existing ? "updated" : "created"
+        } successfully`,
       data: result,
     };
   } catch (error) {

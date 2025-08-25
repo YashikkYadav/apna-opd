@@ -2,18 +2,14 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-const NurseSearch = ({ searchData = {}, onSearch }) => {
+const NurseSearch = ({ onSearch }) => {
   const [location, setLocation] = useState("");
-  // const [nurseType, setNurseType] = useState("");
-  // const [availability, setAvailability] = useState("");
-  // const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Gender");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch( location );
+    onSearch({ location, gender });
   };
-
-
 
   return (
     <motion.section
@@ -43,7 +39,7 @@ const NurseSearch = ({ searchData = {}, onSearch }) => {
         transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
         className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-3xl"
       >
-        <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-3">
           {/* Location Input */}
           <input
             type="text"
@@ -54,47 +50,19 @@ const NurseSearch = ({ searchData = {}, onSearch }) => {
                  focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
           />
 
-          {/* Nurse Type
+          {/* Gender Dropdown */}
           <select
-            value={nurseType}
-            onChange={(e) => setNurseType(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
-          >
-            <option value="">Nurse Type</option>
-            {searchData.nurseTypes?.map((type) => (
-              <option key={type} value={type.toLowerCase()}>
-                {type}
-              </option>
-            ))}
-          </select> */}
-
-          {/* Availability */}
-          {/* <select
-            value={availability}
-            onChange={(e) => setAvailability(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
-          >
-            <option value="">Availability</option>
-            {searchData.availabilities?.map((avail) => (
-              <option key={avail} value={avail.toLowerCase()}>
-                {avail}
-              </option>
-            ))}
-          </select> */}
-
-          {/* Gender */}
-          {/* <select
             value={gender}
             onChange={(e) => setGender(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
+            className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 
+                 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
           >
-            <option value="">Gender</option>
-            {searchData.genders?.map((gen) => (
-              <option key={gen} value={gen.toLowerCase()}>
-                {gen}
-              </option>
-            ))}
-          </select> */}
+            <option value="">Select Gender</option>
+
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="any">Any</option>
+          </select>
 
           {/* Button */}
           <button
@@ -106,7 +74,7 @@ const NurseSearch = ({ searchData = {}, onSearch }) => {
           </button>
         </form>
       </motion.div>
-    </motion.section >
+    </motion.section>
   );
 };
 

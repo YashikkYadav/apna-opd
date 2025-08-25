@@ -1,7 +1,15 @@
 const Veterinary = require("../../models/veterinary");
+const healthServeModel = require("../../models/healthServe");
 const mongoose = require("mongoose");
 
-
+const UpdateHealthServeData = async (req, healthServeId) => {
+    const { address, locality, city, pincode, state } = req.body;
+    return await healthServeModel.updateOne(
+        { _id: healthServeId },
+        { address, locality, city, pincode, state },
+        { upsert: true }
+    );
+};
 exports.handleVeterinary = async (req, healthServeId) => {
   try {
     if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
@@ -88,6 +96,7 @@ exports.handleVeterinary = async (req, healthServeId) => {
       }
 
       result = await Veterinary.findOneAndUpdate({ healthServeId }, update, { new: true });
+      await UpdateHealthServeData(req, healthServeId);
     } else {
       update.galleryImages = newGalleryImages; // create new with initial images
       result = await Veterinary.create(update);
@@ -96,7 +105,7 @@ exports.handleVeterinary = async (req, healthServeId) => {
     return {
       statusCode: 200,
       message: `Veterinary profile ${existing ? "updated" : "created"} successfully`,
-      data: result,
+      data:result,
     };
   } catch (error) {
     console.error("handleVeterinary error:", error);

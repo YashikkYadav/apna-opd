@@ -937,14 +937,17 @@ export default {
   methods: {
     openMapDialog() {
       this.mapDialog = true;
+      this.selectedLatLng = null;
+      this.marker = null;
+      
       this.$nextTick(() => {
-        if (!this.map) {
+        setTimeout(() => {
           const mapEl = document.getElementById("map");
           this.map = new google.maps.Map(mapEl, {
-            center: { lat: 28.6139, lng: 77.209 }, // default: Delhi
+            center: { lat: 28.6139, lng: 77.209 },
             zoom: 12,
           });
-
+          
           this.map.addListener("click", (e) => {
             if (this.marker) this.marker.setMap(null);
             this.selectedLatLng = e.latLng;
@@ -953,35 +956,66 @@ export default {
               map: this.map,
             });
           });
-        }
+        }, 100);
       });
     },
     async confirmLocation() {
-      if (!this.selectedLatLng) return;
+  if (!this.selectedLatLng) return;
 
-      const geocoder = new google.maps.Geocoder();
-      const { lat, lng } = this.selectedLatLng.toJSON();
+  const geocoder = new google.maps.Geocoder();
+  const { lat, lng } = this.selectedLatLng.toJSON();
 
-      try {
-        const response = await geocoder.geocode({ location: { lat, lng } });
-        const result = response.results[0];
-        this.form.address = result.formatted_address;
-
-        for (const comp of result.address_components) {
-          if (comp.types.includes("locality")) this.form.city = comp.long_name;
-          if (comp.types.includes("administrative_area_level_1"))
-            this.form.state = comp.long_name;
-          if (comp.types.includes("postal_code"))
-            this.form.pincode = comp.long_name;
+  try {
+    const results = await new Promise((resolve, reject) => {
+      geocoder.geocode({ location: { lat, lng } }, (res, status) => {
+        if (status === "OK" && res && res.length > 0) {
+          resolve(res);
+        } else {
+          reject(new Error("Geocoding failed: " + status));
         }
+      });
+    });
 
-        this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
-      } catch (err) {
-        console.error("Geocoding failed", err);
-      }
+    const result = results[0];
+    console.log(result)
+    this.form.address = result.formatted_address || "";
 
-      this.mapDialog = false;
-    },
+    // Reset values
+    this.form.city = "";
+    this.form.state = "";
+    this.form.pincode = "";
+    this.form.locality="";
+
+    // Extract components
+    for (const comp of result.address_components) {
+  // Locality (neighborhood/area)
+  if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood")) {
+    this.form.locality = comp.long_name;
+  }
+
+  // City - First try locality
+  if (comp.types.includes("locality")) this.form.city = comp.long_name;
+
+  // Fallback to sublocality
+  if (!this.form.city && comp.types.includes("sublocality_level_1")) this.form.city = comp.long_name;
+
+  // Fallback to administrative_area_level_2
+  if (!this.form.city && comp.types.includes("administrative_area_level_2")) this.form.city = comp.long_name;
+
+  // State
+  if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
+
+  // Postal code
+  if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
+}
+
+    this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
+  } catch (err) {
+    console.error("Geocoding failed", err);
+  }
+
+  this.mapDialog = false;
+},
     addItem(field) {
       if (this.form[field].length >= 5) return;
       const newItem = prompt(`Add new item to ${field}`);

@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
+const healthServeModel = require("../../models/healthServe");
 const MedicalCollege = require("../../models/medicalCollege");
 
+const UpdateHealthServeData = async (req, healthServeId) => {
+    const { address, locality, city, pincode, state } = req.body;
+    return await healthServeModel.updateOne(
+        { _id: healthServeId },
+        { address, locality, city, pincode, state },
+        { upsert: true }
+    );
+};
 
 exports.handleMedicalCollege = async (req, healthServeId) => {
     try {
@@ -36,6 +45,8 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
             careerServices = [],
             tags = [],
         } = req.body;
+
+        console.log("Received body:", req.body);
 
         const parseArray = (val) => {
             try {
@@ -103,6 +114,7 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
                 update,
                 { new: true }
             );
+            await UpdateHealthServeData(req, healthServeId);
         } else {
             update.healthServeId = healthServeId;
             update.galleryImages = newGalleryImages;
@@ -126,34 +138,11 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
 
 
 exports.gethandleMedicalCollege = async (healthServeId) => {
-    try {
-        if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
-            return {
-                statusCode: 400,
-                message: "Invalid or missing healthServeId",
-            };
-        }
 
-        const doc = await MedicalCollege.findOne({ healthServeId });
+    const doc = await MedicalCollege
+        .findOne({ healthServeId })
+        .populate("healthServeId");
+    return doc;
 
-        if (!doc) {
-            return {
-                statusCode: 404,
-                message: "No MedicalCollege found for this healthServeId",
-            };
-        }
 
-        return {
-            statusCode: 200,
-            message: "MedicalCollege data retrieved",
-            data: doc,
-        };
-    } catch (error) {
-        console.error("gethandleCollege error:", error);
-        return {
-            statusCode: 500,
-            message: "Internal Server Error",
-            error: error.message,
-        };
-    }
 };

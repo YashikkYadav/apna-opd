@@ -73,7 +73,7 @@ const IvfClinic = ({ serviceData, totalItems }) => {
               <div className="flex flex-col sm:flex-row">
                 <div className="sm:mr-[32px]">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${imageUrl}`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${imageUrl}`}
                     width={180}
                     height={180}
                     alt="Clinic"
