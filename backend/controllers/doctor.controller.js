@@ -104,6 +104,25 @@ const ratingDoctor = async (req, res) => {
   }
 };
 
+// const getAppointments = async (req, res) => {
+//   try {
+//     const { doctorId } = req.params;
+
+//     const appointments = await doctorService.getAppointments(doctorId);
+
+//     if (appointments.error) {
+//       res.status(appointments.statusCode).json({ error: appointments.error });
+//     }
+
+//     res
+//       .status(appointments.statusCode)
+//       .json({ appointments: appointments.appointments });
+//   } catch (error) {
+//     console.log(`Error in doctor appointment Controller ${error}`);
+//     return res.status(500).json({ error });
+//   }
+// };
+
 const getAppointments = async (req, res) => {
   try {
     const { doctorId } = req.params;
@@ -111,15 +130,18 @@ const getAppointments = async (req, res) => {
     const appointments = await doctorService.getAppointments(doctorId);
 
     if (appointments.error) {
-      res.status(appointments.statusCode).json({ error: appointments.error });
+      // ✅ add return to prevent sending multiple responses
+      return res
+        .status(appointments.statusCode)
+        .json({ error: appointments.error });
     }
 
-    res
+    return res
       .status(appointments.statusCode)
       .json({ appointments: appointments.appointments });
   } catch (error) {
     console.log(`Error in doctor appointment Controller ${error}`);
-    return res.status(500).json({ error });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
