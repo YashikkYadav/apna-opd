@@ -330,7 +330,7 @@ const deleteHealthServe = async (healthServeId) => {
   }
 };
 
-const getHealthServeList = async (page = 1, location, type) => {
+const getHealthServeList = async (page = 1, location, type, name) => {
   try {
     const limit = 6;
     const safePage = Math.max(Number(page) || 1, 1);
@@ -339,6 +339,7 @@ const getHealthServeList = async (page = 1, location, type) => {
     // Build filter
     const filter = {};
 
+    // Location filter
     const extractCity = (rawLocation) => {
       if (!rawLocation) return "";
       return rawLocation
@@ -347,10 +348,14 @@ const getHealthServeList = async (page = 1, location, type) => {
         .split(",")[0]
         .trim();
     };
-
     const city = extractCity(location);
     if (city) {
       filter.location = { $regex: new RegExp(city, "i") };
+    }
+
+    // Name filter
+    if (name) {
+      filter.name = { $regex: new RegExp(name, "i") };
     }
 
     if (type) {
@@ -364,8 +369,6 @@ const getHealthServeList = async (page = 1, location, type) => {
     let total = 0;
 
     let lookup;
-    console.log(type);
-
     switch (type) {
       case "hospital":
         lookup = "hospitals";

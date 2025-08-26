@@ -31,6 +31,7 @@ import { useCallback } from "react";
 const ServicePage = () => {
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState("");
+  const [name, setName] = useState("");
   const params = useParams();
   const searchParams = useSearchParams();
   const specs = params.specs;
@@ -41,7 +42,7 @@ const ServicePage = () => {
   const router = useRouter();
 
   const fetchData = useCallback(
-    async (locationQuery = "", page = 1) => {
+    async (locationQuery = "", page = 1, nameQuery = "") => {
       let sanitizedSpecs = params.specs.replace(/-/g, "_");
       if (sanitizedSpecs === "nurse") {
         sanitizedSpecs = "nursing_staff";
@@ -50,7 +51,7 @@ const ServicePage = () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(
-          `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}`
+          `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}&name=${nameQuery}`
         );
         if (response?.list?.healthServeProfileList) {
           setServiceData(response.list.healthServeProfileList);
@@ -67,14 +68,15 @@ const ServicePage = () => {
     [params.specs]
   );
 
-
   console.log("data", serviceData);
 
   useEffect(() => {
     const locationQuery = searchParams.get("location") || "";
+    const nameQuery = searchParams.get("name") || "";
     setLocation(locationQuery);
+    setName(nameQuery);
     if (params.specs) {
-      fetchData(locationQuery);
+      fetchData(locationQuery, 1, nameQuery);
     }
   }, [params.specs, searchParams, fetchData]);
 
@@ -178,17 +180,16 @@ const ServicePage = () => {
   };
 
   const handleSearch = (locationQuery, name) => {
-    if (locationQuery) {
-      router.push(`/more/${params.specs}?location=${locationQuery}`);
-    } else {
+    if (!locationQuery && !name) {
       router.push(`/more/${params.specs}`);
+      fetchData("", 1, "");
+      return;
     }
-    if(name){
-      console.log(name);
-      const filteredData = serviceData.filter(item => item?.name?.toLowerCase().includes(name.toLowerCase()));
-      console.log("f", filteredData);
-      setServiceData(filteredData);
-    }
+    let query = `/more/${params.specs}?`;
+    if (locationQuery) query += `location=${locationQuery}&`;
+    if (name) query += `name=${name}`;
+    router.push(query);
+    fetchData(locationQuery, 1, name);
   };
 
   const handlePageChange = (page) => {
@@ -203,6 +204,7 @@ const ServicePage = () => {
         <SearchBarForServices
           onSearch={handleSearch}
           location={location}
+          name={name}
         />
       </div>
       <div className="bg-sky-50 px-[15px] sm:px-[30px] mx-auto py-[60px] ">

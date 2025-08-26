@@ -118,11 +118,13 @@ const getHealthServeList = async (req, res) => {
     const page = parseInt(req.query.page) || 0;
     const location = req.query.location || null;
     const type = req.query.type || null;
+    const name = req.query.name || null;
 
     const healthServeList = await healthServeService.getHealthServeList(
       page,
       location,
-      type
+      type,
+      name
     );
 
     if (healthServeList?.error) {
@@ -137,9 +139,12 @@ const getHealthServeList = async (req, res) => {
 
 const ratingHealthServe = async (req, res) => {
   try {
-    const { healthServeId ,rating } = req.body;
+    const { healthServeId, rating } = req.body;
 
-    const healthServe = await healthServeService.ratingHealthServe(healthServeId, rating);
+    const healthServe = await healthServeService.ratingHealthServe(
+      healthServeId,
+      rating
+    );
     if (healthServe?.error) {
       return res.status(healthServe.statusCode).send(healthServe.error);
     }

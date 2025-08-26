@@ -8,12 +8,12 @@ import debounce from "lodash/debounce";
 import { searchCities } from "../../services/locationService";
 import { toast, ToastContainer } from "react-toastify";
 
-const SearchBarForServices = ({ onSearch, location = "", onSearchByName }) => {
+const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
   const [locationQuery, setLocationQuery] = useState(location);
   const [locationOptions, setLocationOptions] = useState([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [name, setName] = useState("");
+  const [nameQuery, setNameQuery] = useState(name);
   const locationWrapperRef = useRef(null);
   const [nameSuggestions, setNameSuggestions] = useState([]);
   const [isLoadingNames, setIsLoadingNames] = useState(false);
@@ -66,12 +66,8 @@ const SearchBarForServices = ({ onSearch, location = "", onSearchByName }) => {
   }, []);
 
   const handleSearch = () => {
-    if (locationQuery || name) {
-      onSearch(locationQuery, name);
-    } else {
-      toast.dismiss();
-      toast.info("Please enter a location or name");
-    }
+    onSearch(locationQuery, nameQuery);
+    
   };
 
   const handleLocationSelect = (location) => {
@@ -157,9 +153,9 @@ const SearchBarForServices = ({ onSearch, location = "", onSearchByName }) => {
           <div className="relative w-2/3">
             <input
               type="text"
-              value={name}
+              value={nameQuery}
               onChange={(e) => {
-                setName(e.target.value);
+                setNameQuery(e.target.value);
               }}
               placeholder="Enter name"
               className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none w-full"
