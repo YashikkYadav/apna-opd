@@ -40,32 +40,35 @@ const ServicePage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const router = useRouter();
 
-
-  const fetchData = useCallback(async (locationQuery = "", page = 1) => {
-    let sanitizedSpecs = params.specs.replace(/-/g, "_");
-    if(sanitizedSpecs==="nurse"){
-      sanitizedSpecs="nursing_staff"
-    }
-    
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get(
-        `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}`
-      );
-      if (response?.list?.healthServeProfileList) {
-        setServiceData(response.list.healthServeProfileList);
-        setCurrentPage(response.list.currentPage || 1);
-        setTotalPages(response.list.totalPages || 1);
-        setTotalItems(response.list.totalItems || 0);
+  const fetchData = useCallback(
+    async (locationQuery = "", page = 1) => {
+      let sanitizedSpecs = params.specs.replace(/-/g, "_");
+      if (sanitizedSpecs === "nurse") {
+        sanitizedSpecs = "nursing_staff";
       }
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [params.specs]);
 
-  console.log("data",serviceData)
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          `/health-serve/list?location=${locationQuery}&type=${sanitizedSpecs}&page=${page}`
+        );
+        if (response?.list?.healthServeProfileList) {
+          setServiceData(response.list.healthServeProfileList);
+          setCurrentPage(response.list.currentPage || 1);
+          setTotalPages(response.list.totalPages || 1);
+          setTotalItems(response.list.totalItems || 0);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [params.specs]
+  );
+
+
+  console.log("data", serviceData);
 
   useEffect(() => {
     const locationQuery = searchParams.get("location") || "";
@@ -74,10 +77,9 @@ const ServicePage = () => {
       fetchData(locationQuery);
     }
   }, [params.specs, searchParams, fetchData]);
-  
 
   if (loading) return <Loader />;
-  console.log(specs)
+  console.log(specs);
   const getServiceTitle = () => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
@@ -122,49 +124,70 @@ const ServicePage = () => {
   const renderServiceComponent = (totalItems) => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
-        return <Ambulance serviceData={serviceData} totalItems={totalItems}/>;
+        return <Ambulance serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.HOSPITAL:
-        return <Hospital serviceData={serviceData} totalItems={totalItems}/>;
+        return <Hospital serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.VATENARY:
-        return <Vatenary serviceData={serviceData} totalItems={totalItems}/>;
+        return <Vatenary serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.EMERGENCY:
-        return <Emergency serviceData={serviceData} totalItems={totalItems}/>;
+        return <Emergency serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.GYM:
-        return <Gym serviceData={serviceData} totalItems={totalItems}/>;
+        return <Gym serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.YOGA:
-        return <Yoga serviceData={serviceData} totalItems={totalItems}/>;
+        return <Yoga serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.MEDITATION:
-        return <CommercialMeditation serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <CommercialMeditation
+            serviceData={serviceData}
+            totalItems={totalItems}
+          />
+        );
       case serviceTypes.NASHA_MUKTI:
-        return <NashamuktiKendra serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <NashamuktiKendra serviceData={serviceData} totalItems={totalItems} />
+        );
       case serviceTypes.MEDICAL_STORE:
-        return <MedicalStore serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <MedicalStore serviceData={serviceData} totalItems={totalItems} />
+        );
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
-        return <NursingCollege serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <NursingCollege serviceData={serviceData} totalItems={totalItems} />
+        );
       case serviceTypes.BLOOD_BANK:
-        return <BloodBank serviceData={serviceData} totalItems={totalItems}/>;
+        return <BloodBank serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.PHYSIOTHERAPIST:
-        return <Physiotherapist serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <Physiotherapist serviceData={serviceData} totalItems={totalItems} />
+        );
       case serviceTypes.BLOOD_DONOR:
-        return <BloodDonor serviceData={serviceData} totalItems={totalItems}/>;
+        return <BloodDonor serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.NURSE:
-        return <Nurse serviceData={serviceData} totalItems={totalItems}/>;
+        return <Nurse serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.RADIOLOGIST:
-        return <Radiologist serviceData={serviceData} totalItems={totalItems}/>;
+        return (
+          <Radiologist serviceData={serviceData} totalItems={totalItems} />
+        );
       case serviceTypes.LABORATORY:
-        return <Laboratory serviceData={serviceData} totalItems={totalItems}/>;
+        return <Laboratory serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.IVFCLINIC:
-        return <IvfClinic serviceData={serviceData} totalItems={totalItems}/>
+        return <IvfClinic serviceData={serviceData} totalItems={totalItems} />;
       default:
         return <div>Service not found</div>;
     }
   };
 
-  const handleSearch = (locationQuery) => {
+  const handleSearch = (locationQuery, name) => {
     if (locationQuery) {
       router.push(`/more/${params.specs}?location=${locationQuery}`);
     } else {
       router.push(`/more/${params.specs}`);
+    }
+    if(name){
+      console.log(name);
+      const filteredData = serviceData.filter(item => item?.name?.toLowerCase().includes(name.toLowerCase()));
+      console.log("f", filteredData);
+      setServiceData(filteredData);
     }
   };
 
@@ -175,34 +198,15 @@ const ServicePage = () => {
   };
 
   return (
-    <div className="pt-[80px]">
-      <div className="bg-[#0D7EB7] banner-with-search">
-        <div className="bg-[url('/images/gradient.svg')] bg-no-repeat bg-right">
-          <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto relative md:h-[700px] pb-[60px] flex flex-col items-center">
-            <div className="flex justify-between items-end pt-[60px] md:pt-[129px]">
-              <div className="max-w-[700px] mx-auto">
-                <h1 className="title-64 mb-[32px] text-center max-w-[530px] mx-auto">
-                  {getServiceTitle()}
-                </h1>
-                <p className="text-base text-white mb-[88px] text-center">
-                  Find the best healthcare services near you. Professional and
-                  reliable assistance available.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <SearchBarForServices
-                onSearch={handleSearch}
-                location={location}
-              />
-            </div>
-          </div>
-        </div>
+    <div className="pt-[120px] p-8">
+      <div>
+        <SearchBarForServices
+          onSearch={handleSearch}
+          location={location}
+        />
       </div>
-
       <div className="bg-sky-50 px-[15px] sm:px-[30px] mx-auto py-[60px] ">
-        <div className="">
+        <div>
           {renderServiceComponent(totalItems)}
           {totalPages > 1 && (
             <Pagination

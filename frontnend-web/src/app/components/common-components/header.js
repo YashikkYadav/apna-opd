@@ -75,7 +75,7 @@ const Header = () => {
     { label: "Home Service", type: "heading" },
     { label: "divider", type: "divider" },
     { label: "Veterinary", route: "/more/vatenary" },
-    { label: "Nurse", route: "/more/nurse" },
+    { label: "Nursing Staff", route: "/nurse-listings" },
     { label: "divider", type: "divider" },
     { label: "Laboratory", route: "/more/laboratory" },
     { label: "divider", type: "divider" },

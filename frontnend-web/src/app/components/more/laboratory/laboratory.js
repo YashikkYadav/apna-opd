@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { FaStar } from "react-icons/fa";
 
-const IvfClinic = ({ serviceData, totalItems }) => {
+const Laboratory = ({ serviceData, totalItems }) => {
   const [filteredList, setFilteredList] = useState([]);
-  const [clinicProfiles, setClinicProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(6);
+  const [viewMode, setViewMode] = useState("grid"); // grid | list
   const navigate = useRouter();
 
   useEffect(() => {
@@ -17,106 +17,202 @@ const IvfClinic = ({ serviceData, totalItems }) => {
     }
   }, [serviceData]);
 
-  // function to fetch profile data for given clinic id
-  const fetchClinicProfile = async (id) => {
-    try {
-      console.log("Fetching profile for clinic:", id);
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
-      );
-      const data = res.data;
-
-      setClinicProfiles((prev) => ({
-        ...prev,
-        [id]: data,
-      }));
-    } catch (err) {
-      console.error(
-        "Error fetching profile:",
-        id,
-        err?.response?.data || err
-      );
-    }
+  const viewLabDetails = (id) => {
+    navigate.push(`/detail/laboratory/${id}`);
   };
 
-  // Pagination logic
+  const getRating = (lab) => {
+    const averageRating = lab?.profiles?.[0]?.testimonials?.length
+      ? lab?.profiles[0]?.testimonials.reduce((sum, t) => sum + t.rating, 0) /
+        lab?.profiles[0]?.testimonials.length
+      : 0;
+    return averageRating;
+  };
+
+  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <>
-      <h2 className="title-48 mb-[24px]">IVF Clinics Near You</h2>
-      <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {totalItems} results
-      </p>
+    <main>
+      <div className="mb-8 text-lg text-gray-600 flex items-center justify-between">
+        <span>{totalItems} Laboratories Available</span>
+        {/* View Mode Toggle */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "grid"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 18 18">
+              <rect x="2" y="2" width="6" height="6" rx="1.5" />
+              <rect x="10" y="2" width="6" height="6" rx="1.5" />
+              <rect x="2" y="10" width="6" height="6" rx="1.5" />
+              <rect x="10" y="10" width="6" height="6" rx="1.5" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "list"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 18 18">
+              <rect x="2" y="4" width="14" height="2" rx="1" />
+              <rect x="2" y="8" width="14" height="2" rx="1" />
+              <rect x="2" y="12" width="14" height="2" rx="1" />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-      <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((clinic) => {
-          // fetch profile only if we don’t already have it
-          if (!clinicProfiles[clinic._id]) {
-            fetchClinicProfile(clinic._id);
-          }
-
-          const profileData =
-            clinicProfiles[clinic._id]?.healthServeProfileData
-              ?.healthServeProfile;
-
-          const imageUrl =
-            profileData?.profilePhoto || "/images/image_placeholder.svg";
-
-          const rating = profileData?.testimonials?.length
-            ? (
-                profileData.testimonials.reduce(
-                  (sum, r) => sum + r.rating,
-                  0
-                ) / profileData.testimonials.length
-              ).toFixed(1)
-            : "0.0";
-
+      <div
+        className={
+          viewMode === "grid"
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            : "flex flex-col gap-4"
+        }
+      >
+        {currentItems?.map((lab) => {
+          const profile = lab?.profiles?.[0];
           return (
             <div
-              key={clinic._id}
-              className="flex flex-col sm:flex-row justify-between mb-[32px]"
+              key={lab?._id}
+              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+                viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+              }`}
             >
-              <div className="flex flex-col sm:flex-row">
-                <div className="sm:mr-[32px]">
+              {/* Avatar + Name */}
+              <div className="flex items-center gap-4 mb-4">
+                {profile?.profilePhoto ? (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${imageUrl}`}
-                    width={180}
-                    height={180}
-                    alt="Clinic"
-                    className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
+                    alt={lab?.name || "Laboratory"}
+                    width={55}
+                    height={55}
+                    className="rounded-full object-cover w-[55px] h-[55px]"
                   />
-                </div>
-                <div className="py-[18px] sm:py-0 md:py-[18px]">
-                  <p className="text-base text-[#5151E1] mb-[8px]">IVF Clinic</p>
-                  <h3 className="title-24 mb-[8px]">{clinic.title}</h3>
-                  <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                    Rating: {rating || "N/A"} / 5
-                  </p>
-                  <h4 className="title-24 text-[#808080] !font-medium">
-                    {clinic.name}
-                  </h4>
+                ) : (
+                  <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
+                    {lab?.name?.charAt(0) || "L"}
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                    {lab?.name || "Unnamed Laboratory"}
+                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      Verified
+                    </span>
+                  </h3>
+                  <div className="text-gray-600 text-sm">
+                    {lab?.location || lab?.city || lab?.state || "No Location"}
+                  </div>
                 </div>
               </div>
 
-              <div className="flex flex-row sm:flex-col justify-end">
+              {/* Experience + Website */}
+              <div className="mb-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Experience:</span>
+                  <span className="font-medium">
+                    {profile?.experience || "N/A"} years
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Website:</span>
+                  <span className="font-medium">
+                    {profile?.website || lab?.website || "N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tests */}
+              <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
+                <div className="font-semibold text-sm text-gray-700 mb-1">
+                  Tests
+                </div>
+                <div className="text-gray-600 text-xs line-clamp-3">
+                  {profile?.tests?.length > 0
+                    ? profile?.tests?.slice(0, 5)?.map((test) => test.name)?.join(", ") // showing first 3 tests
+                    : "No tests available"}
+                </div>
+              </div>
+
+              {/* Tags (limit 4) */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {profile?.tags?.length > 0 ? (
+                  profile?.tags.slice(0, 4).map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-500 text-sm">No tags listed</span>
+                )}
+              </div>
+
+              {/* Key Features (limit 4)
+              <div className="flex flex-wrap gap-2 mb-4">
+                {profile?.keyFeatures?.length > 0 ? (
+                  profile?.keyFeatures.slice(0, 4).map((feature, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {feature}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-500 text-sm">
+                    No features listed
+                  </span>
+                )}
+              </div> */}
+
+              {/* Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex text-sm">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar
+                      key={i}
+                      className={
+                        i < Math.round(getRating(lab))
+                          ? "text-yellow-500"
+                          : "text-gray-300"
+                      }
+                    />
+                  ))}
+                </div>
+                <span className="text-gray-600 text-sm">
+                  {getRating(lab) ? getRating(lab).toFixed(1) : "N/A"} (
+                  {parseFloat(profile?.testimonials?.length) || 0} reviews)
+                </span>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    navigate.push(`/detail/ivf_clinic/${clinic?._id}`)
-                  }
-                  className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                  onClick={() => viewLabDetails(lab?._id)}
                 >
-                  Details
+                  View Details
                 </button>
               </div>
             </div>
           );
         })}
       </div>
-    </>
+    </main>
   );
 };
 
-export default IvfClinic;
+export default Laboratory;

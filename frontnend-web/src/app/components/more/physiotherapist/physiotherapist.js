@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { FaStar } from "react-icons/fa";
 import axios from "axios";
 
 const Physiotherapist = ({ serviceData, totalItems }) => {
@@ -9,6 +10,7 @@ const Physiotherapist = ({ serviceData, totalItems }) => {
   const [physioProfiles, setPhysioProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
+  const [viewMode, setViewMode] = useState("grid"); // grid | list
   const navigate = useRouter();
 
   useEffect(() => {
@@ -38,15 +40,55 @@ const Physiotherapist = ({ serviceData, totalItems }) => {
 
   return (
     <main>
-      <div className="mb-8 text-lg text-gray-600">
-        {totalItems} Physiotherapists Available
+      <div className="mb-8 text-lg text-gray-600 flex items-center justify-between">
+        <span>{totalItems} Physiotherapists Available</span>
+        {/* View Mode Toggle */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "grid"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 18 18">
+              <rect x="2" y="2" width="6" height="6" rx="1.5" />
+              <rect x="10" y="2" width="6" height="6" rx="1.5" />
+              <rect x="2" y="10" width="6" height="6" rx="1.5" />
+              <rect x="10" y="10" width="6" height="6" rx="1.5" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "list"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 18 18">
+              <rect x="2" y="4" width="14" height="2" rx="1" />
+              <rect x="2" y="8" width="14" height="2" rx="1" />
+              <rect x="2" y="12" width="14" height="2" rx="1" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        className={
+          viewMode === "grid"
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            : "flex flex-col gap-4"
+        }
+      >
         {currentItems?.map((physio) => (
           <div
             key={physio?._id}
-            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+              viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+            }`}
           >
             {/* Avatar + Name */}
             <div className="flex items-center gap-4 mb-4">
@@ -126,16 +168,22 @@ const Physiotherapist = ({ serviceData, totalItems }) => {
 
             {/* Rating */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="text-yellow-500 text-sm">
-                {Array.from({ length: Math.round(getRating(physio)) }).map(
-                  (_, i) => (
-                    <span key={i}>★</span>
-                  )
-                )}
+              <div className="flex text-sm">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar
+                    key={i}
+                    className={
+                      i < Math.round(getRating(physio))
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                    }
+                  />
+                ))}
               </div>
               <span className="text-gray-600 text-sm">
-                {getRating(physio) || "N/A"} (
-                {physio?.profiles[0]?.testimonials?.length || 0} reviews)
+                {getRating(physio) ? getRating(physio).toFixed(1) : "N/A"} (
+                {parseFloat(physio?.profiles[0]?.testimonials?.length) || 0}{" "}
+                reviews)
               </span>
             </div>
 

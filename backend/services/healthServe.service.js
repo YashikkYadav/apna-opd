@@ -383,7 +383,7 @@ const getHealthServeList = async (page = 1, location, type) => {
         lookup = "physiotherapists";
         break;
       case "laboratory":
-        lookup = "healthlapprofiles";
+        lookup = "healthlabprofiles";
         break;
       case "vatenary":
         lookup = "veterinaries";
