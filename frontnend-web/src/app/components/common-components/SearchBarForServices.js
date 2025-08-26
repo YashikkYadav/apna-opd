@@ -13,8 +13,8 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
   const [locationOptions, setLocationOptions] = useState([]);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [nameQuery, setNameQuery] = useState(name);
   const locationWrapperRef = useRef(null);
+  const [nameQuery, setNameQuery] = useState(name);
   const [nameSuggestions, setNameSuggestions] = useState([]);
   const [isLoadingNames, setIsLoadingNames] = useState(false);
 
@@ -22,34 +22,25 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
     setLocationQuery(location);
   }, [location]);
 
-  // Backend-powered name search (similar to location)
-  const debouncedNameSearch = debounce(async (searchText) => {
-    if (searchText?.length < 2) return;
-    setIsLoadingNames(true);
-    try {
-      setNameSuggestions(results || []);
-    } catch (error) {
-      setNameSuggestions([]);
-    } finally {
-      setIsLoadingNames(false);
-    }
-  }, 300);
 
-  const debouncedLocationSearch = debounce(async (searchText) => {
-    if (searchText?.length < 2) return;
-    setIsLoadingLocations(true);
-    try {
-      const results = await searchCities(searchText);
-      setLocationOptions(results || []);
-      if (results && results?.length > 0) {
-        setShowLocationDropdown(true);
+  const debouncedLocationSearch = useCallback(
+    debounce(async (searchText) => {
+      if (searchText?.length < 2) return;
+      setIsLoadingLocations(true);
+      try {
+        const results = await searchCities(searchText);
+        setLocationOptions(results || []);
+        setShowLocationDropdown(results && results?.length > 0);
+      } catch (error) {
+        setLocationOptions([]);
+        setShowLocationDropdown(false);
+        console.log("Error fetching locations:", error);
+      } finally {
+        setIsLoadingLocations(false);
       }
-    } catch (error) {
-      console.log("Error fetching locations:", error);
-    } finally {
-      setIsLoadingLocations(false);
-    }
-  });
+    }, 600),
+    []
+  );
 
   // Handle clicks outside the dropdowns
   useEffect(() => {
@@ -67,14 +58,14 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
 
   const handleSearch = () => {
     onSearch(locationQuery, nameQuery);
-    
   };
 
   const handleLocationSelect = (location) => {
     setLocationQuery(location.label);
     setShowLocationDropdown(false);
-    onSearch(location.label);
   };
+
+  console.log(locationOptions);
 
   return (
     <motion.section
@@ -126,6 +117,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
                 setShowLocationDropdown(true);
               }
             }}
+            ref={locationWrapperRef}
           />
           {/* Location Suggestions Dropdown */}
           {showLocationDropdown && (
