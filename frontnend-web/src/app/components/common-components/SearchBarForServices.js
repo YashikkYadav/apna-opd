@@ -15,12 +15,13 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const locationWrapperRef = useRef(null);
   const [nameQuery, setNameQuery] = useState(name);
-  const [nameSuggestions, setNameSuggestions] = useState([]);
+//  const [nameSuggestions, setNameSuggestions] = useState(nameSuggestion);
   const [isLoadingNames, setIsLoadingNames] = useState(false);
 
   useEffect(() => {
     setLocationQuery(location);
-  }, [location]);
+    setNameQuery(name);
+  }, [location, name]);
 
   const debouncedLocationSearch = useCallback(
     debounce(async (searchText) => {
@@ -65,7 +66,11 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
     setShowLocationDropdown(false);
   };
 
-  
+  // const handleNameSelect = (nam) => {
+  //   console.log("Selected name:", nam);
+  //   setNameQuery(nam);
+    
+  // };
 
   return (
     <motion.section
@@ -121,17 +126,17 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
           />
           {/* Location Suggestions Dropdown */}
           {showLocationDropdown && (
-            <div className="absolute bottom-full text-black  bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            <div className="absolute bottom-full text-black bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
               {isLoadingLocations ? (
                 <div className="px-4 py-2 text-gray-500">Loading...</div>
               ) : locationOptions?.length > 0 ? (
                 locationOptions?.map((location) => (
                   <div
-                    key={location.value}
+                    key={location?.value}
                     className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
                     onMouseDown={() => handleLocationSelect(location)}
                   >
-                    {location.label}
+                    {location?.label}
                   </div>
                 ))
               ) : (
@@ -152,20 +157,16 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
               placeholder="Enter name"
               className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none w-full"
             />
-            {nameSuggestions.length > 0 && (
-              <div className="absolute top-0 left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            {/* {nameSuggestions?.length > 0 && (
+              <div className="absolute bottom-full text-black bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                 {isLoadingNames ? (
                   <div className="px-4 py-2 text-gray-500">Loading...</div>
-                ) : nameSuggestions.length > 0 ? (
-                  nameSuggestions.map((suggestion, idx) => (
+                ) : nameSuggestions?.length > 0 ? (
+                  nameSuggestions?.map((suggestion, idx) => (
                     <div
                       key={idx}
                       className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer text-gray-700"
-                      onClick={() => {
-                        setName(suggestion);
-                        setNameSuggestions([]);
-                        handleSearch();
-                      }}
+                      onMouseDown={() => handleNameSelect(suggestion)}
                     >
                       {suggestion}
                     </div>
@@ -174,7 +175,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
                   <div className="px-4 py-2 text-gray-500">No names found</div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
           {/* Button */}
           <button
@@ -185,7 +186,6 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
           </button>
         </form>
         {/* Location Dropdown */}
-        {/* ...existing code... */}
         <ToastContainer
           position="bottom-center"
           autoClose={1000}
