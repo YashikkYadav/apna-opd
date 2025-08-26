@@ -378,20 +378,46 @@ const ratingDoctor = async (doctorId, rating) => {
   }
 };
 
+// const getAppointments = async (doctorId) => {
+//   try {
+//     const appointments = await Appointment.find({ doctorId }).populate(
+//       "patientId"
+//     );
+
+//     if (!appointments) {
+//       return { statusCode: 203, error: "No appointments available" };
+//     }
+
+//     return { statusCode: 200, appointments: appointments };
+//   } catch (error) {
+//     console.log(`Error in doctor appointment service ${error}`);
+//     return { statusCode: 500, error: `Internal server error : ${error}` };
+//   }
+// };
+
+
 const getAppointments = async (doctorId) => {
   try {
+    // ✅ validate doctorId before querying
+    if (!doctorId || !mongoose.Types.ObjectId.isValid(doctorId)) {
+      return { statusCode: 400, error: "Invalid doctorId" };
+    }
+
     const appointments = await Appointment.find({ doctorId }).populate(
       "patientId"
     );
 
-    if (!appointments) {
+    if (!appointments || appointments.length === 0) {
       return { statusCode: 203, error: "No appointments available" };
     }
 
-    return { statusCode: 200, appointments: appointments };
+    return { statusCode: 200, appointments };
   } catch (error) {
     console.log(`Error in doctor appointment service ${error}`);
-    return { statusCode: 500, error: `Internal server error : ${error}` };
+    return {
+      statusCode: 500,
+      error: `Internal server error : ${error.message}`,
+    };
   }
 };
 
