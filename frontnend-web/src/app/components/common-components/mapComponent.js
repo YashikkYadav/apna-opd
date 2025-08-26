@@ -4,7 +4,7 @@ import axios from "axios";
 
 const MapComponent = ({ address }) => {
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+        googleMapsApiKey: "AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8",
     });
 
     const [coords, setCoords] = useState(null);
@@ -19,7 +19,7 @@ const MapComponent = ({ address }) => {
                     {
                         params: {
                             address,
-                            key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+                            key: "AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8",
                         },
                     }
                 );

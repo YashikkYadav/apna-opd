@@ -268,7 +268,7 @@ function cleanedLocations(location) {
 const getDoctorList = async (page, location, speciality) => {
   try {
     const cleanLocation = cleanedLocations(location).split(" ");
-    const limit = 5;
+    const limit = 6;
     const skip = (page - 1) * limit;
 
     const pipeline = [];
