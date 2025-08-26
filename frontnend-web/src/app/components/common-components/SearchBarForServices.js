@@ -22,7 +22,6 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
     setLocationQuery(location);
   }, [location]);
 
-
   const debouncedLocationSearch = useCallback(
     debounce(async (searchText) => {
       if (searchText?.length < 2) return;
@@ -30,7 +29,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
       try {
         const results = await searchCities(searchText);
         setLocationOptions(results || []);
-        setShowLocationDropdown(results && results?.length > 0);
+        setShowLocationDropdown(true);
       } catch (error) {
         setLocationOptions([]);
         setShowLocationDropdown(false);
@@ -60,12 +59,13 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
     onSearch(locationQuery, nameQuery);
   };
 
-  const handleLocationSelect = (location) => {
-    setLocationQuery(location.label);
+  const handleLocationSelect = (loc) => {
+    console.log("Selected location:", loc);
+    setLocationQuery(loc.label);
     setShowLocationDropdown(false);
   };
 
-  console.log(locationOptions);
+  
 
   return (
     <motion.section
@@ -100,7 +100,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
             e.preventDefault();
             handleSearch();
           }}
-          className="flex flex-col sm:flex-row items-center gap-3"
+          className="flex relative flex-col sm:flex-row items-center gap-3"
         >
           {/* Location Input */}
           <input
@@ -121,7 +121,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
           />
           {/* Location Suggestions Dropdown */}
           {showLocationDropdown && (
-            <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            <div className="absolute bottom-full text-black  bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
               {isLoadingLocations ? (
                 <div className="px-4 py-2 text-gray-500">Loading...</div>
               ) : locationOptions?.length > 0 ? (
@@ -129,7 +129,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
                   <div
                     key={location.value}
                     className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
-                    onClick={() => handleLocationSelect(location)}
+                    onMouseDown={() => handleLocationSelect(location)}
                   >
                     {location.label}
                   </div>
@@ -153,7 +153,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
               className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none w-full"
             />
             {nameSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+              <div className="absolute top-0 left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                 {isLoadingNames ? (
                   <div className="px-4 py-2 text-gray-500">Loading...</div>
                 ) : nameSuggestions.length > 0 ? (
