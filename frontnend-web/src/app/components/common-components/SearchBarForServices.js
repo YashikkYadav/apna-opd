@@ -77,7 +77,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col items-center gap-10"
+      className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-20 flex flex-col items-center gap-10"
     >
       {/* Background Circles */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
@@ -98,7 +98,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-        className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-4xl"
+        className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-5xl"
       >
         <form
           onSubmit={(e) => {
@@ -116,7 +116,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
               debouncedLocationSearch(e.target.value);
             }}
             placeholder="Enter location"
-            className="w-2/5 px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
+            className="w-[450px] px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
             onFocus={() => {
               if (locationOptions?.length > 0) {
                 setShowLocationDropdown(true);
@@ -126,7 +126,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
           />
           {/* Location Suggestions Dropdown */}
           {showLocationDropdown && (
-            <div className="absolute bottom-full text-black bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 right-[620px] text-black bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
               {isLoadingLocations ? (
                 <div className="px-4 py-2 text-gray-500">Loading...</div>
               ) : locationOptions?.length > 0 ? (

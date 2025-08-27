@@ -3,6 +3,7 @@ import { Select } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "../common-components/SearchBar";
 import StarRating from "../common-components/StarRating";
@@ -80,35 +81,46 @@ const SearchResultsData = () => {
 
   return (
     <>
-      <div className="bg-[#0D7EB7] banner-with-search">
-        <div className="bg-[url('/images/gradient.svg')] bg-no-repeat bg-right ">
-          <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto relative md:h-[700px] pb-[60px]">
-            <div className="flex justify-between items-end pt-[60px] md:pt-[129px]">
-              <div className="max-w-[700px] mx-auto">
-                <h1 className="title-64 mb-[32px] text-center max-w-[530px] mx-auto">
-                  Find Our Specialist Doctors
-                </h1>
-                <p className="text-base text-white mb-[88px] text-center">
-                  Apna OPD is your all-in-one India healthcare platform to find
-                  doctors by specialty, location, or hospital. Whether you're
-                  looking for online doctor consultation, in-clinic visits, or
-                  the best OPD booking app — we make it easy to compare, choose,
-                  and book appointments with trusted doctors across India in
-                  minutes.
-                </p>
-              </div>
-            </div>
+      {/* Search Bar Section */}
+      {
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-20 flex flex-col items-center gap-10 mx-8 my-10"
+        >
+          {/* Background Circles */}
+          <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
+          <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
 
-            <div>
-              <SearchBar
-                onSearch={handleSearch}
-                location={location}
-                specialty={speciality}
-              />
-            </div>
+          {/* Heading */}
+          <div className="z-10 text-center space-y-4">
+            <h1 className="text-3xl sm:text-5xl font-extrabold leading-tight drop-shadow">
+              Find Our Specialist Doctors
+            </h1>
+            <p className="text-white/90 text-lg sm:text-xl opacity-90 max-w-4xl">
+              Apna OPD is your all-in-one India healthcare platform to find
+              doctors by specialty, location, or hospital. Whether you're
+              looking for online doctor consultation, in-clinic visits, or the
+              best OPD booking app — we make it easy to compare, choose, and
+              book appointments with trusted doctors across India in minutes.
+            </p>
           </div>
-        </div>
-      </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
+            className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-5xl"
+          >
+            <SearchBar
+              onSearch={handleSearch}
+              location={location}
+              specialty={speciality}
+            />
+          </motion.div>
+        </motion.section>
+      }
       <main className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[50px]">
         {/* Count */}
         <div className="mb-8 text-lg text-gray-600">
@@ -121,7 +133,7 @@ const SearchResultsData = () => {
             const avgRating =
               item?.testimonials?.length > 0
                 ? item.testimonials.reduce((sum, r) => sum + r.rating, 0) /
-                item.testimonials.length
+                  item.testimonials.length
                 : 0;
 
             return (
@@ -150,7 +162,8 @@ const SearchResultsData = () => {
                       {item?.doctor?.name || "Unnamed Doctor"}
                     </h3>
                     <p className="text-gray-600 text-sm">
-                      {item?.doctor?.speciality || "MBBS, MD - General Medicine"}
+                      {item?.doctor?.speciality ||
+                        "MBBS, MD - General Medicine"}
                     </p>
                   </div>
                 </div>
@@ -158,23 +171,38 @@ const SearchResultsData = () => {
                 {/* Details */}
                 <div className="space-y-2 text-sm mb-4">
                   <p className="flex justify-between">
-                    <span className="font-medium text-gray-700">Specialization:</span>
-                    <span className="text-gray-600">{item?.doctor?.speciality || "General Practitioner"}</span>
+                    <span className="font-medium text-gray-700">
+                      Specialization:
+                    </span>
+                    <span className="text-gray-600">
+                      {item?.doctor?.speciality || "General Practitioner"}
+                    </span>
                   </p>
                   <p className="flex justify-between">
-                    <span className="font-medium text-gray-700">Experience:</span>
-                    <span className="text-gray-600">{item?.experience ? `${item.experience}+ years experience` : "N/A"}</span>
+                    <span className="font-medium text-gray-700">
+                      Experience:
+                    </span>
+                    <span className="text-gray-600">
+                      {item?.experience
+                        ? `${item.experience}+ years experience`
+                        : "N/A"}
+                    </span>
                   </p>
                   <p className="flex justify-between">
                     <span className="font-medium text-gray-700">Location:</span>
-                    <span className="text-gray-600">{item?.doctor?.clinicName || "Not Provided"}</span>
+                    <span className="text-gray-600">
+                      {item?.doctor?.clinicName || "Not Provided"}
+                    </span>
                   </p>
                   <p className="flex justify-between">
-                    <span className="font-medium text-gray-700">Consultation Fee:</span>
-                    <span className="text-gray-600">₹{item?.appointmentFee || "N/A"}</span>
+                    <span className="font-medium text-gray-700">
+                      Consultation Fee:
+                    </span>
+                    <span className="text-gray-600">
+                      ₹{item?.appointmentFee || "N/A"}
+                    </span>
                   </p>
                 </div>
-
 
                 {/* Tags (Specialties / Skills) */}
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -196,16 +224,21 @@ const SearchResultsData = () => {
                   {avgRating > 0 ? (
                     <>
                       <div className="text-yellow-500 text-sm">
-                        {Array.from({ length: Math.round(avgRating) }).map((_, i) => (
-                          <span key={i}>★</span>
-                        ))}
+                        {Array.from({ length: Math.round(avgRating) }).map(
+                          (_, i) => (
+                            <span key={i}>★</span>
+                          )
+                        )}
                       </div>
                       <span className="text-gray-600 text-sm">
-                        {avgRating.toFixed(1)} ({item?.testimonials?.length} reviews)
+                        {avgRating.toFixed(1)} ({item?.testimonials?.length}{" "}
+                        reviews)
                       </span>
                     </>
                   ) : (
-                    <span className="text-gray-500 text-sm">No reviews yet</span>
+                    <span className="text-gray-500 text-sm">
+                      No reviews yet
+                    </span>
                   )}
                 </div>
 
@@ -232,7 +265,6 @@ const SearchResultsData = () => {
                     View Profile
                   </button>
                 </div>
-
               </div>
             );
           })}
@@ -253,9 +285,8 @@ const SearchResultsData = () => {
           />
         )}
       </main>
-
     </>
-  )
+  );
 };
 
 export default SearchResultsData;

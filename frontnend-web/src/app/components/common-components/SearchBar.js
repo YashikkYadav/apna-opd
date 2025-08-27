@@ -18,17 +18,17 @@ const SearchBar = ({ onSearch, location="", specialty="" }) => {
   const locationWrapperRef = useRef(null);
   const searchWrapperRef = useRef(null);
 
-  const debouncedLocationSearch = useCallback(
+  const debouncedLocationSearch = React.useCallback(
     debounce(async (searchText) => {
       if (searchText?.length < 2) return;
       setIsLoadingLocations(true);
       try {
         const results = await searchCities(searchText);
         setLocationOptions(results || []);
-        if (results && results?.length > 0) {
-          setShowLocationDropdown(true);
-        }
+        setShowLocationDropdown(results && results?.length > 0);
       } catch (error) {
+        setLocationOptions([]);
+        setShowLocationDropdown(false);
         console.log("Error fetching locations:", error);
       } finally {
         setIsLoadingLocations(false);
@@ -97,110 +97,107 @@ const SearchBar = ({ onSearch, location="", specialty="" }) => {
   };
 
   return (
-    <div className="mb-[40px]">
-      <Form
-        name="searchForm"
-        className="flex flex-col md:flex-row gap-[17px] w-full"
-      >
-        <Form.Item name="location" className="mb-0 w-full md:max-w-[317px]">
-          <div className="relative" ref={locationWrapperRef}>
-            <Input
-              placeholder="Location"
-              className="h-[50px] border-[#094B89] text-base"
-              prefix={
-                <Image
-                  className="mr-3"
-                  src="/images/blue_location.svg"
-                  width={24}
-                  height={24}
-                  alt="Location Icon"
-                />
-              }
-              value={locationQuery}
-              onChange={(e) => {
-                setLocationQuery(e.target.value);
-                debouncedLocationSearch(e.target.value);
-              }}
-              onFocus={() => {
-                if (locationOptions?.length > 0) {
-                  setShowLocationDropdown(true);
+    <div>
+      <Form name="searchForm" className="flex flex-col w-full">
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          {/* Location Input + Suggestions Dropdown */}
+          <Form.Item name="location" className="mb-0 w-full md:max-w-[317px]">
+            <div className="relative" ref={locationWrapperRef}>
+              <Input
+                placeholder="Location"
+                className="h-[50px] border-[#094B89] text-base rounded-lg px-4"
+                prefix={
+                  <Image
+                    className="mr-3"
+                    src="/images/blue_location.svg"
+                    width={24}
+                    height={24}
+                    alt="Location Icon"
+                  />
                 }
-              }}
-            />
-            {showLocationDropdown && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
-                {isLoadingLocations ? (
-                  <div className="px-4 py-2 text-gray-500">Loading...</div>
-                ) : locationOptions?.length > 0 ? (
-                  locationOptions?.map((location) => (
-                    <div
-                      key={location.value}
-                      className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
-                      onClick={() => handleLocationSelect(location)}
-                    >
-                      {location.label}
-                    </div>
-                  ))
-                ) : (
-                  <div className="px-4 py-2 text-gray-500">
-                    No locations found
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </Form.Item>
-        <Form.Item name="search" className="mb-0 w-full">
-          <div className="relative border-none" ref={searchWrapperRef}>
-            <Input
-              placeholder="Search by name, specialty, etc."
-              className="h-[50px] border-[#094B89] hover:border-[#69b6ff] text-base"
-              prefix={
-                <Image
-                  className="mr-3"
-                  src="/images/search.svg"
-                  width={24}
-                  height={24}
-                  alt="Search Icon"
-                />
-              }
-              value={searchQuery}
-              onChange={(e) => handleSearchQuery(e.target.value)}
-              onFocus={() => {
-                if (filteredSpecialties?.length > 0) {
-                  setShowSpecialtyDropdown(true);
+                value={locationQuery}
+                onChange={(e) => {
+                  setLocationQuery(e.target.value);
+                  debouncedLocationSearch(e.target.value);
+                }}
+                onFocus={() => {
+                  if (locationOptions?.length > 0) {
+                    setShowLocationDropdown(true);
+                  }
+                }}
+              />
+              {showLocationDropdown && (
+                <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {isLoadingLocations ? (
+                    <div className="px-4 py-2 text-gray-500">Loading...</div>
+                  ) : locationOptions?.length > 0 ? (
+                    locationOptions?.map((location) => (
+                      <div
+                        key={location.value}
+                        className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
+                        onClick={() => handleLocationSelect(location)}
+                      >
+                        {location.label}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-2 text-gray-500">No locations found</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </Form.Item>
+          {/* Specialty Input + Suggestions Dropdown */}
+          <Form.Item name="search" className="mb-0 w-full">
+            <div className="relative border-none" ref={searchWrapperRef}>
+              <Input
+                placeholder="Search by name, specialty, etc."
+                className="h-[50px] border-[#094B89] hover:border-[#69b6ff] text-base rounded-lg px-4"
+                prefix={
+                  <Image
+                    className="mr-3"
+                    src="/images/search.svg"
+                    width={24}
+                    height={24}
+                    alt="Search Icon"
+                  />
                 }
-              }}
-            />
-            {showSpecialtyDropdown && (
-              <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
-                {filteredSpecialties?.length > 0 ? (
-                  filteredSpecialties?.map((specialty) => (
-                    <div
-                      key={specialty}
-                      className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
-                      onClick={() => handleSpecialtySelect(specialty)}
-                    >
-                      {specialty}
-                    </div>
-                  ))
-                ) : (
-                  <div className="px-4 py-2 text-gray-500">
-                    No specialties found
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </Form.Item>
-        <button
-          className="bg-[#3DB8F5] px-[51px] py-[10px] rounded-[8px] text-lg text-white font-bold hover:text-white hover:bg-[#69b6ff]"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
+                value={searchQuery}
+                onChange={(e) => handleSearchQuery(e.target.value)}
+                onFocus={() => {
+                  if (filteredSpecialties?.length > 0) {
+                    setShowSpecialtyDropdown(true);
+                  }
+                }}
+              />
+              {showSpecialtyDropdown && (
+                <div className="absolute top-full left-0 right-0 bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+                  {filteredSpecialties?.length > 0 ? (
+                    filteredSpecialties?.map((specialty) => (
+                      <div
+                        key={specialty}
+                        className="px-4 py-2 hover:bg-[#f5f5f5] cursor-pointer"
+                        onClick={() => handleSpecialtySelect(specialty)}
+                      >
+                        {specialty}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-4 py-2 text-gray-500">No specialties found</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </Form.Item>
+          <button
+            className="bg-[#0C65A0] hover:bg-[#09507C] text-white text-lg font-bold px-8 py-3 rounded-lg shadow-md transition hover:scale-105"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
+        </div>
+        <ToastContainer position="bottom-center" autoClose={1000} progressStyle={{ backgroundColor: "#3DB8F5" }} hideProgressBar={true} />
       </Form>
-      <ToastContainer position="bottom-center" autoClose={1000} progressStyle={{ backgroundColor: "#3DB8F5" }} hideProgressBar ={true}/>
     </div>
   );
 };

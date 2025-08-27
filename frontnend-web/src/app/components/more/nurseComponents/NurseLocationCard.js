@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import MapComponent from "../../common-components/mapComponent";
 import {
   FaMapMarkerAlt,
   FaPhoneAlt,
@@ -46,14 +47,12 @@ export default function NurseLocationCard({ NurseData, userData }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gray-100 rounded-2xl flex items-center p-8 min-h-[320px] md:min-h-[250px]">
-          <span className="text-2xl flex items-center gap-3 text-gray-700">
-            <span className="text-3xl">🗺️</span>
-            <span className="font-semibold">Interactive Map View</span>
-            <span className="font-medium text-gray-500 ml-2 text-lg">
-              {name || "Hospital Location"}
-            </span>
-          </span>
+        {/* Google Map Placeholder */}
+        <div className="bg-blue-50 mt-10 p-6 rounded-xl text-center hover:shadow-md hover:scale-[1.02] transition-all duration-300">
+          <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Google Map</p>
+          <div className="bg-blue-200 w-full h-80 mt-4 rounded-md overflow-hidden">
+            <MapComponent address={userData?.address} />
+          </div>
         </div>
 
         <div className="bg-[#F7F9FB] rounded-2xl p-8 flex flex-col gap-8 min-h-[320px] md:min-h-[400px] justify-center">
@@ -126,8 +125,8 @@ export default function NurseLocationCard({ NurseData, userData }) {
                   <FaClock />
                 </span>
                 <div>
-                <p className="font-bold">{`Visiting Hours: ${workingHours}`}</p>
-                  
+                  <p className="font-bold">{`Visiting Hours: ${workingHours}`}</p>
+
                   <span className="font-bold">Visiting Days:</span>
                   <br />
                   {Object.entries(NurseData?.workingDays).map(

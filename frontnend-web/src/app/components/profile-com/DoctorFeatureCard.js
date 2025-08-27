@@ -60,7 +60,7 @@ export default function DoctorFeatureCard({ doctorData }) {
       </div>
 
       {/* Right: Content */}
-      <div className="z-10 flex-1 space-y-5 text-center md:text-left">
+      <div className="z-10 flex-1 space-y-4 text-center md:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
           {doctorData?.doctorId?.name}
         </h2>
@@ -97,7 +97,7 @@ export default function DoctorFeatureCard({ doctorData }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4">
           <button
             onClick={() => setOpenModal(true)}
             className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105"
