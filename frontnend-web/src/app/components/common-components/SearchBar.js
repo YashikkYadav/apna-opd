@@ -18,7 +18,7 @@ const SearchBar = ({ onSearch, location="", specialty="" }) => {
   const locationWrapperRef = useRef(null);
   const searchWrapperRef = useRef(null);
 
-  const debouncedLocationSearch = React.useCallback(
+  const debouncedLocationSearch = useCallback(
     debounce(async (searchText) => {
       if (searchText?.length < 2) return;
       setIsLoadingLocations(true);
@@ -58,13 +58,7 @@ const SearchBar = ({ onSearch, location="", specialty="" }) => {
   }, []);
 
   const handleSearch = () => {
-    if(locationQuery || searchQuery){
-      onSearch(locationQuery, searchQuery);
-    }
-    else{
-      toast.dismiss();
-      toast.info("Please enter a location or Specialty");
-    }
+    onSearch(locationQuery, searchQuery);
   };
 
   const handleLocationSelect = (location) => {
@@ -151,7 +145,7 @@ const SearchBar = ({ onSearch, location="", specialty="" }) => {
           <Form.Item name="search" className="mb-0 w-full">
             <div className="relative border-none" ref={searchWrapperRef}>
               <Input
-                placeholder="Search by name, specialty, etc."
+                placeholder="Search by Specialty"
                 className="h-[50px] border-[#094B89] hover:border-[#69b6ff] text-base rounded-lg px-4"
                 prefix={
                   <Image
