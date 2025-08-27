@@ -80,140 +80,154 @@ const IvfClinic = ({ serviceData, totalItems }) => {
             : "flex flex-col gap-4"
         }
       >
-        {currentItems?.map((clinic) => {
-          const profile = clinic?.profiles?.[0];
-          return (
-            <div
-              key={clinic?._id}
-              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
-                viewMode === "list" ? "w-full" : "w-full max-w-3xl"
-              }`}
-            >
-              {/* Avatar + Name */}
-              <div className="flex items-center gap-4 mb-4">
-                {profile?.profilePhoto ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
-                    alt={clinic?.name || "IVF Clinic"}
-                    width={55}
-                    height={55}
-                    className="rounded-full object-cover w-[55px] h-[55px]"
-                  />
-                ) : (
-                  <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
-                    {clinic?.name?.charAt(0) || "I"}
-                  </div>
-                )}
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
-                    {clinic?.name || "Unnamed Clinic"}
-                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                      Verified
-                    </span>
-                  </h3>
-                  <div className="text-gray-600 text-sm">
-                    {clinic?.location || clinic?.city || clinic?.state}
-                  </div>
-                </div>
-              </div>
-
-              {/* Experience + Success Rate */}
-              <div className="mb-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Experience:</span>
-                  <span className="font-medium">
-                    {profile?.experience || "N/A"} years
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Success Rate:</span>
-                  <span className="font-medium">
-                    {profile?.successRate || "N/A"}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Couples Treated:</span>
-                  <span className="font-medium">
-                    {profile?.couplesTreated || "N/A"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Degrees */}
-              <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
-                <div className="font-semibold text-sm text-gray-700 mb-1">
-                  Educational Background
-                </div>
-                {profile?.degrees?.length > 0 ? (
-                  <ul className="text-gray-600 text-xs space-y-1">
-                    {profile.degrees.map((degree, index) => (
-                      <li key={degree?._id || index} className="flex flex-col">
-                        <span className="font-medium">{degree?.title}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="text-gray-500 text-xs">
-                    No degrees available
-                  </div>
-                )}
-              </div>
-
-              {/* Services */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profile?.services?.length > 0 ? (
-                  profile?.services.slice(0, 4).map((service, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                    >
-                      {service}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-gray-500 text-sm">
-                    No services listed
-                  </span>
-                )}
-              </div>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex text-sm">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className={
-                        i < Math.round(getRating(clinic))
-                          ? "text-yellow-500"
-                          : "text-gray-300"
-                      }
+        {currentItems?.length === 0 ? (
+          <div
+            className={`w-full ${
+              viewMode === "grid" ? "lg:ml-96" : ""
+            } text-center py-16 text-xl text-gray-500 font-semibold`}
+          >
+            No IVF clinics found for your search.
+          </div>
+        ) : (
+          currentItems?.map((clinic) => {
+            const profile = clinic?.profiles?.[0];
+            return (
+              <div
+                key={clinic?._id}
+                className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+                  viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+                }`}
+              >
+                {/* Avatar + Name */}
+                <div className="flex items-center gap-4 mb-4">
+                  {profile?.profilePhoto ? (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
+                      alt={clinic?.name || "IVF Clinic"}
+                      width={55}
+                      height={55}
+                      className="rounded-full object-cover w-[55px] h-[55px]"
                     />
-                  ))}
+                  ) : (
+                    <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
+                      {clinic?.name?.charAt(0) || "I"}
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                      {clinic?.name || "Unnamed Clinic"}
+                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        Verified
+                      </span>
+                    </h3>
+                    <div className="text-gray-600 text-sm">
+                      {clinic?.location || clinic?.city || clinic?.state}
+                    </div>
+                  </div>
                 </div>
-                <span className="text-gray-600 text-sm">
-                  {getRating(clinic) ? getRating(clinic).toFixed(1) : "N/A"} (
-                  {parseFloat(profile?.testimonials?.length) || 0} reviews)
-                </span>
-              </div>
 
-              {/* Website */}
-              <div className="text-sm text-gray-600 mb-4">
-                🌐 {profile?.website || clinic?.website || "No website"}
-              </div>
+                {/* Experience + Success Rate */}
+                <div className="mb-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Experience:</span>
+                    <span className="font-medium">
+                      {profile?.experience || "N/A"}+ years of Experience
+                    </span>
+                  </div>
 
-              {/* Buttons */}
-              <div className="flex gap-2">
-                <button
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                  onClick={() => viewClinicDetails(clinic?._id)}
-                >
-                  View Details
-                </button>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Couples Treated:</span>
+                    <span className="font-medium">
+                      {profile?.couplesTreated || "N/A"}+ Couples Treated
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Success Rate:</span>
+                    <span className="font-medium">
+                      {profile?.successRate || "N/A"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Degrees */}
+                <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
+                  <div className="font-semibold text-sm text-gray-700 mb-1">
+                    Educational Background
+                  </div>
+                  {profile?.degrees?.length > 0 ? (
+                    <ul className="text-gray-600 text-xs space-y-1">
+                      {profile.degrees.map((degree, index) => (
+                        <li
+                          key={degree?._id || index}
+                          className="flex flex-col"
+                        >
+                          <span className="font-medium">{degree?.title}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="text-gray-500 text-xs">
+                      No degrees available
+                    </div>
+                  )}
+                </div>
+
+                {/* Services */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {profile?.services?.length > 0 ? (
+                    profile?.services.slice(0, 4).map((service, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {service}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-gray-500 text-sm">
+                      No services listed
+                    </span>
+                  )}
+                </div>
+
+                {/* Rating */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex text-sm">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={
+                          i < Math.round(getRating(clinic))
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-600 text-sm">
+                    {getRating(clinic) ? getRating(clinic).toFixed(1) : "N/A"} (
+                    {parseFloat(profile?.testimonials?.length) || 0} reviews)
+                  </span>
+                </div>
+
+                {/* Website */}
+                <div className="text-sm text-gray-600 mb-4">
+                  🌐 {profile?.website || clinic?.website || "No website"}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                    onClick={() => viewClinicDetails(clinic?._id)}
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </main>
   );

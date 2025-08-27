@@ -79,137 +79,155 @@ const Laboratory = ({ serviceData, totalItems }) => {
             : "flex flex-col gap-4"
         }
       >
-        {currentItems?.map((lab) => {
-          const profile = lab?.profiles?.[0];
-          return (
-            <div
-              key={lab?._id}
-              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
-                viewMode === "list" ? "w-full" : "w-full max-w-3xl"
-              }`}
-            >
-              {/* Avatar + Name */}
-              <div className="flex items-center gap-4 mb-4">
-                {profile?.profilePhoto ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
-                    alt={lab?.name || "Laboratory"}
-                    width={55}
-                    height={55}
-                    className="rounded-full object-cover w-[55px] h-[55px]"
-                  />
-                ) : (
-                  <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
-                    {lab?.name?.charAt(0) || "L"}
-                  </div>
-                )}
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
-                    {lab?.name || "Unnamed Laboratory"}
-                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                      Verified
-                    </span>
-                  </h3>
-                  <div className="text-gray-600 text-sm">
-                    {lab?.location || lab?.city || lab?.state || "No Location"}
-                  </div>
-                </div>
-              </div>
-
-              {/* Experience + Website */}
-              <div className="mb-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Experience:</span>
-                  <span className="font-medium">
-                    {profile?.experience || "N/A"} years
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Website:</span>
-                  <span className="font-medium">
-                    {profile?.website || lab?.website || "N/A"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Tests */}
-              <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
-                <div className="font-semibold text-sm text-gray-700 mb-1">
-                  Tests
-                </div>
-                <div className="text-gray-600 text-xs line-clamp-3">
-                  {profile?.tests?.length > 0
-                    ? profile?.tests?.slice(0, 5)?.map((test) => test.name)?.join(", ") // showing first 3 tests
-                    : "No tests available"}
-                </div>
-              </div>
-
-              {/* Tags (limit 4) */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profile?.tags?.length > 0 ? (
-                  profile?.tags.slice(0, 4).map((tag, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-gray-500 text-sm">No tags listed</span>
-                )}
-              </div>
-
-              {/* Key Features (limit 4)
-              <div className="flex flex-wrap gap-2 mb-4">
-                {profile?.keyFeatures?.length > 0 ? (
-                  profile?.keyFeatures.slice(0, 4).map((feature, index) => (
-                    <span
-                      key={index}
-                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium"
-                    >
-                      {feature}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-gray-500 text-sm">
-                    No features listed
-                  </span>
-                )}
-              </div> */}
-
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex text-sm">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className={
-                        i < Math.round(getRating(lab))
-                          ? "text-yellow-500"
-                          : "text-gray-300"
-                      }
+        {currentItems?.length === 0 ? (
+          <div
+            className={`w-full ${
+              viewMode === "grid" ? "lg:ml-96" : ""
+            } text-center py-16 text-xl text-gray-500 font-semibold`}
+          >
+            No laboratories found for your search.
+          </div>
+        ) : (
+          currentItems?.map((lab) => {
+            const profile = lab?.profiles?.[0];
+            return (
+              <div
+                key={lab?._id}
+                className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+                  viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+                }`}
+              >
+                {/* Avatar + Name */}
+                <div className="flex items-center gap-4 mb-4">
+                  {profile?.profilePhoto ? (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
+                      alt={lab?.name || "Laboratory"}
+                      width={55}
+                      height={55}
+                      className="rounded-full object-cover w-[55px] h-[55px]"
                     />
-                  ))}
+                  ) : (
+                    <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
+                      {lab?.name?.charAt(0) || "L"}
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                      {lab?.name || "Unnamed Laboratory"}
+                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        Verified
+                      </span>
+                    </h3>
+                    <div className="text-gray-600 text-sm">
+                      {lab?.location ||
+                        lab?.city ||
+                        lab?.state ||
+                        "No Location"}
+                    </div>
+                  </div>
                 </div>
-                <span className="text-gray-600 text-sm">
-                  {getRating(lab) ? getRating(lab).toFixed(1) : "N/A"} (
-                  {parseFloat(profile?.testimonials?.length) || 0} reviews)
-                </span>
-              </div>
 
-              {/* Buttons */}
-              <div className="flex gap-2">
-                <button
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                  onClick={() => viewLabDetails(lab?._id)}
-                >
-                  View Details
-                </button>
+                {/* Experience + Website */}
+                <div className="mb-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Experience:</span>
+                    <span className="font-medium">
+                      {profile?.experience || "N/A"}+ years of Experience
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Website:</span>
+                    <span className="font-medium">
+                      {profile?.website || lab?.website || "N/A"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Tests */}
+                <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
+                  <div className="font-semibold text-sm text-gray-700 mb-1">
+                    Tests
+                  </div>
+                  <div className="text-gray-600 text-xs line-clamp-3">
+                    {profile?.tests?.length > 0
+                      ? profile?.tests
+                          ?.slice(0, 5)
+                          ?.map((test) => test.name)
+                          ?.join(", ") // showing first 3 tests
+                      : "No tests available"}
+                  </div>
+                </div>
+
+                {/* Tags (limit 4) */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {profile?.tags?.length > 0 ? (
+                    profile?.tags.slice(0, 4).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-gray-500 text-sm">
+                      No tags listed
+                    </span>
+                  )}
+                </div>
+
+                {/* Key Features (limit 4)
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {profile?.keyFeatures?.length > 0 ? (
+                    profile?.keyFeatures.slice(0, 4).map((feature, index) => (
+                      <span
+                        key={index}
+                        className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {feature}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-gray-500 text-sm">
+                      No features listed
+                    </span>
+                  )}
+                </div> */}
+
+                {/* Rating */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex text-sm">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={
+                          i < Math.round(getRating(lab))
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-600 text-sm">
+                    {getRating(lab) ? getRating(lab).toFixed(1) : "N/A"} (
+                    {parseFloat(profile?.testimonials?.length) || 0} reviews)
+                  </span>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                    onClick={() => viewLabDetails(lab?._id)}
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </main>
   );
