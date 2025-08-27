@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Doctor = require("../models/doctor");
 const validateDoctor = require("../validations/doctor.validation");
 const {
@@ -394,7 +395,6 @@ const ratingDoctor = async (doctorId, rating) => {
 //     return { statusCode: 500, error: `Internal server error : ${error}` };
 //   }
 // };
-
 
 const getAppointments = async (doctorId) => {
   try {
