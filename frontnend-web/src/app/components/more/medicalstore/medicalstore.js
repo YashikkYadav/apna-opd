@@ -62,7 +62,7 @@ const MedicalStore = ({ serviceData, totalItems }) => {
             profileData?.profilePhoto ||
             (store.profiles &&
               store.profiles.length > 0 &&
-              store.profiles[0].images.length > 0
+              store.profiles[0].images?.length > 0
               ? store.profiles[0].images[0].url
               : "/images/image_placeholder.svg");
 
