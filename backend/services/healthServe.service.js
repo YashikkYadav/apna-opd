@@ -330,15 +330,16 @@ const deleteHealthServe = async (healthServeId) => {
   }
 };
 
-const getHealthServeList = async (page = 1, location, type) => {
+const getHealthServeList = async (page = 1, location, type, name) => {
   try {
-    const limit = 5;
+    const limit = 6;
     const safePage = Math.max(Number(page) || 1, 1);
     const skip = (safePage - 1) * limit;
 
     // Build filter
     const filter = {};
 
+    // Location filter
     const extractCity = (rawLocation) => {
       if (!rawLocation) return "";
       return rawLocation
@@ -347,10 +348,14 @@ const getHealthServeList = async (page = 1, location, type) => {
         .split(",")[0]
         .trim();
     };
-
     const city = extractCity(location);
     if (city) {
       filter.location = { $regex: new RegExp(city, "i") };
+    }
+
+    // Name filter
+    if (name) {
+      filter.name = { $regex: new RegExp(name, "i") };
     }
 
     if (type) {
@@ -358,10 +363,46 @@ const getHealthServeList = async (page = 1, location, type) => {
     }
 
     // Determine aggregation or direct query
-    const useAggregation = type !== "hospital" && type !== "blood_donor";
+    const useAggregation = type !== "blood_donor";
 
     let healthServeProfileList = [];
     let total = 0;
+
+    let lookup;
+    switch (type) {
+      case "hospital":
+        lookup = "hospitals";
+        break;
+      case "gym":
+        lookup = "gyms";
+        break;
+      case "ivf_clinic":
+        lookup = "ivfclinics";
+        break;
+      case "nursing_staff":
+        lookup = "nursingstaffs";
+        break;
+      case "physiotherapist":
+        lookup = "physiotherapists";
+        break;
+      case "laboratory":
+        lookup = "healthlabprofiles";
+        break;
+      case "vatenary":
+        lookup = "veterinaries";
+        break;
+      case "blood_bank":
+        lookup = "bloodbanks";
+        break;
+      case "nursing_medical_college":
+        lookup = "medicalcolleges";
+        break;
+      case "medical_store":
+        lookup = "pharmacyprofiles";
+        break;
+      default:
+        lookup = "healthserveprofiles";
+    }
 
     if (useAggregation) {
       const aggregationPipeline = [
@@ -370,7 +411,7 @@ const getHealthServeList = async (page = 1, location, type) => {
         { $limit: limit },
         {
           $lookup: {
-            from: "healthserveprofiles",
+            from: lookup,
             localField: "_id",
             foreignField: "healthServeId",
             as: "profiles",

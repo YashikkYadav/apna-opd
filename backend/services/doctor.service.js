@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Doctor = require("../models/doctor");
 const validateDoctor = require("../validations/doctor.validation");
 const {
@@ -268,7 +269,7 @@ function cleanedLocations(location) {
 const getDoctorList = async (page, location, speciality) => {
   try {
     const cleanLocation = cleanedLocations(location).split(" ");
-    const limit = 5;
+    const limit = 6;
     const skip = (page - 1) * limit;
 
     const pipeline = [];
@@ -394,7 +395,6 @@ const ratingDoctor = async (doctorId, rating) => {
 //     return { statusCode: 500, error: `Internal server error : ${error}` };
 //   }
 // };
-
 
 const getAppointments = async (doctorId) => {
   try {

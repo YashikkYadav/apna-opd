@@ -2,6 +2,7 @@ const { Mongoose, default: mongoose } = require("mongoose");
 const Enquiry = require("../models/enquiry");
 const { validateEnquiry } = require("../validations/enquiry.validation");
 const HealthServeProfile = require("../models/healthServeProfile");
+const HealthServe = require("../models/healthServe");
 const moment = require("moment-timezone");
 
 const createEnquiry = async (healthServeId, data) => {
@@ -77,7 +78,8 @@ const getAllEnquiries = async (
       };
     }
 
-    const healthServe = await HealthServeProfile.findOne({ healthServeId });
+    const healthServe = await HealthServe.findOne({ _id: healthServeId });
+    console.log("hs", healthServe)
 
     if (!healthServe) {
       return {

@@ -3,22 +3,31 @@ import { Select } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "../common-components/SearchBar";
 import StarRating from "../common-components/StarRating";
 import Pagination from "./../more/common/Pagination";
 import axiosInstance from "@/app/config/axios";
+import BookAppointment from "../profile-com/Appointment";
+// Add these imports for icons
+import { BsGridFill, BsList } from "react-icons/bs";
 
 const SearchResultsData = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
   });
+
+  // Add viewMode state
+  const [viewMode, setViewMode] = useState("grid");
 
   const fetchData = async (page = 1, loc = location, spec = speciality) => {
     try {
@@ -77,184 +86,244 @@ const SearchResultsData = () => {
 
   return (
     <>
-      <div className="bg-[#0D7EB7] banner-with-search">
-        <div className="bg-[url('/images/gradient.svg')] bg-no-repeat bg-right ">
-          <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto relative md:h-[700px] pb-[60px]">
-            <div className="flex justify-between items-end pt-[60px] md:pt-[129px]">
-              <div className="max-w-[700px] mx-auto">
-                <h1 className="title-64 mb-[32px] text-center max-w-[530px] mx-auto">
-                  Find Our Specialist Doctors
-                </h1>
-                <p className="text-base text-white mb-[88px] text-center">
-                  Apna OPD is your all-in-one India healthcare platform to find
-                  doctors by specialty, location, or hospital. Whether you're
-                  looking for online doctor consultation, in-clinic visits, or
-                  the best OPD booking app — we make it easy to compare, choose,
-                  and book appointments with trusted doctors across India in
-                  minutes.
-                </p>
-              </div>
-            </div>
+      {/* Search Bar Section */}
+      {
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-20 flex flex-col items-center gap-10 mx-8 my-10"
+        >
+          {/* Background Circles */}
+          <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
+          <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
 
-            <div>
-              <SearchBar
-                onSearch={handleSearch}
-                location={location}
-                specialty={speciality}
-              />
-            </div>
+          {/* Heading */}
+          <div className="z-10 text-center space-y-4">
+            <h1 className="text-3xl sm:text-5xl font-extrabold leading-tight drop-shadow">
+              Find Our Specialist Doctors
+            </h1>
+            <p className="text-white/90 text-lg sm:text-xl opacity-90 max-w-4xl">
+              Apna OPD is your all-in-one India healthcare platform to find
+              doctors by specialty, location, or hospital. Whether you're
+              looking for online doctor consultation, in-clinic visits, or the
+              best OPD booking app — we make it easy to compare, choose, and
+              book appointments with trusted doctors across India in minutes.
+            </p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
+            className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-5xl"
+          >
+            <SearchBar
+              onSearch={handleSearch}
+              location={location}
+              specialty={speciality}
+            />
+          </motion.div>
+        </motion.section>
+      }
+      <main className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[50px]">
+        {/* Count and View Mode Toggle */}
+        <div className="mb-8 text-lg text-gray-600 flex items-center justify-between">
+          <span>{pagination.totalItems} Doctors Available</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`p-2 rounded-lg border ${
+                viewMode === "grid"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-700"
+              }`}
+            >
+              <BsGridFill size={18} />
+            </button>
+            <button
+              onClick={() => setViewMode("list")}
+              className={`p-2 rounded-lg border ${
+                viewMode === "list"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-700"
+              }`}
+            >
+              <BsList size={18} />
+            </button>
           </div>
         </div>
-      </div>
-      <div className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[60px] md:my-[120px]">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-0">
-          <div className="lg:w-[34%] flex lg:flex-col gap-2 md:gap-0">
-            <div className="mb-[20px] md:mb-[80px] w-full">
-              <h2 className="title-48 mb-[24px]">Location</h2>
-              <Select
-                className="!h-[50px] w-full max-w-[296px]"
-                placeholder="Location"
-                size="large"
-                prefix={
-                  <Image
-                    className="mr-3"
-                    src="/images/blue_location.svg"
-                    width={24}
-                    height={24}
-                    alt="Location Icon"
-                  />
-                }
-                value={location}
-              >
-                <Select.Option
-                  key={location}
-                  value={location}
-                  placeholder={location}
-                >
-                  {location || "location"}
-                </Select.Option>
-              </Select>
+
+        {/* Doctor Grid/List */}
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "flex flex-col gap-4"
+          }
+        >
+          {data?.length === 0 ? (
+            <div
+              className={`w-full ${
+                viewMode === "grid" ? "lg:ml-96" : ""
+              } text-center py-16 text-xl text-gray-500 font-semibold`}
+            >
+              No doctors found for your search.
             </div>
-            <div className="w-full">
-              <h2 className="title-48 mb-[24px]">Specialist</h2>
-              <Select
-                className="!h-[50px] w-full max-w-[296px]"
-                placeholder="Specialist"
-                size="large"
-                prefix={
-                  <Image
-                    className="mr-3"
-                    src="/images/stethoscope.svg"
-                    width={24}
-                    height={24}
-                    alt="Location Icon"
-                  />
-                }
-                value={speciality}
-              >
-                <Select.Option key={speciality} value={speciality}>
-                  {speciality || "Specialist"}
-                </Select.Option>
-              </Select>
-            </div>
-          </div>
-          <div className="lg:w-[66%]">
-            <h2 className="title-48 mb-[24px]">
-              Result for {speciality || "Paediatrics"}
-            </h2>
-            {data?.length > 0 ? (
-              <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-                Showing {data?.length} of {pagination.totalItems} results
-              </p>
-            ) : (
-              <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-                No doctors Registered as of now.
-              </p>
-            )}
-            <div className="flex flex-col gap-[32px]">
-              {data?.map((item) => (
+          ) : (
+            data?.map((item) => {
+              const avgRating =
+                item?.testimonials?.length > 0
+                  ? item.testimonials.reduce((sum, r) => sum + r.rating, 0) /
+                    item.testimonials.length
+                  : 0;
+
+              return (
                 <div
-                  key={item.doctor._id}
-                  className="flex flex-col sm:flex-row justify-between mb-[32px]"
+                  key={item?.doctor?._id}
+                  className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 ${
+                    viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+                  }`}
                 >
-                  <div className="flex flex-col sm:flex-row">
-                    <div className="sm:mr-[32px]">
+                  {/* Avatar + Name */}
+                  <div className="flex items-center gap-4 mb-4">
+                    {item?.images?.[0]?.filename ? (
                       <Image
-                        src={
-                          `${process.env.NEXT_PUBLIC_IMAGE_URL || ''}/doctor-profile/${item.images[0]?.filename}` ?? "/images/image_placeholder.svg"
-                        }
-                        width={180}
-                        height={180}
-                        alt="Working Men"
-                        className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/doctor-profile/${item?.images[0]?.filename}`}
+                        alt={item?.doctor?.name || "Doctor"}
+                        width={55}
+                        height={55}
+                        className="rounded-full object-cover w-[55px] h-[55px]"
                       />
-                    </div>
-                    <div className="py-[18px] sm:py-0 md:py-[18px]">
-                      <p className="text-base text-[#5151E1] mb-[8px]">
-                        {item.doctor.speciality || "Pedriatics Specialist"}
+                    ) : (
+                      <div className="w-[55px] h-[55px] rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-xl font-bold">
+                        {item?.doctor?.name?.charAt(0) || "D"}
+                      </div>
+                    )}
+
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold">
+                        {item?.doctor?.name || "Unnamed Doctor"}
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        {item?.doctor?.speciality ||
+                          "MBBS, MD - General Medicine"}
                       </p>
-                      <h3 className="title-32 mb-[8px]">{item.doctor.name}</h3>
-                      <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                        {`${item.experience} Years of Experience` ||
-                          "10 Years of Experience"}
-                      </p>
-                      <h4 className="title-24 text-[#808080] !font-medium">
-                        {item.doctor.clinicName || "California Medical Center"}
-                      </h4>
                     </div>
                   </div>
-                  <div className="flex flex-row sm:flex-col justify-between">
-                    {/* <h2 className="title-48 !text-[#5151E1] md:mt-[19px] text-end">
-                      $25
-                    </h2> */}
-                    <div className="mt-[24px]">
-                      {item?.testimonials?.length > 0 ? (
-                        // ✅ Case 1: Has testimonials → Show stars + average
-                        <StarRating
-                          rating={(
-                            item.testimonials.reduce((sum, r) => sum + r.rating, 0) /
-                            item.testimonials.length
-                          )}
-                          ratingCount={item.testimonials.length}
-                          size="sm"
-                          showCount
-                        />
-                      ) : (
-                        // ✅ Case 2: No testimonials → Show empty stars + text
-                        <div className="flex items-center">
-                          <StarRating
-                            rating={0}
-                            ratingCount={0}
-                            size="sm"
-                            showCount={false}
-                          />
-                          <span className="text-sm text-gray-500 ml-2">
-                            No reviews yet
-                          </span>
-                        </div>
-                      )}
 
-                    </div>
-                    <button
-                      onClick={() => handleDoctorDetails(item.doctor._id)}
-                      className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+                  {/* Details */}
+                  <div className="space-y-2 text-sm mb-4">
+                    <p className="flex justify-between">
+                      <span className="font-medium text-gray-700">
+                        Experience:
+                      </span>
+                      <span className="text-gray-600">
+                        {item?.experience
+                          ? `${item.experience}+ years experience`
+                          : "N/A"}
+                      </span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span className="font-medium text-gray-700">
+                        Hospital Name:
+                      </span>
+                      <span className="text-gray-600">
+                        {item?.doctor?.clinicName || "Not Provided"}
+                      </span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span className="font-medium text-gray-700">
+                        Consultation Fee:
+                      </span>
+                      <span className="text-gray-600">
+                        ₹{item?.appointmentFee || "N/A"}
+                      </span>
+                    </p>
+                  </div>
+
+                  {/* Tags (Specialties / Skills) */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(item?.conditionsTreated?.length > 0
+                      ? item?.conditionsTreated
+                      : ["General Care"]
+                    ).map((tag, i) => (
+                      <span
+                        key={i}
+                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-4">
+                    {avgRating > 0 ? (
+                      <>
+                        <div className="text-yellow-500 text-sm">
+                          {Array.from({ length: Math.round(avgRating) }).map(
+                            (_, i) => (
+                              <span key={i}>★</span>
+                            )
+                          )}
+                        </div>
+                        <span className="text-gray-600 text-sm">
+                          {avgRating.toFixed(1)} ({item?.testimonials?.length}{" "}
+                          reviews)
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-gray-500 text-sm">
+                        No reviews yet
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Availability */}
+                  <div className="bg-green-100 text-green-700 text-center py-2 rounded-lg mb-4 text-sm font-medium">
+                    {item?.doctor?.availability || "Available Today"}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-3">
+                    {/* <button
+                      onClick={() => {
+                        setSelectedDoctor(item);
+                        setOpenModal(true);
+                      }}
+                      className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
                     >
-                      Details
+                      Book Appointment
+                    </button> */}
+                    <button
+                      className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                      onClick={() => handleDoctorDetails(item?.doctor?._id)}
+                    >
+                      View Profile
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
-            {pagination.totalPages > 1 && (
-              <Pagination
-                currentPage={pagination.currentPage}
-                totalPages={pagination.totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
-          </div>
+              );
+            })
+          )}
         </div>
-      </div>
+        {/* {selectedDoctor && (
+          <BookAppointment
+            isOpen={!!selectedDoctor}
+            onClose={() => setSelectedDoctor(null)}
+            doctorData={selectedDoctor}
+          />
+        )} */}
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </main>
     </>
   );
 };
