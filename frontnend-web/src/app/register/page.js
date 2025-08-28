@@ -28,7 +28,7 @@ const Register = () => {
     bloodGroup: "",
     homeService: "",
     address: "",
-    pinCode: "",
+    pincode: "",
     city: "",
     locality: "",
     state: "",
@@ -189,8 +189,8 @@ const Register = () => {
     return mobile && mobile.length === 10 && /^\d{10}$/.test(mobile);
   }, []);
 
-  const validatePinCode = useCallback((pinCode) => {
-    return pinCode && pinCode.length === 6 && /^\d{6}$/.test(pinCode);
+  const validatepincode = useCallback((pincode) => {
+    return pincode && pincode.length === 6 && /^\d{6}$/.test(pincode);
   }, []);
 
   // Validation function
@@ -207,7 +207,7 @@ const Register = () => {
       errors.push("Please select a registration type");
     if (!formData.location) errors.push("Please select a location");
     if (!formData.address.trim()) errors.push("Address is required");
-    if (!validatePinCode(formData.pinCode))
+    if (!validatepincode(formData.pincode))
       errors.push("Pin code must be exactly 6 digits");
     if (!formData.city.trim()) errors.push("City is required");
     if (!formData.state.trim()) errors.push("State is required");
@@ -251,7 +251,7 @@ const Register = () => {
     }
 
     return errors;
-  }, [formData, validateEmail, validateMobile, validatePinCode]);
+  }, [formData, validateEmail, validateMobile, validatepincode]);
 
   const handleDoctorRegistration = async () => {
     const payload = {
@@ -263,7 +263,7 @@ const Register = () => {
       clinicName: formData.clinicName,
       location: formData.location,
       address: formData.address,
-      pinCode: formData.pinCode,
+      pincode: formData.pincode,
       city: formData.city,
       locality: formData.locality,
       state: formData.state,
@@ -363,7 +363,7 @@ const Register = () => {
         email: formData.email,
         location: formData.location,
         address: formData.address,
-        pinCode: formData.pinCode,
+        pincode: formData.pincode,
         city: formData.city,
         locality: formData.locality,
         state: formData.state,
@@ -672,8 +672,8 @@ const Register = () => {
             </label>
             <input
               type="text"
-              name="pinCode"
-              value={formData.pinCode}
+              name="pincode"
+              value={formData.pincode}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
               placeholder="Enter 6-digit pin code"
