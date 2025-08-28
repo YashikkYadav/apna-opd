@@ -45,6 +45,21 @@
           </span>
         </template>
 
+        <!-- Medicines Dropdown / Readonly -->
+<template v-slot:[`item.Medicines`]="{ item }">
+  <v-menu offset-y max-width="400">
+    <template v-slot:activator="{ props, on }">
+      <v-btn v-bind="props" v-on="on" text small>
+        Medicines
+      </v-btn>
+    </template>
+    <v-list style="max-width:100px; max-height: 300px; overflow-y: auto; white-space: normal;">
+      <v-list-item v-for="med in item.Medicines" :key="med._id" class="w-120px">
+        <v-list-item-title>{{ med.display }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
+</template>
         <!-- Amount -->
         <template v-slot:[`item.Amount`]="{ item }">
           <span class="status-tag" :style="getAmountStyle(item.Status)">
@@ -82,7 +97,7 @@
 <script>
 import CommonModel from '@/components/CommonModel.vue';
 import { checkAuth, getAmountStyle, getStatusStyle } from '@/lib/utils/utils';
- import { useOrderStore } from '@/store/OrderStore'; // 👈 medicine order store
+import { useOrderStore } from '@/store/OrderStore'; // medicine order store
 
 export default {
   name: "MedicineOrders",
@@ -120,9 +135,12 @@ export default {
         this.allOrders = res.orders;
         this.orders = res.orders.map((order) => ({
           "OrderID": order._id,
-          "User Name": order.userName,
-          "User Phone": order.userPhone,
-          "Medicines": order.items.map((m) => m.medicineName).join(", "),
+          "User Name": order.customerInfo.name,
+          "User Phone": order.customerInfo.phone,
+          "Medicines": order.items.map((m) => ({
+            ...m,
+            display: `${m.name} (${m.dosage}) x${m.quantity}`,
+          })),
           Date: new Date(order.createdAt).toLocaleDateString('en-GB'),
           Amount: order.totalAmount,
           Status: order.status,

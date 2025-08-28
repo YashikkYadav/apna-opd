@@ -18,8 +18,8 @@
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <router-link to="/enquiry" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-file-document" title="Enquiry" value="enquiry"
+        <router-link to="/orders" style="text-decoration: none; color: inherit;">
+          <v-list-item prepend-icon="mdi-file-document" title="Orders" value="orders"
             class="custom-list-item"></v-list-item>
         </router-link>
 

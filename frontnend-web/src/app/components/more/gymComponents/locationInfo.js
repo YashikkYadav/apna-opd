@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { FaPhoneAlt, FaGlobe, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 import { GoLocation } from 'react-icons/go';
 import MapComponent from '../../common-components/mapComponent';
+
 const VisitUsToday = ({
-    website_url = '{{website_url}}',
-    
+    website_url = 'N/A',
     healthProfile,
     data
 }) => {

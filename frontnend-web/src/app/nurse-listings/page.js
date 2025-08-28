@@ -53,7 +53,7 @@ const NurseProfile = () => {
   return (
     <div className="relative bg-white min-h-screen flex flex-col items-center">
       <main className="pt-[120px] pb-16 w-full">
-        <div className="max-w-[90vw] mx-auto space-y-10">
+        <div className="max-w-[94vw] mx-auto space-y-3">
           {/* 🔹 Pass filters setter to NurseSearch */}
           <NurseSearch onSearch={(searchFilters) => setFilters(searchFilters)} />
 

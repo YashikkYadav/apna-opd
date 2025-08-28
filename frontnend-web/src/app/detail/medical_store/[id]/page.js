@@ -262,7 +262,7 @@ const PharmacyStorePage = () => {
             medicines={filteredMedicines}
             addToCart={addToCart}
             cart={cart}
-            healthProfile={res_data?.healthProfile}
+            data={res_data?.otherData}
           />
           <FeatureHighlights
             data={res_data?.otherData}

@@ -1297,8 +1297,8 @@ initMap() {
       if (profile) {
         // Map images to { path, type }
         const images = [];
-        if (profile.profilePhoto) {
-          images.push({ path: profile.profilePhoto, type: "profilePhoto_image" });
+        if (profile.profileImage) {
+          images.push({ path: profile.profileImage, type: "profilePhoto_image" });
         }
         if (Array.isArray(profile.galleryImages)) {
           profile.galleryImages.forEach((img) => {
@@ -1352,7 +1352,7 @@ initMap() {
         formData.append("about", this.form.about || "");
         formData.append("experience", this.form.experience || "");
         formData.append("introduction", this.form.introduction || "");
-         formData.append("address", this.form.address);
+        formData.append("address", this.form.address);
         formData.append("locality", this.form.locality);
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);

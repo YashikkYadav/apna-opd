@@ -28,18 +28,23 @@ const HealthServe = require("../models/healthServe");
 const careerLeadRoutes = require("./careerLead.routes")
 const Doctor = require("../models/doctor");
 const importExcelRouter = require("./importExcel.routes")
-const nurseRoutes=require("./nurse.routes")
+const nurseRoutes = require("./nurse.routes")
+const orderRoutes = require("./order.routes");
+const cartRoutes=require("./cart.routes")
 
 const router = express.Router();
+
+router.use("/cart", cartRoutes);
+router.use("/:healthServeId/orders", orderRoutes);
 
 router.use("/admin", adminRoutes);
 
 router.use("/hospital", hospitalRoutes);
 
-router.get("/oauth2callback", async(req,res) => {
+router.get("/oauth2callback", async (req, res) => {
 })
-router.get("/hello-server", async(req,res)=>{
-res.status(200).send({message:'server working fine'})
+router.get("/hello-server", async (req, res) => {
+  res.status(200).send({ message: 'server working fine' })
 });
 
 router.use("/user", userRoutes);
@@ -98,7 +103,6 @@ router.use("/career-lead", careerLeadRoutes);
 
 router.use("/import-excel", importExcelRouter)
 
-router.use('/nurse-listings',nurseRoutes)
-
+router.use('/nurse-listings', nurseRoutes)
 
 module.exports = router;

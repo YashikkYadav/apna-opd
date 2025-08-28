@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DashBoard from './views/dashboard/DashBoard.vue';
 // import Profile from './views/profile/Profile.vue';
 import Login from './views/login/Login.vue';
-import Enquiry from './views/enquiry/Enquiry.vue';
+import Orders from './views/orders/Orders.vue';
 import Pharmacy from './views/profile/Pharmacy.vue'
 
 
@@ -16,9 +16,9 @@ const routes = [
     component: DashBoard
   },
   {
-    path: '/enquiry',
-    name: 'Enquiry',
-    component: Enquiry
+    path: '/orders',
+    name: 'Orders',
+    component: Orders
   },
   // {
   //   path: '/profile',

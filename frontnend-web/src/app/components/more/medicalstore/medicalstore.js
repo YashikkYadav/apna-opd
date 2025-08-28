@@ -1,123 +1,211 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import Image from "next/image";
+import { BsGridFill, BsList } from "react-icons/bs";
 
 const MedicalStore = ({ serviceData, totalItems }) => {
+  const [storeList, setStoreList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [storeProfiles, setStoreProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const navigate = useRouter();
+  const [itemsPerPage] = useState(9);
+  const [viewMode, setViewMode] = useState("grid");
+  const router = useRouter();
 
   useEffect(() => {
     if (serviceData) {
-      setFilteredList(serviceData || []);
+      setStoreList(serviceData);
+      setFilteredList(serviceData);
     }
   }, [serviceData]);
 
-  // function to fetch profile data for given medical store id
-  const fetchStoreProfile = async (id) => {
-    try {
-      console.log("Fetching profile for store:", id);
-
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
-      );
-
-      const data = res.data;
-
-      setStoreProfiles((prev) => ({
-        ...prev,
-        [id]: data,
-      }));
-    } catch (err) {
-      console.error("Error fetching profile:", id, err?.response?.data || err);
-    }
-  };
-
-  // Pagination logic
+  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
+  const getRating = (store) => {
+    const testimonials = store?.profiles?.[0]?.testimonials || [];
+    if (!testimonials.length) return null;
+    const avg =
+      testimonials.reduce((sum, t) => sum + (t.rating || 0), 0) /
+      testimonials.length;
+    return avg.toFixed(1);
+  };
+
+  const viewDetails = (id) => {
+    console.log("View Details for Store:", id);
+    router.push(`/detail/medical_store/${id}`);
+  };
+
   return (
-    <>
-      <h2 className="title-48 mb-[24px]">Medical Stores Near You</h2>
-      <p className="title-24 text-[#808080] !font-normal mb-[56px]">
-        Showing {currentItems?.length} of {totalItems} results
-      </p>
-      <div className="flex flex-col gap-[32px]">
-        {currentItems?.map((store) => {
-          // call fetch function when profile not yet loaded
-          if (!storeProfiles[store._id]) {
-            fetchStoreProfile(store._id);
-          }
+    <main>
+      <div className="mb-8 text-lg text-gray-600 flex items-center justify-between">
+        <span>{totalItems} Medical Stores Available</span>
+        {/* View mode toggle */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "grid"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <BsGridFill size={18} />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-2 rounded-lg border ${
+              viewMode === "list"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700"
+            }`}
+          >
+            <BsList size={18} />
+          </button>
+        </div>
+      </div>
 
-          const profileData =
-            storeProfiles[store._id]?.healthServeProfileData?.healthServeProfile;
-
-          const imageUrl =
-            profileData?.profilePhoto ||
-            (store.profiles &&
-              store.profiles.length > 0 &&
-              store.profiles[0].images?.length > 0
-              ? store.profiles[0].images[0].url
-              : "/images/image_placeholder.svg");
-
-          const rating = profileData?.testimonials?.length
-            ? (
-              profileData?.testimonials.reduce(
-                (sum, r) => sum + r.rating,
-                0
-              ) / profileData?.testimonials.length
-            ).toFixed(1)
-            : store.rating?.toFixed(1) || "0.0";
-
-          return (
+      <div
+        className={
+          viewMode === "grid"
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            : "flex flex-col gap-4"
+        }
+      >
+        {currentItems?.length === 0 ? (
+          <div
+            className={`w-full ${
+              viewMode === "grid" ? "lg:ml-96" : ""
+            } text-center py-16 text-xl text-gray-500 font-semibold`}
+          >
+            No medical stores found for your search.
+          </div>
+        ) : (
+          currentItems?.map((store) => (
             <div
-              key={store._id}
-              className="flex flex-col sm:flex-row justify-between mb-[32px]"
+              key={store?._id}
+              className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ${
+                viewMode === "list" ? "w-full" : "w-full max-w-3xl"
+              }`}
             >
-              <div className="flex flex-col sm:flex-row">
-                <div className="sm:mr-[32px]">
+              {/* Avatar + Name */}
+              <div className="flex items-center gap-4 mb-4">
+                {store?.profiles?.[0]?.profilePhoto ? (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${imageUrl}`}
-                    width={180}
-                    height={180}
-                    alt="Medical Store"
-                    className="w-full sm:w-fit object-cover rounded-[8px] max-h-[300px] sm:max-h-[200px]"
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${store?.profiles?.[0]?.profilePhoto}`}
+                    alt={store?.name || "Medical Store"}
+                    width={50}
+                    height={50}
+                    className="rounded-full object-cover w-[55px] h-[55px]"
                   />
-                </div>
-                <div className="py-[18px] sm:py-0 md:py-[18px]">
-                  <p className="text-base text-[#5151E1] mb-[8px]">
-                    Medical Store
-                  </p>
-                  <h3 className="title-24 mb-[8px]">{store.title}</h3>
-                  <p className="text-base text-[#2E2E2E] mb-[16px] !font-medium">
-                    Rating: {rating} / 5
-                  </p>
-                  <h4 className="title-24 text-[#808080] !font-medium">
-                    {store.name}
-                  </h4>
+                ) : (
+                  <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
+                    {store?.name?.charAt(0) || "M"}
+                  </div>
+                )}
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                    {store?.name || "Unnamed Store"}
+                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      Verified
+                    </span>
+                  </h3>
+                  <div className="text-gray-600 text-sm">
+                    {store?.location || store?.city || "No Location"}
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-row sm:flex-col justify-end">
+
+              {/* Experience + Partnerships */}
+              <div className="mb-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Experience:</span>
+                  <span className="font-medium">
+                    {store?.profiles?.[0]?.experience || "N/A"}+ Years of
+                    Experience
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Partnerships:</span>
+                  <span className="font-medium">
+                    {store?.profiles?.[0]?.partnerships?.join(", ") || "N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {store?.profiles[0]?.tags?.length > 0 ? (
+                  store?.profiles[0]?.tags?.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-500 text-sm">No tags listed</span>
+                )}
+              </div>
+
+              {/* Opening & Closing Time */}
+              <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-blue-500">
+                <div className="font-semibold text-sm text-gray-700 mb-1">
+                  Opening & Closing Time
+                </div>
+                <div className="text-gray-600 text-xs">
+                  {`${parseInt(store?.profiles?.[0]?.openTime) % 13 || 10} AM`}{" "}
+                  -{" "}
+                  {`${parseInt(store?.profiles?.[0]?.closeTime) % 13 || 7} PM`}
+                </div>
+              </div>
+
+              {/* Contact */}
+              <div className="mb-4 text-sm text-gray-700 space-y-1">
+                <div>
+                  <span className="font-medium">Phone:</span>{" "}
+                  {store?.phone || "N/A"}
+                </div>
+                {store?.profiles?.[0]?.website && (
+                  <div>
+                    <span className="font-medium">Website:</span>{" "}
+                    <a
+                      href={store?.profiles?.[0]?.website}
+                      target="_blank"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {store?.profiles?.[0]?.website}
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="text-yellow-500 text-sm">★★★★★</div>
+                <span className="text-gray-600 text-sm">
+                  {getRating(store) || "N/A"} (
+                  {store?.profiles?.[0]?.testimonials?.length || 0} reviews)
+                </span>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    navigate.push(`/detail/medical_store/${store._id}`)
-                  }
-                  className="bg-[#3DB8F5] px-[35px] py-[10px] rounded-[8px] text-lg text-white font-bold"
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                  onClick={() => viewDetails(store?._id)}
                 >
-                  Details
+                  View Details
                 </button>
               </div>
             </div>
-          );
-        })}
+          ))
+        )}
       </div>
-    </>
+    </main>
   );
 };
 

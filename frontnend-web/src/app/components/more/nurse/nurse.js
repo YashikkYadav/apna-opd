@@ -8,7 +8,7 @@ const Nurse = ({ serviceData, totalItems }) => {
   const [filteredList, setFilteredList] = useState([]);
   const [nurseProfiles, setNurseProfiles] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(6);
   const navigate = useRouter();
 
   useEffect(() => {

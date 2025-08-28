@@ -1,7 +1,7 @@
 <template>
   <v-card class="kpi-card remove-lines">
     <div class="all-details">
-      <h2 class="card-title">Enquires this Month</h2>
+      <h2 class="card-title">Orders this Month</h2>
       <div class="d-flex">
         <h1 class="dashboard-title">{{ patientMonthSum }}</h1>
         <p class="tag">+42%</p>
