@@ -6,7 +6,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       <Head>
-        <title>Privacy Policy - Apna-OPD</title>
+        <title >Privacy Policy - Apna-OPD</title>
         <meta
           name="description"
           content="Privacy Policy of Apna-OPD.com, providing medical services like doctors, hospitals, physiotherapy, and more."
@@ -81,13 +81,13 @@ export default function Index() {
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">10. Contact Us</h2>
-          <p>
+          {/* <p>
             For any questions, reach us at:
             <br />
             📧 Email: <a className="text-blue-600" href="mailto:support@apna-opd.com">support@apna-opd.com</a>
             <br />
             📍 Address: [Insert Business Address]
-          </p>
+          </p> */}
         </section>
       </div>
     </div>
