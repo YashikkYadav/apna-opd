@@ -45,10 +45,23 @@ const generatePatientUid = async () => {
     // const lastPatient = await Patient.findOne()
     //   .sort({ uid: -1 })
     //   .select("uid -_id");
+
+
+    // let lastNumber = 0;
+    // if (lastPatient && lastPatient.uid) {
+    //   lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
+    // }
+
+    // const newNumber = lastNumber + 1;
+    // const uid = `UID${newNumber}`;
     const lastPatient = await Patient.aggregate([
       {
         $addFields: {
-          uidNumber: { $toInt: { $substr: ["$uid", 3, -1] } } // extract number after 'UID'
+          uidNumber: {
+            $toInt: {
+              $substrCP: ["$uid", 3, { $strLenCP: "$uid" }] // extract number after 'UID'
+            }
+          }
         }
       },
       { $sort: { uidNumber: -1 } },
@@ -56,13 +69,14 @@ const generatePatientUid = async () => {
     ]);
 
     let lastNumber = 0;
-    if (lastPatient && lastPatient.uid) {
-      lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
+    if (lastPatient.length > 0) {
+      lastNumber = lastPatient[0].uidNumber;
     }
     
 
     const newNumber = lastNumber + 1;
     const uid = `UID${newNumber}`;
+    console.log(uid);
 
     return uid;
   } catch (error) {
