@@ -114,7 +114,7 @@ const generateOTP = async (phoneNumber) => {
     //   [randomNumber.toString()],
     // );
 
-    await Patient.findOneAndUpdate(
+    const updatedPatient=await Patient.findOneAndUpdate(
       { phoneNumber },
       { otp: randomNumber },
       { new: true }
@@ -122,7 +122,7 @@ const generateOTP = async (phoneNumber) => {
 
     return {
       statusCode: 200,
-      patient,
+      patient:updatedPatient,
     };
   } catch (error) {
     return {
@@ -140,6 +140,7 @@ const validateOTP = async (phoneNumber, otp) => {
         error: "Missing field: OTP",
       };
     }
+
     const patient = await Patient.findOne({ phoneNumber });
 
     if (!patient) {
@@ -149,7 +150,7 @@ const validateOTP = async (phoneNumber, otp) => {
       };
     }
 
-    if (patient.otp !== otp) {
+    if (patient.otp !== parseInt(otp)) {
       return {
         statusCode: 401,
         error: "Wrong OTP",
