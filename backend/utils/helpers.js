@@ -42,9 +42,18 @@ const verifyAccessToken = async (accessToken) => {
 const generatePatientUid = async () => {
   try {
     // atomically find the patient with the highest UID number
-    const lastPatient = await Patient.findOne()
-      .sort({ uid: -1 })
-      .select("uid -_id");
+    // const lastPatient = await Patient.findOne()
+    //   .sort({ uid: -1 })
+    //   .select("uid -_id");
+    const lastPatient = await Patient.aggregate([
+      {
+        $addFields: {
+          uidNumber: { $toInt: { $substr: ["$uid", 3, -1] } } // extract number after 'UID'
+        }
+      },
+      { $sort: { uidNumber: -1 } },
+      { $limit: 1 }
+    ]);
 
     let lastNumber = 0;
     if (lastPatient && lastPatient.uid) {
