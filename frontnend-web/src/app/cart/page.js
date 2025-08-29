@@ -12,11 +12,9 @@ export default function CartPage() {
     const [loading, setLoading] = useState(true);
     const [showOrderForm, setShowOrderForm] = useState(false);
     const [orderLoading, setOrderLoading] = useState(false);
-    const [customerInfo, setCustomerInfo] = useState({
-        name: '',
-        phone: '',
-        address: ''
-    });
+    const [customerInfo, setCustomerInfo] = useState({ name: '', phone: '', address: '' });
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [orderNumber, setOrderNumber] = useState(null);
 
     useEffect(() => {
         fetchCartItems();
@@ -89,13 +87,12 @@ export default function CartPage() {
 
             const data = await res.json();
 
-            if (data.success) {
-                alert(`Order placed successfully! Order Number: ${data.order.orderNumber}`);
+            if (data?.order?.orderNumber) {
+                setOrderNumber(data.order.orderNumber);
+                setShowSuccessPopup(true);
 
                 // Clear backend cart
-                await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart/`, {
-                    method: "DELETE"
-                });
+                await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart/`, { method: "DELETE" });
                 setCartItems([]);
                 setShowOrderForm(false);
                 setCustomerInfo({ name: '', phone: '', address: '' });
@@ -165,6 +162,7 @@ export default function CartPage() {
                 </motion.div>
             </div>
 
+            {/* Customer Information Modal */}
             {showOrderForm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
                     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl p-6 w-full max-w-md">
@@ -203,6 +201,31 @@ export default function CartPage() {
                                 {orderLoading ? 'Placing Order...' : 'Confirm Order'}
                             </button>
                         </div>
+                    </motion.div>
+                </div>
+            )}
+
+            {/* Success Popup Modal */}
+            {showSuccessPopup && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-white rounded-2xl p-6 w-full max-w-md text-center"
+                    >
+                        <h2 className="text-2xl font-bold text-green-600 mb-3">🎉 Order Placed!</h2>
+                        <p className="text-gray-700 mb-4">
+                            Your order has been placed successfully.
+                        </p>
+                        <p className="text-lg font-semibold text-blue-600">
+                            Order Number: {orderNumber}
+                        </p>
+                        <button
+                            onClick={() => setShowSuccessPopup(false)}
+                            className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                        >
+                            Close
+                        </button>
                     </motion.div>
                 </div>
             )}

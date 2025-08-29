@@ -1,4 +1,5 @@
 import axiosAuthenticator from "@/plugins/axios";
+import { he } from "vuetify/locale";
 
 export class AxiosDashboard {
   apiClient;
@@ -6,12 +7,12 @@ export class AxiosDashboard {
     this.apiClient = new axiosAuthenticator();
   }
 
-  last24hoursEnquiryList(healthServeId) {
-    return this.apiClient.get(`/${healthServeId}/enquiry/24hours`);
+  last24hoursOrdersList(healthServeId) {
+    return this.apiClient.get(`/${healthServeId}/orders/24hours`);
   }
 
-  last30DaysEnquiryList(healthServeId) {
-    return this.apiClient.get(`/${healthServeId}/enquiry/30days`);
+  last30DaysOrdersList(healthServeId) {
+    return this.apiClient.get(`/${healthServeId}/orders/30days`);
   }
 
   last30DaysInvoiceList(doctorId) {

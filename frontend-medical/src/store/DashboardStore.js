@@ -7,16 +7,16 @@ export const useDashboardStore = defineStore("dashboardStore", {
   }),
 
   actions: {
-    async getLast24HoursEnquiryApiCall() {
+    async getLast24HoursOrdersApiCall() {
       const DashboardService = new AxiosDashboard();
-      const data = await DashboardService.last24hoursEnquiryList(
+      const data = await DashboardService.last24hoursOrdersList(
         this.healthServeId
       );
       return data;
     },
-    async getLast30DaysEnquiryApiCall() {
+    async getLast30DaysOrdersApiCall() {
       const DashboardService = new AxiosDashboard();
-      const data = await DashboardService.last30DaysEnquiryList(
+      const data = await DashboardService.last30DaysOrdersList(
         this.healthServeId
       );
       return data;

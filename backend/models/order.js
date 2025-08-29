@@ -63,6 +63,10 @@ const orderSchema = new mongoose.Schema({
     userId: {
         type: String,
         default: 'guest'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     }
 }, {
     timestamps: true

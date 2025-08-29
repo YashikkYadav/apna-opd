@@ -155,21 +155,8 @@ export default {
         clinicName: "",
       },
       dropdownItems: [
-        { value: "doctor", label: "Doctor" },
-        { value: "ambulance", label: "Ambulance" },
-        { value: "gym", label: "Gym" },
-        { value: "yoga", label: "Yoga" },
-        { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
-        { value: "commercial_meditation", label: "Commercial Meditation" },
+      
         { value: "medical_store", label: "Medical Store" },
-        { value: "nursing_medical_college", label: "Nursing & Medical College" },
-        { value: "blood_bank", label: "Blood Bank" },
-        { value: "physiotherapist", label: "Physiotherapist" },
-        { value: "blood_donor", label: "Blood Donor" },
-        { value: "nursing_staff", label: "Nursing Staff" },
-        { value: "vatenary", label: "Vaterinary" },
-        { value: "laboratory", label: "Laboratory" },
-        { value: "ivf_clinic", label: "IVF Clinic" },
       ],
       rules: {
         required: (value) => !!value || "This field is required.",

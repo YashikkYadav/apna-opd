@@ -74,10 +74,49 @@ const deleteOrder = async (req, res) => {
     }
 };
 
+// ✅ Orders in last 24 hours
+const getLast24HoursDataCount = async (req, res) => {
+    try {
+        const { healthServeId } = req.params;
+
+        const order = await orderService.getLast24HoursDataCount(healthServeId);
+        if (order?.error) {
+            return res.status(order.statusCode).send(order.error);
+        }
+
+        res.status(order.statusCode).json({
+            order: order.data,
+        });
+    } catch (error) {
+        res.status(500).send(`Error: ${error}`);
+    }
+};
+
+// ✅ Orders in last 30 days
+const getLast30DaysDataCount = async (req, res) => {
+    try {
+        const { healthServeId } = req.params;
+
+        const order = await orderService.getLast30DaysDataCount(healthServeId);
+        if (order?.error) {
+            return res.status(order.statusCode).send(order.error);
+        }
+
+        res.status(order.statusCode).json({
+            order: order.data,
+        });
+    } catch (error) {
+
+        res.status(500).send(`Error: ${error}`);
+    }
+};
+
 module.exports = {
     createOrder,
     getAllOrders,
     getOrderById,
     updateOrder,
     deleteOrder,
+    getLast24HoursDataCount,
+    getLast30DaysDataCount
 };

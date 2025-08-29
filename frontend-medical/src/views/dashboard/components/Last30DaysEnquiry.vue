@@ -7,7 +7,7 @@
         <p class="tag">+42%</p>
       </div>
     </div>
-    <div v-if="patientMonth.length > 0">
+    <div v-if="patientMonth?.length > 0">
       <apexchart
         type="area"
         :options="patientThisMonthOptions"
@@ -100,10 +100,11 @@ export default {
   },
   methods: {
     async fetchMonth() {
-      const res = await useDashboardStore().getLast30DaysEnquiryApiCall();
+      const res = await useDashboardStore().getLast30DaysOrdersApiCall();
+      
       if (res) {
-        this.patientMonth = res.enquiry;
-        const sum = res.enquiry?.reduce((acc, val) => acc + val, 0);
+        this.patientMonth = res?.order;
+        const sum = res?.order?.reduce((acc, val) => acc + val, 0);
         this.patientMonthSum = sum;
       }
     },

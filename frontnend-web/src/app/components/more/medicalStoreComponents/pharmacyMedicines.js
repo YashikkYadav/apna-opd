@@ -36,7 +36,6 @@ const AvailableMedicines = ({ medicines,data }) => {
             });
 
             setCartCount((prev) => prev + 1);
-            alert(`${medicine.name} added to cart 🛒`);
         } catch (err) {
             console.error("Error adding to cart:", err);
             alert("⚠️ Could not add to cart. Please try again.");
