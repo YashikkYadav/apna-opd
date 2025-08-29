@@ -6,7 +6,8 @@ patient.post("/generate-otp", patientController.generateOTP);
 
 patient.post("/validate-otp", patientController.validateOTP);
 
-patient.post("/:doctorId", patientController.registerPatient);
+patient.post("/:doctorId?", patientController.registerPatient);
+
 
 patient.delete(
   "/:doctorId/:patientId/delete-prescription",

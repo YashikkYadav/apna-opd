@@ -50,6 +50,7 @@ const generatePatientUid = async () => {
     if (lastPatient && lastPatient.uid) {
       lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
     }
+    
 
     const newNumber = lastNumber + 1;
     const uid = `UID${newNumber}`;
