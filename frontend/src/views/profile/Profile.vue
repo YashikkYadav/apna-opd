@@ -1153,7 +1153,7 @@ initMap() {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getDoctoreProfileApiCall();
-      console.log(">", res.doctorProfile?.testimonials);
+      
       if (res.doctorProfile !== null) {
         this.images = res.doctorProfile.images;
         this.form = res.doctorProfile;
