@@ -26,10 +26,11 @@ export const useOrderStore = defineStore('orderStore', {
       return data
     },
 
-    async updateOrderApiCall(orderId) {
-      const OrderService = new AxiosOrder()
-      const data = await OrderService.OrdersUpdate(this.doctorId, orderId)
-      return data
+    async updateOrderApiCall(orderId, payload) {
+      const OrderService = new AxiosOrder();
+      console.log(",,,")
+      const data = await OrderService.OrdersUpdate(this.doctorId, orderId, payload);
+      return data;
     },
 
     async deleteOrderApiCall(orderId) {

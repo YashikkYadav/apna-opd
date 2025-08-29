@@ -56,10 +56,10 @@ const registerDoctor = async (doctorData, hospitalId) => {
         message: "Error creating the doctor",
       };
     }
-
     const hospitalDoctor = await HospitalDoctor.create({
       healthServeId: hospitalId.hospitalId,
-      doctorId: doctor.id || doctor._id,
+      doctorId:doctor?.doctor?._id,
+
     });
 
     if (!doctor || !hospitalDoctor) {

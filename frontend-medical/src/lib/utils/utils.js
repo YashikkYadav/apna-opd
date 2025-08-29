@@ -73,7 +73,7 @@ export const getLast24Hours = () => {
 
 export const getDateFormate = (date) => {
   if (!date) return "";
-  
+
   const d = new Date(date);
   if (isNaN(d.getTime())) return "";
 
@@ -85,19 +85,33 @@ export const getDateFormate = (date) => {
 };
 
 
-
-export const getStatusStyle = (status) =>{
+export const getStatusStyle = (status) => {
   const statusColors = {
-    "Billed": { color: "#239f52", backgroundColor: "#3ec97233" },
-    "Unbilled": { color: "#e63939", backgroundColor: "#ff565633" },
-    "Partially Paid": { color: "#bc9021", backgroundColor: "#f0bb3333" },
-    "default": { color: "#000", backgroundColor: "#ddd" },
+    "pending": { color: "#ff9800", backgroundColor: "#ffe0b2" },      
+    "confirmed": { color: "#1976d2", backgroundColor: "#bbdefb" },    
+    "processing": { color: "#9c27b0", backgroundColor: "#e1bee7" },   
+    "shipped": { color: "#0288d1", backgroundColor: "#b3e5fc" },      
+    "delivered": { color: "#4caf50", backgroundColor: "#c8e6c9" },    
+    "cancelled": { color: "#e53935", backgroundColor: "#ffcdd2" },    
+    "default": { color: "#000", backgroundColor: "#ddd" },             
   };
 
-  return statusColors[status] || statusColors.default;
-}
+  const baseStyle = {      
+    borderRadius: "12px",
+    fontWeight: "500",
+    fontSize: "0.875rem",
+    display: "inline-block",
+    textAlign: "center",
+    width: "120px", 
+    boxSizing: "border-box",
+  };
 
-export const  getAmountStyle = (status) => {
+  return { ...baseStyle, ...(statusColors[status] || statusColors.default) };
+};
+
+
+
+export const getAmountStyle = (status) => {
   const statusColors = {
     "Billed": { color: "#34bd68", },
     "Unbilled": { color: "#ff5656" },

@@ -7,11 +7,11 @@ export class AxiosHospital {
   }
 
   Doctor(hospitalId) {
-    console.log("function called in api Hospitala : "+hospitalId);
+    console.log("function called in api Hospitala : " + hospitalId);
     return this.apiClient.get(`/hospital/${hospitalId}/doctor`);
   }
 
   Register(hospitalId, payload) {
-    return this.apiClient.post(`hospital/${hospitalId}/doctor`, payload);
+    return this.apiClient.post(`/hospital/${hospitalId}/doctor`, payload);
   }
 }

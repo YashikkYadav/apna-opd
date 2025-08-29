@@ -68,12 +68,17 @@
         </template>
 
         <!-- Status -->
-        <template v-slot:[`item.Status`]="{ item }">
-          <span class="status-tag" :style="getStatusStyle(item.Status)">
-            {{ item.Status }}
-          </span>
-        </template>
-
+<template v-slot:[`item.Status`]="{ item }">
+  <v-select
+  :items="statusOptions"
+  :model-value="item.Status"
+  @update:model-value="newStatus => updateOrderStatus(item.id, newStatus)"
+  density="compact"
+  variant="outlined"
+  hide-details 
+  :style="getStatusStyle(item.Status)"
+></v-select>
+</template>
         <!-- Actions -->
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn class="icon-btn" icon @click="deleteDialogHandle(item)">
@@ -98,6 +103,7 @@
 import CommonModel from '@/components/CommonModel.vue';
 import { checkAuth, getAmountStyle, getStatusStyle } from '@/lib/utils/utils';
 import { useOrderStore } from '@/store/OrderStore'; // medicine order store
+import { useUiStore } from '@/store/UiStore';
 
 export default {
   name: "MedicineOrders",
@@ -120,6 +126,8 @@ export default {
       allOrders: [],
       isLoading: true,
       isDeleteModalOpen: false,
+      statusOptions: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
+
     };
   },
   mounted() {
@@ -130,6 +138,7 @@ export default {
   },
   methods: {
     async fetchOrders() {
+      
       const res = await useOrderStore().getAllOrdersApiCall();
       if (res?.orders) {
         this.allOrders = res.orders;
@@ -149,6 +158,21 @@ export default {
         this.isLoading = false;
       }
     },
+    async updateOrderStatus(orderId, newStatus) {
+  console.log("Updating order status:", orderId, "to", newStatus);
+  try {
+    const orderStore = useOrderStore();
+    await orderStore.updateOrderApiCall(orderId, { status: newStatus });
+
+    const index = this.orders.findIndex(o => o.id === orderId);
+    if (index !== -1) this.orders[index].Status = newStatus;
+
+    useUiStore().openNotificationMessage("Order status updated successfully!");
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    useUiStore().openNotificationMessage("Failed to update order status.");
+  }
+},
     async onDeleteOrder() {
       await useOrderStore().deleteOrderApiCall(this.orderId);
       this.isDeleteModalOpen = false;

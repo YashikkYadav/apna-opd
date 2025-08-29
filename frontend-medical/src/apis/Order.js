@@ -22,10 +22,9 @@ export class AxiosOrder {
     }
 
     // Update (e.g. mark as delivered / change status)
-    OrdersUpdate(doctorId, orderId) {
-        return this.apiClient.patch(`/${doctorId}/orders/${orderId}`)
+    OrdersUpdate(doctorId, orderId, payload) {
+        return this.apiClient.patch(`/${doctorId}/orders/${orderId}`, payload);
     }
-
     // Delete an order
     OrdersDelete(doctorId, orderId) {
         return this.apiClient.delete(`/${doctorId}/orders/${orderId}`)

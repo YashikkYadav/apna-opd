@@ -110,9 +110,13 @@ export default function CartPage() {
     if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-xl">Loading cart...</div></div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 pb-8">
-            <div className="max-w-4xl mx-auto px-4">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl shadow-lg p-6">
+        <div className="min-h-screen bg-gray-50 pt-24 flex justify-center">
+            
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-2xl shadow-lg p-8 w-[90%] h-[60vh]"
+                >
                     <div className="flex items-center gap-3 mb-6">
                         <ShoppingCart className="w-8 h-8 text-blue-600" />
                         <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
@@ -125,42 +129,55 @@ export default function CartPage() {
                         </div>
                     ) : (
                         <>
-                            <div className="space-y-4 mb-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                                 {cartItems.map(item => (
-                                    <motion.div key={item._id} layout className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-lg">{item.name}</h3>
-                                            <p className="text-gray-600">{item.dosage}</p>
-                                            <p className="text-blue-600 font-bold">₹{item.price}</p>
+                                    <motion.div
+                                        key={item._id}
+                                        layout
+                                        whileHover={{ scale: 1.02 }}
+                                        className="flex flex-col p-6 border border-gray-200 rounded-2xl bg-white shadow-sm w-[90%] h-52 mx-auto"
+                                    >
+
+                                        {/* Name + Price */}
+                                        <div className="flex justify-between items-center mb-2">
+                                            <h3 className="font-semibold text-lg text-gray-800">Name: {item.name}</h3>
+                                            <p className="font-semibold text-lg text-blue-600">Price: ₹{item.price}</p>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <button onClick={() => updateQuantity(item._id, item.quantity - 1)} className="p-1 rounded-full bg-gray-100 hover:bg-gray-200">
+
+                                        {/* Dosage */}
+                                        <p className="text-gray-500 mb-4">Dosage: {item.dosage}</p>
+
+                                        {/* Quantity controls + Delete */}
+                                        <div className="flex items-center gap-3 mt-auto">
+                                            <button onClick={() => updateQuantity(item._id, item.quantity - 1)} className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition">
                                                 <Minus className="w-4 h-4" />
                                             </button>
-                                            <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item._id, item.quantity + 1)} className="p-1 rounded-full bg-gray-100 hover:bg-gray-200">
+                                            <span className="w-10 text-center font-semibold">{item.quantity}</span>
+                                            <button onClick={() => updateQuantity(item._id, item.quantity + 1)} className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition">
                                                 <Plus className="w-4 h-4" />
                                             </button>
-                                            <button onClick={() => removeItem(item._id)} className="p-2 text-red-500 hover:bg-red-50 rounded-full">
+                                            <button onClick={() => removeItem(item._id)} className="ml-auto p-2 text-red-500 hover:bg-red-50 rounded-lg transition">
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
                                         </div>
                                     </motion.div>
                                 ))}
                             </div>
-                            <div className="border-t pt-4">
-                                <div className="flex justify-between items-center mb-4">
-                                    <span className="text-xl font-semibold">Total:</span>
-                                    <span className="text-2xl font-bold text-blue-600">₹{getTotalPrice()}</span>
+                            <div className="border-t pt-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                                <div className="text-xl font-semibold text-gray-800">
+                                    Cart Value: <span className="text-2xl font-bold text-blue-600">₹{getTotalPrice()}</span>
                                 </div>
-                                <button onClick={() => setShowOrderForm(true)} className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                                <button
+                                    onClick={() => setShowOrderForm(true)}
+                                    className="ml-auto bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition"
+                                >
                                     Place Order
                                 </button>
                             </div>
                         </>
                     )}
                 </motion.div>
-            </div>
 
             {/* Customer Information Modal */}
             {showOrderForm && (
