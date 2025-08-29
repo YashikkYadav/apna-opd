@@ -55,6 +55,7 @@ const registerPatient = async (patientData, doctorId) => {
     }
 
     const uid = await generatePatientUid();
+    console.log('uid',uid)
     const newPatient = new Patient({
       uid,
       fullName,
