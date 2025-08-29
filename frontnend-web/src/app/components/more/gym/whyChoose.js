@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
-  FaDollarSign,
   FaUsers,
   FaStar,
+  FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
 
@@ -13,39 +13,39 @@ const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Verified Blood Banks",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
+        "All Blood banks are thoroughly verified and accredited by medical authorities",
     },
     {
       icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
+      title: "Advanced Technology",
       description:
-        "Round-the-clock customer support for all your healthcare needs.",
-    },
-    {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
+        "State-of-the-art medical equipment with cutting-edge facilities",
     },
     {
       icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
+      title: "Transparent Healthcare",
       description:
-        "Large network of qualified nurses across multiple specializations.",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
-      description:
-        "Highly rated by thousands of satisfied patients and families.",
+        "Clear treatment plans with transparent pricing and easy booking system",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
+      title: "Expert Medical Specialists",
       description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Access to India's leading doctors and medical specialists across all domains",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "500+ Top Hospitals",
+      description:
+        "Extensive network of premium healthcare facilities across major cities",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Proven Excellence",
+      description:
+        "Hospitals with excellent patient outcomes and successful treatments",
     },
   ];
 
@@ -55,7 +55,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nurses?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
       </motion.h2>
 
       {/* Features Grid */}

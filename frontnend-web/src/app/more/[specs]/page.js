@@ -126,54 +126,167 @@ const ServicePage = () => {
   const renderServiceComponent = (totalItems) => {
     switch (specs) {
       case serviceTypes.AMBULANCE:
-        return <Ambulance serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Ambulance
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.HOSPITAL:
-        return <Hospital serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Hospital
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.VATENARY:
-        return <Vatenary serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Vatenary
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.EMERGENCY:
-        return <Emergency serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Emergency
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.GYM:
-        return <Gym serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Gym
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.YOGA:
-        return <Yoga serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Yoga
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.MEDITATION:
         return (
           <CommercialMeditation
             serviceData={serviceData}
             totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
           />
         );
       case serviceTypes.NASHA_MUKTI:
         return (
-          <NashamuktiKendra serviceData={serviceData} totalItems={totalItems} />
+          <NashamuktiKendra
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         );
       case serviceTypes.MEDICAL_STORE:
         return (
-          <MedicalStore serviceData={serviceData} totalItems={totalItems} />
+          <MedicalStore
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         );
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
         return (
-          <NursingCollege serviceData={serviceData} totalItems={totalItems} />
+          <NursingCollege
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         );
       case serviceTypes.BLOOD_BANK:
-        return <BloodBank serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <BloodBank
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.PHYSIOTHERAPIST:
         return (
-          <Physiotherapist serviceData={serviceData} totalItems={totalItems} />
+          <Physiotherapist
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         );
       case serviceTypes.BLOOD_DONOR:
         return <BloodDonor serviceData={serviceData} totalItems={totalItems} />;
       case serviceTypes.NURSE:
-        return <Nurse serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Nurse
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.RADIOLOGIST:
         return (
-          <Radiologist serviceData={serviceData} totalItems={totalItems} />
+          <Radiologist
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         );
       case serviceTypes.LABORATORY:
-        return <Laboratory serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <Laboratory
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.IVFCLINIC:
-        return <IvfClinic serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <IvfClinic
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       default:
         return <div>Service not found</div>;
     }
@@ -199,7 +312,7 @@ const ServicePage = () => {
   };
 
   return (
-    <div className="pt-[120px] p-8">
+    <div className="pt-[120px] p-8 bg-sky-50">
       <div>
         <SearchBarForServices
           onSearch={handleSearch}
@@ -207,16 +320,10 @@ const ServicePage = () => {
           name={name}
         />
       </div>
-      <div className="bg-sky-50 px-[15px] sm:px-[30px] mx-auto py-[60px] ">
+      <div className="mx-auto py-[24px] px-1">
         <div>
           {renderServiceComponent(totalItems)}
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          )}
+          
         </div>
       </div>
     </div>
