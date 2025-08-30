@@ -123,8 +123,8 @@ const createPaymentLinkForEntity = async (
       };
     } else {
       data = {
-        amount: doctorProfile.appointmentFee
-          ? doctorProfile.appointmentFee * 100
+        amount: doctorProfile?.appointmentFee
+          ? doctorProfile?.appointmentFee * 100
           : 1 * 100,
         currency: "INR",
         accept_partial: false,
