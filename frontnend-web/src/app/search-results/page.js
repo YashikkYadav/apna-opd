@@ -2,7 +2,7 @@ import SearchResultsData from "../components/search-result-components/searchResu
 
 const SearchResults = () => {
     return (
-        <div className="pt-[80px]">
+        <div className="pt-[56px] md:pt-[80px]">
             <SearchResultsData />
         </div>
     );

@@ -61,7 +61,7 @@ const NurseSearch = ({ onSearch }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col items-center gap-10"
+      className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-5 md:p-10 lg:p-16 flex flex-col items-center gap-10"
     >
       {/* Background Circles */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
@@ -134,7 +134,7 @@ const NurseSearch = ({ onSearch }) => {
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value)}
-            className="w-1/2 px-4 py-3 rounded-lg border border-gray-300 text-gray-700 
+            className="w-full md:w-1/2 px-4 py-3 rounded-lg border border-gray-300 text-gray-700 
                   focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
           >
             <option value="">Select Gender</option>

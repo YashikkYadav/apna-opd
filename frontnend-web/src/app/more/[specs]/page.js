@@ -312,7 +312,7 @@ const ServicePage = () => {
   };
 
   return (
-    <div className="pt-[120px] p-8 bg-sky-50">
+    <div className="pt-[90px] md:pt-[120px] p-3 md:p-8 bg-sky-50">
       <div>
         <SearchBarForServices
           onSearch={handleSearch}

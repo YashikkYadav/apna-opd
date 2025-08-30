@@ -12,6 +12,8 @@ import axiosInstance from "@/app/config/axios";
 import BookAppointment from "../profile-com/Appointment";
 // Add these imports for icons
 import { BsGridFill, BsList } from "react-icons/bs";
+import WhyChooseUs from "./whyChoose";
+import PatientTestimonials from "./Testimonial";
 
 const SearchResultsData = () => {
   const router = useRouter();
@@ -92,7 +94,7 @@ const SearchResultsData = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, type: "spring" }}
-          className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-20 flex flex-col items-center gap-10 mx-8 my-10"
+          className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-5 md:p-10 lg:p-16 flex flex-col items-center gap-10 mx-3 md:mx-8 my-10"
         >
           {/* Background Circles */}
           <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
@@ -116,7 +118,7 @@ const SearchResultsData = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-            className="z-10 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-5xl"
+            className="z-10 bg-white rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-5xl"
           >
             <SearchBar
               onSearch={handleSearch}
@@ -126,7 +128,7 @@ const SearchResultsData = () => {
           </motion.div>
         </motion.section>
       }
-      <main className="max-w-[1270px] px-[15px] sm:px-[30px] mx-auto my-[50px]">
+      <main className="px-[16px] md:px-[30px] mx-auto my-[30px]">
         {/* Count and View Mode Toggle */}
         <div className="mb-8 text-lg text-gray-600 flex items-center justify-between">
           <span>{pagination.totalItems} Doctors Available</span>
@@ -323,6 +325,8 @@ const SearchResultsData = () => {
             onPageChange={handlePageChange}
           />
         )}
+        <WhyChooseUs />
+        <PatientTestimonials />
       </main>
     </>
   );
