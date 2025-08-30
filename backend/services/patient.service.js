@@ -33,7 +33,7 @@ const registerPatient = async (patientData, doctorId) => {
     }
 
     const patient = await Patient.findOne({ phoneNumber });
-    if (patient) {
+    if (patient && doctorId) {
       const doctorPatient = await DoctorPatient.findOne({ patientId: patient._id, doctorId });
 
       if (!doctorPatient) {
@@ -55,6 +55,7 @@ const registerPatient = async (patientData, doctorId) => {
     }
 
     const uid = await generatePatientUid();
+    console.log('uid',uid)
     const newPatient = new Patient({
       uid,
       fullName,
@@ -73,7 +74,7 @@ const registerPatient = async (patientData, doctorId) => {
     });
     await newPatient.save();
 
-    if (doctorId !== "register") {
+    if (doctorId !== "register" && doctorId) {
       const doctorPatient = new DoctorPatient({
         doctorId,
         patientId: newPatient._id,
@@ -95,7 +96,7 @@ const registerPatient = async (patientData, doctorId) => {
 
 const generateOTP = async (phoneNumber) => {
   try {
-    const patient = await Patient.findOne({ phoneNumber });
+    const patient = await Patient.findOne({ phoneNumber:parseInt(phoneNumber) });
 
     if (!patient) {
       return {
@@ -113,15 +114,15 @@ const generateOTP = async (phoneNumber) => {
     //   [randomNumber.toString()],
     // );
 
-    await Patient.findOneAndUpdate(
+    const updatedPatient=await Patient.findOneAndUpdate(
       { phoneNumber },
-      { otp: 1234 },
+      { otp: randomNumber },
       { new: true }
     );
 
     return {
       statusCode: 200,
-      patient,
+      patient:updatedPatient,
     };
   } catch (error) {
     return {
@@ -139,6 +140,7 @@ const validateOTP = async (phoneNumber, otp) => {
         error: "Missing field: OTP",
       };
     }
+
     const patient = await Patient.findOne({ phoneNumber });
 
     if (!patient) {
@@ -148,7 +150,7 @@ const validateOTP = async (phoneNumber, otp) => {
       };
     }
 
-    if (patient.otp !== otp) {
+    if (patient.otp !== parseInt(otp)) {
       return {
         statusCode: 401,
         error: "Wrong OTP",

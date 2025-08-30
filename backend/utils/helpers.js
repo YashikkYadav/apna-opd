@@ -42,17 +42,41 @@ const verifyAccessToken = async (accessToken) => {
 const generatePatientUid = async () => {
   try {
     // atomically find the patient with the highest UID number
-    const lastPatient = await Patient.findOne()
-      .sort({ uid: -1 })
-      .select("uid -_id");
+    // const lastPatient = await Patient.findOne()
+    //   .sort({ uid: -1 })
+    //   .select("uid -_id");
+
+
+    // let lastNumber = 0;
+    // if (lastPatient && lastPatient.uid) {
+    //   lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
+    // }
+
+    // const newNumber = lastNumber + 1;
+    // const uid = `UID${newNumber}`;
+    const lastPatient = await Patient.aggregate([
+      {
+        $addFields: {
+          uidNumber: {
+            $toInt: {
+              $substrCP: ["$uid", 3, { $strLenCP: "$uid" }] // extract number after 'UID'
+            }
+          }
+        }
+      },
+      { $sort: { uidNumber: -1 } },
+      { $limit: 1 }
+    ]);
 
     let lastNumber = 0;
-    if (lastPatient && lastPatient.uid) {
-      lastNumber = parseInt(lastPatient.uid.replace("UID", ""), 10) || 0;
+    if (lastPatient.length > 0) {
+      lastNumber = lastPatient[0].uidNumber;
     }
+    
 
     const newNumber = lastNumber + 1;
     const uid = `UID${newNumber}`;
+    console.log(uid);
 
     return uid;
   } catch (error) {
