@@ -230,23 +230,27 @@ const createAppointment = async (appointmentData, doctorId) => {
 
     let emails = [];
     emails.push(email);
-    const paymentData = await paymentService.createPaymentLinkForEntity(
-      "patient",
-      {
-        name: appointmentData.name ?? "patient",
-        contact: appointmentData.phoneNumber ?? "",
-        email: appointmentData.email ?? "",
-      },
-      "appointment",
-      "appointment",
-      doctorId,
-      newAppointment,
-      appointmentType,
-      emails
-    );
+    let paymentData
+    if(appointmentType === "online"){
+      
+       paymentData = await paymentService.createPaymentLinkForEntity(
+        "patient",
+        {
+          name: appointmentData.name ?? "patient",
+          contact: appointmentData.phoneNumber ?? "",
+          email: appointmentData.email ?? "",
+        },
+        "appointment",
+        "appointment",
+        doctorId,
+        newAppointment,
+        appointmentType,
+        emails
+      );
+    }
 
-    newAppointment._doc.paymentLink = paymentData.paymentLink;
-
+    newAppointment._doc.paymentLink = paymentData?.paymentLink;
+    console.log(appointmentType,appointmentType === "online")
     if (appointmentType === "online") {
       newAppointment.location = paymentData.meetLink;
     }
@@ -254,7 +258,7 @@ const createAppointment = async (appointmentData, doctorId) => {
     return {
       statusCode: 201,
       appointment: newAppointment.toObject(),
-      paymentLink: paymentData.paymentLink,
+      paymentLink: paymentData?.paymentLink,
     };
   } catch (error) {
     return {

@@ -29,9 +29,7 @@ const careerLeadRoutes = require("./careerLead.routes")
 const Doctor = require("../models/doctor");
 const importExcelRouter = require("./importExcel.routes")
 const nurseRoutes = require("./nurse.routes")
-const orderRoutes = require("./order.routes");
-const cartRoutes=require("./cart.routes")
-
+const googleAuthRoutes=require("./googleauth.routes")
 const router = express.Router();
 
 router.use("/cart", cartRoutes);
@@ -42,10 +40,14 @@ router.use("/admin", adminRoutes);
 router.use("/hospital", hospitalRoutes);
 
 router.get("/oauth2callback", async (req, res) => {
+  res.send({ message: 'ok' })
 })
 router.get("/hello-server", async (req, res) => {
   res.status(200).send({ message: 'server working fine' })
 });
+
+
+router.use("/google", googleAuthRoutes);
 
 router.use("/user", userRoutes);
 // Centralizing all the routes in one file
@@ -104,5 +106,6 @@ router.use("/career-lead", careerLeadRoutes);
 router.use("/import-excel", importExcelRouter)
 
 router.use('/nurse-listings', nurseRoutes)
+
 
 module.exports = router;

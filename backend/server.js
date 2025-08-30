@@ -8,6 +8,48 @@ const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
+
+
+const { google } = require("googleapis");
+require("dotenv").config();
+
+const SCOPES = [
+  "https://www.googleapis.com/auth/calendar",
+  "https://www.googleapis.com/auth/calendar.events",
+];
+
+async function main() {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+
+  const url = oauth2Client.generateAuthUrl({
+    access_type: "offline", // important for refresh_token
+    prompt: "consent",      // forces refresh_token on every run
+    scope: SCOPES,
+  });
+
+  console.log("Authorize this app by visiting this url:", url);
+
+  // Copy the "code" from Google's redirect URL after login
+  // Then run: node get-refresh-token.js <CODE>
+  const code = process.argv[2];
+  if (!code) {
+    console.log("\nAfter visiting the URL above, copy the ?code=XXX and run:\n");
+    console.log("   node get-refresh-token.js YOUR_CODE_HERE\n");
+    return;
+  }
+
+  const { tokens } = await oauth2Client.getToken(code);
+  console.log("Tokens received:\n", tokens);
+  console.log("\n⚠️ Save the refresh_token in your .env like this:");
+  console.log("GOOGLE_REFRESH_TOKEN=" + tokens.refresh_token);
+}
+
+main().catch(console.error);
+
 const io = new Server(server, {
   cors: {
     origin: "*",
