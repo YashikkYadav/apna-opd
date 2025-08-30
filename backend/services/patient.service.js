@@ -468,5 +468,5 @@ module.exports = {
   getAllPatients,
   updatePatient,
   deletePatient,
-  appRegisterPatient
+  appRegisterPatient  
 };
