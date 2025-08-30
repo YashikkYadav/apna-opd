@@ -2,12 +2,14 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
+  FaClipboardCheck,
   FaUsers,
   FaStar,
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { GiMicroscope } from "react-icons/gi";
+
 
 const WhyChooseUs = () => {
   const featuresData = [
@@ -18,13 +20,13 @@ const WhyChooseUs = () => {
         "All hospitals are thoroughly verified and accredited by medical authorities",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
+      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
       title: "Advanced Technology",
       description:
         "State-of-the-art medical equipment with cutting-edge facilities",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
+      icon: <FaClipboardCheck className="text-blue-600 text-4xl" />,
       title: "Transparent Healthcare",
       description:
         "Clear treatment plans with transparent pricing and easy booking system",

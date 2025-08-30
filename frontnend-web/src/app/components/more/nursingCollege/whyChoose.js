@@ -3,49 +3,51 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
+  FaUserGraduate,
   FaUsers,
   FaStar,
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Verified Medical Colleges",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
-    },
-    {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
-      description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "All medical colleges are thoroughly verified and recognized by MCI/NMC for quality education",
     },
     {
       icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      title: "Expert Faculty",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "Access to India's leading medical educators and experienced professors for quality education",
     },
     {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Fee Structure",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Clear fee details with no hidden costs and complete information about all expenses",
+    },
+    {
+      icon: <FaUserGraduate className="text-blue-600 text-4xl" />,
+      title: "Career Guidance",
+      description:
+        "Complete career counseling and admission guidance for medical aspirants",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "100+ Top Colleges",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Extensive network of premium medical colleges across all major Indian states",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      title: "Quality Assured",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Colleges with high NIRF rankings and thousands of successful medical graduates",
     },
   ];
 
@@ -65,7 +67,8 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose{" "}
+        <span className="text-blue-500">Apna OPD Medical Colleges?</span>
       </motion.h2>
 
       {/* Features Grid */}

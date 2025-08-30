@@ -5,47 +5,50 @@ import {
   FaClock,
   FaUsers,
   FaStar,
-  FaMapPin,
+  FaHandHoldingHeart,
   FaStethoscope,
+  FaRupeeSign,
 } from "react-icons/fa";
+import { GiMicroscope } from "react-icons/gi";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "Expert Veterinarians",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "Board-certified veterinarians with specialized training in companion animal care and emergency medicine",
     },
+
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+      title: "Advanced Diagnostics",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
-    },
-    {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
-      description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "State-of-the-art diagnostic equipment including digital X-ray, ultrasound, and in-house laboratory",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      title: "Comprehensive Services",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Complete pet healthcare from vaccinations and wellness exams to complex surgeries and dental care",
     },
     {
-      icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "24/7 Emergency Care",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Round-the-clock emergency services with fully equipped ICU and surgical facilities for critical cases",
     },
     {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      icon: <FaHandHoldingHeart className="text-blue-600 text-4xl" />,
+      title: "Compassionate Care",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Gentle, stress-free environment with caring staff who understand the special bond between pets and families",
+    },
+    {
+      icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Affordable Treatment",
+      description:
+        "Transparent pricing with flexible payment options and wellness packages to keep your pet healthy",
     },
   ];
 
@@ -65,7 +68,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Veterinary?</span>
       </motion.h2>
 
       {/* Features Grid */}

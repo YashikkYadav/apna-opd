@@ -8,44 +8,46 @@ import {
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { GrDeliver } from "react-icons/gr";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Verified Medicines",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "All pharmacies are thoroughly verified and licensed by drug authorities for your safety",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <GrDeliver className="text-blue-600 text-4xl" />,
+      title: "Fast Delivery",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "Quick and reliable delivery services to ensure you get your medicines on time",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Pricing",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "Clear pricing with no hidden costs and authentic medicines at competitive rates",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      title: "Expert Pharmacists",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Access to India's leading pharmacists and medical specialists across all domains",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "200+ Top Medical Stores",
       description:
         "Extensive network of premium healthcare facilities across major cities",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      title: "Quality Assured",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Pharmacies with high ratings and thousands of satisfied customers",
     },
   ];
 
@@ -65,7 +67,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Medical Store?</span>
       </motion.h2>
 
       {/* Features Grid */}

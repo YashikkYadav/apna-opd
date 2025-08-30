@@ -2,50 +2,51 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaUsers,
+  FaRupeeSign,
   FaStar,
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { BsClipboard2DataFill } from "react-icons/bs";
+import { GrUserExpert } from "react-icons/gr";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Accredited Labs",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "All labs are NABL certified and equipped with state-of-the-art diagnostic technology",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <GrUserExpert className="text-blue-600 text-4xl" />,
+      title: "Expert Pathologists",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "Access to India's leading pathologists and lab technicians for accurate test results",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Pricing",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "Clear pricing with no hidden costs and comprehensive test packages at competitive rates",
     },
     {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      icon: <BsClipboard2DataFill className="text-blue-600 text-4xl" />,
+      title: "Fast Results",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Quick turnaround time with digital reports and home sample collection",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "200+ Top Labs",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Extensive network of premium diagnostic labs across all major Indian cities",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      title: "Quality Assured",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Labs with high accuracy ratings and thousands of satisfied patients",
     },
   ];
 
@@ -65,7 +66,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Laboratory?</span>
       </motion.h2>
 
       {/* Features Grid */}

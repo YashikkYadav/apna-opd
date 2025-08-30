@@ -6,18 +6,18 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
-      location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      author: "Rajesh Kumar",
+      location: "Noida",
+      text: "After years of trying, we found our miracle through Apna OPD's recommended Hospital. The doctors were amazing and now we have our Healthy life!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Suresh Sharma",
+      location: "Lucknow",
+      text: "The hospital recommended by Apna OPD was exceptional. Professional care, advanced technology and Reasonable Price",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
+      author: "Sneha Bist",
+      location: "Haldwani",
       text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
     },
   ],

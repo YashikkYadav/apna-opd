@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
+      author: "Rajash Gangwar",
       location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      text: "I've been donating blood here for 5 years. The staff is professional, the facility is clean, and I know my donation saves lives. It's a great feeling!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Meera Deshmukh",
+      location: "Assam",
+      text: "During my surgery, I needed rare blood type. This blood bank not only had it available but arranged it within hours. They literally saved my life!",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Ayush Tomar",
+      location: "Bhopal",
+      text: "As a doctor, I trust this blood bank completely. Their screening process is thorough and they maintain the highest safety standards for all blood products.",
     },
   ],
 }) => {

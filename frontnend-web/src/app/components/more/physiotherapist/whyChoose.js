@@ -2,50 +2,54 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaUsers,
   FaStar,
+  FaUsers,
+  FaHome,
   FaMapPin,
+  FaTools,
   FaStethoscope,
+  FaHandsHelping
 } from "react-icons/fa";
+
+
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Verified Physiotherapists",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "All physiotherapists are licensed professionals with BPT/MPT degrees and years of clinical experience",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <FaHome className="text-blue-600 text-4xl" />,
+      title: "Home Visit Services",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "Convenient physiotherapy sessions at your home with portable equipment and personalized care",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      icon: <FaTools className="text-blue-600 text-4xl" />,
+      title: "Advanced Equipment",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "State-of-the-art rehabilitation equipment including electrotherapy, ultrasound, and exercise machines",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      title: "Specialized Treatments",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Expert care for sports injuries, neurological conditions, orthopedic problems, and post-operative rehabilitation",
     },
     {
-      icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      icon: <FaHandsHelping className="text-blue-600 text-4xl" />,
+      title: "Holistic Approach",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Comprehensive treatment combining manual therapy, exercise prescription, and lifestyle modifications",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      title: "Proven Recovery",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "High success rates with 90%+ patients reporting significant improvement within 4-6 weeks",
     },
   ];
 
@@ -65,7 +69,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Physiotherapist?</span>
       </motion.h2>
 
       {/* Features Grid */}

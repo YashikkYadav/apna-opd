@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
+      author: "Jatin Saini",
       location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      text: "I was bedridden after my knee surgery. The physiotherapist from Apna OPD helped me walk again within 3 months. Professional and caring treatment!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Sanjana Agrawal",
+      location: "Uttar Pradesh",
+      text: "My chronic back pain disappeared after 8 weeks of physiotherapy. The exercises and manual therapy worked wonders. Highly recommend!",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Sanjay Dixit",
+      location: "Dehradun",
+      text: "After my stroke, I thought I'd never regain movement. The neuro-physiotherapy team helped me recover 80% of my function. Grateful beyond words!",
     },
   ],
 }) => {

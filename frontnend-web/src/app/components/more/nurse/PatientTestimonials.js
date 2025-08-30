@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
+      author: "Ankush Goyal",
       location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      text: "The nurse assigned to care for my elderly mother was exceptional. Professional, caring, and extremely knowledgeable. Highly recommend Apna OPD!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Pranjal Sinha",
+      location: "Patna",
+      text: "Post-surgery care was seamless. The nurse was punctual, professional, and provided excellent care. Recovery was smooth thanks to their expertise",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Amit Shah",
+      location: "Pratap Nagar, Jaipur",
+      text: "Amazing service! The pediatric nurse was wonderful with my child. Very patient and skilled. Will definitely use Apna OPD again.",
     },
   ],
 }) => {

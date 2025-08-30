@@ -3,49 +3,49 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
-  FaUsers,
-  FaStar,
-  FaMapPin,
-  FaStethoscope,
+  FaMapPin
 } from "react-icons/fa";
+import { GiHypodermicTest } from "react-icons/gi";
+import { FaDroplet } from "react-icons/fa6";
+import { MdWorkspacePremium } from "react-icons/md";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Safe & Verified",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "All blood banks are NACO certified with rigorous screening and safety protocols",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <MdWorkspacePremium className="text-blue-600 text-4xl" />,
+      title: "Quality Blood Products",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "Access to screened blood components with proper storage and temperature control",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      icon: <GiHypodermicTest className="text-blue-600 text-4xl" />,
+      title: "Advanced Testing",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "State-of-the-art laboratories with comprehensive blood screening technologies",
     },
     {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      icon: <FaDroplet className="text-blue-600 text-4xl" />,
+      title: "Rare Blood Groups",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Specialized services for rare blood types with dedicated donor registry",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "150+ Top Blood Banks",
       description:
         "Extensive network of premium healthcare facilities across major cities",
     },
     {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "24/7 Emergency Service",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Round-the-clock blood availability for medical emergencies and urgent cases",
     },
   ];
 

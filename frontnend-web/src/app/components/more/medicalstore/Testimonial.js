@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
-      location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      author: "Rajesh Kumar",
+      location: "Jaipur",
+      text: "Apna OPD helped me find the perfect pharmacy near my home. Fast delivery and genuine medicines at great prices!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Akshay Singh",
+      location: "Udaypur",
+      text: "The pharmacy recommended by Apna OPD is exceptional. Professional service and they even provide health consultations!",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Anmol",
+      location: "Jaisalmer",
+      text: "Excellent service and medicine quality. The pharmacists are very knowledgeable and helpful with medication guidance!",
     },
   ],
 }) => {
@@ -34,7 +34,7 @@ const PatientTestimonials = ({
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
           <FaCommentDots className="text-3xl text-blue-700" />
-          What Our Patients Say
+          What Our Customers Say
         </h2>
       </div>
 

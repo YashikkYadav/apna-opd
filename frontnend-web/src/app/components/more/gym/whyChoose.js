@@ -8,44 +8,44 @@ import {
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { CgGym } from "react-icons/cg";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Verified Gyms",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
+        "All gyms are thoroughly verified and accredited by fitness authorities",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
+      icon: <CgGym className="text-blue-600 text-4xl" />,
+      title: "Modern Equipment",
       description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
+        "State-of-the-art fitness equipment and facilities for complete workout experience",
     },
     {
       icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
+      title: "Expert Trainers",
       description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "Certified personal trainers and fitness experts to guide your fitness journey",
     },
     {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "Flexible Hours",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "24/7 access, group classes, and personalized training programs available",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "200+ Top Gyms",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Extensive network of premium fitness centers across multiple locations",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
-      description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+      title: "4.8+ Rating",
+      description: "Highly rated by thousands of satisfied fitness enthusiasts",
     },
   ];
 
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Gym?</span>
       </motion.h2>
 
       {/* Features Grid */}

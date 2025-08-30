@@ -2,50 +2,50 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaUsers,
+  FaRupeeSign,
   FaStar,
   FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { GiMicroscope } from "react-icons/gi";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Blood Banks",
+      title: "100% Verified IVF Clinics",
       description:
-        "All Blood banks are thoroughly verified and accredited by medical authorities",
-    },
-    {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
-      description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
-    },
-    {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
-      description:
-        "Clear treatment plans with transparent pricing and easy booking system",
+        "All IVF clinics are thoroughly verified and accredited by medical authorities for your safety",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
+      title: "Expert Specialists",
       description:
-        "Access to India's leading doctors and medical specialists across all domains",
+        "Access to India's leading fertility experts and reproductive endocrinologists",
+    },
+    {
+      icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Process",
+      description:
+        "Clear treatment plans with no hidden costs and upfront consultation booking",
+    },
+    {
+      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+      title: "Latest Technology",
+      description:
+        "State-of-the-art fertility labs with advanced reproductive technologies",
     },
     {
       icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
+      title: "200+ Top Clinics",
       description:
-        "Extensive network of premium healthcare facilities across major cities",
+        "Extensive network of premium IVF centers across all major Indian cities",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
+      title: "Proven Success",
       description:
-        "Hospitals with excellent patient outcomes and successful treatments",
+        "Clinics with high success rates and thousands of successful pregnancies",
     },
   ];
 
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
+        Why Choose <span className="text-blue-500">Apna OPD IVF Clinic?</span>
       </motion.h2>
 
       {/* Features Grid */}

@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
-      location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      author: "Shivani Kaur",
+      location: "Vaishali",
+      text: "When Max was hit by a car, I thought we'd lose him. Dr. Sharma's emergency surgery saved his life. He's running around like a puppy again!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Meera Shekh",
+      location: "Bareilly",
+      text: "Fluffy had a complicated surgery for kidney stones. The care and follow-up were exceptional. She's healthy and playful again!",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Vikas Jain",
+      location: "jharkhand",
+      text: "Our German Shepherd was limping for weeks. The X-ray and treatment plan were perfect. He's back to his energetic self!",
     },
   ],
 }) => {

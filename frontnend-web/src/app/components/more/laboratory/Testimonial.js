@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Rajesh & Priya",
-      location: "Delhi",
-      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+      author: "Vishal Saxena",
+      location: "Mansarovar",
+      text: "Apna OPD helped me find the perfect lab near my home. Quick results and accurate reports at great prices!",
     },
     {
-      author: "Suresh & Meera",
-      location: "Mumbai",
-      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+      author: "Ashish Yadav",
+      location: "Jaipur",
+      text: "The lab recommended by Apna OPD is exceptional. Professional service and they even provide home sample collection!",
     },
     {
-      author: "Amit & Sneha",
-      location: "Bangalore",
-      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+      author: "Amit Pal",
+      location: "Rishikesh",
+      text: "Excellent service and report accuracy. The pathologists are very knowledgeable and helpful with test interpretation!",
     },
   ],
 }) => {

@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nurses?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
       </motion.h2>
 
       {/* Features Grid */}
