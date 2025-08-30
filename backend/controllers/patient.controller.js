@@ -1,5 +1,22 @@
 const patientService = require("../services/patient.service");
 
+const appRegisterPatient = async (req, res) => {
+  try {
+    const patientData = req.body;
+
+    const patient = await patientService.appRegisterPatient(patientData);
+    if (patient?.error) {
+      return res.status(patient.statusCode).send(patient.error);
+    }
+
+    res.status(patient.statusCode).json({
+      patient: patient.patient,
+    });
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+}
+
 const registerPatient = async (req, res) => {
   try {
     const patientData = req.body;
@@ -174,7 +191,7 @@ const getAppointments = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   try {
-    const {  appointmentId } = req.params;
+    const { appointmentId } = req.params;
 
     const response = await patientService.deleteAppointment(
       appointmentId
@@ -200,4 +217,5 @@ module.exports = {
   getAllPatients,
   updatePatient,
   deletePatient,
+  appRegisterPatient
 };
