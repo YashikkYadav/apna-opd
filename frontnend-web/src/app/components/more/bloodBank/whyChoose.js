@@ -3,49 +3,49 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
-  FaDollarSign,
-  FaUsers,
-  FaStar,
-  FaStethoscope,
+  FaMapPin
 } from "react-icons/fa";
+import { GiHypodermicTest } from "react-icons/gi";
+import { FaDroplet } from "react-icons/fa6";
+import { MdWorkspacePremium } from "react-icons/md";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Safe & Verified",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
+        "All blood banks are NACO certified with rigorous screening and safety protocols",
+    },
+    {
+      icon: <MdWorkspacePremium className="text-blue-600 text-4xl" />,
+      title: "Quality Blood Products",
+      description:
+        "Access to screened blood components with proper storage and temperature control",
+    },
+    {
+      icon: <GiHypodermicTest className="text-blue-600 text-4xl" />,
+      title: "Advanced Testing",
+      description:
+        "State-of-the-art laboratories with comprehensive blood screening technologies",
+    },
+    {
+      icon: <FaDroplet className="text-blue-600 text-4xl" />,
+      title: "Rare Blood Groups",
+      description:
+        "Specialized services for rare blood types with dedicated donor registry",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "150+ Top Blood Banks",
+      description:
+        "Extensive network of premium healthcare facilities across major cities",
     },
     {
       icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
+      title: "24/7 Emergency Service",
       description:
-        "Round-the-clock customer support for all your healthcare needs.",
-    },
-    {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
-    },
-    {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
-      description:
-        "Large network of qualified nurses across multiple specializations.",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
-      description:
-        "Highly rated by thousands of satisfied patients and families.",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
-      description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Round-the-clock blood availability for medical emergencies and urgent cases",
     },
   ];
 
@@ -55,7 +55,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Blood Banks?</span>
       </motion.h2>
 
       {/* Features Grid */}

@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Ankush Goyal",
+      author: "Jatin Saini",
       location: "Delhi",
-      text: "The nurse assigned to care for my elderly mother was exceptional. Professional, caring, and extremely knowledgeable. Highly recommend Apna OPD!",
+      text: "I was bedridden after my knee surgery. The physiotherapist from Apna OPD helped me walk again within 3 months. Professional and caring treatment!",
     },
     {
-      author: "Pranjal Sinha",
-      location: "Patna",
-      text: "Post-surgery care was seamless. The nurse was punctual, professional, and provided excellent care. Recovery was smooth thanks to their expertise",
+      author: "Sanjana Agrawal",
+      location: "Uttar Pradesh",
+      text: "My chronic back pain disappeared after 8 weeks of physiotherapy. The exercises and manual therapy worked wonders. Highly recommend!",
     },
     {
-      author: "Amit Shah",
-      location: "Pratap Nagar, Jaipur",
-      text: "Amazing service! The pediatric nurse was wonderful with my child. Very patient and skilled. Will definitely use Apna OPD again.",
+      author: "Sanjay Dixit",
+      location: "Dehradun",
+      text: "After my stroke, I thought I'd never regain movement. The neuro-physiotherapy team helped me recover 80% of my function. Grateful beyond words!",
     },
   ],
 }) => {
@@ -28,7 +28,7 @@ const PatientTestimonials = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, type: "spring" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8 md:py-12"
     >
       {/* Title */}
       <div className="mb-8">

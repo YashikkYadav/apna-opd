@@ -2,50 +2,51 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaDollarSign,
-  FaUsers,
+  FaRupeeSign,
   FaStar,
+  FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { BsClipboard2DataFill } from "react-icons/bs";
+import { GrUserExpert } from "react-icons/gr";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Accredited Labs",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
+        "All labs are NABL certified and equipped with state-of-the-art diagnostic technology",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
+      icon: <GrUserExpert className="text-blue-600 text-4xl" />,
+      title: "Expert Pathologists",
       description:
-        "Round-the-clock customer support for all your healthcare needs.",
+        "Access to India's leading pathologists and lab technicians for accurate test results",
     },
     {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
+      icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
       title: "Transparent Pricing",
       description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
+        "Clear pricing with no hidden costs and comprehensive test packages at competitive rates",
     },
     {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
+      icon: <BsClipboard2DataFill className="text-blue-600 text-4xl" />,
+      title: "Fast Results",
       description:
-        "Large network of qualified nurses across multiple specializations.",
+        "Quick turnaround time with digital reports and home sample collection",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "200+ Top Labs",
+      description:
+        "Extensive network of premium diagnostic labs across all major Indian cities",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
+      title: "Quality Assured",
       description:
-        "Highly rated by thousands of satisfied patients and families.",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
-      description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Labs with high accuracy ratings and thousands of satisfied patients",
     },
   ];
 
@@ -55,7 +56,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +66,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Laboratory?</span>
       </motion.h2>
 
       {/* Features Grid */}

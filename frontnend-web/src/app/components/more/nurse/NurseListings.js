@@ -24,7 +24,7 @@ const NurseListings = ({
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="flex flex-col bg-white-50 p-4 sm:p-8 md:p-10"
+      className="flex flex-col bg-white-50 py-8 px-1"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">

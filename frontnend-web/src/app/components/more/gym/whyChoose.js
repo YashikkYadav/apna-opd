@@ -3,49 +3,49 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
-  FaDollarSign,
   FaUsers,
   FaStar,
+  FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { CgGym } from "react-icons/cg";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Verified Gyms",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
+        "All gyms are thoroughly verified and accredited by fitness authorities",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
+      icon: <CgGym className="text-blue-600 text-4xl" />,
+      title: "Modern Equipment",
       description:
-        "Round-the-clock customer support for all your healthcare needs.",
-    },
-    {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
+        "State-of-the-art fitness equipment and facilities for complete workout experience",
     },
     {
       icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
+      title: "Expert Trainers",
       description:
-        "Large network of qualified nurses across multiple specializations.",
+        "Certified personal trainers and fitness experts to guide your fitness journey",
+    },
+    {
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "Flexible Hours",
+      description:
+        "24/7 access, group classes, and personalized training programs available",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "200+ Top Gyms",
+      description:
+        "Extensive network of premium fitness centers across multiple locations",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
-      description:
-        "Highly rated by thousands of satisfied patients and families.",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
-      description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+      title: "4.8+ Rating",
+      description: "Highly rated by thousands of satisfied fitness enthusiasts",
     },
   ];
 
@@ -55,7 +55,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Gym?</span>
       </motion.h2>
 
       {/* Features Grid */}
