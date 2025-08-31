@@ -159,7 +159,8 @@ const generateOTP = async (phoneNumber) => {
 
     const updatedPatient = await Patient.findOneAndUpdate(
       { phoneNumber },
-      { otp: randomNumber },
+      { otp: 1234 },
+      // { otp: randomNumber },
       { new: true }
     );
 
