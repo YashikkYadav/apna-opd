@@ -16,9 +16,9 @@ const ConditionsTreated = ({ data,healthProfile }) => {
         >
             {/* Title */}
             <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
-                    <Stethoscope className="text-blue-600 w-7 h-7" />
-                    Conditions Treated by <span className="text-blue-500">{data?.name ?? 'Doctor'}</span>
+                <h2 className="text-xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
+                    <Stethoscope className="text-blue-600 w-10 h-10" />
+                    <p className="mt-4 md:mt-10">Conditions Treated by <span className="text-blue-800">{data?.name ?? 'Doctor'}</span></p>
                 </h2>
             </div>
 

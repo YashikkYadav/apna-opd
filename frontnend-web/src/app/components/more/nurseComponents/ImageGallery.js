@@ -152,7 +152,7 @@ const ImageGallery = ({ NurseData }) => {
           {/* Left Arrow */}
           <button
             onClick={goToPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-lg text-blue-700 p-3 rounded-full hover:bg-blue-100 transition z-10 focus:outline-none"
+            className="absolute left-0 ml-4 top-1/2 -translate-y-1/2 bg-white shadow-lg text-blue-700 p-3 rounded-full hover:bg-blue-100 transition z-10 focus:outline-none"
             aria-label="Previous image"
             style={{ left: "-40px" }}
           >

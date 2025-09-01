@@ -25,8 +25,8 @@ const Reviews = (healthProfile) => {
         className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
       >
         {/* Title */}
-        <div className=" mb-8">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
+        <div className="mb-8">
+          <h2 className="text-xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
             <FaCommentDots className="text-3xl text-blue-700" />
             Reviews & Ratings
           </h2>

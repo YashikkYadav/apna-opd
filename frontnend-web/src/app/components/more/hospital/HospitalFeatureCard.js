@@ -99,21 +99,21 @@ export default function HospitalFeatureCard({ profileData }) {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="flex flex-col mx-2 my-2 md:flex-row items-center justify-center bg-[#0C65A0] rounded-2xl shadow-lg p-8 md:p-12 gap-8 md:gap-16 relative overflow-hidden"
+      className="flex flex-col mx-2 my-2 lg:flex-row items-center justify-center bg-[#0C65A0] rounded-2xl shadow-lg p-5 md:p-10 gap-8 md:gap-12 relative overflow-hidden"
       style={{ minHeight: 340 }}
     >
       {/* Left: Hospital Image */}
-      <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center items-center">
+      <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center items-center">
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profileData?.profileImage}`}
           alt="Max Super Speciality Hospital"
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
+          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[350px] lg:h-full"
         />
       </div>
       {/* Right: Content */}
-      <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left">
+      <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
         <h2 className="text-white text-4xl md:text-5xl font-extrabold drop-shadow mb-2">
           {profileData?.name ?? "Dummy Name"}
         </h2>
@@ -131,7 +131,7 @@ export default function HospitalFeatureCard({ profileData }) {
           </span>
         </div>
         {/* Features */}
-        <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-2">
+        <div className="flex flex-wrap gap-4 justify-center lg:justify-start mt-2">
           {(profileData?.facilities ?? features.map((f) => f?.text)).map(
             (f, i) =>
               allowedFeatures.includes(f) && (
@@ -147,7 +147,7 @@ export default function HospitalFeatureCard({ profileData }) {
         </div>
         {/* Call Now Button */}
         <a
-          className="mt-8 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+          className="mt-5 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
           // onClick={() => {
           //   if (
           //     window.confirm(
