@@ -209,6 +209,8 @@ const validateOTP = async (phoneNumber, otp) => {
         accessToken,
         phoneNumber,
         id: patient._id,
+        _id: patient._id,
+
       },
     };
   } catch (error) {
