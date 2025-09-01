@@ -407,6 +407,7 @@ const departments = [
   },
 ];
 
+
 function formatDoctorSlots(locations = []) {
   const dayMap = {
     Monday: "Mon",
@@ -443,9 +444,10 @@ function getDoctorInitials(name = "") {
 
 function DoctorCard({ doctor }) {
   const router = useRouter();
+  console.log('doctor', doctor)
 
   const [doctorDetails, setDoctorDetails] = useState({})
-  console.log('doctor', doctor)
+  // console.log('doctor', doctor)
 
   useEffect(() => {
     setDoctorDetails(doctor?.doctorId)
@@ -460,8 +462,8 @@ function DoctorCard({ doctor }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
-      className="bg-white rounded-2xl shadow px-4 py-4 flex flex-col gap-4 max-w-[420px] min-w-[320px] h-full"
+      whileHover={{ y: -4 }}
+      className="bg-white rounded-2xl shadow hover:shadow-xl hover:border-2 hover:border-blue-500 transition-all duration-300 px-4 py-4 flex flex-col gap-4 max-w-[420px] min-w-[320px] h-full border-2 border-transparent"
     >
       <div className="flex items-center gap-4">
         <div className="relative w-20 h-20">
@@ -511,26 +513,28 @@ function DoctorCard({ doctor }) {
           ))}
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch mt-auto">
-        <span className="bg-green-100 text-green-700 font-semibold px-3 py-1.5 rounded-full flex items-center justify-center w-full sm:w-auto text-sm">
+      <div className="space-y-3 mt-auto">
+        <div className="bg-green-100 text-green-700 font-semibold px-4 py-3 rounded-xl flex items-center justify-center text-center">
           ₹{doctor?.doctorProfile?.appointmentFee} Consultation Fee
-        </span>
-        <button
-          onClick={() => {
-            router.push(`/${doctorDetails?._id}/profile`);
-          }}
-          className="bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition w-full sm:w-auto text-xs"
-        >
-          Book Appointment
-        </button>
-        <button
-          onClick={() => {
-            router.push(`/${doctorDetails?._id}/profile`);
-          }}
-          className="border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition w-full sm:w-auto text-xs"
-        >
-          View Profile
-        </button>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              router.push(`/${doctorDetails?._id}/profile`);
+            }}
+            className="flex-1 bg-blue-700 text-white font-bold px-4 py-2 rounded-full hover:bg-blue-600 transition text-sm"
+          >
+            Book Appointment
+          </button>
+          <button
+            onClick={() => {
+              router.push(`/${doctorDetails?._id}/profile`);
+            }}
+            className="flex-1 border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition text-sm"
+          >
+            View Profile
+          </button>
+        </div>
       </div>
     </motion.div>
   );
@@ -538,7 +542,7 @@ function DoctorCard({ doctor }) {
 
 function DepartmentSection({ dept }) {
   const dep = dept.doctorId
-  console.log("dept", dept)
+  // console.log("dept", dept)
   const scrollContainerRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -565,7 +569,7 @@ function DepartmentSection({ dept }) {
   return (
     <div className="mb-10">
       {/* Department Header */}
-      
+
       <div className="bg-blue-700 rounded-xl p-4 mb-6">
         <span className="text-white font-semibold text-base">
           {dep?.speciality} Department
@@ -592,14 +596,14 @@ function DepartmentSection({ dept }) {
           className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          
-            <div
-              
-              className="pl-9 snap-start flex-none w-[calc(60%-1rem)]"
-            >
-              <DoctorCard doctor={dept} />
-            </div>
-          
+
+          <div
+
+            className="pl-9 snap-start flex-none w-[calc(60%-1rem)]"
+          >
+            <DoctorCard doctor={dept} />
+          </div>
+
         </div>
 
         {/* Right Arrow */}
@@ -638,10 +642,56 @@ function DepartmentSection({ dept }) {
 // }
 
 export default function HospitalDoctorsCard({ profileData, doctorData }) {
-  const [showAll, setShowAll] = useState(false);
-  //const visibleDepartments = showAll ? departments : departments.slice(0, 3);
-  // const departments = getDepartmentWiseDoctors(doctorData);
-  console.log('doc', doctorData)
+  const [activeTab, setActiveTab] = useState("");
+  const scrollContainerRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  const departmentMap = {};
+  const specialities = [];
+
+  doctorData?.forEach((doc) => {
+    const dept = doc?.doctorId?.speciality || "General";
+
+    if (!departmentMap[dept]) {
+      departmentMap[dept] = [];
+      specialities.push(dept);
+    }
+
+    departmentMap[dept].push(doc);
+  });
+
+  // set default tab once specialities exist
+  useEffect(() => {
+    if (specialities.length > 0 && !activeTab) {
+      setActiveTab(specialities[0]);
+    }
+  }, [specialities, activeTab]);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = direction === "left" ? -400 : 400;
+      scrollContainerRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      handleScroll();
+    }
+  }, [activeTab]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -651,32 +701,72 @@ export default function HospitalDoctorsCard({ profileData, doctorData }) {
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
       {/* Title */}
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-6">
         <span className="text-3xl">👨‍⚕️</span>
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
           Our Doctors
         </h2>
       </div>
 
-      {doctorData?.map((dept) => (
-        <DepartmentSection key={dept?.doctorId?._id} dept={dept} />
-      ))}
+      {/* Tabs Header */}
+      <div className="flex flex-wrap gap-3 mb-8 border-b border-gray-200 pb-2">
+        {specialities.map((spec) => (
+          <button
+            key={spec}
+            onClick={() => setActiveTab(spec)}
+            className={`px-4 py-2 rounded-full font-semibold transition ${activeTab === spec
+              ? "bg-blue-700 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+          >
+            {spec}
+          </button>
+        ))}
+      </div>
 
-      {/* Show More Button */}
-      {doctorData?.length > 3 && (
-        <motion.button
-          onClick={() => setShowAll(!showAll)}
-          className="w-full flex items-center rounded-full justify-center gap-2 py-4 text-blue-700 font-semibold hover:text-blue-800 hover:border-blue-700 transition-colors"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <span>{showAll ? "Show Less" : "Show More Departments"}</span>
-          <FaChevronDown
-            className={`transform transition-transform duration-300 ${
-              showAll ? "rotate-180" : ""
-            }`}
-          />
-        </motion.button>
+      {/* Doctors Display */}
+      {departmentMap[activeTab]?.length > 3 ? (
+        <div className="relative">
+          {/* Left Arrow */}
+          {showLeftArrow && (
+            <button
+              onClick={() => scroll("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-blue-700 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+            >
+              <FaChevronLeft size={20} />
+            </button>
+          )}
+
+          {/* Doctors Scroll Area */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {departmentMap[activeTab]?.map((doc, index) => (
+              <div key={index} className="snap-start flex-none w-[calc(33.333%-1rem)] min-w-[320px]">
+                <DoctorCard doctor={doc} />
+              </div>
+            ))}
+          </div>
+
+          {/* Right Arrow */}
+          {showRightArrow && (
+            <button
+              onClick={() => scroll("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-blue-700 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+            >
+              <FaChevronRight size={20} />
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {departmentMap[activeTab]?.map((doc, index) => (
+            <DoctorCard key={index} doctor={doc} />
+          ))}
+        </div>
       )}
     </motion.div>
   );

@@ -3,7 +3,8 @@ const Hospital = require('../../models/hospital')
 
 const mongoose = require("mongoose");
 
-const MedicalCollege = require("../../models/medicalCollege");
+const healthServeModel = require("../../models/healthServe");
+
 
 const UpdateHealthServeData = async (req, healthServeId) => {
     const { address, locality, city, pincode, state } = req.body;
@@ -55,16 +56,20 @@ exports.handleHospital = async (req, healthServeId) => {
 
         const files = req.files || [];
 
-        const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
-        const profilePhoto = profileImage
-            ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
-            : undefined;
+        const profileImage = files.find(
+            (f) => f.fieldname === "profilePhoto_image"
+        );
 
+        const profilePhoto = profileImage
+            ? `${profileImage.savedPath
+            }`
+            : existing?.profilePhoto;
+        
         const newGalleryImages = files
-            .filter(file => file.fieldname === 'galleryImages_image')
-            .map(file => {
-                const relativePath = file?.destination?.split('public/')[1] || '';
-                return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
+            .filter((f) => f.fieldname === "galleryImages_image")
+            .map((f) => {
+                if (!f.savedPath) throw new Error("File not saved yet");
+                return f.savedPath; // use the path we set after compression
             });
 
         const update = {

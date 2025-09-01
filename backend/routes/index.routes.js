@@ -30,7 +30,12 @@ const Doctor = require("../models/doctor");
 const importExcelRouter = require("./importExcel.routes")
 const nurseRoutes = require("./nurse.routes")
 const googleAuthRoutes=require("./googleauth.routes")
+const cartRoutes=require("./cart.routes")
+const orderRoutes=require("./order.routes")
 const router = express.Router();
+
+router.use("/cart", cartRoutes);
+router.use("/:healthServeId/orders", orderRoutes);
 
 router.use("/admin", adminRoutes);
 

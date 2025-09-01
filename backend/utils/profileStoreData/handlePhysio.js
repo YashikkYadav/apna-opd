@@ -1,8 +1,6 @@
 const Physiotherapist = require("../../models/physiotherapist");
-
-const mongoose = require("mongoose");
-
 const healthServeModel = require("../../models/healthServe");
+const mongoose = require("mongoose");
 
 const UpdateHealthServeData = async (req, healthServeId) => {
   const { address, locality, city, pincode, state } = req.body;
@@ -53,19 +51,17 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
 
     const files = req.files || [];
 
-    const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
+    const profileImage = files.find((file) => file.fieldname === "profilePhoto_image");
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
+      ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename}`.replace(/^\/+/, "")
       : undefined;
 
     const newGalleryImages = files
-      .filter(file => file.fieldname === 'galleryImages_image')
-      .map(file => {
-        const relativePath = file?.destination?.split('public/')[1] || '';
-        return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
+      .filter((f) => f.fieldname === "galleryImages_image")
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // path after compression
       });
-
-    const existing = await Physiotherapist.findOne({ healthServeId });
 
     const update = {
       healthServeId,
@@ -85,38 +81,37 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
       conditionsTreated: parseArray(conditionsTreated),
       therapyPackages: parseArray(therapyPackages),
       testimonials: parseArray(testimonials),
-      faqs: parseArray(faqs),
       tags: parseArray(tags),
+      faqs: parseArray(faqs),
     };
 
     if (profilePhoto) update.profileImage = profilePhoto;
 
-    if (newGalleryImages.length > 0) {
-      update.galleryImages = [...(existing.galleryImages || []), ...newGalleryImages];
-    } else {
-      update.galleryImages = existing.galleryImages || [];
-    }
-
     let result;
+    const existing = await Physiotherapist.findOne({ healthServeId });
+
     if (existing) {
-      result = await Physiotherapist.findOneAndUpdate(
-        { healthServeId },
-        update,
-        { new: true }
-      );
+      // Merge old + new gallery images
+      if (newGalleryImages.length > 0) {
+        update.galleryImages = [...(existing.galleryImages || []), ...newGalleryImages];
+      } else {
+        update.galleryImages = existing.galleryImages || [];
+      }
+
+      result = await Physiotherapist.findOneAndUpdate({ healthServeId }, update, { new: true });
       await UpdateHealthServeData(req, healthServeId);
     } else {
+      update.galleryImages = newGalleryImages;
       result = await Physiotherapist.create(update);
     }
 
     return {
       statusCode: 200,
-      message: `Physiotherapist profile ${existing ? "updated" : "created"
-        } successfully`,
+      message: `Physiotherapist profile ${existing ? "updated" : "created"} successfully`,
       data: result,
     };
   } catch (error) {
-    console.error("handlePhysiotherapist error:", error);
+    console.error("handlePhysio error:", error);
     return {
       statusCode: 500,
       message: "Internal Server Error",
@@ -124,6 +119,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
     };
   }
 };
+
 
 exports.gethandlePhysiotherapist = async (healthServeId) => {
   try {
@@ -133,6 +129,8 @@ exports.gethandlePhysiotherapist = async (healthServeId) => {
         message: "Invalid or missing healthServeId",
       };
     }
+
+    console.log(">>", healthServeId)
 
     const doc = await Physiotherapist.findOne({ healthServeId });
 

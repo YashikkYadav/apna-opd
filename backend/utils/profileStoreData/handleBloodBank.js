@@ -28,15 +28,16 @@ exports.handleIvfClinic = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => `${f.destination.split("public/")[1]}/${f.filename}`);
-
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
     const finalData = {
       healthServeId,
       about: req.body.about,
@@ -81,14 +82,16 @@ exports.handleLaboratory = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => `${f.destination.split("public/")[1]}/${f.filename}`);
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
 
     const finalData = {
       healthServeId,
@@ -130,15 +133,16 @@ exports.handleMedicalStore = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => `${f.destination.split("public/")[1]}/${f.filename}`);
-
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
     const finalData = {
       healthServeId,
       about: req.body.about,
@@ -183,14 +187,16 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => `${f.destination.split("public/")[1]}/${f.filename}`);
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
 
     const finalData = {
       healthServeId,
@@ -236,14 +242,16 @@ exports.handleBloodBank = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => getRelativePath(`${f.destination}/${f.filename}`));
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
 
     const finalData = {
       healthServeId,
@@ -291,14 +299,16 @@ exports.handleGym = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
-        }`
+      ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename
+      }`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
-      .map((f) => `${f.destination.split("public/")[1]}/${f.filename}`);
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
+      });
 
     const finalData = {
       healthServeId,
