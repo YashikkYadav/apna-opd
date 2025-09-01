@@ -40,6 +40,8 @@ export const useProfileStore = defineStore("profileStore", {
     async getProfileData() {
       const ProfileService = new AxiosProfile();
 
+      this.healthServeId = localStorage.getItem("hospital_id") || null;
+      console.log("<<", this.healthServeId)
       const deleteResponse = await ProfileService.GetProfileData(
         this.healthServeId,
       );

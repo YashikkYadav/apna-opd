@@ -141,7 +141,7 @@ exports.gethandleHospital = async (healthServeId) => {
         }
 
         const doc = await Hospital.findOne({ healthServeId });
-
+        
         if (!doc) {
             return {
                 statusCode: 404,

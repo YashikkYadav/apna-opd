@@ -331,7 +331,7 @@ const fetchDoctors = async () => {
   try {
     const doctorData = await hospitalStore.getDoctors();
     items.value = Array.isArray(doctorData?.doctors) ? doctorData.doctors : [];
-    console.log(items.value[0].doctorId.speciality);
+    console.log(items?.value[0]?.doctorId?.speciality);
   } catch (error) {
     console.error("Failed to fetch doctors:", error);
     items.value = [];

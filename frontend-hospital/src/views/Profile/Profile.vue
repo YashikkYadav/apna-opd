@@ -522,6 +522,7 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 import { reactive } from "vue";
+import { onMounted } from "vue";
 const snackbar = reactive({
   show: false,
   message: "",
@@ -954,6 +955,9 @@ export default {
     },
   },
 };
+onMounted(() => {
+  this.fetchProfileData();
+});
 </script>
 <style scoped>
 .image-gallery {
