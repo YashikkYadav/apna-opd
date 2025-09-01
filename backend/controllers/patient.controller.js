@@ -175,7 +175,7 @@ const getAppointments = async (req, res) => {
     const { patientId } = req.params;
 
     if(patientId){
-      return res.stats(400).send({message:'patient mendatory'})
+      return res.status(400).send({message:'patient mendatory'})
     }
 
     const appointments = await patientService.getAppointments(patientId);
