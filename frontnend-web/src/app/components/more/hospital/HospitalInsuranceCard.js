@@ -41,8 +41,8 @@ export default function HospitalInsuranceCard({ profileData }) {
       </div>
 
       {/* Grid: Insurance, Payments, Health Packages */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {insuranceData.slice(0, 3).map((section) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {insuranceData.map((section) => (
           <motion.div
             key={section?.title}
             whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
@@ -62,7 +62,7 @@ export default function HospitalInsuranceCard({ profileData }) {
         ))}
       </div>
 
-      {/* Grid: Special Services */}
+      {/* Grid: Special Services
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px blue" }}
@@ -82,7 +82,7 @@ export default function HospitalInsuranceCard({ profileData }) {
           </ul>
         </motion.div>
         <div className="hidden md:block md:col-span-2" />
-      </div>
+      </div> */}
     </motion.div>
   );
 }

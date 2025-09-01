@@ -109,7 +109,7 @@ export default function HospitalFeatureCard({ profileData }) {
           alt="Max Super Speciality Hospital"
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[350px] lg:h-full"
+          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[350px]"
         />
       </div>
       {/* Right: Content */}

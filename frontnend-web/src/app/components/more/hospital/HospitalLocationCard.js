@@ -45,7 +45,7 @@ export default function HospitalLocationCard({ profileData }) {
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="bg-gray-100 rounded-2xl flex items-center justify-center p-6 md:p-8 min-h-[320px] md:min-h-[250px]">
           <div className="bg-white p-6 rounded-xl text-center shadow hover:shadow-lg hover:scale-[1.02] transition-all duration-300 w-full max-w-lg">
             <p className="font-bold text-lg text-blue-700 mb-3">🗺️ Google Map</p>
