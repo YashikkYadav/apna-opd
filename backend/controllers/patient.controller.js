@@ -173,11 +173,14 @@ const deletePresciption = async (req, res) => {
 const getAppointments = async (req, res) => {
   try {
     const { patientId } = req.params;
+    if(!patientId){
+      return res.status(400).send({message:'patient mendatory'})
+    }
 
     const appointments = await patientService.getAppointments(patientId);
 
     if (appointments.error) {
-      res.status(appointments.statusCode).json({ error: appointments.error });
+     return res.status(appointments.statusCode).json({ error: appointments.error });
     }
 
     res
