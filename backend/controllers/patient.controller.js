@@ -173,8 +173,7 @@ const deletePresciption = async (req, res) => {
 const getAppointments = async (req, res) => {
   try {
     const { patientId } = req.params;
-console.log('asdasasdas',patientId)
-    if(patientId){
+    if(!patientId){
       return res.status(400).send({message:'patient mendatory'})
     }
 
