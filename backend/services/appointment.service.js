@@ -131,8 +131,10 @@ const bookAppointment = async (appointmentData, doctorId) => {
     let newPatient;
 
     if (!patient) {
+      const uid = await generatePatientUid(doctorId);
+      
       newPatient = await Patient.create({
-        uid: "UID-" + uuidv4(),
+        uid: uid,
         phoneNumber,
         fullName: email,
       });
@@ -177,8 +179,10 @@ const createAppointment = async (appointmentData, doctorId) => {
 
 
     if (!patient) {
+      const uid = await generatePatientUid(doctorId);
+
       patient = await Patient.create({
-        uid: "UID" + (count + 1),
+        uid: uid,
         fullName: "Patient",
         phoneNumber,
         email,
