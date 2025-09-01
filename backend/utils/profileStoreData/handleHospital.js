@@ -59,12 +59,12 @@ exports.handleHospital = async (req, healthServeId) => {
         const profileImage = files.find(
             (f) => f.fieldname === "profilePhoto_image"
         );
-        console.log("profileImage:", profileImage);
+
         const profilePhoto = profileImage
-            ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename
+            ? `${profileImage.savedPath
             }`
             : existing?.profilePhoto;
-
+        
         const newGalleryImages = files
             .filter((f) => f.fieldname === "galleryImages_image")
             .map((f) => {

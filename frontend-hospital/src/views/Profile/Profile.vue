@@ -801,9 +801,11 @@ export default {
       if (profile) {
         // Map images for gallery and profile, matching hospital reference
         this.images = [];
-        if (profile.profilePhoto) {
+        if (profile.profileImage) {
+          console.log(profile.profileImage)
           this.images.push({
-            path: profile.profilePhoto,
+            
+            path: profile.profileImage,
             type: "profilePhoto_image",
           });
         }
