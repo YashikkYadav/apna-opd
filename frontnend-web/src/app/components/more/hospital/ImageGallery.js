@@ -10,7 +10,7 @@ const ImageGallery = ({ profileData }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const autoplayRef = useRef(null);
   const loadedImagesRef = useRef({});
-  console.log("image", profileData);
+  // console.log("image", profileData);
   // Ensure galleryImages is always an array and memoized
   const galleryImages = useMemo(
     () =>
