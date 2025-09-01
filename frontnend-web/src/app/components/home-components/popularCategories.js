@@ -51,7 +51,7 @@ const cardVariants = {
 
 const PopularCategories = () => {
   return (
-    <section className="w-full bg-[#fafbfc] py-8 px-2 md:px-0">
+    <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold text-gray-800">

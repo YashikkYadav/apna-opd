@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Ankush Goyal",
-      location: "Delhi",
-      text: "The nurse assigned to care for my elderly mother was exceptional. Professional, caring, and extremely knowledgeable. Highly recommend Apna OPD!",
+      author: "Rajesh Kumar",
+      location: "Jaipur",
+      text: "Apna OPD helped me find the perfect pharmacy near my home. Fast delivery and genuine medicines at great prices!",
     },
     {
-      author: "Pranjal Sinha",
-      location: "Patna",
-      text: "Post-surgery care was seamless. The nurse was punctual, professional, and provided excellent care. Recovery was smooth thanks to their expertise",
+      author: "Akshay Singh",
+      location: "Udaypur",
+      text: "The pharmacy recommended by Apna OPD is exceptional. Professional service and they even provide health consultations!",
     },
     {
-      author: "Amit Shah",
-      location: "Pratap Nagar, Jaipur",
-      text: "Amazing service! The pediatric nurse was wonderful with my child. Very patient and skilled. Will definitely use Apna OPD again.",
+      author: "Anmol",
+      location: "Jaisalmer",
+      text: "Excellent service and medicine quality. The pharmacists are very knowledgeable and helpful with medication guidance!",
     },
   ],
 }) => {
@@ -28,13 +28,13 @@ const PatientTestimonials = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, type: "spring" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8 md:py-12"
     >
       {/* Title */}
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
           <FaCommentDots className="text-3xl text-blue-700" />
-          What Our Patients Say
+          What Our Customers Say
         </h2>
       </div>
 

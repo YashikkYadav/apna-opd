@@ -33,7 +33,7 @@ const greenButtonVariants = {
 const AppDownloadAndPartner = () => {
   const router = useRouter();
   return (
-    <section className="w-full py-8 px-2 md:px-0">
+    <section className="w-full py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto flex flex-col gap-8">
         {/* Download Our App */}
         <div className="rounded-2xl bg-[#0C65A0] p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8">

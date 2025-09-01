@@ -77,7 +77,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-20 flex flex-col items-center gap-10"
+      className="relative bg-[#0C65A0] text-white rounded-2xl shadow-lg p-5 md:p-10 lg:p-16 flex flex-col items-center gap-10"
     >
       {/* Background Circles */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
@@ -116,7 +116,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
               debouncedLocationSearch(e.target.value);
             }}
             placeholder="Enter location"
-            className="w-[450px] px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
+            className="lg:w-[450px] w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
             onFocus={() => {
               if (locationOptions?.length > 0) {
                 setShowLocationDropdown(true);
@@ -147,7 +147,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
             </div>
           )}
           {/* Name Input */}
-          <div className="relative w-2/3">
+          <div className="relative w-full lg:w-2/3">
             <input
               type="text"
               value={nameQuery}
@@ -155,7 +155,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
                 setNameQuery(e.target.value);
               }}
               placeholder="Enter name"
-              className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none w-full"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-700 focus:ring-2 focus:ring-[#0C65A0] focus:outline-none"
             />
             {/* {nameSuggestions?.length > 0 && (
               <div className="absolute bottom-full text-black bg-white border border-[#f0f0f0] rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto">

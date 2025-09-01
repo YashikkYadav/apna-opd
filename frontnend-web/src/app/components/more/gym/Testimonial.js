@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Ankush Goyal",
+      author: "Rohit Sharma",
       location: "Delhi",
-      text: "The nurse assigned to care for my elderly mother was exceptional. Professional, caring, and extremely knowledgeable. Highly recommend Apna OPD!",
+      text: "Amazing gym with top-notch facilities! The trainers are incredibly knowledgeable and supportive. Best fitness investment I've made!",
     },
     {
-      author: "Pranjal Sinha",
-      location: "Patna",
-      text: "Post-surgery care was seamless. The nurse was punctual, professional, and provided excellent care. Recovery was smooth thanks to their expertise",
+      author: "Priya Mehta",
+      location: "Jaipur",
+      text: "Perfect blend of modern equipment and expert guidance. The flexible timing suits my schedule perfectly. Highly recommend!",
     },
     {
-      author: "Amit Shah",
-      location: "Pratap Nagar, Jaipur",
-      text: "Amazing service! The pediatric nurse was wonderful with my child. Very patient and skilled. Will definitely use Apna OPD again.",
+      author: "Suresh",
+      location: "Kota",
+      text: "Exceeded my expectations! Clean facility, friendly staff, and excellent group classes. My fitness journey has been incredible here.",
     },
   ],
 }) => {
@@ -28,13 +28,13 @@ const PatientTestimonials = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, type: "spring" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8 md:py-12"
     >
       {/* Title */}
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
           <FaCommentDots className="text-3xl text-blue-700" />
-          What Our Patients Say
+          What Our Clients Say
         </h2>
       </div>
 

@@ -6,7 +6,9 @@ patient.post("/generate-otp", patientController.generateOTP);
 
 patient.post("/validate-otp", patientController.validateOTP);
 
+patient.post("/register", patientController.appRegisterPatient);
 patient.post("/:doctorId?", patientController.registerPatient);
+
 
 
 patient.delete(

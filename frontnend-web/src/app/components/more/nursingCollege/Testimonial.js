@@ -6,19 +6,19 @@ import Image from "next/image";
 const PatientTestimonials = ({
   testimonials = [
     {
-      author: "Ankush Goyal",
-      location: "Delhi",
-      text: "The nurse assigned to care for my elderly mother was exceptional. Professional, caring, and extremely knowledgeable. Highly recommend Apna OPD!",
+      author: "Rahul Gupta",
+      location: "Raipur",
+      text: "Apna OPD helped me find the perfect medical college for MBBS. Great faculty and excellent infrastructure at reasonable fees!",
     },
     {
-      author: "Pranjal Sinha",
-      location: "Patna",
-      text: "Post-surgery care was seamless. The nurse was punctual, professional, and provided excellent care. Recovery was smooth thanks to their expertise",
+      author: "Priya Patel",
+      location: "Gurugram",
+      text: "The college recommended by Apna OPD exceeded my expectations. Modern labs and experienced professors made my medical journey amazing!",
     },
     {
-      author: "Amit Shah",
-      location: "Pratap Nagar, Jaipur",
-      text: "Amazing service! The pediatric nurse was wonderful with my child. Very patient and skilled. Will definitely use Apna OPD again.",
+      author: "Arjun Choudhary",
+      location: "Jhansi",
+      text: "Excellent guidance for medical college selection. The admission process was smooth and I got into my dream college!",
     },
   ],
 }) => {
@@ -28,13 +28,13 @@ const PatientTestimonials = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, type: "spring" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mt-12 mb-8 md:py-12"
     >
       {/* Title */}
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
           <FaCommentDots className="text-3xl text-blue-700" />
-          What Our Patients Say
+          What Our Students Say
         </h2>
       </div>
 

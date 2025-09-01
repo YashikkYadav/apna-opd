@@ -14,7 +14,7 @@ const doctors = [
     fee: 500,
     button: "Book Appointment",
     img: "/images/d1.png",
-    link: "/more/Orthopedic-Surgeon",
+    link: "/689c8c406ab629493c8d5d47/profile",
   },
   {
     name: "Dr. Surabhi Mathur",
@@ -25,7 +25,7 @@ const doctors = [
     fee: 500,
     button: "Book Appointment",
     img: "/images/d2.png",
-    link: "/more/Psychiatrist",
+    link: "/689c72dcf5748bb62bc5deeb/profile",
   },
   {
     name: "Dr. Nitin Negi",
@@ -36,7 +36,7 @@ const doctors = [
     fee: 500,
     button: "Book Appointment",
     img: "/images/d3.png",
-    link: "/more/Urologist",
+    link: "/6898d4bc3f42462e876331ed/profile",
   },
   {
     name: "Dr. Vibha Chaturvedi Sharma",
@@ -47,7 +47,7 @@ const doctors = [
     fee: 500,
     button: "Book Appointment",
     img: "/images/d4.png",
-    link: "/more/Gynecologist",
+    link: "/68930bfa7e14518baf273ad5/profile",
   },
 ];
 
@@ -59,7 +59,7 @@ const cardVariants = {
 const TopVerifiedDoctors = () => {    
   const router = useRouter();
   return (
-    <section className="w-full bg-[#fafbfc] py-8 px-2 md:px-0">
+    <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold text-gray-800">
@@ -76,6 +76,7 @@ const TopVerifiedDoctors = () => {
           {doctors.map((doc, idx) => (
             <motion.div
               key={idx}
+              onClick={() => router.push(doc.link)}
               variants={cardVariants}
               initial="initial"
               whileInView="animate"

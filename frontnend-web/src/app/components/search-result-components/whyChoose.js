@@ -2,50 +2,56 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaDollarSign,
-  FaUsers,
   FaStar,
+  FaUsers,
+  FaHome,
+  FaMapPin,
+  FaMoneyBillWave,
+  FaTools,
   FaStethoscope,
+  FaHandsHelping,
+  FaMedkit,
 } from "react-icons/fa";
+
+
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Verified Doctors",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
-    },
-    {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
-      description:
-        "Round-the-clock customer support for all your healthcare needs.",
-    },
-    {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
-    },
-    {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
-      description:
-        "Large network of qualified nurses across multiple specializations.",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
-      description:
-        "Highly rated by thousands of satisfied patients and families.",
+        "All doctors are thoroughly verified and registered with medical councils for your safety",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
+      title: "Expert Specialists",
       description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Access to India's leading doctors and specialists across all medical fields",
+    },
+    {
+      icon: <FaMoneyBillWave className="text-blue-600 text-4xl" />,
+      title: "Transparent Pricing",
+      description:
+        "Clear consultation fees with no hidden costs and instant booking confirmation",
+    },
+    {
+      icon: <FaMedkit className="text-blue-600 text-4xl" />,
+      title: "500+ Top Doctors",
+      description:
+        "Extensive network of premium doctors from India's best hospitals and clinics",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Highly Rated",
+      description:
+        "Doctors with excellent ratings and thousands of successful consultations",
+    },
+    {
+      icon: <FaHandsHelping className="text-blue-600 text-4xl" />,
+      title: "Easy Booking",
+      description:
+        "Book appointments instantly online or via phone with flexible scheduling",
     },
   ];
 
@@ -55,7 +61,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +71,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Physiotherapist?</span>
       </motion.h2>
 
       {/* Features Grid */}

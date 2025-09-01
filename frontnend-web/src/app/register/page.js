@@ -186,11 +186,11 @@ const Register = () => {
   }, []);
 
   const validateMobile = useCallback((mobile) => {
-    return mobile && mobile.length === 10 && /^\d{10}$/.test(mobile);
+    return mobile && mobile.replaceAll(" ", "").length === 10 && /^\d{10}$/.test(mobile.replaceAll(" ", ""));
   }, []);
 
   const validatepincode = useCallback((pincode) => {
-    return pincode && pincode.length === 6 && /^\d{6}$/.test(pincode);
+    return pincode && pincode.trim().length === 6 && /^\d{6}$/.test(pincode);
   }, []);
 
   // Validation function
@@ -256,7 +256,7 @@ const Register = () => {
   const handleDoctorRegistration = async () => {
     const payload = {
       name: formData.name,
-      phoneNumber: formData.mobile,
+      phoneNumber: formData.mobile.replaceAll(" ", ""),
       email: formData.email,
       password: formData.password,
       rmcNumber: formData.rmcNumber,
@@ -275,6 +275,8 @@ const Register = () => {
           : formData.user,
       isCash: formData.isCash,
     };
+  
+    
 
     try {
       setIsSubmitting(true);
@@ -359,7 +361,7 @@ const Register = () => {
       const payload = {
         type: formData.registrationFor,
         name: formData.name,
-        phone: formData.mobile,
+        phone: formData.mobile.replaceAll(" ", ""),
         email: formData.email,
         location: formData.location,
         address: formData.address,
@@ -622,7 +624,6 @@ const Register = () => {
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
               placeholder="Enter 10-digit mobile number"
-              maxLength={10}
               autoComplete="tel"
             />
           </div>

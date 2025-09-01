@@ -40,7 +40,7 @@ const offers = [
 const FlashOffers = () => {
   const router = useRouter();
   return (
-    <section className="w-full flex justify-center py-8 px-2 md:px-0">
+    <section className="w-full flex justify-center py-8 px-4 md:px-3">
       <div className="w-full max-w-7xl rounded-2xl bg-gradient-to-br from-[#fff3c7] to-[#ffe89e] p-6 md:p-10">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8 flex items-center gap-2">
           <span role="img" aria-label="fire" className="text-2xl md:text-3xl">🔥</span>

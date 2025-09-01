@@ -6,6 +6,49 @@ const { sendTemplateMessage } = require("../utils/whatsapp");
 const FileUploader = require("../models/fileUploader");
 const Appointment = require("../models/appointment");
 
+const appRegisterPatient = async (patientData) => {
+  try {
+    const {
+      fullName,
+      phoneNumber,
+      email,
+    } = patientData;
+    const otp = 1234;
+
+
+    console.log('asdasdaadasd', patientData)
+    const patient = await Patient.findOne({ phoneNumber });
+    if (patient) {
+
+      return {
+        statusCode: 409,
+        error: `Patient with ${phoneNumber} already exist`,
+      };
+    }
+
+    const uid = await generatePatientUid();
+    const newPatient = new Patient({
+      uid,
+      fullName,
+      phoneNumber,
+      email,
+      otp,
+    });
+    const dataStore = await newPatient.save();
+
+
+    return {
+      statusCode: 201,
+      patient: dataStore,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      error: error,
+    };
+  }
+}
+
 const registerPatient = async (patientData, doctorId) => {
   try {
     const {
@@ -55,7 +98,7 @@ const registerPatient = async (patientData, doctorId) => {
     }
 
     const uid = await generatePatientUid();
-    console.log('uid',uid)
+    console.log('uid', uid)
     const newPatient = new Patient({
       uid,
       fullName,
@@ -96,7 +139,7 @@ const registerPatient = async (patientData, doctorId) => {
 
 const generateOTP = async (phoneNumber) => {
   try {
-    const patient = await Patient.findOne({ phoneNumber:parseInt(phoneNumber) });
+    const patient = await Patient.findOne({ phoneNumber: parseInt(phoneNumber) });
 
     if (!patient) {
       return {
@@ -114,15 +157,16 @@ const generateOTP = async (phoneNumber) => {
     //   [randomNumber.toString()],
     // );
 
-    const updatedPatient=await Patient.findOneAndUpdate(
+    const updatedPatient = await Patient.findOneAndUpdate(
       { phoneNumber },
-      { otp: randomNumber },
+      { otp: 1234 },
+      // { otp: randomNumber },
       { new: true }
     );
 
     return {
       statusCode: 200,
-      patient:updatedPatient,
+      patient: updatedPatient,
     };
   } catch (error) {
     return {
@@ -425,4 +469,5 @@ module.exports = {
   getAllPatients,
   updatePatient,
   deletePatient,
+  appRegisterPatient  
 };

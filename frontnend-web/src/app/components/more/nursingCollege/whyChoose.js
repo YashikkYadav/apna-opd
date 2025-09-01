@@ -3,49 +3,51 @@ import { motion } from "framer-motion";
 import {
   FaCheckCircle,
   FaClock,
-  FaDollarSign,
+  FaUserGraduate,
   FaUsers,
   FaStar,
+  FaMapPin,
   FaStethoscope,
 } from "react-icons/fa";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Verified Medical Colleges",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
-    },
-    {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
-      description:
-        "Round-the-clock customer support for all your healthcare needs.",
-    },
-    {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
+        "All medical colleges are thoroughly verified and recognized by MCI/NMC for quality education",
     },
     {
       icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
+      title: "Expert Faculty",
       description:
-        "Large network of qualified nurses across multiple specializations.",
+        "Access to India's leading medical educators and experienced professors for quality education",
+    },
+    {
+      icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Fee Structure",
+      description:
+        "Clear fee details with no hidden costs and complete information about all expenses",
+    },
+    {
+      icon: <FaUserGraduate className="text-blue-600 text-4xl" />,
+      title: "Career Guidance",
+      description:
+        "Complete career counseling and admission guidance for medical aspirants",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "100+ Top Colleges",
+      description:
+        "Extensive network of premium medical colleges across all major Indian states",
     },
     {
       icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
+      title: "Quality Assured",
       description:
-        "Highly rated by thousands of satisfied patients and families.",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
-      description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Colleges with high NIRF rankings and thousands of successful medical graduates",
     },
   ];
 
@@ -55,7 +57,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +67,8 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose{" "}
+        <span className="text-blue-500">Apna OPD Medical Colleges?</span>
       </motion.h2>
 
       {/* Features Grid */}

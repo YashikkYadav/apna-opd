@@ -2,50 +2,54 @@
 import { motion } from "framer-motion";
 import {
   FaCheckCircle,
-  FaClock,
-  FaDollarSign,
-  FaUsers,
   FaStar,
+  FaUsers,
+  FaHome,
+  FaMapPin,
+  FaTools,
   FaStethoscope,
+  FaHandsHelping
 } from "react-icons/fa";
+
+
 
 const WhyChooseUs = () => {
   const featuresData = [
     {
       icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified",
+      title: "100% Verified Physiotherapists",
       description:
-        "All nurses are thoroughly background-checked and certified professionals.",
+        "All physiotherapists are licensed professionals with BPT/MPT degrees and years of clinical experience",
     },
     {
-      icon: <FaClock className="text-blue-600 text-4xl" />,
-      title: "24x7 Support",
+      icon: <FaHome className="text-blue-600 text-4xl" />,
+      title: "Home Visit Services",
       description:
-        "Round-the-clock customer support for all your healthcare needs.",
+        "Convenient physiotherapy sessions at your home with portable equipment and personalized care",
     },
     {
-      icon: <FaDollarSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
+      icon: <FaTools className="text-blue-600 text-4xl" />,
+      title: "Advanced Equipment",
       description:
-        "No hidden fees. Affordable and upfront pricing for all services.",
-    },
-    {
-      icon: <FaUsers className="text-blue-600 text-4xl" />,
-      title: "500+ Nurses",
-      description:
-        "Large network of qualified nurses across multiple specializations.",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "4.7+ Rating",
-      description:
-        "Highly rated by thousands of satisfied patients and families.",
+        "State-of-the-art rehabilitation equipment including electrotherapy, ultrasound, and exercise machines",
     },
     {
       icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "All Specialties",
+      title: "Specialized Treatments",
       description:
-        "ICU, Elderly, Pediatric, Post-op, and specialized care available.",
+        "Expert care for sports injuries, neurological conditions, orthopedic problems, and post-operative rehabilitation",
+    },
+    {
+      icon: <FaHandsHelping className="text-blue-600 text-4xl" />,
+      title: "Holistic Approach",
+      description:
+        "Comprehensive treatment combining manual therapy, exercise prescription, and lifestyle modifications",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Proven Recovery",
+      description:
+        "High success rates with 90%+ patients reporting significant improvement within 4-6 weeks",
     },
   ];
 
@@ -55,7 +59,7 @@ const WhyChooseUs = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="bg-white rounded-3xl shadow-lg p-6 md:p-7 mx-auto mb-8"
+      className="bg-white rounded-3xl shadow-lg p-6 md:px-8 mx-auto mb-8 mt-12 md:py-12"
     >
       {/* Title */}
       <motion.h2
@@ -65,7 +69,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Nursing Staff?</span>
+        Why Choose <span className="text-blue-500">Apna OPD Physiotherapist?</span>
       </motion.h2>
 
       {/* Features Grid */}
