@@ -63,16 +63,15 @@ exports.handleNursingStaff = async (req, healthServeId) => {
       (file) => file.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${
-          profileImage.filename
+      ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename
         }`.replace(/^\/+/, "")
       : undefined;
 
     const galleryImages = files
-      .filter((file) => file.fieldname === "galleryImages_image")
-      .map((file) => {
-        const relativePath = file?.destination?.split("public/")[1] || "";
-        return `${relativePath.replace(/^\/+/, "")}/${file?.filename}`;
+      .filter((f) => f.fieldname === "galleryImages_image")
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; 
       });
 
     const existing = await NursingStaff.findOne({ healthServeId });
@@ -128,9 +127,8 @@ exports.handleNursingStaff = async (req, healthServeId) => {
 
     return {
       statusCode: 200,
-      message: `NursingStaff profile ${
-        existing ? "updated" : "created"
-      } successfully`,
+      message: `NursingStaff profile ${existing ? "updated" : "created"
+        } successfully`,
       data: result,
     };
   } catch (error) {

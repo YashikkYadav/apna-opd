@@ -119,12 +119,14 @@ const PharmacyStorePage = () => {
   // console.log("aaaa",data)
   const filteredMedicines = useMemo(() => {
     let filtered = medicines?.filter((medicine) => {
+      console.log(medicine)
       const matchesSearch =
-        medicine?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        medicine?.salt.toLowerCase().includes(searchTerm.toLowerCase());
+        medicine?.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        // ||
+        // medicine?.salt.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
         selectedCategory === "All" || medicine?.category === selectedCategory;
-      const matchesStock = !showInStockOnly || medicine?.inStock;
+      const matchesStock = !showInStockOnly || medicine?.stock>0;
       const matchesDiscount = !showDiscountedOnly || medicine?.discount > 0;
 
       return (
@@ -262,7 +264,7 @@ const PharmacyStorePage = () => {
             medicines={filteredMedicines}
             addToCart={addToCart}
             cart={cart}
-            healthProfile={res_data?.healthProfile}
+            data={res_data?.otherData}
           />
           <FeatureHighlights
             data={res_data?.otherData}

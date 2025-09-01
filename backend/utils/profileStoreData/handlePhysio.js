@@ -55,14 +55,14 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
 
     const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
+      ? `${profileImage.savedPath.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
       : undefined;
 
     const newGalleryImages = files
-      .filter(file => file.fieldname === 'galleryImages_image')
-      .map(file => {
-        const relativePath = file?.destination?.split('public/')[1] || '';
-        return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
+      .filter((f) => f.fieldname === "galleryImages_image")
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
       });
 
     const existing = await Physiotherapist.findOne({ healthServeId });

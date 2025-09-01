@@ -18,7 +18,9 @@ const { handleHospital, gethandleHospital } = require('../utils/profileStoreData
 const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
 const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/profileStoreData/handleCollege')
 const { handleGym, getHandleGym } = require('../utils/profileStoreData/handleBloodBank')
-const {handleNursingStaff, getNursingStaff} = require('../utils/profileStoreData/handleNursingstaff')
+const { handleNursingStaff, getNursingStaff } = require('../utils/profileStoreData/handleNursingstaff')
+
+
 const createProfile = async (healthServeId, profileData) => {
   try {
     const healthServeProfileImages = await getImagesById(healthServeId);
@@ -274,68 +276,65 @@ const getAppointmentDetails = async (healthServeId) => {
 const deleteImage = async (healthServeId, image) => {
   console.log("🔍 Deleting image for:", healthServeId, image);
 
-  const healthServeProfile = await HealthServe.findById(healthServeId);
-
   try {
     if (!mongoose.Types.ObjectId.isValid(healthServeId)) {
       throw new Error("Invalid healthServeId");
     }
-
     if (!image) {
       throw new Error("Image URL missing");
     }
 
-    // Resolve model dynamically
-    let Model;
-    switch (healthServeProfile.type) {
-      case 'vatenary':
-        Model = require("../models/veterinary");
-        break;
-      case 'physiotherapist':
-        Model = require("../models/physiotherapistsProfile");
-        break;
-      case 'hospital':
-        Model = require("../models/hospital");
-        break;
-      case 'nursing_medical_college':
-        Model = require("../models/medicalCollege");
-        break;
-      case 'blood_bank':
-        Model = require("../models/bloodBankProfile");
-        break;
-      case 'medical_store':
-        Model = require("../models/pharmacyProfile");
-        break;
-      case 'laboratory':
-        Model = require("../models/healthlabProfile");
-        break;
-      case 'ivf_clinic':
-        Model = require("../models/ivfClinic");
-        break;
-      case 'gym':
-        console.log("gym")
-        Model = require('../models/gym')
-        break;
-      default:
-        throw new Error("Unsupported healthServeProfile type");
+    // Resolve healthServeProfile
+    const healthServeProfile = await HealthServe.findById(healthServeId);
+    if (!healthServeProfile) {
+      throw new Error("HealthServe profile not found");
     }
 
-    const updatedProfile = await Model.findOneAndUpdate(
-      { healthServeId },
-      { $pull: { galleryImages: image } },
-      { new: true }
-    );
+    // Dynamically load model
+    let Model;
+    switch (healthServeProfile.type) {
+      case "vatenary": Model = require("../models/veterinary"); break;
+      case "physiotherapist": Model = require("../models/physiotherapistsProfile"); break;
+      case "hospital": Model = require("../models/hospital"); break;
+      case "nursing_medical_college": Model = require("../models/medicalCollege"); break;
+      case "blood_bank": Model = require("../models/bloodBankProfile"); break;
+      case "medical_store": Model = require("../models/pharmacyProfile"); break;
+      case "laboratory": Model = require("../models/healthlabProfile"); break;
+      case "ivf_clinic": Model = require("../models/ivfClinic"); break;
+      case "gym": Model = require("../models/gym"); break;
+      default: throw new Error("Unsupported healthServeProfile type");
+    }
+
+    const filename = path.basename(image.path);
+    const imgType = image.type;
+    let updatedProfile;
+
+    if (imgType === "profilePhoto_image") {
+      updatedProfile = await Model.findOneAndUpdate(
+        { healthServeId },
+        { $unset: { profilePhoto: "" } },
+        { new: true }
+      );
+    } else {
+      updatedProfile = await Model.findOneAndUpdate(
+        { healthServeId },
+        { $pull: { galleryImages: image.path } },
+        { new: true }
+      );
+    }
 
     if (!updatedProfile) {
       throw new Error("Profile not found");
     }
 
-    const filename = image.split("/").pop();
-    deleteImageFile(filename);
+    // Delete from disk
+    deleteImageFile(filename, imgType);
 
+    // ✅ Return both galleryImages and profilePhoto so frontend stays in sync
     return {
       statusCode: 200,
-      images: updatedProfile.galleryImages,
+      galleryImages: updatedProfile.galleryImages || [],
+      profilePhoto: updatedProfile.profilePhoto || null
     };
   } catch (error) {
     console.error("🔥 Error deleting image:", error);
@@ -346,11 +345,19 @@ const deleteImage = async (healthServeId, image) => {
   }
 };
 
-function deleteImageFile(imagePath) {
+function deleteImageFile(imagePath, imgType) {
   if (!imagePath) return;
 
   const filename = path.basename(imagePath);
-  const filePath = path.join(__dirname, "..", "public", "galleryImages", filename);
+  console.log("🧭 Deleting file:", filename);
+  let filePath;
+  if (imgType === "profilePhoto_image") {
+    filePath = path.join(__dirname, "..", "public", "profilePhoto", filename);
+  }
+  else {
+    filePath = path.join(__dirname, "..", "public", "galleryImages", filename);
+  }
+
 
   console.log("🧭 Deleting file:", filePath);
 

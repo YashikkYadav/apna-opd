@@ -3,12 +3,12 @@ const healthServeModel = require("../../models/healthServe");
 const mongoose = require("mongoose");
 
 const UpdateHealthServeData = async (req, healthServeId) => {
-    const { address, locality, city, pincode, state } = req.body;
-    return await healthServeModel.updateOne(
-        { _id: healthServeId },
-        { address, locality, city, pincode, state },
-        { upsert: true }
-    );
+  const { address, locality, city, pincode, state } = req.body;
+  return await healthServeModel.updateOne(
+    { _id: healthServeId },
+    { address, locality, city, pincode, state },
+    { upsert: true }
+  );
 };
 exports.handleVeterinary = async (req, healthServeId) => {
   try {
@@ -51,16 +51,17 @@ exports.handleVeterinary = async (req, healthServeId) => {
 
     const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
+      ? `${profileImage.savedPath.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
       : undefined;
 
     const newGalleryImages = files
-      .filter(file => file.fieldname === 'galleryImages_image')
-      .map(file => {
-        const relativePath = file?.destination?.split('public/')[1] || '';
-        return `${relativePath.replace(/^\/+/, '')}/${file?.filename}`;
+      .filter((f) => f.fieldname === "galleryImages_image")
+      .map((f) => {
+        if (!f.savedPath) throw new Error("File not saved yet");
+        return f.savedPath; // use the path we set after compression
       });
 
+    console.log("newGalleryImages:", req.files);
     const update = {
       healthServeId,
       about,
@@ -105,7 +106,7 @@ exports.handleVeterinary = async (req, healthServeId) => {
     return {
       statusCode: 200,
       message: `Veterinary profile ${existing ? "updated" : "created"} successfully`,
-      data:result,
+      data: result,
     };
   } catch (error) {
     console.error("handleVeterinary error:", error);

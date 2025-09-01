@@ -725,7 +725,7 @@ initMap() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-Goog-Api-Key': 'AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8',
+            'X-Goog-Api-Key': process.env.PUBLIC_GOOGLE_MAPS_API_KEY,
           },
           body: JSON.stringify({
             input: currentQuery,
@@ -777,7 +777,7 @@ initMap() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Goog-Api-Key': 'AIzaSyD6NwRkzn0wT0sxUyy8M0SyydK1bNi-IK8', // Replace with your key
+            'X-Goog-Api-Key': process.env.PUBLIC_GOOGLE_MAPS_API_KEY, // Replace with your key
             'X-Goog-FieldMask': 'id,displayName,formattedAddress,location,rating,userRatingCount,primaryType',
           },
         });

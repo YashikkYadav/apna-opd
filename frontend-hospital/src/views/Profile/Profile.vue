@@ -94,10 +94,7 @@
                     ✖
                   </button>
                 </div>
-                <div
-                  v-if="img.type === 'profilePhoto_image'"
-                  class="image-type"
-                >
+                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
                 <div v-if="img.type === 'galleryImages'" class="image-type">
@@ -635,10 +632,8 @@ export default {
       if (!Array.isArray(this.images)) return [];
 
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
-          return -1;
-        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
-          return 1;
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image") return -1;
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image") return 1;
         return 0;
       });
     },
@@ -714,17 +709,16 @@ export default {
     },
     getImageUrl(img) {
       if (!img) return "";
-      const path = img.url || img.path;
-      if (!path) return "";
-      // If already absolute URL, return as is
-      if (typeof path === 'string' && (path.startsWith('http://') || path.startsWith('https://'))) {
-        return path;
+      // If img is a string (new upload), use Vite env
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
       }
-      // Prevent 'undefined' or empty paths
-      if (typeof path === 'string' && (path === 'undefined' || path.startsWith('undefined'))) {
-        return "";
-      }
-      return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${path}`;
+      // If img has a path property, use Vite env
+      if (img.path)
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      // If img is a File object (new upload)
+      if (img instanceof File) return URL.createObjectURL(img);
+      return "";
     },
     isNotFive(type) {
       return (
@@ -805,23 +799,23 @@ export default {
         this.form.pincode = hs?.pincode || "";
       }
       if (profile) {
-        // Collect both profile and gallery images
-        const images = [];
-        if (profile.profileImage) {
-          images.push({
-            url: profile.profileImage,
+        // Map images for gallery and profile, matching hospital reference
+        this.images = [];
+        if (profile.profilePhoto) {
+          this.images.push({
+            path: profile.profilePhoto,
             type: "profilePhoto_image",
           });
         }
         if (Array.isArray(profile.galleryImages)) {
-          profile.galleryImages.forEach((img) => {
-            images.push({
-              url: img,
+          this.images = this.images.concat(
+            profile.galleryImages.map((img) => ({
+              path: img.path || img,
               type: "galleryImages",
-            });
-          });
+            }))
+          );
         }
-        this.images = images;
+        // this.images = images;
 
         const hs = profile.healthServeId;
 
@@ -839,6 +833,7 @@ export default {
         this.form.specialServices = profile.specialServices || [];
         this.form.testimonials = profile.testimonials || [];
         this.form.keyStats = profile.keyStats || [];
+        
       }
     },
     async onSubmit() {

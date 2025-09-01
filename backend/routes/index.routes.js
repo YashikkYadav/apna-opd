@@ -32,6 +32,9 @@ const nurseRoutes = require("./nurse.routes")
 const googleAuthRoutes=require("./googleauth.routes")
 const router = express.Router();
 
+router.use("/cart", cartRoutes);
+router.use("/:healthServeId/orders", orderRoutes);
+
 router.use("/admin", adminRoutes);
 
 router.use("/hospital", hospitalRoutes);
