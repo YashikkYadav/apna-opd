@@ -16,9 +16,10 @@ const VetProfileSection = ({
     const info = [
         { label: 'EXPERIENCE', value: `${healthProfile?.experience}+ Years` },
         { label: 'SPECIALIZATION', value: healthProfile?.specialization },
-        { label: 'LANGUAGES', value: healthProfile?.languages?.map(lang=>(lang)) },
+        { label: 'LANGUAGES', value: healthProfile?.languages?.map(lang=>(lang))?.join(", ") },
         { label: 'CONSULTATION FEE', value: healthProfile?.consultationFee },
     ];
+    console.log("healthProfile:", healthProfile);
 
     return (
       <motion.section
@@ -28,29 +29,29 @@ const VetProfileSection = ({
         transition={{ duration: 0.7, type: "spring" }}
         className="bg-white rounded-3xl shadow-lg p-6 md:p-10 max-w-7xl mx-auto mt-12 mb-8"
       >
-        <div className="flex flex-col md:flex-row md:items-center gap-8 max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-center gap-10 max-w-6xl mx-auto">
           {/* Doctor Image */}
           <div className="flex-shrink-0">
             <img
               src={
-                profileData &&
-                profileData?.galleryImages &&
-                profileData?.galleryImages[0]
-                  ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${profileData?.galleryImages[0]}`
+                healthProfile &&
+                healthProfile?.galleryImages &&
+                healthProfile?.galleryImages[0]
+                  ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.galleryImages[0]}`
                   : "/images/max.png"
               }
               alt={`Dr. ${healthProfile?.name}`}
-              className="rounded-full border-4 border-blue-200 shadow-xl w-40 h-40 object-cover"
+              className="rounded-full border-4 border-blue-200 shadow-xl w-72 h-72 object-cover"
             />
           </div>
 
           {/* Details */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-3">
             <div>
               <h2 className="text-3xl font-extrabold text-blue-700">
-                Dr. {data?.name ?? "dummy"}, {qualifications}
+                Dr. {data?.name ?? "dummy"}
               </h2>
-              <p className="text-gray-700 pt-3 text-base font-medium leading-relaxed">
+              <p className="text-gray-700 text-base font-medium leading-relaxed">
                 {healthProfile?.about}
               </p>
             </div>
