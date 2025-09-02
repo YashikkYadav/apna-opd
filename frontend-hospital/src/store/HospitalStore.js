@@ -8,6 +8,7 @@ export const useHospitalStore = defineStore("hospitalStore", {
   actions: {
     async getDoctors() {
       const HopitalService = new AxiosHospital();
+      this.hospitalId = localStorage.getItem("hospital_id") || null;
       const data = await HopitalService.Doctor(this.hospitalId);
       return data;
     },
