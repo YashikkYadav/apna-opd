@@ -55,7 +55,8 @@ exports.handleHospital = async (req, healthServeId) => {
         };
 
         const files = req.files || [];
-
+        const existing = await Hospital.findOne({ healthServeId });
+        console.log("Existing Hospital:", healthServeId);
         const profileImage = files.find(
             (f) => f.fieldname === "profilePhoto_image"
         );
@@ -96,7 +97,7 @@ exports.handleHospital = async (req, healthServeId) => {
 
         if (profilePhoto) update.profileImage = profilePhoto;
 
-        const existing = await Hospital.findOne({ healthServeId });
+        
 
         if (existing) {
             update.galleryImages = [

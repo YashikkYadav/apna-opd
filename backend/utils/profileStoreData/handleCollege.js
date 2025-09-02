@@ -57,11 +57,12 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
         };
 
         const files = req.files || [];
+        const existing = await MedicalCollege.findOne({ healthServeId });
 
         const profileImage = files.find(file => file.fieldname === 'profilePhoto_image');
         const profilePhoto = profileImage
-            ? `${profileImage.savedPath.split('public/')[1]}/${profileImage.filename}`.replace(/^\/+/, '')
-            : undefined;
+            ? `${profileImage.savedPath}`
+            : existing?.profileImage;
 
         const newGalleryImages = files
             .filter((f) => f.fieldname === "galleryImages_image")
@@ -98,7 +99,7 @@ exports.handleMedicalCollege = async (req, healthServeId) => {
 
         if (profilePhoto) update.profileImage = profilePhoto;
 
-        const existing = await MedicalCollege.findOne({ healthServeId });
+        
 
         let result;
         if (existing) {

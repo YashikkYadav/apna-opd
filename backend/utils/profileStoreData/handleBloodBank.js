@@ -28,8 +28,7 @@ exports.handleIvfClinic = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
-      }`
+      ? `${profileImage.savedPath}`.replace(/^\/+/, '')
       : existing?.profilePhoto;
 
     const newGalleryImages = files
@@ -82,8 +81,7 @@ exports.handleLaboratory = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
-      }`
+            ? `${profileImage.savedPath}`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
@@ -133,8 +131,7 @@ exports.handleMedicalStore = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
-      }`
+            ? `${profileImage.savedPath}`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
@@ -187,8 +184,7 @@ exports.handlePhysiotherapist = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
-      }`
+            ? `${profileImage.savedPath}`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
@@ -242,8 +238,7 @@ exports.handleBloodBank = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.destination.split("public/")[1]}/${profileImage.filename
-      }`
+            ? `${profileImage.savedPath}`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
@@ -299,8 +294,7 @@ exports.handleGym = async (req, healthServeId) => {
       (f) => f.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename
-      }`
+            ? `${profileImage.savedPath}`
       : existing?.profilePhoto;
 
     const newGalleryImages = files
