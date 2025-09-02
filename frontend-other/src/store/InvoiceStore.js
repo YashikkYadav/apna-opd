@@ -1,38 +1,52 @@
-import { defineStore } from 'pinia'
-import { AxiosInvoice } from '../apis/Invoice'
+import { defineStore } from "pinia";
+import { AxiosInvoice } from "../apis/Invoice";
 
-export const useInvoiceStore = defineStore('invoiceStore', {
+export const useInvoiceStore = defineStore("invoiceStore", {
   state: () => ({
-    doctorId: localStorage.getItem('doctor_id') || null,
+    doctorId: localStorage.getItem("doctor_id"),
   }),
 
   actions: {
     async getAllInvoicesApiCall() {
-      const InvoiceService = new AxiosInvoice()
-      const data = await InvoiceService.InvoicesList(this.doctorId)
-      return data
+      const InvoiceService = new AxiosInvoice();
+      this.doctorId = localStorage.getItem("doctor_id");
+      const data = await InvoiceService.InvoicesList(this.doctorId);
+      return data;
     },
     async addInvoiceApiCall(payload) {
-      const InvoiceService = new AxiosInvoice()
-      const data = await InvoiceService.InvoicesAdd(this.doctorId, payload)
-      return data
+      const InvoiceService = new AxiosInvoice();
+      const data = await InvoiceService.InvoicesAdd(this.doctorId, payload);
+      return data;
     },
     async editInvoiceApiCall(invoiceId, payload) {
-      const InvoiceService = new AxiosInvoice()
-      const data = await InvoiceService.InvoicesEdit(this.doctorId, invoiceId, payload)
-      return data
+      const InvoiceService = new AxiosInvoice();
+      const data = await InvoiceService.InvoicesEdit(
+        this.doctorId,
+        invoiceId,
+        payload
+      );
+      return data;
     },
 
     async updateInvoiceApiCall(invoiceId) {
-      const InvoiceService = new AxiosInvoice()
-      const data = await InvoiceService.InvoicesUpdate(this.doctorId, invoiceId)
-      return data
+      const InvoiceService = new AxiosInvoice();
+      const data = await InvoiceService.InvoicesUpdate(
+        this.doctorId,
+        invoiceId
+      );
+      return data;
     },
 
     async deleteInvoiceApiCall(invoiceId) {
-      const InvoiceService = new AxiosInvoice()
-      const data = await InvoiceService.InvoicesDelete(this.doctorId, invoiceId)
-      return data
+      const InvoiceService = new AxiosInvoice();
+      const data = await InvoiceService.InvoicesDelete(
+        this.doctorId,
+        invoiceId
+      );
+      return data;
+    },
+    reset() {
+      this.$reset(); // Built-in Pinia function to reset to initial state
     },
   },
-})
+});

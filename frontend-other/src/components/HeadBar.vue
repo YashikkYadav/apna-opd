@@ -25,6 +25,7 @@
 
 <script>
 import { useProfileStore } from "@/store/ProfileStore";
+import {useInvoiceStore } from "@/store/InvoiceStore";
 import { useUiStore } from "@/store/UiStore";
 
 export default {
@@ -73,6 +74,8 @@ export default {
       localStorage.removeItem("user_type");
       localStorage.removeItem("access_token");
       useProfileStore().reset();
+      useInvoiceStore().reset();
+
 
       this.$router.push("/login");
       useUiStore().openNotificationMessage("You Are Successfully Logged Out!");
