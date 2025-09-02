@@ -59,6 +59,10 @@ const patientSchema = new mongoose.Schema(
       type: Number,
       default: null,
     },
+     password: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

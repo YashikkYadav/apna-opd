@@ -53,8 +53,8 @@ const generateOTP = async (req, res) => {
 
 const validateOTP = async (req, res) => {
   try {
-    const { phoneNumber, otp } = req.body;
-    const patient = await patientService.validateOTP(phoneNumber, otp);
+    const { phoneNumber, otp,password } = req.body;
+    const patient = await patientService.validateOTP(phoneNumber, otp,password);
     if (patient?.error) {
       return res.status(patient.statusCode).send(patient.error);
     }
