@@ -22,7 +22,7 @@ export default function NurseOverviewCar({NurseData, userData, specs}) {
         </h2>
       </div>
       {/* Grid */}
-      <div className="flex flex-wrap gap-12">
+      <div className="flex flex-wrap gap-7">
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
           className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all w-full"
@@ -36,7 +36,7 @@ export default function NurseOverviewCar({NurseData, userData, specs}) {
         </motion.div>
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
-          className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
+          className="bg-[#F7F9FB] w-full lg:w-[31%] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
         >
           <h3 className="text-xl font-bold text-blue-700 mb-2">
             Service Provided
@@ -49,7 +49,7 @@ export default function NurseOverviewCar({NurseData, userData, specs}) {
         </motion.div>
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
-          className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
+          className="bg-[#F7F9FB] rounded-2xl p-6 w-full lg:w-[33%] min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
         >
           <h3 className="text-xl font-bold text-blue-700 mb-2">
             Availability & Charges
@@ -57,7 +57,9 @@ export default function NurseOverviewCar({NurseData, userData, specs}) {
           <ul className="list-disc pl-5">
             <li>{`Working Hours - ${NurseData?.workingHours}  (${
               NurseData?.workingDays[0]
-            } to ${NurseData?.workingDays[NurseData?.workingDays.length - 1]})`}</li>
+            } to ${
+              NurseData?.workingDays[NurseData?.workingDays.length - 1]
+            })`}</li>
             <li>{`Shift Flexibility - ${NurseData?.shiftFlexibility}`}</li>
             <li>{`Per Visit Charges - ${NurseData?.perVisitCharges}`}</li>
             <li>{`Booking Type - ${
@@ -70,7 +72,7 @@ export default function NurseOverviewCar({NurseData, userData, specs}) {
         </motion.div>
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
-          className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
+          className="bg-[#F7F9FB] w-full lg:w-[31%] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
         >
           <h3 className="text-xl font-bold text-blue-700 mb-2">
             Language Spoken

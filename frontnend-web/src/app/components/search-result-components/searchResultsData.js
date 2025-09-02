@@ -246,17 +246,20 @@ const SearchResultsData = () => {
 
                   {/* Tags (Specialties / Skills) */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {(item?.conditionsTreated?.length > 0
-                      ? item?.conditionsTreated
-                      : ["General Care"]
-                    ).map((tag, i) => (
-                      <span
-                        key={i}
-                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium"
-                      >
-                        {tag}
+                    {item?.conditionsTreated?.length > 0 ? (
+                      item?.conditionsTreated?.slice(0,4)?.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium"
+                        >
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500 text-sm">
+                        No conditions listed
                       </span>
-                    ))}
+                    )}
                   </div>
 
                   {/* Rating */}

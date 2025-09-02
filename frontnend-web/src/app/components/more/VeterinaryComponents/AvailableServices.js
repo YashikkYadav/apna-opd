@@ -56,7 +56,7 @@ export default function AvailableServices({data,healthProfile}) {
             transition={{ duration: 0.7, type: "spring" }}
             className="bg-white rounded-3xl shadow-lg p-6 md:p-10 max-w-7xl mx-auto mt-12 mb-8"
         >
-            <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 mb-10 text-left">
+            <h2 className="text-2xl md:text-4xl font-extrabold text-blue-700 mb-10 text-left">
                 Available Services
             </h2>
 

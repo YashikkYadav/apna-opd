@@ -10,7 +10,7 @@ export default function Testimonials({ healthProfile }) {
             transition={{ duration: 0.7, type: 'spring' }}
             className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
         >
-            <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 text-left mb-12">
+            <h2 className="text-2xl md:text-4xl font-extrabold text-blue-700 text-left mb-12">
                 🐾 What Pet Parents Say
             </h2>
 

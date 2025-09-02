@@ -28,7 +28,7 @@ const OverviewSection = ({
             </div>
 
             {/* Grid Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* About Card */}
                 <motion.div
                     whileHover={{ scale: 1.03 }}

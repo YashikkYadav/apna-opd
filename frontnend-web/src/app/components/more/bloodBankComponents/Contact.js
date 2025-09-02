@@ -61,14 +61,14 @@ const Contact = ({ website_url = '{{website_url}}',
             </div>
 
             {/* Contact Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="flex flex-wrap gap-6">
                 {contactItems.map((item, idx) => (
                     <div
                         key={idx}
-                        className="bg-white p-5 rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
+                        className="bg-white p-5 min-w-[250px] rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
                     >
                         <div className="mt-1">{item.icon}</div>
-                        <div>
+                        <div className="max-w-[250px]">
                             <p className="font-semibold text-gray-800">{item.label}:</p>
                             {item.isLink ? (
                                 <a

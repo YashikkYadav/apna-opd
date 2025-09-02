@@ -9,29 +9,30 @@ const DoctorOverviewCar = ({ doctorData }) => {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, type: 'spring' }}
+      transition={{ duration: 0.7, type: "spring" }}
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
     >
       {/* Title */}
       <div className="flex mb-3">
         <User className="w-8 h-8 text-blue-600" />
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
-          About  {doctorData?.doctorId?.name}
+          About {doctorData?.doctorId?.name}
         </h2>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <motion.div
+        whileHover={{ scale: 1.03 }}
+        className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all mb-7"
+      >
+        <p className="text-gray-700 text-base leading-relaxed">
+          {doctorData?.about}
+        </p>
+      </motion.div>
+
+    
         {/* Left Column: Profile + Languages */}
-        <div className="flex flex-col gap-4 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
           {/* Profile */}
-          <motion.div
-            whileHover={{ scale: 1.03 }}
-            className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all"
-          >
-            <p className="text-gray-700 text-base leading-relaxed">
-              {doctorData?.about}
-            </p>
-          </motion.div>
 
           {/* Languages */}
           <motion.div
@@ -52,11 +53,6 @@ const DoctorOverviewCar = ({ doctorData }) => {
               ))}
             </div>
           </motion.div>
-        </div>
-
-        {/* Right Column: Professional Details + Memberships */}
-        <div className="flex flex-col gap-4 flex-1">
-          {/* Professional Details */}
           <motion.div
             whileHover={{ scale: 1.03 }}
             className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all"
@@ -65,16 +61,10 @@ const DoctorOverviewCar = ({ doctorData }) => {
               <FileBadge className="w-6 h-6" /> Professional Details
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700">
-              <li>
-                Appointment Fee :{doctorData?.appointmentFee}
-              </li>
-              <li>
-                happyClients : {doctorData?.happyClients}
-              </li>
+              <li>Appointment Fee :{doctorData?.appointmentFee}</li>
+              <li>happyClients : {doctorData?.happyClients}</li>
             </ul>
           </motion.div>
-
-          {/* Memberships & Awards */}
           <motion.div
             whileHover={{ scale: 1.03 }}
             className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all"
@@ -88,10 +78,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
               ))}
             </ul>
           </motion.div>
-        </div>
       </div>
-
-
     </motion.section>
   );
 };

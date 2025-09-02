@@ -37,19 +37,19 @@ const RequestSteps = ({ healthProfile,data }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, type: 'spring' }}
-            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
+            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-5 mb-8"
         >
             {/* Section Title */}
-            <div className="flex items-center mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
+            <div className="flex items-center">
+                <h2 className="text-xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3 ">
                     <FaClipboardList className="text-3xl text-blue-700" />
 
-                    How to Request Blood from <span className="text-blue-500">{data?.name ?? "Dummy Name"}</span>
+                    <p className="mt-4 md:mt-10">How to Request Blood from <span className="text-blue-500 inline">{data?.name ?? "Dummy Name"}</span></p>
                 </h2>
             </div>
 
             {/* Steps Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {steps.map((item) => (
                     <motion.div
                         key={item.step}

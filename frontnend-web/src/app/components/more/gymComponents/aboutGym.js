@@ -29,7 +29,7 @@ const AboutSection = ({
             </div>
 
             {/* Description */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <p className="text-gray-700 text-lg leading-relaxed">
                     {healthProfile?.about}
                 </p>

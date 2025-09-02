@@ -5,14 +5,6 @@ import { FaHospitalAlt } from "react-icons/fa";
 export default function HospitalOverviewCard({ profileData }) {
   const overviewData = [
     {
-      title: "About " + (profileData?.name || "Hospital"),
-      content: (
-        <span>
-          {profileData?.about || profileData?.introduction || "No description available."}
-        </span>
-      ),
-    },
-    {
       title: "Key Statistics",
       content: (
         <ul className="list-disc pl-5">
@@ -43,6 +35,16 @@ export default function HospitalOverviewCard({ profileData }) {
         </ul>
       ),
     },
+    {
+      title: "About " + (profileData?.name || "Hospital"),
+      content: (
+        <span>
+          {profileData?.about ||
+            profileData?.introduction ||
+            "No description available."}
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -60,27 +62,8 @@ export default function HospitalOverviewCard({ profileData }) {
           Hospital Overview
         </h2>
       </div>
-
-      {/* Grid: About, Key Statistics, Accreditations */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {overviewData.slice(0, 3).map((item, idx) => (
-          <motion.div
-            key={item?.title}
-            whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
-            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
-          >
-            <h3 className="text-xl font-bold text-blue-700 mb-2">
-              {item?.title}
-            </h3>
-            <div className="text-gray-700 text-base font-medium">
-              {item?.content}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Awards & Recognition */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+      {/* About */}
+      <div className="grid grid-cols-1 gap-6 mt-6">
         <motion.div
           whileHover={{ scale: 1.03, boxShadow: "0 0 0 2px rgb(49, 93, 227)" }}
           className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[180px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all md:col-span-1"
@@ -93,6 +76,27 @@ export default function HospitalOverviewCard({ profileData }) {
           </div>
         </motion.div>
         <div className="hidden md:block md:col-span-2" />
+      </div>
+
+      {/* Grid: Award, Key Statistics, Accreditations */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {overviewData.slice(0, 3).map((item, idx) => (
+          <motion.div
+            key={item?.title}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: "0 0 0 2px rgb(49, 93, 227)",
+            }}
+            className="bg-[#F7F9FB] rounded-2xl p-6 min-h-[220px] border-b-4 border-blue-700/30 hover:border-blue-700 transition-all"
+          >
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              {item?.title}
+            </h3>
+            <div className="text-gray-700 text-base font-medium">
+              {item?.content}
+            </div>
+          </motion.div>
+        ))}
       </div>
     </motion.div>
   );

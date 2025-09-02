@@ -46,7 +46,7 @@ export default function NurseLocationCard({ NurseData, userData }) {
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Google Map Placeholder */}
         <div className="bg-blue-50 mt-10 p-6 rounded-xl text-center hover:shadow-md hover:scale-[1.02] transition-all duration-300">
           <p className="font-bold text-lg text-blue-700 mb-2">🗺️ Google Map</p>

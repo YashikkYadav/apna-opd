@@ -40,7 +40,7 @@ const LocationAndContact = ({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, type: 'spring' }}
-            className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12 mb-8"
+            className="bg-white rounded-3xl shadow-lg p-6 md:p-10 max-w-7xl mx-auto mt-12 mb-8"
         >
             {/* Header */}
             <div className="text-left mb-12">
@@ -60,14 +60,14 @@ const LocationAndContact = ({
             </div>
 
             {/* Contact Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="flex flex-wrap gap-6">
                 {contactItems.map((item, idx) => (
                     <div
                         key={idx}
-                        className="bg-white p-5 rounded-xl border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
+                        className="bg-white p-5 rounded-xl min-w-[250px] border-l-4 border-blue-500 hover:border-blue-700 transition-all duration-300 hover:shadow-md hover:scale-[1.02] flex items-start gap-4"
                     >
                         <div className="mt-1">{item?.icon}</div>
-                        <div>
+                        <div className="max-w-[250px]">
                             <p className="font-semibold text-gray-800">{item?.label}:</p>
                             {item?.isLink ? (
                                 <a

@@ -81,7 +81,7 @@ const Availability = ({data,healthProfile}) => {
         >
             {/* Title */}
             <div className=" mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C65A0] flex items-center gap-3">
+                <h2 className="text-2xl md:text-4xl font-extrabold text-[#0C65A0] flex items-center gap-3">
                     <FaTint className="text-3xl text-red-600" />
                     Blood Types & Components Availability
                 </h2>

@@ -62,20 +62,20 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center gap-10"
+      className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-5 md:p-10 flex flex-col lg:flex-row items-center gap-10"
     >
       {/* Background Circles */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />
       <div className="absolute -top-10 right-0 w-40 h-40 bg-white/10 rounded-full z-0" />
 
       {/* Left Image */}
-      <div className="z-10 flex-shrink-0 w-full md:w-[340px] flex justify-center">
+      <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center">
         <Image
           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}`}
           alt={name}
           width={288}
           height={288}
-          className="rounded-xl object-cover shadow-md w-full h-[220px] md:h-[340px]"
+          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
         />
         <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">
           ✓
@@ -83,12 +83,12 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
       </div>
 
       {/* Info */}
-      <div className="relative z-10 flex flex-col justify-center text-white w-full md:w-auto">
-        <h1 className="text-4xl md:text-5xl font-extrabold uppercase leading-tight">
+      <div className="relative z-10 flex flex-col justify-center text-white w-full lg:w-auto">
+        <h1 className="text-3xl md:text-5xl font-extrabold uppercase text-center lg:text-left">
           {name}
         </h1>
 
-        <div className="flex flex-wrap gap-4 my-4">
+        {/* <div className="flex flex-wrap gap-4">
           <div
             onClick={() => {
               const section = document.getElementById("labLocationSection");
@@ -101,7 +101,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
               {location} {address}
             </span>
           </div>
-          <div className="flex items-center gap-2 justify-center md:justify-start">
+          <div className="flex items-center gap-2 justify-center lg:justify-start">
             {getStarIcons(parseFloat(avgRating))}
             <span className="text-white text-xl font-semibold ml-2">
               {avgRating}/5
@@ -110,14 +110,14 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
               ({reviewCount} reviews)
             </span>
           </div>
-        </div>
+        </div> */}
 
-        <p className="mt-2 mb-4 text-lg opacity-90">
+        <p className="mb-4 text-lg opacity-90 text-center lg:text-left">
           {healthProfile?.introduction}
         </p>
 
         {/*tags */}
-        <div className="flex flex-wrap justify-center md:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-2">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -128,7 +128,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3 mt-2">
+        <div className="flex flex-wrap gap-3 justify-center lg:justify-start mt-2">
           <button
             className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 flex items-center gap-2 shadow-lg transition text-base"
             onClick={() => setModalOpen(true)}

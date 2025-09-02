@@ -22,7 +22,7 @@ const PatientReviews = ({ healthProfile }) => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {healthProfile?.testimonials?.map((t, index) => (
                     <motion.div
                         key={index}
