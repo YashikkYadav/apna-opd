@@ -5,6 +5,7 @@ const { validatePatient } = require("../validations/patient.validation");
 const { sendTemplateMessage } = require("../utils/whatsapp");
 const FileUploader = require("../models/fileUploader");
 const Appointment = require("../models/appointment");
+const sendMail = require("../utils/sendMail");
 
 const appRegisterPatient = async (patientData) => {
   try {
@@ -13,10 +14,9 @@ const appRegisterPatient = async (patientData) => {
       phoneNumber,
       email,
     } = patientData;
-    const otp = 1234;
+    const otp = Math.floor(1000 + Math.random() * 9000);
 
 
-    console.log('asdasdaadasd', patientData)
     const patient = await Patient.findOne({ phoneNumber });
     if (patient) {
 
@@ -36,6 +36,32 @@ const appRegisterPatient = async (patientData) => {
     });
     const dataStore = await newPatient.save();
 
+    (async () => {
+      try {
+
+        const html = `
+      <div style="font-family:Arial,sans-serif;font-size:16px;color:#333">
+        <p>Hi <strong>${fullName}</strong>,</p>
+        <p>Your One-Time Password (OTP) for login is:</p>
+        <h2 style="color:#2E86C1;letter-spacing:2px">${otp}</h2>
+        <p>This OTP will expire in <strong>5 minutes</strong>. Please do not share it with anyone.</p>
+        <br/>
+        <p>Regards,<br/><strong>ApnaOPD Team</strong></p>
+      </div>
+    `;
+
+        const response = await sendMail(
+          email,
+          fullName,
+          "Your OTP for Login - ApnaOPD",
+          html
+        );
+
+        console.log("Email sent successfully:", response);
+      } catch (err) {
+        console.error(err.message);
+      }
+    })();
 
     return {
       statusCode: 201,
@@ -148,7 +174,8 @@ const generateOTP = async (phoneNumber) => {
       };
     }
 
-    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    // const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    const otp = Math.floor(1000 + Math.random() * 9000);
 
     // await sendTemplateMessage(
     //   `+91${phoneNumber}`,
@@ -159,11 +186,44 @@ const generateOTP = async (phoneNumber) => {
 
     const updatedPatient = await Patient.findOneAndUpdate(
       { phoneNumber },
-      { otp: 1234 },
+      { otp: otp },
       // { otp: randomNumber },
       { new: true }
     );
 
+    if (!patient?.email) {
+      return {
+        statusCode: 404,
+        error: "Patient not have email",
+      };
+    }
+
+    (async () => {
+      try {
+
+        const html = `
+      <div style="font-family:Arial,sans-serif;font-size:16px;color:#333">
+        <p>Hi <strong>${patient?.fullName}</strong>,</p>
+        <p>Your One-Time Password (OTP) for login is:</p>
+        <h2 style="color:#2E86C1;letter-spacing:2px">${otp}</h2>
+        <p>This OTP will expire in <strong>5 minutes</strong>. Please do not share it with anyone.</p>
+        <br/>
+        <p>Regards,<br/><strong>ApnaOPD Team</strong></p>
+      </div>
+    `;
+
+        const response = await sendMail(
+          patient?.email,
+          patient?.fullName,
+          "Your OTP for Login - ApnaOPD",
+          html
+        );
+
+        console.log("Email sent successfully:", response);
+      } catch (err) {
+        console.error(err.message);
+      }
+    })();
     return {
       statusCode: 200,
       patient: updatedPatient,
@@ -471,5 +531,5 @@ module.exports = {
   getAllPatients,
   updatePatient,
   deletePatient,
-  appRegisterPatient  
+  appRegisterPatient
 };
