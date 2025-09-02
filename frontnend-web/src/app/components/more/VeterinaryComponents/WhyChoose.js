@@ -39,10 +39,10 @@ const WhyChoose = ({
         >
             {/* Title */}
             <div className=" mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
+                <h2 className="text-2xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
                 <FaStar className="text-3xl text-blue-700" />
                 
-                    Why Choose <span className="text-blue-500">{data?.name ?? "Dummy Data"}</span> on Apna OPD?
+                    <p>Why Choose <span className="text-blue-500">{data?.name ?? "Dummy Data"}</span> on Apna OPD?</p>
                 </h2>
             </div>
 

@@ -67,7 +67,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             alt={`${name}` || "image"}
             width={340}
             height={340}
-            className="bg-gray-300 rounded-xl object-cover shadow-md w-full h-[250px] md:h-[360px] lg:h-[390px]"
+            className="bg-gray-300 rounded-xl object-cover shadow-md w-full h-[250px] md:h-[360px]"
           />
         </div>
         {/* Right: Content */}

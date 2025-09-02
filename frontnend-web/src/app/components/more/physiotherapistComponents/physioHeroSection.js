@@ -68,7 +68,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
           alt={`Dr.${data?.name}`}
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px] lg:h-[380px]"
+          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
           priority
         />
       </div>

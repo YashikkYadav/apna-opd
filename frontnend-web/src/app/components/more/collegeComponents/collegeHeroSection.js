@@ -70,7 +70,7 @@ const CollegeHeroSection = ({
           alt={college_name}
           width={320}
           height={320}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[360px]"
+          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
