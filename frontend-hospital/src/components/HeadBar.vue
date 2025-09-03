@@ -34,14 +34,16 @@
 
 <script>
 import { useUiStore } from "@/store/UiStore";
+import {useProfileStore} from "@/store/ProfileStore";
 
 export default {
   methods: {
     handleLogout() {
       localStorage.removeItem("doctor_id");
       localStorage.removeItem("access_token");
-
+     
       this.$router.push("/login");
+       useProfileStore.reset()
       useUiStore().openNotificationMessage("You Are Successfully Logged Out!");
     },
   },
