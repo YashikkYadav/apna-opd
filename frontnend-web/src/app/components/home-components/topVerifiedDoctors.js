@@ -61,8 +61,8 @@ const TopVerifiedDoctors = () => {
   return (
     <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-800">
             Top Verified Doctors
           </h2>
           <Link
@@ -72,7 +72,7 @@ const TopVerifiedDoctors = () => {
             View All &rarr;
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="flex gap-6 overflow-x-auto hide-scrollbar">
           {doctors.map((doc, idx) => (
             <motion.div
               key={idx}
@@ -85,7 +85,7 @@ const TopVerifiedDoctors = () => {
                 scale: 1.04,
                 boxShadow: "0 0 0 2px #2563eb, 0 0 16px #2563eb",
               }}
-              className="bg-white rounded-2xl shadow-md flex flex-col items-center justify-between py-8 px-6 min-h-[370px] transition-all duration-200 cursor-pointer outline-none"
+              className="bg-white rounded-2xl shadow-md flex flex-col items-center justify-between py-8 px-6 my-5 md:mx-2 min-h-[370px] w-[300px] transition-all duration-200 cursor-pointer outline-none"
             >
               <div className="flex items-center justify-center w-24 h-24 mb-6">
                 <img
@@ -137,6 +137,15 @@ const TopVerifiedDoctors = () => {
           ))}
         </div>
       </div>
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 };

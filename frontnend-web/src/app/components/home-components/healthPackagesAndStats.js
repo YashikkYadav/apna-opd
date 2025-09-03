@@ -84,13 +84,18 @@ const HealthPackagesAndStats = () => {
   const router = useRouter();
   return (
     <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         {/* Health Packages */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">Health Packages</h2>
-            <a href="/more/health_packages" className="text-blue-600 font-semibold hover:underline text-base">View All &rarr;</a>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-800">Health Packages</h2>
+          <a
+            href="/more/health_packages"
+            className="text-blue-600 font-semibold hover:underline text-base"
+          >
+            View All &rarr;
+          </a>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+        <div className="flex gap-6 overflow-x-auto hide-scrollbar">
           {packages.map((pkg, idx) => (
             <motion.div
               key={idx}
@@ -102,15 +107,25 @@ const HealthPackagesAndStats = () => {
                 scale: 1.04,
                 boxShadow: "0 0 0 2px #2563eb, 0 0 16px #2563eb",
               }}
-              className="bg-white rounded-2xl shadow-md flex flex-col items-start justify-between py-8 px-6 min-h-[210px] transition-all duration-200 cursor-pointer outline-none"
+              className="bg-white rounded-2xl shadow-md flex flex-col items-start justify-between py-8 px-6 my-5 md:mx-2 min-h-[210px] w-[270px] transition-all duration-200 cursor-pointer outline-none"
             >
-              <span className="inline-block bg-red-500 text-white font-bold text-xs px-4 py-2 rounded-lg mb-2 w-fit">{pkg.badge}</span>
-              <div className="text-xl font-bold text-gray-800 mb-1">{pkg.title}</div>
+              <span className="inline-block bg-red-500 text-white font-bold text-xs px-4 py-2 rounded-lg mb-2 w-fit">
+                {pkg.badge}
+              </span>
+              <div className="text-xl font-bold text-gray-800 mb-1">
+                {pkg.title}
+              </div>
               <div className="text-gray-600 text-base mb-2">{pkg.subtitle}</div>
               <div className="text-lg font-bold text-gray-900 mb-4">
-                ₹{pkg.price} <span className="text-gray-400 font-medium line-through text-base ml-1">₹{pkg.oldPrice}</span>
+                ₹{pkg.price}{" "}
+                <span className="text-gray-400 font-medium line-through text-base ml-1">
+                  ₹{pkg.oldPrice}
+                </span>
               </div>
-              <button onClick={() => router.push(pkg.link)} className="bg-blue-600 text-white font-semibold text-base px-8 py-3 rounded-full transition-all duration-200 hover:bg-blue-700 whitespace-nowrap mt-auto">
+              <button
+                onClick={() => router.push(pkg.link)}
+                className="bg-blue-600 text-white font-semibold text-base px-8 py-3 rounded-full transition-all duration-200 hover:bg-blue-700 whitespace-nowrap mt-auto"
+              >
                 Book Package
               </button>
             </motion.div>
@@ -120,32 +135,65 @@ const HealthPackagesAndStats = () => {
         <div className="w-full rounded-2xl bg-gradient-to-br from-[#2740c6] to-[#2563eb] py-12 px-4 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8 mt-6">
           <div className="flex flex-wrap w-full justify-between items-center gap-y-8">
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">{counts[0]}+</span>
-              <span className="text-white text-lg mt-2 text-center">Monthly Visitors</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                {counts[0]}+
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Monthly Visitors
+              </span>
             </div>
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">{counts[1]}+</span>
-              <span className="text-white text-lg mt-2 text-center">Verified Doctors</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                {counts[1]}+
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Verified Doctors
+              </span>
             </div>
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">{counts[2]}+</span>
-              <span className="text-white text-lg mt-2 text-center">Partner Hospitals</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                {counts[2]}+
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Partner Hospitals
+              </span>
             </div>
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">{counts[3]}+</span>
-              <span className="text-white text-lg mt-2 text-center">Cities Covered</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                {counts[3]}+
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Cities Covered
+              </span>
             </div>
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">{counts[4]}+</span>
-              <span className="text-white text-lg mt-2 text-center">Diagnostic Labs</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                {counts[4]}+
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Diagnostic Labs
+              </span>
             </div>
             <div className="flex flex-col items-center flex-1 min-w-[120px]">
-              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">ISO</span>
-              <span className="text-white text-lg mt-2 text-center">Certified & HIPAA Compliant</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-blue-200">
+                ISO
+              </span>
+              <span className="text-white text-lg mt-2 text-center">
+                Certified & HIPAA Compliant
+              </span>
             </div>
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 };
