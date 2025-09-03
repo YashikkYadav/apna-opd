@@ -66,9 +66,11 @@ const PopularCategories = () => {
         </div>
         <div className="flex gap-6 overflow-x-auto hide-scrollbar">
           {categories.map((cat, idx) => (
-            <Link href={`/search-results?location=&speciality=${cat.title}`}>
+            <Link
+              key={idx}
+              href={`/search-results?location=&speciality=${cat.title}`}
+            >
               <motion.div
-                key={idx}
                 variants={cardVariants}
                 initial="initial"
                 whileInView="animate"
