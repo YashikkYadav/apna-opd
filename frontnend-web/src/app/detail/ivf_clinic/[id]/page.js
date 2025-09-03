@@ -24,13 +24,13 @@ export default function IvfPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-
       const response_data = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
       );
       console.log("Response Data:", response_data);
 
-      const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
+      const { healthServeProfile, healthServeUser } =
+        response_data?.data?.healthServeProfileData;
 
       setData({
         healthProfile: healthServeProfile || null,
@@ -42,7 +42,7 @@ export default function IvfPage() {
     fetchData();
   }, [id]);
 
-  return (
+  return data?.healthProfile ? (
     <div className="relative bg-white min-h-screen flex flex-col items-center">
       <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
         <div className="w-full">
@@ -63,9 +63,9 @@ export default function IvfPage() {
             healthProfile={data?.healthProfile}
           />
           {/* <LeadFertilitySpecialist
-            data={data?.otherData}
-            healthProfile={data?.healthProfile}
-          /> */}
+              data={data?.otherData}
+              healthProfile={data?.healthProfile}
+            /> */}
           <SuccessStories
             data={data?.otherData}
             healthProfile={data?.healthProfile}
@@ -88,6 +88,12 @@ export default function IvfPage() {
           />
         </div>
       </main>
+    </div>
+  ) : (
+    <div className="min-h-64 pt-[120px] flex items-center justify-center">
+      <h1 className="text-3xl text-blue-800">
+        We’re updating this profile to serve you better. Stay tuned!
+      </h1>
     </div>
   );
 }

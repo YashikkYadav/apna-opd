@@ -1,8 +1,9 @@
 <template>
   <v-container fluid>
     <v-row class="flex justify-between">
+      
       <v-col cols="8">
-        <div class="px-1 mb-5">
+        <div class="px-1">
           <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
             Doctors Directory
           </h1>
@@ -17,6 +18,9 @@
         >
           Register Doctor
         </v-btn>
+      </v-col>
+      <v-col cols="12">
+        <p style="font-size: 20px; margin-bottom: 20px; margin-left: 5px; font-weight: bold; text-transform:capitalize;">Complete your profile with accurate details, qualifications, and experience to build trust with patients.</p>
       </v-col>
     </v-row>
 

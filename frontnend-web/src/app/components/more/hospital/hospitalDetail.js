@@ -27,7 +27,7 @@ const FullDetailsPage = ({ profileData }) => {
   }, [profileData?.healthServeId]);
 
   return (
-    <div className="pt-24">
+    <div className="pt-20">
       <HospitalFeatureCard profileData={profileData} />
       <HospitalOverviewCard profileData={profileData} />
       <HospitalDepartmentsCard profileData={profileData} />

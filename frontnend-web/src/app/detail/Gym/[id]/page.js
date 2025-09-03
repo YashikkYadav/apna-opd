@@ -1,7 +1,7 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
-import axios from 'axios';
+"use client";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 
 import HeroSection from "@/app/components/more/gymComponents/gymHero";
 import AboutSection from "@/app/components/more/gymComponents/aboutGym";
@@ -17,48 +17,92 @@ import CertifiedTrainers from "@/app/components/more/gymComponents/trainers";
 import MembershipPlans from "@/app/components/more/gymComponents/plans";
 
 export default function GymPage() {
-    const params = useParams();
-    const id = params.id;
-    const [data, setData] = useState({
-        healthProfile: null, otherData: null
-    })
+  const params = useParams();
+  const id = params.id;
+  const [data, setData] = useState({
+    healthProfile: null,
+    otherData: null,
+  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response_data = await axios.get(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
-            );
-            console.log("Response Data:", response_data);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response_data = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
+      );
+      console.log("Response Data:", response_data);
 
-            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
+      const { healthServeProfile, healthServeUser } =
+        response_data?.data?.healthServeProfileData;
 
-            setData({
-                healthProfile: healthServeProfile || null,
-                otherData: healthServeUser || null,
-            });
-            console.log("healthServeProfile:", healthServeProfile);
-            console.log("healthServeUser:", healthServeUser);
-        };
-        fetchData();
-    }, [id]);
-    return (
-        <div className="relative bg-white min-h-screen flex flex-col items-center">
-            <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
-                <div className="w-full">
-                    <HeroSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <AboutSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <FacilitiesSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <ProgramsAndServices data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <CertifiedTrainers data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <GymTimings data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <MembershipPlans data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <VisitUsToday data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <SuccessStories data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <FAQSection data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <RelatedGyms data={data?.otherData} healthProfile={data?.healthProfile} />
-                    <GymFooter data={data?.otherData} healthProfile={data?.healthProfile} />
-                </div>
-            </main>
+      setData({
+        healthProfile: healthServeProfile || null,
+        otherData: healthServeUser || null,
+      });
+      console.log("healthServeProfile:", healthServeProfile);
+      console.log("healthServeUser:", healthServeUser);
+    };
+    fetchData();
+  }, [id]);
+  return data?.healthProfile ? (
+    <div className="relative bg-white min-h-screen flex flex-col items-center">
+      <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
+        <div className="w-full">
+          <HeroSection
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <AboutSection
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <FacilitiesSection
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <ProgramsAndServices
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <CertifiedTrainers
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <GymTimings
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <MembershipPlans
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <VisitUsToday
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <SuccessStories
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <FAQSection
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <RelatedGyms
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <GymFooter
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
         </div>
-    )
+      </main>
+    </div>
+  ) : (
+    <div className="min-h-64 pt-[120px] flex items-center justify-center">
+      <h1 className="text-3xl text-blue-800">
+        We’re updating this profile to serve you better. Stay tuned!
+      </h1>
+    </div>
+  );
 }

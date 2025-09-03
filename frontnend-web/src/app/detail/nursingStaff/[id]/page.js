@@ -50,7 +50,7 @@ const ProfilePage = () => {
     };
     fetchData();
   }, [id]);
-  return (
+  return data?.healthProfile ? (
     <div className="pt-[80px]">
       <NurseFeatureCard
         userData={data.otherData}
@@ -67,8 +67,14 @@ const ProfilePage = () => {
         NurseData={data.healthProfile}
       />
       <NurseTestimonialsCard NurseData={data.healthProfile} />
-      
-      <NurseFaqs NurseData={data.healthProfile} /> 
+
+      <NurseFaqs NurseData={data.healthProfile} />
+    </div>
+  ) : (
+    <div className="min-h-64 pt-[120px] flex items-center justify-center">
+      <h1 className="text-3xl text-blue-800">
+        We’re updating this profile to serve you better. Stay tuned!
+      </h1>
     </div>
   );
 };

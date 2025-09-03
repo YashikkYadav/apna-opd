@@ -1,9 +1,15 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12">
+    <v-row align="center">
+      <v-col cols="4">
         <h1 class="dashboard-title">Dashboard</h1>
       </v-col>
+       <v-col cols="12">
+          <p style="font-weight: bold; text-transform: capitalize; font-size: 20px;">
+            Complete your profile with accurate details, qualifications, and
+            experience to build trust with patients.
+          </p>
+        </v-col>
     </v-row>
 
     <v-row>

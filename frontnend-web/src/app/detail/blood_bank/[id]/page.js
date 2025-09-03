@@ -14,54 +14,77 @@ import RequestSteps from "@/app/components/more/bloodBankComponents/RequestSteps
 import Availability from "@/app/components/more/bloodBankComponents/Availability";
 
 export default function BloodBankPage() {
-    const params = useParams();
-    const id = params.id;
-    const [data, setData] = useState({
-        healthProfile: null, userData: null
-    })
+  const params = useParams();
+  const id = params.id;
+  const [data, setData] = useState({
+    healthProfile: null,
+    userData: null,
+  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response_data = await axios.get(
-                `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
-            );
-            console.log("Response Data:", response_data?.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response_data = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${id}/health-serve-profile/profile-data`
+      );
+      console.log("Response Data:", response_data?.data);
 
-            const { healthServeProfile, healthServeUser } = response_data?.data?.healthServeProfileData;
+      const { healthServeProfile, healthServeUser } =
+        response_data?.data?.healthServeProfileData;
 
-            setData({
-                healthProfile: healthServeProfile || null,
-                userData: healthServeUser || null,
-            });
-            console.log("healthServeProfile:", healthServeProfile);
-            console.log("healthServeUser:", healthServeUser);
-        };
-        fetchData();
-    }, [id]);
+      setData({
+        healthProfile: healthServeProfile || null,
+        userData: healthServeUser || null,
+      });
+      console.log("healthServeProfile:", healthServeProfile);
+      console.log("healthServeUser:", healthServeUser);
+    };
+    fetchData();
+  }, [id]);
 
-    return (
-        <div className="relative bg-white min-h-screen flex flex-col items-center">
-            <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
-                {/* Hero section with full width */}
-                <div className="w-full">
-                    <HeroSection
-                        data={data?.userData} healthProfile={data?.healthProfile}
-                    />
-                </div>
-
-                {/* Other components in 90% width with rounded sections */}
-                <div className="max-w-[90vw] mx-auto space-y-10">
-                    <Availability data={data?.userData} healthProfile={data?.healthProfile} />
-                    <About data={data?.userData} healthProfile={data?.healthProfile} />
-                    <Contact data={data?.userData} healthProfile={data?.healthProfile} />
-                    <WhyChoose data={data?.userData} healthProfile={data?.healthProfile} />
-                    <RequestSteps data={data?.userData} healthProfile={data?.healthProfile} />
-                    <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
-                    <NearbyBanks data={data?.userData} healthProfile={data?.healthProfile} />
-                    <UrgentBanner data={data?.userData} healthProfile={data?.healthProfile} />
-                </div>
-            </main>
+  return data?.healthProfile ? (
+    <div className="relative bg-white min-h-screen flex flex-col items-center">
+      <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
+        {/* Hero section with full width */}
+        <div className="w-full">
+          <HeroSection
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
         </div>
-    );
 
+        {/* Other components in 90% width with rounded sections */}
+        <div className="max-w-[90vw] mx-auto space-y-10">
+          <Availability
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <About data={data?.userData} healthProfile={data?.healthProfile} />
+          <Contact data={data?.userData} healthProfile={data?.healthProfile} />
+          <WhyChoose
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <RequestSteps
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
+          <NearbyBanks
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+          <UrgentBanner
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+        </div>
+      </main>
+    </div>
+  ) : (
+    <div className="min-h-64 pt-[120px] flex items-center justify-center">
+      <h1 className="text-3xl text-blue-800">
+        We’re updating this profile to serve you better. Stay tuned!
+      </h1>
+    </div>
+  );
 }
