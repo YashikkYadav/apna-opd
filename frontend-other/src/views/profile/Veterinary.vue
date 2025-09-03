@@ -1037,6 +1037,7 @@ initMap() {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
+      console.log("mm",res)
       const profile = res.healthServeProfileData?.healthServeProfile?.data;
       const hs = await res?.healthServeProfileData?.healthServeUser;
       if (hs) {

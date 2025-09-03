@@ -1148,6 +1148,7 @@ initMap() {
       const res = await useProfileStore().getProfileData();
       const profile = res?.healthServeProfileData?.healthServeProfile?.data;
       const hs = await res?.healthServeProfileData?.healthServeUser;
+      console.log("mm",res)
       if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";

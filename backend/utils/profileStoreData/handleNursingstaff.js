@@ -58,14 +58,16 @@ exports.handleNursingStaff = async (req, healthServeId) => {
     };
 
     const files = req.files || [];
+    const existing = await NursingStaff.findOne({ healthServeId });
+
 
     const profileImage = files.find(
       (file) => file.fieldname === "profilePhoto_image"
     );
     const profilePhoto = profileImage
-      ? `${profileImage.savedPath.split("public/")[1]}/${profileImage.filename
-        }`.replace(/^\/+/, "")
-      : undefined;
+      ? `${profileImage.savedPath
+        }`
+      : existing?.profileImage;
 
     const galleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
@@ -74,8 +76,7 @@ exports.handleNursingStaff = async (req, healthServeId) => {
         return f.savedPath; 
       });
 
-    const existing = await NursingStaff.findOne({ healthServeId });
-
+    
     const update = {
       healthServeId,
       about,

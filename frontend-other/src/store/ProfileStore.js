@@ -18,6 +18,7 @@ export const useProfileStore = defineStore("profileStore", {
     },
     async addHealthServeProfileApiCall(payload) {
       const ProfileService = new AxiosProfile();
+      this.healthServeId = localStorage.getItem("doctor_id") || null;
       const data = await ProfileService.ProfileAdd(this.healthServeId, payload);
       return data;
     },
