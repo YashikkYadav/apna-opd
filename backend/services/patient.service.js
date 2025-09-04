@@ -16,7 +16,7 @@ const appRegisterPatient = async (patientData) => {
     } = patientData;
     const uid = await generatePatientUid();
 
-    if (phoneNumber === '9887119749') {
+    if (phoneNumber === '9887119749' && email==="yashik@gmail.com") {
       const newPatient = new Patient({
         uid,
         fullName,
@@ -258,12 +258,12 @@ const generateOTP = async (phoneNumber) => {
   }
 };
 
-const validateOTP = async (phoneNumber, otp, password) => {
+const validateOTP = async (phoneNumber, otp, password,email) => {
   try {
 
     if (password) {
 
-      if (phoneNumber === '9887119749' && password === "Admin@12345") {
+      if (phoneNumber === '9887119749' && password === "Admin@12345" && email==="yashik@gmail.com") {
         const patient_data = await Patient.findOne({ phoneNumber });
         const access_token = getAccessToken(patient_data.phoneNumber, patient_data.fullName);
 
