@@ -33,6 +33,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -299,6 +300,7 @@
                     type="number"
                     placeholder="Stock"
                     dense
+                     @wheel.stop.prevent
                   />
                 </td>
                 <td>
@@ -307,6 +309,7 @@
                     type="number"
                     placeholder="Price"
                     dense
+                     @wheel.stop.prevent
                   />
                 </td>
                 <td>

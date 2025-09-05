@@ -33,6 +33,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -45,6 +46,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -57,6 +59,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -1153,8 +1156,17 @@ initMap() {
     },
     async fetchProfileData() {
       const res = await useProfileStore().getDoctoreProfileApiCall();
+      console.log(">>",res)
+
+      if(res.doctorProfile?.doctorUserProfile){
+        this.form.address = res.doctorProfile.doctorUserProfile?.address;
+        this.form.locality = res.doctorProfile.doctorUserProfile?.locality;
+        this.form.state = res.doctorProfile.doctorUserProfile?.state;
+        this.form.city = res.doctorProfile.doctorUserProfile?.city;
+        this.form.pincode = res.doctorProfile.doctorUserProfile?.pincode;
+      }
       
-      if (res.doctorProfile !== null) {
+      if (res.doctorProfile.doctorProfile !== null) {
         this.images = res.doctorProfile.images;
         this.form = res.doctorProfile;
         this.form.locations = [
@@ -1175,11 +1187,7 @@ initMap() {
         this.form.to = res.doctorProfile.unavailabilityDate?.to
           ? res.doctorProfile.unavailabilityDate.to.split("T")[0]
           : "";
-        this.form.address = res.doctorProfile.doctorId?.address;
-        this.form.locality = res.doctorProfile.doctorId?.locality;
-        this.form.state = res.doctorProfile.doctorId?.state;
-        this.form.city = res.doctorProfile.doctorId?.city;
-        this.form.pincode = res.doctorProfile.doctorId?.pincode;
+        
         this.form.testimonials = res.doctorProfile?.testimonials || [];
         this.form.conditionsTreated = res.doctorProfile.conditionsTreated || [];
         this.form.proceduresOffered = res.doctorProfile.proceduresOffered || [];

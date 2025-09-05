@@ -33,6 +33,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -50,6 +51,7 @@
                 step="0.1"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -332,6 +334,7 @@
               outlined
               hide-details
               class="mb-7"
+               @wheel.stop.prevent
             ></v-text-field>
             <v-text-field
               v-model="form.areaCovered"

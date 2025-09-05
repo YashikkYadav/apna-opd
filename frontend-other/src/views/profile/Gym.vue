@@ -33,6 +33,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -67,6 +68,7 @@
                 type="number"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -76,6 +78,7 @@
                 type="number"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               />
             </v-col>
             <v-col cols="12" md="6">
@@ -430,6 +433,7 @@
                 dense
                 outlined
                 class="mb-3"
+                 @wheel.stop.prevent
               />
 
               <v-textarea
@@ -558,6 +562,7 @@
                     type="number"
                     outlined
                     dense
+                     @wheel.stop.prevent
                   />
                 </v-col>
                 <v-col cols="12" sm="4" class="d-flex align-center">
@@ -654,6 +659,7 @@
                 hide-details
                 class="mb-3"
                 type="number"
+                 @wheel.stop.prevent
               ></v-text-field>
 
               <div class="d-flex justify-end">

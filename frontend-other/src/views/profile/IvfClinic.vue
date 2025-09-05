@@ -34,6 +34,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -296,6 +297,7 @@
                     outlined
                     hide-details
                     class="mb-3"
+                    @wheel.stop.prevent
                   ></v-text-field>
                 </v-col>
               </v-row>
