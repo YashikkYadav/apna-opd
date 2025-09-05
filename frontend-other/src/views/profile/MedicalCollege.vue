@@ -33,6 +33,7 @@
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
+                 @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -518,6 +519,7 @@
                 outlined
                 dense
                 class="mb-3"
+                 @wheel.stop.prevent
               />
               <div class="d-flex justify-end">
                 <v-btn icon color="error" @click="removeCourse(index)">

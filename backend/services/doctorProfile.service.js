@@ -54,7 +54,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
     if (typeof membershipAwards === "string") {
       membershipAwards = JSON.parse(membershipAwards);
     }
-    if(typeof languages === "string"){
+    if (typeof languages === "string") {
       languages = JSON.parse(languages)
     }
 
@@ -123,6 +123,7 @@ const createDoctorProfile = async (doctorId, profileData) => {
       return {
         statusCode: 200,
         doctorProfile: updatedDoctorProfile,
+
       };
     }
 
@@ -191,13 +192,17 @@ async function getImagesById(targetId) {
 
 const getDoctorProfile = async (doctorId) => {
   try {
-    const doctorProfile = await DoctorProfile.findOne({ doctorId }).populate(
-      "doctorId"
-    );
 
+    const doctorUserProfile = await Doctor.findById({ _id: doctorId })
+    const doctorProfile = await DoctorProfile
+      .findOne({ doctorId })
+      .populate(
+        "doctorId"
+      );
     return {
       statusCode: 200,
       doctorProfile,
+      doctorUserProfile
     };
   } catch (error) {
     return {

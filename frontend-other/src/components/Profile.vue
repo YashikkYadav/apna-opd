@@ -16,12 +16,12 @@
           <v-row>
             <v-col cols="12" sm="4">
               <v-text-field v-model="form.happyClients" ref="happyClientsRef" type="number" label="No of customers"
-                :rules="[rules.required]" variant="outlined" dense>
+                :rules="[rules.required]" variant="outlined" dense  @wheel.stop.prevent>
               </v-text-field>
             </v-col>
             <v-col cols="12" sm="4">
               <v-text-field v-model="form.experience" ref="experienceRef" type="number" label="Experience"
-                :rules="[rules.required]" variant="outlined" dense>
+                :rules="[rules.required]" variant="outlined" dense  @wheel.stop.prevent>
               </v-text-field>
             </v-col>
           </v-row>
