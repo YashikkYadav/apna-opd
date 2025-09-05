@@ -36,11 +36,18 @@ const PatientTestimonialsHome = () => {
   return (
     <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">What Our Patients Say</h2>
-          <a href="/more/testimonials" className="text-blue-600 font-semibold hover:underline text-base">View All &rarr;</a>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-800">
+            What Our Patients Say
+          </h2>
+          <a
+            href="/more/testimonials"
+            className="text-blue-600 font-semibold hover:underline text-base"
+          >
+            View All &rarr;
+          </a>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="flex gap-6 overflow-x-auto py-4 hide-scrollbar">
           {testimonials.map((t, idx) => (
             <motion.div
               key={idx}
@@ -52,25 +59,49 @@ const PatientTestimonialsHome = () => {
                 scale: 1.04,
                 boxShadow: "0 0 0 2px #2563eb, 0 0 16px #2563eb",
               }}
-              className="bg-white rounded-2xl shadow-md flex flex-col items-start justify-between py-8 px-6 min-h-[220px] transition-all duration-200 cursor-pointer outline-none"
+              className="bg-white rounded-2xl shadow-md md:mx-3 flex flex-col items-start justify-between py-8 px-6 min-h-[250px] min-w-[250px] transition-all duration-200 cursor-pointer outline-none"
             >
               <div className="flex items-center gap-4 mb-2">
-                <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow" />
+                <img
+                  src={t.img}
+                  alt={t.name}
+                  className="w-12 h-12 rounded-full object-cover border-2 border-white shadow"
+                />
                 <div>
-                  <div className="font-bold text-gray-800 text-lg">{t.name}</div>
+                  <div className="font-bold text-gray-800 text-lg">
+                    {t.name}
+                  </div>
                   <div className="flex items-center gap-1 text-yellow-400 text-base">
                     {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} className={`text-sm ${i < t.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
+                      <FaStar
+                        key={i}
+                        className={`text-sm ${
+                          i < t.rating ? "text-yellow-400" : "text-gray-300"
+                        }`}
+                      />
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="text-gray-700 text-base mb-4 mt-2">"{t.text}"</div>
-              <div className="text-pink-500 text-sm font-medium mt-auto">Used: {t.used}</div>
+              <div className="text-gray-700 text-base mb-4 mt-2">
+                "{t.text}"
+              </div>
+              <div className="text-pink-500 text-sm font-medium mt-auto">
+                Used: {t.used}
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 };

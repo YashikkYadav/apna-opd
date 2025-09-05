@@ -30,11 +30,11 @@ const PartnerHospitalsWithLogos = () => {
   return (
     <section className="w-full bg-[#fafbfc] py-8 px-4 md:px-3">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-gray-800">Partner Hospitals</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-800">Partner Hospitals</h2>
               <a onClick={() => router.push("/more/hospital")} className="text-blue-600 font-semibold hover:underline text-base">View All &rarr;</a>
         </div>
-        <div className="flex gap-6 overflow-x-auto pb-4 hide-scrollbar">
+        <div className="flex gap-6 overflow-x-auto py-5 hide-scrollbar">
           {hospitals.map((h, idx) => (
             <motion.div
               key={idx}
@@ -46,7 +46,7 @@ const PartnerHospitalsWithLogos = () => {
                 scale: 1.04,
                 boxShadow: "0 0 0 2px #2563eb, 0 0 16px #2563eb",
               }}
-              className="min-w-[150px] bg-white rounded-2xl shadow-md flex flex-col items-center justify-center px-8 py-6 text-lg font-semibold text-gray-700 transition-all duration-200 cursor-pointer outline-none"
+              className="min-w-[150px] md:mx-2 bg-white rounded-2xl shadow-md flex flex-col items-center justify-center px-8 py-6 text-lg font-semibold text-gray-700 transition-all duration-200 cursor-pointer outline-none"
             >
               {h.logo ? (
                 <div className="w-16 h-16 mb-3 flex items-center justify-center rounded-lg overflow-hidden bg-white border border-gray-100">

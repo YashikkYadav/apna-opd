@@ -155,7 +155,6 @@ export default {
         clinicName: "",
       },
       dropdownItems: [
-        { value: "doctor", label: "Doctor" },
         { value: "ambulance", label: "Ambulance" },
         { value: "gym", label: "Gym" },
         { value: "yoga", label: "Yoga" },

@@ -119,14 +119,15 @@ const PharmacyStorePage = () => {
   // console.log("aaaa",data)
   const filteredMedicines = useMemo(() => {
     let filtered = medicines?.filter((medicine) => {
-      console.log(medicine)
-      const matchesSearch =
-        medicine?.name.toLowerCase().includes(searchTerm.toLowerCase()) 
-        // ||
-        // medicine?.salt.toLowerCase().includes(searchTerm.toLowerCase());
+      console.log(medicine);
+      const matchesSearch = medicine?.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      // ||
+      // medicine?.salt.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
         selectedCategory === "All" || medicine?.category === selectedCategory;
-      const matchesStock = !showInStockOnly || medicine?.stock>0;
+      const matchesStock = !showInStockOnly || medicine?.stock > 0;
       const matchesDiscount = !showDiscountedOnly || medicine?.discount > 0;
 
       return (
@@ -226,7 +227,7 @@ const PharmacyStorePage = () => {
     );
   }
 
-  return (
+  return res_data?.healthProfile ? (
     <div className="relative bg-white min-h-screen flex flex-col items-center">
       <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
         <div className="w-full">
@@ -286,6 +287,12 @@ const PharmacyStorePage = () => {
           {/* <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} /> */}
         </div>
       </main>
+    </div>
+  ) : (
+    <div className="min-h-64 pt-[120px] flex items-center justify-center">
+      <h1 className="text-3xl text-blue-800">
+        We’re updating this profile to serve you better. Stay tuned!
+      </h1>
     </div>
   );
 };
