@@ -60,7 +60,7 @@ export default function DoctorFeatureCard({ doctorData }) {
       </div>
 
       {/* Right: Content */}
-      <div className="z-10 flex-1 space-y-2 text-center lg:text-left">
+      <div className="z-10 flex-1 text-center lg:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
           {doctorData?.doctorId?.name}
         </h2>

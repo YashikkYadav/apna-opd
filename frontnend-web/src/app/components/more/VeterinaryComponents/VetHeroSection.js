@@ -89,7 +89,7 @@ const VetHeroSection = ({ profileData, data, healthProfile }) => {
         </div>
 
         {/*Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
