@@ -88,7 +88,7 @@ const getDoctorProfile = async (req, res) => {
 
     res
       .status(doctorProfile.statusCode)
-      .json({ doctorProfile: doctorProfile });
+      .json({ doctorProfile: doctorProfile.doctorProfile });
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }
