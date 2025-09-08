@@ -128,7 +128,7 @@ const HeroCarousel = () => {
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                className="object-cover rounded-2xl shadow-lg"
+                className="object-fit rounded-2xl shadow-lg"
                 draggable={false}
               />
             </motion.div>
