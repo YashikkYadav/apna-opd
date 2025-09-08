@@ -123,7 +123,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
           <button
             onClick={() => setModalOpen(true)}
             className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2"

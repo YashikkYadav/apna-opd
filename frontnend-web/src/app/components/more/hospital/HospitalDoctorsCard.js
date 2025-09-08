@@ -530,7 +530,7 @@ function DoctorCard({ doctor }) {
             onClick={() => {
               router.push(`/${doctorDetails?._id}/profile`);
             }}
-            className="flex-1 border-2 border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition text-sm"
+            className="flex-1 border border-blue-700 text-blue-700 font-bold px-4 py-2 rounded-full hover:bg-blue-100 transition text-sm"
           >
             View Profile
           </button>
