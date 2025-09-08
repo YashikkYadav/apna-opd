@@ -288,7 +288,11 @@ const ServicePage = () => {
           />
         );
       default:
-        return <div>Service not found</div>;
+        return (
+          <div className="text-2xl text-center text-blue-800 mt-6">
+            Service Not Found <br /> <span className="text-lg">Plaese Search Available Services</span>
+          </div>
+        );
     }
   };
 
@@ -321,10 +325,7 @@ const ServicePage = () => {
         />
       </div>
       <div className="mx-auto py-[24px] px-1">
-        <div>
-          {renderServiceComponent(totalItems)}
-          
-        </div>
+        <div>{renderServiceComponent(totalItems)}</div>
       </div>
     </div>
   );

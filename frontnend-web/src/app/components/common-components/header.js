@@ -101,6 +101,7 @@ const Header = () => {
 
       if (exactMatch) {
         router.push(exactMatch.route);
+        setSearchValue("");
       } else {
         // Try to find partial match
         const partialMatch = menuItems.find((item) =>
@@ -109,6 +110,7 @@ const Header = () => {
 
         if (partialMatch) {
           router.push(partialMatch.route);
+          setSearchValue("");
         } else {
           searchValue = searchValue.trim().replace(/\s+/g, "-").toLowerCase();
           router.push(`/more/${searchValue}`);
@@ -116,7 +118,7 @@ const Header = () => {
         } 
       }
 
-      setIsSearchDropdownOpen(false);
+      
     }
   };
 
@@ -124,8 +126,9 @@ const Header = () => {
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       handleManualSearch();
+      setSearchValue("");
     } else if (e.key === "Escape") {
-      setIsSearchDropdownOpen(false);
+      setSearchValue("");
     }
   };
 
@@ -262,6 +265,7 @@ const Header = () => {
                 className="w-[250px] border-2 placeholder-[#094B89] placeholder:font-bold border-[#094B89] rounded-md py-2 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#3DB8F5] focus:border-transparent"
               />
               <SearchOutlined
+                onClick={handleManualSearch}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 
               text-[#094B89] cursor-pointer text-xl"
               />
