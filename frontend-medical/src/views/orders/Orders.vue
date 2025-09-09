@@ -46,20 +46,21 @@
         </template>
 
         <!-- Medicines Dropdown / Readonly -->
-<template v-slot:[`item.Medicines`]="{ item }">
-  <v-menu offset-y max-width="400">
-    <template v-slot:activator="{ props, on }">
-      <v-btn v-bind="props" v-on="on" text small>
-        Medicines
-      </v-btn>
-    </template>
-    <v-list style="max-width:100px; max-height: 300px; overflow-y: auto; white-space: normal;">
-      <v-list-item v-for="med in item.Medicines" :key="med._id" class="w-120px">
-        <v-list-item-title>{{ med.display }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-menu>
-</template>
+        <template v-slot:[`item.Medicines`]="{ item }">
+          <v-menu offset-y max-width="400">
+            <template v-slot:activator="{ props, on }">
+              <v-btn v-bind="props" v-on="on" text small>
+                Medicines
+              </v-btn>
+            </template>
+            <v-list style="max-width:100px; max-height: 300px; overflow-y: auto; white-space: normal;">
+              <v-list-item v-for="med in item.Medicines" :key="med._id" class="w-120px">
+                <v-list-item-title>{{ med.display }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+
         <!-- Amount -->
         <template v-slot:[`item.Amount`]="{ item }">
           <span class="status-tag" :style="getAmountStyle(item.Status)">
@@ -68,19 +69,23 @@
         </template>
 
         <!-- Status -->
-<template v-slot:[`item.Status`]="{ item }">
-  <v-select
-  :items="statusOptions"
-  :model-value="item.Status"
-  @update:model-value="newStatus => updateOrderStatus(item.id, newStatus)"
-  density="compact"
-  variant="outlined"
-  hide-details 
-  :style="getStatusStyle(item.Status)"
-></v-select>
-</template>
+        <template v-slot:[`item.Status`]="{ item }">
+          <v-select
+            :items="statusOptions"
+            :model-value="item.Status"
+            @update:model-value="newStatus => updateOrderStatus(item.id, newStatus)"
+            density="compact"
+            variant="outlined"
+            hide-details 
+            :style="getStatusStyle(item.Status)"
+          ></v-select>
+        </template>
+
         <!-- Actions -->
         <template v-slot:[`item.actions`]="{ item }">
+          <v-btn class="icon-btn" icon @click="printOrder(item)">
+            <v-icon color="gray">mdi-printer-outline</v-icon>
+          </v-btn>
           <v-btn class="icon-btn" icon @click="deleteDialogHandle(item)">
             <v-icon color="red">mdi-trash-can-outline</v-icon>
           </v-btn>
@@ -88,6 +93,14 @@
       </v-data-table>
     </v-card>
   </v-container>
+
+  <!-- Order Invoice Modal -->
+  <order-invoice-modal
+    :orderData="selectedOrderData"
+    :dialog="invoiceDialog"
+    :pharmacyName="pharmacyName"
+    @close-dialog="invoiceDialog = false"
+  />
 
   <!-- Delete Modal -->
   <common-model
@@ -100,17 +113,23 @@
 </template>
 
 <script>
-import CommonModel from '@/components/CommonModel.vue';
+import CommonModel from '../../components/CommonModel.vue';
+import OrderInvoiceModal from './OrderInvoice.vue';
 import { checkAuth, getAmountStyle, getStatusStyle } from '@/lib/utils/utils';
-import { useOrderStore } from '@/store/OrderStore'; // medicine order store
+import { useOrderStore } from '@/store/OrderStore';
+import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from '@/store/UiStore';
 
 export default {
   name: "MedicineOrders",
-  components: { CommonModel },
+  components: { 
+    CommonModel,
+    OrderInvoiceModal
+  },
   data() {
     return {
       search: "",
+      pharmacyName:"",
       headers: [
         { align: "start", key: "OrderID", title: "Order ID" },
         { key: "User Name", title: "User Name" },
@@ -126,19 +145,25 @@ export default {
       allOrders: [],
       isLoading: true,
       isDeleteModalOpen: false,
+      invoiceDialog: false,
+      selectedOrderData: {},
       statusOptions: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
-
     };
   },
   mounted() {
     const auth = checkAuth(this.$router);
     if (auth) {
       this.fetchOrders();
+      this.fetchProfileData();
     }
   },
   methods: {
+    async fetchProfileData(){
+      const res = await useProfileStore().getProfileData();
+      const profile = await res?.healthServeProfileData?.healthServeUser
+      this.pharmacyName = profile?.name;
+    },
     async fetchOrders() {
-      
       const res = await useOrderStore().getAllOrdersApiCall();
       if (res?.orders) {
         this.allOrders = res.orders;
@@ -159,20 +184,20 @@ export default {
       }
     },
     async updateOrderStatus(orderId, newStatus) {
-  console.log("Updating order status:", orderId, "to", newStatus);
-  try {
-    const orderStore = useOrderStore();
-    await orderStore.updateOrderApiCall(orderId, { status: newStatus });
+      console.log("Updating order status:", orderId, "to", newStatus);
+      try {
+        const orderStore = useOrderStore();
+        await orderStore.updateOrderApiCall(orderId, { status: newStatus });
 
-    const index = this.orders.findIndex(o => o.id === orderId);
-    if (index !== -1) this.orders[index].Status = newStatus;
+        const index = this.orders.findIndex(o => o.id === orderId);
+        if (index !== -1) this.orders[index].Status = newStatus;
 
-    useUiStore().openNotificationMessage("Order status updated successfully!");
-  } catch (error) {
-    console.error('Error updating order status:', error);
-    useUiStore().openNotificationMessage("Failed to update order status.");
-  }
-},
+        useUiStore().openNotificationMessage("Order status updated successfully!");
+      } catch (error) {
+        console.error('Error updating order status:', error);
+        useUiStore().openNotificationMessage("Failed to update order status.");
+      }
+    },
     async onDeleteOrder() {
       await useOrderStore().deleteOrderApiCall(this.orderId);
       this.isDeleteModalOpen = false;
@@ -183,6 +208,11 @@ export default {
     deleteDialogHandle(item) {
       this.isDeleteModalOpen = true;
       this.orderId = item.id;
+    },
+    printOrder(item) {
+      const orderData = this.allOrders.find((o) => o._id === item.id);
+      this.selectedOrderData = orderData;
+      this.invoiceDialog = true;
     },
     showOrder(id) {
       const order = this.allOrders.find((o) => o._id === id);
