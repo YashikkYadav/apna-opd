@@ -1,26 +1,54 @@
 <template>
   <div class="sidebar">
-    <v-navigation-drawer expand-on-hover rail @mouseover="onHover(true)" @mouseleave="onHover(false)">
+    <v-navigation-drawer
+      expand-on-hover
+      rail
+      @mouseover="onHover(true)"
+      @mouseleave="onHover(false)"
+    >
       <v-list>
         <v-list-item class="logo">
           <v-list-item-content>
-            <v-img src="../assets/apna_opd_logo.svg" alt="Logo" style="height: auto;" class="ml-0 logo-image my-5"></v-img>
+            <v-img
+              src="../assets/apna_opd_logo.svg"
+              alt="Logo"
+              style="height: auto"
+              class="ml-0 logo-image my-5"
+            ></v-img>
           </v-list-item-content>
         </v-list-item>
 
-        <router-link to="/dashboard" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-view-dashboard" title="Dashboard" value="dashboard"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/dashboard"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-view-dashboard"
+            title="Dashboard"
+            value="dashboard"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
-        <!-- <router-link to="/invoice" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-file-document" title="Invoice" value="invoice"
-            class="custom-list-item"></v-list-item>
-        </router-link> -->
+        <router-link to="/orders" style="text-decoration: none; color: inherit">
+          <v-list-item
+            prepend-icon="mdi-cart"
+            title="Orders"
+            value="orders"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
 
-        <router-link to="/orders" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-file-document" title="Orders" value="orders"
-            class="custom-list-item"></v-list-item>
+        <router-link
+          to="/invoice"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-receipt-text"
+            title="Invoice"
+            value="invoice"
+            class="custom-list-item"
+          ></v-list-item>
         </router-link>
 
         <!-- <router-link to="/patient-queue" style="text-decoration: none; color: inherit;">
@@ -38,10 +66,17 @@
             class="custom-list-item"></v-list-item>
         </router-link> -->
 
-        <!-- <router-link to="/appointments" style="text-decoration: none; color: inherit;">
-          <v-list-item prepend-icon="mdi-calendar" title="Appointments" value="appointments"
-            class="custom-list-item"></v-list-item>
-        </router-link> -->
+        <router-link
+          to="/inventory"
+          style="text-decoration: none; color: inherit"
+        >
+          <v-list-item
+            prepend-icon="mdi-package-variant"
+            title="Inventory"
+            value="inventory"
+            class="custom-list-item"
+          ></v-list-item>
+        </router-link>
 
         <!-- <v-list-item prepend-icon="mdi-hospital-building" title="IPD" value="ipd"
           class="custom-list-item"></v-list-item> -->
@@ -95,31 +130,39 @@ export default {
     return {
       drawer: true,
       rail: false,
-    }
+    };
   },
   computed: {
     activeRoute() {
       return this.$route.path;
-    }
+    },
   },
   methods: {
     onHover(state) {
       if (!state) {
-        const items = document.querySelector(".sidebar-drawer .v-list-group__items");
-        const moreItem = document.querySelector(".more-btn-sidebar")
+        const items = document.querySelector(
+          ".sidebar-drawer .v-list-group__items"
+        );
+        const moreItem = document.querySelector(".more-btn-sidebar");
 
-        if(items) items.style.display = "none";
-        if(moreItem) moreItem.style.display = "none";
+        if (items) items.style.display = "none";
+        if (moreItem) moreItem.style.display = "none";
       } else {
-        const items = document.querySelector(".sidebar-drawer .v-list-group__items");
-        const moreItem = document.querySelector(".more-btn-sidebar")
-        if (this.activeRoute === "/template-library" || this.activeRoute === "/medicine-library" || this.activeRoute === "/dropdown-library") {
+        const items = document.querySelector(
+          ".sidebar-drawer .v-list-group__items"
+        );
+        const moreItem = document.querySelector(".more-btn-sidebar");
+        if (
+          this.activeRoute === "/template-library" ||
+          this.activeRoute === "/medicine-library" ||
+          this.activeRoute === "/dropdown-library"
+        ) {
           items.style.display = "block";
         }
 
-        if(moreItem) moreItem.style.display = "block";
+        if (moreItem) moreItem.style.display = "block";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

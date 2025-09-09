@@ -270,7 +270,7 @@
           <v-card-title>
             Medicines
             <v-spacer />
-            <v-btn color="primary" @click="addMedicine">+ Add Medicine</v-btn>
+            <v-btn color="primary" class="mt-2" @click="addMedicine">+ Add Medicine</v-btn>
           </v-card-title>
 
           <v-data-table

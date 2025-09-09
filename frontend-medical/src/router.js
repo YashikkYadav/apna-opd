@@ -6,6 +6,8 @@ import DashBoard from './views/dashboard/DashBoard.vue';
 import Login from './views/login/Login.vue';
 import Orders from './views/orders/Orders.vue';
 import Pharmacy from './views/profile/Pharmacy.vue'
+import Inventory from './views/inventory/Inventory.vue';  
+import InvoiceCard from './components/InvoiceCard.vue';
 
 
 
@@ -20,17 +22,17 @@ const routes = [
     name: 'Orders',
     component: Orders
   },
-  // {
-  //   path: '/profile',
-  //   name: 'Profile',
-  //   component: Profile
-  // },
-  // {
-  //   path: '/profile/physiotherapist',
-  //   name: 'Physiotherapist',
-  //   component: Physiotherapist
+  {
+    path: '/inventory',
+    name: 'Inventory',
+    component: Inventory
+  },
+  {
+    path: '/invoice',
+    name: 'Invoice',
+    component: InvoiceCard
 
-  // },
+  },
   // {
   //   path: '/profile/nursing_staff',
   //   name: 'NusrsingStaff',
