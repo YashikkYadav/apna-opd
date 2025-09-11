@@ -63,7 +63,7 @@
           <v-btn class="icon-btn" icon @click="editInvoice(item)">
             <v-icon color="gray">mdi-pencil-outline</v-icon>
           </v-btn>
-          <v-btn class="icon-btn" @click="pdfDialogHandle(item)" icon>
+          <v-btn class="icon-btn" @click="printOrder(item)" icon>
             <v-icon color="gray">mdi-printer-outline</v-icon>
           </v-btn>
           <v-btn class="icon-btn" icon @click="deleteDialogHandle(item)">
@@ -76,18 +76,22 @@
   <invoice-add-edit-model :invoicesData="invoiceData" :dialog="dialog" :isEditModel="isEdit" :isShowModel="isShow"
     @close-dialog="dialog = false" @fetch-invoices="fetchInvoices" />
 
-  <invoice-pdf-model :pdfUrlData="pdfUrl" :pdfDialogModel="pdfDialog" @close-dialog="pdfDialog = false" />
+  <invoice-pdf-model :orderData="invoiceData" :dialog="invoiceDialog" @close-dialog="invoiceDialog = false" />
 
   <common-model :commonModel="isDeleteModalOpen" @close-dialog="isDeleteModalOpen = false" @actions="onDeleteInvoice"
     title="Delete Invoice" description="Are you sure you want to delete invoice?" />
+  
 </template>
 
 <script>
 import CommonModel from '@/components/CommonModel.vue';
 import InvoiceAddEditModel from './components/InvoiceAddEditModel.vue';
 import InvoicePdfModel from './components/InvoicePdfModel.vue';
+
 import { checkAuth, getAmountStyle, getStatusStyle } from '@/lib/utils/utils';
+import { useProfileStore } from "@/store/ProfileStore";
 import { useInvoiceStore } from '@/store/InvoiceStore';
+import { useUiStore } from '@/store/UiStore';
 
 export default {
   name: "Invoice",
@@ -99,6 +103,7 @@ export default {
   data() {
     return {
       search: "",
+      pharmacyName:"",
       headers: [
         { align: "start", key: "InvoiceID", title: "Invoice" },
         { key: "Amount", title: "Amount" },
@@ -115,47 +120,64 @@ export default {
       dialog: false,
       isEdit: false,
       isShow: false,
-      pdfDialog: false,
-      pdfUrl: '',
       isLoading: true,
       invoiceData: {},
-      isDeleteModalOpen: false
+      isDeleteModalOpen: false,
+      invoiceDialog: false,
     };
   },
-  mounted() {
+  async mounted() {
     const auth = checkAuth(this.$router);
     if (auth) {
+      await this.fetchProfileData(); // Make sure to fetch profile data first
       this.fetchInvoices();
+      this.fetchProfileData()
     }
   },
   methods: {
+    async fetchProfileData(){
+      try {
+        const res = await useProfileStore().getProfileData();
+        const profile = await res?.healthServeProfileData?.healthServeUser
+        this.pharmacyName = profile?.name || "Pharmacy Name";
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        this.pharmacyName = "Pharmacy Name"; // Fallback name
+      }
+    },
     async fetchInvoices() {
-      const res = await useInvoiceStore().getAllInvoicesApiCall()
-      if (res) {
-        this.allInvoices = res.invoices;
-        this.invoice = res.invoices.map((invoice) => ({
-          "InvoiceID": invoice.invoiceId,
-          Amount: invoice.totalAmount,
-          Status: invoice.paymentStatus,
-          "Patient Name": invoice.patientName,
-          Date: new Date(invoice.createdAt).toLocaleDateString('en-GB'),
-          Type: invoice.paymentMode,
-          id: invoice._id
-        }));
-        this.isLoading = false
+      try {
+        const res = await useInvoiceStore().getAllInvoicesApiCall()
+        if (res) {
+          this.allInvoices = res.invoices;
+          this.invoice = res.invoices.map((invoice) => ({
+            "InvoiceID": invoice.invoiceId,
+            Amount: invoice.totalAmount,
+            Status: invoice.paymentStatus,
+            "Patient Name": invoice.patientName,
+            Date: new Date(invoice.createdAt).toLocaleDateString('en-GB'),
+            Type: invoice.paymentMode,
+            id: invoice._id
+          }));
+          this.isLoading = false
+        }
+      } catch (error) {
+        console.error('Error fetching invoices:', error);
+        this.isLoading = false;
       }
     },
     async onDeleteInvoice() {
-      const res = await useInvoiceStore().deleteInvoiceApiCall(this.invoiceId)
-
-      this.isDeleteModalOpen = false;
-      this.invoiceId = ""
-      this.fetchInvoices();
-      useUiStore().openNotificationMessage("Invoice Deleted Successfully!");
-    },
-    pdfDialogHandle(item) {
-      this.pdfUrl = `${import.meta.env.VITE_SERVER_URL}/public/invoices/invoice_${item.id}.pdf`;
-      this.pdfDialog = true;
+      try {
+        const res = await useInvoiceStore().deleteInvoiceApiCall(this.invoiceId)
+        this.isDeleteModalOpen = false;
+        this.invoiceId = ""
+        this.fetchInvoices();
+        useUiStore().openNotificationMessage("Invoice Deleted Successfully!");
+      } catch (error) {
+        console.error('Error deleting invoice:', error);
+        this.isDeleteModalOpen = false;
+        this.invoiceId = ""
+      }
     },
     deleteDialogHandle(item) {
       this.isDeleteModalOpen = true;
@@ -176,58 +198,57 @@ export default {
           },
         ],
         paymentMode: null,
-        medicalName: "",
+        medicalName: this.pharmacyName,
         totalAmount: null,
       };
       this.dialog = true;
       this.isEdit = false;
       this.isShow = false;
-
     },
     editInvoice(item) {
       const data = this.allInvoices.filter(invoice => invoice.invoiceId === item.InvoiceID)
-
-      this.invoiceData = {
-        id: data[0]._id,
-        patientName: data[0].patientName,
-        patientPhone: data[0].patientPhone,
-        patientAddress: data[0].patientAddress,
-        paymentStatus: data[0].paymentStatus,
-        paymentMode: data[0].paymentMode,
-        medicines: data[0].medicines.map((item) => ({
-          medicineName: item.medicineName,
-          qty: item.quantity,
-          amount: item.amount,
-          discount: item.discount,
-        })),
-        totalAmount: data[0].totalAmount
+      if (data.length > 0) {
+        this.invoiceData = {
+          id: data[0]._id,
+          patientName: data[0].patientName,
+          patientPhone: data[0].patientPhone,
+          patientAddress: data[0].patientAddress,
+          paymentStatus: data[0].paymentStatus,
+          paymentMode: data[0].paymentMode,
+          medicines: data[0].medicines.map((item) => ({
+            medicineName: item.medicineName,
+            qty: item.quantity,
+            amount: item.amount,
+            discount: item.discount,
+          })),
+          totalAmount: data[0].totalAmount
+        }
+        this.dialog = true;
+        this.isEdit = true;
+        this.isShow = false;
       }
-
-      this.dialog = true;
-      this.isEdit = true;
-      this.isShow = false;
     },
     showInvoice(id) {
       const data = this.allInvoices.filter(invoice => invoice.invoiceId === id)
-
-      this.invoiceData = {
-        id: data[0]._id,
-        patientName: data[0].patientName,
-        patientPhone: data[0].patientPhone,
-        patientAddress: data[0].patientAddress,
-        paymentStatus: data[0].paymentStatus,
-        paymentMode: data[0].paymentMode,
-        medicines: data[0].medicines.map((item) => ({
-          medicineName: item.medicineName,
-          qty: item.quantity,
-          amount: item.amount,
-          discount: item.discount,
-        })),
-        totalAmount: data[0].totalAmount
+      if (data.length > 0) {
+        this.invoiceData = {
+          id: data[0]._id,
+          patientName: data[0].patientName,
+          patientPhone: data[0].patientPhone,
+          patientAddress: data[0].patientAddress,
+          paymentStatus: data[0].paymentStatus,
+          paymentMode: data[0].paymentMode,
+          medicines: data[0].medicines.map((item) => ({
+            medicineName: item.medicineName,
+            qty: item.quantity,
+            amount: item.amount,
+            discount: item.discount,
+          })),
+          totalAmount: data[0].totalAmount
+        }
+        this.dialog = true;
+        this.isShow = true;
       }
-
-      this.dialog = true;
-      this.isShow = true;
     },
     filterInvoices(status) {
       this.activeStatus = status;
@@ -262,6 +283,41 @@ export default {
     },
     getStatusStyle(status) {
       return getStatusStyle(status);
+    },
+    printOrder(item) {
+      console.log('Print order clicked for item:', item); // Debug log
+      
+      // Find the full invoice data
+      const fullInvoiceData = this.allInvoices.find((invoice) => invoice._id === item.id);
+      
+      if (fullInvoiceData) {
+        console.log('Full invoice data found:', fullInvoiceData); // Debug log
+        
+        // Set the invoice data with proper structure for the modal
+        this.invoiceData = {
+          ...fullInvoiceData,
+          // Ensure medicines have proper structure with price field
+          medicines: fullInvoiceData.medicines.map(medicine => ({
+            ...medicine,
+            price: medicine.amount || medicine.price || 0 // Use amount as price if price doesn't exist
+          }))
+        };
+        
+        console.log('Setting invoiceDialog to true'); // Debug log
+        this.invoiceDialog = true;
+        
+        // Use nextTick to ensure the modal opens after data is set
+        this.$nextTick(() => {
+          console.log('invoiceDialog state after nextTick:', this.invoiceDialog); // Debug log
+        });
+        this.invoiceDialog = true;
+      } else {
+        console.error('Invoice data not found for item:', item);
+        // Show error message to user
+        if (useUiStore && useUiStore().openNotificationMessage) {
+          useUiStore().openNotificationMessage("Error: Invoice data not found!");
+        }
+      }
     },
   },
 };
