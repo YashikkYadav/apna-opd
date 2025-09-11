@@ -7,7 +7,7 @@ import Login from './views/login/Login.vue';
 import Orders from './views/orders/Orders.vue';
 import Pharmacy from './views/profile/Pharmacy.vue'
 import Inventory from './views/inventory/Inventory.vue';  
-import InvoiceCard from './components/InvoiceCard.vue';
+import Invoice from './views/invoice/Invoice.vue';
 
 
 
@@ -30,7 +30,7 @@ const routes = [
   {
     path: '/invoice',
     name: 'Invoice',
-    component: InvoiceCard
+    component: Invoice
 
   },
   // {

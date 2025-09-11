@@ -8,6 +8,7 @@ const {
 
 const Patient = require('../models/patient');
 const Invoice = require('../models/invoice');
+const MedicalInvoice = require("../models/medicalInvoice")
 
 const getHashedPassword = async (password) => {
   const hashedPassword = await bcrypt.hash(password, parseInt(SALT_ROUNDS));
@@ -120,11 +121,47 @@ const generateInvoiceId = async () => {
   }
 };
 
+const generateMedicalInvoiceId = async () => {
+  try {
+    let invoiceId;
+
+    const existingInvoices = await MedicalInvoice.find();
+    const existingInvoiceIds = existingInvoices.map(
+      (invoice) => invoice.invoiceId
+    );
+
+    for (let i = 1; i < 100001; i++) {
+      if (i < 10) {
+        invoiceId = `UID00000${i}`;
+      } else if (i < 100) {
+        invoiceId = `UID0000${i}`;
+      } else if (i < 1000) {
+        invoiceId = `UID000${i}`;
+      } else if (i < 10000) {
+        invoiceId = `UID00${i}`;
+      } else {
+        invoiceId = `UID0${i}`;
+      }
+
+      if (!existingInvoiceIds.includes(invoiceId)) {
+        break;
+      }
+    }
+
+    return invoiceId;
+  } catch (error) {
+    return {
+      error: "Error generating UID",
+    };
+  }
+};
+
 module.exports = {
   getHashedPassword,
   comparePassword,
   getAccessToken,
   verifyAccessToken,
   generatePatientUid,
+  generateMedicalInvoiceId,
   generateInvoiceId,
 };
