@@ -154,7 +154,7 @@ export default {
       rules: {
         required: (value) => !!value || "This field is required.",
         numberRequired: (value) =>
-          (value !== null && value !== "" && !isNaN(value) && Number(value) >= 0) ||
+          (value !== null && value !== "" && !isNaN(value)) ||
           "This field is required and must be a valid number.",
       },
       itemDialog: false,
@@ -315,8 +315,10 @@ export default {
     getStockStatus(stock) {
       if (stock === "" || stock === null || stock === 0 || stock === "0") {
         return "No Stock";
-      } else if (Number(stock) < 10 && Number(stock) > 0) {
+      } else if (Number(stock) < 11 && Number(stock) > 0) {
         return "Low Stock";
+      } else if(stock < 0){
+        return "Add Stock Orders are in Queue"
       }
       return null;
     },
@@ -325,8 +327,11 @@ export default {
       const stock = medicine.stock;
       if (stock === "" || stock === null || stock === 0 || stock === "0") {
         return "no-stock-row";
-      } else if (Number(stock) < 10 && Number(stock) > 0) {
+      } else if (Number(stock) < 11 && Number(stock) > 0) {
         return "low-stock-row";
+      
+      } else if(stock < 0){
+        return "minus-stock";
       }
       return "";
     },
@@ -343,6 +348,10 @@ export default {
 <style scoped>
 .low-stock-row {
   background-color: #fff3cd !important;
+}
+
+.minus-stock{
+  background-color: #500202 !important;
 }
 
 .no-stock-row {

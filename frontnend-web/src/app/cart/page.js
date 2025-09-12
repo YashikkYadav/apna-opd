@@ -24,6 +24,7 @@ export default function CartPage() {
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart/`);
             const data = await res.json();
+            console.log(data)
             setCartItems(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error("Failed to fetch cart:", err);
@@ -68,15 +69,15 @@ export default function CartPage() {
         setOrderLoading(true);
         try {
             const orderPayload = {
-                customerInfo,
-                items: cartItems.map(item => ({
-                    medicineId: item._id,
-                    name: item.name,
-                    dosage: item.dosage,
-                    price: item.price,
-                    quantity: item.quantity
-                })),
-                totalAmount: getTotalPrice()
+              customerInfo,
+              items: cartItems.map((item) => ({
+                medicineId: item.medicineId,
+                name: item.name,
+                dosage: item.dosage,
+                price: item.price,
+                quantity: item.quantity,
+              })),
+              totalAmount: getTotalPrice(),
             };
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/${storeId}/orders/`, {
