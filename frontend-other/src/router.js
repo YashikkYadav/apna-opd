@@ -14,19 +14,20 @@ import Gym from './views/profile/Gym.vue';
 import NursingStaff from './views/profile/NursingStaff.vue';
 import Healthlab from './views/profile/Healthlab.vue'
 import Pharmacy from './views/profile/Pharmacy.vue'
+import Yoga from './views/profile/Yoga.vue'
 
 
 
 const routes = [
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: DashBoard
+    path: "/dashboard",
+    name: "Dashboard",
+    component: DashBoard,
   },
   {
-    path: '/enquiry',
-    name: 'Enquiry',
-    component: Enquiry
+    path: "/enquiry",
+    name: "Enquiry",
+    component: Enquiry,
   },
   // {
   //   path: '/profile',
@@ -34,62 +35,64 @@ const routes = [
   //   component: Profile
   // },
   {
-    path: '/profile/physiotherapist',
-    name: 'Physiotherapist',
-    component: Physiotherapist
-
+    path: "/profile/physiotherapist",
+    name: "Physiotherapist",
+    component: Physiotherapist,
   },
   {
-    path: '/profile/nursing_staff',
-    name: 'NusrsingStaff',
-    component: NursingStaff
+    path: "/profile/nursing_staff",
+    name: "NusrsingStaff",
+    component: NursingStaff,
   },
   {
-    path: '/profile/pharmacy',
-    name: 'Pharmacy',
-    component: Pharmacy
-
+    path: "/profile/pharmacy",
+    name: "Pharmacy",
+    component: Pharmacy,
   },
   {
-    path: '/profile/healthlab',
-    name: 'Healthlab',
-    component: Healthlab
-
+    path: "/profile/healthlab",
+    name: "Healthlab",
+    component: Healthlab,
   },
   {
-    path: '/profile/blood_bank',
-    name: 'BloodBank',
-    component: BloodBank
+    path: "/profile/blood_bank",
+    name: "BloodBank",
+    component: BloodBank,
   },
   {
-    path: '/profile/gym',
-    name: 'gym',
-    component: Gym
+    path: "/profile/gym",
+    name: "gym",
+    component: Gym,
   },
   {
-    path: '/profile/nursing_medical_college',
-    name: 'MedicalCollege',
-    component: MedicalCollege
+    path: "/profile/nursing_medical_college",
+    name: "MedicalCollege",
+    component: MedicalCollege,
   },
   {
-    path: '/profile/ivf_clinic',
-    name: 'IvfClinic',
-    component: IvfClinic
+    path: "/profile/ivf_clinic",
+    name: "IvfClinic",
+    component: IvfClinic,
   },
   {
-    path: '/profile/vetenary',
-    name: 'Vetenary',
-    component: Veterinary
+    path: "/profile/vetenary",
+    name: "Vetenary",
+    component: Veterinary,
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: "/profile/yoga",
+    name: "Yoga",
+    component: Yoga,
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/dashboard'
-  }
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/dashboard",
+  },
 ];
 
 const router = createRouter({
