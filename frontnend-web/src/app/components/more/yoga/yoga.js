@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaStar, FaMapMarkerAlt, FaGlobe, FaUsers } from "react-icons/fa";
 import Pagination from "../common/Pagination";
+import WhyChooseUs from "./whyChoose";
+import Testimonials from "./testimonial";
 
 const Yoga = ({
   serviceData,
@@ -296,6 +298,9 @@ const Yoga = ({
           onPageChange={handlePageChange}
         />
       )}
+
+      <WhyChooseUs />
+      <Testimonials />
     </>
   );
 };
