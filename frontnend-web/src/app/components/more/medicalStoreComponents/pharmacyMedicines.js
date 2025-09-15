@@ -15,7 +15,7 @@ const AvailableMedicines = ({ medicines,data }) => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart`);
                 const data = await res.json();
-                setCartCount(data.reduce((acc, item) => acc + item.quantity, 0));
+                setCartCount(data.length);
             } catch (err) {
                 console.error("Failed to fetch cart:", err);
             }
@@ -31,7 +31,7 @@ const AvailableMedicines = ({ medicines,data }) => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...medicine,
-                    medicineId: medicine.id || medicine._id || `med_${Date.now()}`
+                    medicineId: medicine._id
                 }),
             });
 
@@ -44,6 +44,7 @@ const AvailableMedicines = ({ medicines,data }) => {
 
     return (
         <motion.section
+            id="cartSection"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

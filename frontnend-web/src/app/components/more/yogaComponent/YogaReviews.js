@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FaStar, FaRegStar, FaCommentDots } from 'react-icons/fa';
 
 
-const PatientReviews = ({ healthProfile }) => {
+const Reviews = ({ healthProfile }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -15,9 +15,8 @@ const PatientReviews = ({ healthProfile }) => {
         >
             {/* Title */}
             <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
-                    <FaCommentDots className="text-3xl text-yellow-500" />
-                    Patient Reviews & Testimonials
+                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">        
+                    Member Reviews & Testimonials
                 </h2>
             </div>
 
@@ -44,7 +43,7 @@ const PatientReviews = ({ healthProfile }) => {
                             <strong>{t.vetName}</strong> {t.text}
                         </p>
                         <p className="font-semibold text-blue-800">
-                            – {t.author}, <span className="text-gray-600">{t.role}</span>
+                            – {t.author}
                         </p>
                     </motion.div>
                 ))}
@@ -60,4 +59,4 @@ const PatientReviews = ({ healthProfile }) => {
     );
 };
 
-export default PatientReviews;
+export default Reviews;

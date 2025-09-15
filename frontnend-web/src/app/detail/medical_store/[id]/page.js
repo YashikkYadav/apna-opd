@@ -116,6 +116,7 @@ const PharmacyStorePage = () => {
 
     return () => clearInterval(interval);
   }, [fetchData]);
+  
   // console.log("aaaa",data)
   const filteredMedicines = useMemo(() => {
     let filtered = medicines?.filter((medicine) => {

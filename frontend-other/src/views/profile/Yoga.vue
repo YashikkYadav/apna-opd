@@ -29,11 +29,23 @@
                 v-model="form.experience"
                 ref="experienceRef"
                 type="number"
-                label="Experience"
+                label="Experience (in years)"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
-                 @wheel.stop.prevent
+                @wheel.stop.prevent
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" sm="4">
+              <v-text-field
+                v-model="form.totalCustomers"
+                ref="totalCustomersRef"
+                type="number"
+                label="Total Customers Served"
+                variant="outlined"
+                dense
+                @wheel.stop.prevent
               >
               </v-text-field>
             </v-col>
@@ -105,16 +117,23 @@
                     ✖
                   </button>
                 </div>
-                <div v-if="img.type === 'profilePhoto_image'" class="image-type">
+                <div
+                  v-if="img.type === 'profilePhoto_image'"
+                  class="image-type"
+                >
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div
+                  v-if="img.type === 'galleryImages_image'"
+                  class="image-type"
+                >
                   {{ "Gallery" }}
                 </div>
               </div>
             </div>
           </v-row>
         </v-card>
+
         <v-card class="section-card">
           <v-toolbar
             class="mb-4"
@@ -177,49 +196,157 @@
           </v-row>
         </v-card>
 
-        <v-card class="section-card mb-6">
-          <v-toolbar flat class="mb-4" style="padding: 0 20px">
-            <v-toolbar-title>Open and close Timing</v-toolbar-title>
-          </v-toolbar>
-
-          <v-row>
-            <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="form.openTime"
-                label="Opening Time"
-                type="time"
-                outlined
-                dense
-              />
-            </v-col>
-
-            <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="form.closeTime"
-                label="Closing Time"
-                type="time"
-                outlined
-                dense
-              />
-            </v-col>
-          </v-row>
-        </v-card>
-
-        <v-card>
+        <!-- Services -->
+        <v-card class="section-card">
           <v-toolbar
             flat
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
+            <v-toolbar-title class="ml-3">Services</v-toolbar-title>
           </v-toolbar>
-          <v-text-field
-            class="pa-4"
-            v-model="form.website"
-            label="Website URL"
-            type="url"
-            placeholder="https://example.com"
-          />
+
+          <v-btn class="mb-2" @click="addService">+ Add Service</v-btn>
+
+          <div
+            v-for="(service, index) in form.services"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="service.name"
+                label="Service Name"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+              
+              <v-textarea
+                v-model="service.description"
+                label="Service Description"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-textarea>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeService(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <!-- Instructors -->
+        <v-card class="section-card">
+          <v-toolbar
+            flat
+            class="mb-4"
+            style="column-gap: 20px; padding: 0px 20px"
+          >
+            <v-toolbar-title class="ml-3">Instructors</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addInstructor">+ Add Instructor</v-btn>
+
+          <div
+            v-for="(instructor, index) in form.instructors"
+            :key="index"
+            class="mb-4"
+            style="padding: 20px"
+          >
+            <div
+              class="pa-4"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
+            >
+              <v-text-field
+                v-model="instructor.name"
+                label="Instructor Name"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+              
+              <v-text-field
+                v-model="instructor.designation"
+                label="Designation"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="instructor.speciality"
+                label="Speciality"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
+              <v-textarea
+                v-model="instructor.description"
+                label="Description"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-textarea>
+
+              <div class="d-flex justify-end">
+                <v-btn icon color="error" @click="removeInstructor(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-card>
+
+        <!-- World Class Facilities -->
+        <v-card class="section-card">
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>World Class Facilities</v-toolbar-title>
+          </v-toolbar>
+
+          <v-btn class="mb-2" @click="addFacility">+ Add Facility</v-btn>
+
+          <div
+            v-for="(facility, index) in form.worldClassFacilities"
+            :key="index"
+            class="mb-4 px-4"
+          >
+            <v-select
+              v-model="form.worldClassFacilities[index]"
+              :items="facilityOptions"
+              label="Select Facility"
+              dense
+              outlined
+              hide-details
+            ></v-select>
+            <div class="d-flex justify-end pa-2">
+              <v-btn icon color="error" @click="removeFacility(index)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </div>
+          </div>
         </v-card>
 
         <!-- tags -->
@@ -267,145 +394,72 @@
         </v-card>
 
         <v-card>
-          <v-card-title>
-            Medicines
-            <v-spacer />
-            <v-btn color="primary" class="mt-2" @click="addMedicine">+ Add Medicine</v-btn>
-          </v-card-title>
-
-          <v-data-table
-            :headers="headers"
-            :items="form.medicines"
-            class="elevation-1"
-          >
-            <template v-slot:body>
-              <tr v-for="(medicine, index) in form.medicines" :key="index">
-                <td>
-                  <v-text-field
-                    v-model="medicine.name"
-                    placeholder="Name"
-                    dense
-                  />
-                </td>
-                <td>
-                  <v-text-field
-                    v-model="medicine.dosage"
-                    placeholder="Dosage"
-                    dense
-                  />
-                </td>
-                <td>
-                  <v-text-field
-                    v-model="medicine.stock"
-                    type="number"
-                    placeholder="Stock"
-                    dense
-                     @wheel.stop.prevent
-                  />
-                </td>
-                <td>
-                  <v-text-field
-                    v-model="medicine.price"
-                    type="number"
-                    placeholder="Price"
-                    dense
-                     @wheel.stop.prevent
-                  />
-                </td>
-                <td>
-                  <v-btn icon @click="removeMedicine(index)">
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </v-card>
-
-        <v-card class="section-card">
           <v-toolbar
             flat
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title>Services Offered</v-toolbar-title>
+            <v-toolbar-title class="ml-3">Website</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-2" @click="addServiceOffered">+ Add Service</v-btn>
-          <div
-            v-for="(service, index) in form.servicesOffered"
-            :key="index"
-            class="mb-4"
-            style="padding: 20px"
-          >
-            <div
-              class="pa-4"
-              style="border: 1px solid #ddd; border-radius: 8px"
-            >
-              <v-text-field
-                v-model="service.name"
-                label="Service Name"
-                placeholder="Govt. scheme, Credit Line, Pay on delivery etc."
-                dense
-                outlined
-                class="mb-3"
-                hide-details
-              ></v-text-field>
-              <!-- <v-textarea v-model="service.description" label="Description" dense outlined auto-grow hide-details class="mb-3"></v-textarea> -->
-              <div class="d-flex justify-end">
-                <v-btn icon color="error" @click="removeServiceOffered(index)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </div>
+          <v-text-field
+            class="pa-4"
+            v-model="form.website"
+            label="Website URL"
+            type="url"
+            placeholder="https://example.com"
+          />
         </v-card>
 
+        <!-- THERAPY PACKAGES -->
         <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title>Partnerships</v-toolbar-title>
+          <v-toolbar flat class="mb-4" style="padding: 0px 20px">
+            <v-toolbar-title>Therapy Packages</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-2" @click="addPartnership">+ Add Partnership</v-btn>
+
+          <v-btn class="mb-2" @click="addTherapyPackage">+ Add Package</v-btn>
+
           <div
-            v-for="(partner, index) in form.partnerships"
+            v-for="(pkg, index) in form.therapyPackages"
             :key="index"
-            class="mb-4"
-            style="padding: 20px"
+            class="mb-4 px-4"
           >
             <div
               class="pa-4"
-              style="border: 1px solid #ddd; border-radius: 8px"
+              style="
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin-bottom: 16px;
+              "
             >
               <v-text-field
-                v-model="partner.name"
-                label="Partner Name"
+                v-model="pkg.name"
+                label="Package Name"
                 dense
                 outlined
-                class="mb-3"
                 hide-details
+                class="mb-3"
               ></v-text-field>
+              
+              <v-text-field
+                v-model="pkg.price"
+                label="Price"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
               <v-textarea
-                v-model="partner.description"
+                v-model="pkg.description"
                 label="Description"
                 dense
                 outlined
-                auto-grow
                 hide-details
                 class="mb-3"
               ></v-textarea>
-              <v-text-field
-                v-model="partner.link"
-                label="Website / Link"
-                dense
-                outlined
-                hide-details
-                class="mb-3"
-              ></v-text-field>
+
               <div class="d-flex justify-end">
-                <v-btn icon color="error" @click="removePartnership(index)">
+                <v-btn icon color="error" @click="removeTherapyPackage(index)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </div>
@@ -413,84 +467,42 @@
           </div>
         </v-card>
 
-        <v-card class="section-card">
+        <v-card class="section-card mt-6">
           <v-toolbar
             flat
             class="mb-4"
             style="column-gap: 20px; padding: 0px 20px"
           >
-            <v-toolbar-title>Features</v-toolbar-title>
+            <v-toolbar-title class="ml-3">FAQs</v-toolbar-title>
           </v-toolbar>
-          <v-btn class="mb-2" @click="addFeature">+ Add Feature</v-btn>
+          <v-btn class="mb-6" @click="addFAQ">+ Add FAQ</v-btn>
           <div
-            v-for="(feature, index) in form.features"
-            :key="index"
-            class="mb-4"
-            style="padding: 20px"
+            v-for="(faq, i) in form.faqs"
+            :key="i"
+            class="mb-6 pa-4"
+            style="border: 1px solid #ddd; border-radius: 8px"
           >
-            <div
-              class="pa-4"
-              style="border: 1px solid #ddd; border-radius: 8px"
-            >
-              <v-text-field
-                v-model="feature.title"
-                label="Title"
-                dense
-                outlined
-                class="mb-3"
-                hide-details
-              ></v-text-field>
-              <!-- <v-textarea v-model="feature.detail" label="Detail" dense outlined auto-grow hide-details class="mb-3"></v-textarea> -->
-              <div class="d-flex justify-end">
-                <v-btn icon color="error" @click="removeFeature(index)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </div>
-            </div>
-          </div>
-        </v-card>
-
-        <v-card class="section-card">
-          <v-toolbar
-            flat
-            class="mb-4"
-            style="column-gap: 20px; padding: 0px 20px"
-          >
-            <v-toolbar-title>FAQs</v-toolbar-title>
-          </v-toolbar>
-          <v-btn class="mb-2" @click="addFaq">+ Add FAQ</v-btn>
-          <div
-            v-for="(faq, index) in form.faqs"
-            :key="index"
-            class="mb-4"
-            style="padding: 20px"
-          >
-            <div
-              class="pa-4"
-              style="border: 1px solid #ddd; border-radius: 8px"
-            >
-              <v-text-field
-                v-model="faq.question"
-                label="Question"
-                dense
-                outlined
-                class="mb-3"
-                hide-details
-              ></v-text-field>
-              <v-textarea
-                v-model="faq.answer"
-                label="Answer"
-                dense
-                outlined
-                auto-grow
-                hide-details
-                class="mb-3"
-              ></v-textarea>
-              <div class="d-flex justify-end">
-                <v-btn icon color="error" @click="removeFaq(index)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </div>
+            <v-text-field
+              v-model="faq.question"
+              label="Question"
+              dense
+              outlined
+              hide-details
+              class="mb-3"
+            />
+            <v-textarea
+              v-model="faq.answer"
+              label="Answer"
+              dense
+              outlined
+              auto-grow
+              hide-details
+              class="mb-3"
+            />
+            <div class="d-flex justify-end">
+              <v-btn icon color="error" @click="removeFAQ(i)">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
             </div>
           </div>
         </v-card>
@@ -556,6 +568,15 @@
                 class="mb-3"
               ></v-text-field>
 
+              <v-text-field
+                v-model="testimonial.context"
+                label="Context"
+                dense
+                outlined
+                hide-details
+                class="mb-3"
+              ></v-text-field>
+
               <div class="d-flex justify-end">
                 <v-btn icon color="error" @click="removeTestimonial(index)">
                   <v-icon>mdi-delete</v-icon>
@@ -611,67 +632,97 @@
       </div>
     </div>
   </div>
+
   <v-dialog v-model="mapDialog" max-width="900">
     <v-card>
       <v-card-title>Select Location</v-card-title>
       <v-card-text>
-  <!-- Search + Suggestions Wrapper -->
-  <div style="position: relative; width: 100%; margin-bottom: 10px;">
-  <!-- Search Box -->
-  <input
-    v-model="query"
-    id="pac-input"
-    type="text"
-    placeholder="Search for a place"
-    style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px;"
-    @input="debounceAutocomplete($event.target.value)"
-  />
+        <!-- Search + Suggestions Wrapper -->
+        <div style="position: relative; width: 100%; margin-bottom: 10px">
+          <!-- Search Box -->
+          <input
+            v-model="query"
+            id="pac-input"
+            type="text"
+            placeholder="Search for a place"
+            style="
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+            "
+            @input="debounceAutocomplete($event.target.value)"
+          />
 
-  <!-- Suggestions -->
-  <div
-    id="suggestions"
-    v-show="suggestions.length > 0"
-    style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background-color: white; border: 1px solid #ccc; border-radius: 8px; max-height: 200px; overflow-y: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
-  >
-    <div
-      v-for="suggestion in suggestions"
-      :key="suggestion.placePrediction.placeId"
-      @click="handleSuggestionClick(suggestion)"
-      style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;"
-    >
-      {{ suggestion.placePrediction.text.text }}
-    </div>
-  </div>
-</div>
+          <!-- Suggestions -->
+          <div
+            id="suggestions"
+            v-show="suggestions.length > 0"
+            style="
+              position: absolute;
+              top: 100%;
+              left: 0;
+              right: 0;
+              z-index: 1000;
+              background-color: white;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              max-height: 200px;
+              overflow-y: auto;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <div
+              v-for="suggestion in suggestions"
+              :key="suggestion.placePrediction.placeId"
+              @click="handleSuggestionClick(suggestion)"
+              style="
+                padding: 10px;
+                cursor: pointer;
+                border-bottom: 1px solid #eee;
+              "
+            >
+              {{ suggestion.placePrediction.text.text }}
+            </div>
+          </div>
+        </div>
 
-<!-- Map -->
-<div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
-</v-card-text>
-
+        <!-- Map -->
+        <div
+          id="map"
+          style="height: 400px; width: 100%; border-radius: 8px"
+        ></div>
+      </v-card-text>
 
       <v-card-actions>
         <v-spacer />
         <v-btn text @click="mapDialog = false">Cancel</v-btn>
-        <v-btn color="primary" @click="confirmLocation" :disabled="!selectedLatLng">Confirm</v-btn>
+        <v-btn
+          color="primary"
+          @click="confirmLocation"
+          :disabled="!selectedLatLng"
+          >Confirm</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
+
 <script>
 import { checkAuth } from "@/lib/utils/utils";
 import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 import { onMounted } from "vue";
-
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 import { reactive } from "vue";
+
 const snackbar = reactive({
   show: false,
   message: "",
   color: "warning",
   timeout: 4000,
 });
+
 export default {
   data() {
     return {
@@ -683,37 +734,55 @@ export default {
         color: "warning",
         timeout: 4000,
       },
+      facilityOptions: [
+        'Spacious Practice Halls',
+        'Meditation Room',
+        'Online Class Studio',
+        'Healing Garden',
+        'Audio-Visual Systems',
+        'Changing Rooms'
+      ],
       form: {
-        website: "",
         introduction: "",
-        experience: null,
+        experience: "",
+        totalCustomers: "",
         about: "",
+
+        // Location
         address: "",
         locality: "",
         city: "",
-        pincode: null,
+        pincode: "",
         state: "",
-        openTime: "",
-        closeTime: "",
-        tags: [""],
-        features: [],
-        medicines: [{ name: "", dosage: "", stock: "", price: "" }],
 
-        servicesOffered: [],
-        testimonials: [],
-        partnerships: [],
+        // Arrays
+        services: [],
+        instructors: [],
+        worldClassFacilities: [],
+        tags: [],
         faqs: [],
+
+        // Nested objects
+        therapyPackages: [],
+        testimonials: [],
+        
+        profileImage: "",
+        galleryImages: [],
         googleMapLink: "",
+        website: "",
       },
+
       mapDialog: false,
       map: null,
       marker: null,
       selectedLatLng: null,
-      query: '',
-      userLocation: { latitude: 28.6139, longitude: 77.2090 },
+      query: "",
+      suggestions: [],
+      userLocation: { latitude: 28.6139, longitude: 77.209 },
       rules: {
         required: (value) => !!value || "This field is required.",
       },
+
       itemDialog: false,
       itemType: "",
       newItemText: "",
@@ -725,101 +794,141 @@ export default {
       debounceTimeout: null,
     };
   },
-
+  
   mounted() {
     const auth = checkAuth(this.$router);
     if (auth) {
       this.fetchProfileData();
     }
   },
+  
   computed: {
     sortedImages() {
       if (!Array.isArray(this.images)) return [];
-
       return [...this.images].sort((a, b) => {
-        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image") return -1;
-        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image") return 1;
+        if (a.type === "profilePhoto_image" && b.type !== "profilePhoto_image")
+          return -1;
+        if (b.type === "profilePhoto_image" && a.type !== "profilePhoto_image")
+          return 1;
         return 0;
       });
     },
   },
+  
   methods: {
+    // Services
+    addService() {
+      this.form.services.push({ name: "", description: "" });
+    },
+    removeService(index) {
+      this.form.services.splice(index, 1);
+    },
+
+    // Instructors
+    addInstructor() {
+      this.form.instructors.push({ 
+        name: "", 
+        designation: "", 
+        speciality: "", 
+        description: "" 
+      });
+    },
+    removeInstructor(index) {
+      this.form.instructors.splice(index, 1);
+    },
+
+    // World Class Facilities
+    addFacility() {
+      this.form.worldClassFacilities.push("");
+    },
+    removeFacility(index) {
+      this.form.worldClassFacilities.splice(index, 1);
+    },
+
+    // Map functionality
     openMapDialog() {
-  this.mapDialog = true;
-  this.selectedLatLng = null;
-  this.marker = null;
-  this.query = '';
-  this.suggestions = [];
+      this.mapDialog = true;
+      this.selectedLatLng = null;
+      this.marker = null;
+      this.query = "";
+      this.suggestions = [];
 
-  if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.userLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          this.initMap();
-        },
-        (err) => {
-          console.warn("Geolocation failed, using fallback:", err);
-          this.userLocation = { latitude: 28.6139, longitude: 77.2090 }; // fallback
-          this.initMap();
-        }
-      );
-    } else {
-      console.warn("Geolocation not supported, using fallback");
-      this.userLocation = { latitude: 28.6139, longitude: 77.2090 };
-      this.initMap();
-    }
-},
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.userLocation = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
+            this.initMap();
+          },
+          (err) => {
+            console.warn("Geolocation failed, using fallback:", err);
+            this.userLocation = { latitude: 28.6139, longitude: 77.209 };
+            this.initMap();
+          }
+        );
+      } else {
+        console.warn("Geolocation not supported, using fallback");
+        this.userLocation = { latitude: 28.6139, longitude: 77.209 };
+        this.initMap();
+      }
+    },
 
-initMap() {
+    initMap() {
       this.$nextTick(() => {
         setTimeout(() => {
-          const mapEl = document.getElementById('map');
+          const mapEl = document.getElementById("map");
           if (!mapEl) {
-            console.error('Map element not found');
+            console.error("Map element not found");
             return;
           }
           this.map = new google.maps.Map(mapEl, {
-            center: { lat: this.userLocation.latitude, lng: this.userLocation.longitude },
+            center: {
+              lat: this.userLocation.latitude,
+              lng: this.userLocation.longitude,
+            },
             zoom: 12,
           });
 
           const userMarker = new google.maps.Marker({
-          position: { lat: this.userLocation.latitude, lng: this.userLocation.longitude },
-          map: this.map,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 8,
+            position: {
+              lat: this.userLocation.latitude,
+              lng: this.userLocation.longitude,
+            },
+            map: this.map,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 8,
+              fillColor: "#4285F4",
+              fillOpacity: 1,
+              strokeColor: "white",
+              strokeWeight: 2,
+            },
+          });
+
+          new google.maps.Circle({
+            map: this.map,
+            center: userMarker.getPosition(),
+            radius: 50,
             fillColor: "#4285F4",
-            fillOpacity: 1,
-            strokeColor: "white",
-            strokeWeight: 2,
-          },
-        });
+            fillOpacity: 0.2,
+            strokeColor: "#4285F4",
+            strokeOpacity: 0.4,
+          });
 
-        // Optional accuracy circle
-        new google.maps.Circle({
-          map: this.map,
-          center: userMarker.getPosition(),
-          radius: 50, // meters
-          fillColor: '#4285F4',
-          fillOpacity: 0.2,
-          strokeColor: '#4285F4',
-          strokeOpacity: 0.4,
-        });
-
-
-          this.map.addListener('bounds_changed', () => {
+          this.map.addListener("bounds_changed", () => {
             const bounds = this.map.getBounds();
             if (bounds) {
               const center = bounds.getCenter();
-              this.userLocation = { latitude: center.lat(), longitude: center.lng() };
+              this.userLocation = {
+                latitude: center.lat(),
+                longitude: center.lng(),
+              };
             }
           });
 
-          this.map.addListener('click', (e) => {
+          this.map.addListener("click", (e) => {
             if (this.marker) this.marker.setMap(null);
             this.selectedLatLng = e.latLng;
             this.marker = new google.maps.Marker({
@@ -830,91 +939,105 @@ initMap() {
         }, 100);
       });
     },
+
     debounceAutocomplete() {
       clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(() => this.performAutocomplete(), 300);
     },
+
     async performAutocomplete() {
       const currentQuery = this.query.trim();
-      this.suggestions = []; 
-      const suggestionsDiv = document.getElementById('suggestions');
-      if (suggestionsDiv) suggestionsDiv.style.display = 'none';
+      this.suggestions = [];
+      const suggestionsDiv = document.getElementById("suggestions");
+      if (suggestionsDiv) suggestionsDiv.style.display = "none";
 
       if (!currentQuery) {
         return;
       }
 
-      console.log('Performing autocomplete for query:', currentQuery, 'Location:', this.userLocation);
       try {
-        const response = await fetch('https://places.googleapis.com/v1/places:autocomplete', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Goog-Api-Key': process.env.PUBLIC_GOOGLE_MAPS_API_KEY,
-          },
-          body: JSON.stringify({
-            input: currentQuery,
-            locationBias: {
-              circle: {
-                center: {
-                  latitude: this.userLocation.latitude,
-                  longitude: this.userLocation.longitude,
-                },
-                radius: 50000, // 50km radius
-              },
+        const response = await fetch(
+          "https://places.googleapis.com/v1/places:autocomplete",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Goog-Api-Key": process.env.PUBLIC_GOOGLE_MAPS_API_KEY,
             },
-          }),
-        });
+            body: JSON.stringify({
+              input: currentQuery,
+              locationBias: {
+                circle: {
+                  center: {
+                    latitude: this.userLocation.latitude,
+                    longitude: this.userLocation.longitude,
+                  },
+                  radius: 50000,
+                },
+              },
+            }),
+          }
+        );
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('Autocomplete error:', errorText, 'Status:', response.status);
+          console.error(
+            "Autocomplete error:",
+            errorText,
+            "Status:",
+            response.status
+          );
           return;
         }
 
         const data = await response.json();
-        console.log('Autocomplete response:', data);
         this.suggestions = data.suggestions || [];
-        if (suggestionsDiv) suggestionsDiv.style.display = this.suggestions.length ? 'block' : 'none';
+        if (suggestionsDiv)
+          suggestionsDiv.style.display = this.suggestions.length
+            ? "block"
+            : "none";
       } catch (error) {
-        console.error('Fetch error:', error);
+        console.error("Fetch error:", error);
       }
     },
+
     handleSuggestionClick(suggestion) {
-  if (!suggestion || !suggestion.placePrediction?.placeId) return;
+      if (!suggestion || !suggestion.placePrediction?.placeId) return;
 
-  const placeId = suggestion.placePrediction.placeId;
+      const placeId = suggestion.placePrediction.placeId;
+      this.query = suggestion.placePrediction.text.text;
+      this.fetchPlaceDetails(placeId);
+      this.suggestions = [];
+      const suggestionsDiv = document.getElementById("suggestions");
+      if (suggestionsDiv) suggestionsDiv.style.display = "none";
+    },
 
-  // Fill search box with the selected suggestion text
-  this.query = suggestion.placePrediction.text.text;
-
-  // Fetch details for the selected place
-  this.fetchPlaceDetails(placeId);
-
-  // Clear only suggestions dropdown (keep the input)
-  this.suggestions = [];
-  const suggestionsDiv = document.getElementById('suggestions');
-  if (suggestionsDiv) suggestionsDiv.style.display = 'none';
-},
     async fetchPlaceDetails(placeId) {
       try {
-        const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Goog-Api-Key': process.env.PUBLIC_GOOGLE_MAPS_API_KEY, // Replace with your key
-            'X-Goog-FieldMask': 'id,displayName,formattedAddress,location,rating,userRatingCount,primaryType',
-          },
-        });
+        const response = await fetch(
+          `https://places.googleapis.com/v1/places/${placeId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Goog-Api-Key": process.env.PUBLIC_GOOGLE_MAPS_API_KEY,
+              "X-Goog-FieldMask":
+                "id,displayName,formattedAddress,location,rating,userRatingCount,primaryType",
+            },
+          }
+        );
 
         if (!response.ok) {
-          console.error('Place Details error:', await response.text());
+          console.error("Place Details error:", await response.text());
           return;
         }
 
         const place = await response.json();
         if (this.marker) this.marker.setMap(null);
-        this.selectedLatLng = { lat: place.location.latitude, lng: place.location.longitude };
+        this.selectedLatLng = {
+          lat: place.location.latitude,
+          lng: place.location.longitude,
+        };
         this.marker = new google.maps.Marker({
           map: this.map,
           position: this.selectedLatLng,
@@ -924,94 +1047,85 @@ initMap() {
         this.map.setZoom(15);
 
         this.map.addListener("click", (e) => {
-            if (this.marker) this.marker.setMap(null);
-            this.selectedLatLng = e.latLng;
-            this.marker = new google.maps.Marker({
-              position: e.latLng,
-              map: this.map,
-            });
+          if (this.marker) this.marker.setMap(null);
+          this.selectedLatLng = e.latLng;
+          this.marker = new google.maps.Marker({
+            position: e.latLng,
+            map: this.map,
           });
+        });
       } catch (error) {
-        console.error('Place Details fetch error:', error);
+        console.error("Place Details fetch error:", error);
       }
     },
+
     async confirmLocation() {
-  if (!this.selectedLatLng) return;
+      if (!this.selectedLatLng) return;
 
-  let lat, lng;
+      let lat, lng;
 
-  // Google Maps LatLng object
-  if (typeof this.selectedLatLng.toJSON === "function") {
-    const coords = this.selectedLatLng.toJSON();
-    lat = coords.lat;
-    lng = coords.lng;
-  } 
-  // Plain object (from suggestions)
-  else if (
-    this.selectedLatLng.lat !== undefined &&
-    this.selectedLatLng.lng !== undefined
-  ) {
-    lat = this.selectedLatLng.lat;
-    lng = this.selectedLatLng.lng;
-  } 
-  else {
-    console.error("Invalid selectedLatLng:", this.selectedLatLng);
-    return;
-  }
+      if (typeof this.selectedLatLng.toJSON === "function") {
+        const coords = this.selectedLatLng.toJSON();
+        lat = coords.lat;
+        lng = coords.lng;
+      } else if (
+        this.selectedLatLng.lat !== undefined &&
+        this.selectedLatLng.lng !== undefined
+      ) {
+        lat = this.selectedLatLng.lat;
+        lng = this.selectedLatLng.lng;
+      } else {
+        console.error("Invalid selectedLatLng:", this.selectedLatLng);
+        return;
+      }
 
-  const geocoder = new google.maps.Geocoder();
+      const geocoder = new google.maps.Geocoder();
 
-  try {
-    const results = await new Promise((resolve, reject) => {
-      geocoder.geocode({ location: { lat, lng } }, (res, status) => {
-        if (status === "OK" && res && res.length > 0) {
-          resolve(res);
-        } else {
-          reject(new Error("Geocoding failed: " + status));
+      try {
+        const results = await new Promise((resolve, reject) => {
+          geocoder.geocode({ location: { lat, lng } }, (res, status) => {
+            if (status === "OK" && res && res.length > 0) {
+              resolve(res);
+            } else {
+              reject(new Error("Geocoding failed: " + status));
+            }
+          });
+        });
+
+        const result = results[0];
+
+        this.form.address = result.formatted_address || "";
+        this.form.city = "";
+        this.form.state = "";
+        this.form.pincode = "";
+        this.form.locality = "";
+
+        for (const comp of result.address_components || []) {
+          if (
+            comp.types.includes("sublocality_level_1") ||
+            comp.types.includes("neighborhood")
+          )
+            this.form.locality = comp.long_name;
+          if (comp.types.includes("locality")) this.form.city = comp.long_name;
+          if (
+            !this.form.city &&
+            comp.types.includes("administrative_area_level_2")
+          )
+            this.form.city = comp.long_name;
+          if (comp.types.includes("administrative_area_level_1"))
+            this.form.state = comp.long_name;
+          if (comp.types.includes("postal_code"))
+            this.form.pincode = comp.long_name;
         }
-      });
-    });
 
-    const result = results[0];
-    console.log(result);
+        this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
+      } catch (err) {
+        console.error("Geocoding failed", err);
+      }
 
-    this.form.address = result.formatted_address || "";
-    this.form.city = "";
-    this.form.state = "";
-    this.form.pincode = "";
-    this.form.locality = "";
-
-    for (const comp of result.address_components || []) {
-      if (comp.types.includes("sublocality_level_1") || comp.types.includes("neighborhood"))
-        this.form.locality = comp.long_name;
-      if (comp.types.includes("locality")) this.form.city = comp.long_name;
-      if (!this.form.city && comp.types.includes("administrative_area_level_2"))
-        this.form.city = comp.long_name;
-      if (comp.types.includes("administrative_area_level_1")) this.form.state = comp.long_name;
-      if (comp.types.includes("postal_code")) this.form.pincode = comp.long_name;
-    }
-
-    this.form.googleMapLink = `https://maps.google.com/?q=${lat},${lng}`;
-  } catch (err) {
-    console.error("Geocoding failed", err);
-  }
-
-  this.mapDialog = false;
-},
-    addItem(field) {
-      if (this.form[field].length >= 5) return;
-      const newItem = prompt(`Add new item to ${field}`);
-      if (newItem) this.form[field].push(newItem);
+      this.mapDialog = false;
     },
-    removeItem(field, index) {
-      this.form[field].splice(index, 1);
-    },
-    addMedicine() {
-      this.form.medicines.push({ name: "", dosage: "", stock: "", price: "" });
-    },
-    removeMedicine(index) {
-      this.form.medicines.splice(index, 1);
-    },
+
     addTestimonial() {
       if (this.form.testimonials.length >= 5) return;
       this.form.testimonials.push({
@@ -1025,41 +1139,22 @@ initMap() {
     removeTestimonial(index) {
       this.form.testimonials.splice(index, 1);
     },
-    addServiceOffered() {
-      this.form.servicesOffered.push({ name: "" });
+
+    addFAQ() {
+      this.form.faqs.push({ question: "", answer: "" });
     },
-    removeServiceOffered(index) {
-      this.form.servicesOffered.splice(index, 1);
-    },
-    getImageUrl(img) {
-      if (!img) return "";
-      // If img is a string (new upload), use Vite env
-      if (typeof img === "string") {
-        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
-      }
-      // If img has a path property, use Vite env
-      if (img.path)
-        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
-      // If img is a File object (new upload)
-      if (img instanceof File) return URL.createObjectURL(img);
-      return "";
+    removeFAQ(i) {
+      this.form.faqs.splice(i, 1);
     },
 
-    // PARTNERSHIPS
-    addPartnership() {
-      this.form.partnerships.push({ name: "", description: "", link: "" });
+    // Therapy Packages
+    addTherapyPackage() {
+      this.form.therapyPackages.push({ name: "", price: "", description: "" });
     },
-    removePartnership(index) {
-      this.form.partnerships.splice(index, 1);
+    removeTherapyPackage(i) {
+      this.form.therapyPackages.splice(i, 1);
     },
 
-    // FEATURES
-    addFeature() {
-      this.form.features.push({ title: "" });
-    },
-    removeFeature(index) {
-      this.form.features.splice(index, 1);
-    },
     addTag() {
       this.form.tags.push("");
     },
@@ -1067,37 +1162,20 @@ initMap() {
       this.form.tags.splice(index, 1);
     },
 
-    // FAQS
-    addFaq() {
-      this.form.faqs.push({ question: "", answer: "" });
-    },
-    removeFaq(index) {
-      this.form.faqs.splice(index, 1);
-    },
-    isNotFive(type) {
-      return (
-        type != "insurance" &&
-        type != "payments" &&
-        type != "healthPackages" &&
-        type != "specialServices"
-      );
-    },
-    openItemDialog(type) {
-      if (
-        (this.form[type].length >= 5 && this.isNotFive(type)) ||
-        this.form[type].length >= 7
-      )
-        return;
-      this.itemType = type;
-      this.newItemText = "";
-      this.itemDialog = true;
-    },
-    addItemFromDialog() {
-      if (this.newItemText.trim()) {
-        this.form[this.itemType].push(this.newItemText.trim());
+    getImageUrl(img) {
+      if (!img) return "";
+      if (img instanceof File) {
+        return URL.createObjectURL(img);
       }
-      this.itemDialog = false;
+      if (typeof img === "object" && img.path) {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img.path}`;
+      }
+      if (typeof img === "string") {
+        return `${import.meta.env.VITE_PUBLIC_IMAGE_URL}/${img}`;
+      }
+      return "";
     },
+
     confirmDelete(img) {
       this.imageToDelete = img;
       this.showModal = true;
@@ -1113,9 +1191,9 @@ initMap() {
         this.cancelDelete();
       }
     },
+
     handleGalleryChange(newFiles) {
       const combined = [...this.galleryImages, ...newFiles];
-
       const uniqueFiles = Array.from(
         new Map(combined.map((file) => [file.name, file])).values()
       ).slice(0, 6);
@@ -1140,11 +1218,12 @@ initMap() {
     handleProfileChange(newFile) {
       this.profileImage = newFile;
     },
+
     async fetchProfileData() {
       const res = await useProfileStore().getProfileData();
-      const profile = res.healthServeProfileData.healthServeProfile;
+      const profile = res?.healthServeProfileData?.healthServeProfile?.data;
       const hs = await res?.healthServeProfileData?.healthServeUser;
-      console.log(hs);
+
       if (hs) {
         this.form.address = hs?.address || "";
         this.form.city = hs?.city || "";
@@ -1152,67 +1231,73 @@ initMap() {
         this.form.state = hs?.state || "";
         this.form.pincode = hs?.pincode || profile?.pincode || "";
       }
+
       if (profile) {
-        // Map images for gallery and profile, matching hospital reference
-        this.images = [];
-        if (profile.profilePhoto) {
-          this.images.push({
-            path: profile.profilePhoto,
+        const images = [];
+        if (profile.profileImage) {
+          images.push({
+            path: profile.profileImage,
             type: "profilePhoto_image",
           });
         }
         if (Array.isArray(profile.galleryImages)) {
-          this.images = this.images.concat(
-            profile.galleryImages.map((img) => ({
-              path: img.path || img,
-              type: "galleryImages",
-            }))
-          );
+          profile.galleryImages.forEach((img) => {
+            images.push({ path: img, type: "galleryImages_image" });
+          });
         }
-        this.form.website = profile.website || "";
+        this.images = images;
+
         this.form.introduction = profile.introduction || "";
         this.form.about = profile.about || "";
         this.form.experience = profile.experience || "";
-        // this.form.pincode = profile?.pincode || "";
-        this.form.medicines = profile.medicines?.length
-          ? profile.medicines
-          : [{ name: "", dosage: "", stock: "", price: "" }];
-        this.form.servicesOffered = profile.servicesOffered || [];
-        this.form.partnerships = profile.partnerships || [];
-        this.form.features = profile.features || [];
-        this.form.faqs = profile.faqs || [];
-        this.form.openTime = profile.openTime || "";
-        this.form.closeTime = profile.closeTime || "";
-        this.form.testimonials = profile.testimonials || [];
+        this.form.totalCustomers = profile.totalCustomers || "";
+        this.form.website = profile.website || "";
+
+        // Arrays with proper structure
+        this.form.services = profile.services || [];
+        this.form.instructors = profile.instructors || [];
+        this.form.worldClassFacilities = profile.worldClassFacilities || [];
         this.form.tags = profile.tags || [];
+        this.form.faqs = profile.faqs || [];
+        this.form.therapyPackages = profile.therapyPackages || [];
+        this.form.testimonials = profile.testimonials || [];
+
+        this.form.profileImage = profile.profileImage || "";
+        this.form.galleryImages = profile.galleryImages || [];
+        this.form.googleMapLink = profile.googleMapLink || "";
       }
     },
+
     async onSubmit() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         const formData = new FormData();
+        
+        // Basic fields
         formData.append("website", this.form.website);
         formData.append("about", this.form.about);
         formData.append("experience", this.form.experience);
         formData.append("introduction", this.form.introduction);
+        formData.append("totalCustomers", this.form.totalCustomers);
+        
+        // Address fields
         formData.append("address", this.form.address);
         formData.append("locality", this.form.locality);
         formData.append("city", this.form.city);
         formData.append("pincode", this.form.pincode);
         formData.append("state", this.form.state);
-        formData.append(
-          "servicesOffered",
-          JSON.stringify(this.form.servicesOffered)
-        );
-        formData.append("medicines", JSON.stringify(this.form.medicines));
-        formData.append("partnerships", JSON.stringify(this.form.partnerships));
-        formData.append("features", JSON.stringify(this.form.features));
-        formData.append("faqs", JSON.stringify(this.form.faqs));
-        formData.append("openTime", this.form.openTime);
-        formData.append("closeTime", this.form.closeTime);
+        formData.append("googleMapLink", this.form.googleMapLink);
+        
+        // Complex arrays as JSON strings
+        formData.append("services", JSON.stringify(this.form.services));
+        formData.append("instructors", JSON.stringify(this.form.instructors));
+        formData.append("worldClassFacilities", JSON.stringify(this.form.worldClassFacilities));
+        formData.append("therapyPackages", JSON.stringify(this.form.therapyPackages));
         formData.append("testimonials", JSON.stringify(this.form.testimonials));
         formData.append("tags", JSON.stringify(this.form.tags));
-
+        formData.append("faqs", JSON.stringify(this.form.faqs));
+        
+        // Images
         if (this.profileImage) {
           formData.append("profilePhoto_image", this.profileImage);
         }
@@ -1220,9 +1305,7 @@ initMap() {
         this.galleryImages.forEach((file, index) => {
           formData.append("galleryImages_image", file);
         });
-        for (let pair of formData.entries()) {
-          console.log(pair[0] + ":", pair[1]);
-        }
+
         const res = await useProfileStore().addProfileData(formData);
 
         if (res) {
@@ -1230,7 +1313,7 @@ initMap() {
           this.profileImage = null;
           this.galleryImages = [];
           useUiStore().openNotificationMessage(
-            "Profile data updated sucessfully!"
+            "Profile data updated successfully!"
           );
         }
       } else {
@@ -1241,65 +1324,26 @@ initMap() {
         );
       }
     },
-    handleInputDrugHistory() {
-      if (this.isAllRowsFilled() && !this.hasEmptyRow()) {
-        this.form.about.push("");
-      }
-      this.removeEmptyRows();
-    },
-    isAllRowsFilled() {
-      return this.form.about.every((item) => item.trim() !== "");
-    },
-    hasEmptyRow() {
-      return this.form.about.some((item) => item.trim() === "");
-    },
-    removeEmptyRows() {
-      this.form.about = this.form.about.filter(
-        (item, index) =>
-          item.trim() !== "" || index === this.form.about.length - 1
-      );
-    },
-    handleLocationHistory(item, index) {
-      if (this.isLocationRowFilled(item) && !this.hasEmptyLocationRow()) {
-        this.form.locations.push({
-          name: "",
-          address: "",
-          days: [],
-          from: null,
-          to: null,
-          timeslot: null,
-        });
-      }
-      this.removeEmptyLocationRows();
-    },
-    isLocationRowFilled(item) {
-      return item.name.trim() || (item.address && item.address.trim());
-    },
-    hasEmptyLocationRow() {
-      return this.form.locations.some(
-        (drug) => !(drug.name.trim() || (drug.address && drug.address.trim()))
-      );
-    },
-    removeEmptyLocationRows() {
-      this.form.locations = this.form.locations.filter(
-        (drug, index) =>
-          this.isLocationRowFilled(drug) ||
-          index === this.form.locations.length - 1
-      );
-    },
 
-    validateDays(value) {
-      if (!value || value.length === 0) {
-        return "";
+    openItemDialog(type) {
+      this.itemType = type;
+      this.newItemText = "";
+      this.itemDialog = true;
+    },
+    addItemFromDialog() {
+      if (this.newItemText.trim()) {
+        this.form[this.itemType].push(this.newItemText.trim());
       }
-      return true;
+      this.itemDialog = false;
     },
   },
 };
+
 onMounted(() => {
   this.fetchProfileData();
 });
 </script>
+
 <style scoped>
 .image-gallery {
   display: flex;
@@ -1371,13 +1415,13 @@ onMounted(() => {
 .image-container:hover .delete-button {
   opacity: 1;
 }
+
 .image-type {
   text-align: center;
   margin-top: 0.5rem;
   font-weight: bold;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1390,21 +1434,25 @@ onMounted(() => {
   justify-content: center;
   z-index: 100;
 }
+
 .modal {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
   min-width: 300px;
 }
+
 .modal-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
 }
+
 .modal-actions button {
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
+
 .btn {
   padding: 0.5rem 1.2rem;
   font-size: 0.95rem;
@@ -1414,26 +1462,32 @@ onMounted(() => {
   cursor: pointer;
   font-weight: 500;
 }
+
 .btn-danger {
   background-color: #e53935;
   color: white;
 }
+
 .btn-danger:hover {
   background-color: #d32f2f;
   transform: scale(1.03);
 }
+
 .btn-danger:active {
   transform: scale(0.98);
   background-color: #b71c1c;
 }
+
 .btn-cancel {
   background-color: #f1f1f1;
   color: #333;
 }
+
 .btn-cancel:hover {
   background-color: #e0e0e0;
   transform: scale(1.03);
 }
+
 .btn-cancel:active {
   transform: scale(0.98);
   background-color: #ccc;

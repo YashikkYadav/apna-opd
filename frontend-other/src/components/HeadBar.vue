@@ -57,6 +57,8 @@ export default {
           return "/profile/nursing_medical_college";
         case "ivf_clinic":
           return "/profile/ivf_clinic";
+        case "yoga":
+          return "/profile/yoga"
         default:
           return "/profile";
       }

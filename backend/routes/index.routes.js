@@ -32,9 +32,12 @@ const nurseRoutes = require("./nurse.routes")
 const googleAuthRoutes=require("./googleauth.routes")
 const cartRoutes=require("./cart.routes")
 const orderRoutes=require("./order.routes")
+const medicalInvoiceRoutes = require('./medicalInvoice.routes')
+const medicalMiddleware = require("../middlewares/medical.middleware")
 const router = express.Router();
 
 router.use("/cart", cartRoutes);
+
 router.use("/:healthServeId/orders", orderRoutes);
 
 router.use("/admin", adminRoutes);
@@ -68,6 +71,8 @@ router.use("/patient", patientRoutes);
 router.use("/:doctorId/report", doctorMiddleware, dashboardRoutes);
 
 router.use("/:doctorId/invoice", doctorMiddleware, invoiceRoutes);
+
+router.use("/:medicalId/MedicalInvoice", medicalMiddleware, medicalInvoiceRoutes);
 
 router.use("/:doctorPatientId", messageRoutes);
 
