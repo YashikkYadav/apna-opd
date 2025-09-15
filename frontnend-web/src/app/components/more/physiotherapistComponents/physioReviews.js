@@ -29,7 +29,7 @@ const PatientReviews = ({ healthProfile }) => {
                         whileHover={{ scale: 1.04, boxShadow: '0 0 0 3px rgba(37, 99, 235, 0.2)' }}
                         className="bg-[#F7F9FB] border-l-4 border-blue-500 hover:border-blue-700 rounded-2xl p-6 transition-all duration-300"
                     >
-                        <div className="text-3xl text-blue-400 mb-2">“”</div>
+                        <div className="text-2xl text-black mb-2">“{t.title}”</div>
                         <div className="flex mb-3">
                             {Array(5)
                                 .fill()

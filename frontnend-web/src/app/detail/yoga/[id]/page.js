@@ -4,8 +4,17 @@ import { useParams } from "next/navigation";
 import YogaHero from "@/app/components/more/yogaComponent/YogaHero";
 import OverviewSection from "@/app/components/more/yogaComponent/YogaAbout";
 import YogaFooter from "@/app/components/more/yogaComponent/YogaFooter";
+import YogaServices from "@/app/components/more/yogaComponent/YogaServices";
+import YogaFacilitiesCard from "@/app/components/more/yogaComponent/YogaFacilities";
+import Reviews from "@/app/components/more/yogaComponent/YogaReviews";
 
 import axios from "axios";
+import FAQS from "@/app/components/more/yogaComponent/YogaFaqs";
+import LocationAndContact from "@/app/components/more/yogaComponent/YogaLocation";
+import ImageGallery from "@/app/components/more/yogaComponent/YogaGallery";
+import BenefitsSection from "@/app/components/more/yogaComponent/YogaBenefits";
+import InstructorsSection from "@/app/components/more/yogaComponent/YogaInstructors";
+import Packages from "@/app/components/more/yogaComponent/YogaPackages";
 
 export default function Home() {
   const params = useParams();
@@ -51,6 +60,21 @@ export default function Home() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
+          <YogaServices
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <ImageGallery healthProfile={data?.healthProfile} />
+          <BenefitsSection />
+          <YogaFacilitiesCard profileData={data?.healthProfile} />
+          <InstructorsSection profileData={data?.healthProfile} />
+          <Packages profileData={data?.healthProfile} />
+          <LocationAndContact
+            data={data?.otherData}
+            healthProfile={data?.healthProfile}
+          />
+          <Reviews healthProfile={data?.healthProfile} />
+          <FAQS healthProfile={data?.healthProfile} />
           <YogaFooter data={data?.otherData} />
         </div>
       </main>
