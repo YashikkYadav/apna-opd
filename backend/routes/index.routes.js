@@ -34,6 +34,7 @@ const cartRoutes=require("./cart.routes")
 const orderRoutes=require("./order.routes")
 const medicalInvoiceRoutes = require('./medicalInvoice.routes')
 const medicalMiddleware = require("../middlewares/medical.middleware")
+const homeServiceRoutes = require("./homeService.routes")
 const router = express.Router();
 
 router.use("/cart", cartRoutes);
@@ -113,6 +114,8 @@ router.use("/career-lead", careerLeadRoutes);
 router.use("/import-excel", importExcelRouter)
 
 router.use('/nurse-listings', nurseRoutes)
+
+router.use("/home-services", homeServiceRoutes);
 
 
 module.exports = router;

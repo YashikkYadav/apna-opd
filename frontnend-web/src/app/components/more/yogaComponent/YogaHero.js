@@ -156,7 +156,7 @@ const YogaHero = ({ data, healthProfile }) => {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("PhysioLocationSection");
+              const section = document.getElementById("YogaLocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
