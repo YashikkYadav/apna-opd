@@ -31,6 +31,7 @@ const Header = () => {
     e.preventDefault();
     e.stopPropagation();
     setIsFindDropdownOpen((prev) => !prev);
+    setSearchValue("");
   };
 
   const closeAllMenus = () => {
@@ -87,12 +88,14 @@ const Header = () => {
   const handleSearchFocus = () => {
     if (!searchValue.trim()) {
       setFilteredItems(menuItems);
+      setIsFindDropdownOpen(false);
     }
   };
 
 
   // Handle manual search (Enter key or direct navigation)
   const handleManualSearch = () => {
+
     if (searchValue.trim()) {
       // Try to find exact match first
       const exactMatch = menuItems.find(
@@ -101,7 +104,7 @@ const Header = () => {
 
       if (exactMatch) {
         router.push(exactMatch.route);
-        setSearchValue("");
+        
       } else {
         // Try to find partial match
         const partialMatch = menuItems.find((item) =>
@@ -110,11 +113,9 @@ const Header = () => {
 
         if (partialMatch) {
           router.push(partialMatch.route);
-          setSearchValue("");
         } else {
           searchValue = searchValue.trim().replace(/\s+/g, "-").toLowerCase();
-          router.push(`/more/${searchValue}`);
-          setSearchValue('');
+          router.push(`/search-results?name=${searchValue}`);
         } 
       }
 
@@ -126,7 +127,6 @@ const Header = () => {
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       handleManualSearch();
-      setSearchValue("");
     } else if (e.key === "Escape") {
       setSearchValue("");
     }
@@ -285,7 +285,7 @@ const Header = () => {
             </div>
 
             {/* Desktop Search Dropdown */}
-            <div
+            {/* <div
               ref={searchDropdownRef}
               className="absolute hidden group-hover:block group-focus-within:block left-0 w-full bg-white rounded-md shadow-lg max-h-[300px] overflow-y-auto z-[9999999] border border-gray-200"
             >
@@ -309,7 +309,7 @@ const Header = () => {
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* Mobile Controls */}
@@ -354,7 +354,7 @@ const Header = () => {
 
             {/* Mobile Search Dropdown */}
 
-            <div
+            {/* <div
               ref={searchDropdownRef}
               className="group-hover:block group-focus-within:block hidden absolute left-4 right-4 bg-white rounded-md shadow-lg max-h-[250px] overflow-y-auto z-[999999] border border-gray-200"
             >
@@ -379,7 +379,7 @@ const Header = () => {
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

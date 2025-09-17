@@ -110,7 +110,7 @@ const Yoga = ({
                 viewMode === "grid" ? "lg:ml-96" : ""
               } text-center py-16 text-xl text-gray-500 font-semibold`}
             >
-              No yoga instructors found for your search.
+              No Yoga Profile found for your search.
             </div>
           ) : (
             currentItems?.map((instructor) => (

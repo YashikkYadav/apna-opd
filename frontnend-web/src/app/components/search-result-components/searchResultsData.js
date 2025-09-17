@@ -75,7 +75,7 @@ const SearchResultsData = () => {
 
   const handleSearch = (location, speciality) => {
     router.push(
-      `/search-results?location=${location}&speciality=${speciality}`
+      `/find-doctor?location=${location}&speciality=${speciality}`
     );
   };
 
