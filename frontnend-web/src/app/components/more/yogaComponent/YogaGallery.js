@@ -15,7 +15,7 @@ const ImageGallery = ({ profileData }) => {
   const galleryImages = useMemo(
     () =>
       Array.isArray(profileData?.galleryImages)
-        ? profileData.galleryImages
+        ? profileData?.galleryImages
         : [],
     [profileData?.galleryImages]
   );
@@ -60,7 +60,7 @@ const ImageGallery = ({ profileData }) => {
 
     const preloadAllImages = async () => {
       try {
-        const preloadPromises = galleryImages.map((img) => preloadImage(img));
+        const preloadPromises = galleryImages?.map((img) => preloadImage(img));
         await Promise.all(preloadPromises);
       } catch (error) {
         // If there's an error, still set images as loaded to prevent blocking
@@ -163,7 +163,7 @@ const ImageGallery = ({ profileData }) => {
             className="relative w-full flex items-center justify-center"
             style={{ height: `${CARD_SIZE}px` }}
           >
-            {galleryImages.length > 0 &&
+            {galleryImages?.length > 0 &&
               galleryImages.map((img, idx) => {
                 const offset = idx - selectedImage;
                 if (Math.abs(offset) > 2) return null; // Only show center and 2 sides
@@ -245,8 +245,8 @@ const ImageGallery = ({ profileData }) => {
         </div>
         {/* Pagination Dots */}
         <div className="flex justify-center mt-6 space-x-2">
-          {galleryImages.length > 0 &&
-            galleryImages.map((_, index) => (
+          {galleryImages?.length > 0 &&
+            galleryImages?.map((_, index) => (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full transition ${
