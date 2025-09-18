@@ -109,15 +109,15 @@ export default function HospitalFeatureCard({ profileData }) {
           alt="Max Super Speciality Hospital"
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[350px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
       {/* Right: Content */}
       <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-        <h2 className="text-white text-4xl md:text-5xl font-extrabold drop-shadow mb-2">
+        <h2 className="text-white text-3xl md:text-4xl font-extrabold drop-shadow mb-3 capitalize">
           {profileData?.name ?? "Dummy Name"}
         </h2>
-        <p className="text-white/80 text-xl md:text-2xl font-medium mb-4">
+        <p className="text-white/80 text-xl md:text-2xl font-medium mb-3">
           {profileData?.introduction ?? "Dummy Intro"}
         </p>
         {/* Rating */}
@@ -131,7 +131,7 @@ export default function HospitalFeatureCard({ profileData }) {
           </span>
         </div>
         {/* Features */}
-        <div className="flex flex-wrap gap-4 justify-center lg:justify-start mt-2">
+        <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-4">
           {(profileData?.facilities ?? features.map((f) => f?.text)).map(
             (f, i) =>
               allowedFeatures.includes(f) && (
@@ -145,23 +145,33 @@ export default function HospitalFeatureCard({ profileData }) {
               )
           )}
         </div>
-        {/* Call Now Button */}
-        <a
-          className="mt-5 flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-          // onClick={() => {
-          //   if (
-          //     window.confirm(
-          //       `Do you want to call ${profileData?.name ?? "N/A"} ?`
-          //     )
-          //   ) {
-          //     window.location.href = profileData?.phone ?? "tel:+911140555555";
-          //   }
-          // }}
-          href={`tel:${profileData?.phone}`}
-        >
-          <FaPhoneAlt className="text-2xl" />
-          Call Now
-        </a>
+        <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+          <a
+            className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+            // onClick={() => {
+            //   if (
+            //     window.confirm(
+            //       `Do you want to call ${profileData?.name ?? "N/A"} ?`
+            //     )
+            //   ) {
+            //     window.location.href = profileData?.phone ?? "tel:+911140555555";
+            //   }
+            // }}
+            href={`tel:${profileData?.phone}`}
+          >
+            <FaPhoneAlt className="text-2xl" />
+            Call Now
+          </a>
+          <button
+            onClick={() => {
+              const section = document.getElementById("hospitalLocationSection");
+              section?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="text-white text-xl font-semibold px-8 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
+          >
+            📍 Directions
+          </button>
+        </div>
       </div>
       {/* Background circles for effect */}
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />

@@ -8,7 +8,7 @@ import { FaStar } from "react-icons/fa";
 import Pagination from "../components/more/common/Pagination";
 
 const HomeServices = () => {
-  const [hospitalList, setHospitalList] = useState([]);
+  const [profileList, setProfileList] = useState([]);
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
   const [location, setLocation] = useState("");
@@ -24,7 +24,7 @@ const HomeServices = () => {
       );
       const json = await res.json();
       console.log("Fetched Home Services:", json);
-      setHospitalList(json || []);
+      setProfileList(json || []);
     } catch (err) {
       console.error("Error fetching data", err);
     }
@@ -42,8 +42,8 @@ const HomeServices = () => {
   // Pagination logic (client side)
   const indexOfLastItem = page * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = hospitalList?.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(hospitalList?.length / itemsPerPage);
+  const currentItems = profileList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(profileList?.length / itemsPerPage);
 
   // Helper function to get rating
   const getRating = (service) => {
@@ -51,9 +51,11 @@ const HomeServices = () => {
   };
 
   // Helper function to view service details
-  const viewServiceDetails = (serviceId) => {
+  const viewServiceDetails = (serviceId, type) => {
     // Implement navigation logic here
     console.log("View details for service:", serviceId);
+    if (type === "nursing_staff") type = "nursingStaff";
+    router.push(`/detail/${type}/${serviceId}`);
   };
 
   const handleSearch = (locationQuery, name) => {
@@ -81,7 +83,7 @@ const HomeServices = () => {
 
       <main className="py-5 px-1">
         <div className="mb-8 text-lg text-gray-600 flex items-center justify-between mt-5">
-          <span>{hospitalList.length} Home Services Available</span>
+          <span>{profileList?.length} Home Services Available</span>
           {/* View Mode Toggle */}
           <div className="flex gap-2">
             <button
@@ -133,7 +135,7 @@ const HomeServices = () => {
               : "flex flex-col gap-4"
           }
         >
-          {currentItems.length === 0 ? (
+          {currentItems?.length === 0 ? (
             <div
               className={`w-full ${
                 viewMode === "grid" ? "lg:ml-96" : ""
@@ -142,7 +144,7 @@ const HomeServices = () => {
               No home service providers found.
             </div>
           ) : (
-            currentItems.map((service) => {
+            currentItems?.map((service) => {
               const profile = service?.profile;
               return (
                 <div
@@ -279,7 +281,7 @@ const HomeServices = () => {
                   <div className="flex gap-2">
                     <button
                       className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                      onClick={() => viewServiceDetails(service?._id)}
+                      onClick={() => viewServiceDetails(service?._id, service?.type)}
                     >
                       View Details
                     </button>

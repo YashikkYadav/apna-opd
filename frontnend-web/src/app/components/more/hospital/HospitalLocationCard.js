@@ -29,7 +29,7 @@ export default function HospitalLocationCard({ profileData }) {
 
   return (
     <motion.div
-      id="location"
+      id="hospitalLocationSection"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -48,7 +48,9 @@ export default function HospitalLocationCard({ profileData }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="bg-gray-100 rounded-2xl flex items-center justify-center p-6 md:p-8 min-h-[320px] md:min-h-[250px]">
           <div className="bg-white p-6 rounded-xl text-center shadow hover:shadow-lg hover:scale-[1.02] transition-all duration-300 w-full max-w-lg">
-            <p className="font-bold text-lg text-blue-700 mb-3">🗺️ Google Map</p>
+            <p className="font-bold text-lg text-blue-700 mb-3">
+              🗺️ Google Map
+            </p>
             <div className="w-full h-56 rounded-lg overflow-hidden border border-blue-100">
               <MapComponent address={profileData?.address} />
             </div>

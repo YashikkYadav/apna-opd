@@ -68,19 +68,19 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
           alt={`Dr.${data?.name}`}
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
           priority
         />
       </div>
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-3 capitalize">
           {data?.name}
         </h2>
-        <p className="mb-4">{healthProfile?.introduction}</p>
+        <p className="mb-3">{healthProfile?.introduction}</p>
 
-        <p className="text-white/90 text-lg mb-4">
+        <p className="text-white/90 text-lg mb-3">
           {healthProfile?.experience} Years Experience •{" "}
           {data?.locality ?? "Your Area"} • 5km Home Visit Radius
         </p>

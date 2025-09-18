@@ -75,7 +75,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           alt={name}
           width={288}
           height={288}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
         <span className="absolute -top-2 -right-2 bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-base border-2 border-white">
           ✓
@@ -84,12 +84,16 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
 
       {/* Info */}
       <div className="relative z-10 flex flex-col justify-center text-white w-full lg:w-auto">
-        <h1 className="text-3xl md:text-5xl font-extrabold uppercase text-center lg:text-left">
+        <h1 className="text-3xl md:text-4xl font-extrabold capitalize text-center lg:text-left mb-3">
           {name}
         </h1>
 
-        {/* <div className="flex flex-wrap gap-4">
-          <div
+        <p className="mb-3 text-lg opacity-90 text-center lg:text-left">
+          {healthProfile?.introduction}
+        </p>
+
+        <div className="flex flex-wrap gap-4">
+          {/* <div
             onClick={() => {
               const section = document.getElementById("labLocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
@@ -100,7 +104,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
             <span>
               {location} {address}
             </span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-2 justify-center lg:justify-start">
             {getStarIcons(parseFloat(avgRating))}
             <span className="text-white text-xl font-semibold ml-2">
@@ -110,14 +114,10 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
               ({reviewCount} reviews)
             </span>
           </div>
-        </div> */}
-
-        <p className="mb-4 text-lg opacity-90 text-center lg:text-left">
-          {healthProfile?.introduction}
-        </p>
+        </div>
 
         {/*tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-2">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -128,7 +128,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3 justify-center lg:justify-start mt-2">
+        <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
           <button
             className="bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full px-6 py-3 flex items-center gap-2 shadow-lg transition text-base"
             onClick={() => setModalOpen(true)}

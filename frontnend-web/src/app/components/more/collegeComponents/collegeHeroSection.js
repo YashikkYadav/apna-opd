@@ -70,20 +70,20 @@ const CollegeHeroSection = ({
           alt={college_name}
           width={320}
           height={320}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Right: College Info */}
       <div className="z-10 flex-1 space-y-3 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {data?.name}
         </h2>
 
         <p className="text-white/90 text-lg max-w-xl">{healthProfile?.about}</p>
 
         {/* Ratings */}
-        <div className="flex items-center gap-2 mb-4 justify-center lg:justify-start">
+        <div className="flex items-center gap-2 justify-center lg:justify-start">
           {getStarIcons(parseFloat(avgRating))}
           <span className="text-white text-xl font-semibold ml-2">
             {avgRating}/5
@@ -94,7 +94,7 @@ const CollegeHeroSection = ({
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -106,7 +106,7 @@ const CollegeHeroSection = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 ">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
           <button
             onClick={() => setModalOpen(true)}
             className="bg-white text-blue-700 text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-blue-100 transition hover:scale-105"

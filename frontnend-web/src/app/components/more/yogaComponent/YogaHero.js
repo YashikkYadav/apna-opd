@@ -68,19 +68,19 @@ const YogaHero = ({ data, healthProfile }) => {
           alt={`Dr.${data?.name}`}
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
           priority
         />
       </div>
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-4">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-3 capitalize">
           {data?.name}
         </h2>
-        <p className="mb-4">{healthProfile?.introduction}</p>
+        <p className="mb-3">{healthProfile?.introduction}</p>
 
-        <p className="text-white/90 text-lg mb-4">
+        <p className="text-white/90 text-lg mb-3">
           {healthProfile?.experience}+ Years Experience •{" "}
           {healthProfile?.totalCustomers}+ Happy Members •{" "}
           {healthProfile?.instructors?.length}+ Expert Instructors
@@ -101,7 +101,7 @@ const YogaHero = ({ data, healthProfile }) => {
         </div>
 
         {/*Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 py-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -127,7 +127,7 @@ const YogaHero = ({ data, healthProfile }) => {
         </div> */}
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
           <button
             onClick={() => setModalOpen(true)}
             className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2"
