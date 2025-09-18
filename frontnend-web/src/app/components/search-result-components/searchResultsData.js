@@ -227,7 +227,7 @@ const SearchResultsData = () => {
                       </span>
                     </p>
                     <p className="flex justify-between">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-gray-700 w-32">
                         Hospital Name:
                       </span>
                       <span className="text-gray-600">

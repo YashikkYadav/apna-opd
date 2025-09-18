@@ -42,8 +42,8 @@ const HomeServices = () => {
   // Pagination logic (client side)
   const indexOfLastItem = page * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = hospitalList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(hospitalList.length / itemsPerPage);
+  const currentItems = hospitalList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(hospitalList?.length / itemsPerPage);
 
   // Helper function to get rating
   const getRating = (service) => {
@@ -167,9 +167,9 @@ const HomeServices = () => {
                       </div>
                     )}
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                      <h3 className="text-xl font-semibold mb-1">
                         {service?.name || "Unnamed Service Provider"}
-                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
                           Verified
                         </span>
                       </h3>
@@ -223,16 +223,16 @@ const HomeServices = () => {
                   {/* Condition Treated */}
                   {profile?.conditionsTreated?.length > 0 && (
                     <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
-                    <div className="font-semibold text-sm text-gray-700 mb-1">
-                      Conditions Treated
+                      <div className="font-semibold text-sm text-gray-700 mb-1">
+                        Conditions Treated
+                      </div>
+                      <div className="text-gray-600 text-xs line-clamp-3">
+                        {profile?.conditionsTreated?.length > 0
+                          ? profile?.conditionsTreated?.slice(0, 5)?.join(", ")
+                          : "No conditions listed"}
+                      </div>
                     </div>
-                    <div className="text-gray-600 text-xs line-clamp-3">
-                      {profile?.conditionsTreated?.length > 0
-                        ? profile?.conditionsTreated?.slice(0, 5)?.join(", ")
-                        : "No conditions listed"}
-                    </div>
-                  </div>
-                )}
+                  )}
                   {/* Specializations/Tags */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {profile?.specializations?.length > 0 ? (

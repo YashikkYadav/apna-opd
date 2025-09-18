@@ -135,14 +135,14 @@ const MedicalCollege = ({
                       </div>
                     )}
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                      <h3 className="text-xl font-semibold mb-1">
                         {college?.name || "Unnamed College"}
-                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
                           Verified
                         </span>
                       </h3>
                       <div className="text-gray-600 text-sm">
-                        {profile?.city}, {profile?.state}
+                        {college?.city}, {college?.state}
                       </div>
                     </div>
                   </div>

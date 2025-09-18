@@ -142,9 +142,9 @@ const Services = () => {
                       </div>
                     )}
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                      <h3 className="text-xl font-semibold mb-1">
                         {service?.name || "Unnamed Service Provider"}
-                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
                           Verified
                         </span>
                       </h3>
@@ -222,8 +222,8 @@ const Services = () => {
                           </span>
                         ))
                     ) : (
-                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
-                        {service?.type || "Healthcare Service"}
+                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium capitalize">
+                        {service?.type.replace("_", " ") || "Healthcare Service"}
                       </span>
                     )}
                   </div>
