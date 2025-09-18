@@ -189,8 +189,8 @@ export default function HealthLabPage() {
       </main>
     </div>
   ) : (
-    <div className="min-h-64 pt-[120px] flex items-center justify-center">
-      <h1 className="text-3xl text-blue-800">
+    <div className="min-h-80 pt-[110px] flex items-center justify-center">
+      <h1 className="text-xl text-gray-500 font-semibold">
         We’re updating this profile to serve you better. Stay tuned!
       </h1>
     </div>

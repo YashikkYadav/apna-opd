@@ -75,7 +75,7 @@ const SearchResultsData = () => {
 
   const handleSearch = (location, speciality) => {
     router.push(
-      `/search-results?location=${location}&speciality=${speciality}`
+      `/find-doctor?location=${location}&speciality=${speciality}`
     );
   };
 
@@ -210,6 +210,9 @@ const SearchResultsData = () => {
                       <p className="text-gray-600 text-sm">
                         {item?.doctor?.speciality ||
                           "MBBS, MD - General Medicine"}
+                        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
+                          Verified
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -227,7 +230,7 @@ const SearchResultsData = () => {
                       </span>
                     </p>
                     <p className="flex justify-between">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-gray-700 w-32">
                         Hospital Name:
                       </span>
                       <span className="text-gray-600">
@@ -247,7 +250,7 @@ const SearchResultsData = () => {
                   {/* Tags (Specialties / Skills) */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {item?.conditionsTreated?.length > 0 ? (
-                      item?.conditionsTreated?.slice(0,4)?.map((tag, i) => (
+                      item?.conditionsTreated?.slice(0, 4)?.map((tag, i) => (
                         <span
                           key={i}
                           className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium"

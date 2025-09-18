@@ -136,9 +136,9 @@ const Veterinary = ({
                     </div>
                   )}
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                    <h3 className="text-xl font-semibold mb-1">
                       {vet?.name || "Unnamed Veterinary"}
-                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
                         Verified
                       </span>
                     </h3>

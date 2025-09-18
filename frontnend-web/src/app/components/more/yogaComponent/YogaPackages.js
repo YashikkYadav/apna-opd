@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 export default function Packages({ profileData }) {
   return (
     <motion.div
+      id="therapyPackagesSection"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -12,7 +13,7 @@ export default function Packages({ profileData }) {
       {/* Title */}
       <div className="mb-10">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
-          Expert Instructors
+          Affordable Packages & Pricing
         </h2>
         <div className="w-20 h-1 bg-blue-600 mx-10 mt-2 rounded"></div>
       </div>

@@ -2,23 +2,25 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import SearchBarForServices from "../components/common-components/SearchBarForServices";
 
 import { FaStar } from "react-icons/fa";
 import Pagination from "../components/more/common/Pagination";
 
-const Services = () => {
+const HomeServices = () => {
   const [hospitalList, setHospitalList] = useState([]);
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
+  const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const searchParams = useSearchParams();
   const itemsPerPage = 6;
   const router = useRouter();
 
-  const fetchData = async (nameQuery = "") => {
+  const fetchData = async (locationQuery = "", nameQuery = "") => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/all-profiles?name=${nameQuery}`
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/home-services?location=${locationQuery}&name=${nameQuery}`
       );
       const json = await res.json();
       console.log("Fetched Home Services:", json);
@@ -29,17 +31,19 @@ const Services = () => {
   };
 
   useEffect(() => {
+    const locationQuery = searchParams.get("location") || "";
     const nameQuery = searchParams.get("name") || "";
+    setLocation(locationQuery);
     setName(nameQuery);
 
-    fetchData(nameQuery);
+    fetchData(locationQuery, nameQuery);
   }, []);
 
   // Pagination logic (client side)
   const indexOfLastItem = page * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = hospitalList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(hospitalList.length / itemsPerPage);
+  const currentItems = hospitalList?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(hospitalList?.length / itemsPerPage);
 
   // Helper function to get rating
   const getRating = (service) => {
@@ -52,11 +56,32 @@ const Services = () => {
     console.log("View details for service:", serviceId);
   };
 
+  const handleSearch = (locationQuery, name) => {
+    if (!locationQuery && !name) {
+      router.push(`/home-service`);
+      fetchData("", "");
+      return;
+    }
+    let query = `/home-service?`;
+    if (locationQuery) query += `location=${locationQuery}&`;
+    if (name) query += `name=${name}`;
+    router.push(query);
+    fetchData(locationQuery, name);
+  };
+
   return (
-    <div className="pt-[64px] md:pt-[80px] p-3 md:p-8 bg-sky-50">
+    <div className="pt-[90px] md:pt-[112px] p-3 md:p-8 bg-sky-50">
+      <div>
+        <SearchBarForServices
+          onSearch={handleSearch}
+          location={location}
+          name={name}
+        />
+      </div>
+
       <main className="py-5 px-1">
         <div className="mb-8 text-lg text-gray-600 flex items-center justify-between mt-5">
-          <span>{hospitalList.length} Services Available</span>
+          <span>{hospitalList.length} Home Services Available</span>
           {/* View Mode Toggle */}
           <div className="flex gap-2">
             <button
@@ -114,7 +139,7 @@ const Services = () => {
                 viewMode === "grid" ? "lg:ml-96" : ""
               } text-center py-16 text-xl text-gray-500 font-semibold`}
             >
-              No service providers found for your search.
+              No home service providers found.
             </div>
           ) : (
             currentItems.map((service) => {
@@ -222,8 +247,8 @@ const Services = () => {
                           </span>
                         ))
                     ) : (
-                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium capitalize">
-                        {service?.type.replace("_", " ") || "Healthcare Service"}
+                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
+                        {service?.type || "Healthcare Service"}
                       </span>
                     )}
                   </div>
@@ -280,4 +305,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default HomeServices;

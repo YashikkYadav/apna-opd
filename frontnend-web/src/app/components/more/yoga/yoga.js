@@ -110,7 +110,7 @@ const Yoga = ({
                 viewMode === "grid" ? "lg:ml-96" : ""
               } text-center py-16 text-xl text-gray-500 font-semibold`}
             >
-              No yoga instructors found for your search.
+              No Yoga Profile found for your search.
             </div>
           ) : (
             currentItems?.map((instructor) => (
@@ -136,9 +136,9 @@ const Yoga = ({
                     </div>
                   )}
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-1 flex items-center gap-2">
+                    <h3 className="text-xl font-semibold mb-1">
                       {instructor?.name || "Yoga Instructor"}
-                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold ml-5">
                         Verified
                       </span>
                     </h3>
@@ -185,7 +185,6 @@ const Yoga = ({
                 {/* Services */}
                 {instructor?.profiles?.[0]?.services?.length > 0 ? (
                   <div className="mb-4">
-                    
                     <div className="flex flex-wrap gap-1">
                       {instructor?.profiles?.[0]?.services
                         ?.slice(0, 2)

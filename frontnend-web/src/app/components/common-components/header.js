@@ -31,6 +31,7 @@ const Header = () => {
     e.preventDefault();
     e.stopPropagation();
     setIsFindDropdownOpen((prev) => !prev);
+    setSearchValue("");
   };
 
   const closeAllMenus = () => {
@@ -49,8 +50,8 @@ const Header = () => {
     { label: "Ambulance", route: "/more/ambulance" },
     { label: "GYM", route: "/more/gym" },
     { label: "Yoga", route: "/more/yoga" },
-    { label: "Commercial Meditation", route: "/more/commercial-meditation" },
-    { label: "Nasha Mukti Kendra", route: "/more/nasha-mukti-kendra" },
+    // { label: "Commercial Meditation", route: "/more/commercial-meditation" },
+    // { label: "Nasha Mukti Kendra", route: "/more/nasha-mukti-kendra" },
     { label: "Medical Store", route: "/more/medical-store" },
     {
       label: "Nursing & Medical College",
@@ -87,12 +88,14 @@ const Header = () => {
   const handleSearchFocus = () => {
     if (!searchValue.trim()) {
       setFilteredItems(menuItems);
+      setIsFindDropdownOpen(false);
     }
   };
 
 
   // Handle manual search (Enter key or direct navigation)
   const handleManualSearch = () => {
+
     if (searchValue.trim()) {
       // Try to find exact match first
       const exactMatch = menuItems.find(
@@ -101,7 +104,7 @@ const Header = () => {
 
       if (exactMatch) {
         router.push(exactMatch.route);
-        setSearchValue("");
+        
       } else {
         // Try to find partial match
         const partialMatch = menuItems.find((item) =>
@@ -110,11 +113,9 @@ const Header = () => {
 
         if (partialMatch) {
           router.push(partialMatch.route);
-          setSearchValue("");
         } else {
           searchValue = searchValue.trim().replace(/\s+/g, "-").toLowerCase();
-          router.push(`/more/${searchValue}`);
-          setSearchValue('');
+          router.push(`/search-results?name=${searchValue}`);
         } 
       }
 
@@ -126,7 +127,6 @@ const Header = () => {
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       handleManualSearch();
-      setSearchValue("");
     } else if (e.key === "Escape") {
       setSearchValue("");
     }
@@ -159,7 +159,7 @@ const Header = () => {
     { label: "divider", type: "divider" },
     { label: "Hospital", route: "/more/hospital" },
     { label: "divider", type: "divider" },
-    { label: "Home Service", type: "heading" },
+    { label: "Home Service", route: "/home-service" },
     { label: "divider", type: "divider" },
     { label: "Veterinary", route: "/more/vatenary" },
     { label: "divider", type: "divider" },
@@ -272,7 +272,7 @@ const Header = () => {
                 type="search"
                 value={searchValue}
                 onChange={handleSearchChange}
-                onFocus={() => handleSearchFocus(isSearchDropdownOpen)}
+                onFocus={() => handleSearchFocus()}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="Search services..."
                 className="w-[250px] border-2 placeholder-[#094B89] placeholder:font-bold border-[#094B89] rounded-md py-2 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#3DB8F5] focus:border-transparent"
@@ -285,7 +285,7 @@ const Header = () => {
             </div>
 
             {/* Desktop Search Dropdown */}
-            <div
+            {/* <div
               ref={searchDropdownRef}
               className="absolute hidden group-hover:block group-focus-within:block left-0 w-full bg-white rounded-md shadow-lg max-h-[300px] overflow-y-auto z-[9999999] border border-gray-200"
             >
@@ -295,7 +295,10 @@ const Header = () => {
                     <li
                       key={index}
                       className="px-4 py-2 hover:bg-[#3DB8F5] hover:text-white cursor-pointer text-sm"
-                      onClick={() => { router.push(item.route); setSearchValue(''); }}
+                      onClick={() => {
+                        router.push(item.route);
+                        setSearchValue("");
+                      }}
                     >
                       {item.label}
                     </li>
@@ -306,7 +309,7 @@ const Header = () => {
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* Mobile Controls */}
@@ -351,7 +354,7 @@ const Header = () => {
 
             {/* Mobile Search Dropdown */}
 
-            <div
+            {/* <div
               ref={searchDropdownRef}
               className="group-hover:block group-focus-within:block hidden absolute left-4 right-4 bg-white rounded-md shadow-lg max-h-[250px] overflow-y-auto z-[999999] border border-gray-200"
             >
@@ -376,7 +379,7 @@ const Header = () => {
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

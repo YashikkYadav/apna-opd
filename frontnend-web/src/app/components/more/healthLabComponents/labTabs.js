@@ -51,7 +51,7 @@ const DiagnosticTabs = ({ tab, setTab, filteredTests, packagesData, openPackage,
                         const discount = Math.round((1 - test.discountedPrice / test.originalPrice) * 100);
                         return (
                             <motion.div
-                                key={test.id}
+                                key={test._id}
                                 whileHover={{ scale: 1.02 }}
                                 className="bg-[#F7F9FB] rounded-2xl p-6 shadow-md border border-blue-200 hover:border-blue-500 transition-all flex flex-col"
                             >

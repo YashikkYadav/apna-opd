@@ -75,12 +75,12 @@ const YogaHero = ({ data, healthProfile }) => {
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-4">
           {data?.name}
         </h2>
-        <p>{healthProfile?.introduction}</p>
+        <p className="mb-4">{healthProfile?.introduction}</p>
 
-        <p className="text-white/90 text-lg">
+        <p className="text-white/90 text-lg mb-4">
           {healthProfile?.experience}+ Years Experience •{" "}
           {healthProfile?.totalCustomers}+ Happy Members •{" "}
           {healthProfile?.instructors?.length}+ Expert Instructors
@@ -156,7 +156,7 @@ const YogaHero = ({ data, healthProfile }) => {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("PhysioLocationSection");
+              const section = document.getElementById("YogaLocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

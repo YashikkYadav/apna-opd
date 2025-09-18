@@ -75,12 +75,12 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow mb-4">
           {data?.name}
         </h2>
-        <p>{healthProfile?.introduction}</p>
+        <p className="mb-4">{healthProfile?.introduction}</p>
 
-        <p className="text-white/90 text-lg max-w-xl">
+        <p className="text-white/90 text-lg mb-4">
           {healthProfile?.experience} Years Experience •{" "}
           {data?.locality ?? "Your Area"} • 5km Home Visit Radius
         </p>
@@ -97,7 +97,7 @@ const PhysiotherapyHero = ({ data, healthProfile }) => {
         </div>
 
         {/*Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4 pb-2">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}

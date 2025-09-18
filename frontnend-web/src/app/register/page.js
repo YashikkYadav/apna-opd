@@ -54,8 +54,8 @@ const Register = () => {
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
     { value: "yoga", label: "Yoga" },
-    { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
-    { value: "commercial_meditation", label: "Commercial Meditation" },
+    // { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
+    // { value: "commercial_meditation", label: "Commercial Meditation" },
     { value: "medical_store", label: "Medical Store" },
     { value: "nursing_medical_college", label: "Nursing & Medical College" },
     { value: "blood_bank", label: "Blood Bank" },
@@ -480,7 +480,7 @@ const Register = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
         <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-xl">
           <h2 className="text-2xl font-bold text-center mb-6 text-green-600">
-            Registration Successful
+            Thank You for Registration
           </h2>
           <div className="flex flex-col items-center justify-center space-y-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -505,7 +505,7 @@ const Register = () => {
               Now you need to complete your profile to continue
             </p>
             <p className="text-blue-600 font-medium">
-              Redirecting to Payment Page...
+              Redirecting to Preveous Page...
             </p>
             <Spin size="large" />
           </div>

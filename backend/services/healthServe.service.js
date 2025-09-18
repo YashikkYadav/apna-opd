@@ -89,7 +89,7 @@ const register = async (data) => {
       healthServeData.bloodGroup = bloodGroup;
     }
 
-    if ((type === "nursing_staff" || type === "vatenary") && homeService) {
+    if ((type === "nursing_staff" || type === "vatenary" || type === "physiotherapist" || type === "laboratory") && homeService) {
       healthServeData.homeService = homeService;
     }
 

@@ -33,7 +33,7 @@ const LocationAndContact = ({ healthProfile, data }) => {
 
   return (
     <motion.section
-      id="PhysioLocationSection"
+      id="YogaLocationSection"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
