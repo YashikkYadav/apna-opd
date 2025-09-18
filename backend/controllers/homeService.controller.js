@@ -49,6 +49,7 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
         }
 
         return {
+          type: hs.type,
           ...hs.toObject(),
           profile: profileData || {},
         };

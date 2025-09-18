@@ -57,7 +57,7 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, type: "spring" }}
-        className="flex flex-col mx-2 my-2 lg:flex-row items-center justify-center bg-[#0C65A0] rounded-2xl shadow-lg p-5 md:p-10 gap-8 md:gap-16 relative overflow-hidden"
+        className="flex flex-col mx-2 my-2 lg:flex-row items-center justify-center bg-[#0C65A0] rounded-2xl shadow-lg p-5 md:p-10 gap-8 md:gap-12 relative overflow-hidden"
         style={{ minHeight: 340 }}
       >
         {/* Left: Hospital Image */}

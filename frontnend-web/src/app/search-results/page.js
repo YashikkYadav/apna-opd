@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 import Pagination from "../components/more/common/Pagination";
 
 const Services = () => {
-  const [hospitalList, setHospitalList] = useState([]);
+  const [profileList, setProfileList] = useState([]);
   const [page, setPage] = useState(1);
   const [viewMode, setViewMode] = useState("grid");
   const [name, setName] = useState("");
@@ -15,31 +15,34 @@ const Services = () => {
   const itemsPerPage = 6;
   const router = useRouter();
 
-  const fetchData = async (nameQuery = "") => {
+  const fetchData = useCallback(async (nameQuery = "") => {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/all-profiles?name=${nameQuery}`
       );
       const json = await res.json();
       console.log("Fetched Home Services:", json);
-      setHospitalList(json || []);
+      setProfileList(json || []);
     } catch (err) {
       console.error("Error fetching data", err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const nameQuery = searchParams.get("name") || "";
     setName(nameQuery);
-
     fetchData(nameQuery);
-  }, []);
+  }, [fetchData, searchParams]);
 
   // Pagination logic (client side)
   const indexOfLastItem = page * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = hospitalList.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(hospitalList.length / itemsPerPage);
+  let totalPages = 0;
+  let currentItems = [];
+  if (profileList.length > 0) {
+    currentItems = profileList?.slice(indexOfFirstItem, indexOfLastItem);
+    totalPages = Math.ceil(profileList?.length / itemsPerPage);
+  }
 
   // Helper function to get rating
   const getRating = (service) => {
@@ -47,16 +50,24 @@ const Services = () => {
   };
 
   // Helper function to view service details
-  const viewServiceDetails = (serviceId) => {
+  const viewServiceDetails = (serviceId, type) => {
     // Implement navigation logic here
     console.log("View details for service:", serviceId);
+    if (type === "hospital") {
+      router.push(`/more/hospital/${serviceId}/details`);
+    } else if (type === "doctor") {
+      router.push(`${serviceId}/profile`);
+    } else {
+      if (type === "nursing_staff") type = "nursingStaff";
+      router.push(`/detail/${type}/${serviceId}`);
+    }
   };
 
   return (
     <div className="pt-[64px] md:pt-[80px] p-3 md:p-8 bg-sky-50">
       <main className="py-5 px-1">
         <div className="mb-8 text-lg text-gray-600 flex items-center justify-between mt-5">
-          <span>{hospitalList.length} Services Available</span>
+          <span>{profileList?.length} Services Available</span>
           {/* View Mode Toggle */}
           <div className="flex gap-2">
             <button
@@ -108,7 +119,7 @@ const Services = () => {
               : "flex flex-col gap-4"
           }
         >
-          {currentItems.length === 0 ? (
+          {currentItems?.length === 0 ? (
             <div
               className={`w-full ${
                 viewMode === "grid" ? "lg:ml-96" : ""
@@ -117,7 +128,7 @@ const Services = () => {
               No service providers found for your search.
             </div>
           ) : (
-            currentItems.map((service) => {
+            currentItems?.map((service) => {
               const profile = service?.profile;
               return (
                 <div
@@ -128,7 +139,16 @@ const Services = () => {
                 >
                   {/* Avatar + Name */}
                   <div className="flex items-center gap-4 mb-4">
-                    {profile?.profileImage ? (
+                    {service?.type === "doctor" &&
+                    profile?.images?.length > 0 ? (
+                      <Image
+                        src={profile?.images[0].url}
+                        alt={service?.name || "Doctor"}
+                        width={55}
+                        height={55}
+                        className="rounded-full object-cover w-[55px] h-[55px]"
+                      />
+                    ) : profile?.profileImage ? (
                       <Image
                         src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profileImage}`}
                         alt={service?.name || "Home Service Provider"}
@@ -223,7 +243,8 @@ const Services = () => {
                         ))
                     ) : (
                       <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium capitalize">
-                        {service?.type.replace("_", " ") || "Healthcare Service"}
+                        {service?.type.replace("_", " ") ||
+                          "Healthcare Service"}
                       </span>
                     )}
                   </div>
@@ -254,7 +275,9 @@ const Services = () => {
                   <div className="flex gap-2">
                     <button
                       className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                      onClick={() => viewServiceDetails(service?._id)}
+                      onClick={() =>
+                        viewServiceDetails(service?._id, service?.type)
+                      }
                     >
                       View Details
                     </button>
