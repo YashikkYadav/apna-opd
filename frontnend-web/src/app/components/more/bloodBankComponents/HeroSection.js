@@ -72,13 +72,13 @@ const HeroSection = ({ data, healthProfile }) => {
           width={340}
           height={340}
           unoptimized
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 space-y-3 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {user?.name ?? "Dummy Name"}
         </h2>
 
@@ -96,7 +96,7 @@ const HeroSection = ({ data, healthProfile }) => {
             ({reviewCount} reviews)
           </span>
         </div>
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}

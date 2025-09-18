@@ -64,13 +64,13 @@ const VetHeroSection = ({ profileData, data, healthProfile }) => {
           alt={data?.name}
           width={320}
           height={320}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Right: Text Content */}
       <div className="z-10 flex-1 space-y-2 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {data?.name ?? "Dummy Name"}
         </h2>
         <p className="text-white/90 text-lg">

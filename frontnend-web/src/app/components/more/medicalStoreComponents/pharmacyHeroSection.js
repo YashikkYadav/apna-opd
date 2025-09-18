@@ -64,13 +64,13 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
           alt={data?.name}
           width={320}
           height={320}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Pharmacy Info */}
       <div className="z-10 flex-1 space-y-2 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {data?.name}
         </h2>
         <p className="text-white/90 text-lg max-w-xl">
@@ -78,7 +78,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
         </p>
 
         {/* Meta */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-white/80 pt-2">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-white/80 pt-1">
           <span className="flex items-center gap-2">
             <MapPin className="w-5 h-5" /> {data?.location || "Your City"}
           </span>
@@ -93,14 +93,14 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 justify-center lg:justify-start">
+        <div className="flex items-center gap-2 justify-center lg:justify-start pt-2">
           {getStarIcons(parseFloat(avgRating))}
           <span className="text-white font-semibold ml-2">{avgRating}/5</span>
           <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -112,7 +112,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-3">
           <button
             onClick={() => {
               const section = document.getElementById("cartSection");

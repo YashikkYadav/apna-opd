@@ -72,13 +72,13 @@ const ClinicHeroSection = ({
           alt={data?.name || "image"}
           width={340}
           height={340}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[340px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Right: Content */}
       <div className="z-10 flex-1 space-y-2 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {user?.name}
         </h2>
 
@@ -94,7 +94,7 @@ const ClinicHeroSection = ({
         </div>
 
         {/*Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -106,7 +106,7 @@ const ClinicHeroSection = ({
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-3">
           <button
             onClick={() => setConsultationModalOpen(true)}
             className="bg-white text-[#0C65A0] text-lg px-6 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105"

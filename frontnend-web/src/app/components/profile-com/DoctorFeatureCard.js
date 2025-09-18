@@ -55,20 +55,20 @@ export default function DoctorFeatureCard({ doctorData }) {
           width={300}
           height={300}
           unoptimized
-          className="rounded-xl object-fit shadow-md w-full h-[250px] md:h-[320px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[320px]"
         />
       </div>
 
       {/* Right: Content */}
       <div className="z-10 flex-1 text-center lg:text-left">
-        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize mb-3">
           {doctorData?.doctorId?.name}
         </h2>
-        <p className="text-white/90 text-lg max-w-xl">
+        <p className="text-white/90 text-lg max-w-xl mb-3">
           {doctorData?.introduction}
 
         </p>
-        <div className='flex flex-wrap gap-3 justify-center lg:justify-start'>
+        <div className='flex flex-wrap gap-3 justify-center lg:justify-start mb-3'>
           <p className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
             {doctorData?.doctorId?.speciality}
           </p>
@@ -81,20 +81,20 @@ export default function DoctorFeatureCard({ doctorData }) {
         </div>
 
         {/* Rating */}
-        <div className="flex items-center gap-2 justify-center lg:justify-start">
+        <div className="flex items-center gap-2 justify-center lg:justify-start mb-3">
           {getStarIcons(parseFloat(avgRating))}
           <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
           <span className="text-white/70 text-lg">({reviewCount} reviews)</span>
         </div>
 
         {/* Specialties / Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        {/* <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-3">
           {doctorData?.specialties?.map((tag, i) => (
             <span key={i} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
               {tag}
             </span>
           ))}
-        </div>
+        </div> */}
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center lg:justify-start gap-4">

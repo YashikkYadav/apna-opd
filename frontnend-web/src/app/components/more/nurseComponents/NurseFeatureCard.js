@@ -26,24 +26,24 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
 
   const features = [
     {
-      icon: <FaRegCalendarCheck className="text-blue-400 text-2xl" />,
+      icon: <FaRegCalendarCheck className="text-blue-400 text-xl" />,
       text: "+ Years Experience",
       dynamicValue: NurseData?.experience,
     },
     {
-      icon: <FaUserMd className="text-purple-400 text-2xl" />,
+      icon: <FaUserMd className="text-purple-400 text-xl" />,
       text: "+ Happy Clients",
       dynamicValue: NurseData?.clients,
     },
     {
-      icon: <FaRegHospital className="text-pink-400 text-2xl" />,
+      icon: <FaRegHospital className="text-pink-400 text-xl" />,
       text: "",
       dynamicValue: NurseData?.workingAt,
     },
     ...(specs !== "nurse"
       ? [
           {
-            icon: <FaMapMarkerAlt className="text-green-400 text-2xl" />,
+            icon: <FaMapMarkerAlt className="text-green-400 text-xl" />,
             text: "",
             dynamicValue: NurseData?.city,
           },
@@ -67,19 +67,19 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             alt={`${name}` || "image"}
             width={340}
             height={340}
-            className="bg-gray-300 rounded-xl object-cover shadow-md w-full h-[250px] md:h-[360px]"
+            className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
           />
         </div>
         {/* Right: Content */}
         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-          <h2 className="text-white text-4xl md:text-5xl font-extrabold drop-shadow mb-2">
+          <h2 className="text-white text-3xl md:text-4xl font-extrabold drop-shadow mb-2 capitalize">
             {name}
           </h2>
-          <p className="text-white/80 text-xl md:text-2xl font-medium mb-4">
+          <p className="text-white/80 text-xl md:text-2xl font-medium mb-3">
             {nurseType}
           </p>
           {/* Rating */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3">
             {typeof parseInt(rating) === "number" && parseInt(rating) > 0 && (
               <>
                 {[...Array(Math.floor(parseInt(rating)))].map((_, i) => (
@@ -111,34 +111,33 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             {features.map((f, i) => (
               <div
                 key={i}
-                className="flex items-center gap-2 bg-white/30 backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition"
+                className="flex items-center gap-2 text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
               >
                 {f.icon}
                 {f.dynamicValue ? `${f.dynamicValue} ${f.text}` : f.text}
               </div>
             ))}
-          </div>
-          <div className="mt-5 bg-[#3DB8F5] backdrop-blur px-5 py-3 rounded-xl text-white text-lg font-medium shadow hover:shadow-lg transition">
-            ₹{NurseData?.perVisitCharges} consultationFee
+            <div className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2">
+              ₹{NurseData?.perVisitCharges} Consultation Fees
+            </div>
           </div>
           {/* Call Now Button */}
-          <div className="flex flex-wrap justify-center lg:justify-start gap-7 mt-5">
+          <div className="flex flex-wrap justify-center lg:justify-start gap-4 mt-5">
             <button
-              className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
+              onClick={() => setModalOpen(true)}
+              className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105 flex items-center gap-2"
+            >
+              <CalendarPlus className="w-5 h-5" /> Book Session
+            </button>
+            <button
+              className="text-white font-semibold px-10 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
               onClick={() => {
                 if (window.confirm(`Do you want to call ${name}?`)) {
                   window.location.href = `tel:${phone}`;
                 }
               }}
             >
-              <FaPhoneAlt className="text-2xl" />
-              Call Now
-            </button>
-            <button
-              onClick={() => setModalOpen(true)}
-              className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            >
-              <CalendarPlus className="" /> Book Session
+              📞 Call Now
             </button>
           </div>
           <FreeTrialModal

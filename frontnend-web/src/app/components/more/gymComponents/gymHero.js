@@ -64,13 +64,13 @@ const HeroSection = ({
           alt={data?.name}
           width={320}
           height={320}
-          className="rounded-xl object-cover shadow-md w-full h-[250px] md:h-[320px]"
+          className="rounded-xl object-contain bg-slate-100 shadow-md w-full h-[250px] md:h-[340px]"
         />
       </div>
 
       {/* Right Content */}
       <div className="z-10 flex-1 space-y-3 text-center lg:text-left">
-        <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow">
+        <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
           {data?.name}
         </h1>
 
@@ -90,7 +90,7 @@ const HeroSection = ({
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-3">
           {healthProfile?.tags?.map((tag, index) => (
             <span
               key={index}
@@ -102,7 +102,7 @@ const HeroSection = ({
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-3">
           <div>
             <button
               onClick={() => setModalOpen(true)}
