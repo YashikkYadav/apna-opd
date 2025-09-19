@@ -7,6 +7,7 @@ export const specialties = [
   "General Physician",
   "Neurologist",
   "Psychiatrist",
+  "Dentist",
   "Gastroenterologist",
   "Nephrologist",
   "Urologist",
@@ -60,6 +61,7 @@ export const specialties = [
   "Unani",
   "Yoga & Naturopathy",
   "Acupressure Specialist",
+  "Other"
 ];
 
 // Update getLocations to be async and use the locationService
