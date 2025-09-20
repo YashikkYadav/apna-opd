@@ -68,7 +68,7 @@ const PopularCategories = () => {
           {categories.map((cat, idx) => (
             <Link
               key={idx}
-              href={`/search-results?location=&speciality=${cat.title}`}
+              href={`/find-doctor?location=&speciality=${cat.title}`}
             >
               <motion.div
                 variants={cardVariants}
