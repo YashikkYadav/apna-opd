@@ -61,7 +61,8 @@ export const specialties = [
   "Unani",
   "Yoga & Naturopathy",
   "Acupressure Specialist",
-  "Other"
+  "Multi Speciality",
+  "Other",
 ];
 
 // Update getLocations to be async and use the locationService
