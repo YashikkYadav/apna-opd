@@ -70,6 +70,7 @@ const doctorSchema = new mongoose.Schema(
         "Immunologist",
         "Infectious Disease Specialist",
         "General Surgeon",
+        "General Medicine",
         "Laparoscopic Surgeon",
         "Orthopedic Surgeon",
         "Neurosurgeon",

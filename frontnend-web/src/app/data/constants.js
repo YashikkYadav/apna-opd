@@ -19,6 +19,7 @@ export const specialties = [
   "Immunologist",
   "Infectious Disease Specialist",
   "General Surgeon",
+  "General Medicine",
   "Laparoscopic Surgeon",
   "Orthopedic Surgeon",
   "Neurosurgeon",
