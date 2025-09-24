@@ -33,6 +33,39 @@ const MedicalStore = ({
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredList?.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Function to convert 24-hour format to 12-hour format with AM/PM
+  const convertTo12HourFormat = (time24) => {
+    if (!time24) return "10:00"; // Default time if input is invalid
+
+    // If already in 12-hour format (contains AM/PM), return as is
+    if (time24.includes("AM") || time24.includes("PM")) {
+      return time24;
+    }
+
+    // Handle pure numbers (like 10 or 7)
+    if (!time24.includes(":")) {
+      const hour = parseInt(time24);
+      if (hour === 0) return "12:00 AM";
+      if (hour <= 12) return `${hour}:00 ${hour === 12 ? "PM" : "AM"}`;
+      return `${hour - 12}:00 PM`;
+    }
+
+    // Handle HH:MM format
+    const [hours, minutes] = time24.split(":");
+    const hour24 = parseInt(hours);
+    const min = minutes || "00";
+
+    if (hour24 === 0) {
+      return `12:${min} AM`;
+    } else if (hour24 < 12) {
+      return `${hour24}:${min} AM`;
+    } else if (hour24 === 12) {
+      return `12:${min} PM`;
+    } else {
+      return `${hour24 - 12}:${min} PM`;
+    }
+  };
+
   const getRating = (store) => {
     const testimonials = store?.profiles?.[0]?.testimonials || [];
     if (!testimonials.length) return null;
@@ -140,7 +173,11 @@ const MedicalStore = ({
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Partnerships:</span>
                     <span className="font-medium">
-                      {store?.profiles?.[0]?.partnerships?.join(", ") || "N/A"}
+                      {store?.profiles?.[0]?.partnerships?.length > 0
+                        ? store?.profiles?.[0]?.partnerships
+                            ?.map((p) => p.name || p)
+                            .join(", ")
+                        : "N/A"}
                     </span>
                   </div>
                 </div>
@@ -163,19 +200,14 @@ const MedicalStore = ({
                   )}
                 </div>
 
-                {/* Opening & Closing Time */}
+                {/* Opening & Closing Time - Updated with 12-hour format */}
                 <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-blue-500">
                   <div className="font-semibold text-sm text-gray-700 mb-1">
                     Opening & Closing Time
                   </div>
                   <div className="text-gray-600 text-xs">
-                    {`${
-                      parseInt(store?.profiles?.[0]?.openTime) % 13 || 10
-                    } AM`}{" "}
-                    -{" "}
-                    {`${
-                      parseInt(store?.profiles?.[0]?.closeTime) % 13 || 7
-                    } PM`}
+                    {convertTo12HourFormat(store?.profiles?.[0]?.openTime)} -{" "}
+                    {convertTo12HourFormat(store?.profiles?.[0]?.closeTime)}
                   </div>
                 </div>
 

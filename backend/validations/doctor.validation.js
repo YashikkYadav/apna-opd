@@ -1,5 +1,5 @@
 const zod = require("zod");
-const specialties = require("../utils/constants");
+const specialties = require("../utils/constants.js");
 
 const SpecialitySchema = zod.enum(specialties, {
   errorMap: () => ({

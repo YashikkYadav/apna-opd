@@ -1,21 +1,12 @@
-const Invoice = require('../models/medicalInvoice');
-const { generateMedicalInvoiceId } = require('../utils/helpers');
-const { generateInvoicePDF } = require('../utils/pdfGenerator');
-const { validateInvoice } = require('../validations/medicalInvoice.vallidation');
+const Invoice = require("../models/medicalInvoice");
+const { generateMedicalInvoiceId } = require("../utils/helpers");
+const { generateInvoicePDF } = require("../utils/pdfGenerator");
+const {
+  validateInvoice,
+} = require("../validations/medicalInvoice.vallidation");
 
-const createInvoice = async ( medicalId, invoiceData, invoiceId ) => {
+const createInvoice = async (medicalId, invoiceData, invoiceId) => {
   try {
-    const {
-      patientName,
-      patientAddress,
-      patientPhone,
-      paymentStatus,
-      medicines,
-      totalAmount,
-      paymentMode,
-      medicalName,
-    } = invoiceData;
-
     const invoiceValidation = validateInvoice(invoiceData);
     if (!invoiceValidation.success) {
       return {
@@ -25,74 +16,131 @@ const createInvoice = async ( medicalId, invoiceData, invoiceId ) => {
     }
 
     let invoice;
+    const invoiceType = invoiceData.invoiceType;
+
     if (invoiceId) {
-      invoice = await Invoice.findByIdAndUpdate(
-        invoiceId,
-        {
-          medicalId,
-          patientName,
-          patientAddress,
-          patientPhone,
-          paymentStatus,
-          medicines,
-          totalAmount,
-          paymentMode,
-          medicalName,
-        },
-        { new: true }
-      );
+      // Update existing invoice
+      const updateData = {
+        medicalId,
+        invoiceType,
+        patientName: invoiceData.patientName,
+        patientPhone: invoiceData.patientPhone,
+        patientAddress: invoiceData.patientAddress,
+        paymentStatus: invoiceData.paymentStatus || "Unbilled",
+        paymentMode: invoiceData.paymentMode || "Cash",
+        totalAmount: invoiceData.totalAmount || 0,
+      };
+
+      if (invoiceType === "Medical") {
+        updateData.medicalName = invoiceData.medicalName;
+        updateData.medicines = invoiceData.medicines || [];
+      } else if (invoiceType === "Hospital") {
+        updateData.patientAge = invoiceData.patientAge;
+        updateData.patientGender = invoiceData.patientGender;
+        updateData.hospitalName = invoiceData.hospitalName;
+        updateData.hospitalPhone = invoiceData.hospitalPhone;
+        updateData.hospitalAddress = invoiceData.hospitalAddress;
+        updateData.regNo = invoiceData.regNo;
+        updateData.billNo = invoiceData.billNo;
+        updateData.doctorName = invoiceData.doctorName;
+        updateData.department = invoiceData.department;
+        updateData.admissionDate = invoiceData.admissionDate;
+        updateData.dischargeDate = invoiceData.dischargeDate;
+        updateData.roomType = invoiceData.roomType;
+        updateData.roomNumber = invoiceData.roomNumber;
+        updateData.services = invoiceData.services || [];
+        updateData.overallDiscount = invoiceData.discount || 0;
+        updateData.grandTotal = invoiceData.grandTotal || 0;
+      }
+
+      invoice = await Invoice.findByIdAndUpdate(invoiceId, updateData, {
+        new: true,
+      });
 
       if (!invoice) {
         return {
           statusCode: 404,
-          error: 'Invoice not found',
+          error: "Invoice not found",
         };
       }
     } else {
-      const invoiceId = await generateMedicalInvoiceId();
-      invoice = new Invoice({
-        invoiceId,
+      // Create new invoice
+      const generatedInvoiceId = await generateMedicalInvoiceId();
+
+      const invoiceDoc = {
         medicalId,
-        patientName,
-        patientAddress,
-        patientPhone,
-        paymentStatus,
-        medicines,
-        totalAmount,
-        paymentMode,
-        medicalName,
-      });
+        invoiceId: generatedInvoiceId,
+        invoiceType,
+        patientName: invoiceData.patientName,
+        patientPhone: invoiceData.patientPhone,
+        patientAddress: invoiceData.patientAddress,
+        paymentStatus: invoiceData.paymentStatus || "Unbilled",
+        paymentMode: invoiceData.paymentMode || "Cash",
+        totalAmount: invoiceData.totalAmount || 0,
+      };
+
+      if (invoiceType === "Medical") {
+        invoiceDoc.medicalName = invoiceData.medicalName;
+        invoiceDoc.medicines = invoiceData.medicines || [];
+      } else if (invoiceType === "Hospital") {
+        invoiceDoc.patientAge = invoiceData.patientAge;
+        invoiceDoc.patientGender = invoiceData.patientGender;
+        invoiceDoc.hospitalName = invoiceData.hospitalName;
+        invoiceDoc.hospitalPhone = invoiceData.hospitalPhone;
+        invoiceDoc.hospitalAddress = invoiceData.hospitalAddress;
+        invoiceDoc.regNo = invoiceData.regNo;
+        invoiceDoc.billNo = invoiceData.billNo;
+        invoiceDoc.doctorName = invoiceData.doctorName;
+        invoiceDoc.department = invoiceData.department;
+        invoiceDoc.admissionDate = invoiceData.admissionDate;
+        invoiceDoc.dischargeDate = invoiceData.dischargeDate;
+        invoiceDoc.roomType = invoiceData.roomType;
+        invoiceDoc.roomNumber = invoiceData.roomNumber;
+        invoiceDoc.services = invoiceData.services || [];
+        invoiceDoc.overallDiscount = invoiceData.discount || 0;
+        invoiceDoc.grandTotal = invoiceData.grandTotal || 0;
+      }
+
+      invoice = new Invoice(invoiceDoc);
       await invoice.save();
     }
+
     await generateInvoicePDF(invoice);
 
     return {
-      statusCode: 201,
+      statusCode: invoiceId ? 200 : 201,
       invoice,
       invoiceUrl: `${process.env.SERVER_URL}/public/invoices/invoice_${invoice._id}.pdf`,
     };
   } catch (error) {
+    console.error("Error creating/updating invoice:", error);
     return {
       statusCode: 500,
-      error: error,
+      error: error.message || "Internal server error",
     };
   }
-}
+};
 
-const getInvoicesBymedicalId = async (medicalId) => {
+const getInvoicesByMedicalId = async (medicalId) => {
   try {
-    const invoices = await Invoice.find({
-      medicalId,
-    });
+    if (!medicalId) {
+      return {
+        statusCode: 400,
+        message: "medicalId is required",
+      };
+    }
+
+    const invoices = await Invoice.find({ medicalId });
 
     return {
       statusCode: 200,
-      invoices: invoices,
+      invoices: invoices || [],
     };
   } catch (error) {
+    console.error("Error fetching invoices:", error);
     return {
       statusCode: 500,
-      error: error,
+      error: error.message || "Internal server error",
     };
   }
 };
@@ -118,7 +166,7 @@ const getInvoiceById = async (invoiceId) => {
       error: error,
     };
   }
-}
+};
 
 const deleteInvoiceById = async (invoiceId) => {
   try {
@@ -141,11 +189,11 @@ const deleteInvoiceById = async (invoiceId) => {
       error: error,
     };
   }
-}
+};
 
 module.exports = {
   createInvoice,
-  getInvoicesBymedicalId,
+  getInvoicesByMedicalId,
   getInvoiceById,
   deleteInvoiceById,
 };

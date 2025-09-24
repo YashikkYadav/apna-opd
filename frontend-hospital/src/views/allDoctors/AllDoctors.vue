@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-row class="flex justify-between">
-      
       <v-col cols="8">
         <div class="px-1">
           <h1 class="text-h4 font-weight-bold text-blue-grey-darken-3">
@@ -20,7 +19,18 @@
         </v-btn>
       </v-col>
       <v-col cols="12">
-        <p style="font-size: 20px; margin-bottom: 20px; margin-left: 5px; font-weight: bold; text-transform:capitalize;">Complete your profile with accurate details, qualifications, and experience to build trust with patients.</p>
+        <p
+          style="
+            font-size: 20px;
+            margin-bottom: 20px;
+            margin-left: 5px;
+            font-weight: bold;
+            text-transform: capitalize;
+          "
+        >
+          Complete your profile with accurate details, qualifications, and
+          experience to build trust with patients.
+        </p>
       </v-col>
     </v-row>
 
@@ -249,24 +259,65 @@ defineOptions({
 const specialties = [
   "Cardiologist",
   "Dermatologist",
-  "Dentist",
-  "ENT",
+  "General Physician",
   "Neurologist",
-  "Pediatrician",
-  "Orthopedic Surgeon",
-  "Gynecologist",
-  "Ophthalmologist",
   "Psychiatrist",
-  "Endocrinologist",
-  "Oncologist",
-  "Urologist",
+  "Dentist",
   "Gastroenterologist",
+  "Nephrologist",
+  "Urologist",
   "Pulmonologist",
+  "Endocrinologist",
   "Rheumatologist",
-  "Allergist",
-  "Ayurvedic",
-  "Homoeopathic",
+  "Oncologist",
+  "Hematologist",
+  "Immunologist",
+  "Infectious Disease Specialist",
+  "General Surgeon",
+  "General Medicine",
+  "Laparoscopic Surgeon",
+  "Orthopedic Surgeon",
+  "Neurosurgeon",
+  "Plastic Surgeon",
+  "Cardiothoracic Surgeon",
+  "ENT Surgeon",
+  "Vascular Surgeon",
+  "Bariatric Surgeon",
+  "Uro-Surgeon",
+  "Colorectal Surgeon",
+  "Surgical Oncologist",
+  "Gynecologist/Obstetrician",
+  "Pediatrician",
+  "Neonatologist",
+  "Fertility Specialist / IVF",
+  "Lactation Consultant",
+  "Ophthalmologist",
+  "Diabetologist",
+  "Geriatrician",
+  "Pain Management Specialist",
+  "Sleep Medicine Specialist",
+  "Psychiatrist",
+  "Psychologist",
+  "Child Psychologist",
+  "Clinical Psychologist",
+  "Counsellor",
+  "Occupational Therapist",
+  "Physiotherapist",
+  "Speech Therapist",
+  "Audiologist",
+  "Acupuncturist",
+  "Chiropractor",
+  "Prosthetist & Orthotist",
+  "Dietitian / Nutritionist",
+  "Wellness Coach",
+  "Weight Management Specialist",
+  "Ayurveda",
+  "Homeopathy",
+  "Siddha",
   "Unani",
+  "Yoga & Naturopathy",
+  "Acupressure Specialist",
+  "Multi Speciality",
   "Other",
 ];
 
@@ -388,23 +439,30 @@ const submitDoctorForm = async () => {
   if (doctorFormRef.value) {
     const { valid } = await doctorFormRef.value.validate();
     if (valid) {
-      console.log(
-        "New Doctor Data Submitted:",
-        JSON.parse(JSON.stringify(newDoctorData.value))
-      );
-      const newDoctor = JSON.parse(JSON.stringify(newDoctorData.value));
-      const hospitalStore = useHospitalStore();
-      const newDoctorResult = await hospitalStore.registerDoctor(newDoctor);
-      closeDoctorDialog();
-      if (newDoctorResult.success) {
-        useUiStore().openNotificationMessage("Doctor registered successfully!");
-        await fetchDoctors();
-      } else {
+      try {
+        const newDoctor = JSON.parse(JSON.stringify(newDoctorData.value));
+        const hospitalStore = useHospitalStore();
+        const newDoctorResult = await hospitalStore.registerDoctor(newDoctor);
+        closeDoctorDialog();
+        if (newDoctorResult.success) {
+          useUiStore().openNotificationMessage(
+            "Doctor registered successfully!"
+          );
+          await fetchDoctors();
+        } else {
+          useUiStore().openNotificationMessage(
+            "Error occurred while registration.",
+            "",
+            "error"
+          );
+        }
+      } catch (error) {
         useUiStore().openNotificationMessage(
-          "Error occured while registration : "
+          "Error occurred while registration.",
+          "",
+          "error"
         );
       }
-      closeDoctorDialog();
     } else {
       console.log("Form validation failed.");
     }

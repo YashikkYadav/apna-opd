@@ -29,11 +29,11 @@ const createInvoice = async (req, res) => {
   }
 }
 
-const getInvoicesBymedicalId = async (req, res) => {
+const getInvoicesByMedicalId = async (req, res) => {
   try {
     const { medicalId } = req.params;
 
-    const invoice = await invoiceService.getInvoicesBymedicalId(medicalId);
+    const invoice = await invoiceService.getInvoicesByMedicalId(medicalId);
     if (invoice?.error) {
       return res.status(invoice.statusCode).send(invoice.error);
     }
@@ -94,7 +94,7 @@ const deleteInvoiceById = async (req, res) => {
 
 module.exports = {
   createInvoice,
-  getInvoicesBymedicalId,
+  getInvoicesByMedicalId,
   getInvoiceById,
   deleteInvoiceById,
 };

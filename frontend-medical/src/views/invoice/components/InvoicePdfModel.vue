@@ -1,433 +1,598 @@
 <template>
-  <v-dialog v-model="localDialog" max-width="800px" persistent>
+  <v-dialog v-model="isDialogOpen" max-width="900px">
     <v-card>
-      <v-card-title class="d-flex justify-space-between align-center pa-4">
-        <span class="text-h5">Invoice</span>
-        <div>
-          <v-btn icon @click="printInvoice" class="mr-2">
-            <v-icon>mdi-printer</v-icon>
-          </v-btn>
-          <v-btn icon @click="closeDialog">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </div>
+      <v-card-title class="d-flex justify-space-between align-center">
+        <span>Medical Invoice PDF</span>
+        <v-btn icon @click="$emit('close-dialog')">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </v-card-title>
 
-      <v-divider></v-divider>
-
-      <v-card-text class="pa-0">
-        <div id="invoice-content" class="invoice-container">
-          <!-- Invoice Header -->
-          <div class="invoice-header text-center pa-6 bg-primary">
-            <h1 class="text-white mb-2">{{ orderData?.medicalName }}</h1>
-            <h3 class="text-white opacity-90">
-              Invoice Number : {{ orderData?.invoiceId }}
-            </h3>
-          </div>
-
-          <!-- Order & Date Info -->
-          <div
-            class="invoice-meta d-flex justify-space-between pa-4 bg-grey-lighten-4"
-          >
-            <div>
-              <strong>Invoice Date:</strong>
-              {{ formatDate(orderData.createdAt) }}
+      <v-card-text>
+        <div id="medical-invoice-pdf" class="invoice-pdf">
+          <!-- Header -->
+          <div class="invoice-header">
+            <div class="medical-info">
+              <h1>{{ orderData.medicalName || 'Medical Store' }}</h1>
+              <p>Medical Invoice</p>
             </div>
-            <div>
-              <strong>Status: </strong>
-              <span :class="getStatusClass(orderData.paymentStatus)">{{
-                orderData.paymentStatus?.toUpperCase()
-              }}</span>
+            <div class="invoice-details">
+              <p><strong>Invoice #:</strong> {{ orderData.invoiceId || 'N/A' }}</p>
+              <p><strong>Date:</strong> {{ formatDate(new Date()) }}</p>
             </div>
           </div>
 
-          <!-- Customer Information -->
-          <div class="customer-info pa-4">
-            <h3 class="mb-3">Patient Information</h3>
-            <v-row>
-              <v-col cols="12" md="6">
-                <div class="info-item">
-                  <strong>Name:</strong> {{ orderData?.patientName }}
-                </div>
-                <div class="info-item">
-                  <strong>Phone:</strong> {{ orderData?.patientPhone }}
-                </div>
-              </v-col>
-              <v-col cols="12" md="6">
-                <div class="info-item">
-                  <strong>Address:</strong>
-                  <div class="ml-2">{{ orderData?.patientAddress }}<br /></div>
-                </div>
-              </v-col>
-            </v-row>
-          </div>
+          <hr class="divider">
 
-          <v-divider></v-divider>
+          <!-- Patient Information -->
+          <div class="patient-section no-break">
+            <h3>Patient Information</h3>
+            <div class="patient-details">
+              <div class="patient-left">
+                <p><strong>Name:</strong> {{ orderData.patientName }}</p>
+                <p><strong>Phone:</strong> {{ orderData.patientPhone }}</p>
+              </div>
+              <div class="patient-right">
+                <p><strong>Payment Status:</strong> {{ orderData.paymentStatus }}</p>
+                <p><strong>Payment Mode:</strong> {{ orderData.paymentMode }}</p>
+              </div>
+            </div>
+            <div class="patient-address">
+              <p><strong>Address:</strong> {{ orderData.patientAddress }}</p>
+            </div>
+          </div>
 
           <!-- Medicines Table -->
-          <div class="medicines-section pa-4">
-            <h3 class="mb-4">Ordered Medicines</h3>
-            <v-table class="medicines-table">
+          <div class="medicines-section">
+            <h3>Prescribed Medicines</h3>
+            <table class="medicines-table">
               <thead>
-                <tr class="bg-grey-lighten-3">
-                  <th class="text-left">Medicine Name</th>
-                  <th class="text-center">Quantity</th>
-                  <th class="text-center">Discount (%)</th>
-                  <th class="text-right">Unit Price</th>
-                  <th class="text-right">Total</th>
+                <tr>
+                  <th>Medicine Name</th>
+                  <th>Qty</th>
+                  <th>Rate (₹)</th>
+                  <th>Discount (₹)</th>
+                  <th>Total (₹)</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in safeOrderData.medicines" :key="index">
-                  <td class="medicine-name">{{ item.medicineName || 'N/A' }}</td>
-                  <td class="text-center">{{ item.quantity || 0 }}</td>
-                  <td class="text-center">{{ item.discount || 0 }}%</td>
-                  <td class="text-right">₹{{ formatPrice(item.price || item.amount || 0) }}</td>
-                  <td class="text-right">
-                    ₹{{ formatPrice(calculateItemTotal(item)) }}
-                  </td>
+                <tr v-for="(medicine, index) in orderData.medicines" :key="index">
+                  <td>{{ medicine.medicineName || medicine.name }}</td>
+                  <td>{{ medicine.quantity || medicine.qty }}</td>
+                  <td>₹{{ medicine.amount || medicine.price }}</td>
+                  <td>₹{{ medicine.discount || 0 }}</td>
+                  <td>₹{{ calculateMedicineTotal(medicine) }}</td>
                 </tr>
               </tbody>
-            </v-table>
+            </table>
           </div>
 
-          <v-divider></v-divider>
-
-          <!-- Billing Summary -->
-          <div class="billing-summary pa-4">
-            <v-row>
-              <v-col
-                cols="12"
-                md="6"
-                class="d-flex align-center justify-center"
-              >
-                <div class="payment-info">
-                  <h3 class="mb-3">Payment Information</h3>
-                  <div class="info-item">
-                    <strong>Payment Method:</strong>
-                    {{ orderData?.paymentMode || orderData?.paymentMethod || "Cash" }}
-                  </div>
-                  <div class="info-item">
-                    <strong>Payment Status:</strong>
-                    {{ orderData?.paymentStatus || "Pending" }}
-                  </div>
-                </div>
-              </v-col>
-              <v-col cols="12" md="6">
-                <div class="total-section">
-                  <div class="total-row d-flex justify-space-between">
-                    <span>Subtotal:</span>
-                    <span>₹{{ formatPrice(subtotal) }}</span>
-                  </div>
-                  <div class="total-row d-flex justify-space-between">
-                    <span>GST (18%):</span>
-                    <span>₹{{ formatPrice(gstAmount) }}</span>
-                  </div>
-                  <v-divider class="my-2"></v-divider>
-                  <div
-                    class="total-row final-total d-flex justify-space-between"
-                  >
-                    <strong>Total Amount:</strong>
-                    <strong>₹{{ formatPrice(totalWithGst) }}</strong>
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
+          <!-- Total Section -->
+          <div class="total-section no-break">
+            <div class="total-details">
+              <div class="total-left">
+                <p><strong>Payment Mode:</strong> {{ orderData.paymentMode }}</p>
+              </div>
+              <div class="total-right">
+                <p><strong>Subtotal:</strong> ₹{{ calculateSubtotal() }}</p>
+                <p><strong>Total Discount:</strong> ₹{{ calculateTotalDiscount() }}</p>
+                <p class="grand-total"><strong>Grand Total: ₹{{ calculateGrandTotal() }}</strong></p>
+              </div>
+            </div>
           </div>
 
           <!-- Footer -->
-          <div class="invoice-footer text-center pa-4 bg-grey-lighten-4">
-            <p class="mb-1"><strong>Thank you for choosing us!</strong></p>
-            <p class="text-caption">
-              For any queries, please contact our support team.
-            </p>
-            <p class="text-caption">
-              Generated on: {{ new Date().toLocaleDateString("en-GB") }}
-            </p>
+          <div class="invoice-footer no-break">
+            <p>Thank you for choosing our medical store!</p>
+            <p><em>Generated on {{ formatDate(new Date()) }}</em></p>
           </div>
         </div>
       </v-card-text>
+
+      <v-card-actions class="justify-center">
+        <v-btn color="primary" @click="downloadPDF">
+          <v-icon left>mdi-download</v-icon>
+          Download PDF
+        </v-btn>
+        <v-btn color="secondary" @click="printPDF">
+          <v-icon left>mdi-printer</v-icon>
+          Print
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 export default {
-  name: "OrderInvoiceModal",
+  name: "InvoicePdfModel",
   props: {
-    dialog: {
-      type: Boolean,
-      default: false,
-    },
+    dialog: Boolean,
     orderData: {
       type: Object,
-      default: () => ({}),
-    },
-  },
-  emits: ["close-dialog"],
-  data() {
-    return {
-      localDialog: false,
-    };
+      default: () => ({})
+    }
   },
   computed: {
-    safeOrderData() {
-      return {
-        ...this.orderData,
-        medicines: this.orderData.medicines || []
-      };
-    },
-    subtotal() {
-      if (!this.safeOrderData.medicines || this.safeOrderData.medicines.length === 0) {
-        return this.orderData.totalAmount || 0;
-      }
-      
-      return this.safeOrderData.medicines.reduce((total, item) => {
-        const itemTotal = this.calculateItemTotal(item);
-        return total + itemTotal;
-      }, 0);
-    },
-    gstAmount() {
-      return (this.subtotal * 0.18);
-    },
-    totalWithGst() {
-      return (this.subtotal + this.gstAmount);
-    },
-  },
-  watch: {
-    dialog: {
-      handler(newVal) {
-        console.log('Dialog prop changed to:', newVal);
-        this.localDialog = newVal;
-      },
-      immediate: true
-    },
-    localDialog(newVal) {
-      console.log('Local dialog changed to:', newVal);
-      if (!newVal) {
-        this.$emit("close-dialog");
-      }
-    },
+    isDialogOpen() {
+      return this.dialog;
+    }
   },
   methods: {
-    calculateItemTotal(item) {
-      const price = item.price || item.amount || 0;
-      const quantity = item.quantity || 0;
-      const discount = item.discount || 0;
-      
-      const baseTotal = price * quantity;
-      const discountAmount = baseTotal * (discount / 100);
-      return baseTotal - discountAmount;
+    calculateMedicineTotal(medicine) {
+      const qty = parseFloat(medicine.quantity || medicine.qty || 0);
+      const amount = parseFloat(medicine.amount || medicine.price || 0);
+      const discount = parseFloat(medicine.discount || 0);
+      return (qty * amount - discount).toFixed(2);
     },
-    formatPrice(price) {
-      const numPrice = parseFloat(price) || 0;
-      return numPrice.toFixed(2);
+    calculateSubtotal() {
+      if (!this.orderData.medicines) return '0.00';
+      return this.orderData.medicines.reduce((sum, medicine) => {
+        const qty = parseFloat(medicine.quantity || medicine.qty || 0);
+        const amount = parseFloat(medicine.amount || medicine.price || 0);
+        return sum + (qty * amount);
+      }, 0).toFixed(2);
     },
-    closeDialog() {
-      this.localDialog = false;
+    calculateTotalDiscount() {
+      if (!this.orderData.medicines) return '0.00';
+      return this.orderData.medicines.reduce((sum, medicine) => {
+        return sum + parseFloat(medicine.discount || 0);
+      }, 0).toFixed(2);
     },
-    formatDate(dateString) {
-      if (!dateString) return "N/A";
-      
-      try {
-        return new Date(dateString).toLocaleDateString("en-GB", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      } catch (error) {
-        console.error('Error formatting date:', error);
-        return "Invalid Date";
+    calculateGrandTotal() {
+      if (!this.orderData.medicines) return '0.00';
+      return this.orderData.medicines.reduce((sum, medicine) => {
+        return sum + parseFloat(this.calculateMedicineTotal(medicine));
+      }, 0).toFixed(2);
+    },
+    formatDate(date) {
+      if (!date) return 'N/A';
+      if (typeof date === 'string') {
+        date = new Date(date);
       }
+      return date.toLocaleDateString('en-GB');
     },
-    getStatusClass(status) {
-      if (!status) return "text-grey";
-      
-      const statusClasses = {
-        pending: "text-orange",
-        billed: "text-green",
-        unbilled: "text-orange",
-        "partially paid": "text-blue",
-        paid: "text-green",
-        confirmed: "text-blue",
-        processing: "text-purple",
-        shipped: "text-indigo",
-        delivered: "text-green",
-        cancelled: "text-red",
+    downloadPDF() {
+      const element = document.getElementById("medical-invoice-pdf");
+      const opt = {
+        margin: [0.75, 0.75, 0.75, 0.75], // Equal margins: top, right, bottom, left (in inches)
+        filename: `medical-invoice-${
+          this.orderData.invoiceId || "new"
+        }.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          height: element.scrollHeight,
+          width: element.scrollWidth
+        },
+        jsPDF: { 
+          unit: "in", 
+          format: "a4", 
+          orientation: "portrait",
+          compress: true
+        },
+        pagebreak: { 
+          mode: ['avoid-all', 'css', 'legacy'],
+          before: '.page-break-before',
+          after: '.page-break-after',
+          avoid: '.no-break'
+        }
       };
-      return statusClasses[status.toLowerCase()] || "text-grey";
-    },
-    printInvoice() {
-      const printContent = document.getElementById("invoice-content");
-      if (!printContent) {
-        console.error('Print content not found');
-        return;
-      }
-      
-      const originalContent = document.body.innerHTML;
 
-      // Create print styles
-      const printStyles = `
-        <style>
-          @media print {
-            * {
-              -webkit-print-color-adjust: exact !important;
-              color-adjust: exact !important;
-            }
-            body {
-              margin: 0;
-              padding: 20px;
-              font-family: Arial, sans-serif;
-            }
-            .invoice-container {
-              width: 100%;
-              max-width: none;
-            }
-            .invoice-header {
-              background-color: #1976d2 !important;
-              color: white !important;
-            }
-            .bg-grey-lighten-4 {
-              background-color: #f5f5f5 !important;
-            }
-            .bg-grey-lighten-3 {
-              background-color: #eeeeee !important;
-            }
-            .medicines-table {
-              width: 100%;
-              border-collapse: collapse;
-            }
-            .medicines-table th, .medicines-table td {
-              border: 1px solid #ddd;
-              padding: 8px;
-            }
-            .total-section {
-              border: 1px solid #ddd;
-              padding: 15px;
-              margin-top: 10px;
-            }
-            .final-total {
-              font-size: 1.1em;
-              font-weight: bold;
-            }
-            @page {
-              margin: 1in;
-            }
-          }
-        </style>
+      // Use html2pdf if available, otherwise show message
+      if (window.html2pdf) {
+        window.html2pdf().set(opt).from(element).save();
+      } else {
+        this.printPDF(); // Fallback to print
+      }
+    },
+    printPDF() {
+      const printContents = document.getElementById("medical-invoice-pdf").innerHTML;
+      const originalContents = document.body.innerHTML;
+
+      document.body.innerHTML = `
+        <html>
+          <head>
+            <title>Medical Invoice</title>
+            <style>
+              ${this.getPrintStyles()}
+            </style>
+          </head>
+          <body>
+            ${printContents}
+          </body>
+        </html>
       `;
 
-      document.body.innerHTML = printStyles + printContent.outerHTML;
-      
-      setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContent;
-        
-        // Re-initialize Vue after printing
-        this.$nextTick(() => {
-          location.reload();
-        });
-      }, 250);
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload(); // Reload to restore Vue functionality
     },
-  },
+    getPrintStyles() {
+      return `
+        @page {
+          size: A4;
+          margin: 0.75in 0.75in 0.75in 0.75in; /* Equal margins on all sides */
+        }
+        
+        @media print {
+          * {
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          
+          body { 
+            font-family: Arial, sans-serif; 
+            margin: 0;
+            padding: 0;
+            color: black;
+            background: white;
+            line-height: 1.4;
+          }
+          
+          .invoice-pdf {
+            width: 100%;
+            max-width: none;
+            padding: 0;
+            margin: 0;
+          }
+          
+          /* Page break controls */
+          .page-break-before {
+            page-break-before: always;
+          }
+          
+          .page-break-after {
+            page-break-after: always;
+          }
+          
+          .no-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+          
+          .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+          }
+          
+          .medical-info h1 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+          }
+          
+          .medical-info p {
+            margin: 3px 0;
+            font-size: 13px;
+            color: #666;
+          }
+          
+          .invoice-details {
+            text-align: right;
+          }
+          
+          .invoice-details p {
+            margin: 3px 0;
+            font-size: 12px;
+          }
+          
+          .divider {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+            page-break-inside: avoid;
+          }
+          
+          .patient-section {
+            margin: 15px 0;
+            page-break-inside: avoid;
+          }
+          
+          .patient-section h3 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 4px;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+          }
+          
+          .patient-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 10px;
+          }
+          
+          .patient-left, .patient-right {
+            flex: 1;
+          }
+          
+          .patient-left p, .patient-right p {
+            margin: 6px 0;
+            font-size: 12px;
+            line-height: 1.3;
+          }
+          
+          .patient-address {
+            margin-top: 10px;
+          }
+          
+          .patient-address p {
+            margin: 6px 0;
+            font-size: 12px;
+            line-height: 1.3;
+          }
+          
+          .medicines-section {
+            margin: 20px 0;
+            page-break-inside: avoid;
+          }
+          
+          .medicines-section h3 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 4px;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+          }
+          
+          .medicines-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            page-break-inside: auto;
+          }
+          
+          .medicines-table thead {
+            display: table-header-group;
+          }
+          
+          .medicines-table tfoot {
+            display: table-footer-group;
+          }
+          
+          .medicines-table th,
+          .medicines-table td {
+            border: 1px solid #ddd;
+            padding: 8px 6px;
+            text-align: left;
+            font-size: 11px;
+            vertical-align: top;
+          }
+          
+          .medicines-table th {
+            background-color: #f8f9fa !important;
+            font-weight: bold;
+            color: #333 !important;
+            page-break-after: avoid;
+          }
+          
+          .medicines-table tr {
+            page-break-inside: avoid;
+          }
+          
+          .medicines-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9 !important;
+          }
+          
+          .total-section {
+            margin: 20px 0 0 0;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            page-break-inside: avoid;
+          }
+          
+          .total-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+          }
+          
+          .total-left, .total-right {
+            flex: 1;
+          }
+          
+          .total-right {
+            text-align: right;
+          }
+          
+          .total-right p {
+            margin: 6px 0;
+            font-size: 14px;
+          }
+          
+          .grand-total {
+            font-size: 16px !important;
+            color: #007bff !important;
+            font-weight: bold !important;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+            margin-top: 10px !important;
+          }
+          
+          .invoice-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            page-break-inside: avoid;
+          }
+          
+          .invoice-footer p {
+            margin: 4px 0;
+            font-size: 12px;
+          }
+          
+          /* Ensure no content bleeds outside margins */
+          * {
+            box-sizing: border-box;
+          }
+          
+          /* Handle long content gracefully */
+          .medicines-table td {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 150px;
+          }
+        }
+      `;
+    }
+  }
 };
 </script>
 
 <style scoped>
-.invoice-container {
-  max-width: 100%;
-  margin: 0 auto;
+.invoice-pdf {
+  padding: 20px;
   background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: black;
+  font-family: Arial, sans-serif;
 }
 
 .invoice-header {
-  background: linear-gradient(135deg, #1976d2, #1565c0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
-.info-item {
-  margin-bottom: 8px;
-  line-height: 1.4;
+.medical-info h1 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.medical-info p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.invoice-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.divider {
+  border: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+.patient-section {
+  margin: 20px 0;
+}
+
+.patient-section h3 {
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.patient-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.patient-left, .patient-right {
+  width: 45%;
+}
+
+.patient-left p, .patient-right p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.patient-address p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.medicines-section {
+  margin: 30px 0;
+}
+
+.medicines-section h3 {
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .medicines-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin: 15px 0;
 }
 
 .medicines-table th,
 .medicines-table td {
-  padding: 12px 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
 }
 
 .medicines-table th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.875rem;
-  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  font-weight: bold;
+  color: #333;
 }
 
-.medicine-name {
-  font-weight: 500;
-  color: #1976d2;
+.medicines-table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
 .total-section {
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
+  margin: 30px 0;
+  border-top: 2px solid #ddd;
+  padding-top: 20px;
 }
 
-.total-row {
-  padding: 4px 0;
-  font-size: 0.95rem;
+.total-details {
+  display: flex;
+  justify-content: space-between;
 }
 
-.final-total {
-  font-size: 1.1rem;
-  color: #1976d2;
-  padding-top: 8px;
+.total-left, .total-right {
+  width: 45%;
 }
 
-.payment-info {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid #1976d2;
+.total-right {
+  text-align: right;
+}
+
+.total-right p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.grand-total {
+  font-size: 18px !important;
+  color: #007bff !important;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  margin-top: 15px !important;
 }
 
 .invoice-footer {
-  background: linear-gradient(135deg, #f5f5f5, #eeeeee);
-  color: #666;
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
 }
 
-.text-orange {
-  color: #ff9800 !important;
-}
-.text-blue {
-  color: #2196f3 !important;
-}
-.text-purple {
-  color: #9c27b0 !important;
-}
-.text-indigo {
-  color: #3f51b5 !important;
-}
-.text-green {
-  color: #4caf50 !important;
-}
-.text-red {
-  color: #f44336 !important;
-}
-.text-grey {
-  color: #757575 !important;
+.invoice-footer p {
+  margin: 5px 0;
+  font-size: 14px;
 }
 </style>

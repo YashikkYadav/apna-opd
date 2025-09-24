@@ -8,6 +8,7 @@ import {
   SearchOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
+import {specialties} from "../../data/constants"
 
 const Header = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -45,7 +46,9 @@ const Header = () => {
     router.push(route);
   };
 
-  const menuItems = [
+
+
+  let menuItems = [
     { label: "Doctors", route: "/find-doctor" },
     { label: "Ambulance", route: "/more/ambulance" },
     { label: "GYM", route: "/more/gym" },
@@ -66,6 +69,13 @@ const Header = () => {
     { label: "Laboratory", route: "/more/laboratory" },
     { label: "IVF Clinic", route: "/more/ivf-clinic" },
   ];
+
+  specialties.forEach((specialty) => {
+    menuItems.push({
+      label: specialty,
+      route: `/find-doctor?speciality=${specialty}`,
+    });
+  });
 
   // Filter search items based on input
   useEffect(() => {
