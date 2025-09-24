@@ -403,6 +403,9 @@ const getHealthServeList = async (page = 1, location, type, name) => {
       case "yoga":
         lookup = "yogas";
         break;
+      case "radiologist":
+        lookup = "radiologistprofiles";
+        break;
       default:
         lookup = "healthserveprofiles";
     }

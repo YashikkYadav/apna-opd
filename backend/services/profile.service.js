@@ -20,7 +20,7 @@ const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/prof
 const { handleGym, getHandleGym } = require('../utils/profileStoreData/handleBloodBank')
 const { handleNursingStaff, getNursingStaff } = require('../utils/profileStoreData/handleNursingstaff')
 const {handleYoga, gethandleYoga} = require('../utils/profileStoreData/handleYoga')
-
+const {handleRadiologist, getHandleRadiologist} = require('../utils/profileStoreData/handleRadiologist')
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -303,6 +303,9 @@ const deleteImage = async (healthServeId, image) => {
       case "laboratory": Model = require("../models/healthlabProfile"); break;
       case "ivf_clinic": Model = require("../models/ivfClinic"); break;
       case "gym": Model = require("../models/gym"); break;
+      case "nursing_staff": Model = require("../models/nursingStaff"); break;
+      case "yoga": Model = require("../models/yoga"); break;
+      case "radiologist": Model = require("../models/radiologist"); break;
       default: throw new Error("Unsupported healthServeProfile type");
     }
 
@@ -313,7 +316,7 @@ const deleteImage = async (healthServeId, image) => {
     if (imgType === "profilePhoto_image") {
       updatedProfile = await Model.findOneAndUpdate(
         { healthServeId },
-        { $unset: { profilePhoto: "" } },
+        { $unset: { profileImage: "" } },
         { new: true }
       );
     } else {
@@ -335,7 +338,7 @@ const deleteImage = async (healthServeId, image) => {
     return {
       statusCode: 200,
       galleryImages: updatedProfile.galleryImages || [],
-      profilePhoto: updatedProfile.profilePhoto || null
+      profileImage: updatedProfile.profileImage || null,
     };
   } catch (error) {
     console.error("🔥 Error deleting image:", error);
@@ -423,6 +426,9 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         break;
       case "yoga":
         result = await handleYoga(req, healthServeId);
+        break;
+      case "radiologist":
+        result = await handleRadiologist(req, healthServeId);
         break;
     }
 
@@ -527,6 +533,8 @@ const getHealthServeProfileData = async (healthServeId) => {
       case "yoga":
         result = await gethandleYoga(healthServeId);
         break;
+      case "radiologist":
+        result = await getHandleRadiologist(healthServeId)
     }
 
     return {

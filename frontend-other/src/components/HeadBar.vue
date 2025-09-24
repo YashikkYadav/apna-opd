@@ -59,6 +59,8 @@ export default {
           return "/profile/ivf_clinic";
         case "yoga":
           return "/profile/yoga"
+        case "radiologist":
+          return "/profile/radiologist"
         default:
           return "/profile";
       }
