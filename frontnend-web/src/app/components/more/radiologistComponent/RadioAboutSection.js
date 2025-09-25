@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { User, FileBadge, Award, Languages } from 'lucide-react';
+import { motion } from "framer-motion";
+import { User, FileBadge, Award, Languages } from "lucide-react";
 
-const DoctorOverviewCar = ({ doctorData }) => {
+const RadioAboutSection = ({ data, healthProfile }) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -16,7 +16,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
       <div className="flex mb-3">
         <User className="w-8 h-8 text-blue-600" />
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
-          About {doctorData?.doctorId?.name}
+          About {data?.name}
         </h2>
       </div>
 
@@ -25,7 +25,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
         className="bg-[#F7F9FB] rounded-2xl p-6 border-l-4 border-blue-400 shadow-md transition-all mb-7"
       >
         <p className="text-gray-700 text-base leading-relaxed">
-          {doctorData?.about}
+          {healthProfile?.about}
         </p>
       </motion.div>
 
@@ -42,7 +42,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
             <Languages className="w-6 h-6" /> Languages Spoken
           </h3>
           <div className="flex flex-wrap gap-3">
-            {doctorData?.languages?.map((lang, idx) => (
+            {healthProfile?.languages?.map((lang, idx) => (
               <span
                 key={idx}
                 className="bg-gray-100 px-4 py-1 rounded-full text-gray-800 text-sm"
@@ -60,8 +60,8 @@ const DoctorOverviewCar = ({ doctorData }) => {
             <FileBadge className="w-6 h-6" /> Professional Details
           </h3>
           <ul className="list-disc pl-5 space-y-2 text-gray-700">
-            <li>Appointment Fee :{doctorData?.appointmentFee}</li>
-            <li>happyClients : {doctorData?.happyClients}</li>
+            <li>Appointment Fee :{healthProfile?.appointmentFee}</li>
+            <li>happyClients : {healthProfile?.happyClients}</li>
           </ul>
         </motion.div>
         <motion.div
@@ -72,7 +72,7 @@ const DoctorOverviewCar = ({ doctorData }) => {
             <Award className="w-6 h-6" /> Memberships & Awards
           </h3>
           <ul className="list-disc pl-5 space-y-2 text-gray-700">
-            {doctorData?.membershipAwards?.map((award, idx) => (
+            {healthProfile?.membershipAwards?.map((award, idx) => (
               <li key={idx}>{award}</li>
             ))}
           </ul>
@@ -86,10 +86,11 @@ const DoctorOverviewCar = ({ doctorData }) => {
           </h3>
           <ul className="list-disc pl-5 space-y-2 text-gray-700">
             <li>
-              {doctorData?.locations[0].from} - {doctorData?.locations[0].to}
+              {healthProfile?.locations[0].from} -{" "}
+              {healthProfile?.locations[0].to}
             </li>
-            <li>{doctorData?.locations[0].days.join(",")}</li>
-            <li>Time Slot - {doctorData?.locations[0].timeslot} Minutes</li>
+            <li>{healthProfile?.locations[0].days.join(",")}</li>
+            <li>Time Slot - {healthProfile?.locations[0].timeslot} Minutes</li>
           </ul>
         </motion.div>
       </div>
@@ -97,4 +98,4 @@ const DoctorOverviewCar = ({ doctorData }) => {
   );
 };
 
-export default DoctorOverviewCar;
+export default RadioAboutSection;
