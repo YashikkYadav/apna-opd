@@ -16,6 +16,7 @@ import Healthlab from './views/profile/Healthlab.vue'
 import Pharmacy from './views/profile/Pharmacy.vue'
 import Yoga from './views/profile/Yoga.vue'
 import Radiology from './views/profile/Radiology.vue'
+import Ambulance from './views/profile/Ambulance.vue';
 
 
 
@@ -89,6 +90,11 @@ const routes = [
     path: "/profile/radiologist",
     name: "Radiologist",
     component: Radiology,
+  },
+  {
+    path: "/profile/ambulance",
+    name: "Ambulance",
+    component: Ambulance,
   },
   {
     path: "/login",

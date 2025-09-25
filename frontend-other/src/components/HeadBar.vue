@@ -61,6 +61,8 @@ export default {
           return "/profile/yoga"
         case "radiologist":
           return "/profile/radiologist"
+        case "ambulance":
+          return "/profile/ambulance"
         default:
           return "/profile";
       }
