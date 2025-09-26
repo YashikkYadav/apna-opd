@@ -9,6 +9,7 @@ const ambulanceSchema = new mongoose.Schema(
       index: true,
     },
     introduction: { type: String },
+    about: { type: String },
 
     // Service Location Info
     address: { type: String },
@@ -25,6 +26,7 @@ const ambulanceSchema = new mongoose.Schema(
         registrationNo: { type: String },
         insuranceNo: { type: String },
         pollutionCertificateNo: { type: String },
+        responseTime: { type: Number, default: 30 }, // in minutes
 
         vehicleType: {
           type: String,

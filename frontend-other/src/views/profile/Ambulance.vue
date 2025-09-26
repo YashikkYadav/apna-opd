@@ -20,12 +20,26 @@
                 v-model="form.introduction"
                 ref="introductionRef"
                 label="Service Introduction"
-                placeholder="Brief introduction about your ambulance service"
+                placeholder="Tag line or Introduction"
                 :rules="[rules.required]"
                 variant="outlined"
                 dense
                 rows="3"
               ></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <v-textarea
+                v-model="form.about"
+                ref="aboutRef"
+                label="About"
+                placeholder="Brief about your ambulance service"
+                :rules="[rules.required]"
+                variant="outlined"
+                dense
+              >
+              </v-textarea>
             </v-col>
           </v-row>
           <v-row>
@@ -271,6 +285,15 @@
                   variant="outlined"
                   dense
                 ></v-select>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="ambulance.responseTime"
+                  label="Response Time"
+                  type="number"
+                  variant="outlined"
+                  dense
+                ></v-text-field>
               </v-col>
             </v-row>
 
@@ -638,6 +661,7 @@ export default {
       },
       form: {
         introduction: "",
+        about: "",
         address: "",
         locality: "",
         city: "",
@@ -712,6 +736,7 @@ export default {
         insuranceNo: "",
         pollutionCertificateNo: "",
         vehicleType: "",
+        responseTime:"",
         capacity: 1,
         availabilityStatus: "Available",
         equipment: [],
@@ -1110,7 +1135,7 @@ export default {
           });
         }
         this.images = images;
-
+        this.form.about = profile.about || "";
         this.form.introduction = profile.introduction || "";
         this.form.coverageArea = profile.coverageArea || "";
         this.form.ambulances = profile.ambulances || [];
@@ -1125,6 +1150,7 @@ export default {
       if (valid) {
         const formData = new FormData();
         formData.append("introduction", this.form.introduction);
+        formData.append("about", this.form.about);
         formData.append("address", this.form.address);
         formData.append("locality", this.form.locality);
         formData.append("city", this.form.city);

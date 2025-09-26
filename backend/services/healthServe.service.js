@@ -367,6 +367,7 @@ const getHealthServeList = async (page = 1, location, type, name) => {
 
     let healthServeProfileList = [];
     let total = 0;
+    console.log(type)
 
     let lookup;
     switch (type) {
@@ -405,6 +406,9 @@ const getHealthServeList = async (page = 1, location, type, name) => {
         break;
       case "radiologist":
         lookup = "radiologistprofiles";
+        break;
+      case "ambulance":
+        lookup = "ambulances";
         break;
       default:
         lookup = "healthserveprofiles";

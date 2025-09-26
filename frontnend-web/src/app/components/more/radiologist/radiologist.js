@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BsGridFill, BsList } from "react-icons/bs";
-
+import Testimonials from "./Testimonial";
+import WhyChooseUs from "./whyChoose";
 import Pagination from "../common/Pagination";
 
 const Radiologist = ({
@@ -266,8 +267,8 @@ const Radiologist = ({
             onPageChange={handlePageChange}
           />
         )}
-        {/* <WhyChooseUs />
-        <PatientTestimonials /> */}
+        <WhyChooseUs />
+        <Testimonials />
       </main>
     </>
   );
