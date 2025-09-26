@@ -50,7 +50,7 @@ const bloodDonorSchema = new mongoose.Schema(
       enum: ["Aadhaar", "Driving License", "Voter ID", "Passport", "Other"],
     },
     idProofNumber: { type: String }, // store ID number
-    verifiedDonor: { type: Boolean, default: false }, // admin verified
+    verifiedDonor: { type: Boolean, default: true }, // admin verified
 
     languagesSpoken: [{ type: String }], // e.g., ["English", "Hindi"]
     testimonials: [

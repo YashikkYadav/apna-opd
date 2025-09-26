@@ -362,13 +362,7 @@ const getHealthServeList = async (page = 1, location, type, name) => {
       filter.type = type;
     }
 
-    // Determine aggregation or direct query
-    const useAggregation = type !== "blood_donor";
-
-    let healthServeProfileList = [];
-    let total = 0;
-    console.log(type)
-
+    // ✅ Always use aggregation for profile lookup
     let lookup;
     switch (type) {
       case "hospital":
@@ -411,13 +405,16 @@ const getHealthServeList = async (page = 1, location, type, name) => {
         lookup = "ambulances";
         break;
       case "blood_donor":
-        lookup = "blooddonors";
+        lookup = "blooddonors"; // ✅ now joins blood donor profile
         break;
       default:
         lookup = "healthserveprofiles";
     }
 
-    if (useAggregation) {
+    let healthServeProfileList = [];
+    let total = 0;
+
+    if (lookup) {
       const aggregationPipeline = [
         { $match: filter },
         { $skip: skip },
@@ -432,7 +429,6 @@ const getHealthServeList = async (page = 1, location, type, name) => {
         },
       ];
 
-      // Correct total count: needs separate pipeline without skip/limit
       const totalCountPipeline = [{ $match: filter }, { $count: "count" }];
 
       const [data, countResult] = await Promise.all([
@@ -443,6 +439,7 @@ const getHealthServeList = async (page = 1, location, type, name) => {
       healthServeProfileList = data;
       total = countResult[0]?.count || 0;
     } else {
+      // fallback (rare case, if no lookup is needed)
       const [data, count] = await Promise.all([
         HealthServe.find(filter).skip(skip).limit(limit),
         HealthServe.countDocuments(filter),
@@ -466,6 +463,7 @@ const getHealthServeList = async (page = 1, location, type, name) => {
     };
   }
 };
+
 
 const getDoctors = async (hospitalId) => {
   try {
