@@ -59,6 +59,10 @@ const {
   getHandleAmbulance,
   handleAmbulance,
 } = require("../utils/profileStoreData/handleAmbulance");
+const {
+  handleBloodDonor,
+  getHandleBloodDonor,
+} = require("../utils/profileStoreData/handleBloodDonor");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -371,10 +375,13 @@ const deleteImage = async (healthServeId, image) => {
       case "ambulance":
         Model = require("../models/ambulance");
         break;
+      case "blood_donor":
+        Model = require("../models/bloodDonor");
+        break;
       default:
         throw new Error("Unsupported healthServeProfile type");
     }
-   
+
     const filename = path.basename(image.path);
     const imgType = image.type;
     let updatedProfile;
@@ -392,7 +399,7 @@ const deleteImage = async (healthServeId, image) => {
         { new: true }
       );
     }
-     console.log("Updated profile after image deletion:", updatedProfile);
+    console.log("Updated profile after image deletion:", updatedProfile);
 
     if (!updatedProfile) {
       throw new Error("Profile not found");
@@ -470,9 +477,6 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       case "blood_bank":
         result = await handleBloodBank(req, healthServeId);
         break;
-      // case 'physiotherapist':
-      //   result = await handlePhysiotherapist(req, healthServeId);
-      //   break;
       case "medical_store":
         result = await handleMedicalStore(req, healthServeId);
         break;
@@ -496,6 +500,9 @@ const addHealthServeProfileData = async (req, healthServeId) => {
         break;
       case "ambulance":
         result = await handleAmbulance(req, healthServeId);
+        break;
+      case "blood_donor":
+        result = await handleBloodDonor(req, healthServeId);
         break;
     }
 
@@ -602,6 +609,9 @@ const getHealthServeProfileData = async (healthServeId) => {
         break;
       case "ambulance":
         result = await getHandleAmbulance(healthServeId);
+        break;
+      case "blood_donor":
+        result = await getHandleBloodDonor(healthServeId);
         break;
     }
 

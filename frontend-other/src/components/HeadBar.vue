@@ -58,11 +58,13 @@ export default {
         case "ivf_clinic":
           return "/profile/ivf_clinic";
         case "yoga":
-          return "/profile/yoga"
+          return "/profile/yoga";
         case "radiologist":
-          return "/profile/radiologist"
+          return "/profile/radiologist";
         case "ambulance":
-          return "/profile/ambulance"
+          return "/profile/ambulance";
+        case "blood_donor":
+          return "/profile/blood-donor";
         default:
           return "/profile";
       }

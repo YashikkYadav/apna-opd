@@ -213,7 +213,7 @@ const Register = () => {
     if (!formData.state.trim()) errors.push("State is required");
 
     // Password validation for non-blood donors
-    if (formData.registrationFor !== "blood_donor") {
+    
       if (!formData.password) errors.push("Password is required");
       if (formData.password.length < 6)
         errors.push("Password must be at least 6 characters");
@@ -223,7 +223,7 @@ const Register = () => {
         errors.push("Passwords do not match");
       if (!formData.subscriptionType)
         errors.push("Please select a subscription type");
-    }
+    
 
     // Doctor specific validations
     if (formData.registrationFor === "doctor") {
@@ -372,10 +372,10 @@ const Register = () => {
         isCash: formData.isCash,
       };
 
-      if (formData.registrationFor !== "blood_donor") {
+     
         payload.password = formData.password;
         payload.subscriptionType = formData.subscriptionType;
-      }
+      
 
       if (formData.registrationFor === "blood_donor") {
         payload.bloodGroup = formData.bloodGroup;
@@ -827,8 +827,7 @@ const Register = () => {
           )}
 
           {/* Password Fields for Non-Blood Donors */}
-          {formData.registrationFor &&
-            formData.registrationFor !== "blood_donor" && (
+          {formData.registrationFor && (
               <>
                 <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
