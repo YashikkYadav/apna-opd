@@ -89,7 +89,9 @@ const RadioAboutSection = ({ data, healthProfile }) => {
               {healthProfile?.locations[0].from} -{" "}
               {healthProfile?.locations[0].to}
             </li>
-            <li>{healthProfile?.locations[0].days.join(",")}</li>
+            <li className="break-words whitespace-normal">
+              {healthProfile?.locations[0].days.join(", ")}
+            </li>
             <li>Time Slot - {healthProfile?.locations[0].timeslot} Minutes</li>
           </ul>
         </motion.div>

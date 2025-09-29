@@ -1,8 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import CallNow from "../VeterinaryComponents/CallNow";
+import { FaStar, FaStarHalfAlt, FaRegStar, FaTint } from "react-icons/fa";
+import RequestBloodDonation from "./DonorRequest";
 
 import { useState } from "react";
 
@@ -35,13 +35,23 @@ function getStarIcons(avgRating) {
 }
 
 const HeroSection = ({ data, healthProfile }) => {
-  console.log(healthProfile?.profilePhoto);
+  console.log("h", healthProfile);
 
   const user = data;
-
-  const [openModel, setModalOpen] = useState(false);
-
   const [callModalOpen, setCallModalOpen] = useState(false);
+
+  const getAge = (dob) => {
+    if (!dob) return "N/A";
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();  
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const avgRating = healthProfile?.testimonials?.length
     ? (
         healthProfile?.testimonials.reduce((sum, r) => sum + r.rating, 0) /
@@ -79,10 +89,16 @@ const HeroSection = ({ data, healthProfile }) => {
       {/* Right: Text Content */}
       <div className="z-10 flex-1 space-y-3 text-center lg:text-left">
         <h2 className="text-3xl md:text-4xl font-extrabold drop-shadow capitalize">
-          {user?.name ?? "Dummy Name"} ({healthProfile?.gender})
+          {user?.name ?? "Dummy Name"} ({healthProfile?.data?.gender || "N/A"})
         </h2>
-
-      
+        <p className="text-lg flex items-center bg-white text-[#0C65A0] rounded-full w-fit px-4 py-1 mx-auto lg:mx-0 font-semibold gap-2">
+          <FaTint className="text-red-500" /> Blood Group:{" "}
+          {healthProfile?.data?.bloodGroup || "N/A"}
+        </p>
+        <p className="capitalize text-lg">
+          {healthProfile?.data?.locality}, {healthProfile?.data?.city || "N/A"}{" "}
+          & Age: {getAge(healthProfile?.data?.dob)}
+        </p>
 
         {/* Badges */}
         <div className="flex items-center gap-2 mb-4 justify-center lg:justify-start">
@@ -94,36 +110,21 @@ const HeroSection = ({ data, healthProfile }) => {
             ({reviewCount} reviews)
           </span>
         </div>
-        <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
-          {healthProfile?.tags?.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-white/20 text-white px-4 py-2 rounded-full text-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
+        {healthProfile?.data?.willingToDonate && (
+          <p className="text-lg">
+            Willing to Donate :{" "}
+            {healthProfile?.data?.preferredDonationLocation || "N/A"}
+          </p>
+        )}
         {/* Enlarged Action Buttons */}
         <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-white text-[#0C65A0] text-lg px-8 py-3 rounded-full font-bold shadow hover:bg-gray-100 transition hover:scale-105"
-          >
-            🔍 Check Availability
-          </button>
-          <CheckAvailability
-            isOpen={openModel}
-            onClose={() => setModalOpen(false)}
-          />
           <button
             onClick={() => setCallModalOpen(true)}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
           >
-            📞 Call Now
+            📞 Request Donation
           </button>
-          <CallNow
+          <RequestBloodDonation
             isOpen={callModalOpen}
             onClose={() => setCallModalOpen(false)}
           />

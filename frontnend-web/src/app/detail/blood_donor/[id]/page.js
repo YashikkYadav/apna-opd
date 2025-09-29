@@ -2,18 +2,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import Head from "next/head";
-import UrgentBanner from "@/app/components/more/bloodBankComponents/UrgentBanner";
-import About from "@/app/components/more/bloodBankComponents/About";
-import Contact from "@/app/components/more/bloodBankComponents/Contact";
-import WhyChoose from "@/app/components/more/bloodBankComponents/WhyChoose";
-import HeroSection from "@/app/components/more/bloodDonorComponent/DonorHero";
-import Reviews from "@/app/components/more/bloodBankComponents/Reviews";
-import NearbyBanks from "@/app/components/more/bloodBankComponents/NearBy";
-import RequestSteps from "@/app/components/more/bloodBankComponents/RequestSteps";
-import Availability from "@/app/components/more/bloodBankComponents/Availability";
 
-export default function BloodBankPage() {
+import Contact from "@/app/components/more/bloodDonorComponent/DonorLocation";
+import HeroSection from "@/app/components/more/bloodDonorComponent/DonorHero";
+import OverviewSection from "@/app/components/more/bloodDonorComponent/DonorOverview";
+import Reviews from "@/app/components/more/bloodBankComponents/Reviews";
+import Conditions from "@/app/components/more/bloodDonorComponent/DonorCondition";
+
+export default function BloodDonorPage() {
   const params = useParams();
   const id = params.id;
   const [data, setData] = useState({
@@ -42,7 +38,7 @@ export default function BloodBankPage() {
   }, [id]);
 
   return data?.healthProfile ? (
-    <div className="relative bg-white min-h-screen flex flex-col items-center">
+    <div className="relative bg-white flex flex-col items-center">
       <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
         {/* Hero section with full width */}
         <div className="w-full">
@@ -54,29 +50,16 @@ export default function BloodBankPage() {
 
         {/* Other components in 90% width with rounded sections */}
         <div className="max-w-[90vw] mx-auto space-y-10">
-          <Availability
+          <OverviewSection
             data={data?.userData}
-            healthProfile={data?.healthProfile}
+            healthProfile={data?.healthProfile?.data}
           />
-          <About data={data?.userData} healthProfile={data?.healthProfile} />
+          {data?.healthProfile?.data.medicalConditions?.length > 0 && (
+            <Conditions data={data?.userData} healthProfile={data?.healthProfile} />
+          )}
           <Contact data={data?.userData} healthProfile={data?.healthProfile} />
-          <WhyChoose
-            data={data?.userData}
-            healthProfile={data?.healthProfile}
-          />
-          <RequestSteps
-            data={data?.userData}
-            healthProfile={data?.healthProfile}
-          />
+          
           <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
-          <NearbyBanks
-            data={data?.userData}
-            healthProfile={data?.healthProfile}
-          />
-          <UrgentBanner
-            data={data?.userData}
-            healthProfile={data?.healthProfile}
-          />
         </div>
       </main>
     </div>
