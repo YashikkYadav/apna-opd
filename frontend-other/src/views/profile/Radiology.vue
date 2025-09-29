@@ -1192,10 +1192,9 @@ export default {
     },
     async deleteImage() {
       if (this.imageToDelete) {
-        const res = await useProfileStore().deleteImage(this.imageToDelete);
-        this.images = res.images;
+        await useProfileStore().deleteImage(this.imageToDelete);
+        this.fetchProfileData()
         this.cancelDelete();
-        this.fetchProfileData();
       }
     },
     addTestimonial() {

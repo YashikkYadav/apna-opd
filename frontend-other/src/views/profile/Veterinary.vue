@@ -1002,10 +1002,8 @@ initMap() {
     },
     async deleteImage() {
       if (this.imageToDelete) {
-        console.log(this.imageToDelete);
-        const res = await useProfileStore().deleteImage(this.imageToDelete);
-        console.log(res);
-        this.images = res.images;
+        await useProfileStore().deleteImage(this.imageToDelete);
+        this.fetchProfileData()
         this.cancelDelete();
       }
     },
