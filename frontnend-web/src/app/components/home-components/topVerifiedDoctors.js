@@ -72,7 +72,7 @@ const TopVerifiedDoctors = () => {
             View All &rarr;
           </Link>
         </div>
-        <div className="flex gap-6 overflow-x-auto hide-scrollbar">
+        <div className="flex overflow-x-auto hide-scrollbar">
           {doctors.map((doc, idx) => (
             <motion.div
               key={idx}
