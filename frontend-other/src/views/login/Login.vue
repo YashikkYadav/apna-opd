@@ -161,6 +161,7 @@ export default {
         // { value: "nasha_mukti_kendra", label: "Nasha Mukti Kendra" },
         // { value: "commercial_meditation", label: "Commercial Meditation" },
         // { value: "medical_store", label: "Medical Store" },
+        {value: "radiologist", label: "Radiologist"},
         { value: "nursing_medical_college", label: "Nursing & Medical College" },
         { value: "blood_bank", label: "Blood Bank" },
         { value: "physiotherapist", label: "Physiotherapist" },

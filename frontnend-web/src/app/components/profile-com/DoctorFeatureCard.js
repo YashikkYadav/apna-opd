@@ -114,7 +114,9 @@ export default function DoctorFeatureCard({ doctorData }) {
           <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
           <button
             onClick={() => {
-              const section = document.getElementById('location');
+              const section = document.getElementById(
+                "hospitalLocationSection"
+              );
               section?.scrollIntoView({ behavior: 'smooth' });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"

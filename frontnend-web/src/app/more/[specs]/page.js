@@ -246,7 +246,15 @@ const ServicePage = () => {
           />
         );
       case serviceTypes.BLOOD_DONOR:
-        return <BloodDonor serviceData={serviceData} totalItems={totalItems} />;
+        return (
+          <BloodDonor
+            serviceData={serviceData}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        );
       case serviceTypes.NURSE:
         return (
           <Nurse

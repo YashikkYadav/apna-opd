@@ -130,7 +130,7 @@ const BloodBank = ({
                         className="rounded-full object-cover w-[55px] h-[55px]"
                       />
                     ) : (
-                      <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center text-white text-2xl font-bold">
+                      <div className="px-5 py-2.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-2xl font-bold">
                         {bloodBank?.name?.charAt(0) || "B"}
                       </div>
                     )}

@@ -108,7 +108,7 @@
                 <div v-if="img.type === 'profilePhoto_image'" class="image-type">
                   {{ "Profile" }}
                 </div>
-                <div v-if="img.type === 'galleryImages'" class="image-type">
+                <div v-if="img.type === 'galleryImages_image'" class="image-type">
                   {{ "Gallery" }}
                 </div>
               </div>
@@ -972,8 +972,8 @@ initMap() {
     },
     async deleteImage() {
       if (this.imageToDelete) {
-        const res = await useProfileStore().deleteImage(this.imageToDelete);
-        this.images = res.images;
+        await useProfileStore().deleteImage(this.imageToDelete);
+        this.fetchProfileData()
         this.cancelDelete();
       }
     },
@@ -1031,7 +1031,7 @@ initMap() {
           this.images = this.images.concat(
             profile.galleryImages.map((img) => ({
               path: img.path || img,
-              type: "galleryImages",
+              type: "galleryImages_image",
             }))
           );
         }

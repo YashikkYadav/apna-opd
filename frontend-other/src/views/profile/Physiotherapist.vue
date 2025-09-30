@@ -1113,8 +1113,8 @@ initMap() {
     },
     async deleteImage() {
       if (this.imageToDelete) {
-        const res = await useProfileStore().deleteImage(this.imageToDelete);
-        this.images = res.images;
+        await useProfileStore().deleteImage(this.imageToDelete);
+        this.fetchProfileData()
         this.cancelDelete();
       }
     },
@@ -1166,7 +1166,7 @@ initMap() {
         }
         if (Array.isArray(profile.galleryImages)) {
           profile.galleryImages.forEach((img) => {
-            images.push({ path: img, type: "galleryImages" });
+            images.push({ path: img, type: "galleryImages_image" });
           });
         }
         this.images = images;

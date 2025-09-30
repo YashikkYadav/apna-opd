@@ -58,7 +58,7 @@ const PopularCategories = () => {
             Popular Categories
           </h2>
           <a
-            href="/more/categories"
+            href="/find-doctor"
             className="text-blue-600 font-semibold hover:underline text-base"
           >
             View All &rarr;

@@ -111,12 +111,12 @@ export default function CartPage() {
     if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-xl">Loading cart...</div></div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 flex justify-center">
+        <div className="bg-gray-50 pt-24 flex justify-center">
             
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl shadow-lg p-8 w-[90%] h-[60vh]"
+                    className="bg-white rounded-2xl shadow-lg p-8 w-[90%]"
                 >
                     <div className="flex items-center gap-3 mb-6">
                         <ShoppingCart className="w-8 h-8 text-blue-600" />
@@ -130,7 +130,7 @@ export default function CartPage() {
                         </div>
                     ) : (
                         <>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                                 {cartItems.map(item => (
                                     <motion.div
                                         key={item._id}

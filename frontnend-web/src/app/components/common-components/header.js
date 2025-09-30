@@ -8,7 +8,7 @@ import {
   SearchOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import {specialties} from "../../data/constants"
+import { specialties } from "../../data/constants";
 
 const Header = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -46,8 +46,6 @@ const Header = () => {
     router.push(route);
   };
 
-
-
   let menuItems = [
     { label: "Doctors", route: "/find-doctor" },
     { label: "Ambulance", route: "/more/ambulance" },
@@ -68,6 +66,12 @@ const Header = () => {
     { label: "Nursing Staff", route: "/nurse-listings" },
     { label: "Laboratory", route: "/more/laboratory" },
     { label: "IVF Clinic", route: "/more/ivf-clinic" },
+    { label: "Home Service", route: "/home-service" },
+    { label: "Blood Donor", route: "/more/blood-donor" },
+    { label: "Emergency", route: "/more/emergency" },
+    { label: "FAQ", route: "/faq" },
+    { label: "About", route: "/about" },
+    { label: "Contact", route: "/contact" },
   ];
 
   specialties.forEach((specialty) => {
@@ -102,10 +106,8 @@ const Header = () => {
     }
   };
 
-
   // Handle manual search (Enter key or direct navigation)
   const handleManualSearch = () => {
-
     if (searchValue.trim()) {
       // Try to find exact match first
       const exactMatch = menuItems.find(
@@ -114,7 +116,6 @@ const Header = () => {
 
       if (exactMatch) {
         router.push(exactMatch.route);
-        
       } else {
         // Try to find partial match
         const partialMatch = menuItems.find((item) =>
@@ -126,10 +127,8 @@ const Header = () => {
         } else {
           searchValue = searchValue.trim().replace(/\s+/g, "-").toLowerCase();
           router.push(`/search-results?name=${searchValue}`);
-        } 
+        }
       }
-
-      
     }
   };
 

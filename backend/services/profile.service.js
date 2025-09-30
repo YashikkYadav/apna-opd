@@ -8,19 +8,61 @@ const config = require("../config/config");
 const HospitalDoctor = require("../models/hospitalDoctor");
 const DoctorProfile = require("../models/doctorProfile");
 const Doctor = require("../models/doctor");
-const Veterinary = require('../models/veterinary')
+const Veterinary = require("../models/veterinary");
 const physiotherapistsProfile = require("../models/physiotherapistsProfile");
 const healthlabProfile = require("../models/healthlabProfile");
 const pharmacyProfile = require("../models/pharmacyProfile");
-const { handleBloodBank, gethandleBloodBank, handleIvf, gethandleMedicalStore, handleMedicalStore, handleLaboratory, gethandleLaboratory, handleIvfClinic, gethandleIvf } = require("../utils/profileStoreData/handleBloodBank");
-const { handlePhysiotherapist, gethandlePhysiotherapist } = require('../utils/profileStoreData/handlePhysio')
-const { handleHospital, gethandleHospital } = require('../utils/profileStoreData/handleHospital')
-const { handleVeterinary, gethandleVeterinary } = require('../utils/profileStoreData/handleVeterinary')
-const { handleMedicalCollege, gethandleMedicalCollege } = require('../utils/profileStoreData/handleCollege')
-const { handleGym, getHandleGym } = require('../utils/profileStoreData/handleBloodBank')
-const { handleNursingStaff, getNursingStaff } = require('../utils/profileStoreData/handleNursingstaff')
-const {handleYoga, gethandleYoga} = require('../utils/profileStoreData/handleYoga')
-
+const {
+  handleBloodBank,
+  gethandleBloodBank,
+  handleIvf,
+  gethandleMedicalStore,
+  handleMedicalStore,
+  handleLaboratory,
+  gethandleLaboratory,
+  handleIvfClinic,
+  gethandleIvf,
+} = require("../utils/profileStoreData/handleBloodBank");
+const {
+  handlePhysiotherapist,
+  gethandlePhysiotherapist,
+} = require("../utils/profileStoreData/handlePhysio");
+const {
+  handleHospital,
+  gethandleHospital,
+} = require("../utils/profileStoreData/handleHospital");
+const {
+  handleVeterinary,
+  gethandleVeterinary,
+} = require("../utils/profileStoreData/handleVeterinary");
+const {
+  handleMedicalCollege,
+  gethandleMedicalCollege,
+} = require("../utils/profileStoreData/handleCollege");
+const {
+  handleGym,
+  getHandleGym,
+} = require("../utils/profileStoreData/handleBloodBank");
+const {
+  handleNursingStaff,
+  getNursingStaff,
+} = require("../utils/profileStoreData/handleNursingstaff");
+const {
+  handleYoga,
+  gethandleYoga,
+} = require("../utils/profileStoreData/handleYoga");
+const {
+  handleRadiologist,
+  getHandleRadiologist,
+} = require("../utils/profileStoreData/handleRadiologist");
+const {
+  getHandleAmbulance,
+  handleAmbulance,
+} = require("../utils/profileStoreData/handleAmbulance");
+const {
+  handleBloodDonor,
+  getHandleBloodDonor,
+} = require("../utils/profileStoreData/handleBloodDonor");
 
 const createProfile = async (healthServeId, profileData) => {
   try {
@@ -294,16 +336,50 @@ const deleteImage = async (healthServeId, image) => {
     // Dynamically load model
     let Model;
     switch (healthServeProfile.type) {
-      case "vatenary": Model = require("../models/veterinary"); break;
-      case "physiotherapist": Model = require("../models/physiotherapistsProfile"); break;
-      case "hospital": Model = require("../models/hospital"); break;
-      case "nursing_medical_college": Model = require("../models/medicalCollege"); break;
-      case "blood_bank": Model = require("../models/bloodBankProfile"); break;
-      case "medical_store": Model = require("../models/pharmacyProfile"); break;
-      case "laboratory": Model = require("../models/healthlabProfile"); break;
-      case "ivf_clinic": Model = require("../models/ivfClinic"); break;
-      case "gym": Model = require("../models/gym"); break;
-      default: throw new Error("Unsupported healthServeProfile type");
+      case "vatenary":
+        Model = require("../models/veterinary");
+        break;
+      case "physiotherapist":
+        Model = require("../models/physiotherapistsProfile");
+        break;
+      case "hospital":
+        Model = require("../models/hospital");
+        break;
+      case "nursing_medical_college":
+        Model = require("../models/medicalCollege");
+        break;
+      case "blood_bank":
+        Model = require("../models/bloodBankProfile");
+        break;
+      case "medical_store":
+        Model = require("../models/pharmacyProfile");
+        break;
+      case "laboratory":
+        Model = require("../models/healthlabProfile");
+        break;
+      case "ivf_clinic":
+        Model = require("../models/ivfClinic");
+        break;
+      case "gym":
+        Model = require("../models/gym");
+        break;
+      case "nursing_staff":
+        Model = require("../models/nursingStaff");
+        break;
+      case "yoga":
+        Model = require("../models/yoga");
+        break;
+      case "radiologist":
+        Model = require("../models/radiologist");
+        break;
+      case "ambulance":
+        Model = require("../models/ambulance");
+        break;
+      case "blood_donor":
+        Model = require("../models/bloodDonor");
+        break;
+      default:
+        throw new Error("Unsupported healthServeProfile type");
     }
 
     const filename = path.basename(image.path);
@@ -313,16 +389,17 @@ const deleteImage = async (healthServeId, image) => {
     if (imgType === "profilePhoto_image") {
       updatedProfile = await Model.findOneAndUpdate(
         { healthServeId },
-        { $unset: { profilePhoto: "" } },
+        { $unset: { profileImage: "" } },
         { new: true }
       );
     } else {
       updatedProfile = await Model.findOneAndUpdate(
         { healthServeId },
-        { $pull: { galleryImages: image.path } },
+        { $pull: { galleryImages: image.path } }, // 👈 FIXED
         { new: true }
       );
     }
+    console.log("Updated profile after image deletion:", updatedProfile);
 
     if (!updatedProfile) {
       throw new Error("Profile not found");
@@ -335,7 +412,7 @@ const deleteImage = async (healthServeId, image) => {
     return {
       statusCode: 200,
       galleryImages: updatedProfile.galleryImages || [],
-      profilePhoto: updatedProfile.profilePhoto || null
+      profileImage: updatedProfile.profileImage || null,
     };
   } catch (error) {
     console.error("🔥 Error deleting image:", error);
@@ -354,11 +431,9 @@ function deleteImageFile(imagePath, imgType) {
   let filePath;
   if (imgType === "profilePhoto_image") {
     filePath = path.join(__dirname, "..", "public", "profilePhoto", filename);
-  }
-  else {
+  } else {
     filePath = path.join(__dirname, "..", "public", "galleryImages", filename);
   }
-
 
   console.log("🧭 Deleting file:", filePath);
 
@@ -372,7 +447,6 @@ function deleteImageFile(imagePath, imgType) {
 }
 const addHealthServeProfileData = async (req, healthServeId) => {
   try {
-
     if (!healthServeId || !mongoose.Types.ObjectId.isValid(healthServeId)) {
       console.log("Invalid healthServeId");
     }
@@ -383,7 +457,7 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       return {
         statusCode: 404,
         error: "Health Serve not found",
-      }
+      };
     }
     let result;
     switch (healthServeProfile.type) {
@@ -403,9 +477,6 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       case "blood_bank":
         result = await handleBloodBank(req, healthServeId);
         break;
-      // case 'physiotherapist':
-      //   result = await handlePhysiotherapist(req, healthServeId);
-      //   break;
       case "medical_store":
         result = await handleMedicalStore(req, healthServeId);
         break;
@@ -424,8 +495,16 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       case "yoga":
         result = await handleYoga(req, healthServeId);
         break;
+      case "radiologist":
+        result = await handleRadiologist(req, healthServeId);
+        break;
+      case "ambulance":
+        result = await handleAmbulance(req, healthServeId);
+        break;
+      case "blood_donor":
+        result = await handleBloodDonor(req, healthServeId);
+        break;
     }
-
 
     return {
       statusCode: 201,
@@ -434,32 +513,34 @@ const addHealthServeProfileData = async (req, healthServeId) => {
     };
     // Determine model based on type
     switch (healthServeProfile.type) {
-      case 'physiotherapist':
+      case "physiotherapist":
         Model = pharmacyProfile;
         break;
-      case 'medical_store':
+      case "medical_store":
         Model = pharmacyProfile;
         break;
-      case 'laboratory':
+      case "laboratory":
         Model = healthlabProfile;
         break;
-      case 'vatenary':
+      case "vatenary":
         Model = healthlabProfile;
-        break
-      case 'blood_bank':
-        Model = healthlabProfile
-        break
-      case 'nursing_medical_college':
-        Model = healthlabProfile
-        break
-      case 'gym':
-        Model = healthlabProfile
-        break
-      case 'ivf_clinic':
-        Model = healthlabProfile
-        break
+        break;
+      case "blood_bank":
+        Model = healthlabProfile;
+        break;
+      case "nursing_medical_college":
+        Model = healthlabProfile;
+        break;
+      case "gym":
+        Model = healthlabProfile;
+        break;
+      case "ivf_clinic":
+        Model = healthlabProfile;
+        break;
       default:
-        throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
+        throw new Error(
+          `Unsupported healthServeProfile type: ${healthServeProfile.type}`
+        );
     }
 
     const filter = { healthServeId: data.healthServeId };
@@ -472,22 +553,18 @@ const addHealthServeProfileData = async (req, healthServeId) => {
       ok: true,
       healthServeProfile: doc, // return saved document
     };
-
   } catch (error) {
     return {
       statusCode: 500,
       error: error.message,
-      ok: false
+      ok: false,
     };
   }
-}
+};
 
 const getHealthServeProfileData = async (healthServeId) => {
   try {
-
-
     let healthServeProfile = await HealthServe.findById(healthServeId);
-
 
     let result;
     switch (healthServeProfile.type) {
@@ -527,54 +604,64 @@ const getHealthServeProfileData = async (healthServeId) => {
       case "yoga":
         result = await gethandleYoga(healthServeId);
         break;
+      case "radiologist":
+        result = await getHandleRadiologist(healthServeId);
+        break;
+      case "ambulance":
+        result = await getHandleAmbulance(healthServeId);
+        break;
+      case "blood_donor":
+        result = await getHandleBloodDonor(healthServeId);
+        break;
     }
 
     return {
       statusCode: 201,
       healthServeProfile: result, // return saved document,
       healthServeUser: healthServeProfile,
-      ok: true
+      ok: true,
     };
-    console.log('healthServeProfile.type', healthServeProfile.type)
+    console.log("healthServeProfile.type", healthServeProfile.type);
     // Determine model based on type
     switch (healthServeProfile.type) {
-      case 'physiotherapist':
+      case "physiotherapist":
         Model = pharmacyProfile;
         break;
-      case 'medical_store':
+      case "medical_store":
         Model = pharmacyProfile;
         break;
-      case 'laboratory':
+      case "laboratory":
         Model = healthlabProfile;
         break;
-      case 'vatenary':
+      case "vatenary":
         Model = healthlabProfile;
-        break
-      case 'blood_bank':
-        Model = healthlabProfile
-        break
-      case 'nursing_medical_college':
-        Model = healthlabProfile
-        break
-      case 'gym':
-        Model = healthlabProfile
-        break
-      case 'ivf_clinic':
-        Model = healthlabProfile
-        break
+        break;
+      case "blood_bank":
+        Model = healthlabProfile;
+        break;
+      case "nursing_medical_college":
+        Model = healthlabProfile;
+        break;
+      case "gym":
+        Model = healthlabProfile;
+        break;
+      case "ivf_clinic":
+        Model = healthlabProfile;
+        break;
       default:
-        throw new Error(`Unsupported healthServeProfile type: ${healthServeProfile.type}`);
+        throw new Error(
+          `Unsupported healthServeProfile type: ${healthServeProfile.type}`
+        );
     }
 
     // const doc = await Model.findOne({ healthServeId });
-    console.log('doc')
+    console.log("doc");
     return {
       statusCode: 201,
       healthServeProfile: doc, // return saved document,
       healthServeUser: healthServeProfile,
-      ok: true
+      ok: true,
     };
-
   } catch (error) {
     return {
       statusCode: 500,
@@ -582,12 +669,12 @@ const getHealthServeProfileData = async (healthServeId) => {
       error: error.message,
     };
   }
-}
+};
 module.exports = {
   deleteImage,
   createProfile,
   getHealthServeProfile,
   getAppointmentDetails,
   addHealthServeProfileData,
-  getHealthServeProfileData
+  getHealthServeProfileData,
 };

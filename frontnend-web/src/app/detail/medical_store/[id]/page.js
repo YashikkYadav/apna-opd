@@ -16,7 +16,7 @@ import AvailableMedicines from "@/app/components/more/medicalStoreComponents/pha
 import TestimonialsSection from "@/app/components/more/medicalStoreComponents/pharmacyReviews";
 import MedicineFilterBar from "@/app/components/more/medicalStoreComponents/pharmacySearch";
 import UploadPrescription from "@/app/components/more/medicalStoreComponents/pharmacyUpload";
-import SupportOptions from "@/app/components/more/medicalStoreComponents/supportOptions";
+
 
 const PharmacyStorePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,8 +26,6 @@ const PharmacyStorePage = () => {
   const [showDiscountedOnly, setShowDiscountedOnly] = useState(false);
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
-  const [deliveryOption, setDeliveryOption] = useState("delivery");
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const params = useParams();
   const id = params.id;
   // Dynamic data state
@@ -39,9 +37,7 @@ const PharmacyStorePage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [lastUpdate, setLastUpdate] = useState(null);
-  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
-  const [dataVersion, setDataVersion] = useState(0); // Force re-renders
+  
   const [res_data, set_res_data] = useState({
     healthProfile: null,
     otherData: null,

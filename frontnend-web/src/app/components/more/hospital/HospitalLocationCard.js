@@ -8,20 +8,22 @@ import {
   FaClock,
 } from "react-icons/fa";
 import MapComponent from "../../common-components/mapComponent";
-export default function HospitalLocationCard({ profileData }) {
+export default function HospitalLocationCard({ profileData, user }) {
   const {
-    name,
     address,
     locality,
+    phone,
+    phoneNumber,
     city,
     state,
     pincode,
-    phone,
     emergencyPhone,
     email,
     website,
     visitingHours,
   } = profileData || {};
+
+  console.log("Profile Data in HospitalLocationCard:", phoneNumber);
 
   const fullAddress = [address, locality, city, state, pincode]
     .filter(Boolean)
@@ -74,24 +76,22 @@ export default function HospitalLocationCard({ profileData }) {
               </div>
             )}
 
-            {phone && (
-              <div className="flex items-start gap-4 mb-4 text-lg">
-                <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
-                  <FaPhoneAlt />
-                </span>
-                <div>
-                  <span className="font-bold">Phone:</span>
-                  <br />
-                  {phone}
-                  {emergencyPhone && (
-                    <>
-                      <br />
-                      Emergency: {emergencyPhone}
-                    </>
-                  )}
-                </div>
+            <div className="flex items-start gap-4 mb-4 text-lg">
+              <span className="bg-blue-100 text-blue-700 rounded-full p-3 text-2xl">
+                <FaPhoneAlt />
+              </span>
+              <div>
+                <span className="font-bold">Phone:</span>
+                <br />
+                {!phoneNumber ? phone : phoneNumber}
+                {emergencyPhone && (
+                  <>
+                    <br />
+                    Emergency: {emergencyPhone}
+                  </>
+                )}
               </div>
-            )}
+            </div>
 
             {email && (
               <div className="flex items-start gap-4 mb-4 text-lg">
