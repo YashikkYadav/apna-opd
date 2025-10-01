@@ -7,8 +7,9 @@ import LocationAndContact from "@/app/components/more/healthLabComponents/labLoc
 import AboutSection from "@/app/components/more/healthLabComponents/labAbout";
 import FAQSection from "@/app/components/more/healthLabComponents/labFAQS";
 import LabFilterBar from "@/app/components/more/healthLabComponents/labSearch";
-import DiagnosticTabs from "@/app/components/more/healthLabComponents/labTabs";
 import ReviewSection from "@/app/components/more/healthLabComponents/reviewSection";
+import IndividualTests from "@/app/components/more/healthLabComponents/IndividualTest";
+import TestPackages from "@/app/components/more/healthLabComponents/TestPackages";
 
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -38,15 +39,12 @@ export default function HealthLabPage() {
   const id = params.id;
 
   // UI state
-  const [tab, setTab] = useState("tests");
   const [search, setSearch] = useState("");
   const [testType, setTestType] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
   const [openFAQ, setOpenFAQ] = useState(null);
   const [openPackage, setOpenPackage] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalTest, setModalTest] = useState(null);
   const [data, set_res_data] = useState({
     healthProfile: null,
     otherData: null,
@@ -161,15 +159,11 @@ export default function HealthLabPage() {
             location={location}
             setLocation={setLocation}
           />
-          <DiagnosticTabs
-            tab={tab}
-            setTab={setTab}
-            filteredTests={filteredTests}
-            packagesData={packagesData}
-            setShowModal={setShowModal}
-            setModalTest={setModalTest}
+          <IndividualTests filteredTests={filteredTests} />
+          <TestPackages
             openPackage={openPackage}
             setOpenPackage={setOpenPackage}
+            packagesData={packagesData}
           />
           <ReviewSection
             data={data?.otherData}
