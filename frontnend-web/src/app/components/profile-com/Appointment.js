@@ -119,7 +119,7 @@ export default function BookAppointment({ isOpen, onClose, doctorData }) {
     // 👇 Original booking form
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 overflow-auto">
-            <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-5xl border border-blue-200 mt-[350px]">
+            <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-5xl border border-blue-200  mt-[300px] md:mt-0 lg:mt-[350px]">
                 <h2 className="text-2xl font-bold text-blue-600 border-b-2 border-blue-500 pb-2 mb-6">
                     Book Appointment
                 </h2>

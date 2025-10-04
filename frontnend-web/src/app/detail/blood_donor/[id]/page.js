@@ -37,7 +37,7 @@ export default function BloodDonorPage() {
     fetchData();
   }, [id]);
 
-  return data?.healthProfile ? (
+  return data?.healthProfile?.data ? (
     <div className="relative bg-white flex flex-col items-center">
       <main className="pt-[120px] px-4 pb-16 space-y-10 w-full">
         {/* Hero section with full width */}
@@ -54,7 +54,7 @@ export default function BloodDonorPage() {
             data={data?.userData}
             healthProfile={data?.healthProfile?.data}
           />
-          {data?.healthProfile?.data.medicalConditions?.length > 0 && (
+          {data?.healthProfile?.data?.medicalConditions?.length > 0 && (
             <Conditions data={data?.userData} healthProfile={data?.healthProfile} />
           )}
           <Contact data={data?.userData} healthProfile={data?.healthProfile} />
