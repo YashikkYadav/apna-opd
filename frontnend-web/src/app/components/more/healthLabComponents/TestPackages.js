@@ -94,7 +94,7 @@ const TestPackages = ({ packagesData, openPackage, setOpenPackage }) => {
               </button>
               <div
                 className={classNames(
-                  "grid grid-cols-2 gap-2 mt-2 transition-all overflow-hidden",
+                  "grid grid-cols-2 gap-2 mt-2 transition-all overflow-auto",
                   openPackage === pkg._id ? "max-h-40" : "max-h-0"
                 )}
                 style={{
