@@ -34,7 +34,8 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
       if (invoiceType === "Medical") {
         updateData.medicalName = invoiceData.medicalName;
         updateData.medicines = invoiceData.medicines || [];
-      } else if (invoiceType === "Hospital") {
+      } 
+      else if (invoiceType === "Hospital") {
         updateData.patientAge = invoiceData.patientAge;
         updateData.patientGender = invoiceData.patientGender;
         updateData.hospitalName = invoiceData.hospitalName;
@@ -82,7 +83,8 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
       if (invoiceType === "Medical") {
         invoiceDoc.medicalName = invoiceData.medicalName;
         invoiceDoc.medicines = invoiceData.medicines || [];
-      } else if (invoiceType === "Hospital") {
+      } 
+      else if (invoiceType === "Hospital") {
         invoiceDoc.patientAge = invoiceData.patientAge;
         invoiceDoc.patientGender = invoiceData.patientGender;
         invoiceDoc.hospitalName = invoiceData.hospitalName;

@@ -60,6 +60,12 @@ router.use("/user", userRoutes);
 // Centralizing all the routes in one file
 router.use("/doctor", doctorRoutes);
 
+router.use("/:doctorId/medicine", doctorMiddleware, medicineLibraryRoutes);
+
+router.use("/:doctorId/template", doctorMiddleware, templateLibraryRoutes);
+
+router.use("/:doctorId/dropdown", doctorMiddleware, dropdownLibraryRoutes);
+
 router.use("/:doctorId/doctor-profile", doctorMiddleware, doctorProfileRoutes);
 
 router.use("/:healthServeId/health-serve-profile", healthServeProfileRoutes);
@@ -92,15 +98,13 @@ router.use("/:patientId/file", fileUploader);
 
 router.use("/:patientId", patientRoutes);
 
-router.use("/:doctorId/medicine", doctorMiddleware, medicineLibraryRoutes);
 
-router.use("/:doctorId/template", doctorMiddleware, templateLibraryRoutes);
 
 router.use("/library", libraryRoutes);
 
 router.use("/payment", paymentRoutes);
 
-router.use("/:doctorId/dropdown", doctorMiddleware, dropdownLibraryRoutes);
+
 
 router.use(
   "/:doctorId/prescription-section",
