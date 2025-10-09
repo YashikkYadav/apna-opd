@@ -4,8 +4,75 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { BsGridFill, BsList } from "react-icons/bs";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaStar,
+  FaMapPin,
+  FaStethoscope,
+} from "react-icons/fa";
+import { GrDeliver } from "react-icons/gr";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+
+
+  const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified Medicines",
+      description:
+        "All pharmacies are thoroughly verified and licensed by drug authorities for your safety",
+    },
+    {
+      icon: <GrDeliver className="text-blue-600 text-4xl" />,
+      title: "Fast Delivery",
+      description:
+        "Quick and reliable delivery services to ensure you get your medicines on time",
+    },
+    {
+      icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Pricing",
+      description:
+        "Clear pricing with no hidden costs and authentic medicines at competitive rates",
+    },
+    {
+      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+      title: "Expert Pharmacists",
+      description:
+        "Access to India's leading pharmacists and medical specialists across all domains",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "200+ Top Medical Stores",
+      description:
+        "Extensive network of premium healthcare facilities across major cities",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Quality Assured",
+      description:
+        "Pharmacies with high ratings and thousands of satisfied customers",
+    },
+  ];
+
+const testimonials = [
+  {
+    author: "Rajesh Kumar",
+    location: "Jaipur",
+    text: "Apna OPD helped me find the perfect pharmacy near my home. Fast delivery and genuine medicines at great prices!",
+  },
+  {
+    author: "Akshay Singh",
+    location: "Udaypur",
+    text: "The pharmacy recommended by Apna OPD is exceptional. Professional service and they even provide health consultations!",
+  },
+  {
+    author: "Anmol",
+    location: "Jaisalmer",
+    text: "Excellent service and medicine quality. The pharmacists are very knowledgeable and helpful with medication guidance!",
+  },
+];
 
 const MedicalStore = ({
   serviceData,
@@ -261,8 +328,8 @@ const MedicalStore = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

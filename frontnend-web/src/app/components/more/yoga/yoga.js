@@ -2,10 +2,77 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar, FaMapMarkerAlt, FaGlobe, FaUsers } from "react-icons/fa";
+import { FaStar, FaMapMarkerAlt, FaGlobe,  } from "react-icons/fa";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import Testimonials from "./testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaLeaf,
+  FaHeart,
+  FaClock,
+  FaUsers,
+  FaRupeeSign,
+} from "react-icons/fa";
+import { GiMeditation, GiFlexibleLamp, GiTreeBranch } from "react-icons/gi";
+
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "Certified Yoga Instructors",
+    description:
+      "Experienced and certified yoga instructors with specialized training in various yoga styles and therapeutic practices",
+  },
+  {
+    icon: <GiMeditation className="text-blue-600 text-4xl" />,
+    title: "Holistic Wellness Approach",
+    description:
+      "Comprehensive yoga programs combining physical postures, breathing techniques, meditation, and mindfulness practices",
+  },
+  {
+    icon: <GiFlexibleLamp className="text-blue-600 text-4xl" />,
+    title: "All Skill Levels Welcome",
+    description:
+      "From beginner-friendly sessions to advanced practices, personalized instruction for every student's journey",
+  },
+  {
+    icon: <FaClock className="text-blue-600 text-4xl" />,
+    title: "Flexible Class Schedules",
+    description:
+      "Multiple daily sessions, private classes, and online options to fit your lifestyle and schedule preferences",
+  },
+  {
+    icon: <FaHeart className="text-blue-600 text-4xl" />,
+    title: "Mind-Body Connection",
+    description:
+      "Focus on building strength, flexibility, and inner peace through mindful movement and breath awareness",
+  },
+  {
+    icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+    title: "Affordable Packages",
+    description:
+      "Transparent pricing with flexible membership options, drop-in classes, and special packages for families",
+  },
+];
+
+const testimonials = [
+  {
+    author: "Anjali Verma",
+    location: "Noida",
+    text: "The yoga sessions here have transformed my daily routine. I feel more energetic, flexible, and mentally calm than ever before.",
+  },
+  {
+    author: "Rohit Malhotra",
+    location: "Delhi",
+    text: "I joined for stress relief, and within a few weeks, I noticed a huge difference. The instructors are very supportive and guide with patience.",
+  },
+  {
+    author: "Priya Nair",
+    location: "Bangalore",
+    text: "The therapeutic yoga classes really helped with my back pain. I’m able to sit longer at work without discomfort, and I sleep better too!",
+  },
+];
 
 const Yoga = ({
   serviceData,
@@ -298,8 +365,8 @@ const Yoga = ({
         />
       )}
 
-      <WhyChooseUs />
-      <Testimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

@@ -1,56 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import {
-  FaCheckCircle,
-  FaClipboardCheck,
-  FaUsers,
-  FaStar,
-  FaMapPin,
-  FaStethoscope,
-} from "react-icons/fa";
-import { GiMicroscope } from "react-icons/gi";
 
-
-const WhyChooseUs = () => {
-  const featuresData = [
-    {
-      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Hospitals",
-      description:
-        "All hospitals are thoroughly verified and accredited by medical authorities",
-    },
-    {
-      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
-      title: "Advanced Technology",
-      description:
-        "State-of-the-art medical equipment with cutting-edge facilities",
-    },
-    {
-      icon: <FaClipboardCheck className="text-blue-600 text-4xl" />,
-      title: "Transparent Healthcare",
-      description:
-        "Clear treatment plans with transparent pricing and easy booking system",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Medical Specialists",
-      description:
-        "Access to India's leading doctors and medical specialists across all domains",
-    },
-    {
-      icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "500+ Top Hospitals",
-      description:
-        "Extensive network of premium healthcare facilities across major cities",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Proven Excellence",
-      description:
-        "Hospitals with excellent patient outcomes and successful treatments",
-    },
-  ];
-
+const WhyChooseUs = ({ featuresData , type}) => {
   return (
     <motion.section
       initial={{ opacity: 0, y: 50 }}
@@ -67,7 +18,7 @@ const WhyChooseUs = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-3xl md:text-4xl font-extrabold text-left text-blue-700 mb-12"
       >
-        Why Choose <span className="text-blue-500">Apna OPD Hospitals?</span>
+        Why Choose <span className="text-blue-500 capitalize">Apna OPD {type?.replace("_", " ")}?</span>
       </motion.h2>
 
       {/* Features Grid */}

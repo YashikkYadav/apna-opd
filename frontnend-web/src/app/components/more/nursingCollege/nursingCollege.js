@@ -2,10 +2,75 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaUserGraduate,
+  FaUsers,
+  FaStar,
+  FaMapPin,
+} from "react-icons/fa";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "100% Verified Medical Colleges",
+    description:
+      "All medical colleges are thoroughly verified and recognized by MCI/NMC for quality education",
+  },
+  {
+    icon: <FaUsers className="text-blue-600 text-4xl" />,
+    title: "Expert Faculty",
+    description:
+      "Access to India's leading medical educators and experienced professors for quality education",
+  },
+  {
+    icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+    title: "Transparent Fee Structure",
+    description:
+      "Clear fee details with no hidden costs and complete information about all expenses",
+  },
+  {
+    icon: <FaUserGraduate className="text-blue-600 text-4xl" />,
+    title: "Career Guidance",
+    description:
+      "Complete career counseling and admission guidance for medical aspirants",
+  },
+  {
+    icon: <FaMapPin className="text-blue-600 text-4xl" />,
+    title: "100+ Top Colleges",
+    description:
+      "Extensive network of premium medical colleges across all major Indian states",
+  },
+  {
+    icon: <FaStar className="text-blue-600 text-4xl" />,
+    title: "Quality Assured",
+    description:
+      "Colleges with high NIRF rankings and thousands of successful medical graduates",
+  },
+];
+
+const testimonials = [
+  {
+    author: "Rahul Gupta",
+    location: "Raipur",
+    text: "Apna OPD helped me find the perfect medical college for MBBS. Great faculty and excellent infrastructure at reasonable fees!",
+  },
+  {
+    author: "Priya Patel",
+    location: "Gurugram",
+    text: "The college recommended by Apna OPD exceeded my expectations. Modern labs and experienced professors made my medical journey amazing!",
+  },
+  {
+    author: "Arjun Choudhary",
+    location: "Jhansi",
+    text: "Excellent guidance for medical college selection. The admission process was smooth and I got into my dream college!",
+  },
+];
 
 const MedicalCollege = ({
   serviceData,
@@ -241,8 +306,8 @@ const MedicalCollege = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type="Medical College" />
+      <Testimonials testimonials={testimonials} type="Medical College" />
     </>
   );
 };

@@ -2,10 +2,75 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
 import Pagination from '../common/Pagination';
-import WhyChooseUs from "./WhyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaClipboardCheck,
+  FaUsers,
+  FaStar,
+  FaMapPin,
+  FaStethoscope,
+} from "react-icons/fa";
+import { GiMicroscope } from "react-icons/gi";
+const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified Hospitals",
+      description:
+        "All hospitals are thoroughly verified and accredited by medical authorities",
+    },
+    {
+      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+      title: "Advanced Technology",
+      description:
+        "State-of-the-art medical equipment with cutting-edge facilities",
+    },
+    {
+      icon: <FaClipboardCheck className="text-blue-600 text-4xl" />,
+      title: "Transparent Healthcare",
+      description:
+        "Clear treatment plans with transparent pricing and easy booking system",
+    },
+    {
+      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+      title: "Expert Medical Specialists",
+      description:
+        "Access to India's leading doctors and medical specialists across all domains",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "500+ Top Hospitals",
+      description:
+        "Extensive network of premium healthcare facilities across major cities",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Proven Excellence",
+      description:
+        "Hospitals with excellent patient outcomes and successful treatments",
+    },
+  ];
+
+  const testimonials = [
+    {
+      author: "Rajesh Kumar",
+      location: "Noida",
+      text: "After years of trying, we found our miracle through Apna OPD's recommended Hospital. The doctors were amazing and now we have our Healthy life!",
+    },
+    {
+      author: "Suresh Sharma",
+      location: "Lucknow",
+      text: "The hospital recommended by Apna OPD was exceptional. Professional care, advanced technology and Reasonable Price",
+    },
+    {
+      author: "Sneha Bist",
+      location: "Haldwani",
+      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+    },
+  ]
 
 const Hospital = ({
   serviceData,
@@ -252,8 +317,8 @@ const Hospital = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

@@ -2,10 +2,77 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaRupeeSign,
+  FaStar,
+  FaMapPin,
+  FaStethoscope,
+} from "react-icons/fa";
+
+import { GiMicroscope } from "react-icons/gi";
+
+
+  const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified IVF Clinics",
+      description:
+        "All IVF clinics are thoroughly verified and accredited by medical authorities for your safety",
+    },
+    {
+      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+      title: "Expert Specialists",
+      description:
+        "Access to India's leading fertility experts and reproductive endocrinologists",
+    },
+    {
+      icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+      title: "Transparent Process",
+      description:
+        "Clear treatment plans with no hidden costs and upfront consultation booking",
+    },
+    {
+      icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+      title: "Latest Technology",
+      description:
+        "State-of-the-art fertility labs with advanced reproductive technologies",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "200+ Top Clinics",
+      description:
+        "Extensive network of premium IVF centers across all major Indian cities",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Proven Success",
+      description:
+        "Clinics with high success rates and thousands of successful pregnancies",
+    },
+  ];
+  
+  const testimonials = [
+    {
+      author: "Rajesh & Priya",
+      location: "Delhi",
+      text: "After years of trying, we found our miracle through Apna OPD's recommended clinic. The doctors were amazing and now we have our beautiful baby!",
+    },
+    {
+      author: "Suresh & Meera",
+      location: "Mumbai",
+      text: "The clinic recommended by Apna OPD was exceptional. Professional care, advanced technology, and most importantly - our dream came true!",
+    },
+    {
+      author: "Amit & Sneha",
+      location: "Bangalore",
+      text: "Excellent guidance in choosing the right fertility center. The success rate was exactly as promised. We're now proud parents of twins!",
+    },
+  ]
 
 const IvfClinic = ({
   serviceData,
@@ -257,8 +324,8 @@ const IvfClinic = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

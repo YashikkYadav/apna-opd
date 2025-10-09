@@ -2,10 +2,77 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar, FaTint, FaUser, FaPhoneAlt } from "react-icons/fa";
-import WhyChooseUs from "./whyChoose";
+import { FaTint, FaUser, FaPhoneAlt } from "react-icons/fa";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
 import Pagination from "../common/Pagination";
-import PatientTestimonials from "./Testimonial";
+
+import {
+  FaCheckCircle,
+  FaClock,
+  FaMapPin
+} from "react-icons/fa";
+import { GiHypodermicTest } from "react-icons/gi";
+import { FaDroplet } from "react-icons/fa6";
+import { MdWorkspacePremium } from "react-icons/md";
+
+
+  const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "Safe Donation Process",
+      description:
+        "Every donation is carried out under strict medical supervision with sterile equipment.",
+    },
+    {
+      icon: <MdWorkspacePremium className="text-blue-600 text-4xl" />,
+      title: "Donor Recognition",
+      description:
+        "Regular donors receive certificates, badges, and appreciation for their life-saving contributions.",
+    },
+    {
+      icon: <GiHypodermicTest className="text-blue-600 text-4xl" />,
+      title: "Free Health Checkup",
+      description:
+        "Each donor undergoes a basic health screening including hemoglobin levels, blood pressure, and more.",
+    },
+    {
+      icon: <FaDroplet className="text-blue-600 text-4xl" />,
+      title: "Support Rare Needs",
+      description:
+        "Join the donor registry to help patients in need of rare blood groups during critical emergencies.",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "Nationwide Donor Network",
+      description:
+        "Be part of a growing community of blood donors available across cities for urgent requirements.",
+    },
+    {
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "Quick & Hassle-Free",
+      description:
+        "The donation process takes only 15–20 minutes, making it simple to save lives in your free time.",
+    },
+  ];
+
+  const testimonials = [
+  {
+    author: "Rajash Gangwar",
+    location: "Delhi",
+    text: "I have donated blood several times through this platform. The process is smooth and well-organized, and I feel proud knowing my small act can save someone’s life.",
+  },
+  {
+    author: "Meera Deshmukh",
+    location: "Assam",
+    text: "Donating blood here was my first experience, and the staff made me feel so comfortable. It was quick, safe, and now I’m motivated to donate regularly.",
+  },
+  {
+    author: "Ayush Tomar",
+    location: "Bhopal",
+    text: "As a regular donor, I appreciate how the system keeps track of my donations and reminds me when I’m eligible again. It feels great to contribute to society in this way.",
+  },
+]
 
 const BloodDonor = ({
   serviceData,
@@ -213,8 +280,8 @@ const BloodDonor = ({
         />
       )}
 
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

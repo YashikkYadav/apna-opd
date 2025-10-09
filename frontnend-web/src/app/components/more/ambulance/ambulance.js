@@ -5,8 +5,69 @@ import { useRouter } from "next/navigation";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import Testimonials from "./Testimonials";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import { FaAmbulance, FaUserMd, FaRegClock, FaHeadset } from "react-icons/fa";
+import { MdMedicalServices } from "react-icons/md";
+import { GiFirstAidKit } from "react-icons/gi";
+
+const featuresData = [
+  {
+    icon: <FaAmbulance className="text-blue-600 text-4xl" />,
+    title: "Fast Response",
+    description:
+      "Quick ambulance dispatch with real-time tracking to reach you on time.",
+  },
+  {
+    icon: <GiFirstAidKit className="text-blue-600 text-4xl" />,
+    title: "Fully Equipped",
+    description:
+      "Advanced life support equipment and emergency medical kits in every vehicle.",
+  },
+  {
+    icon: <FaUserMd className="text-blue-600 text-4xl" />,
+    title: "Trained Medical Staff",
+    description:
+      "Certified paramedics and doctors onboard to provide critical care during transit.",
+  },
+  {
+    icon: <MdMedicalServices className="text-blue-600 text-4xl" />,
+    title: "Critical Care Support",
+    description:
+      "Specialized ambulances for cardiac, neonatal, and trauma emergencies.",
+  },
+  {
+    icon: <FaHeadset className="text-blue-600 text-4xl" />,
+    title: "24/7 Helpline",
+    description:
+      "Dedicated emergency helpline to book ambulances anytime, anywhere.",
+  },
+  {
+    icon: <FaRegClock className="text-blue-600 text-4xl" />,
+    title: "Round-the-Clock Service",
+    description:
+      "Available day and night to handle all kinds of medical emergencies.",
+  },
+];
+
+const testimonials = [
+  {
+    author: "Rajash Gangwar",
+    location: "Delhi",
+    text: "I've used their ambulance service multiple times for emergencies. They arrive quickly, the vehicles are well-equipped, and the staff is highly professional.",
+  },
+  {
+    author: "Meera Deshmukh",
+    location: "Assam",
+    text: "When my father had a heart attack, their ambulance reached within minutes and provided critical care on the way to the hospital. They truly saved his life!",
+  },
+  {
+    author: "Ayush Tomar",
+    location: "Bhopal",
+    text: "As a doctor, I always recommend their ambulance services. The team is trained, the equipment is advanced, and they maintain the highest safety standards.",
+  },
+];
 
 const Ambulance = ({
   serviceData,
@@ -218,8 +279,8 @@ const Ambulance = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <Testimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };
