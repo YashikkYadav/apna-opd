@@ -522,6 +522,7 @@ const ratingHealthServe = async (healthServeId, ratingData, type) => {
       return { statusCode: 404, error: "Health Serve profile not found" };
     }
 
+    // ✅ Select model dynamically
     let model;
     switch (type) {
       case "hospital":
@@ -570,26 +571,24 @@ const ratingHealthServe = async (healthServeId, ratingData, type) => {
         return { statusCode: 400, error: "Invalid type provided" };
     }
 
-    if (!model) {
-      return { statusCode: 400, error: "Invalid model type" };
-    }
-
-    console.log(model.modelName)
-
-    // If healthServeProfile contains a linked ID
-    const modelId = healthServeProfile.healthServeId || healthServeId;
-    const res = await model.findByIdAndUpdate(
-      modelId,
-      { $push: { testimonials: ratingData } },
-      { new: true }
+    // ✅ Use Mongoose `$push` to add testimonial directly
+    const updatedDoc = await model.findOneAndUpdate(
+      { healthServeId }, // find by healthServeId
+      { $push: { testimonials: ratingData } }, // push new testimonial
+      { new: true } // return updated document
     );
+
+    if (!updatedDoc) {
+      return { statusCode: 404, error: `${type} not found` };
+    }
 
     return {
       statusCode: 200,
-      message: res,
+      message: "Testimonial added successfully",
+      data: updatedDoc,
     };
   } catch (error) {
-    console.error(error);
+    console.error("Error adding testimonial:", error);
     return { statusCode: 500, error: error.message };
   }
 };
