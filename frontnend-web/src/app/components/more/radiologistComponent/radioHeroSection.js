@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
-import BookAppointment from "./BookSession";
-import CallNow from "../VeterinaryComponents/CallNow";
+import BookSession from "../common/BookSession";
+import CallNow from "../common/CallNow";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -124,7 +124,7 @@ export default function RadioHeroSection({ data, healthProfile }) {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("radioLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
@@ -132,10 +132,10 @@ export default function RadioHeroSection({ data, healthProfile }) {
             📍 Get Directions
           </button>
         </div>
-        <BookAppointment
+        <BookSession
           isOpen={openModal}
           onClose={() => setOpenModal(false)}
-          healthProfile={healthProfile}
+          title="Book a Appointment"
         />
       </div>
     </motion.section>

@@ -11,8 +11,8 @@ import {
   Star,
 } from "lucide-react";
 import { useState } from "react";
-import BookTest from "./BookTests";
-import CallNow from "./CallNow";
+import BookSession from "../common/BookSession";
+import CallNow from "../common/CallNow"
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -135,7 +135,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           >
             <ClipboardList className="w-4 h-4" /> Book Test
           </button>
-          <BookTest isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+          <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Book a Test" />
           <button
             onClick={() => {
               const section = document.getElementById("labPackagesSection");
@@ -157,7 +157,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("labLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-2 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105"

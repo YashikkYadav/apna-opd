@@ -6,12 +6,11 @@ import OverviewSection from "@/app/components/more/yogaComponent/YogaAbout";
 import YogaFooter from "@/app/components/more/yogaComponent/YogaFooter";
 import YogaServices from "@/app/components/more/yogaComponent/YogaServices";
 import YogaFacilitiesCard from "@/app/components/more/yogaComponent/YogaFacilities";
-import Reviews from "@/app/components/more/yogaComponent/YogaReviews";
-
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import axios from "axios";
-import FAQS from "@/app/components/more/yogaComponent/YogaFaqs";
-import LocationAndContact from "@/app/components/more/yogaComponent/YogaLocation";
-import ImageGallery from "@/app/components/more/yogaComponent/YogaGallery";
+import FAQS from "@/app/components/more/common/Faqs";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 import BenefitsSection from "@/app/components/more/yogaComponent/YogaBenefits";
 import InstructorsSection from "@/app/components/more/yogaComponent/YogaInstructors";
 import Packages from "@/app/components/more/yogaComponent/YogaPackages";
@@ -73,7 +72,7 @@ export default function Home() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <Reviews healthProfile={data?.healthProfile} />
+          <TestimonialsCard testimonials={data?.healthProfile.testimonials} />
           <FAQS healthProfile={data?.healthProfile} />
           <YogaFooter data={data?.otherData} />
         </div>

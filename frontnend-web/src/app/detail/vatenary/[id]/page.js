@@ -4,13 +4,15 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import AppointmentOptions from "@/app/components/more/VeterinaryComponents/Appointment";
 import AvailableServices from "@/app/components/more/VeterinaryComponents/AvailableServices";
-import ClinicInfoSection from "@/app/components/more/VeterinaryComponents/ClinicInfo";
-import FAQ from "@/app/components/more/VeterinaryComponents/Faqs";
+import FAQS from "@/app/components/more/common/Faqs";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import FooterCTA from "@/app/components/more/VeterinaryComponents/Footer";
-import Testimonials from "@/app/components/more/VeterinaryComponents/Testimonials";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import VetHeroSection from "@/app/components/more/VeterinaryComponents/VetHeroSection";
 import VetProfileSection from "@/app/components/more/VeterinaryComponents/VetProfile";
 import WhyChooseUs from "@/app/components/more/VeterinaryComponents/WhyChoose";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 export default function VeterinaryPage() {
   const params = useParams();
@@ -52,7 +54,7 @@ export default function VeterinaryPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <ClinicInfoSection
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
@@ -64,15 +66,16 @@ export default function VeterinaryPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
+          <ImageGallery profileData={data?.healthProfile} />
           <WhyChooseUs
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <Testimonials
+          <TestimonialsCard
             data={data?.otherData}
-            healthProfile={data?.healthProfile}
+            testimonials={data?.healthProfile.testimonials}
           />
-          <FAQ data={data?.otherData} healthProfile={data?.healthProfile} />
+          <FAQS data={data?.otherData} healthProfile={data?.healthProfile} />
           <FooterCTA
             data={data?.otherData}
             healthProfile={data?.healthProfile}

@@ -13,6 +13,8 @@ import {
 import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
+import CallNow from "../common/CallNow";
+import { useState } from "react";
 
 const allowedFeatures = [
   "24/7 Emergency",
@@ -43,6 +45,7 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
+  const [openModel, setOpenModal] = useState(false)
   const avgRating = profileData?.testimonials?.length
     ? (
         profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) /
@@ -148,23 +151,17 @@ export default function HospitalFeatureCard({ profileData }) {
         <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
           <a
             className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            // onClick={() => {
-            //   if (
-            //     window.confirm(
-            //       `Do you want to call ${profileData?.name ?? "N/A"} ?`
-            //     )
-            //   ) {
-            //     window.location.href = profileData?.phone ?? "tel:+911140555555";
-            //   }
-            // }}
-            href={`tel:${profileData?.phone}`}
+            onClick={() => setOpenModal(true)}
           >
             <FaPhoneAlt className="text-2xl" />
             Call Now
           </a>
+          <CallNow isOpen={openModel} onClose={() => setOpenModal(false)} />
           <button
             onClick={() => {
-              const section = document.getElementById("hospitalLocationSection");
+              const section = document.getElementById(
+                "hospitalLocationSection"
+              );
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="text-white text-xl font-semibold px-8 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

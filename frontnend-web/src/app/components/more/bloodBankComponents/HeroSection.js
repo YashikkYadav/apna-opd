@@ -2,8 +2,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import CallNow from "./CallNow";
-import CheckAvailability from "./checkAvailability";
+import CallNow from "../common/CallNow";
+import BookSession from "../common/BookSession";
 import { useState } from "react";
 
 function getStarIcons(avgRating) {
@@ -115,9 +115,10 @@ const HeroSection = ({ data, healthProfile }) => {
           >
             🔍 Check Availability
           </button>
-          <CheckAvailability
+          <BookSession
             isOpen={openModel}
             onClose={() => setModalOpen(false)}
+            title="Check Avalability"
           />
           <button
             onClick={() => setCallModalOpen(true)}
@@ -132,7 +133,7 @@ const HeroSection = ({ data, healthProfile }) => {
           <div>
             <button
               onClick={() => {
-                const section = document.getElementById("contactSection");
+                const section = document.getElementById("LocationSection");
                 section?.scrollIntoView({ behavior: "smooth" });
               }}
               className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"

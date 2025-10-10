@@ -8,13 +8,14 @@ import CollegeHeroSection from "@/app/components/more/collegeComponents/collegeH
 import CollegeOverview from "@/app/components/more/collegeComponents/collegeOverview";
 import CollegeFooter from "@/app/components/more/collegeComponents/collegeFooter";
 import CoursesOffered from "@/app/components/more/collegeComponents/collegeOffers";
-import StudentTestimonials from "@/app/components/more/collegeComponents/studentReviews";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import CampusFacilities from "@/app/components/more/collegeComponents/Facilities";
-import ContactAndLocation from "@/app/components/more/collegeComponents/contactInfo";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import Faculty from "@/app/components/more/collegeComponents/faculty";
 import PlacementAndInternship from "@/app/components/more/collegeComponents/placementIntern";
 import RelatedColleges from "@/app/components/more/collegeComponents/relatedColleges";
 import WhyChooseCollege from "@/app/components/more/collegeComponents/whyChooseClg";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 export default function VeterinaryPage() {
   const params = useParams();
@@ -73,16 +74,14 @@ export default function VeterinaryPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
+          <ImageGallery profileData={data?.healthProfile} />
           {/* <Faculty  data={data?.otherData} healthProfile={data?.healthProfile} /> */}
           <AdmissionProcess
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <StudentTestimonials
-            data={data?.otherData}
-            healthProfile={data?.healthProfile}
-          />
-          <ContactAndLocation
+          <TestimonialsCard testimonials={data?.healthProfile.testimonials} data={data?.otherData} />
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />

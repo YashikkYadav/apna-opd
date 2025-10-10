@@ -4,11 +4,10 @@ import { useParams } from "next/navigation";
 import AmbulanceHero from "@/app/components/more/ambulanceComponents/ambuHero";
 import OverviewSection from "@/app/components/more/ambulanceComponents/ambuAbout";
 import AmbulanceDetails from "@/app/components/more/ambulanceComponents/ambulanceDetails";
-import PhysioFAQS from "@/app/components/more/physiotherapistComponents/physioFaqs"; 
+import FAQS from "@/app/components/more/common/Faqs";
 import DeriversSection from "@/app/components/more/ambulanceComponents/ambuDrivers";
-import PhysioLocation from "@/app/components/more/physiotherapistComponents/physioLocation";
-import PhysioReviews from "@/app/components/more/physiotherapistComponents/physioReviews";
-import Image from "next/image";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import axios from "axios";
 
 export default function Home() {
@@ -63,15 +62,15 @@ export default function Home() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <PhysioLocation
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <PhysioReviews
+          <TestimonialsCard
             data={data?.otherData}
-            healthProfile={data?.healthProfile}
+            testimonials={data?.healthProfile.testimonials}
           />
-          <PhysioFAQS
+          <FAQS
             data={data}
             openFAQ={openFAQ}
             setOpenFAQ={setOpenFAQ}

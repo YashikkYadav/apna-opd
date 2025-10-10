@@ -2,9 +2,9 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import BookSession from "./BookSession";
+import BookSession from "../common/BookSession";
 import { useState } from "react";
-import CallNow from "./CallNow";
+import CallNow from "../common/CallNow";
 const getStarIcons = (avgRating) => {
   const stars = [];
   const safeRating = avgRating ?? 0;
@@ -121,7 +121,7 @@ const VetHeroSection = ({ profileData, data, healthProfile }) => {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("vetLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105"

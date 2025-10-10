@@ -2,15 +2,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import PhysiotherapyHero from "@/app/components/more/physiotherapistComponents/physioHeroSection";
-import PhysioFAQS from "@/app/components/more/physiotherapistComponents/physioFaqs";
+import FAQS from "@/app/components/more/common/Faqs";
 import OverviewSection from "@/app/components/more/physiotherapistComponents/physioOverview";
 import ConditionsTreated from "@/app/components/more/physiotherapistComponents/conditionsTreated";
-import PhysioLocation from "@/app/components/more/physiotherapistComponents/physioLocation";
-import PhysioReviews from "@/app/components/more/physiotherapistComponents/physioReviews";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import SupportOptions from "@/app/components/more/physiotherapistComponents/physioSupport";
 import TherapyPackages from "@/app/components/more/physiotherapistComponents/therapy";
 import Image from "next/image";
 import axios from "axios";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 export default function Home() {
   const params = useParams();
@@ -64,15 +65,16 @@ export default function Home() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <PhysioLocation
+          <ImageGallery profileData={data?.healthProfile} />
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <PhysioReviews
+          <TestimonialsCard
             data={data?.otherData}
-            healthProfile={data?.healthProfile}
+            testimonials={data?.healthProfile.testimonials}
           />
-          <PhysioFAQS
+          <FAQS
             data={data}
             openFAQ={openFAQ}
             setOpenFAQ={setOpenFAQ}

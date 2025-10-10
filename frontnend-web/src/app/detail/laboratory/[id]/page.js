@@ -3,16 +3,18 @@
 import { useState, useEffect } from "react";
 
 import HeroSection from "@/app/components/more/healthLabComponents/labHeroSection";
-import LocationAndContact from "@/app/components/more/healthLabComponents/labLocation";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import AboutSection from "@/app/components/more/healthLabComponents/labAbout";
-import FAQSection from "@/app/components/more/healthLabComponents/labFAQS";
+import FAQS from "@/app/components/more/common/Faqs";
 import LabFilterBar from "@/app/components/more/healthLabComponents/labSearch";
-import ReviewSection from "@/app/components/more/healthLabComponents/reviewSection";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import IndividualTests from "@/app/components/more/healthLabComponents/IndividualTest";
 import TestPackages from "@/app/components/more/healthLabComponents/TestPackages";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 import { useParams } from "next/navigation";
 import axios from "axios";
+
 const getAverageRating = (reviews) => {
   if (!reviews || reviews.length === 0) return 0;
 
@@ -165,15 +167,13 @@ export default function HealthLabPage() {
             setOpenPackage={setOpenPackage}
             packagesData={packagesData}
           />
-          <ReviewSection
-            data={data?.otherData}
-            healthProfile={data?.healthProfile}
-          />
+          <ImageGallery profileData={data?.healthProfile} />
+          <TestimonialsCard testimonials={data?.healthProfile.testimonials} data={data?.otherData} />
           <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <FAQSection
+          <FAQS
             faqs={faqData}
             openFAQ={openFAQ}
             setOpenFAQ={setOpenFAQ}

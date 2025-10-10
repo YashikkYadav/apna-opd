@@ -6,14 +6,79 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import SearchBar from "../common-components/SearchBar";
-import StarRating from "../common-components/StarRating";
 import Pagination from "./../more/common/Pagination";
 import axiosInstance from "@/app/config/axios";
-import BookAppointment from "../profile-com/Appointment";
 // Add these imports for icons
 import { BsGridFill, BsList } from "react-icons/bs";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../more/common/Testimonial";
+import WhyChooseUs from "../more/common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaStar,
+  FaMoneyBillWave,
+  FaStethoscope,
+  FaHandsHelping,
+  FaMedkit,
+} from "react-icons/fa";
+
+
+  const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified Doctors",
+      description:
+        "All doctors are thoroughly verified and registered with medical councils for your safety",
+    },
+    {
+      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+      title: "Expert Specialists",
+      description:
+        "Access to India's leading doctors and specialists across all medical fields",
+    },
+    {
+      icon: <FaMoneyBillWave className="text-blue-600 text-4xl" />,
+      title: "Transparent Pricing",
+      description:
+        "Clear consultation fees with no hidden costs and instant booking confirmation",
+    },
+    {
+      icon: <FaMedkit className="text-blue-600 text-4xl" />,
+      title: "500+ Top Doctors",
+      description:
+        "Extensive network of premium doctors from India's best hospitals and clinics",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Highly Rated",
+      description:
+        "Doctors with excellent ratings and thousands of successful consultations",
+    },
+    {
+      icon: <FaHandsHelping className="text-blue-600 text-4xl" />,
+      title: "Easy Booking",
+      description:
+        "Book appointments instantly online or via phone with flexible scheduling",
+    },
+  ];
+
+  const testimonials = [
+    {
+      author: "Ansh Rajawat",
+      location: "Jaipur",
+      text: "Dr. Sharma was incredibly knowledgeable and caring. The consultation was thorough and the treatment plan worked perfectly!",
+    },
+    {
+      author: "Sakshi Verma",
+      location: "Uttar Pradesh",
+      text: "Found an excellent cardiologist through Apna OPD. Easy booking and the doctor was very professional and experienced!",
+    },
+    {
+      author: "Abhishek Adhikari",
+      location: "Dehradun",
+      text: "Amazing platform! The pediatrician we consulted was excellent with our child. Highly recommend Apna OPD!",
+    },
+  ];
 
 const SearchResultsData = () => {
   const router = useRouter();
@@ -331,8 +396,8 @@ const SearchResultsData = () => {
             onPageChange={handlePageChange}
           />
         )}
-        <WhyChooseUs />
-        <PatientTestimonials />
+        <WhyChooseUs featuresData={featuresData} type="Doctors" />
+        <Testimonials testimonials={testimonials} type="Doctors" />
       </main>
     </>
   );

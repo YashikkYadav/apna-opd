@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import axios from "axios";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { FaStar,FaRegStar,FaStarHalfAlt } from 'react-icons/fa';
+import RatingModal from '../../common-components/RatingModal';
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -25,7 +27,9 @@ function getStarIcons(avgRating) {
 }
 
 
-export default function DoctorTestimonialsCard({ testimonials }) {
+export default function TestimonialsCard({ testimonials, data }) {
+  console.log(data)
+  const [openModel, setOpenModel] = useState(false);
 
   const avgRating = testimonials?.length
     ? (testimonials?.reduce((sum, r) => sum + r?.rating, 0) / testimonials?.length).toFixed(1)
@@ -45,12 +49,27 @@ export default function DoctorTestimonialsCard({ testimonials }) {
     return true;
   });
 
+  const handleSubmit = async(rating) => {
+    const ratingData = {
+      rating: rating.rating,
+      title: "Apna Opd Review",
+      text: rating.feedback,
+      author: rating.author,
+      context: ""
+    }
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/health-serve/${data._id}/rating`,
+      { ratingData, type: data.type, healthServeId: data._id}
+    );
+    console.log(res);
+  }
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, type: 'spring' }}
+      transition={{ duration: 0.7, type: "spring" }}
       className="bg-white rounded-3xl shadow-lg p-6 md:p-12 max-w-7xl mx-auto mt-12"
     >
       {/* Header */}
@@ -62,21 +81,24 @@ export default function DoctorTestimonialsCard({ testimonials }) {
           <span className="text-4xl font-bold text-blue-600">{avgRating}</span>
           <div className="flex items-center gap-1 justify-end">
             {getStarIcons(parseFloat(avgRating))}
-            <span className="text-gray-600 text-sm ml-2">{reviewCount} reviews</span>
+            <span className="text-gray-600 text-sm ml-2">
+              {reviewCount} reviews
+            </span>
           </div>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
-        {filters?.map(btn => (
+        {filters?.map((btn) => (
           <button
             key={btn}
             onClick={() => setFilter(btn)}
-            className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${filter === btn
-              ? 'bg-blue-500 text-white border-blue-500 shadow-md'
-              : 'bg-white text-gray-700 border-gray-300 hover:bg-blue-50'
-              }`}
+            className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${
+              filter === btn
+                ? "bg-blue-500 text-white border-blue-500 shadow-md"
+                : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50"
+            }`}
           >
             {btn}
           </button>
@@ -99,7 +121,11 @@ export default function DoctorTestimonialsCard({ testimonials }) {
                 <span className="font-bold text-gray-900">{r?.author}</span>
                 <div className="flex items-center">
                   {[...Array(r?.rating)].map((_, i) => (
-                    <Star key={i} size={16} className="text-orange-400 fill-orange-400" />
+                    <Star
+                      key={i}
+                      size={16}
+                      className="text-orange-400 fill-orange-400"
+                    />
                   ))}
                 </div>
                 {r?.verified && (
@@ -108,12 +134,17 @@ export default function DoctorTestimonialsCard({ testimonials }) {
                   </span>
                 )}
               </div>
-
             </div>
             <p className="text-gray-700">{r?.text}</p>
           </motion.div>
         ))}
       </AnimatePresence>
+      <div className="flex justify-center pt-10">
+        <button onClick={() => setOpenModel(true)} className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white font-semibold transition-all duration-300">
+          Leave a Review
+        </button>
+      </div>
+      <RatingModal visible={openModel} onClose={() => setOpenModel(false)} onSubmit={handleSubmit} />
     </motion.section>
   );
 }

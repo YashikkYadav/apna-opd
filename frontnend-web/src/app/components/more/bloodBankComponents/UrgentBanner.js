@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { BsDropletHalf } from 'react-icons/bs';
 import { MdDownload } from 'react-icons/md';
-import CallNow from './CallNow';
+import CallNow from '../common/CallNow';
 import { useState } from 'react';
+
 const UrgentBanner = ({ healthProfile}) => {
   const [modalOpen, setModalOpen] = useState(false);
   return (

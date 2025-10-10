@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
-import BookConsultation from "./BookConsultation";
+import BookSession from "../common/BookSession";
 import CallNow from "./CallNow";
 
 const ClinicHeroSection = ({
@@ -67,8 +67,10 @@ const ClinicHeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center">
         <Image
-         src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` || ""}
-          
+          src={
+            `${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` ||
+            ""
+          }
           alt={data?.name || "image"}
           width={340}
           height={340}
@@ -113,9 +115,10 @@ const ClinicHeroSection = ({
           >
             📅 Book Consultation
           </button>
-          <BookConsultation
+          <BookSession
             isOpen={consultationModalOpen}
             onClose={() => setConsultationModalOpen(false)}
+            title="Book a Consultation"
           />
           <button
             onClick={() => setCallModalOpen(true)}
@@ -129,7 +132,7 @@ const ClinicHeroSection = ({
           />
           <button
             onClick={() => {
-              const section = document.getElementById("ivfLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105"

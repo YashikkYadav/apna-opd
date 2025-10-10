@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { CalendarPlus, Package } from "lucide-react";
-import BookSession from "./BookSession";
 import { useState } from "react";
-import CallNow from "../VeterinaryComponents/CallNow";
+import CallNow from "../common/CallNow";
+import BookSession from "../common/BookSession";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -104,7 +104,11 @@ const AmbulanceHero = ({ data, healthProfile }) => {
           >
             <CalendarPlus className="w-5 h-5" /> Book Session
           </button>
-          <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+          <BookSession
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title={"Book a Session"}
+          />
 
           <button
             onClick={() => setCallModalOpen(true)}

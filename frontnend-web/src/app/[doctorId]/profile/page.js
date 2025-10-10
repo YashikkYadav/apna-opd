@@ -5,10 +5,10 @@ import axiosInstance from "@/app/config/axios";
 import DoctorOverviewCar from "@/app/components/profile-com/DoctorOverviewCar";
 import DoctorSpecialistsCard from "@/app/components/profile-com/DoctorSpecialistsCard";
 import DoctorFeatureCard from "@/app/components/profile-com/DoctorFeatureCard";
-import ImageGallery from "@/app/components/profile-com/imageGallery";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 import HospitalLocationCard from "@/app/components/more/hospital/HospitalLocationCard";
-import DoctorTestimonialsCard from "@/app/components/profile-com/DoctorTestimonialsCard";
-import Faqs from "@/app/components/profile-com/faqs";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
+import FAQS from "@/app/components/more/common/Faqs";
 
 const ProfilePage = () => {
   const { doctorId } = useParams();
@@ -55,8 +55,8 @@ const ProfilePage = () => {
       <DoctorSpecialistsCard doctorData={doctorDetail} />
       {/* <ImageGallery doctorDetail={doctorDetail} /> */}
       <HospitalLocationCard profileData={doctorDetail.doctorId} />
-      <DoctorTestimonialsCard testimonials={doctorDetail?.testimonials} />
-      <Faqs doctorData={doctorDetail} />
+      <TestimonialsCard testimonials={doctorDetail?.testimonials} data={{...doctorDetail?.doctorId, type: "doctor"}} />
+      <FAQS doctorData={doctorDetail} />
     </div>
   );
 };

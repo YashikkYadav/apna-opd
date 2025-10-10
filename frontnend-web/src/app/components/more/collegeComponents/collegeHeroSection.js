@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
 import ApplyNow from "./ApplyNow";
-import CallNow from "../VeterinaryComponents/CallNow";
+import CallNow from "../common/CallNow"; 
 function getStarIcons(avgRating) {
   const stars = [];
   const safeRating = avgRating ?? 0;

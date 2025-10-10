@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import FreeTrialModal from './BookSession';
-import CallNow from './CallNow';
+import BookSession from '../common/BookSession';
+import CallNow from '../common/CallNow';
 import { useState } from 'react';
+
 const IvfFooter = ({ data }) => {
+
   const [bokkSessionOpen, setBookSessionOpen] = useState(false);
   const [callNowOpen, setCallNowOpen] = useState(false);
   return (
@@ -31,9 +33,10 @@ const IvfFooter = ({ data }) => {
         >
           Book Session
         </motion.a>
-        <FreeTrialModal
+        <BookSession
           isOpen={bokkSessionOpen}
           onClose={() => setBookSessionOpen(false)}
+          title='Book a Session'
         />
         <motion.a
           whileHover={{ scale: 1.05 }}

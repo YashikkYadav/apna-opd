@@ -7,9 +7,9 @@ import HospitalInsuranceCard from "./HospitalInsuranceCard";
 import HospitalLocationCard from "./HospitalLocationCard";
 import HospitalOverviewCard from "./HospitalOverviewCard";
 import HospitalQuickActionsCard from "./HospitalQuickActionsCard";
-import HospitalTestimonialsCard from "./HospitalTestimonialsCard";
+import TestimonialsCard from "../common/ProfileTestimonial";
 import axios from "axios";
-import ImageGallery from "./ImageGallery";
+import ImageGallery from "../common/ImageGallery";
 
 const FullDetailsPage = ({ profileData }) => {
   const [doctorData, setDoctorData] = useState();
@@ -36,7 +36,7 @@ const FullDetailsPage = ({ profileData }) => {
       <HospitalFacilitiesCard profileData={profileData} />
       <HospitalInsuranceCard profileData={profileData} />
       <HospitalLocationCard profileData={profileData} />
-      <HospitalTestimonialsCard profileData={profileData} />
+      <TestimonialsCard testimonials={profileData.testimonials} />
       <HospitalQuickActionsCard profileData={profileData} />
     </div>
   );

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import FreeTrialModal from "./FreeTrialModel";
+import BookSession from "../common/BookSession";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -111,7 +111,7 @@ const HeroSection = ({
               Book a Free Trial
             </button>
 
-            <FreeTrialModal
+            <BookSession
               isOpen={modalOpen}
               onClose={() => setModalOpen(false)}
               healthServeId={healthProfile?._id}
@@ -133,7 +133,7 @@ const HeroSection = ({
           <div>
             <button
               onClick={() => {
-                const section = document.getElementById("locationSection");
+                const section = document.getElementById("LocationSection");
                 section?.scrollIntoView({ behavior: "smooth" });
               }}
               className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

@@ -139,11 +139,13 @@ const getHealthServeList = async (req, res) => {
 
 const ratingHealthServe = async (req, res) => {
   try {
-    const { healthServeId, rating } = req.body;
+    const { ratingData, type } = req.body;
+    const { healthServeId } = req.params;
 
     const healthServe = await healthServeService.ratingHealthServe(
       healthServeId,
-      rating
+      ratingData,
+      type
     );
     if (healthServe?.error) {
       return res.status(healthServe.statusCode).send(healthServe.error);

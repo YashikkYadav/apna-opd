@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Calendar, Package } from 'lucide-react';
 import { useState } from 'react';
-import BookSession from './BookSession';
+import BookSession from '../common/BookSession';
 
 const TherapyPackages = ({ data, healthProfile }) => {
     const [modalOpen, setModalOpen] = useState(false);

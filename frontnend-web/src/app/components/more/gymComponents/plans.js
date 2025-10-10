@@ -3,7 +3,7 @@ import React from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaDumbbell } from 'react-icons/fa';
-import FreeTrialModal from './FreeTrialModel';
+import BookSession from '../common/BookSession';
 
 const MembershipPlans = ({ healthProfile, data
 }) => {
@@ -73,7 +73,7 @@ const MembershipPlans = ({ healthProfile, data
 
                     </motion.div>
                 ))}
-                 <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id} />
+                 <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id} />
             </div>
         </motion.section>
     );

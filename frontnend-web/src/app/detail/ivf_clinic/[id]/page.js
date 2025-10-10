@@ -7,12 +7,14 @@ import ClinicHeroSection from "@/app/components/more/ivfClinicComponents/ivfHero
 import ClinicAboutSection from "@/app/components/more/ivfClinicComponents/ivfAbout";
 import FertilityServices from "@/app/components/more/ivfClinicComponents/ivfServices";
 import LeadFertilitySpecialist from "@/app/components/more/ivfClinicComponents/specialist";
-import SuccessStories from "@/app/components/more/ivfClinicComponents/successStories";
-import VisitClinic from "@/app/components/more/ivfClinicComponents/visit";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 import WhyChoose from "@/app/components/more/ivfClinicComponents/whyChooseUS";
-import FAQSection from "@/app/components/more/ivfClinicComponents/faqs";
+import FAQS from "@/app/components/more/common/Faqs";
 import IvfFooter from "@/app/components/more/ivfClinicComponents/ivfFooter";
 import ClinicDoctorsSection from "@/app/components/more/ivfClinicComponents/ivfDoctors";
+import { Import } from "lucide-react";
 
 export default function IvfPage() {
   const params = useParams();
@@ -62,15 +64,16 @@ export default function IvfPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
+          <ImageGallery profileData={data?.healthProfile} />
           {/* <LeadFertilitySpecialist
               data={data?.otherData}
               healthProfile={data?.healthProfile}
             /> */}
-          <SuccessStories
+          <TestimonialsCard
             data={data?.otherData}
-            healthProfile={data?.healthProfile}
+            testimonials={data?.healthProfile.testimonials}
           />
-          <VisitClinic
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
@@ -78,10 +81,7 @@ export default function IvfPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <FAQSection
-            data={data?.otherData}
-            healthProfile={data?.healthProfile}
-          />
+          <FAQS data={data?.otherData} healthProfile={data?.healthProfile} />
           <IvfFooter
             data={data?.otherData}
             healthProfile={data?.healthProfile}

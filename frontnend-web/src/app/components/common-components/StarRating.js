@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StarRating = ({ rating = 0, ratingCount = 0, showCount = true, size = "sm" }) => {
+const StarRating = ({ rating = 0, ratingCount = 0, showCount = true, size = "lg" }) => {
   const totalStars = 5;
   const filledStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
@@ -58,7 +58,7 @@ const StarRating = ({ rating = 0, ratingCount = 0, showCount = true, size = "sm"
       return (
         <svg 
           key={index} 
-          className={`${starClass} text-gray-300`}
+          className={`w-5 h-5 inline-block text-gray-300`}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -78,13 +78,13 @@ const StarRating = ({ rating = 0, ratingCount = 0, showCount = true, size = "sm"
         </div>
       )}
       
-      <span className={`${textSizes[size]} font-semibold text-gray-700 ml-1`}>
-        {rating > 0 ? rating.toFixed(1) : '0.0'}
+      <span className={`${textSizes[size]} font-semibold text-white ml-1`}>
+        {rating > 0 ? rating : '0.0'}
       </span>
       
       {showCount && ratingCount > 0 && (
-        <span className={`${textSizes[size]} text-gray-500 ml-1`}>
-          ({ratingCount})
+        <span className={`${textSizes[size]} text-white ml-1`}>
+          ({ratingCount} Reviews)
         </span>
       )}
     </div>

@@ -63,4 +63,4 @@ const PhysiotherapistSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Physiotherapist", PhysiotherapistSchema);
+module.exports = mongoose.model("physiotherapists", PhysiotherapistSchema);

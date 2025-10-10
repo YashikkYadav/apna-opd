@@ -12,6 +12,9 @@ const IVF = require("../models/ivfClinic");
 const BloodBank = require("../models/bloodBankProfile");
 const Gym = require("../models/gym");
 const MedicalCollege = require("../models/medicalCollege");
+const Radiologist = require("../models/radiologist");
+const BloodDonor = require("../models/bloodDonor");
+const Ambulance = require("../models/ambulance");
 
 exports.getAllProfiles = async (req, res) => {
   try {
@@ -62,6 +65,21 @@ exports.getAllProfiles = async (req, res) => {
             break;
           case "medical_college":
             profileData = await MedicalCollege.findOne({
+              healthServeId: hs._id,
+            });
+            break;
+          case "blood_donor":
+            profileData = await BloodDonor.findOne({
+              healthServeId: hs._id,
+            });
+            break;
+          case "radiologist":
+            profileData = await Radiologist.findOne({
+              healthServeId: hs._id,
+            });
+            break;
+          case "ambulance":
+            profileData = await Ambulance.findOne({
               healthServeId: hs._id,
             });
             break;

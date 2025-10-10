@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import FreeTrialModal from './FreeTrialModel';
+import BookSession from '../common/BookSession';
 import { useState } from 'react';
+
 const GymFooter = ({ healthProfile,data }) => {
     const [modalOpen, setModalOpen] = useState(false);
     return (
@@ -37,7 +38,7 @@ const GymFooter = ({ healthProfile,data }) => {
                 >
                     Claim Your Free Trial
                 </motion.a>
-                <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
             </div>
 
             <p className="text-sm text-blue-300">© 2024 {healthProfile?.name}. All rights reserved.</p>
