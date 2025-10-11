@@ -222,6 +222,23 @@ const HomeServices = () => {
                     </div>
                   )}
 
+                  {/*Tests */}
+                  {profile?.tests?.length > 0 && (
+                    <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
+                      <div className="font-semibold text-sm text-gray-700 mb-1">
+                        Tests
+                      </div>
+                      <div className="text-gray-600 text-xs line-clamp-3">
+                        {profile?.tests?.length > 0
+                          ? profile?.tests
+                              ?.map((obj) => obj.name)
+                              .slice(0, 5)
+                              ?.join(", ")
+                          : "No services listed"}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Condition Treated */}
                   {profile?.conditionsTreated?.length > 0 && (
                     <div className="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-green-500">
@@ -249,8 +266,9 @@ const HomeServices = () => {
                           </span>
                         ))
                     ) : (
-                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">
-                        {service?.type || "Healthcare Service"}
+                      <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium capitalize">
+                        {service?.type.replace("_", " ") ||
+                          "Healthcare Service"}
                       </span>
                     )}
                   </div>
@@ -281,7 +299,9 @@ const HomeServices = () => {
                   <div className="flex gap-2">
                     <button
                       className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                      onClick={() => viewServiceDetails(service?._id, service?.type)}
+                      onClick={() =>
+                        viewServiceDetails(service?._id, service?.type)
+                      }
                     >
                       View Details
                     </button>
