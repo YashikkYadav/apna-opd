@@ -1,20 +1,6 @@
 const HealthServe = require("../models/healthServe");
 const Doctor = require("../models/doctor");
-const DoctorProfile = require("../models/doctorProfile");
-const Veterinary = require("../models/veterinary");
-const Laboratory = require("../models/healthlabProfile");
-const NursingStaff = require("../models/nursingStaff");
-const PhysioTherapist = require("../models/physiotherapist");
-const Yoga = require("../models/yoga");
-const MedicalStore = require("../models/pharmacyProfile");
-const Hospital = require("../models/hospital");
-const IVF = require("../models/ivfClinic");
-const BloodBank = require("../models/bloodBankProfile");
-const Gym = require("../models/gym");
-const MedicalCollege = require("../models/medicalCollege");
-const Radiologist = require("../models/radiologist");
-const BloodDonor = require("../models/bloodDonor");
-const Ambulance = require("../models/ambulance");
+
 
 exports.getAllProfiles = async (req, res) => {
   try {
@@ -39,7 +25,7 @@ exports.getAllProfiles = async (req, res) => {
       },
       {
         $lookup: {
-          from: "laboratories",
+          from: "healthlabprofiles",
           localField: "_id",
           foreignField: "healthServeId",
           as: "laboratoryProfile",
@@ -87,7 +73,7 @@ exports.getAllProfiles = async (req, res) => {
       },
       {
         $lookup: {
-          from: "ivfs",
+          from: "ivfclinics",
           localField: "_id",
           foreignField: "healthServeId",
           as: "ivfProfile",
@@ -127,7 +113,7 @@ exports.getAllProfiles = async (req, res) => {
       },
       {
         $lookup: {
-          from: "radiologists",
+          from: "radiologistprofiles",
           localField: "_id",
           foreignField: "healthServeId",
           as: "radiologistProfile",
