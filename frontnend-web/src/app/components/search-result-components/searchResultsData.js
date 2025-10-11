@@ -133,6 +133,17 @@ const SearchResultsData = () => {
     fetchData(1, loc, spec);
   }, [searchParams]);
 
+
+  
+  const getRating = (item) => {
+    const testimonials = item?.testimonials || [];
+    if (!testimonials.length) return null;
+    const avg =
+      testimonials.reduce((sum, t) => sum + (t.rating || 0), 0) /
+      testimonials.length;
+    return avg;
+  };
+
   const handlePageChange = (page) => {
     if (page > pagination.totalPages || page < 1) return;
     fetchData(page);
@@ -332,25 +343,25 @@ const SearchResultsData = () => {
 
                   {/* Rating */}
                   <div className="flex items-center gap-2 mb-4">
-                    {avgRating > 0 ? (
-                      <>
-                        <div className="text-yellow-500 text-sm">
-                          {Array.from({ length: Math.round(avgRating) }).map(
-                            (_, i) => (
-                              <span key={i}>★</span>
-                            )
-                          )}
-                        </div>
-                        <span className="text-gray-600 text-sm">
-                          {avgRating.toFixed(1)} ({item?.testimonials?.length}{" "}
-                          reviews)
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-gray-500 text-sm">
-                        No reviews yet
-                      </span>
-                    )}
+                    <div className="flex text-sm">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          className={
+                            i < Math.round(getRating(item))
+                              ? "text-yellow-500"
+                              : "text-gray-300"
+                          }
+                        />
+                      ))}
+                    </div>
+                    <span className="text-gray-600 text-sm">
+                      {getRating(item) ? getRating(item).toFixed(1) : "N/A"}{" "}
+                      (
+                      {parseFloat(item?.testimonials?.length) ||
+                        0}{" "}
+                      reviews)
+                    </span>
                   </div>
 
                   {/* Availability */}

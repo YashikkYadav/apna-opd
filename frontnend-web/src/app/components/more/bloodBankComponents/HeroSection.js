@@ -5,34 +5,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import CallNow from "../common/CallNow";
 import BookSession from "../common/BookSession";
 import { useState } from "react";
-
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(
-      <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  if (hasHalfStar) {
-    stars.push(
-      <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  return stars;
-}
+import StarRating from "../../common-components/StarRating";
 
 const HeroSection = ({ data, healthProfile }) => {
   console.log(healthProfile?.profilePhoto);
@@ -88,13 +61,10 @@ const HeroSection = ({ data, healthProfile }) => {
 
         {/* Badges */}
         <div className="flex items-center gap-2 mb-4 justify-center lg:justify-start">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating}/5
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            ({reviewCount} reviews)
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
         <div className="flex flex-wrap justify-center lg:justify-start gap-3 pt-2">
           {healthProfile?.tags?.map((tag, index) => (

@@ -7,6 +7,7 @@ import { CalendarPlus, Package } from "lucide-react";
 import BookSession from "../common/BookSession";
 import { useState } from "react";
 import CallNow from "../common/CallNow";
+import StarRating from "../../common-components/StarRating";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -88,16 +89,10 @@ const YogaHero = ({ data, healthProfile }) => {
 
         {/* Star Ratings */}
         <div className="flex items-center gap-2 justify-center lg:justify-start">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating}/5
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            ({reviewCount} reviews)
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            • {data?.locality ?? "Your Area"}
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/*Tags */}

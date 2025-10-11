@@ -7,54 +7,48 @@ import Pagination from "../common/Pagination";
 import Testimonials from "../common/Testimonial";
 import WhyChooseUs from "../common/WhyChoose";
 
-import {
-  FaCheckCircle,
-  FaStar,
-  FaMapPin,
-  FaStethoscope,
-} from "react-icons/fa";
+import { FaCheckCircle, FaStar, FaMapPin, FaStethoscope } from "react-icons/fa";
 import { GrDeliver } from "react-icons/gr";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 
-
-  const featuresData = [
-    {
-      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
-      title: "100% Verified Medicines",
-      description:
-        "All pharmacies are thoroughly verified and licensed by drug authorities for your safety",
-    },
-    {
-      icon: <GrDeliver className="text-blue-600 text-4xl" />,
-      title: "Fast Delivery",
-      description:
-        "Quick and reliable delivery services to ensure you get your medicines on time",
-    },
-    {
-      icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
-      title: "Transparent Pricing",
-      description:
-        "Clear pricing with no hidden costs and authentic medicines at competitive rates",
-    },
-    {
-      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
-      title: "Expert Pharmacists",
-      description:
-        "Access to India's leading pharmacists and medical specialists across all domains",
-    },
-    {
-      icon: <FaMapPin className="text-blue-600 text-4xl" />,
-      title: "200+ Top Medical Stores",
-      description:
-        "Extensive network of premium healthcare facilities across major cities",
-    },
-    {
-      icon: <FaStar className="text-blue-600 text-4xl" />,
-      title: "Quality Assured",
-      description:
-        "Pharmacies with high ratings and thousands of satisfied customers",
-    },
-  ];
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "100% Verified Medicines",
+    description:
+      "All pharmacies are thoroughly verified and licensed by drug authorities for your safety",
+  },
+  {
+    icon: <GrDeliver className="text-blue-600 text-4xl" />,
+    title: "Fast Delivery",
+    description:
+      "Quick and reliable delivery services to ensure you get your medicines on time",
+  },
+  {
+    icon: <FaIndianRupeeSign className="text-blue-600 text-4xl" />,
+    title: "Transparent Pricing",
+    description:
+      "Clear pricing with no hidden costs and authentic medicines at competitive rates",
+  },
+  {
+    icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+    title: "Expert Pharmacists",
+    description:
+      "Access to India's leading pharmacists and medical specialists across all domains",
+  },
+  {
+    icon: <FaMapPin className="text-blue-600 text-4xl" />,
+    title: "200+ Top Medical Stores",
+    description:
+      "Extensive network of premium healthcare facilities across major cities",
+  },
+  {
+    icon: <FaStar className="text-blue-600 text-4xl" />,
+    title: "Quality Assured",
+    description:
+      "Pharmacies with high ratings and thousands of satisfied customers",
+  },
+];
 
 const testimonials = [
   {
@@ -139,7 +133,7 @@ const MedicalStore = ({
     const avg =
       testimonials.reduce((sum, t) => sum + (t.rating || 0), 0) /
       testimonials.length;
-    return avg.toFixed(1);
+    return avg;
   };
 
   const viewDetails = (id) => {
@@ -300,10 +294,22 @@ const MedicalStore = ({
 
                 {/* Rating */}
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="text-yellow-500 text-sm">★★★★★</div>
+                  <div className="flex text-sm">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={
+                          i < Math.round(getRating(store))
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                        }
+                      />
+                    ))}
+                  </div>
                   <span className="text-gray-600 text-sm">
-                    {getRating(store) || "N/A"} (
-                    {store?.profiles?.[0]?.testimonials?.length || 0} reviews)
+                    {getRating(store) ? getRating(store).toFixed(1) : "N/A"} (
+                    {parseFloat(store?.profiles[0]?.testimonials?.length) || 0}{" "}
+                    reviews)
                   </span>
                 </div>
 

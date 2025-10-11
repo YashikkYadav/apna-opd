@@ -5,25 +5,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { useState } from 'react';
 import BookAppointment from './Appointment'
 import CallNow from '../more/common/CallNow';
-
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />);
-  }
-  if (hasHalfStar) {
-    stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />);
-  }
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(<FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />);
-  }
-  return stars;
-}
+import StarRating from '../common-components/StarRating';
 
 export default function DoctorFeatureCard({ doctorData }) {
   const [openModal, setOpenModal] = useState(false);
@@ -37,7 +19,7 @@ export default function DoctorFeatureCard({ doctorData }) {
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, type: 'spring' }}
+      transition={{ duration: 0.6, type: "spring" }}
       className="relative overflow-hidden bg-[#0C65A0] text-white rounded-2xl shadow-lg p-5 md:p-10 flex flex-col lg:flex-row items-center gap-10 m-6"
     >
       {/* Background Circles */}
@@ -47,11 +29,14 @@ export default function DoctorFeatureCard({ doctorData }) {
       {/* Left: Profile Image */}
       <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center">
         <Image
-          src={doctorData.images?.[0]?.filename
-            ? `${process.env.NEXT_PUBLIC_IMAGE_URL || ''}/doctor-profile/${doctorData.images[0].filename}`
-            : '/images/default-doctor.jpg'
+          src={
+            doctorData.images?.[0]?.filename
+              ? `${process.env.NEXT_PUBLIC_IMAGE_URL || ""}/doctor-profile/${
+                  doctorData.images[0].filename
+                }`
+              : "/images/default-doctor.jpg"
           }
-          alt={doctorData?.name || 'Doctor'}
+          alt={doctorData?.name || "Doctor"}
           width={300}
           height={300}
           unoptimized
@@ -66,9 +51,8 @@ export default function DoctorFeatureCard({ doctorData }) {
         </h2>
         <p className="text-white/90 text-lg max-w-xl mb-3">
           {doctorData?.introduction}
-
         </p>
-        <div className='flex flex-wrap gap-3 justify-center lg:justify-start mb-3'>
+        <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-3">
           <p className="bg-white/20 text-white px-4 py-2 rounded-full text-sm">
             {doctorData?.doctorId?.speciality}
           </p>
@@ -82,9 +66,10 @@ export default function DoctorFeatureCard({ doctorData }) {
 
         {/* Rating */}
         <div className="flex items-center gap-2 justify-center lg:justify-start mb-3">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">{avgRating}/5</span>
-          <span className="text-white/70 text-lg">({reviewCount} reviews)</span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={doctorData?.testimonials?.length}
+          />
         </div>
 
         {/* Specialties / Tags */}
@@ -111,20 +96,27 @@ export default function DoctorFeatureCard({ doctorData }) {
           >
             📞 Call Now
           </button>
-          <CallNow isOpen={callModalOpen} onClose={() => setCallModalOpen(false)} />
+          <CallNow
+            isOpen={callModalOpen}
+            onClose={() => setCallModalOpen(false)}
+          />
           <button
             onClick={() => {
               const section = document.getElementById(
                 "hospitalLocationSection"
               );
-              section?.scrollIntoView({ behavior: 'smooth' });
+              section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
           >
             📍 Get Directions
           </button>
         </div>
-        <BookAppointment isOpen={openModal} onClose={() => setOpenModal(false)} doctorData={doctorData}/>
+        <BookAppointment
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+          doctorData={doctorData}
+        />
       </div>
     </motion.section>
   );

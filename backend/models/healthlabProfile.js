@@ -48,7 +48,7 @@ const HealthLabProfileSchema = new Schema({
   faqs: [FAQSchema],
   tests: [TestSchema],
   testimonials: [TestimonialSchema],
-  profilePhoto: String,
+  profileImage: String,
   galleryImages: [String],
 }, {
   timestamps: true,

@@ -185,9 +185,9 @@ const Laboratory = ({
                 >
                   {/* Avatar + Name */}
                   <div className="flex items-center gap-4 mb-4">
-                    {profile?.profilePhoto ? (
+                    {profile?.profileImage ? (
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profileImage}`}
                         alt={lab?.name || "Laboratory"}
                         width={55}
                         height={55}
@@ -323,8 +323,8 @@ const Laboratory = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
-      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
+      <WhyChooseUs featuresData={featuresData} type="laboratory" />
+      <Testimonials testimonials={testimonials} type="laboratory" />
     </>
   );
 };

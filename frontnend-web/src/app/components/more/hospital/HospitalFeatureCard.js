@@ -15,6 +15,7 @@ import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 import CallNow from "../common/CallNow";
 import { useState } from "react";
+import StarRating from "../../common-components/StarRating";
 
 const allowedFeatures = [
   "24/7 Emergency",
@@ -45,7 +46,7 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
-  const [openModel, setOpenModal] = useState(false)
+  const [openModel, setOpenModal] = useState(false);
   const avgRating = profileData?.testimonials?.length
     ? (
         profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) /
@@ -70,33 +71,7 @@ export default function HospitalFeatureCard({ profileData }) {
         return null;
     }
   }
-  function getStarIcons(rating) {
-    const stars = [];
-    const safeRating = rating ?? 0;
-    const fullStars = Math.floor(safeRating);
-    const hasHalfStar = safeRating - fullStars > 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <FaStar key={`full-${i}`} className="text-yellow-400 text-2xl" />
-      );
-    }
-
-    if (hasHalfStar) {
-      stars.push(
-        <FaStarHalfAlt key="half" className="text-yellow-400 text-2xl" />
-      );
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(
-        <FaRegStar key={`empty-${i}`} className="text-gray-400 text-2xl" />
-      );
-    }
-
-    return stars;
-  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -125,13 +100,10 @@ export default function HospitalFeatureCard({ profileData }) {
         </p>
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
-          {getStarIcons(avgRating)}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating + "/5" ?? "0/5"}
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            {reviewCount + " reviews" ?? "0 reviews"}
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={profileData?.testimonials?.length}
+          />
         </div>
         {/* Features */}
         <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-4">

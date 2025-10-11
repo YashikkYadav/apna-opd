@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import BookConsultation from './BookConsultation';
+import BookSession from '../common/BookSession';
 import { useState } from 'react';
 const IvfFooter = ({ data }) => {
   const [consultationModalOpen, setConsultationModalOpen] = useState(false);
@@ -30,7 +30,7 @@ const IvfFooter = ({ data }) => {
         >
           Book Fertility Consultation
         </motion.a>
-        <BookConsultation isOpen={consultationModalOpen} onClose={() => setConsultationModalOpen(false)} />
+        <BookSession isOpen={consultationModalOpen} onClose={() => setConsultationModalOpen(false)} title="Book a Consultation" />
         <motion.a
           whileHover={{ scale: 1.05 }}
           href="/download-brochure"

@@ -13,34 +13,7 @@ import {
 import { useState } from "react";
 import BookSession from "../common/BookSession";
 import CallNow from "../common/CallNow"
-
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(
-      <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  if (hasHalfStar) {
-    stars.push(
-      <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  return stars;
-}
+import StarRating from "../../common-components/StarRating";
 
 const HeroSection = ({ res_data, data, healthProfile }) => {
   const [callModalOpen, setCallModalOpen] = useState(false);
@@ -71,7 +44,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
       {/* Left Image */}
       <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center">
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}`}
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profileImage}`}
           alt={name}
           width={288}
           height={288}
@@ -106,13 +79,10 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
             </span>
           </div> */}
           <div className="flex items-center gap-2 justify-center lg:justify-start">
-            {getStarIcons(parseFloat(avgRating))}
-            <span className="text-white text-xl font-semibold ml-2">
-              {avgRating}/5
-            </span>
-            <span className="text-white/70 text-lg ml-2">
-              ({reviewCount} reviews)
-            </span>
+            <StarRating
+              rating={avgRating}
+              ratingCount={healthProfile?.testimonials?.length}
+            />
           </div>
         </div>
 
@@ -135,7 +105,11 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           >
             <ClipboardList className="w-4 h-4" /> Book Test
           </button>
-          <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} title="Book a Test" />
+          <BookSession
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title="Book a Test"
+          />
           <button
             onClick={() => {
               const section = document.getElementById("labPackagesSection");
