@@ -73,7 +73,7 @@ const MembershipPlans = ({ healthProfile, data
 
                     </motion.div>
                 ))}
-                 <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} healthServeId={healthProfile?._id} />
+                 <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
             </div>
         </motion.section>
     );

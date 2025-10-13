@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import BookSession from "../common/BookSession";
 import StarRating from "../../common-components/StarRating";
 
@@ -18,7 +17,7 @@ const HeroSection = ({
         healthProfile?.testimonials.length
       ).toFixed(1)
     : "0.0";
-  const reviewCount = healthProfile?.testimonials?.length || 0;
+    
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}

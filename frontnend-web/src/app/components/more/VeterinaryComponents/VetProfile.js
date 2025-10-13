@@ -6,12 +6,6 @@ const VetProfileSection = ({
 
 }) => {
     const {
-        qualifications,
-        experience_years,
-        specialization,
-        languages,
-        fee,
-    
     } = profileData || {}
     const info = [
         { label: 'EXPERIENCE', value: `${healthProfile?.experience}+ Years` },

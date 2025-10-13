@@ -3,11 +3,6 @@ import { motion } from 'framer-motion';
 import { FaDumbbell } from 'react-icons/fa';
 
 const AboutSection = ({
-    gymName = "{{gym_name}}",
-    city = "{{locality}}",
-    year_established = "{{year_established}}",
-    members = "500+",
-    trainers = "10+",
     healthProfile,
     data
 }) => {

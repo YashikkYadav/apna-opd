@@ -4,18 +4,6 @@ import { FaUniversity } from 'react-icons/fa';
 import Image from 'next/image';
 
 const CollegeOverview = ({
-    college_name = 'VisionTech Medical College',
-    type = 'Medical',
-    established_year = '1998',
-    city = 'Pune',
-    state = 'Maharashtra',
-    affiliated_to = 'Pune University',
-    approving_bodies = 'AICTE, MCI',
-    recognition_bodies = 'UGC, NAAC',
-    full_address = '123 Vision Road, Pune, Maharashtra',
-    phone_number = '+91 9876543210',
-    email = 'info@visiontech.edu.in',
-    description = 'Get to know VisionTech – your gateway to excellence in medical education.',
     imageUrl = '/images/college-campus.jpg',
     healthProfile,
     data,
