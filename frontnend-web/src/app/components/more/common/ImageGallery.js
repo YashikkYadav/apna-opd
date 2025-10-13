@@ -128,7 +128,7 @@ const ImageGallery = ({ profileData }) => {
           <FaStar />
         </span>
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700">
-          Yoga Gallery
+          Gallery
         </h2>
       </div>
       {/* Carousel */}

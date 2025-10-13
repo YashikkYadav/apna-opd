@@ -3,35 +3,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import FreeTrialModal from "./FreeTrialModel";
-
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(
-      <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  if (hasHalfStar) {
-    stars.push(
-      <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-
-  return stars;
-}
+import BookSession from "../common/BookSession";
+import StarRating from "../../common-components/StarRating";
 
 const HeroSection = ({
   imageUrl = "/images/gym-default.jpg",
@@ -80,13 +53,10 @@ const HeroSection = ({
 
         {/* Ratings */}
         <div className="flex items-center gap-2 justify-center lg:justify-start">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating}/5
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            ({reviewCount} reviews)
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/* Tags */}
@@ -111,7 +81,7 @@ const HeroSection = ({
               Book a Free Trial
             </button>
 
-            <FreeTrialModal
+            <BookSession
               isOpen={modalOpen}
               onClose={() => setModalOpen(false)}
               healthServeId={healthProfile?._id}
@@ -133,7 +103,7 @@ const HeroSection = ({
           <div>
             <button
               onClick={() => {
-                const section = document.getElementById("locationSection");
+                const section = document.getElementById("LocationSection");
                 section?.scrollIntoView({ behavior: "smooth" });
               }}
               className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

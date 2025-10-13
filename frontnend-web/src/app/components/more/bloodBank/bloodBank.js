@@ -3,9 +3,75 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaStar } from "react-icons/fa";
-import WhyChooseUs from "./whyChoose";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaMapPin
+} from "react-icons/fa";
+import { GiHypodermicTest } from "react-icons/gi";
+import { FaDroplet } from "react-icons/fa6";
+import { MdWorkspacePremium } from "react-icons/md";
+
 import Pagination from "../common/Pagination";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "100% Safe & Verified",
+    description:
+      "All blood banks are NACO certified with rigorous screening and safety protocols",
+  },
+  {
+    icon: <MdWorkspacePremium className="text-blue-600 text-4xl" />,
+    title: "Quality Blood Products",
+    description:
+      "Access to screened blood components with proper storage and temperature control",
+  },
+  {
+    icon: <GiHypodermicTest className="text-blue-600 text-4xl" />,
+    title: "Advanced Testing",
+    description:
+      "State-of-the-art laboratories with comprehensive blood screening technologies",
+  },
+  {
+    icon: <FaDroplet className="text-blue-600 text-4xl" />,
+    title: "Rare Blood Groups",
+    description:
+      "Specialized services for rare blood types with dedicated donor registry",
+  },
+  {
+    icon: <FaMapPin className="text-blue-600 text-4xl" />,
+    title: "150+ Top Blood Banks",
+    description:
+      "Extensive network of premium healthcare facilities across major cities",
+  },
+  {
+    icon: <FaClock className="text-blue-600 text-4xl" />,
+    title: "24/7 Emergency Service",
+    description:
+      "Round-the-clock blood availability for medical emergencies and urgent cases",
+  },
+];
+
+const testimonials = [
+    {
+      author: "Rajash Gangwar",
+      location: "Delhi",
+      text: "I've been donating blood here for 5 years. The staff is professional, the facility is clean, and I know my donation saves lives. It's a great feeling!",
+    },
+    {
+      author: "Meera Deshmukh",
+      location: "Assam",
+      text: "During my surgery, I needed rare blood type. This blood bank not only had it available but arranged it within hours. They literally saved my life!",
+    },
+    {
+      author: "Ayush Tomar",
+      location: "Bhopal",
+      text: "As a doctor, I trust this blood bank completely. Their screening process is thorough and they maintain the highest safety standards for all blood products.",
+    },
+  ]
 
 const BloodBank = ({
   serviceData,
@@ -238,8 +304,8 @@ const BloodBank = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

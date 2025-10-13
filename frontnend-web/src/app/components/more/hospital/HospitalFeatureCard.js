@@ -13,6 +13,9 @@ import {
 import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
+import CallNow from "../common/CallNow";
+import { useState } from "react";
+import StarRating from "../../common-components/StarRating";
 
 const allowedFeatures = [
   "24/7 Emergency",
@@ -43,6 +46,7 @@ const features = [
 ];
 
 export default function HospitalFeatureCard({ profileData }) {
+  const [openModel, setOpenModal] = useState(false);
   const avgRating = profileData?.testimonials?.length
     ? (
         profileData?.testimonials.reduce((sum, r) => sum + r?.rating, 0) /
@@ -67,33 +71,7 @@ export default function HospitalFeatureCard({ profileData }) {
         return null;
     }
   }
-  function getStarIcons(rating) {
-    const stars = [];
-    const safeRating = rating ?? 0;
-    const fullStars = Math.floor(safeRating);
-    const hasHalfStar = safeRating - fullStars > 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <FaStar key={`full-${i}`} className="text-yellow-400 text-2xl" />
-      );
-    }
-
-    if (hasHalfStar) {
-      stars.push(
-        <FaStarHalfAlt key="half" className="text-yellow-400 text-2xl" />
-      );
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(
-        <FaRegStar key={`empty-${i}`} className="text-gray-400 text-2xl" />
-      );
-    }
-
-    return stars;
-  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -122,13 +100,10 @@ export default function HospitalFeatureCard({ profileData }) {
         </p>
         {/* Rating */}
         <div className="flex items-center gap-2 mb-4">
-          {getStarIcons(avgRating)}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating + "/5" ?? "0/5"}
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            {reviewCount + " reviews" ?? "0 reviews"}
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={profileData?.testimonials?.length}
+          />
         </div>
         {/* Features */}
         <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-4">
@@ -148,23 +123,17 @@ export default function HospitalFeatureCard({ profileData }) {
         <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
           <a
             className="flex items-center gap-3 bg-[#3DB8F5] hover:bg-[#256fa1] text-white font-bold px-10 py-4 rounded-full shadow-lg transition-all duration-300 text-xl transform hover:scale-105 hover:shadow-xl"
-            // onClick={() => {
-            //   if (
-            //     window.confirm(
-            //       `Do you want to call ${profileData?.name ?? "N/A"} ?`
-            //     )
-            //   ) {
-            //     window.location.href = profileData?.phone ?? "tel:+911140555555";
-            //   }
-            // }}
-            href={`tel:${profileData?.phone}`}
+            onClick={() => setOpenModal(true)}
           >
             <FaPhoneAlt className="text-2xl" />
             Call Now
           </a>
+          <CallNow isOpen={openModel} onClose={() => setOpenModal(false)} />
           <button
             onClick={() => {
-              const section = document.getElementById("hospitalLocationSection");
+              const section = document.getElementById(
+                "hospitalLocationSection"
+              );
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="text-white text-xl font-semibold px-8 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

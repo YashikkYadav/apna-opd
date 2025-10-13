@@ -2,10 +2,74 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaStar } from "react-icons/fa";
 import Pagination from '../common/Pagination';
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaClock,
+  FaUsers,
+  FaStar,
+  FaMapPin,
+} from "react-icons/fa";
+import { CgGym } from "react-icons/cg";
+
+const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified Gyms",
+      description:
+        "All gyms are thoroughly verified and accredited by fitness authorities",
+    },
+    {
+      icon: <CgGym className="text-blue-600 text-4xl" />,
+      title: "Modern Equipment",
+      description:
+        "State-of-the-art fitness equipment and facilities for complete workout experience",
+    },
+    {
+      icon: <FaUsers className="text-blue-600 text-4xl" />,
+      title: "Expert Trainers",
+      description:
+        "Certified personal trainers and fitness experts to guide your fitness journey",
+    },
+    {
+      icon: <FaClock className="text-blue-600 text-4xl" />,
+      title: "Flexible Hours",
+      description:
+        "24/7 access, group classes, and personalized training programs available",
+    },
+    {
+      icon: <FaMapPin className="text-blue-600 text-4xl" />,
+      title: "200+ Top Gyms",
+      description:
+        "Extensive network of premium fitness centers across multiple locations",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "4.8+ Rating",
+      description: "Highly rated by thousands of satisfied fitness enthusiasts",
+    },
+  ];
+
+  const testimonials = [
+    {
+      author: "Rohit Sharma",
+      location: "Delhi",
+      text: "Amazing gym with top-notch facilities! The trainers are incredibly knowledgeable and supportive. Best fitness investment I've made!",
+    },
+    {
+      author: "Priya Mehta",
+      location: "Jaipur",
+      text: "Perfect blend of modern equipment and expert guidance. The flexible timing suits my schedule perfectly. Highly recommend!",
+    },
+    {
+      author: "Suresh",
+      location: "Kota",
+      text: "Exceeded my expectations! Clean facility, friendly staff, and excellent group classes. My fitness journey has been incredible here.",
+    },
+  ]
 
 const Gym = ({
   serviceData,
@@ -264,8 +328,8 @@ const Gym = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type="Gym" />
+      <Testimonials testimonials={testimonials} type="Gym" />
     </>
   );
 };

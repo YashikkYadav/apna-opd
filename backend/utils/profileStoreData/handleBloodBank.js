@@ -77,12 +77,12 @@ exports.handleLaboratory = async (req, healthServeId) => {
     const files = req.files || [];
     const existing = await healthlabProfileModel.findOne({ healthServeId });
 
-    const profileImage = files.find(
+    let profileImage = files.find(
       (f) => f.fieldname === "profilePhoto_image"
     );
-    const profilePhoto = profileImage
+    profileImage = profileImage
             ? `${profileImage.savedPath}`
-      : existing?.profilePhoto;
+      : existing?.profileImage;
 
     const newGalleryImages = files
       .filter((f) => f.fieldname === "galleryImages_image")
@@ -104,7 +104,7 @@ exports.handleLaboratory = async (req, healthServeId) => {
       keyFeatures: JSON.parse(req.body.keyFeatures),
       tags: JSON.parse(req.body.tags),
       testimonials: JSON.parse(req.body.testimonials).map((t) => t),
-      profilePhoto,
+      profileImage,
       galleryImages: appendImages(existing?.galleryImages, newGalleryImages),
     };
 

@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
-import BookConsultation from "./BookConsultation";
-import CallNow from "./CallNow";
+import BookSession from "../common/BookSession";
+import CallNow from "../common/CallNow";
+import StarRating from "../../common-components/StarRating";
 
 const ClinicHeroSection = ({
   imageUrl = "/images/clinic-hero.jpg",
@@ -21,37 +22,7 @@ const ClinicHeroSection = ({
       healthProfile?.testimonials.length
     ).toFixed(1)
     : "0.0";
-  const reviewCount = healthProfile?.testimonials?.length || 0;
-
-  function getStarIcons(avgRating) {
-    const stars = [];
-    const safeRating = avgRating ?? 0;
-    const fullStars = Math.floor(safeRating);
-    const hasHalfStar = safeRating - fullStars > 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <FaStar key={`full-${i}`} className="text-[#FFD700] text-xl" />
-      );
-    }
-
-    if (hasHalfStar) {
-      stars.push(
-        <FaStarHalfAlt key="half" className="text-[#FFD700] text-xl" />
-      );
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(
-        <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-xl" />
-      );
-    }
-
-    return stars;
-  }
-  
-  
+  const reviewCount = healthProfile?.testimonials?.length || 0;  
 
   return (
     <motion.section
@@ -67,8 +38,10 @@ const ClinicHeroSection = ({
       {/* Left: Image */}
       <div className="z-10 flex-shrink-0 w-full lg:w-2/5 flex justify-center">
         <Image
-         src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` || ""}
-          
+          src={
+            `${process.env.NEXT_PUBLIC_IMAGE_URL}/${healthProfile?.profilePhoto}` ||
+            ""
+          }
           alt={data?.name || "image"}
           width={340}
           height={340}
@@ -88,9 +61,10 @@ const ClinicHeroSection = ({
 
         {/* Stars & Reviews */}
         <div className="flex items-center gap-2 justify-center lg:justify-start">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white font-semibold ml-2">{avgRating}/5</span>
-          <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/*Tags */}
@@ -113,9 +87,10 @@ const ClinicHeroSection = ({
           >
             📅 Book Consultation
           </button>
-          <BookConsultation
+          <BookSession
             isOpen={consultationModalOpen}
             onClose={() => setConsultationModalOpen(false)}
+            title="Book a Consultation"
           />
           <button
             onClick={() => setCallModalOpen(true)}
@@ -129,7 +104,7 @@ const ClinicHeroSection = ({
           />
           <button
             onClick={() => {
-              const section = document.getElementById("ivfLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-green-700 transition hover:scale-105"

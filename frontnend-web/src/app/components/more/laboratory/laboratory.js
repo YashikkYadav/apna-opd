@@ -2,10 +2,76 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+const testimonials = [
+  {
+    author: "Vishal Saxena",
+    location: "Mansarovar",
+    text: "Apna OPD helped me find the perfect lab near my home. Quick results and accurate reports at great prices!",
+  },
+  {
+    author: "Ashish Yadav",
+    location: "Jaipur",
+    text: "The lab recommended by Apna OPD is exceptional. Professional service and they even provide home sample collection!",
+  },
+  {
+    author: "Amit Pal",
+    location: "Rishikesh",
+    text: "Excellent service and report accuracy. The pathologists are very knowledgeable and helpful with test interpretation!",
+  },
+];
+
+import {
+  FaCheckCircle,
+  FaRupeeSign,
+  FaStar,
+  FaMapPin,
+  FaStethoscope,
+} from "react-icons/fa";
+import { BsClipboard2DataFill } from "react-icons/bs";
+import { GrUserExpert } from "react-icons/gr";
+
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "100% Accredited Labs",
+    description:
+      "All labs are NABL certified and equipped with state-of-the-art diagnostic technology",
+  },
+  {
+    icon: <GrUserExpert className="text-blue-600 text-4xl" />,
+    title: "Expert Pathologists",
+    description:
+      "Access to India's leading pathologists and lab technicians for accurate test results",
+  },
+  {
+    icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+    title: "Transparent Pricing",
+    description:
+      "Clear pricing with no hidden costs and comprehensive test packages at competitive rates",
+  },
+  {
+    icon: <BsClipboard2DataFill className="text-blue-600 text-4xl" />,
+    title: "Fast Results",
+    description:
+      "Quick turnaround time with digital reports and home sample collection",
+  },
+  {
+    icon: <FaMapPin className="text-blue-600 text-4xl" />,
+    title: "200+ Top Labs",
+    description:
+      "Extensive network of premium diagnostic labs across all major Indian cities",
+  },
+  {
+    icon: <FaStar className="text-blue-600 text-4xl" />,
+    title: "Quality Assured",
+    description:
+      "Labs with high accuracy ratings and thousands of satisfied patients",
+  },
+];
 
 const Laboratory = ({
   serviceData,
@@ -119,9 +185,9 @@ const Laboratory = ({
                 >
                   {/* Avatar + Name */}
                   <div className="flex items-center gap-4 mb-4">
-                    {profile?.profilePhoto ? (
+                    {profile?.profileImage ? (
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profilePhoto}`}
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${profile?.profileImage}`}
                         alt={lab?.name || "Laboratory"}
                         width={55}
                         height={55}
@@ -257,8 +323,8 @@ const Laboratory = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type="laboratory" />
+      <Testimonials testimonials={testimonials} type="laboratory" />
     </>
   );
 };

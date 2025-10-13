@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { CalendarPlus, Package } from "lucide-react";
-import BookSession from "./BookSession";
+import BookSession from "../common/BookSession";
 import { useState } from "react";
-import CallNow from "./CallNow";
+import CallNow from "../common/CallNow";
+import StarRating from "../../common-components/StarRating";
 
 function getStarIcons(avgRating) {
   const stars = [];
@@ -88,16 +89,10 @@ const YogaHero = ({ data, healthProfile }) => {
 
         {/* Star Ratings */}
         <div className="flex items-center gap-2 justify-center lg:justify-start">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating}/5
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            ({reviewCount} reviews)
-          </span>
-          <span className="text-white/70 text-lg ml-2">
-            • {data?.locality ?? "Your Area"}
-          </span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/*Tags */}
@@ -134,7 +129,11 @@ const YogaHero = ({ data, healthProfile }) => {
           >
             <CalendarPlus className="w-5 h-5" /> Book Session
           </button>
-          <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+          <BookSession
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            title="Book a Session"
+          />
           <button
             onClick={() => {
               const section = document.getElementById("therapyPackagesSection");
@@ -156,7 +155,7 @@ const YogaHero = ({ data, healthProfile }) => {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("YogaLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="text-white font-semibold px-6 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"

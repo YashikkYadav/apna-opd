@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import BookSession from "./BookSession";
+import BookSession from "../common/BookSession";
 
 const StatusBadge = ({ status }) => {
   const statusConfig = {
@@ -216,6 +216,7 @@ export default function AmbulanceDetails({ healthProfile }) {
                 <BookSession
                   isOpen={modalOpen}
                   onClose={() => setModalOpen(false)}
+                  title='Book a Session'
                 />
               </div>
             </div>

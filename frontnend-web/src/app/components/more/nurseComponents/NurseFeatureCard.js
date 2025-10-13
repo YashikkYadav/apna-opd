@@ -14,13 +14,15 @@ import { MdEmergency } from "react-icons/md";
 import { BsShieldCheck } from "react-icons/bs";
 import { RiBankCardLine } from "react-icons/ri";
 import { useState } from "react";
-import FreeTrialModal from "./BookSession";
+import BookSession from "../common/BookSession";
+import CallNow from "../common/CallNow";
 import { CalendarPlus } from "lucide-react";
 
 export default function NurseFeatureCard({ NurseData, userData, specs }) {
   const { rating, nurseType } = NurseData || {};
   const { name, phone } = userData || {};
   const [modalOpen, setModalOpen] = useState(false);
+  const [ callOpen, setCallOpen ] = useState(false);
 
   console.log("MM", NurseData);
 
@@ -131,19 +133,13 @@ export default function NurseFeatureCard({ NurseData, userData, specs }) {
             </button>
             <button
               className="text-white font-semibold px-10 py-4 border-2 border-white rounded-full hover:bg-white hover:text-blue-600 transition"
-              onClick={() => {
-                if (window.confirm(`Do you want to call ${name}?`)) {
-                  window.location.href = `tel:${phone}`;
-                }
-              }}
+              onClick={() => setCallOpen(true)}
             >
               📞 Call Now
             </button>
           </div>
-          <FreeTrialModal
-            isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-          />
+          <CallNow isOpen={callOpen} onClose={() => setCallOpen(false)} />
+          <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
         </div>
         {/* Background circles for effect */}
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full z-0" />

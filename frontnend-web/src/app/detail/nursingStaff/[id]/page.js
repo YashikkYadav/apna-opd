@@ -6,11 +6,11 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 
-import ImageGallery from '@/app/components/more/nurseComponents/ImageGallery';
+import ImageGallery from '@/app/components/more/common/ImageGallery';
 import NurseFeatureCard from '@/app/components/more/nurseComponents/NurseFeatureCard';
-import NurseFaqs from '@/app/components/more/nurseComponents/NurseFaqs';
-import NurseTestimonialsCard from '@/app/components/more/nurseComponents/NurseTestimonialCard';
-import NurseLocationCard from '@/app/components/more/nurseComponents/NurseLocationCard';
+import FAQS from '@/app/components/more/common/Faqs';
+import TestimonialsCard from '@/app/components/more/common/ProfileTestimonial';
+import LocationAndContact from '@/app/components/more/common/LocationCard';
 import NurseSpecialistsCard from '@/app/components/more/nurseComponents/NurseSpecialListCard';
 import NurseOverviewCar from '@/app/components/more/nurseComponents/NurseOverviewCard';
 
@@ -61,14 +61,14 @@ const ProfilePage = () => {
         NurseData={data.healthProfile}
       />
       <NurseSpecialistsCard NurseData={data.healthProfile} />
-      <ImageGallery NurseData={data.healthProfile} />
-      <NurseLocationCard
-        userData={data.otherData}
-        NurseData={data.healthProfile}
+      <ImageGallery profileData={data.healthProfile} />
+      <LocationAndContact
+        data={data.otherData}
+        healthProfile={data.healthProfile}
       />
-      <NurseTestimonialsCard NurseData={data.healthProfile} />
+      <TestimonialsCard healthProfile={data.healthProfile.testimonials} data={data?.otherData} />
 
-      <NurseFaqs NurseData={data.healthProfile} />
+      <FAQS NurseData={data.healthProfile} />
     </div>
   ) : (
     <div className="min-h-80 pt-[110px] flex items-center justify-center">

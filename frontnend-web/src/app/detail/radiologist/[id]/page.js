@@ -4,9 +4,10 @@ import { useParams } from "next/navigation"
 import RadioHeroSection from "@/app/components/more/radiologistComponent/radioHeroSection";
 import RadioAboutSection from "@/app/components/more/radiologistComponent/RadioAboutSection";
 import RadioServices from "@/app/components/more/radiologistComponent/RadioServices";
-import RadioLocationCard from "@/app/components/more/radiologistComponent/RadioLocation";
-import PhysioFAQS from "@/app/components/more/physiotherapistComponents/physioFaqs";
-import RadioReviews from "@/app/components/more/radiologistComponent/RadioReviews";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
+import FAQS from "@/app/components/more/common/Faqs"; 
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 import axios from "axios";
 
 export default function Home() {
@@ -57,16 +58,16 @@ export default function Home() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-
-          <RadioLocationCard
+          <ImageGallery profileData={data?.healthProfile} />
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <RadioReviews
+          <TestimonialsCard
             data={data?.otherData}
             testimonials={data?.healthProfile?.testimonials}
           />
-          <PhysioFAQS
+          <FAQS
             data={data}
             openFAQ={openFAQ}
             setOpenFAQ={setOpenFAQ}

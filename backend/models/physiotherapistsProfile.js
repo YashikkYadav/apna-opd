@@ -47,7 +47,7 @@ const PhysiotherapistProfileSchema = new Schema({
 });
 
 const physiotherapistProfile = mongoose.model(
-  "physiotherapists",
+  "Physiotherapists",
   PhysiotherapistProfileSchema
 );
 module.exports = physiotherapistProfile;

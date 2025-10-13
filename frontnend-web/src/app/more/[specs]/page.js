@@ -9,20 +9,17 @@ import Vatenary from "../../components/more/vatenary/vatenary";
 import Emergency from "../../components/more/emergency/emergency";
 import Gym from "../../components/more/gym/gym";
 import Yoga from "../../components/more/yoga/yoga";
-import CommercialMeditation from "../../components/more/commercialMeditation/commercialMeditation";
-import NashamuktiKendra from "../../components/more/nasha-mukti/nashaMukti";
 import MedicalStore from "../../components/more/medicalstore/medicalstore";
 import NursingCollege from "@/app/components/more/nursingCollege/nursingCollege";
 import BloodBank from "../../components/more/bloodBank/bloodBank";
 import Physiotherapist from "../../components/more/physiotherapist/physiotherapist";
 import BloodDonor from "../../components/more/bloodDonor/bloodDonor";
-import Nurse from "../../components/more/nurse/nurse";
 import Radiologist from "../../components/more/radiologist/radiologist";
 import Laboratory from "@/app/components/more/laboratory/laboratory";
 import IvfClinic from "@/app/components/more/ivfClinic/ivfClinic";
 import { serviceTypes } from "../../data/constants";
 import Loader from "@/app/components/common-components/Loader";
-import Pagination from "../../components/more/common/Pagination";
+
 import { useEffect, useState } from "react";
 import axiosInstance from "@/app/config/axios";
 import { useRouter } from "next/navigation";
@@ -96,10 +93,10 @@ const ServicePage = () => {
         return "Find Fitness Centers & Gyms";
       case serviceTypes.YOGA:
         return "Find Yoga Centers";
-      case serviceTypes.MEDITATION:
-        return "Find Meditation Centers";
-      case serviceTypes.NASHA_MUKTI:
-        return "Find Nasha Mukti Kendras";
+      // case serviceTypes.MEDITATION:
+      //   return "Find Meditation Centers";
+      // case serviceTypes.NASHA_MUKTI:
+      //   return "Find Nasha Mukti Kendras";
       case serviceTypes.MEDICAL_STORE:
         return "Find Medical Stores";
       case serviceTypes.NURSING_MEDICAL_COLLEGE:
@@ -185,26 +182,26 @@ const ServicePage = () => {
             handlePageChange={handlePageChange}
           />
         );
-      case serviceTypes.MEDITATION:
-        return (
-          <CommercialMeditation
-            serviceData={serviceData}
-            totalItems={totalItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-          />
-        );
-      case serviceTypes.NASHA_MUKTI:
-        return (
-          <NashamuktiKendra
-            serviceData={serviceData}
-            totalItems={totalItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-          />
-        );
+      // case serviceTypes.MEDITATION:
+      //   return (
+      //     <CommercialMeditation
+      //       serviceData={serviceData}
+      //       totalItems={totalItems}
+      //       currentPage={currentPage}
+      //       totalPages={totalPages}
+      //       handlePageChange={handlePageChange}
+      //     />
+      //   );
+      // case serviceTypes.NASHA_MUKTI:
+      //   return (
+      //     <NashamuktiKendra
+      //       serviceData={serviceData}
+      //       totalItems={totalItems}
+      //       currentPage={currentPage}
+      //       totalPages={totalPages}
+      //       handlePageChange={handlePageChange}
+      //     />
+      //   );
       case serviceTypes.MEDICAL_STORE:
         return (
           <MedicalStore
@@ -255,16 +252,16 @@ const ServicePage = () => {
             handlePageChange={handlePageChange}
           />
         );
-      case serviceTypes.NURSE:
-        return (
-          <Nurse
-            serviceData={serviceData}
-            totalItems={totalItems}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-          />
-        );
+      // case serviceTypes.NURSE:
+      //   return (
+      //     <Nurse
+      //       serviceData={serviceData}
+      //       totalItems={totalItems}
+      //       currentPage={currentPage}
+      //       totalPages={totalPages}
+      //       handlePageChange={handlePageChange}
+      //     />
+      //   );
       case serviceTypes.RADIOLOGIST:
         return (
           <Radiologist

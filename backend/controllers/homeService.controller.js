@@ -8,53 +8,102 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
   try {
     const { location, name } = req.query;
 
-    // Base query: only homeService = "yes"
-    let query = { homeService: "yes" };
+    // Base filter
+    const query = { homeService: "yes" };
 
     if (location) {
-      query.location = { $regex: location, $options: "i" }; // case-insensitive
+      query.location = { $regex: location, $options: "i" };
     }
 
     if (name) {
       query.name = { $regex: name, $options: "i" };
     }
 
-    // Fetch all matching HealthServe docs
+    // Fetch all matching HealthServe documents
     const healthServes = await HealthServe.find(query);
 
     if (!healthServes || healthServes.length === 0) {
       return res.status(404).json({ message: "No home services found" });
     }
 
-    // Attach the related profile depending on type
-    const results = await Promise.all(
-      healthServes.map(async (hs) => {
-        let profileData = null;
+    // Use aggregation pipelines for each type in parallel
+    const [vets, labs, nurses, physios] = await Promise.all([
+      Veterinary.aggregate([
+        {
+          $lookup: {
+            from: "healthserves", // must match actual collection name
+            localField: "healthServeId",
+            foreignField: "_id",
+            as: "healthServe",
+          },
+        },
+        { $unwind: "$healthServe" },
+        { $match: { "healthServe.homeService": "yes" } },
+      ]),
 
-        switch (hs.type) {
-          case "vatenary":
-            profileData = await Veterinary.findOne({ healthServeId: hs._id });
-            break;
-          case "laboratory":
-            profileData = await Laboratory.findOne({ healthServeId: hs._id });
-            break;
-          case "nursing_staff":
-            profileData = await NursingStaff.findOne({ healthServeId: hs._id });
-            break;
-          case "physiotherapist":
-            profileData = await PhysioTherapist.findOne({
-              healthServeId: hs._id,
-            });
-            break;
-        }
+      Laboratory.aggregate([
+        {
+          $lookup: {
+            from: "healthserves",
+            localField: "healthServeId",
+            foreignField: "_id",
+            as: "healthServe",
+          },
+        },
+        { $unwind: "$healthServe" },
+        { $match: { "healthServe.homeService": "yes" } },
+      ]),
 
-        return {
-          type: hs.type,
-          ...hs.toObject(),
-          profile: profileData || {},
-        };
-      })
-    );
+      NursingStaff.aggregate([
+        {
+          $lookup: {
+            from: "healthserves",
+            localField: "healthServeId",
+            foreignField: "_id",
+            as: "healthServe",
+          },
+        },
+        { $unwind: "$healthServe" },
+        { $match: { "healthServe.homeService": "yes" } },
+      ]),
+
+      PhysioTherapist.aggregate([
+        {
+          $lookup: {
+            from: "healthserves",
+            localField: "healthServeId",
+            foreignField: "_id",
+            as: "healthServe",
+          },
+        },
+        { $unwind: "$healthServe" },
+        { $match: { "healthServe.homeService": "yes" } },
+      ]),
+    ]);
+
+    // Combine all results
+    const results = [
+      ...vets.map((item) => ({
+        type: "vatenary",
+        ...item.healthServe,
+        profile: item,
+      })),
+      ...labs.map((item) => ({
+        type: "laboratory",
+        ...item.healthServe,
+        profile: item,
+      })),
+      ...nurses.map((item) => ({
+        type: "nursing_staff",
+        ...item.healthServe,
+        profile: item,
+      })),
+      ...physios.map((item) => ({
+        type: "physiotherapist",
+        ...item.healthServe,
+        profile: item,
+      })),
+    ];
 
     res.status(200).json(results);
   } catch (error) {
@@ -62,4 +111,5 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 

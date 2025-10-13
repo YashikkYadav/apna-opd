@@ -10,7 +10,7 @@ import {
   Home,
   User,
 } from "lucide-react";
-import BookTest from "./BookTests";
+import BookSession from "../common/BookSession";
 
 const IndividualTests = ({ filteredTests }) => {
   const [modalOpenTest, setModalOpenTest] = useState(false);
@@ -93,9 +93,10 @@ const IndividualTests = ({ filteredTests }) => {
             </motion.div>
           );
         })}
-        <BookTest
+        <BookSession
           isOpen={modalOpenTest}
           onClose={() => setModalOpenTest(false)}
+          title="Book a Test"
         />
       </div>
     </motion.div>

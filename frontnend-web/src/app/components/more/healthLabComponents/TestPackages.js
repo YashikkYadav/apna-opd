@@ -12,7 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import classNames from "classnames";
-import BookTest from "./BookTests";
+import BookSession from "../common/BookSession";
 
 const TestPackages = ({ packagesData, openPackage, setOpenPackage }) => {
   const [modalOpenPkg, setModalOpenPkg] = useState(false);
@@ -116,7 +116,7 @@ const TestPackages = ({ packagesData, openPackage, setOpenPackage }) => {
           </motion.div>
         );
       })}
-      <BookTest isOpen={modalOpenPkg} onClose={() => setModalOpenPkg(false)} />
+      <BookSession isOpen={modalOpenPkg} onClose={() => setModalOpenPkg(false)} title="Book a Test" />
     </div>
     </motion.div>
   );

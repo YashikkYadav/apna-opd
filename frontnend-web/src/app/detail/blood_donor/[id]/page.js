@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 
-import Contact from "@/app/components/more/bloodDonorComponent/DonorLocation";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import HeroSection from "@/app/components/more/bloodDonorComponent/DonorHero";
 import OverviewSection from "@/app/components/more/bloodDonorComponent/DonorOverview";
-import Reviews from "@/app/components/more/bloodBankComponents/Reviews";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import Conditions from "@/app/components/more/bloodDonorComponent/DonorCondition";
 
 export default function BloodDonorPage() {
@@ -55,11 +55,20 @@ export default function BloodDonorPage() {
             healthProfile={data?.healthProfile?.data}
           />
           {data?.healthProfile?.data?.medicalConditions?.length > 0 && (
-            <Conditions data={data?.userData} healthProfile={data?.healthProfile} />
+            <Conditions
+              data={data?.userData}
+              healthProfile={data?.healthProfile}
+            />
           )}
-          <Contact data={data?.userData} healthProfile={data?.healthProfile} />
-          
-          <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
+          <LocationAndContact
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
+
+          <TestimonialsCard
+            data={data?.userData}
+            testimonials={data?.healthProfile.testimonials}
+          />
         </div>
       </main>
     </div>

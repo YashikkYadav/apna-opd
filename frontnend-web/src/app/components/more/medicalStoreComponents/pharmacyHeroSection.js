@@ -4,32 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Phone, MapPin, Clock } from "lucide-react";
 import { useState } from "react";
-import CallSection from "./CallSection";
+import CallNow from "../common/CallNow";
 import { useRouter } from "next/navigation";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(<FaStar key={`full-${i}`} className="text-[#FFD700] text-xl" />);
-  }
-
-  if (hasHalfStar) {
-    stars.push(<FaStarHalfAlt key="half" className="text-[#FFD700] text-xl" />);
-  }
-
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-xl" />
-    );
-  }
-
-  return stars;
-}
+import StarRating from "../../common-components/StarRating";
 
 const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
   // console.log("healthProfile", data)
@@ -94,9 +71,10 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
           )}
         </div>
         <div className="flex items-center gap-2 justify-center lg:justify-start pt-2">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white font-semibold ml-2">{avgRating}/5</span>
-          <span className="text-white/70 text-sm">({reviewCount} reviews)</span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/* Tags */}
@@ -128,7 +106,7 @@ const PharmacyHero = ({ healthProfile, data, dataVersion, lastUpdate }) => {
           >
             📞 Call Pharmacy
           </button>
-          <CallSection isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+          <CallNow isOpen={modalOpen} onClose={() => setModalOpen(false)} />
           <button
             onClick={() => {
               const section = document.getElementById(

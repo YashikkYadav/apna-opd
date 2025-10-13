@@ -1,101 +1,185 @@
 const HealthServe = require("../models/healthServe");
 const Doctor = require("../models/doctor");
-const DoctorProfile = require("../models/doctorProfile");
-const Veterinary = require("../models/veterinary");
-const Laboratory = require("../models/healthlabProfile");
-const NursingStaff = require("../models/nursingStaff");
-const PhysioTherapist = require("../models/physiotherapist");
-const Yoga = require("../models/yoga");
-const MedicalStore = require("../models/pharmacyProfile");
-const Hospital = require("../models/hospital");
-const IVF = require("../models/ivfClinic");
-const BloodBank = require("../models/bloodBankProfile");
-const Gym = require("../models/gym");
-const MedicalCollege = require("../models/medicalCollege");
+
 
 exports.getAllProfiles = async (req, res) => {
   try {
     const { name } = req.query;
 
-    // ----------------- HealthServe Query -----------------
-    let query = {};
-    if (name) query.name = { $regex: name, $options: "i" };
+    // Build search filter
+    const matchQuery = {};
+    if (name) {
+      matchQuery.name = { $regex: name, $options: "i" };
+    }
 
-    const healthServes = await HealthServe.find(query);
+    // 1️⃣ Fetch all HealthServe with related profiles using $lookup
+    const healthServeResults = await HealthServe.aggregate([
+      { $match: matchQuery },
+      {
+        $lookup: {
+          from: "veterinaries", // MongoDB collection name (lowercase plural)
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "veterinaryProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "healthlabprofiles",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "laboratoryProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "nursingstaffs",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "nursingProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "physiotherapists",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "physiotherapistProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "yogas",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "yogaProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "medicalstores",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "pharmacyProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "hospitals",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "hospitalProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "ivfclinics",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "ivfProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "bloodbanks",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "bloodBankProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "gyms",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "gymProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "medicalcolleges",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "medicalCollegeProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "blooddonors",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "bloodDonorProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "radiologistprofiles",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "radiologistProfile",
+        },
+      },
+      {
+        $lookup: {
+          from: "ambulances",
+          localField: "_id",
+          foreignField: "healthServeId",
+          as: "ambulanceProfile",
+        },
+      },
+      {
+        $project: {
+          type: 1,
+          name: 1,
+          location: 1,
+          profiles: {
+            $mergeObjects: [
+              { $arrayElemAt: ["$veterinaryProfile", 0] },
+              { $arrayElemAt: ["$laboratoryProfile", 0] },
+              { $arrayElemAt: ["$nursingProfile", 0] },
+              { $arrayElemAt: ["$physiotherapistProfile", 0] },
+              { $arrayElemAt: ["$yogaProfile", 0] },
+              { $arrayElemAt: ["$pharmacyProfile", 0] },
+              { $arrayElemAt: ["$hospitalProfile", 0] },
+              { $arrayElemAt: ["$ivfProfile", 0] },
+              { $arrayElemAt: ["$bloodBankProfile", 0] },
+              { $arrayElemAt: ["$gymProfile", 0] },
+              { $arrayElemAt: ["$medicalCollegeProfile", 0] },
+              { $arrayElemAt: ["$bloodDonorProfile", 0] },
+              { $arrayElemAt: ["$radiologistProfile", 0] },
+              { $arrayElemAt: ["$ambulanceProfile", 0] },
+            ],
+          },
+        },
+      },
+    ]);
 
-    const hsResults = await Promise.all(
-      healthServes.map(async (hs) => {
-        let profileData = null;
+    // 2️⃣ Fetch Doctors and their Profiles
+    const doctorMatch = {};
+    if (name) doctorMatch.name = { $regex: name, $options: "i" };
 
-        switch (hs.type) {
-          case "veterinary":
-            profileData = await Veterinary.findOne({ healthServeId: hs._id });
-            break;
-          case "laboratory":
-            profileData = await Laboratory.findOne({ healthServeId: hs._id });
-            break;
-          case "nursing_staff":
-            profileData = await NursingStaff.findOne({ healthServeId: hs._id });
-            break;
-          case "physiotherapist":
-            profileData = await PhysioTherapist.findOne({
-              healthServeId: hs._id,
-            });
-            break;
-          case "yoga":
-            profileData = await Yoga.findOne({ healthServeId: hs._id });
-            break;
-          case "pharmacy":
-            profileData = await MedicalStore.findOne({ healthServeId: hs._id });
-            break;
-          case "hospital":
-            profileData = await Hospital.findOne({ healthServeId: hs._id });
-            break;
-          case "ivf":
-            profileData = await IVF.findOne({ healthServeId: hs._id });
-            break;
-          case "blood_bank":
-            profileData = await BloodBank.findOne({ healthServeId: hs._id });
-            break;
-          case "gym":
-            profileData = await Gym.findOne({ healthServeId: hs._id });
-            break;
-          case "medical_college":
-            profileData = await MedicalCollege.findOne({
-              healthServeId: hs._id,
-            });
-            break;
-          default:
-            profileData = {};
-        }
+    const doctorResults = await Doctor.aggregate([
+      { $match: doctorMatch },
+      {
+        $lookup: {
+          from: "doctorprofiles",
+          localField: "_id",
+          foreignField: "doctorId",
+          as: "profile",
+        },
+      },
+      {
+        $project: {
+          type: { $literal: "doctor" },
+          name: 1,
+          location: 1,
+          profile: { $arrayElemAt: ["$profile", 0] },
+        },
+      },
+    ]);
 
-        return {
-          type: hs.type,
-          ...hs.toObject(),
-          profile: profileData || {},
-        };
-      })
-    );
-
-    // ----------------- Doctor Query -----------------
-    const doctorQuery = {};
-    if (name) doctorQuery.name = { $regex: name, $options: "i" };
-
-    const doctors = await Doctor.find(doctorQuery);
-
-    const doctorResults = await Promise.all(
-      doctors.map(async (doc) => {
-        const profile = await DoctorProfile.findOne({ doctorId: doc._id });
-        return {
-          type: "doctor",
-          ...doc.toObject(),
-          profile: profile || {},
-        };
-      })
-    );
-
-    // ----------------- Merge Results -----------------
-    const results = [...hsResults, ...doctorResults];
+    // 3️⃣ Merge all results
+    const results = [...healthServeResults, ...doctorResults];
 
     if (results.length === 0) {
       return res.status(404).json({ message: "No profiles found" });
@@ -107,3 +191,4 @@ exports.getAllProfiles = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+

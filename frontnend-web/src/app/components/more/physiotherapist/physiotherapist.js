@@ -2,11 +2,78 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
-import axios from "axios";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+
+import {
+  FaCheckCircle,
+  FaStar,
+  FaHome,
+  FaTools,
+  FaStethoscope,
+  FaHandsHelping
+} from "react-icons/fa";
+
+
+  const featuresData = [
+    {
+      icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+      title: "100% Verified Physiotherapists",
+      description:
+        "All physiotherapists are licensed professionals with BPT/MPT degrees and years of clinical experience",
+    },
+    {
+      icon: <FaHome className="text-blue-600 text-4xl" />,
+      title: "Home Visit Services",
+      description:
+        "Convenient physiotherapy sessions at your home with portable equipment and personalized care",
+    },
+    {
+      icon: <FaTools className="text-blue-600 text-4xl" />,
+      title: "Advanced Equipment",
+      description:
+        "State-of-the-art rehabilitation equipment including electrotherapy, ultrasound, and exercise machines",
+    },
+    {
+      icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+      title: "Specialized Treatments",
+      description:
+        "Expert care for sports injuries, neurological conditions, orthopedic problems, and post-operative rehabilitation",
+    },
+    {
+      icon: <FaHandsHelping className="text-blue-600 text-4xl" />,
+      title: "Holistic Approach",
+      description:
+        "Comprehensive treatment combining manual therapy, exercise prescription, and lifestyle modifications",
+    },
+    {
+      icon: <FaStar className="text-blue-600 text-4xl" />,
+      title: "Proven Recovery",
+      description:
+        "High success rates with 90%+ patients reporting significant improvement within 4-6 weeks",
+    },
+  ];
+
+
+const testimonials = [
+  {
+    author: "Jatin Saini",
+    location: "Delhi",
+    text: "I was bedridden after my knee surgery. The physiotherapist from Apna OPD helped me walk again within 3 months. Professional and caring treatment!",
+  },
+  {
+    author: "Sanjana Agrawal",
+    location: "Uttar Pradesh",
+    text: "My chronic back pain disappeared after 8 weeks of physiotherapy. The exercises and manual therapy worked wonders. Highly recommend!",
+  },
+  {
+    author: "Sanjay Dixit",
+    location: "Dehradun",
+    text: "After my stroke, I thought I'd never regain movement. The neuro-physiotherapy team helped me recover 80% of my function. Grateful beyond words!",
+  },
+];
 
 const Physiotherapist = ({
   serviceData,
@@ -240,8 +307,8 @@ const Physiotherapist = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
+      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
     </>
   );
 };

@@ -5,13 +5,13 @@ import axios from "axios";
 import Head from "next/head";
 import UrgentBanner from "@/app/components/more/bloodBankComponents/UrgentBanner";
 import About from "@/app/components/more/bloodBankComponents/About";
-import Contact from "@/app/components/more/bloodBankComponents/Contact";
 import WhyChoose from "@/app/components/more/bloodBankComponents/WhyChoose";
 import HeroSection from "@/app/components/more/bloodBankComponents/HeroSection";
-import Reviews from "@/app/components/more/bloodBankComponents/Reviews";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import NearbyBanks from "@/app/components/more/bloodBankComponents/NearBy";
 import RequestSteps from "@/app/components/more/bloodBankComponents/RequestSteps";
 import Availability from "@/app/components/more/bloodBankComponents/Availability";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 
 export default function BloodBankPage() {
   const params = useParams();
@@ -59,7 +59,10 @@ export default function BloodBankPage() {
             healthProfile={data?.healthProfile}
           />
           <About data={data?.userData} healthProfile={data?.healthProfile} />
-          <Contact data={data?.userData} healthProfile={data?.healthProfile} />
+          <LocationAndContact
+            data={data?.userData}
+            healthProfile={data?.healthProfile}
+          />
           <WhyChoose
             data={data?.userData}
             healthProfile={data?.healthProfile}
@@ -68,7 +71,10 @@ export default function BloodBankPage() {
             data={data?.userData}
             healthProfile={data?.healthProfile}
           />
-          <Reviews data={data?.userData} healthProfile={data?.healthProfile} />
+          <TestimonialsCard
+            data={data?.userData}
+            testimonials={data?.healthProfile.testimonials}
+          />
           <NearbyBanks
             data={data?.userData}
             healthProfile={data?.healthProfile}

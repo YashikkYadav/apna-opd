@@ -2,10 +2,77 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FaStar } from "react-icons/fa";
 import Pagination from "../common/Pagination";
-import WhyChooseUs from "./whyChoose";
-import PatientTestimonials from "./Testimonial";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
+
+import {
+  FaCheckCircle,
+  FaClock,
+  FaStar,
+  FaHandHoldingHeart,
+  FaStethoscope,
+  FaRupeeSign,
+} from "react-icons/fa";
+import { GiMicroscope } from "react-icons/gi";
+
+const featuresData = [
+  {
+    icon: <FaCheckCircle className="text-blue-600 text-4xl" />,
+    title: "Expert Veterinarians",
+    description:
+      "Board-certified veterinarians with specialized training in companion animal care and emergency medicine",
+  },
+
+  {
+    icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+    title: "Advanced Diagnostics",
+    description:
+      "State-of-the-art diagnostic equipment including digital X-ray, ultrasound, and in-house laboratory",
+  },
+  {
+    icon: <FaStethoscope className="text-blue-600 text-4xl" />,
+    title: "Comprehensive Services",
+    description:
+      "Complete pet healthcare from vaccinations and wellness exams to complex surgeries and dental care",
+  },
+  {
+    icon: <FaClock className="text-blue-600 text-4xl" />,
+    title: "24/7 Emergency Care",
+    description:
+      "Round-the-clock emergency services with fully equipped ICU and surgical facilities for critical cases",
+  },
+  {
+    icon: <FaHandHoldingHeart className="text-blue-600 text-4xl" />,
+    title: "Compassionate Care",
+    description:
+      "Gentle, stress-free environment with caring staff who understand the special bond between pets and families",
+  },
+  {
+    icon: <FaRupeeSign className="text-blue-600 text-4xl" />,
+    title: "Affordable Treatment",
+    description:
+      "Transparent pricing with flexible payment options and wellness packages to keep your pet healthy",
+  },
+];
+
+const testimonials = [
+  {
+    author: "Shivani Kaur",
+    location: "Vaishali",
+    text: "When Max was hit by a car, I thought we'd lose him. Dr. Sharma's emergency surgery saved his life. He's running around like a puppy again!",
+  },
+  {
+    author: "Meera Shekh",
+    location: "Bareilly",
+    text: "Fluffy had a complicated surgery for kidney stones. The care and follow-up were exceptional. She's healthy and playful again!",
+  },
+  {
+    author: "Vikas Jain",
+    location: "jharkhand",
+    text: "Our German Shepherd was limping for weeks. The X-ray and treatment plan were perfect. He's back to his energetic self!",
+  },
+];
 
 const Veterinary = ({
   serviceData,
@@ -257,8 +324,8 @@ const Veterinary = ({
           onPageChange={handlePageChange}
         />
       )}
-      <WhyChooseUs />
-      <PatientTestimonials />
+      <WhyChooseUs featuresData={featuresData} type="Vatenary" />
+      <Testimonials testimonials={testimonials} type="Vatenary" />
     </>
   );
 };

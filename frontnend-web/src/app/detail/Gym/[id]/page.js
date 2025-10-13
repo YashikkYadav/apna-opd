@@ -6,10 +6,10 @@ import axios from "axios";
 import HeroSection from "@/app/components/more/gymComponents/gymHero";
 import AboutSection from "@/app/components/more/gymComponents/aboutGym";
 import FacilitiesSection from "@/app/components/more/gymComponents/facilities";
-import FAQSection from "@/app/components/more/gymComponents/gymFaqs";
-import GymFooter from "@/app/components/more/gymComponents/gymFooter";
-import SuccessStories from "@/app/components/more/gymComponents/gymReviews";
-import VisitUsToday from "@/app/components/more/gymComponents/locationInfo";
+import FAQS from "@/app/components/more/common/Faqs";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import RelatedGyms from "@/app/components/more/gymComponents/relatedGyms";
 import ProgramsAndServices from "@/app/components/more/gymComponents/services";
 import GymTimings from "@/app/components/more/gymComponents/timings";
@@ -75,18 +75,16 @@ export default function GymPage() {
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <VisitUsToday
+          <ImageGallery profileData={data?.healthProfile} />
+          <LocationAndContact
             data={data?.otherData}
             healthProfile={data?.healthProfile}
           />
-          <SuccessStories
+          <TestimonialsCard
             data={data?.otherData}
-            healthProfile={data?.healthProfile}
+            testimonials={data?.healthProfile.testimonials}
           />
-          <FAQSection
-            data={data?.otherData}
-            healthProfile={data?.healthProfile}
-          />
+          <FAQS data={data?.otherData} healthProfile={data?.healthProfile} />
           <RelatedGyms
             data={data?.otherData}
             healthProfile={data?.healthProfile}

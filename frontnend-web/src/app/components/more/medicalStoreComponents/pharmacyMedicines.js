@@ -68,27 +68,27 @@ const AvailableMedicines = ({ medicines,data }) => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {medicines?.map((medicine, index) => (
                     <motion.div
                         key={index}
                         whileHover={{ scale: 1.03, boxShadow: '0 0 0 3px rgba(37,99,235,0.2)' }}
-                        className="bg-[#F7F9FB] border border-blue-200 rounded-2xl p-6 shadow-sm transition-all flex flex-col justify-between"
+                        className="border border-blue-200 rounded-xl p-6 shadow-md transition-all flex flex-col justify-between"
                     >
                         <div>
-                            <h3 className="text-xl font-bold text-blue-900 mb-2">{medicine.name}</h3>
-                            <p className="text-blue-700 mb-1 font-medium">
+                            <h3 className="text-xl font-bold mb-2">{medicine.name}</h3>
+                            <p className="mb-2 font-medium">
                                 Dosage: <span className="font-normal">{medicine.dosage}</span>
                             </p>
-                            <p className="text-blue-700 font-medium">
-                                Price: <span className="text-blue-800 font-bold">₹{medicine.price}</span>
+                            <p className="font-medium">
+                                Price: <span className="font-bold">₹{medicine.price}</span>
                             </p>
                         </div>
 
                         {/* Add to Cart Button */}
                         <button
                             onClick={() => addToCart(medicine)}
-                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
                         >
                             Add to Cart
                         </button>

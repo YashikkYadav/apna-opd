@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 
-export default function BookTest({ isOpen, onClose }) {
+export default function BookSession({ isOpen, onClose, title = "Book a Session" }) {
   const [errors, setErrors] = useState({});
   const params = useParams();
   const id = params.id;
@@ -62,7 +62,7 @@ export default function BookTest({ isOpen, onClose }) {
     // Validate all fields
     const newErrors = {};
     if (!name.trim()) newErrors.name = "Name is required.";
-   
+
     if (!phone || !/^\d{10}$/.test(phone))
       newErrors.phone = "Valid 10-digit phone is required.";
     if (!message.trim() || message.trim().length < 3)
@@ -102,11 +102,11 @@ export default function BookTest({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-blue-200">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md border border-blue-200 space-y-2.5">
         {!submitted ? (
           <>
             <h2 className="text-2xl font-bold text-blue-700 mb-4">
-              Book a Test
+              {title || "Book a Session"}
             </h2>
 
             <input
@@ -138,6 +138,7 @@ export default function BookTest({ isOpen, onClose }) {
             {errors.email && (
               <div className="text-red-600 text-xs mb-2">{errors.email}</div>
             )}
+
             <textarea
               placeholder="Message (required)"
               value={message}
@@ -237,7 +238,7 @@ export default function BookTest({ isOpen, onClose }) {
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold text-blue-700">Thank you!</h2>
             <p className="text-gray-600">
-              Thanks for booking the Test. We’ll update you further.
+              Thanks for booking the Session. We’ll update you further.
             </p>
             <button
               onClick={onClose}

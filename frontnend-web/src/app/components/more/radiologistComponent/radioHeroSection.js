@@ -3,33 +3,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { useState } from "react";
-import BookAppointment from "./BookSession";
-import CallNow from "../VeterinaryComponents/CallNow";
+import BookSession from "../common/BookSession";
+import CallNow from "../common/CallNow";
+import StarRating from "../../common-components/StarRating";
 
-function getStarIcons(avgRating) {
-  const stars = [];
-  const safeRating = avgRating ?? 0;
-  const fullStars = Math.floor(safeRating);
-  const hasHalfStar = safeRating - fullStars > 0.5;
-  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(
-      <FaStar key={`full-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-  if (hasHalfStar) {
-    stars.push(
-      <FaStarHalfAlt key="half" className="text-[#FFD700] text-2xl" />
-    );
-  }
-  for (let i = 0; i < emptyStars; i++) {
-    stars.push(
-      <FaRegStar key={`empty-${i}`} className="text-[#FFD700] text-2xl" />
-    );
-  }
-  return stars;
-}
 
 export default function RadioHeroSection({ data, healthProfile }) {
   const [openModal, setOpenModal] = useState(false);
@@ -38,9 +15,8 @@ export default function RadioHeroSection({ data, healthProfile }) {
     ? (
         healthProfile.testimonials.reduce((sum, r) => sum + r.rating, 0) /
         healthProfile.testimonials.length
-      ).toFixed(1)
+      )
     : "0.0";
-  const reviewCount = healthProfile?.testimonials?.length || 0;
 
   return (
     <motion.section
@@ -87,11 +63,10 @@ export default function RadioHeroSection({ data, healthProfile }) {
 
         {/* Rating */}
         <div className="flex items-center gap-2 justify-center lg:justify-start mb-3">
-          {getStarIcons(parseFloat(avgRating))}
-          <span className="text-white text-xl font-semibold ml-2">
-            {avgRating}/5
-          </span>
-          <span className="text-white/70 text-lg">({reviewCount} reviews)</span>
+          <StarRating
+            rating={avgRating}
+            ratingCount={healthProfile?.testimonials?.length}
+          />
         </div>
 
         {/* Specialties / Tags */}
@@ -124,7 +99,7 @@ export default function RadioHeroSection({ data, healthProfile }) {
           />
           <button
             onClick={() => {
-              const section = document.getElementById("radioLocationSection");
+              const section = document.getElementById("LocationSection");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
             className="border-2 border-white text-white text-lg px-8 py-3 rounded-full font-bold hover:bg-white hover:text-[#0C65A0] transition hover:scale-105"
@@ -132,10 +107,10 @@ export default function RadioHeroSection({ data, healthProfile }) {
             📍 Get Directions
           </button>
         </div>
-        <BookAppointment
+        <BookSession
           isOpen={openModal}
           onClose={() => setOpenModal(false)}
-          healthProfile={healthProfile}
+          title="Book a Appointment"
         />
       </div>
     </motion.section>

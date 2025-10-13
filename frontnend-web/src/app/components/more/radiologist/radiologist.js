@@ -3,9 +3,70 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BsGridFill, BsList } from "react-icons/bs";
-import Testimonials from "./Testimonial";
-import WhyChooseUs from "./whyChoose";
+import Testimonials from "../common/Testimonial";
+import WhyChooseUs from "../common/WhyChoose";
 import Pagination from "../common/Pagination";
+
+import { FaRegClock, FaMapMarkerAlt, FaUserMd, FaXRay } from "react-icons/fa";
+import { MdMedicalServices } from "react-icons/md";
+import { GiMicroscope } from "react-icons/gi";
+
+const featuresData = [
+  {
+    icon: <FaXRay className="text-blue-600 text-4xl" />,
+    title: "Accurate Imaging",
+    description:
+      "High-quality X-rays, CT scans, and MRIs with advanced digital imaging systems.",
+  },
+  {
+    icon: <GiMicroscope className="text-blue-600 text-4xl" />,
+    title: "Advanced Diagnostics",
+    description:
+      "State-of-the-art machines and technology for precise radiological examinations.",
+  },
+  {
+    icon: <FaUserMd className="text-blue-600 text-4xl" />,
+    title: "Expert Radiologists",
+    description:
+      "Experienced specialists ensuring accurate interpretations and timely reports.",
+  },
+  {
+    icon: <MdMedicalServices className="text-blue-600 text-4xl" />,
+    title: "Comprehensive Services",
+    description:
+      "Wide range of diagnostic imaging from ultrasound to advanced CT and MRI scans.",
+  },
+  {
+    icon: <FaMapMarkerAlt className="text-blue-600 text-4xl" />,
+    title: "Multiple Centers",
+    description:
+      "Extensive network of radiology centers across major cities for easy access.",
+  },
+  {
+    icon: <FaRegClock className="text-blue-600 text-4xl" />,
+    title: "24/7 Availability",
+    description:
+      "Round-the-clock radiology support for emergencies and urgent medical cases.",
+  },
+];
+
+const testimonials = [
+  {
+    author: "Rajash Gangwar",
+    location: "Delhi",
+    text: "I’ve been visiting this radiology center for years. The doctors are professional, the equipment is modern, and the reports are always accurate and on time.",
+  },
+  {
+    author: "Meera Deshmukh",
+    location: "Assam",
+    text: "During my treatment, I needed urgent MRI scans. The radiology team arranged everything quickly and guided me throughout the process. Their care truly made a difference!",
+  },
+  {
+    author: "Ayush Tomar",
+    location: "Bhopal",
+    text: "As a doctor, I trust this radiology center completely. Their imaging quality is excellent, and they maintain the highest safety and diagnostic standards.",
+  },
+];
 
 const Radiologist = ({
   serviceData,
@@ -30,7 +91,6 @@ const Radiologist = ({
   const viewPhysioDetails = (id) => {
     navigate.push(`/detail/radiologist/${id}`);
   };
-
 
   // Pagination
   const indexOfLastItem = page * itemsPerPage;
@@ -267,8 +327,8 @@ const Radiologist = ({
             onPageChange={handlePageChange}
           />
         )}
-        <WhyChooseUs />
-        <Testimonials />
+        <WhyChooseUs featuresData={featuresData} type='Radiologists' />
+        <Testimonials testimonials={testimonials} type='Radiologists' />
       </main>
     </>
   );

@@ -9,13 +9,14 @@ import axios from "axios";
 import PharmacyHero from "@/app/components/more/medicalStoreComponents/pharmacyHeroSection";
 import PharmacyAbout from "@/app/components/more/medicalStoreComponents/pharmacyAbout";
 import CartModal from "@/app/components/more/medicalStoreComponents/pharmacyCart";
-import FAQSection from "@/app/components/more/medicalStoreComponents/pharmacyFaqs";
+import FAQS from "@/app/components/more/common/Faqs";
 import FeatureHighlights from "@/app/components/more/medicalStoreComponents/pharmacyFeatures";
-import PharmacyLocationCard from "@/app/components/more/medicalStoreComponents/pharmacyLocation";
+import LocationAndContact from "@/app/components/more/common/LocationCard";
 import AvailableMedicines from "@/app/components/more/medicalStoreComponents/pharmacyMedicines";
-import TestimonialsSection from "@/app/components/more/medicalStoreComponents/pharmacyReviews";
+import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import MedicineFilterBar from "@/app/components/more/medicalStoreComponents/pharmacySearch";
 import UploadPrescription from "@/app/components/more/medicalStoreComponents/pharmacyUpload";
+import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 
 const PharmacyStorePage = () => {
@@ -268,19 +269,17 @@ const PharmacyStorePage = () => {
             data={res_data?.otherData}
             healthProfile={res_data?.healthProfile}
           />
-          <PharmacyLocationCard
+          <ImageGallery profileData={data?.healthProfile} />
+          <LocationAndContact
             data={res_data?.otherData}
             healthProfile={res_data?.healthProfile}
           />
-          <TestimonialsSection
+          <TestimonialsCard
+            testimonials={res_data?.healthProfile.testimonials}
             data={res_data?.otherData}
-            healthProfile={res_data?.healthProfile}
           />
           {acceptsPrescriptions && <UploadPrescription />}
-          <FAQSection
-            faqs={data?.faqs}
-            healthProfile={res_data?.healthProfile}
-          />
+          <FAQS faqs={data?.faqs} healthProfile={res_data?.healthProfile} />
           {/* <SupportOptions data={res_data?.otherData} healthProfile={res_data?.healthProfile} /> */}
         </div>
       </main>

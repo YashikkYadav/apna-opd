@@ -3,25 +3,21 @@ import { motion } from "framer-motion";
 import { FaStar, FaRegStar, FaCommentDots } from "react-icons/fa";
 import Image from "next/image";
 
-const PatientTestimonials = ({
-  testimonials = [
-    {
-      author: "Rajesh Kumar",
-      location: "Jaipur",
-      text: "Apna OPD helped me find the perfect pharmacy near my home. Fast delivery and genuine medicines at great prices!",
-    },
-    {
-      author: "Akshay Singh",
-      location: "Udaypur",
-      text: "The pharmacy recommended by Apna OPD is exceptional. Professional service and they even provide health consultations!",
-    },
-    {
-      author: "Anmol",
-      location: "Jaisalmer",
-      text: "Excellent service and medicine quality. The pharmacists are very knowledgeable and helpful with medication guidance!",
-    },
-  ],
+const Testimonials = ({
+  testimonials, type
 }) => {
+  const users = () => {
+    if (type === 'blood_donor'){
+      return 'Donors'
+    } else if (type === "Gym") {
+      return "Fitness Freaks";
+    } else if (type === "yoga") {
+      return "Members";
+    } else {
+      return "Patients";
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -34,7 +30,7 @@ const PatientTestimonials = ({
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-blue-700 flex items-center gap-3">
           <FaCommentDots className="text-3xl text-blue-700" />
-          What Our Customers Say
+          What Our {users()} Say
         </h2>
       </div>
 
@@ -81,4 +77,4 @@ const PatientTestimonials = ({
   );
 };
 
-export default PatientTestimonials;
+export default Testimonials;

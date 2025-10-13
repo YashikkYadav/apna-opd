@@ -3,6 +3,21 @@ const HealthServeProfile = require("../models/healthServeProfile");
 const HospitalDoctor = require("../models/hospitalDoctor");
 const DoctorProfile = require("../models/doctorProfile");
 
+const Veterinary = require("../models/veterinary");
+const Laboratory = require("../models/healthlabProfile");
+const NursingStaff = require("../models/nursingStaff");
+const PhysioTherapist = require("../models/physiotherapist");
+const Yoga = require("../models/yoga");
+const MedicalStore = require("../models/pharmacyProfile");
+const Hospital = require("../models/hospital");
+const IVF = require("../models/ivfClinic");
+const BloodBank = require("../models/bloodBankProfile");
+const Gym = require("../models/gym");
+const MedicalCollege = require("../models/medicalCollege");
+const Radiologist = require("../models/radiologist");
+const BloodDonor = require("../models/bloodDonor");
+const Ambulance = require("../models/ambulance");
+
 const {
   getAccessToken,
   getHashedPassword,
@@ -89,7 +104,13 @@ const register = async (data) => {
       healthServeData.bloodGroup = bloodGroup;
     }
 
-    if ((type === "nursing_staff" || type === "vatenary" || type === "physiotherapist" || type === "laboratory") && homeService) {
+    if (
+      (type === "nursing_staff" ||
+        type === "vatenary" ||
+        type === "physiotherapist" ||
+        type === "laboratory") &&
+      homeService
+    ) {
       healthServeData.homeService = homeService;
     }
 
@@ -464,7 +485,6 @@ const getHealthServeList = async (page = 1, location, type, name) => {
   }
 };
 
-
 const getDoctors = async (hospitalId) => {
   try {
     const doctors = await HospitalDoctor.find({
@@ -495,48 +515,81 @@ const getDoctors = async (hospitalId) => {
   }
 };
 
-const ratingHealthServe = async (healthServeId, rating) => {
+const ratingHealthServe = async (healthServeId, ratingData, type) => {
   try {
-    rating = typeof rating === "string" ? parseInt(rating) : rating;
-
-    if (rating < 1 || rating > 5) {
-      return {
-        statusCode: 400,
-        error: "Rating must be between 1 and 5",
-      };
-    }
-
-    const healthServeProfile = await HealthServeProfile.findById(healthServeId);
+    const healthServeProfile = await HealthServe.findById(healthServeId);
     if (!healthServeProfile) {
-      return {
-        statusCode: 404,
-        error: "Health Serve profile not found",
-      };
+      return { statusCode: 404, error: "Health Serve profile not found" };
     }
 
-    const newRating =
-      (healthServeProfile.rating * healthServeProfile.ratingCount + rating) /
-      (healthServeProfile.ratingCount + 1);
-    const newRatingCount = healthServeProfile.ratingCount + 1;
+    // ✅ Select model dynamically
+    let model;
+    switch (type) {
+      case "hospital":
+        model = Hospital;
+        break;
+      case "gym":
+        model = Gym;
+        break;
+      case "ivf_clinic":
+        model = IVF;
+        break;
+      case "nursing_staff":
+        model = NursingStaff;
+        break;
+      case "physiotherapist":
+        model = PhysioTherapist;
+        break;
+      case "laboratory":
+        model = Laboratory;
+        break;
+      case "vatenary":
+        model = Veterinary;
+        break;
+      case "blood_bank":
+        model = BloodBank;
+        break;
+      case "nursing_medical_college":
+        model = MedicalCollege;
+        break;
+      case "medical_store":
+        model = MedicalStore;
+        break;
+      case "yoga":
+        model = Yoga;
+        break;
+      case "radiologist":
+        model = Radiologist;
+        break;
+      case "ambulance":
+        model = Ambulance;
+        break;
+      case "blood_donor":
+        model = BloodDonor;
+        break;
+      default:
+        return { statusCode: 400, error: "Invalid type provided" };
+    }
 
-    await HealthServeProfile.findByIdAndUpdate(
-      healthServeProfile._id,
-      {
-        rating: newRating,
-        ratingCount: newRatingCount,
-      },
-      { runValidators: false }
+    // ✅ Use Mongoose `$push` to add testimonial directly
+    const updatedDoc = await model.findOneAndUpdate(
+      { healthServeId }, // find by healthServeId
+      { $push: { testimonials: ratingData } }, // push new testimonial
+      { new: true } // return updated document
     );
+
+    if (!updatedDoc) {
+      return { statusCode: 404, error: `${type} not found` };
+    }
 
     return {
       statusCode: 200,
-      message: "Health Serve rating updated successfully",
+      message: "Testimonial added successfully",
+      data: updatedDoc,
     };
   } catch (error) {
-    return {
-      statusCode: 500,
-      error: error,
-    };
+    console.error("Error adding testimonial:", error);
+    return { statusCode: 500, error: error.message };
   }
 };
 
