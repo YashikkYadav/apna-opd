@@ -51,7 +51,13 @@ const HomeServices = () => {
 
   // Helper function to view service details
   const viewServiceDetails = (serviceId, type) => {
-    router.push(`/detail/${type}/${serviceId}`);
+    console.log(type)
+    if (type === "hospital") {
+      router.push(`/more/hospital/${serviceId}/details`);
+    }else{
+      router.push(`/detail/${type}/${serviceId}`);
+    }
+    
   };
 
 
