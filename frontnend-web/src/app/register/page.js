@@ -50,7 +50,7 @@ const Register = () => {
     { value: "doctor", label: "Doctor" },
     { value: "hospital", label: "Hospital" },
     { value: "vatenary", label: "Veterinary" },
-    { value: "emergency", label: "Emergency Service" },
+    // { value: "emergency", label: "Emergency Service" },
     { value: "ambulance", label: "Ambulance" },
     { value: "gym", label: "Gym" },
     { value: "yoga", label: "Yoga" },
