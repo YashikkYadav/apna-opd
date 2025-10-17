@@ -399,6 +399,17 @@ const getAllUpcomingAppointments = async (doctorId) => {
       return !isToday || appt.time >= currentTime;
     });
 
+    // 🔹 Merge doctor profile details for each appointment (non-destructive)
+    for (const appt of appointments) {
+      const doctorProfile = await DoctorProfile.findOne({
+        doctorId: appt.doctorId,
+      }).lean();
+
+      if (doctorProfile) {
+        appt._doc.doctorProfile = doctorProfile; // merge profile into appointment result
+      }
+    }
+
     return {
       statusCode: 200,
       appointments,
