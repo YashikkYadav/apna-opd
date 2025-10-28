@@ -41,7 +41,7 @@ const PatientTestimonialsHome = () => {
             What Our Patients Say
           </h2>
           <a
-            href="/more/testimonials"
+            href="/why-choose-us"
             className="text-blue-600 font-semibold hover:underline text-base"
           >
             View All &rarr;

@@ -11,7 +11,7 @@ const offers = [
     oldPrice: 599,
     button: "Book Now",
     buttonColor: "bg-blue-600",
-    link: "/more/thyroid",
+    link: "/more/laboratory",
   },
   {
     badge: "₹199 ONLY",
@@ -22,7 +22,7 @@ const offers = [
     oldPrice: 399,
     button: "Book Now",
     buttonColor: "bg-blue-600",
-    link: "/more/blood_bank",
+    link: "/more/blood-bank",
   },
   {
     badge: "SPECIAL",
@@ -33,7 +33,7 @@ const offers = [
     oldPrice: 599,
     button: "Consult Now",
     buttonColor: "bg-blue-600",
-    link: "/more/cardiologist",
+    link: "/find-doctor?location=&speciality=Cardiologist",
   },
 ];
 
