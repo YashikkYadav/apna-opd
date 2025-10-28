@@ -65,7 +65,7 @@ const HeroSection = ({ res_data, data, healthProfile }) => {
           {healthProfile?.introduction}
         </p>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap justify-center lg:justify-start gap-4">
           {/* <div
             onClick={() => {
               const section = document.getElementById("labLocationSection");

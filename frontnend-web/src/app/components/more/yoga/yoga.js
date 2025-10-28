@@ -365,8 +365,8 @@ const Yoga = ({
         />
       )}
 
-      <WhyChooseUs featuresData={featuresData} type={serviceData[0]?.type} />
-      <Testimonials testimonials={testimonials} type={serviceData[0]?.type} />
+      <WhyChooseUs featuresData={featuresData} type="Yoga" />
+      <Testimonials testimonials={testimonials} type="Yoga" />
     </>
   );
 };

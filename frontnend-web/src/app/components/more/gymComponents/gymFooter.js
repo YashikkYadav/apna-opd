@@ -30,7 +30,7 @@ const GymFooter = ({ healthProfile,data }) => {
                 >
                     Join {data?.name} Today
                 </motion.a>
-                <FreeTrialModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} title='Joiner Details' />
                 <motion.a
                     whileHover={{ scale: 1.05 }}
                     onClick={() => setModalOpen(true)}
@@ -38,7 +38,7 @@ const GymFooter = ({ healthProfile,data }) => {
                 >
                     Claim Your Free Trial
                 </motion.a>
-                <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                <BookSession isOpen={modalOpen} onClose={() => setModalOpen(false)} title='Fill Details' />
             </div>
 
             <p className="text-sm text-blue-300">© 2024 {healthProfile?.name}. All rights reserved.</p>

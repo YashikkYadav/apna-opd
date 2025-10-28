@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import BookSession from "../common/BookSession";
 import { useState } from "react";
 import CallNow from "../common/CallNow";
@@ -16,10 +15,9 @@ const VetHeroSection = ({ profileData, data, healthProfile }) => {
         healthProfile?.testimonials.length
       ).toFixed(1)
     : "0.0";
-  const reviewCount = healthProfile?.testimonials?.length || 0;
   const features = healthProfile?.doctorInfo?.features;
   console.log("dd", healthProfile?.profileImage);
-  console.log(healthProfile);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}

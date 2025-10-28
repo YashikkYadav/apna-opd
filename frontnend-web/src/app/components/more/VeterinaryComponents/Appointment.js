@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaBolt } from "react-icons/fa";
 import { useState } from "react";
 import BookSession from "../common/BookSession";
+
 const AppointmentOptions = ({ clinicName = "Happy Tails Clinic" }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);

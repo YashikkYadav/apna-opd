@@ -126,7 +126,7 @@ const SearchBarForServices = ({ onSearch, location = "", name = "" }) => {
           />
           {/* Location Suggestions Dropdown */}
           {showLocationDropdown && (
-            <div className="absolute top-full left-0 right-[620px] text-black bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
+            <div className="absolute top-12 md:top-full left-0 lg:right-[620px] text-black bg-white border border-[#f0f0f0] rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
               {isLoadingLocations ? (
                 <div className="px-4 py-2 text-gray-500">Loading...</div>
               ) : locationOptions?.length > 0 ? (

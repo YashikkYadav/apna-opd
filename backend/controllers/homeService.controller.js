@@ -8,37 +8,30 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
   try {
     const { location, name } = req.query;
 
-    // Base filter
-    const query = { homeService: "yes" };
+    // Base query for home services
+    const matchQuery = { "healthServe.homeService": "yes" };
 
     if (location) {
-      query.location = { $regex: location, $options: "i" };
+      matchQuery["healthServe.location"] = { $regex: location, $options: "i" };
     }
 
     if (name) {
-      query.name = { $regex: name, $options: "i" };
+      matchQuery["healthServe.name"] = { $regex: name, $options: "i" };
     }
 
-    // Fetch all matching HealthServe documents
-    const healthServes = await HealthServe.find(query);
-
-    if (!healthServes || healthServes.length === 0) {
-      return res.status(404).json({ message: "No home services found" });
-    }
-
-    // Use aggregation pipelines for each type in parallel
+    // Parallel aggregation for all services
     const [vets, labs, nurses, physios] = await Promise.all([
       Veterinary.aggregate([
         {
           $lookup: {
-            from: "healthserves", // must match actual collection name
+            from: "healthserves",
             localField: "healthServeId",
             foreignField: "_id",
             as: "healthServe",
           },
         },
         { $unwind: "$healthServe" },
-        { $match: { "healthServe.homeService": "yes" } },
+        { $match: matchQuery },
       ]),
 
       Laboratory.aggregate([
@@ -51,7 +44,7 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
           },
         },
         { $unwind: "$healthServe" },
-        { $match: { "healthServe.homeService": "yes" } },
+        { $match: matchQuery },
       ]),
 
       NursingStaff.aggregate([
@@ -64,7 +57,7 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
           },
         },
         { $unwind: "$healthServe" },
-        { $match: { "healthServe.homeService": "yes" } },
+        { $match: matchQuery },
       ]),
 
       PhysioTherapist.aggregate([
@@ -77,14 +70,14 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
           },
         },
         { $unwind: "$healthServe" },
-        { $match: { "healthServe.homeService": "yes" } },
+        { $match: matchQuery },
       ]),
     ]);
 
     // Combine all results
     const results = [
       ...vets.map((item) => ({
-        type: "vatenary",
+        type: "veterinary",
         ...item.healthServe,
         profile: item,
       })),
@@ -105,11 +98,15 @@ exports.getAllHomeServicesWithProfiles = async (req, res) => {
       })),
     ];
 
-    res.status(200).json(results);
+    if (results.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No matching home services found" });
+    }
+
+    res.status(200).json({ count: results.length, results });
   } catch (error) {
     console.error("Error fetching home services with profiles:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-

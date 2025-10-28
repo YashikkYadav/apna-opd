@@ -24,7 +24,7 @@ const HomeServices = () => {
       );
       const json = await res.json();
       console.log("Fetched Home Services:", json);
-      setProfileList(json || []);
+      setProfileList(json?.results || []);
     } catch (err) {
       console.error("Error fetching data", err);
     }

@@ -4,11 +4,6 @@ import { motion } from "framer-motion";
 import { User, HeartPulse, GraduationCap, Languages } from "lucide-react";
 
 const OverviewSection = ({
-  about = "",
-  education = "",
-  certifications = "",
-  interests = "",
-  languages = [],
   data,
   healthProfile,
 }) => {

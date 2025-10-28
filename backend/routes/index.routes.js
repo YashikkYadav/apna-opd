@@ -25,17 +25,18 @@ const messageRoutes = require("./messages.routes");
 const adminRoutes = require("./admin.routes");
 const userRoutes = require("./user.routes");
 const HealthServe = require("../models/healthServe");
-const careerLeadRoutes = require("./careerLead.routes")
+const careerLeadRoutes = require("./careerLead.routes");
 const Doctor = require("../models/doctor");
-const importExcelRouter = require("./importExcel.routes")
-const nurseRoutes = require("./nurse.routes")
-const googleAuthRoutes=require("./googleauth.routes")
-const cartRoutes=require("./cart.routes")
-const orderRoutes=require("./order.routes")
-const medicalInvoiceRoutes = require('./medicalInvoice.routes')
-const medicalMiddleware = require("../middlewares/medical.middleware")
-const homeServiceRoutes = require("./homeService.routes")
-const allProfileRoutes = require("./allProfile.routes")
+const importExcelRouter = require("./importExcel.routes");
+const nurseRoutes = require("./nurse.routes");
+const googleAuthRoutes = require("./googleauth.routes");
+const cartRoutes = require("./cart.routes");
+const orderRoutes = require("./order.routes");
+const medicalInvoiceRoutes = require("./medicalInvoice.routes");
+const medicalMiddleware = require("../middlewares/medical.middleware");
+const homeServiceRoutes = require("./homeService.routes");
+const allProfileRoutes = require("./allProfile.routes");
+const emergencyProfileRoutes = require("./emergency.routes");
 const router = express.Router();
 
 router.use("/cart", cartRoutes);
@@ -47,12 +48,11 @@ router.use("/admin", adminRoutes);
 router.use("/hospital", hospitalRoutes);
 
 router.get("/oauth2callback", async (req, res) => {
-  res.send({ message: 'ok' })
-})
-router.get("/hello-server", async (req, res) => {
-  res.status(200).send({ message: 'server working fine' })
+  res.send({ message: "ok" });
 });
-
+router.get("/hello-server", async (req, res) => {
+  res.status(200).send({ message: "server working fine" });
+});
 
 router.use("/google", googleAuthRoutes);
 
@@ -80,7 +80,11 @@ router.use("/:doctorId/report", doctorMiddleware, dashboardRoutes);
 
 router.use("/:doctorId/invoice", doctorMiddleware, invoiceRoutes);
 
-router.use("/:medicalId/MedicalInvoice", medicalMiddleware, medicalInvoiceRoutes);
+router.use(
+  "/:medicalId/MedicalInvoice",
+  medicalMiddleware,
+  medicalInvoiceRoutes
+);
 
 router.use("/:doctorPatientId", messageRoutes);
 
@@ -98,13 +102,9 @@ router.use("/:patientId/file", fileUploader);
 
 router.use("/:patientId", patientRoutes);
 
-
-
 router.use("/library", libraryRoutes);
 
 router.use("/payment", paymentRoutes);
-
-
 
 router.use(
   "/:doctorId/prescription-section",
@@ -116,13 +116,14 @@ router.use("/contact-lead", contactLeadRoutes);
 
 router.use("/career-lead", careerLeadRoutes);
 
-router.use("/import-excel", importExcelRouter)
+router.use("/import-excel", importExcelRouter);
 
-router.use('/nurse-listings', nurseRoutes)
+router.use("/nurse-listings", nurseRoutes);
 
 router.use("/home-services", homeServiceRoutes);
 
 router.use("/all-profiles", allProfileRoutes);
 
+router.use("/emergency-profiles", emergencyProfileRoutes);
 
 module.exports = router;
