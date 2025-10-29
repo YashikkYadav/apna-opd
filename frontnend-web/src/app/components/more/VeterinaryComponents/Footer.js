@@ -2,7 +2,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import BookSession from './BookSession';
+import BookSession from '../common/BookSession';
+
 const FooterCTA = ({healthProfile,data }) => {
     const [modelOpen, setModalOpen] = useState(false);
     return (

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import AppointmentOptions from "@/app/components/more/VeterinaryComponents/Appointment";
@@ -11,7 +11,6 @@ import TestimonialsCard from "@/app/components/more/common/ProfileTestimonial";
 import VetHeroSection from "@/app/components/more/VeterinaryComponents/VetHeroSection";
 import VetProfileSection from "@/app/components/more/VeterinaryComponents/VetProfile";
 import WhyChooseUs from "@/app/components/more/VeterinaryComponents/WhyChoose";
-import LocationAndContact from "@/app/components/more/common/LocationCard";
 import ImageGallery from "@/app/components/more/common/ImageGallery";
 
 export default function VeterinaryPage() {

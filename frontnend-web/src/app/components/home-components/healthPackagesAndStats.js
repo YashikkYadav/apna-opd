@@ -9,7 +9,7 @@ const packages = [
     subtitle: "Complete health screening with 50+ tests",
     price: 1999,
     oldPrice: 3999,
-    link: "/more/full_body_checkup",
+    link: "/more/laboratory",
   },
   {
     badge: "WOMEN",
@@ -17,7 +17,7 @@ const packages = [
     subtitle: "Comprehensive women's health package",
     price: 2499,
     oldPrice: 4999,
-    link: "/more/women_wellness",
+    link: "/more/yoga",
   },
   {
     badge: "HEART",
@@ -25,7 +25,7 @@ const packages = [
     subtitle: "Complete cardiac risk assessment",
     price: 1799,
     oldPrice: 3599,
-    link: "/more/heart_health_panel",
+    link: "/find-doctor?location=&speciality=Cardiologist",
   },
   {
     badge: "SENIOR",
@@ -33,7 +33,7 @@ const packages = [
     subtitle: "Tailored health checkup for seniors",
     price: 2999,
     oldPrice: 5999,
-    link: "/more/senior_citizen_plans",
+    link: "/more/laboratory",
   },
 ];
 
