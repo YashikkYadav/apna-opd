@@ -229,7 +229,7 @@
           <!-- Services Table -->
           <v-row>
             <v-col cols="12">
-              <h4 class="mb-3">Hospital Services</h4>
+              <h4 class="mb-3">Hospital Services & Medicines</h4>
               <v-data-table
                 dense
                 :items="invoiceData.services"
@@ -237,17 +237,23 @@
                 class="elevation-1 grey-head add-radius"
                 hide-default-footer
                 :headers="serviceHeaders"
-                ><template v-slot:[`item.serviceName`]="{ item, index }">
-                  <v-text-field
+              >
+                <template v-slot:[`item.serviceName`]="{ item, index }">
+                  <v-combobox
                     v-model="item.serviceName"
                     class="table-cell my-3"
                     variant="outlined"
+                    :items="medicineOptions"
+                    item-title="name"
+                    item-value="name"
                     dense
                     hide-details
-                    @input="handleInput(item)"
+                    @update:modelValue="onMedicineSelect(item, $event)"
                     :key="'service-' + index"
                     :disabled="isShow"
-                  ></v-text-field>
+                    placeholder="Select Medicine or Enter Service"
+                    clearable
+                  ></v-combobox>
                 </template>
 
                 <template v-slot:[`item.serviceDate`]="{ item, index }">
@@ -327,7 +333,6 @@
             </v-col>
 
             <!-- Payment Mode -->
-
             <v-col cols="4">
               <v-select
                 v-model="invoiceData.paymentMode"
@@ -375,6 +380,7 @@
 
 <script>
 import { useInvoiceStore } from "@/store/InvoiceStore";
+import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 
 export default {
@@ -403,13 +409,15 @@ export default {
     return {
       isValid: false,
       serviceHeaders: [
-        { title: "Service Name", key: "serviceName", width: "35%" },
-        { title: "Date", key: "serviceDate", width: "22%" },
-        { title: "Qty", key: "qty", width: "12%" },
-        { title: "Rate (₹)", key: "amount", width: "16%" },
-        { title: "Total (₹)", key: "total", width: "10%" },
-        { title: "Actions", key: "actions", width: "5%", sortable: false },
+        { title: "Service/Medicine Name", key: "serviceName", align: "start", width: "35%" },
+        { title: "Date", key: "serviceDate", align: "center", width: "22%" },
+        { title: "Qty", key: "qty", align: "center", width: "12%" },
+        { title: "Rate (₹)", key: "amount", align: "center", width: "16%" },
+        { title: "Total (₹)", key: "total", align: "center", width: "10%" },
+        { title: "Actions", key: "actions", align: "center", width: "5%", sortable: false },
       ],
+
+      medicineOptions: [], // Will hold the list of medicines from profile
 
       rules: {
         required: (value) => !!value || "Required.",
@@ -418,7 +426,67 @@ export default {
       },
     };
   },
+  mounted() {
+    this.fetchProfileData();
+  },
+
   methods: {
+    async fetchProfileData() {
+      try {
+        const res = await useProfileStore().getProfileData();
+        const profile = res.healthServeProfileData.healthServeProfile;
+        
+        // Store medicines for dropdown
+        this.medicineOptions = profile.medicines?.length
+          ? profile.medicines
+          : [];
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        useUiStore().openNotificationMessage(
+          "Failed to load medicines data",
+          "",
+          "error"
+        );
+      }
+    },
+
+    onMedicineSelect(item, value) {
+      // Check if it's an object (medicine from dropdown) or string (custom entry)
+      const serviceName = typeof value === 'object' ? value?.name : value;
+      
+      // Find the selected medicine from the options
+      const selectedMedicine = this.medicineOptions.find(
+        (med) => med.name === serviceName
+      );
+
+      if (selectedMedicine) {
+        // Auto-fill for medicine from dropdown
+        item.serviceName = selectedMedicine.name;
+        item.amount = selectedMedicine.price || 0;
+        item.qty = 1;
+        item.serviceDate = this.getTodayDate();
+      } else {
+        // Custom service/medicine - just set the name
+        item.serviceName = serviceName;
+        // User needs to fill in other fields manually
+        if (!item.serviceDate) {
+          item.serviceDate = this.getTodayDate();
+        }
+      }
+      
+      // Check if we need to add a new row
+      this.handleInput(item);
+    },
+
+    getTodayDate() {
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
+
     async submitInvoice(isEdit) {
       const isValid = await this.$refs.form.validate();
 
@@ -452,12 +520,14 @@ export default {
           this.invoiceData.paymentStatus === null
             ? ""
             : this.invoiceData.paymentStatus,
-        services: this.invoiceData.services.map((service) => ({
-          serviceName: service.serviceName,
-          serviceDate: service.serviceDate,
-          amount: parseFloat(service.amount) || 0,
-          quantity: parseInt(service.qty) || 0,
-        })),
+        services: this.invoiceData.services
+          .filter((service) => service.serviceName) // Only include rows with service names
+          .map((service) => ({
+            serviceName: service.serviceName,
+            serviceDate: service.serviceDate,
+            amount: parseFloat(service.amount) || 0,
+            quantity: parseInt(service.qty) || 0,
+          })),
         totalAmount: this.calculateTotalAmount(),
         discount: this.invoiceData.discount,
         grandTotal: this.calculateFinalAmount(),
@@ -470,9 +540,7 @@ export default {
 
       try {
         if (!isEdit) {
-          const res = await useInvoiceStore().addInvoiceApiCall(
-            requestData
-          );
+          const res = await useInvoiceStore().addInvoiceApiCall(requestData);
           if (res) {
             this.$emit("close-dialog");
             this.$emit("fetch-invoices");
@@ -502,6 +570,7 @@ export default {
         );
       }
     },
+
     handleInput(item) {
       if (this.isRowFilled(item) && !this.hasEmptyRow()) {
         this.invoiceData.services.push({
@@ -513,42 +582,50 @@ export default {
         });
       }
     },
+
     isRowFilled(item) {
       return item.serviceName || item.serviceDate || item.qty || item.amount;
     },
+
     hasEmptyRow() {
       return this.invoiceData.services.some(
         (row) => !row.serviceName && !row.serviceDate && !row.qty && !row.amount
       );
     },
+
     addService() {
       this.invoiceData.services.push({
         serviceName: "",
-        serviceDate: "",
+        serviceDate: this.getTodayDate(),
         qty: "",
         amount: "",
         total: "",
       });
     },
+
     removeService(index) {
       if (this.invoiceData.services.length > 1) {
         this.invoiceData.services.splice(index, 1);
       }
     },
+
     calculateTotal(item) {
       const qty = parseFloat(item.qty) || 0;
       const amount = parseFloat(item.amount) || 0;
       return (qty * amount).toFixed(2);
     },
+
     calculateGrandTotal() {
       return this.invoiceData.services.reduce(
         (sum, item) => sum + parseFloat(this.calculateTotal(item) || 0),
         0
       );
     },
-    calculateTotalAmount(){
+
+    calculateTotalAmount() {
       return this.calculateGrandTotal();
     },
+
     calculateFinalAmount() {
       const discount = parseFloat(this.invoiceData.discount) || 0;
       const grandTotal = this.calculateGrandTotal();
@@ -558,3 +635,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.table-cell {
+  min-width: 100px;
+}
+
+.service-down {
+  min-width: 200px;
+}
+</style>
