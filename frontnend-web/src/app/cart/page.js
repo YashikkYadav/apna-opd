@@ -22,7 +22,9 @@ export default function CartPage() {
 
     const fetchCartItems = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart/`);
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cart/${storeId}`
+            );
             const data = await res.json();
             console.log(data)
             setCartItems(Array.isArray(data) ? data : []);

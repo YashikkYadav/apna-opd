@@ -11,7 +11,6 @@ const orderItemSchema = new mongoose.Schema({
     },
     dosage: {
         type: String,
-        required: true
     },
     price: {
         type: Number,
