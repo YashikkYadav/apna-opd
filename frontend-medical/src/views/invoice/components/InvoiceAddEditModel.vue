@@ -19,11 +19,6 @@
         <v-form ref="form" v-model="isValid">
           <!-- Patient Information -->
           <v-row>
-            <!-- <v-col cols="3">
-                            <v-text-field v-model="invoiceData.uid" label="UID" :rules="[rules.required]"
-                                variant="outlined" dense :disabled="isShow">
-                            </v-text-field>
-                        </v-col> -->
             <v-col cols="6">
               <v-text-field
                 v-model="invoiceData.patientName"
@@ -73,7 +68,7 @@
             </v-col>
           </v-row>
 
-          <!-- medicines Table -->
+          <!-- Medicines Table -->
           <v-row>
             <v-col cols="12">
               <v-data-table
@@ -90,12 +85,16 @@
                     class="table-cell py-2 service-down"
                     variant="outlined"
                     v-model="item.medicineName"
+                    :items="medicineOptions"
+                    item-title="name"
+                    item-value="name"
                     dense
                     hide-details
-                    @input="handleInput(item)"
-                    :key="'service-' + index"
-                    :items="serviceOptions"
+                    @update:modelValue="onMedicineSelect(item, $event)"
+                    :key="'medicine-' + index"
                     :disabled="isShow"
+                    placeholder="Select or Enter Medicine"
+                    clearable
                   ></v-combobox>
                 </template>
 
@@ -204,6 +203,7 @@
 
 <script>
 import { useInvoiceStore } from "@/store/InvoiceStore";
+import { useProfileStore } from "@/store/ProfileStore";
 import { useUiStore } from "@/store/UiStore";
 
 export default {
@@ -236,16 +236,67 @@ export default {
           /^\d+$/.test(value) || "Phone number must be numeric.",
       },
       medicineHeaders: [
-        { text: "Medicine Name", value: "medicineName" },
-        { text: "Qty", value: "qty" },
-        { text: "Amount", value: "amount" },
-        { text: "Discount", value: "discount" },
-        { text: "Total", value: "total" },
-        { text: "Actions", value: "actions", sortable: false }, // 👈 required for delete button
+        { title: "Medicine Name", value: "medicineName", align: "start" },
+        { title: "Qty", value: "qty", align: "center" },
+        { title: "Amount", value: "amount", align: "center" },
+        { title: "Discount", value: "discount", align: "center" },
+        { title: "Total", value: "total", align: "center" },
+        { title: "Actions", value: "actions", sortable: false, align: "center" },
       ],
+      medicineOptions: [], // Will hold the list of medicines from profile
     };
   },
+  mounted() {
+    this.fetchProfileData();
+  },
   methods: {
+    async fetchProfileData() {
+      try {
+        const res = await useProfileStore().getProfileData();
+        const profile = res.healthServeProfileData.healthServeProfile;
+        
+        // Store medicines for dropdown
+        this.medicineOptions = profile.medicines?.length
+          ? profile.medicines
+          : [];
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        useUiStore().openNotificationMessage(
+          "Failed to load medicines data",
+          "",
+          "error"
+        );
+      }
+    },
+    
+    onMedicineSelect(item, value) {
+      // Check if it's an object (medicine from dropdown) or string (custom entry)
+      const medicineName = typeof value === 'object' ? value?.name : value;
+      
+      // Find the selected medicine from the options
+      const selectedMedicine = this.medicineOptions.find(
+        (med) => med.name === medicineName
+      );
+
+      if (selectedMedicine) {
+        // Auto-fill for medicine from dropdown
+        item.medicineName = selectedMedicine.name;
+        item.amount = selectedMedicine.price || 0;
+        item.qty = 1;
+        item.discount = 0;
+      } else {
+        // Custom medicine - just set the name
+        item.medicineName = medicineName;
+        // User needs to fill in other fields manually
+        if (!item.discount) {
+          item.discount = 0;
+        }
+      }
+      
+      // Check if we need to add a new row
+      this.handleInput(item);
+    },
+
     async submitInvoice(isEdit) {
       const isValid = await this.$refs.form.validate();
 
@@ -266,12 +317,14 @@ export default {
             ? ""
             : this.invoiceData.paymentStatus,
         patientAddress: this.invoiceData.patientAddress,
-        medicines: this.invoiceData.medicines.map((service) => ({
-          medicineName: service.medicineName,
-          amount: parseFloat(service.amount) || 0,
-          quantity: parseInt(service.qty) || 0,
-          discount: parseFloat(service.discount) || 0,
-        })),
+        medicines: this.invoiceData.medicines
+          .filter((service) => service.medicineName) // Only include rows with medicine names
+          .map((service) => ({
+            medicineName: service.medicineName,
+            amount: parseFloat(service.amount) || 0,
+            quantity: parseInt(service.qty) || 0,
+            discount: parseFloat(service.discount) || 0,
+          })),
         totalAmount: this.calculateFinalAmount(),
         paymentMode:
           this.invoiceData.paymentMode === null
@@ -286,21 +339,21 @@ export default {
         if (res) {
           this.$emit("close-dialog");
           this.$emit("fetch-invoices");
-          useUiStore().openNotificationMessage("Invoice Added Succesfully!");
+          useUiStore().openNotificationMessage("Invoice Added Successfully!");
         }
       } else {
         const res = await useInvoiceStore().editInvoiceApiCall(
           this.invoiceData.id,
           requestData
         );
-        console.log(this.invoiceData.id);
         if (res) {
           this.$emit("close-dialog");
           this.$emit("fetch-invoices");
-          useUiStore().openNotificationMessage("Invoice Updated Succesfully!");
+          useUiStore().openNotificationMessage("Invoice Updated Successfully!");
         }
       }
     },
+    
     handleInput(item) {
       if (this.isRowFilled(item) && !this.hasEmptyRow()) {
         this.invoiceData.medicines.push({
@@ -312,32 +365,48 @@ export default {
         });
       }
     },
+    
     isRowFilled(item) {
-      return item.service || item.qty || item.amount || item.discount;
+      return item.medicineName || item.qty || item.amount || item.discount;
     },
+    
     hasEmptyRow() {
       return this.invoiceData.medicines.some(
         (row) => !row.medicineName && !row.qty && !row.amount && !row.discount
       );
     },
+    
     calculateTotal(item) {
       const qty = parseFloat(item.qty) || 0;
       const amount = parseFloat(item.amount) || 0;
       const discount = parseFloat(item.discount) || 0;
       return (qty * amount - discount).toFixed(2);
     },
+    
     calculateGrandTotal() {
       return this.invoiceData.medicines.reduce(
         (sum, item) => sum + parseFloat(this.calculateTotal(item) || 0),
         0
       );
     },
+    
     removeMedicine(index) {
       this.invoiceData.medicines.splice(index, 1);
     },
+    
     calculateFinalAmount() {
       return this.calculateGrandTotal();
     },
   },
 };
 </script>
+
+<style scoped>
+.table-cell {
+  min-width: 100px;
+}
+
+.service-down {
+  min-width: 200px;
+}
+</style>

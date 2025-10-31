@@ -63,7 +63,9 @@ const PharmacyStorePage = () => {
     "3:00 PM - 6:00 PM",
     "6:00 PM - 9:00 PM",
   ];
+
   const [medicines, setMed] = useState(null);
+
   const fetchData = useCallback(
     async (showNotification = true) => {
       try {
@@ -103,13 +105,17 @@ const PharmacyStorePage = () => {
         setLoading(false);
       }
     },
-    [id, medicines]
+    [id]
   );
+
   useEffect(() => {
+    
     fetchData(false);
 
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(fetchData, 10000);
+    // Auto-refresh every 60 seconds (1 minute)
+    const interval = setInterval(() => {
+      fetchData(false);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [fetchData]);

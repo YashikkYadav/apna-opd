@@ -6,7 +6,7 @@ const cartController = {
         try {
             const userId = req.user?.id || 'guest';
             const { storeId } = req.params;
-            const cartItems = await cartService.getCartItems(userId);
+            const cartItems = await cartService.getCartItems(userId, storeId);
             res.json(cartItems);
         } catch (error) {
             res.status(500).json({ error: error.message });
