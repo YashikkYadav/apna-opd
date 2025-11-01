@@ -26,8 +26,8 @@ const pharmacyProfileSchema = new mongoose.Schema({
     {
       name: String,
       dosage: String,
-      stock: String,
-      price: String
+      stock: Number,
+      price: Number
     }
   ],
   partnerships: [

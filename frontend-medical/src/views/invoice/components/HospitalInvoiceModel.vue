@@ -463,6 +463,7 @@ export default {
         // Auto-fill for medicine from dropdown
         item.serviceName = selectedMedicine.name;
         item.amount = selectedMedicine.price || 0;
+        item.medicineId = selectedMedicine._id,
         item.qty = 1;
         item.serviceDate = this.getTodayDate();
       } else {
@@ -524,6 +525,7 @@ export default {
           .filter((service) => service.serviceName) // Only include rows with service names
           .map((service) => ({
             serviceName: service.serviceName,
+            medicineId: service?.medicineId,
             serviceDate: service.serviceDate,
             amount: parseFloat(service.amount) || 0,
             quantity: parseInt(service.qty) || 0,

@@ -1,6 +1,7 @@
 const Invoice = require("../models/medicalInvoice");
 const { generateMedicalInvoiceId } = require("../utils/helpers");
 const { generateInvoicePDF } = require("../utils/pdfGenerator");
+const PharmacyProfile = require("../models/pharmacyProfile");
 const {
   validateInvoice,
 } = require("../validations/medicalInvoice.vallidation");
@@ -19,7 +20,7 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
     const invoiceType = invoiceData.invoiceType;
 
     if (invoiceId) {
-      // Update existing invoice
+      // ✅ Update existing invoice
       const updateData = {
         medicalId,
         invoiceType,
@@ -34,8 +35,7 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
       if (invoiceType === "Medical") {
         updateData.medicalName = invoiceData.medicalName;
         updateData.medicines = invoiceData.medicines || [];
-      } 
-      else if (invoiceType === "Hospital") {
+      } else if (invoiceType === "Hospital") {
         updateData.patientAge = invoiceData.patientAge;
         updateData.patientGender = invoiceData.patientGender;
         updateData.hospitalName = invoiceData.hospitalName;
@@ -65,7 +65,7 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
         };
       }
     } else {
-      // Create new invoice
+      // ✅ Create new invoice
       const generatedInvoiceId = await generateMedicalInvoiceId();
 
       const invoiceDoc = {
@@ -83,8 +83,7 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
       if (invoiceType === "Medical") {
         invoiceDoc.medicalName = invoiceData.medicalName;
         invoiceDoc.medicines = invoiceData.medicines || [];
-      } 
-      else if (invoiceType === "Hospital") {
+      } else if (invoiceType === "Hospital") {
         invoiceDoc.patientAge = invoiceData.patientAge;
         invoiceDoc.patientGender = invoiceData.patientGender;
         invoiceDoc.hospitalName = invoiceData.hospitalName;
@@ -105,8 +104,38 @@ const createInvoice = async (medicalId, invoiceData, invoiceId) => {
 
       invoice = new Invoice(invoiceDoc);
       await invoice.save();
+
+      // ✅ Update stock only
+      if (invoiceData.medicines?.length > 0 || invoiceData.services?.length > 0) {
+        for (const med of invoiceData.medicines || invoiceData.services) {
+          try {
+            const pharmacy = await PharmacyProfile.findOne({
+              healthServeId: medicalId,
+            });
+
+            if (!pharmacy) {
+                return { statusCode: 404, error: "Pharmacy profile not found" };
+            }
+
+            const medicine = pharmacy.medicines.id(med.medicineId);
+            if (medicine) {
+              medicine.stock = medicine.stock - med.quantity;
+            }
+            await pharmacy.save();
+            console.log(`✅ Updated stock for ${med.medicineName}`);
+          } catch (err) {
+            console.error(
+              `❌ Error updating ${med.medicineName}:`,
+              err.message
+            );
+          }
+        }
+
+        console.log("✅ Medicine stock update completed");
+      }
     }
 
+    // ✅ Generate PDF after invoice creation
     await generateInvoicePDF(invoice);
 
     return {

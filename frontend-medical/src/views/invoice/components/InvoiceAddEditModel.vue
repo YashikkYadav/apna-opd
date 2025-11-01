@@ -281,6 +281,7 @@ export default {
       if (selectedMedicine) {
         // Auto-fill for medicine from dropdown
         item.medicineName = selectedMedicine.name;
+        item.medicineId = selectedMedicine._id;
         item.amount = selectedMedicine.price || 0;
         item.qty = 1;
         item.discount = 0;
@@ -321,6 +322,7 @@ export default {
           .filter((service) => service.medicineName) // Only include rows with medicine names
           .map((service) => ({
             medicineName: service.medicineName,
+            medicineId: service?.medicineId,
             amount: parseFloat(service.amount) || 0,
             quantity: parseInt(service.qty) || 0,
             discount: parseFloat(service.discount) || 0,
