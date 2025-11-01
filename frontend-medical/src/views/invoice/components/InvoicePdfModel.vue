@@ -152,6 +152,8 @@ export default {
       }
       return date.toLocaleDateString('en-GB');
     },
+
+    
     downloadPDF() {
       const element = document.getElementById("medical-invoice-pdf");
       const opt = {
@@ -210,6 +212,7 @@ export default {
       document.body.innerHTML = originalContents;
       window.location.reload(); // Reload to restore Vue functionality
     },
+  
     getPrintStyles() {
       return `
         @page {

@@ -179,6 +179,8 @@ export default {
       const price = service.amount || service.price || 0;
       return qty * price;
     },
+
+    
     downloadPDF() {
       const element = document.getElementById("hospital-invoice-pdf");
       const opt = {
@@ -220,6 +222,7 @@ export default {
 
       window.print();
       document.body.innerHTML = originalContents;
+      window.location.reload(); //
     },
     getPrintStyles() {
       return `

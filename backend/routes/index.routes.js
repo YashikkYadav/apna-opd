@@ -37,7 +37,10 @@ const medicalMiddleware = require("../middlewares/medical.middleware");
 const homeServiceRoutes = require("./homeService.routes");
 const allProfileRoutes = require("./allProfile.routes");
 const emergencyProfileRoutes = require("./emergency.routes");
+const sendPdfRoutes = require("./sendPdf.routes");
 const router = express.Router();
+
+router.use("/send-pdf", sendPdfRoutes);
 
 router.use("/cart", cartRoutes);
 
@@ -125,5 +128,7 @@ router.use("/home-services", homeServiceRoutes);
 router.use("/all-profiles", allProfileRoutes);
 
 router.use("/emergency-profiles", emergencyProfileRoutes);
+
+
 
 module.exports = router;
